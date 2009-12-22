@@ -23,6 +23,7 @@ FOR ANY DAMAGES OR OTHER LIABILITY, WHETHER IN CONTRACT, TORT OR OTHERWISE,
 ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 
+
 Also available at http://www.boost.org/LICENSE_1_0.txt
 
 
@@ -50,6 +51,7 @@ MiniGlobe uses OpenTK:
   CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT 
   OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR
   THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
 
   Also available at http://www.opentk.com/project/license
 
@@ -85,3 +87,33 @@ MiniGlobe tests use NUnit:
 
 
   Also available at http://nunit.com/index.php?p=license&r=2.4.8
+
+
+Data
+---------------------------------------------------------------------------
+
+
+MiniGlobe uses data from NASA Visible Earth:
+
+   Data\Imagery\NASA\world.topo.200412.3x5400x2700.jpg
+      Reto Stockli, NASA Earth Observatory 
+      http://visibleearth.nasa.gov/view_rec.php?id=7135
+
+   Data\Imagery\NASA\world_topo_bathy_200411_3x5400x2700.jpg
+      Reto Stockli, NASA Earth Observatory 
+      http://visibleearth.nasa.gov/view_rec.php?id=7110
+
+
+   Terms of use:  http://visibleearth.nasa.gov/useterms.php
+
+
+MiniGlobe uses data from Natural Earth:
+
+   Free vector and raster map data @ naturalearthdata.com.
+
+   Data\Imagery\NaturalEarth\NE2_50M_SR_W.jpg
+      http://www.naturalearthdata.com/downloads/50m-natural-earth-2/
+      50m-natural-earth-ii-with-shaded-relief-and-water/
+
+
+   Terms of use:  http://www.naturalearthdata.com/about/terms-of-use/
