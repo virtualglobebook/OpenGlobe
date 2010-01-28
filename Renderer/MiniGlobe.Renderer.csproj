@@ -1,0 +1,186 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{E735AB3A-EB92-4C51-814E-E5E1F2173AA4}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>MiniGlobe.Renderer</RootNamespace>
+    <AssemblyName>MiniGlobe.Renderer</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="OpenTK, Version=0.9.9.2, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\ThirdParty\opentk-1.0-beta-2\Binaries\OpenTK\Release\OpenTK.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Drawing" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BlittableBGRA.cs" />
+    <Compile Include="BlittableRGBA.cs" />
+    <Compile Include="Extensions.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="FrameBuffer\HighResolutionSnapFrameBuffer.cs" />
+    <Compile Include="GL32\ExtensionsGL32.cs" />
+    <Compile Include="GL32\ICleanable.cs" />
+    <Compile Include="Scene\Camera.cs" />
+    <Compile Include="Scene\SceneState.cs" />
+    <Compile Include="Shaders\DrawAutomaticUniforms\CameraEyeDrawAutomaticUniform.cs" />
+    <Compile Include="Shaders\DrawAutomaticUniforms\CameraEyeDrawAutomaticUniformFactory.cs" />
+    <Compile Include="Shaders\DrawAutomaticUniforms\DrawAutomaticUniform.cs" />
+    <Compile Include="Shaders\DrawAutomaticUniforms\DrawAutomaticUniformFactory.cs" />
+    <Compile Include="Shaders\DrawAutomaticUniforms\DrawAutomaticUniformFactoryCollection.cs" />
+    <Compile Include="Shaders\DrawAutomaticUniforms\LightPositionDrawAutomaticUniform.cs" />
+    <Compile Include="Shaders\DrawAutomaticUniforms\LightPositionDrawAutomaticUniformFactory.cs" />
+    <Compile Include="Shaders\DrawAutomaticUniforms\LightPropertiesDrawAutomaticUniform.cs" />
+    <Compile Include="Shaders\DrawAutomaticUniforms\LightPropertiesDrawAutomaticUniformFactory.cs" />
+    <Compile Include="Shaders\DrawAutomaticUniforms\ModelViewMatrixDrawAutomaticUniform.cs" />
+    <Compile Include="Shaders\DrawAutomaticUniforms\ModelViewMatrixDrawAutomaticUniformFactory.cs" />
+    <Compile Include="Shaders\DrawAutomaticUniforms\ModelViewPerspectiveProjectionMatrixDrawAutomaticUniform.cs" />
+    <Compile Include="Shaders\DrawAutomaticUniforms\ModelViewPerspectiveProjectionMatrixDrawAutomaticUniformFactory.cs" />
+    <Compile Include="Shaders\DrawAutomaticUniforms\PerspectiveProjectionMatrixDrawAutomaticUniform.cs" />
+    <Compile Include="Shaders\DrawAutomaticUniforms\PerspectiveProjectionMatrixDrawAutomaticUniformFactory.cs" />
+    <Compile Include="Shaders\LinkAutomaticUniforms\LinkAutomaticUniform.cs" />
+    <Compile Include="Shaders\LinkAutomaticUniforms\LinkAutomaticUniformCollection.cs" />
+    <Compile Include="Shaders\LinkAutomaticUniforms\TextureLinkAutomaticUniform.cs" />
+    <Compile Include="Textures\TextureUtility.cs" />
+    <Compile Include="VertexArray\AttachedVertexBuffer.cs" />
+    <Compile Include="VertexArray\AttachedVertexBuffers.cs" />
+    <Compile Include="VertexArray\VertexArray.cs" />
+    <Compile Include="Buffers\Buffer.cs" />
+    <Compile Include="Buffers\IndexBuffer.cs" />
+    <Compile Include="Buffers\ReadPixelBuffer.cs" />
+    <Compile Include="Buffers\UniformBuffer.cs" />
+    <Compile Include="Buffers\VertexBuffer.cs" />
+    <Compile Include="Buffers\WritePixelBuffer.cs" />
+    <Compile Include="Context.cs" />
+    <Compile Include="CouldNotCreateVideoCardResourceException.cs" />
+    <Compile Include="Device.cs" />
+    <Compile Include="FrameBuffer\ColorAttachments.cs" />
+    <Compile Include="FrameBuffer\FrameBuffer.cs" />
+    <Compile Include="GL32\VertexArray\AttachedVertexBuffersGL32.cs" />
+    <Compile Include="GL32\VertexArray\VertexArrayGL32.cs" />
+    <Compile Include="GL32\Buffers\BufferGL32.cs" />
+    <Compile Include="GL32\Buffers\IndexBufferGL32.cs" />
+    <Compile Include="GL32\Buffers\ReadPixelBufferGL32.cs" />
+    <Compile Include="GL32\Buffers\UniformBufferGL32.cs" />
+    <Compile Include="GL32\Buffers\VertexBufferGL32.cs" />
+    <Compile Include="GL32\Buffers\WritePixelBufferGL32.cs" />
+    <Compile Include="GL32\ContextGL32.cs" />
+    <Compile Include="GL32\FrameBuffer\ColorAttachmentsGL32.cs" />
+    <Compile Include="GL32\FrameBuffer\FrameBufferGL32.cs" />
+    <Compile Include="GL32\MiniGlobeWindowGL32.cs" />
+    <Compile Include="GL32\Shaders\ShaderObjectGL32.cs" />
+    <Compile Include="GL32\Shaders\ShaderProgramGL32.cs" />
+    <Compile Include="GL32\Shaders\UniformBlockGL32.cs" />
+    <Compile Include="GL32\Shaders\UniformBoolGL32.cs" />
+    <Compile Include="GL32\Shaders\UniformBoolVector2GL32.cs" />
+    <Compile Include="GL32\Shaders\UniformBoolVector3GL32.cs" />
+    <Compile Include="GL32\Shaders\UniformBoolVector4GL32.cs" />
+    <Compile Include="GL32\Shaders\UniformFloatGL32.cs" />
+    <Compile Include="GL32\Shaders\UniformFloatMatrix22GL32.cs" />
+    <Compile Include="GL32\Shaders\UniformFloatMatrix23GL32.cs" />
+    <Compile Include="GL32\Shaders\UniformFloatMatrix24GL32.cs" />
+    <Compile Include="GL32\Shaders\UniformFloatMatrix32GL32.cs" />
+    <Compile Include="GL32\Shaders\UniformFloatMatrix33GL32.cs" />
+    <Compile Include="GL32\Shaders\UniformFloatMatrix34GL32.cs" />
+    <Compile Include="GL32\Shaders\UniformFloatMatrix42GL32.cs" />
+    <Compile Include="GL32\Shaders\UniformFloatMatrix43GL32.cs" />
+    <Compile Include="GL32\Shaders\UniformFloatMatrix44GL32.cs" />
+    <Compile Include="GL32\Shaders\UniformFloatVector2GL32.cs" />
+    <Compile Include="GL32\Shaders\UniformFloatVector3GL32.cs" />
+    <Compile Include="GL32\Shaders\UniformFloatVector4GL32.cs" />
+    <Compile Include="GL32\Shaders\UniformIntGL32.cs" />
+    <Compile Include="GL32\Shaders\UniformIntVector2GL32.cs" />
+    <Compile Include="GL32\Shaders\UniformIntVector3GL32.cs" />
+    <Compile Include="GL32\Shaders\UniformIntVector4GL32.cs" />
+    <Compile Include="GL32\SizesGL32.cs" />
+    <Compile Include="GL32\Textures\Texture2DGL32.cs" />
+    <Compile Include="GL32\Textures\TextureUnitGL32.cs" />
+    <Compile Include="GL32\Textures\TextureUnitsGL32.cs" />
+    <Compile Include="GL32\TypeConverterGL32.cs" />
+    <Compile Include="InsufficientVideoCardException.cs" />
+    <Compile Include="MiniGlobeWindow.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RenderState\Blending.cs" />
+    <Compile Include="RenderState\DepthTest.cs" />
+    <Compile Include="RenderState\FacetCulling.cs" />
+    <Compile Include="RenderState\PrimitiveRestart.cs" />
+    <Compile Include="RenderState\RenderState.cs" />
+    <Compile Include="RenderState\ScissorTest.cs" />
+    <Compile Include="RenderState\StencilTest.cs" />
+    <Compile Include="RenderState\StencilTestFace.cs" />
+    <Compile Include="Shaders\ShaderCache.cs" />
+    <Compile Include="Shaders\ShaderProgram.cs" />
+    <Compile Include="Shaders\Uniform.cs" />
+    <Compile Include="Shaders\UniformBlock.cs" />
+    <Compile Include="Shaders\UniformBlockArrayMember.cs" />
+    <Compile Include="Shaders\UniformBlockCollection.cs" />
+    <Compile Include="Shaders\UniformBlockMatrixMember.cs" />
+    <Compile Include="Shaders\UniformBlockMember.cs" />
+    <Compile Include="Shaders\UniformBlockMemberCollection.cs" />
+    <Compile Include="Shaders\UniformCollection.cs" />
+    <Compile Include="Shaders\UniformBlockMatrixArrayMember.cs" />
+    <Compile Include="Shaders\ShaderVertexAttribute.cs" />
+    <Compile Include="ShaderVertexAttributeCollection.cs" />
+    <Compile Include="OpenTK\Vector2b.cs" />
+    <Compile Include="OpenTK\Vector3b.cs" />
+    <Compile Include="OpenTK\Vector4b.cs" />
+    <Compile Include="OpenTK\Matrix22.cs" />
+    <Compile Include="OpenTK\Matrix23.cs" />
+    <Compile Include="OpenTK\Matrix24.cs" />
+    <Compile Include="OpenTK\Matrix32.cs" />
+    <Compile Include="OpenTK\Matrix33.cs" />
+    <Compile Include="OpenTK\Matrix34.cs" />
+    <Compile Include="OpenTK\Matrix42.cs" />
+    <Compile Include="OpenTK\Matrix43.cs" />
+    <Compile Include="OpenTK\Vector2i.cs" />
+    <Compile Include="OpenTK\Vector3i.cs" />
+    <Compile Include="OpenTK\Vector4i.cs" />
+    <Compile Include="Textures\Texture2D.cs" />
+    <Compile Include="Textures\Texture2DDescription.cs" />
+    <Compile Include="Textures\Texture2DFilter.cs" />
+    <Compile Include="Textures\TextureUnit.cs" />
+    <Compile Include="Textures\TextureUnits.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Core\MiniGlobe.Core.csproj">
+      <Project>{51502B9C-1A97-4F2C-8541-7D9D61ED6C6D}</Project>
+      <Name>MiniGlobe.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

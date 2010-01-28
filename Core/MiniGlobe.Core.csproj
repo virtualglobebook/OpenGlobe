@@ -1,0 +1,79 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{51502B9C-1A97-4F2C-8541-7D9D61ED6C6D}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>MiniGlobe.Core</RootNamespace>
+    <AssemblyName>MiniGlobe.Core</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Conversion.cs" />
+    <Compile Include="Disposable.cs" />
+    <Compile Include="Geometry\Ellipsoid.cs" />
+    <Compile Include="Geometry\Indices\Indices.cs" />
+    <Compile Include="Geometry\Indices\IndicesBase.cs" />
+    <Compile Include="Geometry\Indices\IndicesByte.cs" />
+    <Compile Include="Geometry\Indices\IndicesInt.cs" />
+    <Compile Include="Geometry\Indices\IndicesShort.cs" />
+    <Compile Include="Geometry\Mesh.cs" />
+    <Compile Include="Geometry\VertexAttributes\VertexAttribute.cs" />
+    <Compile Include="Geometry\VertexAttributes\VertexAttributeCollection.cs" />
+    <Compile Include="Geometry\VertexAttributes\VertexAttributeDouble.cs" />
+    <Compile Include="Geometry\VertexAttributes\VertexAttributeDoubleVector2.cs" />
+    <Compile Include="Geometry\VertexAttributes\VertexAttributeDoubleVector3.cs" />
+    <Compile Include="Geometry\VertexAttributes\VertexAttributeDoubleVector4.cs" />
+    <Compile Include="Geometry\VertexAttributes\VertexAttributeFloat.cs" />
+    <Compile Include="Geometry\VertexAttributes\VertexAttributeFloatVector2.cs" />
+    <Compile Include="Geometry\VertexAttributes\VertexAttributeFloatVector3.cs" />
+    <Compile Include="Geometry\VertexAttributes\VertexAttributeFloatVector4.cs" />
+    <Compile Include="Geometry\VertexAttributes\VertexAttributeHalfFloat.cs" />
+    <Compile Include="Geometry\VertexAttributes\VertexAttributeHalfFloatVector2.cs" />
+    <Compile Include="Geometry\VertexAttributes\VertexAttributeHalfFloatVector3.cs" />
+    <Compile Include="Geometry\VertexAttributes\VertexAttributeHalfFloatVector4.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Tessellation\QuadCubeEllipsoidTessellator.cs" />
+    <Compile Include="Tessellation\SubdivisionEllipsoidTessellator.cs" />
+    <Compile Include="Tessellation\SubdivisionSphereTessellator.cs" />
+    <Compile Include="Geometry\TriangleIndices.cs" />
+    <Compile Include="Tessellation\SubdivisionSphereTessellatorSimple.cs" />
+    <Compile Include="Tessellation\SubdivisionUtility.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="OpenTK, Version=0.9.9.5, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\ThirdParty\opentk-1.0-beta-2\Binaries\OpenTK\Release\OpenTK.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

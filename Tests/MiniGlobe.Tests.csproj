@@ -1,0 +1,88 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <StartAction>Program</StartAction>
+    <StartProgram>$(SolutionDir)..\Tools\NUnit-2.4.8-net-2.0\bin\nunit.exe</StartProgram>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{2B3E6147-B17C-4C96-B710-5257620CE911}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>MiniGlobe.Tests</RootNamespace>
+    <AssemblyName>MiniGlobe.Tests</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="nunit.framework, Version=2.4.8.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Tools\NUnit-2.4.8-net-2.0\bin\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenTK, Version=0.9.9.5, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\ThirdParty\opentk-1.0-beta-2\Binaries\OpenTK\Release\OpenTK.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Drawing" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Core\Geometry\EllipsoidTests.cs" />
+    <Compile Include="Core\Geometry\GeometryTests.cs" />
+    <Compile Include="Core\SystemTests.cs" />
+    <Compile Include="Core\Tessellation\TessellationTests.cs" />
+    <Compile Include="MiniGlobeAssert.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Renderer\VertexArray\VertexArrayTests.cs" />
+    <Compile Include="Renderer\Buffers\BufferObjectTests.cs" />
+    <Compile Include="Renderer\FrameBuffer\FrameBufferTests.cs" />
+    <Compile Include="Renderer\Context\ContextTest.cs" />
+    <Compile Include="Renderer\RenderState\RenderStateTests.cs" />
+    <Compile Include="Renderer\ShaderSources.cs" />
+    <Compile Include="Renderer\Shaders\ShaderProgramTests.cs" />
+    <Compile Include="Renderer\SystemTests.cs" />
+    <Compile Include="Renderer\Textures\Texture2DTests.cs" />
+    <Compile Include="Scene\SystemTests.cs" />
+    <Compile Include="TestUtility.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Core\MiniGlobe.Core.csproj">
+      <Project>{51502B9C-1A97-4F2C-8541-7D9D61ED6C6D}</Project>
+      <Name>MiniGlobe.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Renderer\MiniGlobe.Renderer.csproj">
+      <Project>{E735AB3A-EB92-4C51-814E-E5E1F2173AA4}</Project>
+      <Name>MiniGlobe.Renderer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Scene\MiniGlobe.Scene.csproj">
+      <Project>{71ABD41E-1545-45DF-B016-58E89111A4F3}</Project>
+      <Name>MiniGlobe.Scene</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
