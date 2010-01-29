@@ -101,13 +101,14 @@ namespace MiniGlobe.Examples.Chapter3.SubdivisionSphere1
             //Bitmap bitmap = new Bitmap("world_topo_bathy_200411_3x5400x2700.jpg");
             //Bitmap bitmap = new Bitmap("world.topo.200412.3x5400x2700.jpg");
             _texture = Device.CreateTexture2D(bitmap, TextureFormat.RedGreenBlue8, false);
+
+            _sceneState.Camera.ZoomToTarget(1);
         }
 
         public void OnResize()
         {
             _window.Context.Viewport = new Rectangle(0, 0, _window.Width, _window.Height);
             _sceneState.Camera.AspectRatio = _window.Width / (double)_window.Height;
-            _sceneState.Camera.ZoomToTarget(1);
         }
 
         public void OnRenderFrame()
