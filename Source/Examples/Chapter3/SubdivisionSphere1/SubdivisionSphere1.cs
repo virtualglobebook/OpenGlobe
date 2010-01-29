@@ -15,6 +15,7 @@ using System.Drawing;
 using MiniGlobe.Core.Geometry;
 using MiniGlobe.Core.Tessellation;
 using MiniGlobe.Renderer;
+using MiniGlobe.Scene;
 
 namespace MiniGlobe.Examples.Chapter3.SubdivisionSphere1
 {
@@ -26,6 +27,7 @@ namespace MiniGlobe.Examples.Chapter3.SubdivisionSphere1
             _window.Resize += OnResize;
             _window.RenderFrame += OnRenderFrame;
             _sceneState = new SceneState();
+            _camera = new CameraGlobeCentered(_sceneState.Camera, _window, Ellipsoid.UnitSphere);
 
             string vs =
                 @"#version 150
@@ -138,6 +140,7 @@ namespace MiniGlobe.Examples.Chapter3.SubdivisionSphere1
             _texture.Dispose();
             _va.Dispose();
             _sp.Dispose();
+            _camera.Dispose();
             _window.Dispose();
         }
 
@@ -158,6 +161,7 @@ namespace MiniGlobe.Examples.Chapter3.SubdivisionSphere1
 
         private readonly MiniGlobeWindow _window;
         private readonly SceneState _sceneState;
+        private readonly CameraGlobeCentered _camera;
         private readonly RenderState _renderState;
         private readonly ShaderProgram _sp;
         private readonly VertexArray _va;

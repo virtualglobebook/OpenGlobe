@@ -25,21 +25,24 @@ namespace MiniGlobe.Renderer.GL32
             _gameWindw.RenderFrame += new EventHandler<FrameEventArgs>(this.OnRenderFrame);
 
             _context = new ContextGL32();
+
+            _mouse = new MouseGL32(_gameWindw.Mouse);
+            _keyboard = new KeyboardGL32(_gameWindw.Keyboard);
         }
 
         private void OnResize<T>(object sender, T e)
         {
-            RaiseResize();
+            OnResize();
         }
 
         private void OnUpdateFrame<T>(object sender, T e)
         {
-            RaiseUpdateFrame();
+            OnUpdateFrame();
         }
 
         private void OnRenderFrame<T>(object sender, T e)
         {
-            RaiseRenderFrame();
+            OnRenderFrame();
             _gameWindw.SwapBuffers();
         }
 
@@ -65,6 +68,16 @@ namespace MiniGlobe.Renderer.GL32
             get { return _gameWindw.Height; }
         }
 
+        public override Mouse Mouse
+        {
+            get { return _mouse; }
+        }
+
+        public override Keyboard Keyboard
+        {
+            get { return _keyboard; }
+        }
+
         #endregion
 
         #region Disposable Members
@@ -78,5 +91,7 @@ namespace MiniGlobe.Renderer.GL32
 
         private GameWindow _gameWindw;
         private ContextGL32 _context;
+        private MouseGL32 _mouse;
+        private KeyboardGL32 _keyboard;
     }
 }

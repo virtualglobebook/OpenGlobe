@@ -62,6 +62,10 @@
       <Project>{E735AB3A-EB92-4C51-814E-E5E1F2173AA4}</Project>
       <Name>MiniGlobe.Renderer</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\Scene\MiniGlobe.Scene.csproj">
+      <Project>{71ABD41E-1545-45DF-B016-58E89111A4F3}</Project>
+      <Name>MiniGlobe.Scene</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="..\..\..\..\Data\Imagery\NaturalEarth\NE2_50M_SR_W_4096.jpg">

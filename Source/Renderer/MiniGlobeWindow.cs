@@ -19,27 +19,30 @@ namespace MiniGlobe.Renderer
         public event MiniGlobeHandler UpdateFrame;
         public event MiniGlobeHandler RenderFrame;
 
-        protected void RaiseResize()
+        protected virtual void OnResize()
         {
-            if (Resize != null)
+            MiniGlobeHandler handler = Resize;
+            if (handler != null)
             {
-                Resize();
+                handler();
             }
         }
 
-        protected void RaiseUpdateFrame()
+        protected virtual void OnUpdateFrame()
         {
-            if (UpdateFrame != null)
+            MiniGlobeHandler handler = UpdateFrame;
+            if (handler != null)
             {
-                UpdateFrame();
+                handler();
             }
         }
 
-        protected void RaiseRenderFrame()
+        protected virtual void OnRenderFrame()
         {
-            if (RenderFrame != null)
+            MiniGlobeHandler handler = RenderFrame;
+            if (handler != null)
             {
-                RenderFrame();
+                handler();
             }
         }
 
@@ -47,5 +50,7 @@ namespace MiniGlobe.Renderer
         public abstract Context Context { get; }
         public abstract int Width { get; }
         public abstract int Height { get; }
+        public abstract Mouse Mouse { get; }
+        public abstract Keyboard Keyboard { get; }
     }
 }

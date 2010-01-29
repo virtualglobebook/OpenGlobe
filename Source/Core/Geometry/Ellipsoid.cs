@@ -47,6 +47,16 @@ namespace MiniGlobe.Core.Geometry
             get { return _radii; }
         }
 
+        public double MinimumRadius
+        {
+            get { return Math.Min(_radii.X, Math.Min(_radii.Y, _radii.Z)); }
+        }
+
+        public double MaximumRadius
+        {
+            get { return Math.Max(_radii.X, Math.Max(_radii.Y, _radii.Z)); }
+        }
+
         private readonly Vector3d _radii;
         private readonly Vector3d _oneOverRadiiSquared;
     }
