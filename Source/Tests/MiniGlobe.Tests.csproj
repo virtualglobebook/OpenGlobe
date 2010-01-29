@@ -51,6 +51,7 @@
     <Compile Include="Core\Tessellation\TessellationTests.cs" />
     <Compile Include="MiniGlobeAssert.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Renderer\Scene\CameraTest.cs" />
     <Compile Include="Renderer\VertexArray\VertexArrayTests.cs" />
     <Compile Include="Renderer\Buffers\BufferObjectTests.cs" />
     <Compile Include="Renderer\FrameBuffer\FrameBufferTests.cs" />

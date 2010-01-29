@@ -8,7 +8,8 @@
 #endregion
 
 using System;
-using System.Diagnostics;
+using System.IO;
+using System.Xml;
 using OpenTK;
 
 namespace MiniGlobe.Renderer
@@ -49,6 +50,44 @@ namespace MiniGlobe.Renderer
             double sin = Math.Sin(Math.Min(FieldOfViewX, FieldOfViewY) * 0.5);
             double distance = (radius / sin);
             Eye = Target + (distance * toEye);
+        }
+
+        public void SaveView(string filename)
+        {
+            XmlDocument xmlDocument = new XmlDocument();
+
+            XmlDeclaration xmlDeclaration = xmlDocument.CreateXmlDeclaration("1.0", "utf-8", null);
+            xmlDocument.InsertBefore(xmlDeclaration, xmlDocument.DocumentElement);
+
+            XmlElement cameraNode = xmlDocument.CreateElement("Camera");
+            xmlDocument.AppendChild(cameraNode);
+
+            SaveVector(xmlDocument, "Eye", Eye, cameraNode);
+            SaveVector(xmlDocument, "Target", Target, cameraNode);
+            SaveVector(xmlDocument, "Up", Up, cameraNode);
+
+            xmlDocument.Save(filename);
+        }
+
+        static private void SaveVector(XmlDocument xmlDocument, string name, Vector3d value, XmlElement parentNode)
+        {
+            XmlElement node = xmlDocument.CreateElement(name);
+            node.AppendChild(xmlDocument.CreateTextNode(value.X + " " + value.Y + " " + value.Z));
+            parentNode.AppendChild(node);
+        }
+
+        public void LoadView(string filename)
+        {
+            XmlDocument xmlDocument = new XmlDocument();
+            xmlDocument.Load(filename);
+            XmlNodeList nodeList = xmlDocument.GetElementsByTagName("Camera");
+
+            string[] eye = nodeList[0].ChildNodes[0].InnerText.Split(new[] { ' ' });
+            Eye = new Vector3d(Convert.ToDouble(eye[0]), Convert.ToDouble(eye[1]), Convert.ToDouble(eye[2]));
+            string[] target = nodeList[0].ChildNodes[1].InnerText.Split(new[] { ' ' });
+            Target = new Vector3d(Convert.ToDouble(target[0]), Convert.ToDouble(target[1]), Convert.ToDouble(target[2]));
+            string[] up = nodeList[0].ChildNodes[2].InnerText.Split(new[] { ' ' });
+            Up = new Vector3d(Convert.ToDouble(up[0]), Convert.ToDouble(up[1]), Convert.ToDouble(up[2]));
         }
     }
 }
