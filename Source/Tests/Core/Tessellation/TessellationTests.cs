@@ -59,9 +59,9 @@ namespace MiniGlobe.Core.Tessellation
         }
 
         [Test]
-        public void QuadCubeEllipsoidTessellatorTest()
+        public void CubeMapEllipsoidTessellatorTest()
         {
-            Mesh mesh = QuadCubeEllipsoidTessellator.Compute(Ellipsoid.UnitSphere, 3, QuadCubeEllipsoidVertexAttributes.All);
+            Mesh mesh = CubeMapEllipsoidTessellator.Compute(Ellipsoid.UnitSphere, 3, CubeMapEllipsoidVertexAttributes.All);
 
             VertexAttributeDoubleVector3 positions = mesh.Attributes["position"] as VertexAttributeDoubleVector3;
             VertexAttributeHalfFloatVector3 normals = mesh.Attributes["normal"] as VertexAttributeHalfFloatVector3;

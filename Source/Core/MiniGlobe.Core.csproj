@@ -55,7 +55,7 @@
     <Compile Include="Geometry\VertexAttributes\VertexAttributeHalfFloatVector3.cs" />
     <Compile Include="Geometry\VertexAttributes\VertexAttributeHalfFloatVector4.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Tessellation\QuadCubeEllipsoidTessellator.cs" />
+    <Compile Include="Tessellation\CubeMapEllipsoidTessellator.cs" />
     <Compile Include="Tessellation\SubdivisionEllipsoidTessellator.cs" />
     <Compile Include="Tessellation\SubdivisionSphereTessellator.cs" />
     <Compile Include="Geometry\TriangleIndices.cs" />

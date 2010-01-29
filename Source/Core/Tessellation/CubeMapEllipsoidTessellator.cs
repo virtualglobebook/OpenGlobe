@@ -15,7 +15,7 @@ using MiniGlobe.Core.Geometry;
 namespace MiniGlobe.Core.Tessellation
 {
     [Flags]
-    public enum QuadCubeEllipsoidVertexAttributes
+    public enum CubeMapEllipsoidVertexAttributes
     {
         Position = 1,
         Normal = 2,
@@ -23,9 +23,9 @@ namespace MiniGlobe.Core.Tessellation
         All = Position | Normal | TextureCoordinate
     }
     
-    public static class QuadCubeEllipsoidTessellator
+    public static class CubeMapEllipsoidTessellator
     {
-        internal class QuadCubeMesh
+        internal class CubeMapMesh
         {
             public Ellipsoid Ellipsoid { get; set; }
             public int NumberOfPartitions { get; set; }
@@ -35,14 +35,14 @@ namespace MiniGlobe.Core.Tessellation
             public IndicesInt Indices { get; set; }
         }
 
-        public static Mesh Compute(Ellipsoid ellipsoid, int numberOfPartitions, QuadCubeEllipsoidVertexAttributes vertexAttributes)
+        public static Mesh Compute(Ellipsoid ellipsoid, int numberOfPartitions, CubeMapEllipsoidVertexAttributes vertexAttributes)
         {
             if (numberOfPartitions < 0)
             {
                 throw new ArgumentOutOfRangeException("numberOfPartitions");
             }
 
-            if ((vertexAttributes & QuadCubeEllipsoidVertexAttributes.Position) != QuadCubeEllipsoidVertexAttributes.Position)
+            if ((vertexAttributes & CubeMapEllipsoidVertexAttributes.Position) != CubeMapEllipsoidVertexAttributes.Position)
             {
                 throw new ArgumentException("Positions must be provided.", "vertexAttributes");
             }
@@ -58,24 +58,24 @@ namespace MiniGlobe.Core.Tessellation
             IndicesInt indices = new IndicesInt(3 * NumberOfTriangles(numberOfPartitions));
             mesh.Indices = indices;
 
-            QuadCubeMesh quadCubeMesh = new QuadCubeMesh();
-            quadCubeMesh.Ellipsoid = ellipsoid;
-            quadCubeMesh.NumberOfPartitions = numberOfPartitions;
-            quadCubeMesh.Positions = positionsAttribute.Values;
-            quadCubeMesh.Indices = indices;
+            CubeMapMesh CubeMapMesh = new CubeMapMesh();
+            CubeMapMesh.Ellipsoid = ellipsoid;
+            CubeMapMesh.NumberOfPartitions = numberOfPartitions;
+            CubeMapMesh.Positions = positionsAttribute.Values;
+            CubeMapMesh.Indices = indices;
 
-            if ((vertexAttributes & QuadCubeEllipsoidVertexAttributes.Normal) == QuadCubeEllipsoidVertexAttributes.Normal)
+            if ((vertexAttributes & CubeMapEllipsoidVertexAttributes.Normal) == CubeMapEllipsoidVertexAttributes.Normal)
             {
                 VertexAttributeHalfFloatVector3 normalsAttribute = new VertexAttributeHalfFloatVector3("normal");
                 mesh.Attributes.Add(normalsAttribute);
-                quadCubeMesh.Normals = normalsAttribute.Values;
+                CubeMapMesh.Normals = normalsAttribute.Values;
             }
 
-            if ((vertexAttributes & QuadCubeEllipsoidVertexAttributes.TextureCoordinate) == QuadCubeEllipsoidVertexAttributes.TextureCoordinate)
+            if ((vertexAttributes & CubeMapEllipsoidVertexAttributes.TextureCoordinate) == CubeMapEllipsoidVertexAttributes.TextureCoordinate)
             {
                 VertexAttributeHalfFloatVector2 textureCoordinateAttribute = new VertexAttributeHalfFloatVector2("textureCoordinate");
                 mesh.Attributes.Add(textureCoordinateAttribute);
-                quadCubeMesh.TextureCoordinate = textureCoordinateAttribute.Values;
+                CubeMapMesh.TextureCoordinate = textureCoordinateAttribute.Values;
             }
 
             //
@@ -92,14 +92,14 @@ namespace MiniGlobe.Core.Tessellation
             //
             // Similarly, p4 to p7 are in the plane z = 1.
             //
-            quadCubeMesh.Positions.Add(new Vector3d(-1, 0, -1));
-            quadCubeMesh.Positions.Add(new Vector3d(0, -1, -1));
-            quadCubeMesh.Positions.Add(new Vector3d(1, 0, -1));
-            quadCubeMesh.Positions.Add(new Vector3d(0, 1, -1));
-            quadCubeMesh.Positions.Add(new Vector3d(-1, 0, 1));
-            quadCubeMesh.Positions.Add(new Vector3d(0, -1, 1));
-            quadCubeMesh.Positions.Add(new Vector3d(1, 0, 1));
-            quadCubeMesh.Positions.Add(new Vector3d(0, 1, 1));
+            CubeMapMesh.Positions.Add(new Vector3d(-1, 0, -1));
+            CubeMapMesh.Positions.Add(new Vector3d(0, -1, -1));
+            CubeMapMesh.Positions.Add(new Vector3d(1, 0, -1));
+            CubeMapMesh.Positions.Add(new Vector3d(0, 1, -1));
+            CubeMapMesh.Positions.Add(new Vector3d(-1, 0, 1));
+            CubeMapMesh.Positions.Add(new Vector3d(0, -1, 1));
+            CubeMapMesh.Positions.Add(new Vector3d(1, 0, 1));
+            CubeMapMesh.Positions.Add(new Vector3d(0, 1, 1));
 
             //
             // Edges
@@ -108,36 +108,36 @@ namespace MiniGlobe.Core.Tessellation
             // 4 -> 5, 5 -> 6, 6 -> 7, 7 -> 4.  Plane z = 1
             // 0 -> 4, 1 -> 5, 2 -> 6, 3 -> 7.  From plane z = -1 to plane z - 1
             //
-            int[] edge0to1 = AddEdgePositions(0, 1, quadCubeMesh);
-            int[] edge1to2 = AddEdgePositions(1, 2, quadCubeMesh);
-            int[] edge2to3 = AddEdgePositions(2, 3, quadCubeMesh);
-            int[] edge3to0 = AddEdgePositions(3, 0, quadCubeMesh);
+            int[] edge0to1 = AddEdgePositions(0, 1, CubeMapMesh);
+            int[] edge1to2 = AddEdgePositions(1, 2, CubeMapMesh);
+            int[] edge2to3 = AddEdgePositions(2, 3, CubeMapMesh);
+            int[] edge3to0 = AddEdgePositions(3, 0, CubeMapMesh);
 
-            int[] edge4to5 = AddEdgePositions(4, 5, quadCubeMesh);
-            int[] edge5to6 = AddEdgePositions(5, 6, quadCubeMesh);
-            int[] edge6to7 = AddEdgePositions(6, 7, quadCubeMesh);
-            int[] edge7to4 = AddEdgePositions(7, 4, quadCubeMesh);
+            int[] edge4to5 = AddEdgePositions(4, 5, CubeMapMesh);
+            int[] edge5to6 = AddEdgePositions(5, 6, CubeMapMesh);
+            int[] edge6to7 = AddEdgePositions(6, 7, CubeMapMesh);
+            int[] edge7to4 = AddEdgePositions(7, 4, CubeMapMesh);
 
-            int[] edge0to4 = AddEdgePositions(0, 4, quadCubeMesh);
-            int[] edge1to5 = AddEdgePositions(1, 5, quadCubeMesh);
-            int[] edge2to6 = AddEdgePositions(2, 6, quadCubeMesh);
-            int[] edge3to7 = AddEdgePositions(3, 7, quadCubeMesh);
+            int[] edge0to4 = AddEdgePositions(0, 4, CubeMapMesh);
+            int[] edge1to5 = AddEdgePositions(1, 5, CubeMapMesh);
+            int[] edge2to6 = AddEdgePositions(2, 6, CubeMapMesh);
+            int[] edge3to7 = AddEdgePositions(3, 7, CubeMapMesh);
 
-            AddFaceTriangles(edge0to4, edge0to1, edge1to5, edge4to5, quadCubeMesh); // Q3 Face
-            AddFaceTriangles(edge1to5, edge1to2, edge2to6, edge5to6, quadCubeMesh); // Q4 Face
-            AddFaceTriangles(edge2to6, edge2to3, edge3to7, edge6to7, quadCubeMesh); // Q1 Face
-            AddFaceTriangles(edge3to7, edge3to0, edge0to4, edge7to4, quadCubeMesh); // Q2 Face
-            AddFaceTriangles(ReversedArray(edge7to4), edge4to5, edge5to6, ReversedArray(edge6to7), quadCubeMesh); // Plane z = 1
-            AddFaceTriangles(edge1to2, ReversedArray(edge0to1), ReversedArray(edge3to0), edge2to3, quadCubeMesh); // Plane z = -1
+            AddFaceTriangles(edge0to4, edge0to1, edge1to5, edge4to5, CubeMapMesh); // Q3 Face
+            AddFaceTriangles(edge1to5, edge1to2, edge2to6, edge5to6, CubeMapMesh); // Q4 Face
+            AddFaceTriangles(edge2to6, edge2to3, edge3to7, edge6to7, CubeMapMesh); // Q1 Face
+            AddFaceTriangles(edge3to7, edge3to0, edge0to4, edge7to4, CubeMapMesh); // Q2 Face
+            AddFaceTriangles(ReversedArray(edge7to4), edge4to5, edge5to6, ReversedArray(edge6to7), CubeMapMesh); // Plane z = 1
+            AddFaceTriangles(edge1to2, ReversedArray(edge0to1), ReversedArray(edge3to0), edge2to3, CubeMapMesh); // Plane z = -1
 
-            CubeToEllipsoid(quadCubeMesh);
+            CubeToEllipsoid(CubeMapMesh);
             return mesh;
         }
 
-        private static int[] AddEdgePositions(int i0, int i1, QuadCubeMesh quadCubeMesh)
+        private static int[] AddEdgePositions(int i0, int i1, CubeMapMesh CubeMapMesh)
         {
-            IList<Vector3d> positions = quadCubeMesh.Positions;
-            int numberOfPartitions = quadCubeMesh.NumberOfPartitions;
+            IList<Vector3d> positions = CubeMapMesh.Positions;
+            int numberOfPartitions = CubeMapMesh.NumberOfPartitions;
 
             int[] indices = new int[2 + (numberOfPartitions - 1)];
             indices[0] = i0;
@@ -162,11 +162,11 @@ namespace MiniGlobe.Core.Tessellation
             int[] bottomLeftToRight,
             int[] rightBottomToTop,
             int[] topLeftToRight,
-            QuadCubeMesh quadCubeMesh)
+            CubeMapMesh CubeMapMesh)
         {
-            IList<Vector3d> positions = quadCubeMesh.Positions;
-            IndicesInt indices = quadCubeMesh.Indices;
-            int numberOfPartitions = quadCubeMesh.NumberOfPartitions;
+            IList<Vector3d> positions = CubeMapMesh.Positions;
+            IndicesInt indices = CubeMapMesh.Indices;
+            int numberOfPartitions = CubeMapMesh.NumberOfPartitions;
 
             Vector3d origin = positions[bottomLeftToRight[0]];
             Vector3d x = positions[bottomLeftToRight[bottomLeftToRight.Length - 1]] - origin;
@@ -202,7 +202,7 @@ namespace MiniGlobe.Core.Tessellation
                         double deltaX = i / (double)numberOfPartitions;
                         Vector3d offsetX = deltaX * x;
 
-                        topIndicesBuffer[i] = quadCubeMesh.Positions.Count;
+                        topIndicesBuffer[i] = CubeMapMesh.Positions.Count;
                         positions.Add(origin + offsetX + offsetY);
                     }
                 }
@@ -225,26 +225,26 @@ namespace MiniGlobe.Core.Tessellation
             }
         }
 
-        private static void CubeToEllipsoid(QuadCubeMesh quadCubeMesh)
+        private static void CubeToEllipsoid(CubeMapMesh CubeMapMesh)
         {
-            IList<Vector3d> positions = quadCubeMesh.Positions;
+            IList<Vector3d> positions = CubeMapMesh.Positions;
 
             for (int i = 0; i < positions.Count; ++i)
             {
-                positions[i] = Vector3d.Multiply(Vector3d.Normalize(positions[i]), quadCubeMesh.Ellipsoid.Radii);
+                positions[i] = Vector3d.Multiply(Vector3d.Normalize(positions[i]), CubeMapMesh.Ellipsoid.Radii);
 
-                if ((quadCubeMesh.Normals != null) || (quadCubeMesh.TextureCoordinate != null))
+                if ((CubeMapMesh.Normals != null) || (CubeMapMesh.TextureCoordinate != null))
                 {
-                    Vector3d deticSurfaceNormal = quadCubeMesh.Ellipsoid.DeticSurfaceNormal(positions[i]);
+                    Vector3d deticSurfaceNormal = CubeMapMesh.Ellipsoid.DeticSurfaceNormal(positions[i]);
 
-                    if (quadCubeMesh.Normals != null)
+                    if (CubeMapMesh.Normals != null)
                     {
-                        quadCubeMesh.Normals.Add(new Vector3h(deticSurfaceNormal));
+                        CubeMapMesh.Normals.Add(new Vector3h(deticSurfaceNormal));
                     }
 
-                    if (quadCubeMesh.TextureCoordinate != null)
+                    if (CubeMapMesh.TextureCoordinate != null)
                     {
-                        quadCubeMesh.TextureCoordinate.Add(SubdivisionUtility.ComputeTextureCoordinate(deticSurfaceNormal));
+                        CubeMapMesh.TextureCoordinate.Add(SubdivisionUtility.ComputeTextureCoordinate(deticSurfaceNormal));
                     }
                 }
             }

@@ -29,9 +29,9 @@ namespace MiniGlobe.Core
         }
 
         [Test]
-        public void RenderQuadCubeSphere()
+        public void RenderCubeMapSphere()
         {
-            Render(QuadCubeEllipsoidTessellator.Compute(Ellipsoid.UnitSphere, 3, QuadCubeEllipsoidVertexAttributes.Position));
+            Render(CubeMapEllipsoidTessellator.Compute(Ellipsoid.UnitSphere, 3, CubeMapEllipsoidVertexAttributes.Position));
         }
 
         private static void Render(Mesh mesh)
