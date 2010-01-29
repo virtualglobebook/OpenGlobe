@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<project name="CSharpMoneyPort" default="build">
+
+  <property name="output.dir" value="../../bin" />
+  <property name="output.dll" value="../../bin/cs-money-port.dll" />
+
+  <target name="clean">
+    <delete file="${output.dll}" />
+  </target>
+
+  <target name="build">
+    <mkdir dir="${output.dir}" unless="${directory::exists(output.dir)}" />
+    <copy file="../../../bin/nunit.framework.dll" todir="${output.dir}" 
+      if="${file::exists('../../../bin/nunit.framework.dll')}" />
+
+    <csc target="library" output="${output.dll}">
+      <sources>
+        <include name="*.cs"/>
+      </sources>
+      <nowarn>
+        <warning number="618"/>
+        <warning number="672"/>
+      </nowarn>
+      <references basedir="${output.dir}">
+        <include name="nunit.framework.dll" />
+      </references>
+    </csc>
+  </target>
+
+  <target name="rebuild" depends="clean,build" />
+
+  <target name="package">
+    <copy todir="${package.samples.dir}/csharp/money-port">
+      <fileset basedir=".">
+        <include name="cs-money-port.csproj" />
+        <include name="cs-money-port.build" />
+        <include name="cs-money-port.dll.config" />
+        <include name="AssemblyInfo.cs" />
+        <include name="IMoney.cs" />
+        <include name="Money.cs" />
+        <include name="MoneyBag.cs" />
+        <include name="MoneyTest.cs" />
+      </fileset>
+    </copy>
+
+    <xmlpoke 
+      file="${package.samples.dir}/csharp/money-port/cs-money-port.csproj"
+      xpath="/VisualStudioProject/CSHARP/Build/References/Reference[@Name='nunit.framework']/@HintPath"
+      value="..\..\..\bin\nunit.framework.dll" />
+  </target>
+
+</project>

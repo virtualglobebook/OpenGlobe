@@ -1,0 +1,3641 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FxCopProject Version="1.36" Name="My FxCop Project">
+ <ProjectOptions>
+  <SharedProject>True</SharedProject>
+  <Stylesheet Apply="False">c:\program files\microsoft fxcop 1.36\Xml\FxCopReport.xsl</Stylesheet>
+  <SaveMessages>
+   <Project Status="Active, Excluded" NewOnly="False" />
+   <Report Status="Active" NewOnly="False" />
+  </SaveMessages>
+  <ProjectFile Compress="True" DefaultTargetCheck="True" DefaultRuleCheck="True" SaveByRuleGroup="" Deterministic="True" />
+  <EnableMultithreadedLoad>True</EnableMultithreadedLoad>
+  <EnableMultithreadedAnalysis>True</EnableMultithreadedAnalysis>
+  <SourceLookup>True</SourceLookup>
+  <AnalysisExceptionsThreshold>10</AnalysisExceptionsThreshold>
+  <RuleExceptionsThreshold>1</RuleExceptionsThreshold>
+  <Spelling Locale="en-US" />
+  <OverrideRuleVisibilities>False</OverrideRuleVisibilities>
+  <CustomDictionaries SearchFxCopDir="True" SearchUserProfile="True" SearchProjectDir="True" />
+  <SearchGlobalAssemblyCache>False</SearchGlobalAssemblyCache>
+  <DeadlockDetectionTimeout>120</DeadlockDetectionTimeout>
+  <IgnoreGeneratedCode>False</IgnoreGeneratedCode>
+ </ProjectOptions>
+ <Targets>
+  <Target Name="$(ProjectDir)/../../Source/Examples/Chapter3/SubdivisionEllipsoid/bin/Release/Chapter3SubdivisionEllipsoid.exe" Analyze="True" AnalyzeAllChildren="True" />
+  <Target Name="$(ProjectDir)/../../Source/Examples/Chapter3/SubdivisionSphere1/bin/Release/Chapter3SubdivisionSphere1.exe" Analyze="True" AnalyzeAllChildren="True" />
+  <Target Name="$(ProjectDir)/../../Source/Examples/Chapter3/SubdivisionSphere2/bin/Release/Chapter3SubdivisionSphere2.exe" Analyze="True" AnalyzeAllChildren="True" />
+  <Target Name="$(ProjectDir)/../../Source/Tests/bin/Release/MiniGlobe.Core.dll" Analyze="True" AnalyzeAllChildren="True" />
+  <Target Name="$(ProjectDir)/../../Source/Tests/bin/Release/MiniGlobe.Renderer.dll" Analyze="True" AnalyzeAllChildren="True" />
+  <Target Name="$(ProjectDir)/../../Source/Tests/bin/Release/MiniGlobe.Scene.dll" Analyze="True" AnalyzeAllChildren="True" />
+  <Target Name="$(ProjectDir)/../../Source/Tests/bin/Release/MiniGlobe.Tests.dll" Analyze="True" AnalyzeAllChildren="True" />
+ </Targets>
+ <Rules>
+  <RuleFiles>
+   <RuleFile Name="$(FxCopDir)\Rules\DesignRules.dll" Enabled="True" AllRulesEnabled="True" />
+   <RuleFile Name="$(FxCopDir)\Rules\GlobalizationRules.dll" Enabled="True" AllRulesEnabled="True" />
+   <RuleFile Name="$(FxCopDir)\Rules\InteroperabilityRules.dll" Enabled="True" AllRulesEnabled="True" />
+   <RuleFile Name="$(FxCopDir)\Rules\MobilityRules.dll" Enabled="True" AllRulesEnabled="True" />
+   <RuleFile Name="$(FxCopDir)\Rules\NamingRules.dll" Enabled="True" AllRulesEnabled="True" />
+   <RuleFile Name="$(FxCopDir)\Rules\PerformanceRules.dll" Enabled="True" AllRulesEnabled="True" />
+   <RuleFile Name="$(FxCopDir)\Rules\PortabilityRules.dll" Enabled="True" AllRulesEnabled="True" />
+   <RuleFile Name="$(FxCopDir)\Rules\SecurityRules.dll" Enabled="True" AllRulesEnabled="True" />
+   <RuleFile Name="$(FxCopDir)\Rules\UsageRules.dll" Enabled="True" AllRulesEnabled="True" />
+  </RuleFiles>
+  <Groups />
+  <Settings />
+ </Rules>
+ <FxCopReport Version="1.36">
+  <Namespaces>
+   <Namespace Name="MiniGlobe">
+    <Messages>
+     <Message TypeName="AvoidNamespacesWithFewTypes" Category="Microsoft.Design" CheckId="CA1020" Status="Excluded" Created="2009-12-29 14:04:17Z">
+      <Issue>
+       <Item>MiniGlobe</Item>
+      </Issue>
+      <Notes>
+       <User Name="pjcozzi">
+        <Note Id="24" />
+       </User>
+      </Notes>
+     </Message>
+    </Messages>
+   </Namespace>
+   <Namespace Name="MiniGlobe.Core">
+    <Messages>
+     <Message TypeName="AvoidNamespacesWithFewTypes" Category="Microsoft.Design" CheckId="CA1020" Status="Excluded" Created="2009-12-29 14:04:17Z">
+      <Issue>
+       <Item>MiniGlobe.Core</Item>
+      </Issue>
+      <Notes>
+       <User Name="pjcozzi">
+        <Note Id="24" />
+       </User>
+      </Notes>
+     </Message>
+    </Messages>
+   </Namespace>
+   <Namespace Name="MiniGlobe.Core.Tessellation">
+    <Messages>
+     <Message TypeName="AvoidNamespacesWithFewTypes" Category="Microsoft.Design" CheckId="CA1020" Status="Excluded" Created="2009-12-23 01:33:54Z">
+      <Issue>
+       <Item>MiniGlobe.Core.Tessellation</Item>
+      </Issue>
+      <Notes>
+       <User Name="pjcozzi">
+        <Note Id="15" />
+       </User>
+      </Notes>
+     </Message>
+    </Messages>
+   </Namespace>
+   <Namespace Name="MiniGlobe.Renderer.GL32">
+    <Messages>
+     <Message TypeName="AvoidNamespacesWithFewTypes" Category="Microsoft.Design" CheckId="CA1020" Status="Excluded" Created="2009-12-11 23:38:35Z">
+      <Issue>
+       <Item>MiniGlobe.Renderer.GL32</Item>
+      </Issue>
+      <Notes>
+       <User Name="pjcozzi">
+        <Note Id="2" />
+       </User>
+      </Notes>
+     </Message>
+    </Messages>
+   </Namespace>
+   <Namespace Name="MiniGlobe.Scene">
+    <Messages>
+     <Message TypeName="AvoidNamespacesWithFewTypes" Category="Microsoft.Design" CheckId="CA1020" Status="Excluded" Created="2009-12-29 14:04:17Z">
+      <Issue>
+       <Item>MiniGlobe.Scene</Item>
+      </Issue>
+      <Notes>
+       <User Name="pjcozzi">
+        <Note Id="24" />
+       </User>
+      </Notes>
+     </Message>
+    </Messages>
+   </Namespace>
+  </Namespaces>
+  <Targets>
+   <Target Name="$(ProjectDir)/../../Source/Examples/Chapter3/SubdivisionEllipsoid/bin/Release/Chapter3SubdivisionEllipsoid.exe">
+    <Modules>
+     <Module Name="chapter3subdivisionellipsoid.exe">
+      <Messages>
+       <Message TypeName="AssembliesShouldHaveValidStrongNames" Category="Microsoft.Design" CheckId="CA2210" Created="2010-01-05 17:55:49Z">
+        <Issue Name="NoStrongName">
+         <Item>'Chapter3SubdivisionEllipsoid.exe'</Item>
+        </Issue>
+       </Message>
+      </Messages>
+     </Module>
+    </Modules>
+   </Target>
+   <Target Name="$(ProjectDir)/../../Source/Examples/Chapter3/SubdivisionSphere1/bin/Release/Chapter3SubdivisionSphere1.exe">
+    <Modules>
+     <Module Name="chapter3subdivisionsphere1.exe">
+      <Messages>
+       <Message TypeName="AssembliesShouldHaveValidStrongNames" Category="Microsoft.Design" CheckId="CA2210" Created="2009-12-29 14:04:17Z">
+        <Issue Name="NoStrongName">
+         <Item>'Chapter3SubdivisionSphere1.exe'</Item>
+        </Issue>
+       </Message>
+      </Messages>
+     </Module>
+    </Modules>
+   </Target>
+   <Target Name="$(ProjectDir)/../../Source/Examples/Chapter3/SubdivisionSphere2/bin/Release/Chapter3SubdivisionSphere2.exe">
+    <Modules>
+     <Module Name="chapter3subdivisionsphere2.exe">
+      <Messages>
+       <Message TypeName="AssembliesShouldHaveValidStrongNames" Category="Microsoft.Design" CheckId="CA2210" Created="2009-12-29 14:04:17Z">
+        <Issue Name="NoStrongName">
+         <Item>'Chapter3SubdivisionSphere2.exe'</Item>
+        </Issue>
+       </Message>
+      </Messages>
+     </Module>
+    </Modules>
+   </Target>
+   <Target Name="$(ProjectDir)/../../Source/Tests/bin/Release/MiniGlobe.Core.dll">
+    <Modules>
+     <Module Name="miniglobe.core.dll">
+      <Messages>
+       <Message TypeName="AssembliesShouldHaveValidStrongNames" Category="Microsoft.Design" CheckId="CA2210" Created="2009-12-23 01:33:54Z">
+        <Issue Name="NoStrongName">
+         <Item>'MiniGlobe.Core.dll'</Item>
+        </Issue>
+       </Message>
+      </Messages>
+      <Namespaces>
+       <Namespace Name="MiniGlobe.Core.Geometry">
+        <Types>
+         <Type Name="Ellipsoid">
+          <Members>
+           <Member Name="#.ctor(System.Double,System.Double,System.Double)">
+            <Messages>
+             <Message Id="x" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-01-05 17:55:49Z">
+              <Issue Name="MemberParameterMoreMeaningfulName">
+               <Item>'Ellipsoid.Ellipsoid(double, double, double)'</Item>
+               <Item>'x'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="17" />
+               </User>
+              </Notes>
+             </Message>
+             <Message Id="y" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-01-05 17:55:49Z">
+              <Issue Name="MemberParameterMoreMeaningfulName">
+               <Item>'Ellipsoid.Ellipsoid(double, double, double)'</Item>
+               <Item>'y'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="17" />
+               </User>
+              </Notes>
+             </Message>
+             <Message Id="z" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-01-05 17:55:49Z">
+              <Issue Name="MemberParameterMoreMeaningfulName">
+               <Item>'Ellipsoid.Ellipsoid(double, double, double)'</Item>
+               <Item>'z'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="17" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#UnitSphere">
+            <Messages>
+             <Message TypeName="DoNotDeclareReadOnlyMutableReferenceTypes" Category="Microsoft.Security" CheckId="CA2104" Status="Excluded" Created="2010-01-13 21:00:18Z">
+              <Issue>
+               <Item>'Ellipsoid.UnitSphere'</Item>
+               <Item>'Ellipsoid'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="31" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Wgs84">
+            <Messages>
+             <Message TypeName="DoNotDeclareReadOnlyMutableReferenceTypes" Category="Microsoft.Security" CheckId="CA2104" Status="Excluded" Created="2010-01-13 21:00:18Z">
+              <Issue>
+               <Item>'Ellipsoid.Wgs84'</Item>
+               <Item>'Ellipsoid'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="31" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="Indices`1">
+          <Messages>
+           <Message Id="Indices" TypeName="UsePreferredTerms" Category="Microsoft.Naming" CheckId="CA1726" Status="Excluded" Created="2009-12-29 14:04:17Z">
+            <Issue Name="Type">
+             <Item>Indices</Item>
+             <Item>'Indices&lt;T&gt;'</Item>
+             <Item>Indexes</Item>
+            </Issue>
+            <Notes>
+             <User Name="pjcozzi">
+              <Note Id="26" />
+             </User>
+            </Notes>
+           </Message>
+          </Messages>
+         </Type>
+         <Type Name="IndicesBase">
+          <Messages>
+           <Message Id="Indices" TypeName="UsePreferredTerms" Category="Microsoft.Naming" CheckId="CA1726" Status="Excluded" Created="2009-12-29 14:04:17Z">
+            <Issue Name="Type">
+             <Item>Indices</Item>
+             <Item>'IndicesBase'</Item>
+             <Item>Indexes</Item>
+            </Issue>
+            <Notes>
+             <User Name="pjcozzi">
+              <Note Id="26" />
+             </User>
+            </Notes>
+           </Message>
+          </Messages>
+         </Type>
+         <Type Name="IndicesByte">
+          <Messages>
+           <Message Id="Indices" TypeName="UsePreferredTerms" Category="Microsoft.Naming" CheckId="CA1726" Status="Excluded" Created="2009-12-29 14:04:17Z">
+            <Issue Name="Type">
+             <Item>Indices</Item>
+             <Item>'IndicesByte'</Item>
+             <Item>Indexes</Item>
+            </Issue>
+            <Notes>
+             <User Name="pjcozzi">
+              <Note Id="26" />
+             </User>
+            </Notes>
+           </Message>
+          </Messages>
+         </Type>
+         <Type Name="IndicesInt">
+          <Messages>
+           <Message Id="Indices" TypeName="UsePreferredTerms" Category="Microsoft.Naming" CheckId="CA1726" Status="Excluded" Created="2009-12-29 14:04:17Z">
+            <Issue Name="Type">
+             <Item>Indices</Item>
+             <Item>'IndicesInt'</Item>
+             <Item>Indexes</Item>
+            </Issue>
+            <Notes>
+             <User Name="pjcozzi">
+              <Note Id="26" />
+             </User>
+            </Notes>
+           </Message>
+          </Messages>
+         </Type>
+         <Type Name="IndicesShort">
+          <Messages>
+           <Message Id="Indices" TypeName="UsePreferredTerms" Category="Microsoft.Naming" CheckId="CA1726" Status="Excluded" Created="2009-12-29 14:04:17Z">
+            <Issue Name="Type">
+             <Item>Indices</Item>
+             <Item>'IndicesShort'</Item>
+             <Item>Indexes</Item>
+            </Issue>
+            <Notes>
+             <User Name="pjcozzi">
+              <Note Id="26" />
+             </User>
+            </Notes>
+           </Message>
+          </Messages>
+         </Type>
+         <Type Name="IndicesType">
+          <Messages>
+           <Message Id="Indices" TypeName="UsePreferredTerms" Category="Microsoft.Naming" CheckId="CA1726" Status="Excluded" Created="2009-12-29 14:04:17Z">
+            <Issue Name="Type">
+             <Item>Indices</Item>
+             <Item>'IndicesType'</Item>
+             <Item>Indexes</Item>
+            </Issue>
+            <Notes>
+             <User Name="pjcozzi">
+              <Note Id="26" />
+             </User>
+            </Notes>
+           </Message>
+          </Messages>
+         </Type>
+         <Type Name="Mesh">
+          <Members>
+           <Member Name="#Indices">
+            <Messages>
+             <Message Id="Indices" TypeName="UsePreferredTerms" Category="Microsoft.Naming" CheckId="CA1726" Status="Excluded" Created="2009-12-23 01:33:54Z">
+              <Issue Name="Member">
+               <Item>Indices</Item>
+               <Item>'Mesh.Indices'</Item>
+               <Item>Indexes</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="18" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="TriangleIndices`1">
+          <Messages>
+           <Message Id="Indices" TypeName="UsePreferredTerms" Category="Microsoft.Naming" CheckId="CA1726" Status="Excluded" Created="2009-12-29 14:04:17Z">
+            <Issue Name="Type">
+             <Item>Indices</Item>
+             <Item>'TriangleIndices&lt;T&gt;'</Item>
+             <Item>Indexes</Item>
+            </Issue>
+            <Notes>
+             <User Name="pjcozzi">
+              <Note Id="26" />
+             </User>
+            </Notes>
+           </Message>
+          </Messages>
+          <Members>
+           <Member Name="#.ctor(!0,!0,!0)">
+            <Messages>
+             <Message Id="i" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2009-12-29 14:04:17Z">
+              <Issue Name="MemberParameter">
+               <Item>'TriangleIndices&lt;T&gt;.TriangleIndices(T, T, T)'</Item>
+               <Item>i</Item>
+               <Item>'i0'</Item>
+              </Issue>
+              <Issue Name="MemberParameter">
+               <Item>'TriangleIndices&lt;T&gt;.TriangleIndices(T, T, T)'</Item>
+               <Item>i</Item>
+               <Item>'i1'</Item>
+              </Issue>
+              <Issue Name="MemberParameter">
+               <Item>'TriangleIndices&lt;T&gt;.TriangleIndices(T, T, T)'</Item>
+               <Item>i</Item>
+               <Item>'i2'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="27" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="VertexAttribute">
+          <Messages>
+           <Message TypeName="IdentifiersShouldNotHaveIncorrectSuffix" Category="Microsoft.Naming" CheckId="CA1711" Status="Excluded" Created="2010-01-13 21:00:18Z">
+            <Issue Name="TypeNoAlternate">
+             <Item>'VertexAttribute'</Item>
+             <Item>Attribute</Item>
+            </Issue>
+            <Notes>
+             <User Name="pjcozzi">
+              <Note Id="30" />
+             </User>
+            </Notes>
+           </Message>
+          </Messages>
+         </Type>
+         <Type Name="VertexAttribute`1">
+          <Messages>
+           <Message TypeName="IdentifiersShouldNotHaveIncorrectSuffix" Category="Microsoft.Naming" CheckId="CA1711" Status="Excluded" Created="2009-12-23 01:33:54Z">
+            <Issue Name="TypeNoAlternate">
+             <Item>'VertexAttribute&lt;T&gt;'</Item>
+             <Item>Attribute</Item>
+            </Issue>
+            <Notes>
+             <User Name="pjcozzi">
+              <Note Id="19" />
+             </User>
+            </Notes>
+           </Message>
+          </Messages>
+         </Type>
+        </Types>
+       </Namespace>
+      </Namespaces>
+     </Module>
+    </Modules>
+   </Target>
+   <Target Name="$(ProjectDir)/../../Source/Tests/bin/Release/MiniGlobe.Renderer.dll">
+    <Modules>
+     <Module Name="miniglobe.renderer.dll">
+      <Messages>
+       <Message TypeName="AssembliesShouldHaveValidStrongNames" Category="Microsoft.Design" CheckId="CA2210" Created="2009-12-11 23:38:35Z">
+        <Issue Name="NoStrongName">
+         <Item>'MiniGlobe.Renderer.dll'</Item>
+        </Issue>
+       </Message>
+      </Messages>
+      <Namespaces>
+       <Namespace Name="MiniGlobe.Renderer">
+        <Types>
+         <Type Name="Blending">
+          <Members>
+           <Member Name="#DestinationRGBFactor">
+            <Messages>
+             <Message Id="RGB" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Excluded" Created="2009-12-11 23:38:35Z">
+              <Issue Name="Member">
+               <Item>RGB</Item>
+               <Item>'Blending.DestinationRGBFactor'</Item>
+               <Item>Rgb</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="3" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#RGBEquation">
+            <Messages>
+             <Message Id="RGB" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Excluded" Created="2009-12-11 23:38:35Z">
+              <Issue Name="Member">
+               <Item>RGB</Item>
+               <Item>'Blending.RGBEquation'</Item>
+               <Item>Rgb</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="3" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#SourceRGBFactor">
+            <Messages>
+             <Message Id="RGB" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Excluded" Created="2009-12-11 23:38:35Z">
+              <Issue Name="Member">
+               <Item>RGB</Item>
+               <Item>'Blending.SourceRGBFactor'</Item>
+               <Item>Rgb</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="3" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="BlittableBGRA">
+          <Messages>
+           <Message Id="BGRA" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Excluded" Created="2009-12-11 23:38:35Z">
+            <Issue Name="Type">
+             <Item>BGRA</Item>
+             <Item>'BlittableBGRA'</Item>
+             <Item>Bgra</Item>
+            </Issue>
+            <Notes>
+             <User Name="pjcozzi">
+              <Note Id="3" />
+             </User>
+            </Notes>
+           </Message>
+          </Messages>
+          <Members>
+           <Member Name="#A">
+            <Messages>
+             <Message Id="A" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2009-12-14 19:26:16Z">
+              <Issue Name="MemberMoreMeaningfulName">
+               <Item>'BlittableBGRA.A'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="6" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#B">
+            <Messages>
+             <Message Id="B" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2009-12-14 19:26:16Z">
+              <Issue Name="MemberMoreMeaningfulName">
+               <Item>'BlittableBGRA.B'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="6" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#G">
+            <Messages>
+             <Message Id="G" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2009-12-14 19:26:16Z">
+              <Issue Name="MemberMoreMeaningfulName">
+               <Item>'BlittableBGRA.G'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="6" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#R">
+            <Messages>
+             <Message Id="R" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2009-12-14 19:26:16Z">
+              <Issue Name="MemberMoreMeaningfulName">
+               <Item>'BlittableBGRA.R'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="6" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="BlittableRGBA">
+          <Messages>
+           <Message Id="RGBA" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Excluded" Created="2009-12-11 23:38:35Z">
+            <Issue Name="Type">
+             <Item>RGBA</Item>
+             <Item>'BlittableRGBA'</Item>
+             <Item>Rgba</Item>
+            </Issue>
+            <Notes>
+             <User Name="pjcozzi">
+              <Note Id="3" />
+             </User>
+            </Notes>
+           </Message>
+          </Messages>
+          <Members>
+           <Member Name="#A">
+            <Messages>
+             <Message Id="A" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2009-12-14 19:26:16Z">
+              <Issue Name="MemberMoreMeaningfulName">
+               <Item>'BlittableRGBA.A'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="6" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#B">
+            <Messages>
+             <Message Id="B" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2009-12-14 19:26:16Z">
+              <Issue Name="MemberMoreMeaningfulName">
+               <Item>'BlittableRGBA.B'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="6" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#G">
+            <Messages>
+             <Message Id="G" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2009-12-14 19:26:16Z">
+              <Issue Name="MemberMoreMeaningfulName">
+               <Item>'BlittableRGBA.G'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="6" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#R">
+            <Messages>
+             <Message Id="R" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2009-12-14 19:26:16Z">
+              <Issue Name="MemberMoreMeaningfulName">
+               <Item>'BlittableRGBA.R'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="6" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="HighResolutionSnapFrameBuffer">
+          <Members>
+           <Member Name="#SaveColorBuffer(System.String)">
+            <Messages>
+             <Message Id="filename" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Status="Excluded" Created="2010-01-13 21:00:18Z">
+              <Issue Name="MemberParameterShouldBeCompoundWord">
+               <Item>'HighResolutionSnapFrameBuffer.SaveColorBuffer(string)'</Item>
+               <Item>filename</Item>
+               <Item>'filename'</Item>
+               <Item>fileName</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="32" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#SaveDepthBuffer(System.String)">
+            <Messages>
+             <Message Id="filename" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Status="Excluded" Created="2010-01-13 21:00:18Z">
+              <Issue Name="MemberParameterShouldBeCompoundWord">
+               <Item>'HighResolutionSnapFrameBuffer.SaveDepthBuffer(string)'</Item>
+               <Item>filename</Item>
+               <Item>'filename'</Item>
+               <Item>fileName</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="32" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="IndexBuffer">
+          <Members>
+           <Member Name="#CopyToSystemMemory`1()">
+            <Messages>
+             <Message TypeName="GenericMethodsShouldProvideTypeParameter" Category="Microsoft.Design" CheckId="CA1004" Created="2009-12-11 23:38:35Z">
+              <Issue>
+               <Item>'IndexBuffer.CopyToSystemMemory&lt;T&gt;()'</Item>
+               <Item>'T'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#CopyToSystemMemory`1(System.Int32,System.Int32)">
+            <Messages>
+             <Message TypeName="GenericMethodsShouldProvideTypeParameter" Category="Microsoft.Design" CheckId="CA1004" Created="2009-12-11 23:38:35Z">
+              <Issue>
+               <Item>'IndexBuffer.CopyToSystemMemory&lt;T&gt;(int, int)'</Item>
+               <Item>'T'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="Matrix2">
+          <Members>
+           <Member Name="#.ctor(System.Single,System.Single,System.Single,System.Single)">
+            <Messages>
+             <Message Id="m" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2009-12-14 19:57:46Z">
+              <Issue Name="MemberParameter">
+               <Item>'Matrix2.Matrix2(float, float, float, float)'</Item>
+               <Item>m</Item>
+               <Item>'m00'</Item>
+              </Issue>
+              <Issue Name="MemberParameter">
+               <Item>'Matrix2.Matrix2(float, float, float, float)'</Item>
+               <Item>m</Item>
+               <Item>'m01'</Item>
+              </Issue>
+              <Issue Name="MemberParameter">
+               <Item>'Matrix2.Matrix2(float, float, float, float)'</Item>
+               <Item>m</Item>
+               <Item>'m10'</Item>
+              </Issue>
+              <Issue Name="MemberParameter">
+               <Item>'Matrix2.Matrix2(float, float, float, float)'</Item>
+               <Item>m</Item>
+               <Item>'m11'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="13" />
+               </User>
+              </Notes>
+             </Message>
+             <Message TypeName="ReplaceRepetitiveArgumentsWithParamsArray" Category="Microsoft.Design" CheckId="CA1025" Status="Excluded" Created="2009-12-14 19:57:46Z">
+              <Issue>
+               <Item>'Matrix2.Matrix2(float, float, float, float)'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="14" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="Matrix23">
+          <Members>
+           <Member Name="#.ctor(System.Single,System.Single,System.Single,System.Single,System.Single,System.Single)">
+            <Messages>
+             <Message Id="m" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2009-12-11 23:38:35Z">
+              <Issue Name="MemberParameter">
+               <Item>'Matrix23.Matrix23(float, float, float, float, float, float)'</Item>
+               <Item>m</Item>
+               <Item>'m00'</Item>
+              </Issue>
+              <Issue Name="MemberParameter">
+               <Item>'Matrix23.Matrix23(float, float, float, float, float, float)'</Item>
+               <Item>m</Item>
+               <Item>'m01'</Item>
+              </Issue>
+              <Issue Name="MemberParameter">
+               <Item>'Matrix23.Matrix23(float, float, float, float, float, float)'</Item>
+               <Item>m</Item>
+               <Item>'m10'</Item>
+              </Issue>
+              <Issue Name="MemberParameter">
+               <Item>'Matrix23.Matrix23(float, float, float, float, float, float)'</Item>
+               <Item>m</Item>
+               <Item>'m11'</Item>
+              </Issue>
+              <Issue Name="MemberParameter">
+               <Item>'Matrix23.Matrix23(float, float, float, float, float, float)'</Item>
+               <Item>m</Item>
+               <Item>'m20'</Item>
+              </Issue>
+              <Issue Name="MemberParameter">
+               <Item>'Matrix23.Matrix23(float, float, float, float, float, float)'</Item>
+               <Item>m</Item>
+               <Item>'m21'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="7" />
+               </User>
+              </Notes>
+             </Message>
+             <Message TypeName="ReplaceRepetitiveArgumentsWithParamsArray" Category="Microsoft.Design" CheckId="CA1025" Status="Excluded" Created="2009-12-11 23:38:35Z">
+              <Issue>
+               <Item>'Matrix23.Matrix23(float, float, float, float, float, float)'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="12" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="Matrix24">
+          <Members>
+           <Member Name="#.ctor(OpenTK.Vector2,OpenTK.Vector2,OpenTK.Vector2,OpenTK.Vector2)">
+            <Messages>
+             <Message TypeName="ReplaceRepetitiveArgumentsWithParamsArray" Category="Microsoft.Design" CheckId="CA1025" Status="Excluded" Created="2009-12-11 23:38:35Z">
+              <Issue>
+               <Item>'Matrix24.Matrix24(Vector2, Vector2, Vector2, Vector2)'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="12" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#.ctor(System.Single,System.Single,System.Single,System.Single,System.Single,System.Single,System.Single,System.Single)">
+            <Messages>
+             <Message Id="m" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2009-12-11 23:38:35Z">
+              <Issue Name="MemberParameter">
+               <Item>'Matrix24.Matrix24(float, float, float, float, float, float, float, float)'</Item>
+               <Item>m</Item>
+               <Item>'m00'</Item>
+              </Issue>
+              <Issue Name="MemberParameter">
+               <Item>'Matrix24.Matrix24(float, float, float, float, float, float, float, float)'</Item>
+               <Item>m</Item>
+               <Item>'m01'</Item>
+              </Issue>
+              <Issue Name="MemberParameter">
+               <Item>'Matrix24.Matrix24(float, float, float, float, float, float, float, float)'</Item>
+               <Item>m</Item>
+               <Item>'m10'</Item>
+              </Issue>
+              <Issue Name="MemberParameter">
+               <Item>'Matrix24.Matrix24(float, float, float, float, float, float, float, float)'</Item>
+               <Item>m</Item>
+               <Item>'m11'</Item>
+              </Issue>
+              <Issue Name="MemberParameter">
+               <Item>'Matrix24.Matrix24(float, float, float, float, float, float, float, float)'</Item>
+               <Item>m</Item>
+               <Item>'m20'</Item>
+              </Issue>
+              <Issue Name="MemberParameter">
+               <Item>'Matrix24.Matrix24(float, float, float, float, float, float, float, float)'</Item>
+               <Item>m</Item>
+               <Item>'m21'</Item>
+              </Issue>
+              <Issue Name="MemberParameter">
+               <Item>'Matrix24.Matrix24(float, float, float, float, float, float, float, float)'</Item>
+               <Item>m</Item>
+               <Item>'m30'</Item>
+              </Issue>
+              <Issue Name="MemberParameter">
+               <Item>'Matrix24.Matrix24(float, float, float, float, float, float, float, float)'</Item>
+               <Item>m</Item>
+               <Item>'m31'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="7" />
+               </User>
+              </Notes>
+             </Message>
+             <Message TypeName="ReplaceRepetitiveArgumentsWithParamsArray" Category="Microsoft.Design" CheckId="CA1025" Status="Excluded" Created="2009-12-11 23:38:35Z">
+              <Issue>
+               <Item>'Matrix24.Matrix24(float, float, float, float, float, float, float, float)'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="12" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="Matrix3">
+          <Members>
+           <Member Name="#.ctor(System.Single,System.Single,System.Single,System.Single,System.Single,System.Single,System.Single,System.Single,System.Single)">
+            <Messages>
+             <Message Id="m" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2009-12-11 23:38:35Z">
+              <Issue Name="MemberParameter">
+               <Item>'Matrix3.Matrix3(float, float, float, float, float, float, float, float, float)'</Item>
+               <Item>m</Item>
+               <Item>'m00'</Item>
+              </Issue>
+              <Issue Name="MemberParameter">
+               <Item>'Matrix3.Matrix3(float, float, float, float, float, float, float, float, float)'</Item>
+               <Item>m</Item>
+               <Item>'m01'</Item>
+              </Issue>
+              <Issue Name="MemberParameter">
+               <Item>'Matrix3.Matrix3(float, float, float, float, float, float, float, float, float)'</Item>
+               <Item>m</Item>
+               <Item>'m02'</Item>
+              </Issue>
+              <Issue Name="MemberParameter">
+               <Item>'Matrix3.Matrix3(float, float, float, float, float, float, float, float, float)'</Item>
+               <Item>m</Item>
+               <Item>'m10'</Item>
+              </Issue>
+              <Issue Name="MemberParameter">
+               <Item>'Matrix3.Matrix3(float, float, float, float, float, float, float, float, float)'</Item>
+               <Item>m</Item>
+               <Item>'m11'</Item>
+              </Issue>
+              <Issue Name="MemberParameter">
+               <Item>'Matrix3.Matrix3(float, float, float, float, float, float, float, float, float)'</Item>
+               <Item>m</Item>
+               <Item>'m12'</Item>
+              </Issue>
+              <Issue Name="MemberParameter">
+               <Item>'Matrix3.Matrix3(float, float, float, float, float, float, float, float, float)'</Item>
+               <Item>m</Item>
+               <Item>'m20'</Item>
+              </Issue>
+              <Issue Name="MemberParameter">
+               <Item>'Matrix3.Matrix3(float, float, float, float, float, float, float, float, float)'</Item>
+               <Item>m</Item>
+               <Item>'m21'</Item>
+              </Issue>
+              <Issue Name="MemberParameter">
+               <Item>'Matrix3.Matrix3(float, float, float, float, float, float, float, float, float)'</Item>
+               <Item>m</Item>
+               <Item>'m22'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="7" />
+               </User>
+              </Notes>
+             </Message>
+             <Message TypeName="ReplaceRepetitiveArgumentsWithParamsArray" Category="Microsoft.Design" CheckId="CA1025" Status="Excluded" Created="2009-12-11 23:38:35Z">
+              <Issue>
+               <Item>'Matrix3.Matrix3(float, float, float, float, float, float, float, float, float)'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="12" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="Matrix32">
+          <Members>
+           <Member Name="#.ctor(System.Single,System.Single,System.Single,System.Single,System.Single,System.Single)">
+            <Messages>
+             <Message Id="m" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2009-12-11 23:38:35Z">
+              <Issue Name="MemberParameter">
+               <Item>'Matrix32.Matrix32(float, float, float, float, float, float)'</Item>
+               <Item>m</Item>
+               <Item>'m00'</Item>
+              </Issue>
+              <Issue Name="MemberParameter">
+               <Item>'Matrix32.Matrix32(float, float, float, float, float, float)'</Item>
+               <Item>m</Item>
+               <Item>'m01'</Item>
+              </Issue>
+              <Issue Name="MemberParameter">
+               <Item>'Matrix32.Matrix32(float, float, float, float, float, float)'</Item>
+               <Item>m</Item>
+               <Item>'m02'</Item>
+              </Issue>
+              <Issue Name="MemberParameter">
+               <Item>'Matrix32.Matrix32(float, float, float, float, float, float)'</Item>
+               <Item>m</Item>
+               <Item>'m10'</Item>
+              </Issue>
+              <Issue Name="MemberParameter">
+               <Item>'Matrix32.Matrix32(float, float, float, float, float, float)'</Item>
+               <Item>m</Item>
+               <Item>'m11'</Item>
+              </Issue>
+              <Issue Name="MemberParameter">
+               <Item>'Matrix32.Matrix32(float, float, float, float, float, float)'</Item>
+               <Item>m</Item>
+               <Item>'m12'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="7" />
+               </User>
+              </Notes>
+             </Message>
+             <Message TypeName="ReplaceRepetitiveArgumentsWithParamsArray" Category="Microsoft.Design" CheckId="CA1025" Status="Excluded" Created="2009-12-11 23:38:35Z">
+              <Issue>
+               <Item>'Matrix32.Matrix32(float, float, float, float, float, float)'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="12" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="Matrix34">
+          <Members>
+           <Member Name="#.ctor(OpenTK.Vector3,OpenTK.Vector3,OpenTK.Vector3,OpenTK.Vector3)">
+            <Messages>
+             <Message TypeName="ReplaceRepetitiveArgumentsWithParamsArray" Category="Microsoft.Design" CheckId="CA1025" Status="Excluded" Created="2009-12-11 23:38:35Z">
+              <Issue>
+               <Item>'Matrix34.Matrix34(Vector3, Vector3, Vector3, Vector3)'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="12" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#.ctor(System.Single,System.Single,System.Single,System.Single,System.Single,System.Single,System.Single,System.Single,System.Single,System.Single,System.Single,System.Single)">
+            <Messages>
+             <Message Id="m" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2009-12-11 23:38:35Z">
+              <Issue Name="MemberParameter">
+               <Item>'Matrix34.Matrix34(float, float, float, float, float, float, float, float, float, float, float, float)'</Item>
+               <Item>m</Item>
+               <Item>'m00'</Item>
+              </Issue>
+              <Issue Name="MemberParameter">
+               <Item>'Matrix34.Matrix34(float, float, float, float, float, float, float, float, float, float, float, float)'</Item>
+               <Item>m</Item>
+               <Item>'m01'</Item>
+              </Issue>
+              <Issue Name="MemberParameter">
+               <Item>'Matrix34.Matrix34(float, float, float, float, float, float, float, float, float, float, float, float)'</Item>
+               <Item>m</Item>
+               <Item>'m02'</Item>
+              </Issue>
+              <Issue Name="MemberParameter">
+               <Item>'Matrix34.Matrix34(float, float, float, float, float, float, float, float, float, float, float, float)'</Item>
+               <Item>m</Item>
+               <Item>'m10'</Item>
+              </Issue>
+              <Issue Name="MemberParameter">
+               <Item>'Matrix34.Matrix34(float, float, float, float, float, float, float, float, float, float, float, float)'</Item>
+               <Item>m</Item>
+               <Item>'m11'</Item>
+              </Issue>
+              <Issue Name="MemberParameter">
+               <Item>'Matrix34.Matrix34(float, float, float, float, float, float, float, float, float, float, float, float)'</Item>
+               <Item>m</Item>
+               <Item>'m12'</Item>
+              </Issue>
+              <Issue Name="MemberParameter">
+               <Item>'Matrix34.Matrix34(float, float, float, float, float, float, float, float, float, float, float, float)'</Item>
+               <Item>m</Item>
+               <Item>'m20'</Item>
+              </Issue>
+              <Issue Name="MemberParameter">
+               <Item>'Matrix34.Matrix34(float, float, float, float, float, float, float, float, float, float, float, float)'</Item>
+               <Item>m</Item>
+               <Item>'m21'</Item>
+              </Issue>
+              <Issue Name="MemberParameter">
+               <Item>'Matrix34.Matrix34(float, float, float, float, float, float, float, float, float, float, float, float)'</Item>
+               <Item>m</Item>
+               <Item>'m22'</Item>
+              </Issue>
+              <Issue Name="MemberParameter">
+               <Item>'Matrix34.Matrix34(float, float, float, float, float, float, float, float, float, float, float, float)'</Item>
+               <Item>m</Item>
+               <Item>'m30'</Item>
+              </Issue>
+              <Issue Name="MemberParameter">
+               <Item>'Matrix34.Matrix34(float, float, float, float, float, float, float, float, float, float, float, float)'</Item>
+               <Item>m</Item>
+               <Item>'m31'</Item>
+              </Issue>
+              <Issue Name="MemberParameter">
+               <Item>'Matrix34.Matrix34(float, float, float, float, float, float, float, float, float, float, float, float)'</Item>
+               <Item>m</Item>
+               <Item>'m32'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="7" />
+               </User>
+              </Notes>
+             </Message>
+             <Message TypeName="ReplaceRepetitiveArgumentsWithParamsArray" Category="Microsoft.Design" CheckId="CA1025" Status="Excluded" Created="2009-12-11 23:38:35Z">
+              <Issue>
+               <Item>'Matrix34.Matrix34(float, float, float, float, float, float, float, float, float, float, float, float)'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="12" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="Matrix42">
+          <Members>
+           <Member Name="#.ctor(System.Single,System.Single,System.Single,System.Single,System.Single,System.Single,System.Single,System.Single)">
+            <Messages>
+             <Message Id="m" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2009-12-11 23:38:35Z">
+              <Issue Name="MemberParameter">
+               <Item>'Matrix42.Matrix42(float, float, float, float, float, float, float, float)'</Item>
+               <Item>m</Item>
+               <Item>'m00'</Item>
+              </Issue>
+              <Issue Name="MemberParameter">
+               <Item>'Matrix42.Matrix42(float, float, float, float, float, float, float, float)'</Item>
+               <Item>m</Item>
+               <Item>'m01'</Item>
+              </Issue>
+              <Issue Name="MemberParameter">
+               <Item>'Matrix42.Matrix42(float, float, float, float, float, float, float, float)'</Item>
+               <Item>m</Item>
+               <Item>'m02'</Item>
+              </Issue>
+              <Issue Name="MemberParameter">
+               <Item>'Matrix42.Matrix42(float, float, float, float, float, float, float, float)'</Item>
+               <Item>m</Item>
+               <Item>'m03'</Item>
+              </Issue>
+              <Issue Name="MemberParameter">
+               <Item>'Matrix42.Matrix42(float, float, float, float, float, float, float, float)'</Item>
+               <Item>m</Item>
+               <Item>'m10'</Item>
+              </Issue>
+              <Issue Name="MemberParameter">
+               <Item>'Matrix42.Matrix42(float, float, float, float, float, float, float, float)'</Item>
+               <Item>m</Item>
+               <Item>'m11'</Item>
+              </Issue>
+              <Issue Name="MemberParameter">
+               <Item>'Matrix42.Matrix42(float, float, float, float, float, float, float, float)'</Item>
+               <Item>m</Item>
+               <Item>'m12'</Item>
+              </Issue>
+              <Issue Name="MemberParameter">
+               <Item>'Matrix42.Matrix42(float, float, float, float, float, float, float, float)'</Item>
+               <Item>m</Item>
+               <Item>'m13'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="7" />
+               </User>
+              </Notes>
+             </Message>
+             <Message TypeName="ReplaceRepetitiveArgumentsWithParamsArray" Category="Microsoft.Design" CheckId="CA1025" Status="Excluded" Created="2009-12-11 23:38:35Z">
+              <Issue>
+               <Item>'Matrix42.Matrix42(float, float, float, float, float, float, float, float)'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="12" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="Matrix43">
+          <Members>
+           <Member Name="#.ctor(System.Single,System.Single,System.Single,System.Single,System.Single,System.Single,System.Single,System.Single,System.Single,System.Single,System.Single,System.Single)">
+            <Messages>
+             <Message Id="m" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2009-12-11 23:38:35Z">
+              <Issue Name="MemberParameter">
+               <Item>'Matrix43.Matrix43(float, float, float, float, float, float, float, float, float, float, float, float)'</Item>
+               <Item>m</Item>
+               <Item>'m00'</Item>
+              </Issue>
+              <Issue Name="MemberParameter">
+               <Item>'Matrix43.Matrix43(float, float, float, float, float, float, float, float, float, float, float, float)'</Item>
+               <Item>m</Item>
+               <Item>'m01'</Item>
+              </Issue>
+              <Issue Name="MemberParameter">
+               <Item>'Matrix43.Matrix43(float, float, float, float, float, float, float, float, float, float, float, float)'</Item>
+               <Item>m</Item>
+               <Item>'m02'</Item>
+              </Issue>
+              <Issue Name="MemberParameter">
+               <Item>'Matrix43.Matrix43(float, float, float, float, float, float, float, float, float, float, float, float)'</Item>
+               <Item>m</Item>
+               <Item>'m03'</Item>
+              </Issue>
+              <Issue Name="MemberParameter">
+               <Item>'Matrix43.Matrix43(float, float, float, float, float, float, float, float, float, float, float, float)'</Item>
+               <Item>m</Item>
+               <Item>'m10'</Item>
+              </Issue>
+              <Issue Name="MemberParameter">
+               <Item>'Matrix43.Matrix43(float, float, float, float, float, float, float, float, float, float, float, float)'</Item>
+               <Item>m</Item>
+               <Item>'m11'</Item>
+              </Issue>
+              <Issue Name="MemberParameter">
+               <Item>'Matrix43.Matrix43(float, float, float, float, float, float, float, float, float, float, float, float)'</Item>
+               <Item>m</Item>
+               <Item>'m12'</Item>
+              </Issue>
+              <Issue Name="MemberParameter">
+               <Item>'Matrix43.Matrix43(float, float, float, float, float, float, float, float, float, float, float, float)'</Item>
+               <Item>m</Item>
+               <Item>'m13'</Item>
+              </Issue>
+              <Issue Name="MemberParameter">
+               <Item>'Matrix43.Matrix43(float, float, float, float, float, float, float, float, float, float, float, float)'</Item>
+               <Item>m</Item>
+               <Item>'m20'</Item>
+              </Issue>
+              <Issue Name="MemberParameter">
+               <Item>'Matrix43.Matrix43(float, float, float, float, float, float, float, float, float, float, float, float)'</Item>
+               <Item>m</Item>
+               <Item>'m21'</Item>
+              </Issue>
+              <Issue Name="MemberParameter">
+               <Item>'Matrix43.Matrix43(float, float, float, float, float, float, float, float, float, float, float, float)'</Item>
+               <Item>m</Item>
+               <Item>'m22'</Item>
+              </Issue>
+              <Issue Name="MemberParameter">
+               <Item>'Matrix43.Matrix43(float, float, float, float, float, float, float, float, float, float, float, float)'</Item>
+               <Item>m</Item>
+               <Item>'m23'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="7" />
+               </User>
+              </Notes>
+             </Message>
+             <Message TypeName="ReplaceRepetitiveArgumentsWithParamsArray" Category="Microsoft.Design" CheckId="CA1025" Status="Excluded" Created="2009-12-11 23:38:35Z">
+              <Issue>
+               <Item>'Matrix43.Matrix43(float, float, float, float, float, float, float, float, float, float, float, float)'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="12" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="MiniGlobeWindow">
+          <Members>
+           <Member Name="#RaiseRenderFrame()">
+            <Messages>
+             <Message TypeName="UseEventsWhereAppropriate" Category="Microsoft.Design" CheckId="CA1030" Created="2010-01-12 13:54:55Z">
+              <Issue>
+               <Item>'MiniGlobeWindow.RaiseRenderFrame()'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#RaiseResize()">
+            <Messages>
+             <Message TypeName="UseEventsWhereAppropriate" Category="Microsoft.Design" CheckId="CA1030" Created="2010-01-12 13:54:55Z">
+              <Issue>
+               <Item>'MiniGlobeWindow.RaiseResize()'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#RaiseUpdateFrame()">
+            <Messages>
+             <Message TypeName="UseEventsWhereAppropriate" Category="Microsoft.Design" CheckId="CA1030" Created="2010-01-12 13:54:55Z">
+              <Issue>
+               <Item>'MiniGlobeWindow.RaiseUpdateFrame()'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#RenderFrame" Kind="Event">
+            <Messages>
+             <Message TypeName="DeclareEventHandlersCorrectly" Category="Microsoft.Design" CheckId="CA1009" Created="2009-12-11 23:38:35Z">
+              <Issue Name="First">
+               <Item>'MiniGlobeWindow.MiniGlobeHandler'</Item>
+              </Issue>
+              <Issue Name="Second">
+               <Item>'MiniGlobeWindow.MiniGlobeHandler'</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="IdentifiersShouldHaveCorrectSuffix" Category="Microsoft.Naming" CheckId="CA1710" Created="2009-12-11 23:38:35Z">
+              <Issue>
+               <Item>'MiniGlobeWindow.MiniGlobeHandler'</Item>
+               <Item>EventHandler</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Resize" Kind="Event">
+            <Messages>
+             <Message TypeName="DeclareEventHandlersCorrectly" Category="Microsoft.Design" CheckId="CA1009" Created="2009-12-11 23:38:35Z">
+              <Issue Name="First">
+               <Item>'MiniGlobeWindow.MiniGlobeHandler'</Item>
+              </Issue>
+              <Issue Name="Second">
+               <Item>'MiniGlobeWindow.MiniGlobeHandler'</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="IdentifiersShouldHaveCorrectSuffix" Category="Microsoft.Naming" CheckId="CA1710" Created="2009-12-11 23:38:35Z">
+              <Issue>
+               <Item>'MiniGlobeWindow.MiniGlobeHandler'</Item>
+               <Item>EventHandler</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#UpdateFrame" Kind="Event">
+            <Messages>
+             <Message TypeName="DeclareEventHandlersCorrectly" Category="Microsoft.Design" CheckId="CA1009" Created="2009-12-11 23:38:35Z">
+              <Issue Name="First">
+               <Item>'MiniGlobeWindow.MiniGlobeHandler'</Item>
+              </Issue>
+              <Issue Name="Second">
+               <Item>'MiniGlobeWindow.MiniGlobeHandler'</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="IdentifiersShouldHaveCorrectSuffix" Category="Microsoft.Naming" CheckId="CA1710" Created="2009-12-11 23:38:35Z">
+              <Issue>
+               <Item>'MiniGlobeWindow.MiniGlobeHandler'</Item>
+               <Item>EventHandler</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="MiniGlobeWindow+MiniGlobeHandler">
+          <Messages>
+           <Message TypeName="NestedTypesShouldNotBeVisible" Category="Microsoft.Design" CheckId="CA1034" Created="2009-12-11 23:38:35Z">
+            <Issue>
+             <Item>'MiniGlobeWindow.MiniGlobeHandler'</Item>
+            </Issue>
+           </Message>
+          </Messages>
+         </Type>
+         <Type Name="ReadPixelBuffer">
+          <Members>
+           <Member Name="#CopyToSystemMemory`1()">
+            <Messages>
+             <Message TypeName="GenericMethodsShouldProvideTypeParameter" Category="Microsoft.Design" CheckId="CA1004" Created="2009-12-11 23:38:35Z">
+              <Issue>
+               <Item>'ReadPixelBuffer.CopyToSystemMemory&lt;T&gt;()'</Item>
+               <Item>'T'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#CopyToSystemMemory`1(System.Int32,System.Int32)">
+            <Messages>
+             <Message TypeName="GenericMethodsShouldProvideTypeParameter" Category="Microsoft.Design" CheckId="CA1004" Created="2009-12-11 23:38:35Z">
+              <Issue>
+               <Item>'ReadPixelBuffer.CopyToSystemMemory&lt;T&gt;(int, int)'</Item>
+               <Item>'T'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="ShaderVertexAttribute">
+          <Messages>
+           <Message TypeName="IdentifiersShouldNotHaveIncorrectSuffix" Category="Microsoft.Naming" CheckId="CA1711" Status="Excluded" Created="2009-12-11 23:38:35Z">
+            <Issue Name="TypeNoAlternate">
+             <Item>'ShaderVertexAttribute'</Item>
+             <Item>Attribute</Item>
+            </Issue>
+            <Notes>
+             <User Name="pjcozzi">
+              <Note Id="11" />
+             </User>
+            </Notes>
+           </Message>
+          </Messages>
+         </Type>
+         <Type Name="Texture2D">
+          <Members>
+           <Member Name="#CopyFromBuffer(MiniGlobe.Renderer.WritePixelBuffer,System.Int32,System.Int32,System.Int32,System.Int32,MiniGlobe.Renderer.ImageFormat,MiniGlobe.Renderer.ImageDataType)">
+            <Messages>
+             <Message Id="x" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2009-12-11 23:38:35Z">
+              <Issue Name="MemberParameter">
+               <Item>'Texture2D.CopyFromBuffer(WritePixelBuffer, int, int, int, int, ImageFormat, ImageDataType)'</Item>
+               <Item>x</Item>
+               <Item>'xOffset'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="9" />
+               </User>
+              </Notes>
+             </Message>
+             <Message Id="y" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2009-12-11 23:38:35Z">
+              <Issue Name="MemberParameter">
+               <Item>'Texture2D.CopyFromBuffer(WritePixelBuffer, int, int, int, int, ImageFormat, ImageDataType)'</Item>
+               <Item>y</Item>
+               <Item>'yOffset'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="9" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Save(System.String)">
+            <Messages>
+             <Message Id="filename" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Status="Excluded" Created="2010-01-13 21:00:18Z">
+              <Issue Name="MemberParameterShouldBeCompoundWord">
+               <Item>'Texture2D.Save(string)'</Item>
+               <Item>filename</Item>
+               <Item>'filename'</Item>
+               <Item>fileName</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="32" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="TextureFormat">
+          <Members>
+           <Member Name="#Depth32f">
+            <Messages>
+             <Message Id="f" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Excluded" Created="2009-12-11 23:38:35Z">
+              <Issue Name="Member">
+               <Item>f</Item>
+               <Item>'TextureFormat.Depth32f'</Item>
+               <Item>F</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="3" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Depth32fStencil8">
+            <Messages>
+             <Message Id="f" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Excluded" Created="2009-12-11 23:38:35Z">
+              <Issue Name="Member">
+               <Item>f</Item>
+               <Item>'TextureFormat.Depth32fStencil8'</Item>
+               <Item>F</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="3" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Red11fGreen11fBlue10f">
+            <Messages>
+             <Message Id="f" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Excluded" Created="2009-12-14 19:35:24Z">
+              <Issue Name="Member">
+               <Item>f</Item>
+               <Item>'TextureFormat.Red11fGreen11fBlue10f'</Item>
+               <Item>F</Item>
+              </Issue>
+              <Issue Name="Member">
+               <Item>f</Item>
+               <Item>'TextureFormat.Red11fGreen11fBlue10f'</Item>
+               <Item>F</Item>
+              </Issue>
+              <Issue Name="Member">
+               <Item>f</Item>
+               <Item>'TextureFormat.Red11fGreen11fBlue10f'</Item>
+               <Item>F</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="10" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Red16f">
+            <Messages>
+             <Message Id="f" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Excluded" Created="2009-12-11 23:38:35Z">
+              <Issue Name="Member">
+               <Item>f</Item>
+               <Item>'TextureFormat.Red16f'</Item>
+               <Item>F</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="3" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Red16i">
+            <Messages>
+             <Message Id="i" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Excluded" Created="2009-12-11 23:38:35Z">
+              <Issue Name="Member">
+               <Item>i</Item>
+               <Item>'TextureFormat.Red16i'</Item>
+               <Item>I</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="3" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Red16ui">
+            <Messages>
+             <Message Id="ui" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Excluded" Created="2009-12-11 23:38:35Z">
+              <Issue Name="Member">
+               <Item>ui</Item>
+               <Item>'TextureFormat.Red16ui'</Item>
+               <Item>UI</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="3" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Red32f">
+            <Messages>
+             <Message Id="f" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Excluded" Created="2009-12-11 23:38:35Z">
+              <Issue Name="Member">
+               <Item>f</Item>
+               <Item>'TextureFormat.Red32f'</Item>
+               <Item>F</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="3" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Red32i">
+            <Messages>
+             <Message Id="i" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Excluded" Created="2009-12-11 23:38:35Z">
+              <Issue Name="Member">
+               <Item>i</Item>
+               <Item>'TextureFormat.Red32i'</Item>
+               <Item>I</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="3" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Red32ui">
+            <Messages>
+             <Message Id="ui" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Excluded" Created="2009-12-11 23:38:35Z">
+              <Issue Name="Member">
+               <Item>ui</Item>
+               <Item>'TextureFormat.Red32ui'</Item>
+               <Item>UI</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="3" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Red8i">
+            <Messages>
+             <Message Id="i" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Excluded" Created="2009-12-11 23:38:35Z">
+              <Issue Name="Member">
+               <Item>i</Item>
+               <Item>'TextureFormat.Red8i'</Item>
+               <Item>I</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="3" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Red8ui">
+            <Messages>
+             <Message Id="ui" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Excluded" Created="2009-12-11 23:38:35Z">
+              <Issue Name="Member">
+               <Item>ui</Item>
+               <Item>'TextureFormat.Red8ui'</Item>
+               <Item>UI</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="3" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#RedGreen16f">
+            <Messages>
+             <Message Id="f" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Excluded" Created="2009-12-11 23:38:35Z">
+              <Issue Name="Member">
+               <Item>f</Item>
+               <Item>'TextureFormat.RedGreen16f'</Item>
+               <Item>F</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="3" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#RedGreen16i">
+            <Messages>
+             <Message Id="i" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Excluded" Created="2009-12-11 23:38:35Z">
+              <Issue Name="Member">
+               <Item>i</Item>
+               <Item>'TextureFormat.RedGreen16i'</Item>
+               <Item>I</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="3" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#RedGreen16ui">
+            <Messages>
+             <Message Id="ui" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Excluded" Created="2009-12-11 23:38:35Z">
+              <Issue Name="Member">
+               <Item>ui</Item>
+               <Item>'TextureFormat.RedGreen16ui'</Item>
+               <Item>UI</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="3" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#RedGreen32f">
+            <Messages>
+             <Message Id="f" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Excluded" Created="2009-12-11 23:38:35Z">
+              <Issue Name="Member">
+               <Item>f</Item>
+               <Item>'TextureFormat.RedGreen32f'</Item>
+               <Item>F</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="3" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#RedGreen32i">
+            <Messages>
+             <Message Id="i" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Excluded" Created="2009-12-11 23:38:35Z">
+              <Issue Name="Member">
+               <Item>i</Item>
+               <Item>'TextureFormat.RedGreen32i'</Item>
+               <Item>I</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="3" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#RedGreen32ui">
+            <Messages>
+             <Message Id="ui" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Excluded" Created="2009-12-11 23:38:35Z">
+              <Issue Name="Member">
+               <Item>ui</Item>
+               <Item>'TextureFormat.RedGreen32ui'</Item>
+               <Item>UI</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="3" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#RedGreen8i">
+            <Messages>
+             <Message Id="i" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Excluded" Created="2009-12-11 23:38:35Z">
+              <Issue Name="Member">
+               <Item>i</Item>
+               <Item>'TextureFormat.RedGreen8i'</Item>
+               <Item>I</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="3" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#RedGreen8ui">
+            <Messages>
+             <Message Id="ui" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Excluded" Created="2009-12-11 23:38:35Z">
+              <Issue Name="Member">
+               <Item>ui</Item>
+               <Item>'TextureFormat.RedGreen8ui'</Item>
+               <Item>UI</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="3" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#RedGreenBlue16f">
+            <Messages>
+             <Message Id="f" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Excluded" Created="2009-12-11 23:38:35Z">
+              <Issue Name="Member">
+               <Item>f</Item>
+               <Item>'TextureFormat.RedGreenBlue16f'</Item>
+               <Item>F</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="3" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#RedGreenBlue16i">
+            <Messages>
+             <Message Id="i" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Excluded" Created="2009-12-11 23:38:35Z">
+              <Issue Name="Member">
+               <Item>i</Item>
+               <Item>'TextureFormat.RedGreenBlue16i'</Item>
+               <Item>I</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="3" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#RedGreenBlue16ui">
+            <Messages>
+             <Message Id="ui" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Excluded" Created="2009-12-11 23:38:35Z">
+              <Issue Name="Member">
+               <Item>ui</Item>
+               <Item>'TextureFormat.RedGreenBlue16ui'</Item>
+               <Item>UI</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="3" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#RedGreenBlue32f">
+            <Messages>
+             <Message Id="f" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Excluded" Created="2009-12-11 23:38:35Z">
+              <Issue Name="Member">
+               <Item>f</Item>
+               <Item>'TextureFormat.RedGreenBlue32f'</Item>
+               <Item>F</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="3" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#RedGreenBlue32i">
+            <Messages>
+             <Message Id="i" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Excluded" Created="2009-12-11 23:38:35Z">
+              <Issue Name="Member">
+               <Item>i</Item>
+               <Item>'TextureFormat.RedGreenBlue32i'</Item>
+               <Item>I</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="3" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#RedGreenBlue32ui">
+            <Messages>
+             <Message Id="ui" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Excluded" Created="2009-12-11 23:38:35Z">
+              <Issue Name="Member">
+               <Item>ui</Item>
+               <Item>'TextureFormat.RedGreenBlue32ui'</Item>
+               <Item>UI</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="3" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#RedGreenBlue8i">
+            <Messages>
+             <Message Id="i" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Excluded" Created="2009-12-11 23:38:35Z">
+              <Issue Name="Member">
+               <Item>i</Item>
+               <Item>'TextureFormat.RedGreenBlue8i'</Item>
+               <Item>I</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="3" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#RedGreenBlue8ui">
+            <Messages>
+             <Message Id="ui" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Excluded" Created="2009-12-11 23:38:35Z">
+              <Issue Name="Member">
+               <Item>ui</Item>
+               <Item>'TextureFormat.RedGreenBlue8ui'</Item>
+               <Item>UI</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="3" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#RedGreenBlueAlpha16f">
+            <Messages>
+             <Message Id="f" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Excluded" Created="2009-12-11 23:38:35Z">
+              <Issue Name="Member">
+               <Item>f</Item>
+               <Item>'TextureFormat.RedGreenBlueAlpha16f'</Item>
+               <Item>F</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="3" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#RedGreenBlueAlpha16i">
+            <Messages>
+             <Message Id="i" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Excluded" Created="2009-12-11 23:38:35Z">
+              <Issue Name="Member">
+               <Item>i</Item>
+               <Item>'TextureFormat.RedGreenBlueAlpha16i'</Item>
+               <Item>I</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="3" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#RedGreenBlueAlpha16ui">
+            <Messages>
+             <Message Id="ui" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Excluded" Created="2009-12-11 23:38:35Z">
+              <Issue Name="Member">
+               <Item>ui</Item>
+               <Item>'TextureFormat.RedGreenBlueAlpha16ui'</Item>
+               <Item>UI</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="3" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#RedGreenBlueAlpha32f">
+            <Messages>
+             <Message Id="f" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Excluded" Created="2009-12-11 23:38:35Z">
+              <Issue Name="Member">
+               <Item>f</Item>
+               <Item>'TextureFormat.RedGreenBlueAlpha32f'</Item>
+               <Item>F</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="3" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#RedGreenBlueAlpha32i">
+            <Messages>
+             <Message Id="i" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Excluded" Created="2009-12-11 23:38:35Z">
+              <Issue Name="Member">
+               <Item>i</Item>
+               <Item>'TextureFormat.RedGreenBlueAlpha32i'</Item>
+               <Item>I</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="3" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#RedGreenBlueAlpha32ui">
+            <Messages>
+             <Message Id="ui" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Excluded" Created="2009-12-11 23:38:35Z">
+              <Issue Name="Member">
+               <Item>ui</Item>
+               <Item>'TextureFormat.RedGreenBlueAlpha32ui'</Item>
+               <Item>UI</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="3" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#RedGreenBlueAlpha8i">
+            <Messages>
+             <Message Id="i" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Excluded" Created="2009-12-11 23:38:35Z">
+              <Issue Name="Member">
+               <Item>i</Item>
+               <Item>'TextureFormat.RedGreenBlueAlpha8i'</Item>
+               <Item>I</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="3" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#RedGreenBlueAlpha8ui">
+            <Messages>
+             <Message Id="ui" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Excluded" Created="2009-12-11 23:38:35Z">
+              <Issue Name="Member">
+               <Item>ui</Item>
+               <Item>'TextureFormat.RedGreenBlueAlpha8ui'</Item>
+               <Item>UI</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="3" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="UniformBuffer">
+          <Members>
+           <Member Name="#CopyToSystemMemory`1()">
+            <Messages>
+             <Message TypeName="GenericMethodsShouldProvideTypeParameter" Category="Microsoft.Design" CheckId="CA1004" Created="2009-12-11 23:38:35Z">
+              <Issue>
+               <Item>'UniformBuffer.CopyToSystemMemory&lt;T&gt;()'</Item>
+               <Item>'T'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#CopyToSystemMemory`1(System.Int32,System.Int32)">
+            <Messages>
+             <Message TypeName="GenericMethodsShouldProvideTypeParameter" Category="Microsoft.Design" CheckId="CA1004" Created="2009-12-11 23:38:35Z">
+              <Issue>
+               <Item>'UniformBuffer.CopyToSystemMemory&lt;T&gt;(int, int)'</Item>
+               <Item>'T'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="Vector2b">
+          <Messages>
+           <Message Id="b" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Excluded" Created="2009-12-11 23:38:35Z">
+            <Issue Name="Type">
+             <Item>b</Item>
+             <Item>'Vector2b'</Item>
+             <Item>B</Item>
+            </Issue>
+            <Notes>
+             <User Name="pjcozzi">
+              <Note Id="3" />
+             </User>
+            </Notes>
+           </Message>
+          </Messages>
+          <Members>
+           <Member Name="#.ctor(System.Boolean,System.Boolean)">
+            <Messages>
+             <Message Id="x" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2009-12-11 23:38:35Z">
+              <Issue Name="MemberParameterMoreMeaningfulName">
+               <Item>'Vector2b.Vector2b(bool, bool)'</Item>
+               <Item>'x'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="5" />
+               </User>
+              </Notes>
+             </Message>
+             <Message Id="y" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2009-12-11 23:38:35Z">
+              <Issue Name="MemberParameterMoreMeaningfulName">
+               <Item>'Vector2b.Vector2b(bool, bool)'</Item>
+               <Item>'y'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="5" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#X">
+            <Messages>
+             <Message Id="X" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2009-12-14 19:26:16Z">
+              <Issue Name="MemberMoreMeaningfulName">
+               <Item>'Vector2b.X'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="5" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Y">
+            <Messages>
+             <Message Id="Y" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2009-12-14 19:26:16Z">
+              <Issue Name="MemberMoreMeaningfulName">
+               <Item>'Vector2b.Y'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="5" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="Vector2i">
+          <Messages>
+           <Message Id="i" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Excluded" Created="2009-12-11 23:38:35Z">
+            <Issue Name="Type">
+             <Item>i</Item>
+             <Item>'Vector2i'</Item>
+             <Item>I</Item>
+            </Issue>
+            <Notes>
+             <User Name="pjcozzi">
+              <Note Id="3" />
+             </User>
+            </Notes>
+           </Message>
+          </Messages>
+          <Members>
+           <Member Name="#.ctor(System.Int32,System.Int32)">
+            <Messages>
+             <Message Id="x" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2009-12-11 23:38:35Z">
+              <Issue Name="MemberParameterMoreMeaningfulName">
+               <Item>'Vector2i.Vector2i(int, int)'</Item>
+               <Item>'x'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="8" />
+               </User>
+              </Notes>
+             </Message>
+             <Message Id="y" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2009-12-11 23:38:35Z">
+              <Issue Name="MemberParameterMoreMeaningfulName">
+               <Item>'Vector2i.Vector2i(int, int)'</Item>
+               <Item>'y'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="8" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#X">
+            <Messages>
+             <Message Id="X" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2009-12-14 19:26:16Z">
+              <Issue Name="MemberMoreMeaningfulName">
+               <Item>'Vector2i.X'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="5" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Y">
+            <Messages>
+             <Message Id="Y" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2009-12-14 19:26:16Z">
+              <Issue Name="MemberMoreMeaningfulName">
+               <Item>'Vector2i.Y'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="5" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="Vector3b">
+          <Messages>
+           <Message Id="b" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Excluded" Created="2009-12-11 23:38:35Z">
+            <Issue Name="Type">
+             <Item>b</Item>
+             <Item>'Vector3b'</Item>
+             <Item>B</Item>
+            </Issue>
+            <Notes>
+             <User Name="pjcozzi">
+              <Note Id="3" />
+             </User>
+            </Notes>
+           </Message>
+          </Messages>
+          <Members>
+           <Member Name="#.ctor(System.Boolean,System.Boolean,System.Boolean)">
+            <Messages>
+             <Message Id="x" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2009-12-11 23:38:35Z">
+              <Issue Name="MemberParameterMoreMeaningfulName">
+               <Item>'Vector3b.Vector3b(bool, bool, bool)'</Item>
+               <Item>'x'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="4" />
+               </User>
+              </Notes>
+             </Message>
+             <Message Id="y" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2009-12-11 23:38:35Z">
+              <Issue Name="MemberParameterMoreMeaningfulName">
+               <Item>'Vector3b.Vector3b(bool, bool, bool)'</Item>
+               <Item>'y'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="4" />
+               </User>
+              </Notes>
+             </Message>
+             <Message Id="z" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2009-12-11 23:38:35Z">
+              <Issue Name="MemberParameterMoreMeaningfulName">
+               <Item>'Vector3b.Vector3b(bool, bool, bool)'</Item>
+               <Item>'z'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="4" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#X">
+            <Messages>
+             <Message Id="X" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2009-12-14 19:26:16Z">
+              <Issue Name="MemberMoreMeaningfulName">
+               <Item>'Vector3b.X'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="4" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Y">
+            <Messages>
+             <Message Id="Y" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2009-12-14 19:26:16Z">
+              <Issue Name="MemberMoreMeaningfulName">
+               <Item>'Vector3b.Y'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="4" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Z">
+            <Messages>
+             <Message Id="Z" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2009-12-14 19:26:16Z">
+              <Issue Name="MemberMoreMeaningfulName">
+               <Item>'Vector3b.Z'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="4" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="Vector3i">
+          <Messages>
+           <Message Id="i" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Excluded" Created="2009-12-11 23:38:35Z">
+            <Issue Name="Type">
+             <Item>i</Item>
+             <Item>'Vector3i'</Item>
+             <Item>I</Item>
+            </Issue>
+            <Notes>
+             <User Name="pjcozzi">
+              <Note Id="3" />
+             </User>
+            </Notes>
+           </Message>
+          </Messages>
+          <Members>
+           <Member Name="#.ctor(System.Int32,System.Int32,System.Int32)">
+            <Messages>
+             <Message Id="x" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2009-12-11 23:38:35Z">
+              <Issue Name="MemberParameterMoreMeaningfulName">
+               <Item>'Vector3i.Vector3i(int, int, int)'</Item>
+               <Item>'x'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="5" />
+               </User>
+              </Notes>
+             </Message>
+             <Message Id="y" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2009-12-11 23:38:35Z">
+              <Issue Name="MemberParameterMoreMeaningfulName">
+               <Item>'Vector3i.Vector3i(int, int, int)'</Item>
+               <Item>'y'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="5" />
+               </User>
+              </Notes>
+             </Message>
+             <Message Id="z" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2009-12-11 23:38:35Z">
+              <Issue Name="MemberParameterMoreMeaningfulName">
+               <Item>'Vector3i.Vector3i(int, int, int)'</Item>
+               <Item>'z'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="5" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#X">
+            <Messages>
+             <Message Id="X" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2009-12-14 19:26:16Z">
+              <Issue Name="MemberMoreMeaningfulName">
+               <Item>'Vector3i.X'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="5" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Y">
+            <Messages>
+             <Message Id="Y" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2009-12-14 19:26:16Z">
+              <Issue Name="MemberMoreMeaningfulName">
+               <Item>'Vector3i.Y'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="5" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Z">
+            <Messages>
+             <Message Id="Z" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2009-12-14 19:26:16Z">
+              <Issue Name="MemberMoreMeaningfulName">
+               <Item>'Vector3i.Z'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="5" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="Vector4b">
+          <Messages>
+           <Message Id="b" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Excluded" Created="2009-12-11 23:38:35Z">
+            <Issue Name="Type">
+             <Item>b</Item>
+             <Item>'Vector4b'</Item>
+             <Item>B</Item>
+            </Issue>
+            <Notes>
+             <User Name="pjcozzi">
+              <Note Id="3" />
+             </User>
+            </Notes>
+           </Message>
+          </Messages>
+          <Members>
+           <Member Name="#.ctor(System.Boolean,System.Boolean,System.Boolean,System.Boolean)">
+            <Messages>
+             <Message Id="w" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2009-12-11 23:38:35Z">
+              <Issue Name="MemberParameterMoreMeaningfulName">
+               <Item>'Vector4b.Vector4b(bool, bool, bool, bool)'</Item>
+               <Item>'w'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="5" />
+               </User>
+              </Notes>
+             </Message>
+             <Message Id="x" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2009-12-11 23:38:35Z">
+              <Issue Name="MemberParameterMoreMeaningfulName">
+               <Item>'Vector4b.Vector4b(bool, bool, bool, bool)'</Item>
+               <Item>'x'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="5" />
+               </User>
+              </Notes>
+             </Message>
+             <Message Id="y" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2009-12-11 23:38:35Z">
+              <Issue Name="MemberParameterMoreMeaningfulName">
+               <Item>'Vector4b.Vector4b(bool, bool, bool, bool)'</Item>
+               <Item>'y'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="5" />
+               </User>
+              </Notes>
+             </Message>
+             <Message Id="z" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2009-12-11 23:38:35Z">
+              <Issue Name="MemberParameterMoreMeaningfulName">
+               <Item>'Vector4b.Vector4b(bool, bool, bool, bool)'</Item>
+               <Item>'z'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="5" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#W">
+            <Messages>
+             <Message Id="W" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2009-12-14 19:26:16Z">
+              <Issue Name="MemberMoreMeaningfulName">
+               <Item>'Vector4b.W'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="5" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#X">
+            <Messages>
+             <Message Id="X" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2009-12-14 19:26:16Z">
+              <Issue Name="MemberMoreMeaningfulName">
+               <Item>'Vector4b.X'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="5" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Y">
+            <Messages>
+             <Message Id="Y" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2009-12-14 19:26:16Z">
+              <Issue Name="MemberMoreMeaningfulName">
+               <Item>'Vector4b.Y'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="5" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Z">
+            <Messages>
+             <Message Id="Z" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2009-12-14 19:26:16Z">
+              <Issue Name="MemberMoreMeaningfulName">
+               <Item>'Vector4b.Z'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="5" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="Vector4i">
+          <Messages>
+           <Message Id="i" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Excluded" Created="2009-12-11 23:38:35Z">
+            <Issue Name="Type">
+             <Item>i</Item>
+             <Item>'Vector4i'</Item>
+             <Item>I</Item>
+            </Issue>
+            <Notes>
+             <User Name="pjcozzi">
+              <Note Id="3" />
+             </User>
+            </Notes>
+           </Message>
+          </Messages>
+          <Members>
+           <Member Name="#.ctor(System.Int32,System.Int32,System.Int32,System.Int32)">
+            <Messages>
+             <Message Id="w" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2009-12-11 23:38:35Z">
+              <Issue Name="MemberParameterMoreMeaningfulName">
+               <Item>'Vector4i.Vector4i(int, int, int, int)'</Item>
+               <Item>'w'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="5" />
+               </User>
+              </Notes>
+             </Message>
+             <Message Id="x" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2009-12-11 23:38:35Z">
+              <Issue Name="MemberParameterMoreMeaningfulName">
+               <Item>'Vector4i.Vector4i(int, int, int, int)'</Item>
+               <Item>'x'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="5" />
+               </User>
+              </Notes>
+             </Message>
+             <Message Id="y" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2009-12-11 23:38:35Z">
+              <Issue Name="MemberParameterMoreMeaningfulName">
+               <Item>'Vector4i.Vector4i(int, int, int, int)'</Item>
+               <Item>'y'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="5" />
+               </User>
+              </Notes>
+             </Message>
+             <Message Id="z" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2009-12-11 23:38:35Z">
+              <Issue Name="MemberParameterMoreMeaningfulName">
+               <Item>'Vector4i.Vector4i(int, int, int, int)'</Item>
+               <Item>'z'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="5" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#W">
+            <Messages>
+             <Message Id="W" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2009-12-14 19:26:16Z">
+              <Issue Name="MemberMoreMeaningfulName">
+               <Item>'Vector4i.W'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="5" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#X">
+            <Messages>
+             <Message Id="X" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2009-12-14 19:26:16Z">
+              <Issue Name="MemberMoreMeaningfulName">
+               <Item>'Vector4i.X'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="5" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Y">
+            <Messages>
+             <Message Id="Y" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2009-12-14 19:26:16Z">
+              <Issue Name="MemberMoreMeaningfulName">
+               <Item>'Vector4i.Y'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="5" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Z">
+            <Messages>
+             <Message Id="Z" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2009-12-14 19:26:16Z">
+              <Issue Name="MemberMoreMeaningfulName">
+               <Item>'Vector4i.Z'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="5" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="VertexBuffer">
+          <Members>
+           <Member Name="#CopyToSystemMemory`1()">
+            <Messages>
+             <Message TypeName="GenericMethodsShouldProvideTypeParameter" Category="Microsoft.Design" CheckId="CA1004" Created="2009-12-11 23:38:35Z">
+              <Issue>
+               <Item>'VertexBuffer.CopyToSystemMemory&lt;T&gt;()'</Item>
+               <Item>'T'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#CopyToSystemMemory`1(System.Int32,System.Int32)">
+            <Messages>
+             <Message TypeName="GenericMethodsShouldProvideTypeParameter" Category="Microsoft.Design" CheckId="CA1004" Created="2009-12-11 23:38:35Z">
+              <Issue>
+               <Item>'VertexBuffer.CopyToSystemMemory&lt;T&gt;(int, int)'</Item>
+               <Item>'T'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="WritePixelBuffer">
+          <Members>
+           <Member Name="#CopyToSystemMemory`1()">
+            <Messages>
+             <Message TypeName="GenericMethodsShouldProvideTypeParameter" Category="Microsoft.Design" CheckId="CA1004" Created="2009-12-11 23:38:35Z">
+              <Issue>
+               <Item>'WritePixelBuffer.CopyToSystemMemory&lt;T&gt;()'</Item>
+               <Item>'T'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#CopyToSystemMemory`1(System.Int32,System.Int32)">
+            <Messages>
+             <Message TypeName="GenericMethodsShouldProvideTypeParameter" Category="Microsoft.Design" CheckId="CA1004" Created="2009-12-11 23:38:35Z">
+              <Issue>
+               <Item>'WritePixelBuffer.CopyToSystemMemory&lt;T&gt;(int, int)'</Item>
+               <Item>'T'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+        </Types>
+       </Namespace>
+      </Namespaces>
+     </Module>
+    </Modules>
+   </Target>
+   <Target Name="$(ProjectDir)/../../Source/Tests/bin/Release/MiniGlobe.Scene.dll">
+    <Modules>
+     <Module Name="miniglobe.scene.dll">
+      <Messages>
+       <Message TypeName="AssembliesShouldHaveValidStrongNames" Category="Microsoft.Design" CheckId="CA2210" Created="2010-01-05 17:55:49Z">
+        <Issue Name="NoStrongName">
+         <Item>'MiniGlobe.Scene.dll'</Item>
+        </Issue>
+       </Message>
+      </Messages>
+     </Module>
+    </Modules>
+   </Target>
+   <Target Name="$(ProjectDir)/../../Source/Tests/bin/Release/MiniGlobe.Tests.dll">
+    <Modules>
+     <Module Name="miniglobe.tests.dll">
+      <Messages>
+       <Message TypeName="AssembliesShouldHaveValidStrongNames" Category="Microsoft.Design" CheckId="CA2210" Created="2009-12-11 23:38:35Z">
+        <Issue Name="NoStrongName">
+         <Item>'MiniGlobe.Tests.dll'</Item>
+        </Issue>
+       </Message>
+      </Messages>
+      <Namespaces>
+       <Namespace Name="MiniGlobe.Core">
+        <Types>
+         <Type Name="SystemTests">
+          <Members>
+           <Member Name="#RenderQuadCubeSphere()">
+            <Messages>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-01-28 23:38:56Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'SystemTests.RenderQuadCubeSphere()'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="33" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#RenderSubdivisionSphere()">
+            <Messages>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2009-12-29 14:04:17Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'SystemTests.RenderSubdivisionSphere()'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="23" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+        </Types>
+       </Namespace>
+       <Namespace Name="MiniGlobe.Core.Geometry">
+        <Types>
+         <Type Name="EllipsoidTests">
+          <Members>
+           <Member Name="#Construct()">
+            <Messages>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-01-13 21:00:18Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'EllipsoidTests.Construct()'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="29" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#DeticSurfaceNormal()">
+            <Messages>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-01-05 17:55:49Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'EllipsoidTests.DeticSurfaceNormal()'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="16" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="GeometryTests">
+          <Members>
+           <Member Name="#MeshIndices()">
+            <Messages>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2009-12-29 14:04:17Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'GeometryTests.MeshIndices()'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="23" />
+               </User>
+              </Notes>
+             </Message>
+             <Message Id="Indices" TypeName="UsePreferredTerms" Category="Microsoft.Naming" CheckId="CA1726" Status="Excluded" Created="2009-12-29 14:04:17Z">
+              <Issue Name="Member">
+               <Item>Indices</Item>
+               <Item>'GeometryTests.MeshIndices()'</Item>
+               <Item>Indexes</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="25" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#MeshVertexAttributes()">
+            <Messages>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2009-12-23 01:33:54Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'GeometryTests.MeshVertexAttributes()'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="20" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#TriangleIndicesTest()">
+            <Messages>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2009-12-23 01:33:54Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'GeometryTests.TriangleIndicesTest()'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="20" />
+               </User>
+              </Notes>
+             </Message>
+             <Message Id="Indices" TypeName="UsePreferredTerms" Category="Microsoft.Naming" CheckId="CA1726" Status="Excluded" Created="2009-12-23 01:33:54Z">
+              <Issue Name="Member">
+               <Item>Indices</Item>
+               <Item>'GeometryTests.TriangleIndicesTest()'</Item>
+               <Item>Indexes</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="21" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+        </Types>
+       </Namespace>
+       <Namespace Name="MiniGlobe.Core.Tessellation">
+        <Types>
+         <Type Name="TessellationTests">
+          <Members>
+           <Member Name="#QuadCubeEllipsoidTessellatorTest()">
+            <Messages>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-01-28 23:38:56Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'TessellationTests.QuadCubeEllipsoidTessellatorTest()'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="33" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#SubdivisionEllipsoidTessellatorTest()">
+            <Messages>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-01-05 17:55:49Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'TessellationTests.SubdivisionEllipsoidTessellatorTest()'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="16" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#SubdivisionSphereTessellatorTest()">
+            <Messages>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-01-05 17:55:49Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'TessellationTests.SubdivisionSphereTessellatorTest()'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="16" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+        </Types>
+       </Namespace>
+       <Namespace Name="MiniGlobe.Renderer">
+        <Types>
+         <Type Name="BufferObjectTests">
+          <Members>
+           <Member Name="#IndexBuffer()">
+            <Messages>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2009-12-11 23:38:35Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'BufferObjectTests.IndexBuffer()'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="0" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#UniformBuffer()">
+            <Messages>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2009-12-11 23:38:35Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'BufferObjectTests.UniformBuffer()'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="0" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#VertexBuffer()">
+            <Messages>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2009-12-11 23:38:35Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'BufferObjectTests.VertexBuffer()'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="0" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#WritePixelBuffer()">
+            <Messages>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2009-12-11 23:38:35Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'BufferObjectTests.WritePixelBuffer()'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="0" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#WritePixelBufferBitmap()">
+            <Messages>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2009-12-11 23:38:35Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'BufferObjectTests.WritePixelBufferBitmap()'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="0" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="ContextTests">
+          <Members>
+           <Member Name="#Clear()">
+            <Messages>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2009-12-11 23:38:35Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'ContextTests.Clear()'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="0" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="FrameBufferTests">
+          <Members>
+           <Member Name="#ColorAttachment()">
+            <Messages>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2009-12-11 23:38:35Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'FrameBufferTests.ColorAttachment()'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="0" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#DepthAttachment()">
+            <Messages>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2009-12-11 23:38:35Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'FrameBufferTests.DepthAttachment()'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="0" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#DepthStencilAttachment()">
+            <Messages>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2009-12-11 23:38:35Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'FrameBufferTests.DepthStencilAttachment()'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="0" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#EnumerateColorAttachments()">
+            <Messages>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-01-12 13:54:55Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'FrameBufferTests.EnumerateColorAttachments()'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="28" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#HighResolutionSnapFrameBuffer()">
+            <Messages>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-01-13 21:00:18Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'FrameBufferTests.HighResolutionSnapFrameBuffer()'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="29" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="RenderStateTests">
+          <Members>
+           <Member Name="#ApplyDefaultStateBlock()">
+            <Messages>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2009-12-11 23:38:35Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'RenderStateTests.ApplyDefaultStateBlock()'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="0" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Blending()">
+            <Messages>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2009-12-11 23:38:35Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'RenderStateTests.Blending()'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="0" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#DepthTest()">
+            <Messages>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2009-12-11 23:38:35Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'RenderStateTests.DepthTest()'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="0" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#FacetCulling()">
+            <Messages>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2009-12-11 23:38:35Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'RenderStateTests.FacetCulling()'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="0" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#PrimitiveRestart()">
+            <Messages>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2009-12-11 23:38:35Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'RenderStateTests.PrimitiveRestart()'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="0" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#RasterizationMode()">
+            <Messages>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2009-12-11 23:38:35Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'RenderStateTests.RasterizationMode()'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="0" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#ScissorTest()">
+            <Messages>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2009-12-11 23:38:35Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'RenderStateTests.ScissorTest()'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="0" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#StencilTest()">
+            <Messages>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2009-12-11 23:38:35Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'RenderStateTests.StencilTest()'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="0" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="ShaderProgramTests">
+          <Members>
+           <Member Name="#DefaultUniformBlock()">
+            <Messages>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2009-12-11 23:38:35Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'ShaderProgramTests.DefaultUniformBlock()'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="0" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#LinkAutomaticUniforms()">
+            <Messages>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2009-12-23 01:33:54Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'ShaderProgramTests.LinkAutomaticUniforms()'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="20" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#PassThrough()">
+            <Messages>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2009-12-11 23:38:35Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'ShaderProgramTests.PassThrough()'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="0" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#PassThroughWithGeometryShader()">
+            <Messages>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2009-12-11 23:38:35Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'ShaderProgramTests.PassThroughWithGeometryShader()'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="0" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#UniformBlock()">
+            <Messages>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2009-12-11 23:38:35Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'ShaderProgramTests.UniformBlock()'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="0" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="SystemTests">
+          <Members>
+           <Member Name="#ClearColorDepth()">
+            <Messages>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2009-12-23 01:33:54Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'SystemTests.ClearColorDepth()'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="20" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#RenderMultitexturedPoint()">
+            <Messages>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2009-12-14 18:00:00Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'SystemTests.RenderMultitexturedPoint()'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="1" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#RenderMultitexturedPointThreads()">
+            <Messages>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2009-12-14 18:00:00Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'SystemTests.RenderMultitexturedPointThreads()'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="1" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#RenderPoint()">
+            <Messages>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2009-12-14 17:37:40Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'SystemTests.RenderPoint()'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="0" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#RenderPointWithDrawAutomaticUniforms()">
+            <Messages>
+             <Message Id="WithDraw" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Status="Excluded" Created="2009-12-23 01:33:54Z">
+              <Issue Name="MemberShouldBeDiscreteTerm">
+               <Item>WithDraw</Item>
+               <Item>'SystemTests.RenderPointWithDrawAutomaticUniforms()'</Item>
+               <Item>Withdraw</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="22" />
+               </User>
+              </Notes>
+             </Message>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2009-12-23 01:33:54Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'SystemTests.RenderPointWithDrawAutomaticUniforms()'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="20" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#RenderPointWithStencil()">
+            <Messages>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2009-12-23 01:33:54Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'SystemTests.RenderPointWithStencil()'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="20" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#RenderTexturedPoint()">
+            <Messages>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2009-12-14 17:37:40Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'SystemTests.RenderTexturedPoint()'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="0" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#RenderTriangle()">
+            <Messages>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2009-12-14 17:37:40Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'SystemTests.RenderTriangle()'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="0" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="Texture2DTests">
+          <Members>
+           <Member Name="#EnumerateTextureUnits()">
+            <Messages>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-01-12 13:54:55Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'Texture2DTests.EnumerateTextureUnits()'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="28" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Texture2D()">
+            <Messages>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2009-12-11 23:38:35Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'Texture2DTests.Texture2D()'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="0" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Texture2DAlignment()">
+            <Messages>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2009-12-11 23:38:35Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'Texture2DTests.Texture2DAlignment()'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="0" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Texture2DDescription()">
+            <Messages>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2009-12-11 23:38:35Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'Texture2DTests.Texture2DDescription()'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="0" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Texture2DFilter()">
+            <Messages>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2009-12-11 23:38:35Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'Texture2DTests.Texture2DFilter()'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="0" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Texture2DSubImage()">
+            <Messages>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2009-12-11 23:38:35Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'Texture2DTests.Texture2DSubImage()'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="0" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#TextureUnits()">
+            <Messages>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2009-12-11 23:38:35Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'Texture2DTests.TextureUnits()'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="0" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="VertexArrayTests">
+          <Members>
+           <Member Name="#EnumerateAttachedVertexBuffers()">
+            <Messages>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-01-12 13:54:55Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'VertexArrayTests.EnumerateAttachedVertexBuffers()'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="28" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#VertexArray()">
+            <Messages>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2009-12-11 23:38:35Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'VertexArrayTests.VertexArray()'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="0" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+        </Types>
+       </Namespace>
+       <Namespace Name="MiniGlobe.Scene">
+        <Types>
+         <Type Name="SystemTests">
+          <Members>
+           <Member Name="#Dummy()">
+            <Messages>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2009-12-29 14:04:17Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'SystemTests.Dummy()'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="23" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+        </Types>
+       </Namespace>
+      </Namespaces>
+     </Module>
+    </Modules>
+   </Target>
+  </Targets>
+  <Notes>
+   <User Name="pjcozzi">
+    <Note Id="0" Modified="2009-12-14 17:38:53Z">[Test] cannot be static</Note>
+    <Note Id="1" Modified="2009-12-14 18:00:30Z">[Test] cannot be static.</Note>
+    <Note Id="2" Modified="2009-12-14 18:07:49Z">This namespace has several types but they are all internal because they are the OpenGL renderer implementation.</Note>
+    <Note Id="3" Modified="2009-12-14 19:28:59Z">No thank you.</Note>
+    <Note Id="4" Modified="2009-12-14 19:30:02Z">X, Y, and Z are ok.</Note>
+    <Note Id="5" Modified="2009-12-14 19:31:02Z">X, Y, Z, and W are ok.</Note>
+    <Note Id="6" Modified="2009-12-14 19:31:48Z">R, G, B, and A are the same as System.Color.</Note>
+    <Note Id="7" Modified="2009-12-14 19:32:21Z">Matrix constructor parameter names are ok.</Note>
+    <Note Id="8" Modified="2009-12-14 19:32:34Z">X and Y are ok.</Note>
+    <Note Id="9" Modified="2009-12-14 19:34:09Z">X and Y are ok.</Note>
+    <Note Id="10" Modified="2009-12-14 19:35:49Z">No thank you.  For now, at least.</Note>
+    <Note Id="11" Modified="2009-12-14 19:36:40Z">This is a vertex attribute.  Sorry.</Note>
+    <Note Id="12" Modified="2009-12-14 19:51:15Z">No thank you.</Note>
+    <Note Id="13" Modified="2009-12-14 19:58:13Z">Matrix constructor parameter names are ok.</Note>
+    <Note Id="14" Modified="2009-12-14 19:58:30Z">No thank you.</Note>
+    <Note Id="15" Modified="2009-12-23 01:34:23Z">This namespace will have more types.</Note>
+    <Note Id="16" Modified="2010-01-05 17:56:22Z">Tests cannot be static.</Note>
+    <Note Id="17" Modified="2010-01-05 17:59:10Z">x, y, and z are ok here.</Note>
+    <Note Id="18" Modified="2009-12-23 01:37:47Z">Indices is ok for computer graphics.</Note>
+    <Note Id="19" Modified="2009-12-23 01:38:02Z">No.  It is a vertex attribute.</Note>
+    <Note Id="20" Modified="2009-12-23 01:39:28Z">[Test] cannot be static.</Note>
+    <Note Id="21" Modified="2009-12-23 01:39:43Z">Indices is ok in computer graphics.</Note>
+    <Note Id="22" Modified="2009-12-23 01:40:09Z">WithDraw is intended.</Note>
+    <Note Id="23" Modified="2009-12-29 14:08:38Z">[Test] cannot be static.</Note>
+    <Note Id="24" Modified="2009-12-29 14:08:58Z">No.</Note>
+    <Note Id="25" Modified="2009-12-29 14:09:23Z">In computer graphics, these are indices.</Note>
+    <Note Id="26" Modified="2009-12-29 14:11:26Z">Indices are ok in computer graphics.</Note>
+    <Note Id="27" Modified="2009-12-29 14:11:47Z">These are ok for indices.</Note>
+    <Note Id="28" Modified="2010-01-12 14:01:16Z">[Test] cannot be static.</Note>
+    <Note Id="29" Modified="2010-01-13 21:00:43Z">[Test] cannot be static.</Note>
+    <Note Id="30" Modified="2010-01-13 21:06:32Z">In graphics, it is a vertex attribute.</Note>
+    <Note Id="31" Modified="2010-01-13 21:08:11Z">Ellipsoid is immutable.</Note>
+    <Note Id="32" Modified="2010-01-13 21:09:01Z">This is the same as Bitmap.Save().</Note>
+    <Note Id="33" Modified="2010-01-28 23:39:40Z">[Test] cannot be static.</Note>
+   </User>
+  </Notes>
+  <Rules>
+   <Rule TypeName="AssembliesShouldHaveValidStrongNames" Category="Microsoft.Design" CheckId="CA2210">
+    <Resolution Name="NoStrongName">Sign {0} with a strong name key.</Resolution>
+   </Rule>
+   <Rule TypeName="AvoidNamespacesWithFewTypes" Category="Microsoft.Design" CheckId="CA1020">
+    <Resolution Name="Default">Consider merging the types defined in '{0}' with another namespace.</Resolution>
+   </Rule>
+   <Rule TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702">
+    <Resolution Name="MemberParameterShouldBeCompoundWord">In member {0}, the discrete term '{1}' in parameter name {2} should be expressed as a compound word, '{3}'.</Resolution>
+    <Resolution Name="MemberShouldBeDiscreteTerm">The compound word '{0}' in member name {1} exists as a discrete term. If your usage is intended to be single word, case it as '{2}' or strip the first token entirely if it represents any sort of Hungarian notation.</Resolution>
+   </Rule>
+   <Rule TypeName="DeclareEventHandlersCorrectly" Category="Microsoft.Design" CheckId="CA1009">
+    <Resolution Name="First">Declare the first parameter of {0} as an object named 'sender'.</Resolution>
+    <Resolution Name="Second">Declare the second parameter of {0} as an EventArgs, or an instance of a type that extends EventArgs, named 'e'.</Resolution>
+   </Rule>
+   <Rule TypeName="DoNotDeclareReadOnlyMutableReferenceTypes" Category="Microsoft.Security" CheckId="CA2104">
+    <Resolution Name="Default">Remove the read-only designation from {0} or change the field to one that is an immutable reference type. If the reference type {1} is, in fact, immutable, exclude this message.</Resolution>
+   </Rule>
+   <Rule TypeName="GenericMethodsShouldProvideTypeParameter" Category="Microsoft.Design" CheckId="CA1004">
+    <Resolution Name="Default">Consider a design where {0} doesn't require explicit type parameter {1} in any call to it.</Resolution>
+   </Rule>
+   <Rule TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709">
+    <Resolution Name="Member">Correct the casing of '{0}' in member name {1} by changing it to '{2}'.</Resolution>
+    <Resolution Name="Type">Correct the casing of '{0}' in type name {1} by changing it to '{2}'.</Resolution>
+   </Rule>
+   <Rule TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704">
+    <Resolution Name="MemberMoreMeaningfulName">Consider providing a more meaningful name than member name {0}.</Resolution>
+    <Resolution Name="MemberParameter">In method {0}, correct the spelling of '{1}' in parameter name {2} or remove it entirely if it represents any sort of Hungarian notation.</Resolution>
+    <Resolution Name="MemberParameterMoreMeaningfulName">In method {0}, consider providing a more meaningful name than parameter name {1}.</Resolution>
+   </Rule>
+   <Rule TypeName="IdentifiersShouldHaveCorrectSuffix" Category="Microsoft.Naming" CheckId="CA1710">
+    <Resolution Name="Default">Rename {0} to end in '{1}'.</Resolution>
+   </Rule>
+   <Rule TypeName="IdentifiersShouldNotHaveIncorrectSuffix" Category="Microsoft.Naming" CheckId="CA1711">
+    <Resolution Name="TypeNoAlternate">Rename type name {0} so that it does not end in '{1}'.</Resolution>
+   </Rule>
+   <Rule TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822">
+    <Resolution Name="Default">The 'this' parameter (or 'Me' in Visual Basic) of {0} is never used. Mark the member as static (or Shared in Visual Basic) or use 'this'/'Me' in the method body or at least one property accessor, if appropriate.</Resolution>
+   </Rule>
+   <Rule TypeName="NestedTypesShouldNotBeVisible" Category="Microsoft.Design" CheckId="CA1034">
+    <Resolution Name="Default">Do not nest type {0}. Alternatively, change its accessibility so that it is not externally visible.</Resolution>
+   </Rule>
+   <Rule TypeName="ReplaceRepetitiveArgumentsWithParamsArray" Category="Microsoft.Design" CheckId="CA1025">
+    <Resolution Name="Default">Consider implementing a version of {0} that accepts a parameter array argument.</Resolution>
+   </Rule>
+   <Rule TypeName="UseEventsWhereAppropriate" Category="Microsoft.Design" CheckId="CA1030">
+    <Resolution Name="Default">Consider making {0} an event.</Resolution>
+   </Rule>
+   <Rule TypeName="UsePreferredTerms" Category="Microsoft.Naming" CheckId="CA1726">
+    <Resolution Name="Member">Replace the term '{0}' in member name {1} with the preferred alternate '{2}'.</Resolution>
+    <Resolution Name="Type">Replace the term '{0}' in type name {1} with the preferred alternate '{2}'.</Resolution>
+   </Rule>
+  </Rules>
+ </FxCopReport>
+</FxCopProject>

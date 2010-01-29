@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<project name="Cpp-Managed-Failures" default="build">
+
+  <property name="output.dir" value="../../../bin" />
+  <property name="output.dll" value="../../../bin/cpp-managed-failures.dll" />
+
+  <target name="clean">
+    <delete file="${output.dll}" />
+  </target>
+
+  <target name="build">
+
+    <readregistry property="vs.2003.path" 
+      key="Software\Microsoft\VisualStudio\7.1\InstallDir" 
+      hive="LocalMachine" failonerror="false"
+      unless="${property::exists( 'vs.2003.path' )}"/>
+
+    <property name="build.config" value="Debug"
+      unless="${property::exists('build.config')}" />
+
+    <fail message="VS 2003 must be installed to build this sample"
+      unless="${property::exists( 'vs.2003.path' )}"/>
+
+    <mkdir dir="${output.dir}" unless="${directory::exists(output.dir)}" />
+    <copy file="../../../../bin/nunit.framework.dll" todir="${output.dir}" 
+      if="${file::exists('../../../../bin/nunit.framework.dll')}" />
+
+    <exec program="devenv.exe" basedir="${vs.2003.path}" workingdir="."
+      commandline="cpp-managed-failures.sln /build ${build.config} /out ${output.dll}" />
+
+  </target>
+
+  <target name="rebuild" depends="clean,build" />
+
+  <target name="package">
+    <copy todir="${package.samples.dir}/cpp/managed/failures">
+      <fileset basedir=".">
+        <include name="cpp-managed-failures.build" />
+        <include name="AssemblyInfo.cpp" />
+        <include name="cppsample.cpp" />
+        <include name="cppsample.h" />
+      </fileset>
+    </copy>
+
+    <copy todir="${package.samples.dir}/cpp/managed/failures"
+        file="./cpp-managed-failures.vcproj">
+      <filterchain>
+        <replacestring from="$(SolutionDir)..\..\..\src\NUnitFramework\framework\bin\Debug\nunit.framework.dll"
+          to="..\..\..\..\bin\nunit.framework.dll"/>
+      </filterchain>
+    </copy>
+  </target>
+
+</project>

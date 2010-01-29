@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<project name="MinimalAddin" default="build">
+
+  <property name="output.dir" value="../../../bin" />
+  <property name="output.dll" value="../../../bin/Minimal.dll" />
+
+  <target name="clean">
+    <delete file="${output.dll}" />
+  </target>
+
+  <target name="build">
+    <mkdir dir="${output.dir}" unless="${directory::exists(output.dir)}" />
+    <copy file="../../../../bin/nunit.framework.dll" todir="${output.dir}" 
+      if="${file::exists('../../../../bin/nunit.framework.dll')}" />
+    <copy file="../../../../bin/nunit.core.interfaces.dll" todir="${output.dir}" 
+      if="${file::exists('../../../../bin/nunit.core.interfaces.dll')}" />
+
+    <csc target="library" output="${output.dll}">
+      <sources>
+        <include name="*.cs"/>
+      </sources>
+      <references basedir="${output.dir}">
+        <include name="nunit.framework.dll" />
+        <include name="nunit.core.interfaces.dll" />
+      </references>
+    </csc>
+  </target>
+
+  <target name="rebuild" depends="clean,build" />
+
+  <target name="package">
+    <copy todir="${package.samples.dir}/Extensibility/Core/Minimal">
+      <fileset basedir=".">
+        <include name="Minimal.csproj" />
+        <include name="Minimal.build" />
+        <include name="Minimal.cs" />
+        <include name="ReadMe.txt" />
+      </fileset>
+    </copy>
+
+    <xmlpoke 
+      file="${package.samples.dir}/Extensibility/Core/Minimal/Minimal.csproj"
+      xpath="/VisualStudioProject/CSHARP/Build/References/Reference[@Name='nunit.core.interfaces']/@HintPath"
+      value="..\..\..\..\bin\nunit.core.interfaces.dll" />
+  </target>
+
+</project>

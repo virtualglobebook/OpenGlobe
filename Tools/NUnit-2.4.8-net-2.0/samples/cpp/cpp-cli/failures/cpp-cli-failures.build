@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<project name="Cpp-Cli-Failures" default="build">
+
+  <property name="output.dir" value="../../../bin" />
+  <property name="output.dll" value="../../../bin/cpp-cli-failures.dll" />
+
+  <target name="clean">
+    <delete file="${output.dll}" />
+  </target>
+
+  <target name="build">
+
+    <readregistry property="vs.2005.path" 
+      key="Software\Microsoft\VisualStudio\8.0\InstallDir" 
+      hive="LocalMachine" failonerror="false"
+      unless="${property::exists( 'vs.2005.path' )}"/>
+
+    <fail message="VS 2005 must be installed to build this sample"
+      unless="${property::exists( 'vs.2005.path' )}"/>
+
+    <property name="build.config" value="Debug"
+      unless="${property::exists('build.config')}" />
+
+    <mkdir dir="${output.dir}" unless="${directory::exists(output.dir)}" />
+    <copy file="../../../../bin/nunit.framework.dll" todir="${output.dir}" 
+      if="${file::exists('../../../../bin/nunit.framework.dll')}" />
+
+    <exec program="devenv.exe"
+      basedir="${vs.2005.path}" workingdir="."
+      commandline="cpp-cli-failures.sln /build ${build.config} /out ${output.dll}"/>
+
+  </target>
+
+  <target name="rebuild" depends="clean,build" />
+
+  <target name="package">
+    <copy todir="${package.samples.dir}/cpp/cpp-cli/failures">
+      <fileset basedir=".">
+        <include name="cpp-cli-failures.vcproj" />
+        <include name="cpp-cli-failures.build" />
+        <include name="AssemblyInfo.cpp" />
+        <include name="cppsample.cpp" />
+        <include name="cppsample.h" />
+      </fileset>
+    </copy>
+  </target>
+
+</project>

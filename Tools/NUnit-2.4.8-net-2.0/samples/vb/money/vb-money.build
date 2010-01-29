@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<project name="VBMoney" default="build">
+
+  <property name="output.dir" value="../../bin" />
+  <property name="output.dll" value="../../bin/vb-money.dll" />
+
+  <target name="clean">
+    <delete file="${output.dll}" />
+  </target>
+
+  <target name="build">
+
+    <mkdir dir="${output.dir}" unless="${directory::exists(output.dir)}" />
+    <copy file="../../../bin/nunit.framework.dll" todir="${output.dir}" 
+      if="${file::exists('../../../bin/nunit.framework.dll')}" />
+
+    <vbc target="library" 
+        output="${output.dll}">
+      <imports>
+        <import namespace="System"/>
+        <import namespace="System.Collections"/>
+      </imports>
+      <sources>
+        <include name="*.vb"/>
+      </sources>
+      <references basedir="${output.dir}">
+        <include name="nunit.framework.dll" />
+      </references>
+    </vbc>
+  </target>
+
+  <target name="rebuild" depends="clean,build" />
+
+  <target name="package">
+    <copy todir="${package.samples.dir}/vb/money">
+      <fileset basedir=".">
+        <include name="vb-money.vbproj" />
+        <include name="vb-money.build" />
+        <include name="AssemblyInfo.vb" />
+        <include name="IMoney.vb" />
+        <include name="Money.vb" />
+        <include name="MoneyBag.vb" />
+        <include name="MoneyTest.vb" />
+      </fileset>
+    </copy>
+
+    <xmlpoke 
+      file="${package.samples.dir}/vb/money/vb-money.vbproj"
+      xpath="/VisualStudioProject/VisualBasic/Build/References/Reference[@Name='nunit.framework']/@HintPath"
+      value="..\..\..\bin\nunit.framework.dll" />
+  </target>
+
+</project>

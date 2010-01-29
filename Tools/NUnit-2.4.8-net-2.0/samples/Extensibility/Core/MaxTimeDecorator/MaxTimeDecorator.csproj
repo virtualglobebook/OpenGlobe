@@ -1,0 +1,23 @@
+<VisualStudioProject>
+  <CSHARP ProjectType="Local" ProductVersion="7.10.3077" SchemaVersion="2.0" ProjectGuid="{BA74B90C-5B99-482E-8C0A-1B2BE4A198ED}">
+    <Build>
+      <Settings ApplicationIcon="" AssemblyKeyContainerName="" AssemblyName="MaxTimeDecorator" AssemblyOriginatorKeyFile="" DefaultClientScript="JScript" DefaultHTMLPageLayout="Grid" DefaultTargetSchema="IE50" DelaySign="false" OutputType="Library" PreBuildEvent="" PostBuildEvent="..\..\..\install.bat $(TargetFileName)" RootNamespace="NUnit.Core.Extensions" RunPostBuildEvent="OnBuildSuccess" StartupObject="">
+        <Config Name="Debug" AllowUnsafeBlocks="false" BaseAddress="285212672" CheckForOverflowUnderflow="false" ConfigurationOverrideFile="" DefineConstants="DEBUG;TRACE" DocumentationFile="" DebugSymbols="true" FileAlignment="4096" IncrementalBuild="false" NoStdLib="false" NoWarn="" Optimize="false" OutputPath="bin\Debug\" RegisterForComInterop="false" RemoveIntegerChecks="false" TreatWarningsAsErrors="false" WarningLevel="4" />
+        <Config Name="Release" AllowUnsafeBlocks="false" BaseAddress="285212672" CheckForOverflowUnderflow="false" ConfigurationOverrideFile="" DefineConstants="TRACE" DocumentationFile="" DebugSymbols="false" FileAlignment="4096" IncrementalBuild="false" NoStdLib="false" NoWarn="" Optimize="true" OutputPath="bin\Release\" RegisterForComInterop="false" RemoveIntegerChecks="false" TreatWarningsAsErrors="false" WarningLevel="4" />
+      </Settings>
+      <References>
+        <Reference Name="System" AssemblyName="System" />
+        <Reference Name="nunit.core" AssemblyName="nunit.core" HintPath="..\..\..\..\bin\nunit.core.dll" AssemblyFolderKey="hkcu\dn\nunit 2.4.5" Private="False" />
+        <Reference Name="nunit.core.interfaces" AssemblyName="nunit.core.interfaces" HintPath="..\..\..\..\bin\nunit.core.interfaces.dll" AssemblyFolderKey="hkcu\dn\nunit 2.4.5" Private="False" />
+      </References>
+    </Build>
+    <Files>
+      <Include>
+        <File RelPath="AssemblyInfo.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="MaxTimeAttribute.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="MaxTimeDecorator.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="MaxTimeTestCase.cs" SubType="Code" BuildAction="Compile" />
+      </Include>
+    </Files>
+  </CSHARP>
+</VisualStudioProject>
