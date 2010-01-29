@@ -49,6 +49,14 @@
     <Compile Include="FrameBuffer\HighResolutionSnapFrameBuffer.cs" />
     <Compile Include="GL32\ExtensionsGL32.cs" />
     <Compile Include="GL32\ICleanable.cs" />
+    <Compile Include="GL32\Input\KeyboardGL32.cs" />
+    <Compile Include="GL32\Input\MouseGL32.cs" />
+    <Compile Include="Input\Keyboard.cs" />
+    <Compile Include="Input\Mouse.cs" />
+    <Compile Include="Input\MouseButton.cs" />
+    <Compile Include="Input\MouseButtonEvent.cs" />
+    <Compile Include="Input\MouseButtonEventArgs.cs" />
+    <Compile Include="Input\MouseMoveEventArgs.cs" />
     <Compile Include="Scene\Camera.cs" />
     <Compile Include="Scene\SceneState.cs" />
     <Compile Include="Shaders\DrawAutomaticUniforms\CameraEyeDrawAutomaticUniform.cs" />
