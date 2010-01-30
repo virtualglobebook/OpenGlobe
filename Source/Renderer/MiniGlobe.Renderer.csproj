@@ -73,8 +73,12 @@
     <Compile Include="Shaders\DrawAutomaticUniforms\ModelViewMatrixDrawAutomaticUniformFactory.cs" />
     <Compile Include="Shaders\DrawAutomaticUniforms\ModelViewPerspectiveProjectionMatrixDrawAutomaticUniform.cs" />
     <Compile Include="Shaders\DrawAutomaticUniforms\ModelViewPerspectiveProjectionMatrixDrawAutomaticUniformFactory.cs" />
+    <Compile Include="Shaders\DrawAutomaticUniforms\OrthographicProjectionMatrixDrawAutomaticUniform.cs" />
+    <Compile Include="Shaders\DrawAutomaticUniforms\OrthographicProjectionMatrixDrawAutomaticUniformFactory.cs" />
     <Compile Include="Shaders\DrawAutomaticUniforms\PerspectiveProjectionMatrixDrawAutomaticUniform.cs" />
     <Compile Include="Shaders\DrawAutomaticUniforms\PerspectiveProjectionMatrixDrawAutomaticUniformFactory.cs" />
+    <Compile Include="Shaders\DrawAutomaticUniforms\ViewportDrawAutomaticUniform.cs" />
+    <Compile Include="Shaders\DrawAutomaticUniforms\ViewportDrawAutomaticUniformFactory.cs" />
     <Compile Include="Shaders\LinkAutomaticUniforms\LinkAutomaticUniform.cs" />
     <Compile Include="Shaders\LinkAutomaticUniforms\LinkAutomaticUniformCollection.cs" />
     <Compile Include="Shaders\LinkAutomaticUniforms\TextureLinkAutomaticUniform.cs" />

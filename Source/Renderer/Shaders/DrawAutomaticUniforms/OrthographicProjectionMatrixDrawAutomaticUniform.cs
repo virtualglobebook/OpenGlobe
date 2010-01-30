@@ -8,29 +8,26 @@
 #endregion
 
 using OpenTK;
+using MiniGlobe.Core;
 
 namespace MiniGlobe.Renderer
 {
-    internal class LightPropertiesDrawAutomaticUniform : DrawAutomaticUniform
+    internal class OrthographicProjectionMatrixDrawAutomaticUniform : DrawAutomaticUniform
     {
-        public LightPropertiesDrawAutomaticUniform(Uniform uniform)
+        public OrthographicProjectionMatrixDrawAutomaticUniform(Uniform uniform)
         {
-            _uniform = uniform as Uniform<Vector4>;
+            _uniform = uniform as Uniform<Matrix4>;
         }
 
         #region DrawAutomaticUniform Members
 
         public override void Set(Context context, SceneState sceneState)
         {
-            _uniform.Value = new Vector4(
-                sceneState.DiffuseIntensity,
-                sceneState.SpecularIntensity,
-                sceneState.AmbientIntensity,
-                sceneState.Shininess);
+            _uniform.Value = Conversion.ToMatrix4(sceneState.ComputeOrthographicProjectionMatrix(context.Viewport));
         }
 
         #endregion
 
-        private Uniform<Vector4> _uniform;
+        private Uniform<Matrix4> _uniform;
     }
 }

@@ -11,6 +11,6 @@ namespace MiniGlobe.Renderer
 {
     internal abstract class DrawAutomaticUniform
     {
-        public abstract void Set(SceneState sceneState);
+        public abstract void Set(Context context, SceneState sceneState);
     }
 }

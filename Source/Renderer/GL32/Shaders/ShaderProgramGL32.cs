@@ -431,9 +431,9 @@ namespace MiniGlobe.Renderer.GL32
             GL.UseProgram(_program);
         }
 
-        internal void Clean(SceneState sceneState)
+        internal void Clean(Context context, SceneState sceneState)
         {
-            SetDrawAutomaticUniforms(sceneState);
+            SetDrawAutomaticUniforms(context, sceneState);
 
             for (int i = 0; i < _uniformsToClean.Length; ++i)
             {

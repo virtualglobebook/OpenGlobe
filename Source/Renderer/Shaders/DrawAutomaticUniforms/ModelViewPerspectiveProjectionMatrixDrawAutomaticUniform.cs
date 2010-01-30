@@ -21,7 +21,7 @@ namespace MiniGlobe.Renderer
 
         #region DrawAutomaticUniform Members
 
-        public override void Set(SceneState sceneState)
+        public override void Set(Context context, SceneState sceneState)
         {
             _uniform.Value = Conversion.ToMatrix4(sceneState.ModelViewPerspectiveProjectionMatrix);
         }

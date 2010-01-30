@@ -432,7 +432,7 @@ namespace MiniGlobe.Renderer.GL32
         private void CleanShaderProgram(SceneState sceneState)
         {
             Debug.Assert(_boundShaderProgram != null);
-            _boundShaderProgram.Clean(sceneState);
+            _boundShaderProgram.Clean(this, sceneState);
 
 #if DEBUG
             GL.ValidateProgram(_boundShaderProgram.Handle);

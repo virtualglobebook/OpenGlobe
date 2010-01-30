@@ -34,11 +34,11 @@ namespace MiniGlobe.Renderer
             }
         }
 
-        protected void SetDrawAutomaticUniforms(SceneState sceneState)
+        protected void SetDrawAutomaticUniforms(Context context, SceneState sceneState)
         {
             for (int i = 0; i < _drawAutomaticUniforms.Count; ++i)
             {
-                _drawAutomaticUniforms[i].Set(sceneState);
+                _drawAutomaticUniforms[i].Set(context, sceneState);
             }
         }
 
