@@ -166,7 +166,7 @@ namespace MiniGlobe.Scene
         {
             double approximateDistanceFromSurface = _camera.Eye.Length - _ellipsoid.MinimumRadius;
             double rangeWindowRatio = (double)movement.Height / (double)_window.Height;
-            _range += 5.0 * approximateDistanceFromSurface * rangeWindowRatio;
+            _range -= 5.0 * approximateDistanceFromSurface * rangeWindowRatio;
         }
 
         private void CameraToElements()
@@ -189,6 +189,7 @@ namespace MiniGlobe.Scene
         private void ElementsToCamera()
         {
             double rangeTimesSinElevation = _range * Math.Sin(_elevation);
+            _camera.Target = Vector3d.Zero;
             _camera.Eye = new Vector3d(rangeTimesSinElevation * Math.Cos(_azimuth),
                                        rangeTimesSinElevation * Math.Sin(_azimuth),
                                        _range * Math.Cos(_elevation));
