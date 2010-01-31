@@ -101,11 +101,11 @@ namespace MiniGlobe.Scene
                   }";
             _sp = Device.CreateShaderProgram(vs, gs, fs);
 
-            _lineWidth = _sp.Uniforms["u_halfLineWidth"] as Uniform<float>;
-            _lineWidth.Value = 1;
+            _halfLineWidth = _sp.Uniforms["u_halfLineWidth"] as Uniform<float>;
+            Width = 1;
 
             _lineLength = _sp.Uniforms["u_lineLength"] as Uniform<float>;
-            _lineLength.Value = 1;
+            Length = 1;
 
             Vector3[] positions = new Vector3[] 
             { 
@@ -150,8 +150,12 @@ namespace MiniGlobe.Scene
 
         public float Width
         {
-            get { return _lineWidth.Value; }
-            set { _lineWidth.Value = value; }
+            get { return _lineWidth; }
+            set 
+            {
+                _lineWidth = value;
+                _halfLineWidth.Value = _lineWidth * 0.5f; ; 
+            }
         }
 
         public float Length
@@ -173,7 +177,8 @@ namespace MiniGlobe.Scene
         private readonly Context _context;
         private readonly RenderState _renderState;
         private readonly ShaderProgram _sp;
-        private readonly Uniform<float> _lineWidth;
+        private float _lineWidth;
+        private readonly Uniform<float> _halfLineWidth;
         private readonly Uniform<float> _lineLength;
         private readonly VertexArray _va;
     }
