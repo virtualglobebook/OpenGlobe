@@ -37,28 +37,11 @@ namespace MiniGlobe.Renderer
 
         public Matrix4d ComputeOrthographicProjectionMatrix(Rectangle viewport)
         {
-            //Matrix4d m = Matrix4d.CreateOrthographic(800, 600, Camera.NearPlaneDistance, Camera.FarPlaneDistance);
-            //return m;
-
-            double left = viewport.Left;
-            double bottom = viewport.Top;       // Swapped:  MS -> OpenGL
-            double right = viewport.Width;
-            double top = viewport.Bottom;
-            double zNear = Camera.NearPlaneDistance;
-            double zFar = Camera.FarPlaneDistance;
-
-            double deltaX = right - left;
-            double deltaY = top - bottom;
-            double deltaZ = zFar - zNear;
-
-            // TODO: -z doesn't work for normal orthographic rendering
-            Matrix4d m = new Matrix4d(
-              2.0 / deltaX, 0, 0, -(right + left) / deltaX,
-              0, 2.0 / deltaY, 0, -(top + bottom) / deltaY,
-              0, 0, -2.0 / deltaZ, -(zFar + zNear) / deltaZ,
-              0, 0, 0, 1);
-            m.Transpose();
-            return m;
+            //
+            // Bottom and top swapped:  MS -> OpenGL
+            //
+            return Matrix4d.CreateOrthographicOffCenter(viewport.Left, viewport.Right, viewport.Top,
+                viewport.Bottom, Camera.NearPlaneDistance, Camera.FarPlaneDistance);
         }
 
         public Matrix4d PerspectiveProjectionMatrix 

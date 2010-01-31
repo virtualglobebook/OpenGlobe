@@ -43,7 +43,7 @@ namespace MiniGlobe.Scene
 
                       v.x = mg_Viewport.x + mg_Viewport.z * (v.x + 1.0) * 0.5;  // window coordinates
                       v.y = mg_Viewport.y + mg_Viewport.w * (v.y + 1.0) * 0.5;
-                      v.z = (v.z + 1.0) * -0.5;                                 // TODO: Ok?
+                      v.z = (v.z + 1.0) * -0.5;
 
                       gl_Position = v;
                       gsColor = color;
