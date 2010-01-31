@@ -51,8 +51,8 @@ namespace MiniGlobe.Core.Tessellation
             mesh.PrimitiveType = PrimitiveType.Triangles;
             mesh.FrontFaceWindingOrder = WindingOrder.Counterclockwise;
 
-            VertexAttributeDoubleVector3 positionsAttribute = new VertexAttributeDoubleVector3(
-                "position", NumberOfVertices(numberOfPartitions));
+            int numberOfVertices = NumberOfVertices(numberOfPartitions);
+            VertexAttributeDoubleVector3 positionsAttribute = new VertexAttributeDoubleVector3("position", numberOfVertices);
             mesh.Attributes.Add(positionsAttribute);
 
             IndicesInt indices = new IndicesInt(3 * NumberOfTriangles(numberOfPartitions));
@@ -66,14 +66,14 @@ namespace MiniGlobe.Core.Tessellation
 
             if ((vertexAttributes & CubeMapEllipsoidVertexAttributes.Normal) == CubeMapEllipsoidVertexAttributes.Normal)
             {
-                VertexAttributeHalfFloatVector3 normalsAttribute = new VertexAttributeHalfFloatVector3("normal");
+                VertexAttributeHalfFloatVector3 normalsAttribute = new VertexAttributeHalfFloatVector3("normal", numberOfVertices);
                 mesh.Attributes.Add(normalsAttribute);
                 CubeMapMesh.Normals = normalsAttribute.Values;
             }
 
             if ((vertexAttributes & CubeMapEllipsoidVertexAttributes.TextureCoordinate) == CubeMapEllipsoidVertexAttributes.TextureCoordinate)
             {
-                VertexAttributeHalfFloatVector2 textureCoordinateAttribute = new VertexAttributeHalfFloatVector2("textureCoordinate");
+                VertexAttributeHalfFloatVector2 textureCoordinateAttribute = new VertexAttributeHalfFloatVector2("textureCoordinate", numberOfVertices);
                 mesh.Attributes.Add(textureCoordinateAttribute);
                 CubeMapMesh.TextureCoordinate = textureCoordinateAttribute.Values;
             }

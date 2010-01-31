@@ -49,8 +49,8 @@ namespace MiniGlobe.Core.Tessellation
             mesh.PrimitiveType = PrimitiveType.Triangles;
             mesh.FrontFaceWindingOrder = WindingOrder.Counterclockwise;
 
-            VertexAttributeDoubleVector3 positionsAttribute = new VertexAttributeDoubleVector3(
-                "position", SubdivisionUtility.NumberOfVertices(numberOfSubdivisions));
+            int numberOfVertices = SubdivisionUtility.NumberOfVertices(numberOfSubdivisions);
+            VertexAttributeDoubleVector3 positionsAttribute = new VertexAttributeDoubleVector3("position", numberOfVertices);
             mesh.Attributes.Add(positionsAttribute);
 
             IndicesInt indices = new IndicesInt(3 * SubdivisionUtility.NumberOfTriangles(numberOfSubdivisions));
@@ -62,14 +62,14 @@ namespace MiniGlobe.Core.Tessellation
 
             if ((vertexAttributes & SubdivisionSphereVertexAttributes.Normal) == SubdivisionSphereVertexAttributes.Normal)
             {
-                VertexAttributeHalfFloatVector3 normalsAttribute = new VertexAttributeHalfFloatVector3("normal");
+                VertexAttributeHalfFloatVector3 normalsAttribute = new VertexAttributeHalfFloatVector3("normal", numberOfVertices);
                 mesh.Attributes.Add(normalsAttribute);
                 subdivisionMesh.Normals = normalsAttribute.Values;
             }
 
             if ((vertexAttributes & SubdivisionSphereVertexAttributes.TextureCoordinate) == SubdivisionSphereVertexAttributes.TextureCoordinate)
             {
-                VertexAttributeHalfFloatVector2 textureCoordinateAttribute = new VertexAttributeHalfFloatVector2("textureCoordinate");
+                VertexAttributeHalfFloatVector2 textureCoordinateAttribute = new VertexAttributeHalfFloatVector2("textureCoordinate", numberOfVertices);
                 mesh.Attributes.Add(textureCoordinateAttribute);
                 subdivisionMesh.TextureCoordinate = textureCoordinateAttribute.Values;
             }
