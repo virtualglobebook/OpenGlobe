@@ -21,6 +21,7 @@
   <IgnoreGeneratedCode>False</IgnoreGeneratedCode>
  </ProjectOptions>
  <Targets>
+  <Target Name="$(ProjectDir)/../../Source/Examples/Chapter3/RayCasting/bin/Release/Chapter3RayCasting.exe" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/../../Source/Examples/Chapter3/SubdivisionEllipsoid/bin/Release/Chapter3SubdivisionEllipsoid.exe" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/../../Source/Examples/Chapter3/SubdivisionSphere1/bin/Release/Chapter3SubdivisionSphere1.exe" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/../../Source/Examples/Chapter3/SubdivisionSphere2/bin/Release/Chapter3SubdivisionSphere2.exe" Analyze="True" AnalyzeAllChildren="True" />
@@ -118,6 +119,19 @@
    </Namespace>
   </Namespaces>
   <Targets>
+   <Target Name="$(ProjectDir)/../../Source/Examples/Chapter3/RayCasting/bin/Release/Chapter3RayCasting.exe">
+    <Modules>
+     <Module Name="chapter3raycasting.exe">
+      <Messages>
+       <Message TypeName="AssembliesShouldHaveValidStrongNames" Category="Microsoft.Design" CheckId="CA2210" Created="2010-02-02 18:33:41Z">
+        <Issue Name="NoStrongName">
+         <Item>'Chapter3RayCasting.exe'</Item>
+        </Issue>
+       </Message>
+      </Messages>
+     </Module>
+    </Modules>
+   </Target>
    <Target Name="$(ProjectDir)/../../Source/Examples/Chapter3/SubdivisionEllipsoid/bin/Release/Chapter3SubdivisionEllipsoid.exe">
     <Modules>
      <Module Name="chapter3subdivisionellipsoid.exe">
@@ -2743,11 +2757,16 @@
           <Members>
            <Member Name="#MouseUp(MiniGlobe.Renderer.MouseButton,System.Drawing.Point)">
             <Messages>
-             <Message Id="point" TypeName="ReviewUnusedParameters" Category="Microsoft.Usage" CheckId="CA1801" Created="2010-02-02 14:22:10Z" FixCategory="DependsOnFix">
+             <Message Id="point" TypeName="ReviewUnusedParameters" Category="Microsoft.Usage" CheckId="CA1801" Status="Excluded" Created="2010-02-02 14:22:10Z" FixCategory="DependsOnFix">
               <Issue>
                <Item>'point'</Item>
                <Item>'CameraGlobeCentered.MouseUp(MouseButton, Point)'</Item>
               </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="33" />
+               </User>
+              </Notes>
              </Message>
             </Messages>
            </Member>
@@ -2774,6 +2793,15 @@
         <Types>
          <Type Name="SystemTests">
           <Members>
+           <Member Name="#RenderBox()">
+            <Messages>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Created="2010-02-02 18:33:41Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'SystemTests.RenderBox()'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
            <Member Name="#RenderCubeMapSphere()">
             <Messages>
              <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-02-02 14:22:10Z" FixCategory="DependsOnFix">
@@ -2986,6 +3014,15 @@
         <Types>
          <Type Name="TessellationTests">
           <Members>
+           <Member Name="#BoxTessellatorTest()">
+            <Messages>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Created="2010-02-02 18:33:41Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'TessellationTests.BoxTessellatorTest()'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
            <Member Name="#CubeMapEllipsoidTessellatorTest()">
             <Messages>
              <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-02-02 14:22:10Z" FixCategory="DependsOnFix">
@@ -3748,6 +3785,7 @@
     <Note Id="30" Modified="2010-01-13 21:06:32Z">In graphics, it is a vertex attribute.</Note>
     <Note Id="31" Modified="2010-01-13 21:08:11Z">Ellipsoid is immutable.</Note>
     <Note Id="32" Modified="2010-01-13 21:09:01Z">This is the same as Bitmap.Save().</Note>
+    <Note Id="33" Modified="2010-02-02 18:33:02Z">Required for delegate.</Note>
     <Note Id="34" Modified="2010-02-02 14:22:43Z">[Test] can't be static.</Note>
     <Note Id="35" Modified="2010-02-02 14:24:45Z">filename is ok.</Note>
    </User>
