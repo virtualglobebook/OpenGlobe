@@ -110,36 +110,6 @@ namespace MiniGlobe.Examples.Chapter3.RayCasting
                       }
                   }
 
-                  Intersection rayIntersectSphere(vec3 rayOrigin, vec3 rayDirection, vec3 sphereCenter, float sphereRadius)
-                  {
-                      vec3 l = sphereCenter - rayOrigin;
-
-                      float s = dot(l, rayDirection);
-                      float lSquaredDistance  = dot(l, l);
-                      float radiusSquared = sphereRadius * sphereRadius;
-
-                      if (s < 0 && lSquaredDistance > radiusSquared)
-                      {
-                          return Intersection(false, 0);
-                      }
-
-                      float mSquared = lSquaredDistance - (s * s);
-                      if (mSquared > radiusSquared)
-                      {
-                          return Intersection(false, 0);
-                      }
-
-                      float q = sqrt(radiusSquared - mSquared);
-                      if (lSquaredDistance > radiusSquared)
-                      {
-                          return Intersection(true, s - q);
-                      }
-                      else
-                      {
-                          return Intersection(true, s + q);
-                      }
-                  }
-
                   float lightIntensity(vec3 normal, vec3 toLight, vec3 toEye, vec4 diffuseSpecularAmbientShininess)
                   {
                       vec3 toReflectedLight = reflect(-toLight, normal);
