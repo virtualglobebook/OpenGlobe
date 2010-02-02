@@ -70,5 +70,18 @@ namespace MiniGlobe.Core.Tessellation
             Assert.AreEqual(positions.Values.Count, normals.Values.Count);
             Assert.AreEqual(positions.Values.Count, textureCoordinates.Values.Count);
         }
+
+        [Test]
+        public void GeographicGridEllipsoidTessellatorTest()
+        {
+            Mesh mesh = GeographicGridEllipsoidTessellator.Compute(Ellipsoid.UnitSphere, 8, 4, GeographicGridEllipsoidVertexAttributes.All);
+
+            VertexAttributeDoubleVector3 positions = mesh.Attributes["position"] as VertexAttributeDoubleVector3;
+            VertexAttributeHalfFloatVector3 normals = mesh.Attributes["normal"] as VertexAttributeHalfFloatVector3;
+            VertexAttributeHalfFloatVector2 textureCoordinates = mesh.Attributes["textureCoordinate"] as VertexAttributeHalfFloatVector2;
+
+            Assert.AreEqual(positions.Values.Count, normals.Values.Count);
+            Assert.AreEqual(positions.Values.Count, textureCoordinates.Values.Count);
+        }
     }
 }

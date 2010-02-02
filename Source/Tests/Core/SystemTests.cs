@@ -34,6 +34,13 @@ namespace MiniGlobe.Core
             Render(CubeMapEllipsoidTessellator.Compute(Ellipsoid.UnitSphere, 3, CubeMapEllipsoidVertexAttributes.Position));
         }
 
+
+        [Test]
+        public void RenderGeographicGridSphere()
+        {
+            Render(GeographicGridEllipsoidTessellator.Compute(Ellipsoid.UnitSphere, 9, 4, GeographicGridEllipsoidVertexAttributes.Position));
+        }
+
         private static void Render(Mesh mesh)
         {
             MiniGlobeWindow window = Device.CreateWindow(1, 1);

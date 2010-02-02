@@ -69,26 +69,37 @@ namespace MiniGlobe.Core.Tessellation
                 textureCoordinates = textureCoordinateAttribute.Values;
             }
 
+            //
+            // Create lookup table
+            //
+            double[] cosTheta = new double[numberOfSlicePartitions];
+            double[] sinTheta = new double[numberOfSlicePartitions];
+
+            for (int j = 0; j < numberOfSlicePartitions; ++j)
+            {
+                double theta = (2.0 * Math.PI) * (((double)j) / numberOfSlicePartitions);
+                cosTheta[j] = Math.Cos(theta);
+                sinTheta[j] = Math.Sin(theta);
+            }
+
+            //
+            // Create positions
+            //
             IList<Vector3d> positions = positionsAttribute.Values;
             positions.Add(new Vector3d(0, 0, ellipsoid.Radii.Z));
 
-            // TODO:  lookup table
             for (int i = 1; i < numberOfStackPartitions; ++i)
             {
                 double phi = Math.PI * (((double)i) / numberOfStackPartitions);
-                double cosPhi = Math.Cos(phi);
                 double sinPhi = Math.Sin(phi);
+
+                double xSinPhi = ellipsoid.Radii.X * sinPhi;
+                double ySinPhi = ellipsoid.Radii.Y * sinPhi;
+                double zCosPhi = ellipsoid.Radii.Z * Math.Cos(phi);
 
                 for (int j = 0; j < numberOfSlicePartitions; ++j)
                 {
-                    double theta = (2.0 * Math.PI) * (((double)j) / numberOfSlicePartitions);
-                    double cosTheta = Math.Cos(theta);
-                    double sinTheta = Math.Sin(theta);
-
-                    positions.Add(new Vector3d(
-                        ellipsoid.Radii.X * cosTheta * sinPhi,
-                        ellipsoid.Radii.Y * sinTheta * sinPhi,
-                        ellipsoid.Radii.Z * cosPhi));
+                    positions.Add(new Vector3d(cosTheta[j] * xSinPhi, sinTheta[j] * ySinPhi, zCosPhi));
                 }
             }
             positions.Add(new Vector3d(0, 0, -ellipsoid.Radii.Z));
