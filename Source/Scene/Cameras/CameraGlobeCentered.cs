@@ -176,9 +176,17 @@ namespace MiniGlobe.Scene
             _range = eyePosition.Length;
             _elevation = Math.Acos(eyePosition.Z / _range);
 
-            if (eyePosition.Xy.LengthSquared == 0.0)
+            if (eyePosition.Xy.LengthSquared < _camera.Up.Xy.LengthSquared)
             {
-                _azimuth = Math.Atan2(-_camera.Up.Y, -_camera.Up.X);
+                // Near the poles, determine the azimuth from the Up direction instead of from the Eye position.
+                if (eyePosition.Z > 0.0)
+                {
+                    _azimuth = Math.Atan2(-_camera.Up.Y, -_camera.Up.X);
+                }
+                else
+                {
+                    _azimuth = Math.Atan2(_camera.Up.Y, _camera.Up.X);
+                }
             }
             else
             {
@@ -188,27 +196,23 @@ namespace MiniGlobe.Scene
 
         private void ElementsToCamera()
         {
-            double rangeTimesSinElevation = _range * Math.Sin(_elevation);
             _camera.Target = Vector3d.Zero;
+
+            double rangeTimesSinElevation = _range * Math.Sin(_elevation);
             _camera.Eye = new Vector3d(rangeTimesSinElevation * Math.Cos(_azimuth),
                                        rangeTimesSinElevation * Math.Sin(_azimuth),
                                        _range * Math.Cos(_elevation));
 
-            Vector3d up;
-            if (_camera.Eye.Xy.LengthSquared == 0.0)
+            Vector3d look = _camera.Eye - _camera.Target;
+            Vector3d right = Vector3d.Cross(look, Vector3d.UnitZ);
+            _camera.Up = Vector3d.Normalize(Vector3d.Cross(right, look));
+
+            if (Double.IsNaN(_camera.Up.X))
             {
-                // Near a pole, so capture the azimuth directly in the up direction.
-                up = new Vector3d(-Math.Cos(_azimuth), -Math.Sin(_azimuth), 0.0);
+                // Up vector is invalid because _camera.Eye is all Z (or very close to it).
+                // So compute the Up vector directly assuming no Z component.
+                _camera.Up = new Vector3d(-Math.Cos(_azimuth), -Math.Sin(_azimuth), 0.0);
             }
-            else
-            {
-                Vector3d look = _camera.Eye - _camera.Target;
-                Vector3d right = Vector3d.Cross(look, Vector3d.UnitZ);
-                up = Vector3d.Cross(right, look);
-                up.Normalize();
-            }
-            
-            _camera.Up = up;
         }
 
         private Camera _camera;
