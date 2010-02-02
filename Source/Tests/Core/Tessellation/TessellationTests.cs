@@ -9,6 +9,7 @@
 
 using NUnit.Framework;
 using MiniGlobe.Core.Geometry;
+using OpenTK;
 
 namespace MiniGlobe.Core.Tessellation
 {
@@ -82,6 +83,15 @@ namespace MiniGlobe.Core.Tessellation
 
             Assert.AreEqual(positions.Values.Count, normals.Values.Count);
             Assert.AreEqual(positions.Values.Count, textureCoordinates.Values.Count);
+        }
+
+        [Test]
+        public void BoxTessellatorTest()
+        {
+            Mesh mesh = BoxTessellator.Compute(new Vector3d(1, 1, 1));
+
+            Assert.IsNotNull(mesh.Attributes["position"] as VertexAttributeDoubleVector3);
+            Assert.IsNotNull(mesh.Indices as IndicesByte);
         }
     }
 }

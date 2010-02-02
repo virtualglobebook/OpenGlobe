@@ -11,6 +11,7 @@ using NUnit.Framework;
 using MiniGlobe.Renderer;
 using MiniGlobe.Core.Geometry;
 using MiniGlobe.Core.Tessellation;
+using OpenTK;
 
 namespace MiniGlobe.Core
 {
@@ -34,11 +35,16 @@ namespace MiniGlobe.Core
             Render(CubeMapEllipsoidTessellator.Compute(Ellipsoid.UnitSphere, 3, CubeMapEllipsoidVertexAttributes.Position));
         }
 
-
         [Test]
         public void RenderGeographicGridSphere()
         {
             Render(GeographicGridEllipsoidTessellator.Compute(Ellipsoid.UnitSphere, 9, 4, GeographicGridEllipsoidVertexAttributes.Position));
+        }
+
+        [Test]
+        public void RenderBox()
+        {
+            Render(BoxTessellator.Compute(new Vector3d(1, 1, 1)));
         }
 
         private static void Render(Mesh mesh)
