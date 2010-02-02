@@ -32,88 +32,177 @@ namespace MiniGlobe.Examples.Chapter3.RayCasting
 
         public RayCasting()
         {
-            _window = Device.CreateWindow(800, 600, "Chapter 3:  Subdivision Sphere 1");
+            Ellipsoid globeShape = Ellipsoid.UnitSphere;
+
+            _window = Device.CreateWindow(800, 600, "Chapter 3:  Ray Casting");
             _window.Resize += OnResize;
             _window.RenderFrame += OnRenderFrame;
             _window.Mouse.ButtonDown += MouseDown;
             _sceneState = new SceneState();
-            _camera = new CameraGlobeCentered(_sceneState.Camera, _window, Ellipsoid.UnitSphere);
+            _camera = new CameraGlobeCentered(_sceneState.Camera, _window, globeShape);
 
             string vs =
                 @"#version 150
 
                   in vec4 position;
                   out vec3 worldPosition;
-                  out vec3 positionToLight;
-                  out vec3 positionToEye;
 
                   uniform mat4 mg_ModelViewPerspectiveProjectionMatrix;
-                  uniform vec3 mg_CameraEye;
-                  uniform vec3 mg_LightPosition;
 
                   void main()                     
                   {
-                        gl_Position = mg_ModelViewPerspectiveProjectionMatrix * position; 
-
-                        worldPosition = position.xyz;
-                        positionToLight = mg_LightPosition - worldPosition;
-                        positionToEye = mg_CameraEye - worldPosition;
+                      gl_Position = mg_ModelViewPerspectiveProjectionMatrix * position; 
+                      worldPosition = position.xyz;
                   }";
 
             string fs =
                 @"#version 150
                  
                   in vec3 worldPosition;
-                  in vec3 positionToLight;
-                  in vec3 positionToEye;
                   out vec4 fragColor;
 
                   uniform vec4 mg_DiffuseSpecularAmbientShininess;
                   uniform sampler2D mg_Texture0;
 
-                  void main()
-                  {
-                      vec3 toLight = normalize(positionToLight);
-                      vec3 toEye = normalize(positionToEye);
+                  uniform mat4 mg_ModelViewPerspectiveProjectionMatrix;
 
-                      vec3 normal = normalize(worldPosition);
+                  uniform vec3 mg_LightPosition;
+                  uniform vec3 mg_CameraEye;
+                  uniform vec3 u_GlobeCenter;
+                  uniform float u_GlobeRadius;
+
+                  struct Intersection
+                  {
+                      bool  Intersects;
+                      float Time;         // Along ray
+                  };
+
+                  Intersection rayIntersectSphere(vec3 rayOrigin, vec3 rayDirection, vec3 sphereCenter, float sphereRadius)
+                  {
+                      vec3 l = sphereCenter - rayOrigin;
+
+                      float s = dot(l, rayDirection);
+                      float lSquaredDistance  = dot(l, l);
+                      float radiusSquared = sphereRadius * sphereRadius;
+
+                      if (s < 0 && lSquaredDistance > radiusSquared)
+                      {
+                          return Intersection(false, 0);
+                      }
+
+                      float mSquared = lSquaredDistance - (s * s);
+                      if (mSquared > radiusSquared)
+                      {
+                          return Intersection(false, 0);
+                      }
+
+                      float q = sqrt(radiusSquared - mSquared);
+                      if (lSquaredDistance > radiusSquared)
+                      {
+                          return Intersection(true, s - q);
+                      }
+                      else
+                      {
+                          return Intersection(true, s + q);
+                      }
+                  }
+
+                  float lightIntensity(vec3 normal, vec3 toLight, vec3 toEye, vec4 diffuseSpecularAmbientShininess)
+                  {
                       vec3 toReflectedLight = reflect(-toLight, normal);
 
                       float diffuse = max(dot(toLight, normal), 0.0);
                       float specular = max(dot(toReflectedLight, toEye), 0.0);
                       specular = pow(specular, mg_DiffuseSpecularAmbientShininess.w);
 
-                      float intensity = 
-                         (mg_DiffuseSpecularAmbientShininess.x * diffuse) +
-                         (mg_DiffuseSpecularAmbientShininess.y * specular) +
-                         mg_DiffuseSpecularAmbientShininess.z;
+                      return (mg_DiffuseSpecularAmbientShininess.x * diffuse) +
+                             (mg_DiffuseSpecularAmbientShininess.y * specular) +
+                              mg_DiffuseSpecularAmbientShininess.z;
+                  }
 
-                      vec2 textureCoordinate = vec2(atan2(normal.y, normal.x) / mg_TwoPi + 0.5, asin(normal.z) / mg_Pi + 0.5);
-                      fragColor = vec4(intensity * texture2D(mg_Texture0, textureCoordinate).rgb, 1.0);
+                  vec2 ComputeTextureCoordinates(vec3 normal)
+                  {
+                      return vec2(atan2(normal.y, normal.x) / mg_TwoPi + 0.5, asin(normal.z) / mg_Pi + 0.5);
+                  }
 
-                      fragColor = vec4(0, 0, 0, 1);
+                  float ComputeWorldPositionDepth(vec3 position)
+                  {
+                      // Consider using mat4x2
+                      vec4 v = mg_ModelViewPerspectiveProjectionMatrix * vec4(position, 1);   // clip coordinates
+                      v.z /= v.w;                                                             // normalized device coordinates
+                      v.z = (v.z + 1.0) * 0.5;
+                      return v.z;
+                  }
+
+                  void main()
+                  {
+                      vec3 rayDirection = normalize(worldPosition - mg_CameraEye);
+                      Intersection i = rayIntersectSphere(mg_CameraEye, rayDirection, u_GlobeCenter, u_GlobeRadius);
+                      if (i.Intersects)
+                      {
+                          vec3 intersectionPosition = mg_CameraEye + (i.Time * rayDirection);
+                          vec3 intersectionNormal = normalize(intersectionPosition);
+
+                          vec3 toLight = normalize(mg_LightPosition - intersectionPosition);
+                          vec3 toEye = normalize(mg_CameraEye - intersectionPosition);
+                          float intensity = lightIntensity(intersectionNormal, toLight, toEye, mg_DiffuseSpecularAmbientShininess);
+
+                          fragColor = vec4(intensity * texture2D(mg_Texture0, ComputeTextureCoordinates(intersectionNormal)).rgb, 1.0);
+                          gl_FragDepth = ComputeWorldPositionDepth(intersectionPosition);
+                      }
+                      else
+                      {
+                          discard;
+                      }
                   }";
             _sp = Device.CreateShaderProgram(vs, fs);
 
-            ///////////////////////////////////////////////////////////////////
+            (_sp.Uniforms["u_GlobeCenter"] as Uniform<Vector3>).Value = Vector3.Zero;
+            (_sp.Uniforms["u_GlobeRadius"] as Uniform<float>).Value = (float)globeShape.Radii.X;   // TODO
 
-            Mesh mesh = BoxTessellator.Compute(new Vector3d(2, 2, 2));
+            Mesh mesh = BoxTessellator.Compute(2 * globeShape.Radii);
             _va = _window.Context.CreateVertexArray(mesh, _sp.VertexAttributes, BufferHint.StaticDraw);
             _primitiveType = mesh.PrimitiveType;
 
-            ///////////////////////////////////////////////////////////////////
-
             _renderState = new RenderState();
-            _renderState.RasterizationMode = RasterizationMode.Line;
+            _renderState.FacetCulling.Face = CullFace.Front;
             _renderState.FacetCulling.FrontFaceWindingOrder = mesh.FrontFaceWindingOrder;
-
-            ///////////////////////////////////////////////////////////////////
 
             Bitmap bitmap = new Bitmap("NE2_50M_SR_W_4096.jpg");
             _texture = Device.CreateTexture2D(bitmap, TextureFormat.RedGreenBlue8, false);
 
-            _sceneState.Camera.ZoomToTarget(1);
+            ///////////////////////////////////////////////////////////////////
 
+            string vs2 =
+                @"#version 150
+
+                  in vec4 position;
+                  uniform mat4 mg_ModelViewPerspectiveProjectionMatrix;
+
+                  void main()                     
+                  {
+                      gl_Position = mg_ModelViewPerspectiveProjectionMatrix * position; 
+                  }";
+
+            string fs2 =
+                @"#version 150
+                 
+                  out vec4 fragColor;
+
+                  void main()
+                  {
+                      fragColor = vec4(0.0, 0.0, 0.0, 1.0);
+                  }";
+            _boxSP = Device.CreateShaderProgram(vs2, fs2);
+
+            _boxRenderState = new RenderState();
+            _boxRenderState.RasterizationMode = RasterizationMode.Line;
+            _boxRenderState.FacetCulling.Face = CullFace.Front;
+            _boxRenderState.FacetCulling.FrontFaceWindingOrder = mesh.FrontFaceWindingOrder;
+
+            ///////////////////////////////////////////////////////////////////
+
+            _sceneState.Camera.ZoomToTarget(Math.Max(Math.Max(globeShape.Radii.X, globeShape.Radii.Y), globeShape.Radii.Z));
             //_sceneState.Camera.LoadView(@"E:\Dropbox\My Dropbox\Book\Manuscript\GlobeRendering\Figures\RayCasting.xml");
         }
 
@@ -134,10 +223,21 @@ namespace MiniGlobe.Examples.Chapter3.RayCasting
 #endif
 
             context.Clear(ClearBuffers.ColorAndDepthBuffer, Color.White, 1, 0);
+            context.Bind(_va);
+
+            //
+            // Ray Casting Pass
+            //
             context.TextureUnits[0].Texture2D = _texture;
             context.Bind(_renderState);
             context.Bind(_sp);
-            context.Bind(_va);
+            context.Draw(_primitiveType, _sceneState);
+
+            //
+            // Wireframe Box Pass
+            //
+            context.Bind(_boxRenderState);
+            context.Bind(_boxSP);
             context.Draw(_primitiveType, _sceneState);
 
 #if FBO
@@ -151,6 +251,7 @@ namespace MiniGlobe.Examples.Chapter3.RayCasting
 
         public void Dispose()
         {
+            _boxSP.Dispose();
             _texture.Dispose();
             _va.Dispose();
             _sp.Dispose();
@@ -181,5 +282,8 @@ namespace MiniGlobe.Examples.Chapter3.RayCasting
         private readonly VertexArray _va;
         private readonly Texture2D _texture;
         private readonly PrimitiveType _primitiveType;
+
+        private readonly RenderState _boxRenderState;
+        private readonly ShaderProgram _boxSP;
     }
 }
