@@ -15,7 +15,7 @@ using OpenTK;
 
 namespace MiniGlobe.Scene
 {
-    public class Axes : IDisposable
+    public sealed class Axes : IDisposable
     {
         public Axes(Context context)
         {

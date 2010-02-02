@@ -141,6 +141,27 @@
         </Issue>
        </Message>
       </Messages>
+      <Namespaces>
+       <Namespace Name="MiniGlobe.Examples.Chapter3.SubdivisionSphere1">
+        <Types>
+         <Type Name="SubdivisionSphere1">
+          <Members>
+           <Member Name="#Dispose()">
+            <Messages>
+             <Message Id="_axes" TypeName="DisposableFieldsShouldBeDisposed" Category="Microsoft.Usage" CheckId="CA2213" Created="2010-02-02 14:22:10Z">
+              <Issue>
+               <Item>'SubdivisionSphere1'</Item>
+               <Item>'SubdivisionSphere1._axes'</Item>
+               <Item>'Axes'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+        </Types>
+       </Namespace>
+      </Namespaces>
      </Module>
     </Modules>
    </Target>
@@ -650,6 +671,44 @@
            </Member>
           </Members>
          </Type>
+         <Type Name="Camera">
+          <Members>
+           <Member Name="#LoadView(System.String)">
+            <Messages>
+             <Message Id="filename" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Status="Excluded" Created="2010-02-02 14:22:10Z">
+              <Issue Name="MemberParameterShouldBeCompoundWord">
+               <Item>'Camera.LoadView(string)'</Item>
+               <Item>filename</Item>
+               <Item>'filename'</Item>
+               <Item>fileName</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="35" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#SaveView(System.String)">
+            <Messages>
+             <Message Id="filename" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Status="Excluded" Created="2010-02-02 14:22:10Z">
+              <Issue Name="MemberParameterShouldBeCompoundWord">
+               <Item>'Camera.SaveView(string)'</Item>
+               <Item>filename</Item>
+               <Item>'filename'</Item>
+               <Item>fileName</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="35" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
          <Type Name="HighResolutionSnapFrameBuffer">
           <Members>
            <Member Name="#SaveColorBuffer(System.String)">
@@ -706,6 +765,19 @@
               <Issue>
                <Item>'IndexBuffer.CopyToSystemMemory&lt;T&gt;(int, int)'</Item>
                <Item>'T'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="KeyboardGL32">
+          <Members>
+           <Member Name="#_keyboard">
+            <Messages>
+             <Message TypeName="AvoidUnusedPrivateFields" Category="Microsoft.Performance" CheckId="CA1823" Created="2010-02-02 14:22:10Z">
+              <Issue>
+               <Item>'KeyboardGL32._keyboard'</Item>
               </Issue>
              </Message>
             </Messages>
@@ -1267,33 +1339,6 @@
          </Type>
          <Type Name="MiniGlobeWindow">
           <Members>
-           <Member Name="#RaiseRenderFrame()">
-            <Messages>
-             <Message TypeName="UseEventsWhereAppropriate" Category="Microsoft.Design" CheckId="CA1030" Created="2010-01-12 13:54:55Z">
-              <Issue>
-               <Item>'MiniGlobeWindow.RaiseRenderFrame()'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-           <Member Name="#RaiseResize()">
-            <Messages>
-             <Message TypeName="UseEventsWhereAppropriate" Category="Microsoft.Design" CheckId="CA1030" Created="2010-01-12 13:54:55Z">
-              <Issue>
-               <Item>'MiniGlobeWindow.RaiseResize()'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-           <Member Name="#RaiseUpdateFrame()">
-            <Messages>
-             <Message TypeName="UseEventsWhereAppropriate" Category="Microsoft.Design" CheckId="CA1030" Created="2010-01-12 13:54:55Z">
-              <Issue>
-               <Item>'MiniGlobeWindow.RaiseUpdateFrame()'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
            <Member Name="#RenderFrame" Kind="Event">
             <Messages>
              <Message TypeName="DeclareEventHandlersCorrectly" Category="Microsoft.Design" CheckId="CA1009" Created="2009-12-11 23:38:35Z">
@@ -2691,6 +2736,26 @@
         </Issue>
        </Message>
       </Messages>
+      <Namespaces>
+       <Namespace Name="MiniGlobe.Scene">
+        <Types>
+         <Type Name="CameraGlobeCentered">
+          <Members>
+           <Member Name="#MouseUp(MiniGlobe.Renderer.MouseButton,System.Drawing.Point)">
+            <Messages>
+             <Message Id="point" TypeName="ReviewUnusedParameters" Category="Microsoft.Usage" CheckId="CA1801" Created="2010-02-02 14:22:10Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'point'</Item>
+               <Item>'CameraGlobeCentered.MouseUp(MouseButton, Point)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+        </Types>
+       </Namespace>
+      </Namespaces>
      </Module>
     </Modules>
    </Target>
@@ -2709,15 +2774,29 @@
         <Types>
          <Type Name="SystemTests">
           <Members>
-           <Member Name="#RenderQuadCubeSphere()">
+           <Member Name="#RenderCubeMapSphere()">
             <Messages>
-             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-01-28 23:38:56Z" FixCategory="DependsOnFix">
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-02-02 14:22:10Z" FixCategory="DependsOnFix">
               <Issue>
-               <Item>'SystemTests.RenderQuadCubeSphere()'</Item>
+               <Item>'SystemTests.RenderCubeMapSphere()'</Item>
               </Issue>
               <Notes>
                <User Name="pjcozzi">
-                <Note Id="33" />
+                <Note Id="34" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#RenderGeographicGridSphere()">
+            <Messages>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-02-02 14:22:10Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'SystemTests.RenderGeographicGridSphere()'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="34" />
                </User>
               </Notes>
              </Message>
@@ -2768,6 +2847,62 @@
               <Notes>
                <User Name="pjcozzi">
                 <Note Id="16" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#SphereIntersectionsFromEdge()">
+            <Messages>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-02-02 14:22:10Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'EllipsoidTests.SphereIntersectionsFromEdge()'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="34" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#SphereIntersectionsNoIntersection()">
+            <Messages>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-02-02 14:22:10Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'EllipsoidTests.SphereIntersectionsNoIntersection()'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="34" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#SphereIntersectionsTwoFromInside()">
+            <Messages>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-02-02 14:22:10Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'EllipsoidTests.SphereIntersectionsTwoFromInside()'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="34" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#SphereIntersectionsTwoFromOutside()">
+            <Messages>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-02-02 14:22:10Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'EllipsoidTests.SphereIntersectionsTwoFromOutside()'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="34" />
                </User>
               </Notes>
              </Message>
@@ -2851,15 +2986,29 @@
         <Types>
          <Type Name="TessellationTests">
           <Members>
-           <Member Name="#QuadCubeEllipsoidTessellatorTest()">
+           <Member Name="#CubeMapEllipsoidTessellatorTest()">
             <Messages>
-             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-01-28 23:38:56Z" FixCategory="DependsOnFix">
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-02-02 14:22:10Z" FixCategory="DependsOnFix">
               <Issue>
-               <Item>'TessellationTests.QuadCubeEllipsoidTessellatorTest()'</Item>
+               <Item>'TessellationTests.CubeMapEllipsoidTessellatorTest()'</Item>
               </Issue>
               <Notes>
                <User Name="pjcozzi">
-                <Note Id="33" />
+                <Note Id="34" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#GeographicGridEllipsoidTessellatorTest()">
+            <Messages>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-02-02 14:22:10Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'TessellationTests.GeographicGridEllipsoidTessellatorTest()'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="34" />
                </User>
               </Notes>
              </Message>
@@ -2966,6 +3115,24 @@
               <Notes>
                <User Name="pjcozzi">
                 <Note Id="0" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="CameraTests">
+          <Members>
+           <Member Name="#SaveLoadView()">
+            <Messages>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-02-02 14:22:10Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'CameraTests.SaveLoadView()'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="34" />
                </User>
               </Notes>
              </Message>
@@ -3581,7 +3748,8 @@
     <Note Id="30" Modified="2010-01-13 21:06:32Z">In graphics, it is a vertex attribute.</Note>
     <Note Id="31" Modified="2010-01-13 21:08:11Z">Ellipsoid is immutable.</Note>
     <Note Id="32" Modified="2010-01-13 21:09:01Z">This is the same as Bitmap.Save().</Note>
-    <Note Id="33" Modified="2010-01-28 23:39:40Z">[Test] cannot be static.</Note>
+    <Note Id="34" Modified="2010-02-02 14:22:43Z">[Test] can't be static.</Note>
+    <Note Id="35" Modified="2010-02-02 14:24:45Z">filename is ok.</Note>
    </User>
   </Notes>
   <Rules>
@@ -3591,6 +3759,9 @@
    <Rule TypeName="AvoidNamespacesWithFewTypes" Category="Microsoft.Design" CheckId="CA1020">
     <Resolution Name="Default">Consider merging the types defined in '{0}' with another namespace.</Resolution>
    </Rule>
+   <Rule TypeName="AvoidUnusedPrivateFields" Category="Microsoft.Performance" CheckId="CA1823">
+    <Resolution Name="Default">It appears that field {0} is never used or is only ever assigned to. Use this field or remove it.</Resolution>
+   </Rule>
    <Rule TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702">
     <Resolution Name="MemberParameterShouldBeCompoundWord">In member {0}, the discrete term '{1}' in parameter name {2} should be expressed as a compound word, '{3}'.</Resolution>
     <Resolution Name="MemberShouldBeDiscreteTerm">The compound word '{0}' in member name {1} exists as a discrete term. If your usage is intended to be single word, case it as '{2}' or strip the first token entirely if it represents any sort of Hungarian notation.</Resolution>
@@ -3598,6 +3769,9 @@
    <Rule TypeName="DeclareEventHandlersCorrectly" Category="Microsoft.Design" CheckId="CA1009">
     <Resolution Name="First">Declare the first parameter of {0} as an object named 'sender'.</Resolution>
     <Resolution Name="Second">Declare the second parameter of {0} as an EventArgs, or an instance of a type that extends EventArgs, named 'e'.</Resolution>
+   </Rule>
+   <Rule TypeName="DisposableFieldsShouldBeDisposed" Category="Microsoft.Usage" CheckId="CA2213">
+    <Resolution Name="Default">{0} contains field {1} that is of IDisposable type: {2}. Change the Dispose method on {0} to call Dispose or Close on this field.</Resolution>
    </Rule>
    <Rule TypeName="DoNotDeclareReadOnlyMutableReferenceTypes" Category="Microsoft.Security" CheckId="CA2104">
     <Resolution Name="Default">Remove the read-only designation from {0} or change the field to one that is an immutable reference type. If the reference type {1} is, in fact, immutable, exclude this message.</Resolution>
@@ -3629,8 +3803,8 @@
    <Rule TypeName="ReplaceRepetitiveArgumentsWithParamsArray" Category="Microsoft.Design" CheckId="CA1025">
     <Resolution Name="Default">Consider implementing a version of {0} that accepts a parameter array argument.</Resolution>
    </Rule>
-   <Rule TypeName="UseEventsWhereAppropriate" Category="Microsoft.Design" CheckId="CA1030">
-    <Resolution Name="Default">Consider making {0} an event.</Resolution>
+   <Rule TypeName="ReviewUnusedParameters" Category="Microsoft.Usage" CheckId="CA1801">
+    <Resolution Name="Default">Parameter {0} of {1} is never used. Remove the parameter or use it in the method body.</Resolution>
    </Rule>
    <Rule TypeName="UsePreferredTerms" Category="Microsoft.Naming" CheckId="CA1726">
     <Resolution Name="Member">Replace the term '{0}' in member name {1} with the preferred alternate '{2}'.</Resolution>

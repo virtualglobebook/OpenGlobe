@@ -10,6 +10,7 @@
 using System;
 using System.IO;
 using System.Xml;
+using System.Globalization;
 using OpenTK;
 
 namespace MiniGlobe.Renderer
@@ -81,13 +82,22 @@ namespace MiniGlobe.Renderer
             XmlDocument xmlDocument = new XmlDocument();
             xmlDocument.Load(filename);
             XmlNodeList nodeList = xmlDocument.GetElementsByTagName("Camera");
-
+            
             string[] eye = nodeList[0].ChildNodes[0].InnerText.Split(new[] { ' ' });
-            Eye = new Vector3d(Convert.ToDouble(eye[0]), Convert.ToDouble(eye[1]), Convert.ToDouble(eye[2]));
+            Eye = new Vector3d(
+                Convert.ToDouble(eye[0], CultureInfo.InvariantCulture), 
+                Convert.ToDouble(eye[1], CultureInfo.InvariantCulture), 
+                Convert.ToDouble(eye[2], CultureInfo.InvariantCulture));
             string[] target = nodeList[0].ChildNodes[1].InnerText.Split(new[] { ' ' });
-            Target = new Vector3d(Convert.ToDouble(target[0]), Convert.ToDouble(target[1]), Convert.ToDouble(target[2]));
+            Target = new Vector3d(
+                Convert.ToDouble(target[0], CultureInfo.InvariantCulture),
+                Convert.ToDouble(target[1], CultureInfo.InvariantCulture),
+                Convert.ToDouble(target[2], CultureInfo.InvariantCulture));
             string[] up = nodeList[0].ChildNodes[2].InnerText.Split(new[] { ' ' });
-            Up = new Vector3d(Convert.ToDouble(up[0]), Convert.ToDouble(up[1]), Convert.ToDouble(up[2]));
+            Up = new Vector3d(
+                Convert.ToDouble(up[0], CultureInfo.InvariantCulture),
+                Convert.ToDouble(up[1], CultureInfo.InvariantCulture),
+                Convert.ToDouble(up[2], CultureInfo.InvariantCulture));
         }
     }
 }

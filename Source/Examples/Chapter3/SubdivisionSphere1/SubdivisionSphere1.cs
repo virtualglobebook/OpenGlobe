@@ -21,13 +21,28 @@ namespace MiniGlobe.Examples.Chapter3.SubdivisionSphere1
 {
     sealed class SubdivisionSphere1 : IDisposable
     {
+        Axes _axes;
+
+        private void MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.Button == MouseButton.Middle)
+            {
+                _sceneState.Camera.SaveView(@"E:\Dropbox\My Dropbox\Book\Manuscript\GlobeRendering\Figures\GeographicGridEllipsoidTessellationPole.xml");
+            }
+        }
+
         public SubdivisionSphere1()
         {
             _window = Device.CreateWindow(800, 600, "Chapter 3:  Subdivision Sphere 1");
             _window.Resize += OnResize;
             _window.RenderFrame += OnRenderFrame;
+            _window.Mouse.ButtonDown += MouseDown;
             _sceneState = new SceneState();
             _camera = new CameraGlobeCentered(_sceneState.Camera, _window, Ellipsoid.UnitSphere);
+
+            _axes = new Axes(_window.Context);
+            _axes.Width = 1;
+            _axes.Length = 1.25f;
 
             string vs =
                 @"#version 150
@@ -80,19 +95,26 @@ namespace MiniGlobe.Examples.Chapter3.SubdivisionSphere1
 
                       vec2 textureCoordinate = vec2(atan2(normal.y, normal.x) / mg_TwoPi + 0.5, asin(normal.z) / mg_Pi + 0.5);
                       fragColor = vec4(intensity * texture2D(mg_Texture0, textureCoordinate).rgb, 1.0);
+
+                      fragColor = vec4(0, 0, 0, 1);
                   }";
             _sp = Device.CreateShaderProgram(vs, fs);
 
             ///////////////////////////////////////////////////////////////////
 
-            Mesh mesh = SubdivisionSphereTessellatorSimple.Compute(5);
+            //Mesh mesh = SubdivisionSphereTessellatorSimple.Compute(5);
+            //Mesh mesh = CubeMapEllipsoidTessellator.Compute(Ellipsoid.UnitSphere, 8, CubeMapEllipsoidVertexAttributes.Position);
+            //Mesh mesh = GeographicGridEllipsoidTessellator.Compute(Ellipsoid.UnitSphere, 3, 2, GeographicGridEllipsoidVertexAttributes.Position);
+            //Mesh mesh = GeographicGridEllipsoidTessellator.Compute(Ellipsoid.UnitSphere, 6, 4, GeographicGridEllipsoidVertexAttributes.Position);
+            //Mesh mesh = GeographicGridEllipsoidTessellator.Compute(Ellipsoid.UnitSphere, 16, 8, GeographicGridEllipsoidVertexAttributes.Position);
+            Mesh mesh = GeographicGridEllipsoidTessellator.Compute(Ellipsoid.UnitSphere, 48, 24, GeographicGridEllipsoidVertexAttributes.Position);
             _va = _window.Context.CreateVertexArray(mesh, _sp.VertexAttributes, BufferHint.StaticDraw);
             _primitiveType = mesh.PrimitiveType;
 
             ///////////////////////////////////////////////////////////////////
 
             _renderState = new RenderState();
-            //_renderState.RasterizationMode = RasterizationMode.Line;
+            _renderState.RasterizationMode = RasterizationMode.Line;
             _renderState.FacetCulling.FrontFaceWindingOrder = mesh.FrontFaceWindingOrder;
 
             ///////////////////////////////////////////////////////////////////
@@ -103,6 +125,8 @@ namespace MiniGlobe.Examples.Chapter3.SubdivisionSphere1
             _texture = Device.CreateTexture2D(bitmap, TextureFormat.RedGreenBlue8, false);
 
             _sceneState.Camera.ZoomToTarget(1);
+
+            //_sceneState.Camera.LoadView(@"E:\Dropbox\My Dropbox\Book\Manuscript\GlobeRendering\Figures\GeographicGridEllipsoidTessellationPole.xml");
         }
 
         public void OnResize()
@@ -116,21 +140,24 @@ namespace MiniGlobe.Examples.Chapter3.SubdivisionSphere1
             Context context = _window.Context;
 
 #if FBO
-            HighResolutionSnapFrameBuffer snapBuffer = new HighResolutionSnapFrameBuffer(context, 6, 600, _sceneState.Camera.AspectRatio);
+            HighResolutionSnapFrameBuffer snapBuffer = new HighResolutionSnapFrameBuffer(context, 3, 600, _sceneState.Camera.AspectRatio);
             _window.Context.Viewport = new Rectangle(0, 0, snapBuffer.WidthInPixels, snapBuffer.HeightInPixels);
             context.Bind(snapBuffer.FrameBuffer);
 #endif
 
-            context.Clear(ClearBuffers.ColorAndDepthBuffer, Color.Black, 1, 0);
+            context.Clear(ClearBuffers.ColorAndDepthBuffer, Color.White, 1, 0);
             context.TextureUnits[0].Texture2D = _texture;
             context.Bind(_renderState);
             context.Bind(_sp);
             context.Bind(_va);
             context.Draw(_primitiveType, _sceneState);
 
+            //_axes.Render(_sceneState);
+
 #if FBO
-            snapBuffer.SaveColorBuffer(@"c:\color.tif");
-            snapBuffer.SaveDepthBuffer(@"c:\depth.tif");
+            snapBuffer.SaveColorBuffer(@"E:\Dropbox\My Dropbox\Book\Manuscript\GlobeRendering\Figures\GeographicGridEllipsoidTessellationPol.png");
+            //snapBuffer.SaveDepthBuffer(@"c:\depth.tif");
+            Environment.Exit(0);
 #endif
         }
 
