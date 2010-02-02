@@ -21,6 +21,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiniGlobe.Scene", "Scene\Mi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chapter3SubdivisionEllipsoid", "Examples\Chapter3\SubdivisionEllipsoid\Chapter3SubdivisionEllipsoid.csproj", "{D26223CF-C385-45BE-A9E5-7977D4F0C004}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chapter3RayCasting", "Examples\Chapter3\RayCasting\Chapter3RayCasting.csproj", "{2ABF9F7F-B818-44DC-9237-C1D1DC22ADE7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -55,6 +57,10 @@ Global
 		{D26223CF-C385-45BE-A9E5-7977D4F0C004}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D26223CF-C385-45BE-A9E5-7977D4F0C004}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D26223CF-C385-45BE-A9E5-7977D4F0C004}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2ABF9F7F-B818-44DC-9237-C1D1DC22ADE7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2ABF9F7F-B818-44DC-9237-C1D1DC22ADE7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2ABF9F7F-B818-44DC-9237-C1D1DC22ADE7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2ABF9F7F-B818-44DC-9237-C1D1DC22ADE7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
