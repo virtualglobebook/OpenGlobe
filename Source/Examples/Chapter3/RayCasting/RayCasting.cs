@@ -12,6 +12,7 @@
 using System;
 using System.Drawing;
 
+using MiniGlobe.Core;
 using MiniGlobe.Core.Geometry;
 using MiniGlobe.Core.Tessellation;
 using MiniGlobe.Renderer;
@@ -68,14 +69,46 @@ namespace MiniGlobe.Examples.Chapter3.RayCasting
 
                   uniform vec3 mg_LightPosition;
                   uniform vec3 mg_CameraEye;
-                  uniform vec3 u_GlobeCenter;
-                  uniform float u_GlobeRadius;
+                  uniform vec3 u_GlobeOneOverRadiiSquared;
 
                   struct Intersection
                   {
                       bool  Intersects;
                       float Time;         // Along ray
                   };
+
+                  //
+                  // Assumes ellipsoid is at (0, 0, 0)
+                  //
+                  Intersection rayIntersectEllipsoid(vec3 rayOrigin, vec3 rayDirection, vec3 oneOverEllipsoidRadiiSquared)
+                  {
+                      float a = dot(rayDirection * rayDirection, oneOverEllipsoidRadiiSquared);
+                      float b = 2.0 * dot(rayOrigin * rayDirection, oneOverEllipsoidRadiiSquared);
+                      float c = dot(rayOrigin * rayOrigin, oneOverEllipsoidRadiiSquared) - 1.0;
+                      float discriminant = b * b - 4.0 * a * c;
+
+                      if (discriminant < 0.0)
+                      {
+                          return Intersection(false, 0);
+                      }
+                      else if (discriminant == 0.0)
+                      {
+                          return Intersection(true, -0.5 * b / a);
+                      }
+
+                      float t = -0.5 * (b + (b > 0 ? 1.0 : -1.0) * sqrt(discriminant));
+                      float root1 = t / a;
+                      float root2 = c / t;
+
+                      if (root1 < root2)
+                      {
+                          return Intersection(true, root1);
+                      }
+                      else
+                      {
+                          return Intersection(true, root2);
+                      }
+                  }
 
                   Intersection rayIntersectSphere(vec3 rayOrigin, vec3 rayDirection, vec3 sphereCenter, float sphereRadius)
                   {
@@ -120,6 +153,11 @@ namespace MiniGlobe.Examples.Chapter3.RayCasting
                               mg_DiffuseSpecularAmbientShininess.z;
                   }
 
+                  vec3 ComputeDeticSurfaceNormal(vec3 positionOnEllipsoid, vec3 oneOverEllipsoidRadiiSquared)
+                  {
+                      return normalize(positionOnEllipsoid * oneOverEllipsoidRadiiSquared);
+                  }
+
                   vec2 ComputeTextureCoordinates(vec3 normal)
                   {
                       return vec2(atan2(normal.y, normal.x) / mg_TwoPi + 0.5, asin(normal.z) / mg_Pi + 0.5);
@@ -137,18 +175,19 @@ namespace MiniGlobe.Examples.Chapter3.RayCasting
                   void main()
                   {
                       vec3 rayDirection = normalize(worldPosition - mg_CameraEye);
-                      Intersection i = rayIntersectSphere(mg_CameraEye, rayDirection, u_GlobeCenter, u_GlobeRadius);
+                      Intersection i = rayIntersectEllipsoid(mg_CameraEye, rayDirection, u_GlobeOneOverRadiiSquared);
+
                       if (i.Intersects)
                       {
-                          vec3 intersectionPosition = mg_CameraEye + (i.Time * rayDirection);
-                          vec3 intersectionNormal = normalize(intersectionPosition);
+                          vec3 position = mg_CameraEye + (i.Time * rayDirection);
+                          vec3 normal = ComputeDeticSurfaceNormal(position, u_GlobeOneOverRadiiSquared);
 
-                          vec3 toLight = normalize(mg_LightPosition - intersectionPosition);
-                          vec3 toEye = normalize(mg_CameraEye - intersectionPosition);
-                          float intensity = lightIntensity(intersectionNormal, toLight, toEye, mg_DiffuseSpecularAmbientShininess);
+                          vec3 toLight = normalize(mg_LightPosition - position);
+                          vec3 toEye = normalize(mg_CameraEye - position);
+                          float intensity = lightIntensity(normal, toLight, toEye, mg_DiffuseSpecularAmbientShininess);
 
-                          fragColor = vec4(intensity * texture2D(mg_Texture0, ComputeTextureCoordinates(intersectionNormal)).rgb, 1.0);
-                          gl_FragDepth = ComputeWorldPositionDepth(intersectionPosition);
+                          fragColor = vec4(intensity * texture2D(mg_Texture0, ComputeTextureCoordinates(normal)).rgb, 1.0);
+                          gl_FragDepth = ComputeWorldPositionDepth(position);
                       }
                       else
                       {
@@ -156,10 +195,8 @@ namespace MiniGlobe.Examples.Chapter3.RayCasting
                       }
                   }";
             _sp = Device.CreateShaderProgram(vs, fs);
-
-            (_sp.Uniforms["u_GlobeCenter"] as Uniform<Vector3>).Value = Vector3.Zero;
-            (_sp.Uniforms["u_GlobeRadius"] as Uniform<float>).Value = (float)globeShape.Radii.X;   // TODO
-
+            (_sp.Uniforms["u_GlobeOneOverRadiiSquared"] as Uniform<Vector3>).Value = Conversion.ToVector3(globeShape.OneOverRadiiSquared);
+                
             Mesh mesh = BoxTessellator.Compute(2 * globeShape.Radii);
             _va = _window.Context.CreateVertexArray(mesh, _sp.VertexAttributes, BufferHint.StaticDraw);
             _primitiveType = mesh.PrimitiveType;
@@ -202,7 +239,7 @@ namespace MiniGlobe.Examples.Chapter3.RayCasting
 
             ///////////////////////////////////////////////////////////////////
 
-            _sceneState.Camera.ZoomToTarget(Math.Max(Math.Max(globeShape.Radii.X, globeShape.Radii.Y), globeShape.Radii.Z));
+            _sceneState.Camera.ZoomToTarget(globeShape.MaximumRadius);
             //_sceneState.Camera.LoadView(@"E:\Dropbox\My Dropbox\Book\Manuscript\GlobeRendering\Figures\RayCasting.xml");
         }
 

@@ -25,6 +25,9 @@ namespace MiniGlobe.Core.Geometry
 
             Ellipsoid ellipsoid2 = new Ellipsoid(4, 5, 6);
             Assert.AreNotEqual(new Vector3d(4, 5, 6), ellipsoid2.Radii);
+
+            Ellipsoid sphere = Ellipsoid.UnitSphere;
+            Assert.IsTrue(sphere.OneOverRadiiSquared.Equals((new Vector3d(1, 1, 1))));
         }
 
         [Test]
