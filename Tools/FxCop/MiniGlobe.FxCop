@@ -21,6 +21,7 @@
   <IgnoreGeneratedCode>False</IgnoreGeneratedCode>
  </ProjectOptions>
  <Targets>
+  <Target Name="$(ProjectDir)/../../Source/Examples/Chapter3/LatitudeLongitudeGrid/bin/Release/Chapter3LatitudeLongitudeGrid.exe" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/../../Source/Examples/Chapter3/RayCasting/bin/Release/Chapter3RayCasting.exe" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/../../Source/Examples/Chapter3/SubdivisionEllipsoid/bin/Release/Chapter3SubdivisionEllipsoid.exe" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/../../Source/Examples/Chapter3/SubdivisionSphere1/bin/Release/Chapter3SubdivisionSphere1.exe" Analyze="True" AnalyzeAllChildren="True" />
@@ -119,6 +120,19 @@
    </Namespace>
   </Namespaces>
   <Targets>
+   <Target Name="$(ProjectDir)/../../Source/Examples/Chapter3/LatitudeLongitudeGrid/bin/Release/Chapter3LatitudeLongitudeGrid.exe">
+    <Modules>
+     <Module Name="chapter3latitudelongitudegrid.exe">
+      <Messages>
+       <Message TypeName="AssembliesShouldHaveValidStrongNames" Category="Microsoft.Design" CheckId="CA2210" Created="2010-02-03 04:06:56Z">
+        <Issue Name="NoStrongName">
+         <Item>'Chapter3LatitudeLongitudeGrid.exe'</Item>
+        </Issue>
+       </Message>
+      </Messages>
+     </Module>
+    </Modules>
+   </Target>
    <Target Name="$(ProjectDir)/../../Source/Examples/Chapter3/RayCasting/bin/Release/Chapter3RayCasting.exe">
     <Modules>
      <Module Name="chapter3raycasting.exe">
@@ -2795,10 +2809,15 @@
           <Members>
            <Member Name="#RenderBox()">
             <Messages>
-             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Created="2010-02-02 18:33:41Z" FixCategory="DependsOnFix">
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-02-02 18:33:41Z" FixCategory="DependsOnFix">
               <Issue>
                <Item>'SystemTests.RenderBox()'</Item>
               </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="36" />
+               </User>
+              </Notes>
              </Message>
             </Messages>
            </Member>
@@ -3016,10 +3035,15 @@
           <Members>
            <Member Name="#BoxTessellatorTest()">
             <Messages>
-             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Created="2010-02-02 18:33:41Z" FixCategory="DependsOnFix">
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-02-02 18:33:41Z" FixCategory="DependsOnFix">
               <Issue>
                <Item>'TessellationTests.BoxTessellatorTest()'</Item>
               </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="36" />
+               </User>
+              </Notes>
              </Message>
             </Messages>
            </Member>
@@ -3788,6 +3812,7 @@
     <Note Id="33" Modified="2010-02-02 18:33:02Z">Required for delegate.</Note>
     <Note Id="34" Modified="2010-02-02 14:22:43Z">[Test] can't be static.</Note>
     <Note Id="35" Modified="2010-02-02 14:24:45Z">filename is ok.</Note>
+    <Note Id="36" Modified="2010-02-03 04:07:31Z">[Test] is ok.</Note>
    </User>
   </Notes>
   <Rules>
