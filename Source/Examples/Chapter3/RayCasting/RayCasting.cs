@@ -80,7 +80,7 @@ namespace MiniGlobe.Examples.Chapter3.RayCasting
                   //
                   // Assumes ellipsoid is at (0, 0, 0)
                   //
-                  Intersection rayIntersectEllipsoid(vec3 rayOrigin, vec3 rayDirection, vec3 oneOverEllipsoidRadiiSquared)
+                  Intersection RayIntersectEllipsoid(vec3 rayOrigin, vec3 rayDirection, vec3 oneOverEllipsoidRadiiSquared)
                   {
                       float a = dot(rayDirection * rayDirection, oneOverEllipsoidRadiiSquared);
                       float b = 2.0 * dot(rayOrigin * rayDirection, oneOverEllipsoidRadiiSquared);
@@ -124,7 +124,7 @@ namespace MiniGlobe.Examples.Chapter3.RayCasting
                       return v.z;
                   }
 
-                  float lightIntensity(vec3 normal, vec3 toLight, vec3 toEye, vec4 diffuseSpecularAmbientShininess)
+                  float LightIntensity(vec3 normal, vec3 toLight, vec3 toEye, vec4 diffuseSpecularAmbientShininess)
                   {
                       vec3 toReflectedLight = reflect(-toLight, normal);
 
@@ -145,7 +145,7 @@ namespace MiniGlobe.Examples.Chapter3.RayCasting
                   void main()
                   {
                       vec3 rayDirection = normalize(worldPosition - mg_CameraEye);
-                      Intersection i = rayIntersectEllipsoid(mg_CameraEye, rayDirection, u_GlobeOneOverRadiiSquared);
+                      Intersection i = RayIntersectEllipsoid(mg_CameraEye, rayDirection, u_GlobeOneOverRadiiSquared);
 
                       if (i.Intersects)
                       {
@@ -154,7 +154,7 @@ namespace MiniGlobe.Examples.Chapter3.RayCasting
 
                           vec3 toLight = normalize(mg_LightPosition - position);
                           vec3 toEye = normalize(mg_CameraEye - position);
-                          float intensity = lightIntensity(normal, toLight, toEye, mg_DiffuseSpecularAmbientShininess);
+                          float intensity = LightIntensity(normal, toLight, toEye, mg_DiffuseSpecularAmbientShininess);
 
                           fragColor = vec4(intensity * texture2D(mg_Texture0, ComputeTextureCoordinates(normal)).rgb, 1.0);
                           gl_FragDepth = ComputeWorldPositionDepth(position);

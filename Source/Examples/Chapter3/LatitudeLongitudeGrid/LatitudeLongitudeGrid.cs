@@ -70,7 +70,7 @@ namespace MiniGlobe.Examples.Chapter3.LatitudeLongitudeGrid
                   uniform vec4 mg_DiffuseSpecularAmbientShininess;
                   uniform sampler2D mg_Texture0;
 
-                  float lightIntensity(vec3 normal, vec3 toLight, vec3 toEye, vec4 diffuseSpecularAmbientShininess)
+                  float LightIntensity(vec3 normal, vec3 toLight, vec3 toEye, vec4 diffuseSpecularAmbientShininess)
                   {
                       vec3 toReflectedLight = reflect(-toLight, normal);
 
@@ -91,12 +91,12 @@ namespace MiniGlobe.Examples.Chapter3.LatitudeLongitudeGrid
                   void main()
                   {
                       vec3 normal = normalize(worldPosition);
-                      float intensity = lightIntensity(normal,  normalize(positionToLight), normalize(positionToEye), mg_DiffuseSpecularAmbientShininess);
+                      float intensity = LightIntensity(normal,  normalize(positionToLight), normalize(positionToEye), mg_DiffuseSpecularAmbientShininess);
                       fragColor = vec4(intensity * texture2D(mg_Texture0, ComputeTextureCoordinates(normal)).rgb, 1.0);
                   }";
             _sp = Device.CreateShaderProgram(vs, fs);
 
-            Mesh mesh = GeographicGridEllipsoidTessellator.Compute(Ellipsoid.UnitSphere, 32, 16, GeographicGridEllipsoidVertexAttributes.Position);
+            Mesh mesh = GeographicGridEllipsoidTessellator.Compute(Ellipsoid.UnitSphere, 64, 32, GeographicGridEllipsoidVertexAttributes.Position);
             _va = _window.Context.CreateVertexArray(mesh, _sp.VertexAttributes, BufferHint.StaticDraw);
             _primitiveType = mesh.PrimitiveType;
 
