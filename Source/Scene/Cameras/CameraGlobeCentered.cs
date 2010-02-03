@@ -164,7 +164,8 @@ namespace MiniGlobe.Scene
 
         private void Zoom(Size movement)
         {
-            double approximateDistanceFromSurface = _camera.Eye.Length - _ellipsoid.MinimumRadius;
+            double approximateDistanceFromSurface = Math.Abs(_camera.Eye.Length - _ellipsoid.MinimumRadius);
+            approximateDistanceFromSurface = Math.Max(approximateDistanceFromSurface, _ellipsoid.MinimumRadius / 100.0);
             double rangeWindowRatio = (double)movement.Height / (double)_window.Height;
             _range -= 5.0 * approximateDistanceFromSurface * rangeWindowRatio;
         }
@@ -173,7 +174,7 @@ namespace MiniGlobe.Scene
         {
             Vector3d eyePosition = _camera.Eye;
 
-            _range = eyePosition.Length;
+            _range = Math.Sqrt(eyePosition.X * eyePosition.X + eyePosition.Y * eyePosition.Y + eyePosition.Z * eyePosition.Z);
             _elevation = Math.Acos(eyePosition.Z / _range);
 
             if (eyePosition.Xy.LengthSquared < _camera.Up.Xy.LengthSquared)
