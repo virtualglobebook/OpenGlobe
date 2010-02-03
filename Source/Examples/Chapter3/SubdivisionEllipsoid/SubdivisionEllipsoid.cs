@@ -33,7 +33,6 @@ namespace MiniGlobe.Examples.Chapter3.SubdivisionEllipsoid
                   in vec3 normal;
                   in vec2 textureCoordinate;
 
-                  out vec3 worldPosition;
                   out vec3 positionToLight;
                   out vec3 positionToEye;
                   out vec3 surfaceNormal;
@@ -47,9 +46,8 @@ namespace MiniGlobe.Examples.Chapter3.SubdivisionEllipsoid
                   {
                         gl_Position = mg_ModelViewPerspectiveProjectionMatrix * position; 
 
-                        worldPosition = position.xyz;
-                        positionToLight = mg_LightPosition - worldPosition;
-                        positionToEye = mg_CameraEye - worldPosition;
+                        positionToLight = mg_LightPosition - position.xyz;
+                        positionToEye = mg_CameraEye - position.xyz;
 
                         surfaceNormal = normal;
                         surfaceTextureCoordinate = textureCoordinate;
@@ -58,7 +56,6 @@ namespace MiniGlobe.Examples.Chapter3.SubdivisionEllipsoid
             string sphereFS =
                 @"#version 150
                  
-                  in vec3 worldPosition;
                   in vec3 positionToLight;
                   in vec3 positionToEye;
                   in vec3 surfaceNormal;
@@ -69,23 +66,23 @@ namespace MiniGlobe.Examples.Chapter3.SubdivisionEllipsoid
                   uniform vec4 mg_DiffuseSpecularAmbientShininess;
                   uniform sampler2D mg_Texture0;
 
-                  void main()
+                  float lightIntensity(vec3 normal, vec3 toLight, vec3 toEye, vec4 diffuseSpecularAmbientShininess)
                   {
-                      vec3 toLight = normalize(positionToLight);
-                      vec3 toEye = normalize(positionToEye);
-
-                      vec3 normal = normalize(surfaceNormal);
                       vec3 toReflectedLight = reflect(-toLight, normal);
 
                       float diffuse = max(dot(toLight, normal), 0.0);
                       float specular = max(dot(toReflectedLight, toEye), 0.0);
                       specular = pow(specular, mg_DiffuseSpecularAmbientShininess.w);
 
-                      float intensity = 
-                         (mg_DiffuseSpecularAmbientShininess.x * diffuse) +
-                         (mg_DiffuseSpecularAmbientShininess.y * specular) +
-                         mg_DiffuseSpecularAmbientShininess.z;
+                      return (mg_DiffuseSpecularAmbientShininess.x * diffuse) +
+                             (mg_DiffuseSpecularAmbientShininess.y * specular) +
+                              mg_DiffuseSpecularAmbientShininess.z;
+                  }
 
+                  void main()
+                  {
+                      vec3 normal = normalize(surfaceNormal);
+                      float intensity = lightIntensity(normal,  normalize(positionToLight), normalize(positionToEye), mg_DiffuseSpecularAmbientShininess);
                       fragColor = vec4(intensity * texture2D(mg_Texture0, surfaceTextureCoordinate).rgb, 1.0);
                   }";
             _sphereShaderProgram = Device.CreateShaderProgram(sphereVS, sphereFS);

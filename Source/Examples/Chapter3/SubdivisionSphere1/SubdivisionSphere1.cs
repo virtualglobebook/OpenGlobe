@@ -21,8 +21,6 @@ namespace MiniGlobe.Examples.Chapter3.SubdivisionSphere1
 {
     sealed class SubdivisionSphere1 : IDisposable
     {
-        Axes _axes;
-
         private void MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (e.Button == MouseButton.Middle)
@@ -39,10 +37,6 @@ namespace MiniGlobe.Examples.Chapter3.SubdivisionSphere1
             _window.Mouse.ButtonDown += MouseDown;
             _sceneState = new SceneState();
             _camera = new CameraGlobeCentered(_sceneState.Camera, _window, Ellipsoid.UnitSphere);
-
-            _axes = new Axes(_window.Context);
-            _axes.Width = 1;
-            _axes.Length = 1.25f;
 
             string vs =
                 @"#version 150
@@ -76,45 +70,42 @@ namespace MiniGlobe.Examples.Chapter3.SubdivisionSphere1
                   uniform vec4 mg_DiffuseSpecularAmbientShininess;
                   uniform sampler2D mg_Texture0;
 
-                  void main()
+                  float lightIntensity(vec3 normal, vec3 toLight, vec3 toEye, vec4 diffuseSpecularAmbientShininess)
                   {
-                      vec3 toLight = normalize(positionToLight);
-                      vec3 toEye = normalize(positionToEye);
-
-                      vec3 normal = normalize(worldPosition);
                       vec3 toReflectedLight = reflect(-toLight, normal);
 
                       float diffuse = max(dot(toLight, normal), 0.0);
                       float specular = max(dot(toReflectedLight, toEye), 0.0);
                       specular = pow(specular, mg_DiffuseSpecularAmbientShininess.w);
 
-                      float intensity = 
-                         (mg_DiffuseSpecularAmbientShininess.x * diffuse) +
-                         (mg_DiffuseSpecularAmbientShininess.y * specular) +
-                         mg_DiffuseSpecularAmbientShininess.z;
+                      return (mg_DiffuseSpecularAmbientShininess.x * diffuse) +
+                             (mg_DiffuseSpecularAmbientShininess.y * specular) +
+                              mg_DiffuseSpecularAmbientShininess.z;
+                  }
 
-                      vec2 textureCoordinate = vec2(atan2(normal.y, normal.x) / mg_TwoPi + 0.5, asin(normal.z) / mg_Pi + 0.5);
-                      fragColor = vec4(intensity * texture2D(mg_Texture0, textureCoordinate).rgb, 1.0);
+                  vec2 ComputeTextureCoordinates(vec3 normal)
+                  {
+                      return vec2(atan2(normal.y, normal.x) / mg_TwoPi + 0.5, asin(normal.z) / mg_Pi + 0.5);
+                  }
 
-                      fragColor = vec4(0, 0, 0, 1);
+                  void main()
+                  {
+                      vec3 normal = normalize(worldPosition);
+                      float intensity = lightIntensity(normal,  normalize(positionToLight), normalize(positionToEye), mg_DiffuseSpecularAmbientShininess);
+                      fragColor = vec4(intensity * texture2D(mg_Texture0, ComputeTextureCoordinates(normal)).rgb, 1.0);
                   }";
             _sp = Device.CreateShaderProgram(vs, fs);
 
             ///////////////////////////////////////////////////////////////////
 
-            //Mesh mesh = SubdivisionSphereTessellatorSimple.Compute(5);
-            //Mesh mesh = CubeMapEllipsoidTessellator.Compute(Ellipsoid.UnitSphere, 8, CubeMapEllipsoidVertexAttributes.Position);
-            //Mesh mesh = GeographicGridEllipsoidTessellator.Compute(Ellipsoid.UnitSphere, 3, 2, GeographicGridEllipsoidVertexAttributes.Position);
-            //Mesh mesh = GeographicGridEllipsoidTessellator.Compute(Ellipsoid.UnitSphere, 6, 4, GeographicGridEllipsoidVertexAttributes.Position);
-            //Mesh mesh = GeographicGridEllipsoidTessellator.Compute(Ellipsoid.UnitSphere, 16, 8, GeographicGridEllipsoidVertexAttributes.Position);
-            Mesh mesh = GeographicGridEllipsoidTessellator.Compute(Ellipsoid.UnitSphere, 48, 24, GeographicGridEllipsoidVertexAttributes.Position);
+            Mesh mesh = SubdivisionSphereTessellatorSimple.Compute(5);
             _va = _window.Context.CreateVertexArray(mesh, _sp.VertexAttributes, BufferHint.StaticDraw);
             _primitiveType = mesh.PrimitiveType;
 
             ///////////////////////////////////////////////////////////////////
 
             _renderState = new RenderState();
-            _renderState.RasterizationMode = RasterizationMode.Line;
+            //_renderState.RasterizationMode = RasterizationMode.Line;
             _renderState.FacetCulling.FrontFaceWindingOrder = mesh.FrontFaceWindingOrder;
 
             ///////////////////////////////////////////////////////////////////
@@ -125,7 +116,6 @@ namespace MiniGlobe.Examples.Chapter3.SubdivisionSphere1
             _texture = Device.CreateTexture2D(bitmap, TextureFormat.RedGreenBlue8, false);
 
             _sceneState.Camera.ZoomToTarget(1);
-
             //_sceneState.Camera.LoadView(@"E:\Dropbox\My Dropbox\Book\Manuscript\GlobeRendering\Figures\GeographicGridEllipsoidTessellationPole.xml");
         }
 
@@ -151,8 +141,6 @@ namespace MiniGlobe.Examples.Chapter3.SubdivisionSphere1
             context.Bind(_sp);
             context.Bind(_va);
             context.Draw(_primitiveType, _sceneState);
-
-            //_axes.Render(_sceneState);
 
 #if FBO
             snapBuffer.SaveColorBuffer(@"E:\Dropbox\My Dropbox\Book\Manuscript\GlobeRendering\Figures\GeographicGridEllipsoidTessellationPol.png");

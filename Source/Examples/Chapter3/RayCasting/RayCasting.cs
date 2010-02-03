@@ -110,6 +110,20 @@ namespace MiniGlobe.Examples.Chapter3.RayCasting
                       }
                   }
 
+                  vec3 ComputeDeticSurfaceNormal(vec3 positionOnEllipsoid, vec3 oneOverEllipsoidRadiiSquared)
+                  {
+                      return normalize(positionOnEllipsoid * oneOverEllipsoidRadiiSquared);
+                  }
+
+                  float ComputeWorldPositionDepth(vec3 position)
+                  {
+                      // Consider using mat4x2
+                      vec4 v = mg_ModelViewPerspectiveProjectionMatrix * vec4(position, 1);   // clip coordinates
+                      v.z /= v.w;                                                             // normalized device coordinates
+                      v.z = (v.z + 1.0) * 0.5;
+                      return v.z;
+                  }
+
                   float lightIntensity(vec3 normal, vec3 toLight, vec3 toEye, vec4 diffuseSpecularAmbientShininess)
                   {
                       vec3 toReflectedLight = reflect(-toLight, normal);
@@ -123,23 +137,9 @@ namespace MiniGlobe.Examples.Chapter3.RayCasting
                               mg_DiffuseSpecularAmbientShininess.z;
                   }
 
-                  vec3 ComputeDeticSurfaceNormal(vec3 positionOnEllipsoid, vec3 oneOverEllipsoidRadiiSquared)
-                  {
-                      return normalize(positionOnEllipsoid * oneOverEllipsoidRadiiSquared);
-                  }
-
                   vec2 ComputeTextureCoordinates(vec3 normal)
                   {
                       return vec2(atan2(normal.y, normal.x) / mg_TwoPi + 0.5, asin(normal.z) / mg_Pi + 0.5);
-                  }
-
-                  float ComputeWorldPositionDepth(vec3 position)
-                  {
-                      // Consider using mat4x2
-                      vec4 v = mg_ModelViewPerspectiveProjectionMatrix * vec4(position, 1);   // clip coordinates
-                      v.z /= v.w;                                                             // normalized device coordinates
-                      v.z = (v.z + 1.0) * 0.5;
-                      return v.z;
                   }
 
                   void main()

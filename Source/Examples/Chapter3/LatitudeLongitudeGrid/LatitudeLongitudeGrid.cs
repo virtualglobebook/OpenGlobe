@@ -70,25 +70,29 @@ namespace MiniGlobe.Examples.Chapter3.LatitudeLongitudeGrid
                   uniform vec4 mg_DiffuseSpecularAmbientShininess;
                   uniform sampler2D mg_Texture0;
 
-                  void main()
+                  float lightIntensity(vec3 normal, vec3 toLight, vec3 toEye, vec4 diffuseSpecularAmbientShininess)
                   {
-                      vec3 toLight = normalize(positionToLight);
-                      vec3 toEye = normalize(positionToEye);
-
-                      vec3 normal = normalize(worldPosition);
                       vec3 toReflectedLight = reflect(-toLight, normal);
 
                       float diffuse = max(dot(toLight, normal), 0.0);
                       float specular = max(dot(toReflectedLight, toEye), 0.0);
                       specular = pow(specular, mg_DiffuseSpecularAmbientShininess.w);
 
-                      float intensity = 
-                         (mg_DiffuseSpecularAmbientShininess.x * diffuse) +
-                         (mg_DiffuseSpecularAmbientShininess.y * specular) +
-                         mg_DiffuseSpecularAmbientShininess.z;
+                      return (mg_DiffuseSpecularAmbientShininess.x * diffuse) +
+                             (mg_DiffuseSpecularAmbientShininess.y * specular) +
+                              mg_DiffuseSpecularAmbientShininess.z;
+                  }
 
-                      vec2 textureCoordinate = vec2(atan2(normal.y, normal.x) / mg_TwoPi + 0.5, asin(normal.z) / mg_Pi + 0.5);
-                      fragColor = vec4(intensity * texture2D(mg_Texture0, textureCoordinate).rgb, 1.0);
+                  vec2 ComputeTextureCoordinates(vec3 normal)
+                  {
+                      return vec2(atan2(normal.y, normal.x) / mg_TwoPi + 0.5, asin(normal.z) / mg_Pi + 0.5);
+                  }
+
+                  void main()
+                  {
+                      vec3 normal = normalize(worldPosition);
+                      float intensity = lightIntensity(normal,  normalize(positionToLight), normalize(positionToEye), mg_DiffuseSpecularAmbientShininess);
+                      fragColor = vec4(intensity * texture2D(mg_Texture0, ComputeTextureCoordinates(normal)).rgb, 1.0);
                   }";
             _sp = Device.CreateShaderProgram(vs, fs);
 

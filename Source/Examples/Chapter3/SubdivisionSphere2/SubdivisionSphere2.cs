@@ -13,6 +13,7 @@ using System.Drawing;
 using MiniGlobe.Core.Geometry;
 using MiniGlobe.Core.Tessellation;
 using MiniGlobe.Renderer;
+using MiniGlobe.Scene;
 
 namespace MiniGlobe.Examples.Chapter3.SubdivisionSphere2
 {
@@ -24,6 +25,7 @@ namespace MiniGlobe.Examples.Chapter3.SubdivisionSphere2
             _window.Resize += OnResize;
             _window.RenderFrame += OnRenderFrame;
             _sceneState = new SceneState();
+            _camera = new CameraGlobeCentered(_sceneState.Camera, _window, Ellipsoid.UnitSphere);
 
             string vs =
                 @"#version 150
@@ -32,7 +34,6 @@ namespace MiniGlobe.Examples.Chapter3.SubdivisionSphere2
                   in vec3 normal;
                   in vec2 textureCoordinate;
 
-                  out vec3 worldPosition;
                   out vec3 positionToLight;
                   out vec3 positionToEye;
                   out vec3 surfaceNormal;
@@ -46,18 +47,15 @@ namespace MiniGlobe.Examples.Chapter3.SubdivisionSphere2
                   {
                         gl_Position = mg_ModelViewPerspectiveProjectionMatrix * position; 
 
-                        worldPosition = position.xyz;
-                        positionToLight = mg_LightPosition - worldPosition;
-                        positionToEye = mg_CameraEye - worldPosition;
+                        positionToLight = mg_LightPosition - position.xyz;
+                        positionToEye = mg_CameraEye - position.xyz;
 
                         surfaceNormal = normal;
                         surfaceTextureCoordinate = textureCoordinate;
                   }";
-
             string fs =
                 @"#version 150
                  
-                  in vec3 worldPosition;
                   in vec3 positionToLight;
                   in vec3 positionToEye;
                   in vec3 surfaceNormal;
@@ -68,42 +66,34 @@ namespace MiniGlobe.Examples.Chapter3.SubdivisionSphere2
                   uniform vec4 mg_DiffuseSpecularAmbientShininess;
                   uniform sampler2D mg_Texture0;
 
-                  void main()
+                  float lightIntensity(vec3 normal, vec3 toLight, vec3 toEye, vec4 diffuseSpecularAmbientShininess)
                   {
-                      vec3 toLight = normalize(positionToLight);
-                      vec3 toEye = normalize(positionToEye);
-
-                      vec3 normal = normalize(surfaceNormal);
                       vec3 toReflectedLight = reflect(-toLight, normal);
 
                       float diffuse = max(dot(toLight, normal), 0.0);
                       float specular = max(dot(toReflectedLight, toEye), 0.0);
                       specular = pow(specular, mg_DiffuseSpecularAmbientShininess.w);
 
-                      float intensity = 
-                         (mg_DiffuseSpecularAmbientShininess.x * diffuse) +
-                         (mg_DiffuseSpecularAmbientShininess.y * specular) +
-                         mg_DiffuseSpecularAmbientShininess.z;
+                      return (mg_DiffuseSpecularAmbientShininess.x * diffuse) +
+                             (mg_DiffuseSpecularAmbientShininess.y * specular) +
+                              mg_DiffuseSpecularAmbientShininess.z;
+                  }
 
+                  void main()
+                  {
+                      vec3 normal = normalize(surfaceNormal);
+                      float intensity = lightIntensity(normal,  normalize(positionToLight), normalize(positionToEye), mg_DiffuseSpecularAmbientShininess);
                       fragColor = vec4(intensity * texture2D(mg_Texture0, surfaceTextureCoordinate).rgb, 1.0);
                   }";
-
             _sp = Device.CreateShaderProgram(vs, fs);
-
-            ///////////////////////////////////////////////////////////////////
 
             Mesh mesh = SubdivisionSphereTessellator.Compute(5, SubdivisionSphereVertexAttributes.All);
             _va = _window.Context.CreateVertexArray(mesh, _sp.VertexAttributes, BufferHint.StaticDraw);
             _primitiveType = mesh.PrimitiveType;
 
-            ///////////////////////////////////////////////////////////////////
-
             _renderState = new RenderState();
-            //_renderState.RasterizationMode = RasterizationMode.Line;
             _renderState.FacetCulling.FrontFaceWindingOrder = mesh.FrontFaceWindingOrder;
             
-            ///////////////////////////////////////////////////////////////////
-
             Bitmap bitmap = new Bitmap("NE2_50M_SR_W_4096.jpg");
             _texture = Device.CreateTexture2D(bitmap, TextureFormat.RedGreenBlue8, false);
         }
@@ -133,6 +123,7 @@ namespace MiniGlobe.Examples.Chapter3.SubdivisionSphere2
             _texture.Dispose();
             _va.Dispose();
             _sp.Dispose();
+            _camera.Dispose();
             _window.Dispose();
         }
 
@@ -153,6 +144,7 @@ namespace MiniGlobe.Examples.Chapter3.SubdivisionSphere2
 
         private readonly MiniGlobeWindow _window;
         private readonly SceneState _sceneState;
+        private readonly CameraGlobeCentered _camera;
         private readonly RenderState _renderState;
         private readonly ShaderProgram _sp;
         private readonly VertexArray _va;
