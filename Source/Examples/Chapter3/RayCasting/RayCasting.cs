@@ -211,6 +211,10 @@ namespace MiniGlobe.Examples.Chapter3.RayCasting
 
             _sceneState.Camera.ZoomToTarget(globeShape.MaximumRadius);
             //_sceneState.Camera.LoadView(@"E:\Dropbox\My Dropbox\Book\Manuscript\GlobeRendering\Figures\RayCasting.xml");
+
+            const double degreesToRadians = Math.PI / 180.0;
+            _camera.ViewPoint(-75.697 * degreesToRadians, 40.039 * degreesToRadians, 0.0);
+            _camera.UpdateCameraFromParameters();
         }
 
         public void OnResize()

@@ -58,6 +58,7 @@
     <Compile Include="Input\MouseButtonEvent.cs" />
     <Compile Include="Input\MouseButtonEventArgs.cs" />
     <Compile Include="Input\MouseMoveEventArgs.cs" />
+    <Compile Include="OpenTK\Matrix3d.cs" />
     <Compile Include="Scene\Camera.cs" />
     <Compile Include="Scene\SceneState.cs" />
     <Compile Include="Shaders\DrawAutomaticUniforms\CameraEyeDrawAutomaticUniform.cs" />

@@ -98,6 +98,29 @@ namespace MiniGlobe.Core.Geometry
                 return new double[2] { root2, root1 };
         }
 
+        public Vector3d DeticToVector3d(double longitude, double latitude, double height)
+        {
+            // Algorithm is from Wikipedia's "Geodetic System" topic.
+
+            double cosLon = Math.Cos(longitude);
+            double cosLat = Math.Cos(latitude);
+            double sinLon = Math.Sin(longitude);
+            double sinLat = Math.Sin(latitude);
+
+            double major = MaximumRadius;
+            double minor = MinimumRadius;
+            double firstEccentricitySquared = 1.0 - (major * major) / (minor * minor);
+            double chi = Math.Sqrt(1 - firstEccentricitySquared * cosLat * cosLat);
+            double normal = major / chi;
+            double normalPlusHeight = normal + height;
+
+            double x = normalPlusHeight * cosLat * cosLon;
+            double y = normalPlusHeight * cosLat * sinLon;
+            double z = (normal * (1 - firstEccentricitySquared) + height) * sinLat;
+
+            return new Vector3d(x, y, z);
+        }
+
         private readonly Vector3d _radii;
         private readonly Vector3d _oneOverRadiiSquared;
     }
