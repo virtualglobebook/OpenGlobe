@@ -104,6 +104,10 @@ MiniGlobe uses data from NASA Visible Earth:
       Reto Stockli, NASA Earth Observatory 
       http://visibleearth.nasa.gov/view_rec.php?id=7110
 
+   Data\Imagery\NASA\land_ocean_ice_lights_2048.jpg
+      Data courtesy Marc Imhoff of NASA GSFC and Christopher Elvidge of 
+      NOAA NGDC. Image by Craig Mayhew and Robert Simmon, NASA GSFC. 
+      http://visibleearth.nasa.gov/view_rec.php?id=1438
 
    Terms of use:  http://visibleearth.nasa.gov/useterms.php
 

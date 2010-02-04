@@ -25,6 +25,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chapter3RayCasting", "Examp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chapter3LatitudeLongitudeGrid", "Examples\Chapter3\LatitudeLongitudeGrid\Chapter3LatitudeLongitudeGrid.csproj", "{89A86599-4C34-4016-BD0B-23AA6511EB03}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chapter3NightLights", "Examples\Chapter3\NightLights\Chapter3NightLights.csproj", "{C084FBCF-6C79-47DD-9440-A829F3D534FB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -67,6 +69,10 @@ Global
 		{89A86599-4C34-4016-BD0B-23AA6511EB03}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{89A86599-4C34-4016-BD0B-23AA6511EB03}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{89A86599-4C34-4016-BD0B-23AA6511EB03}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C084FBCF-6C79-47DD-9440-A829F3D534FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C084FBCF-6C79-47DD-9440-A829F3D534FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C084FBCF-6C79-47DD-9440-A829F3D534FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C084FBCF-6C79-47DD-9440-A829F3D534FB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

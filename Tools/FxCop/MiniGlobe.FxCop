@@ -22,6 +22,7 @@
  </ProjectOptions>
  <Targets>
   <Target Name="$(ProjectDir)/../../Source/Examples/Chapter3/LatitudeLongitudeGrid/bin/Release/Chapter3LatitudeLongitudeGrid.exe" Analyze="True" AnalyzeAllChildren="True" />
+  <Target Name="$(ProjectDir)/../../Source/Examples/Chapter3/NightLights/bin/Release/Chapter3NightLights.exe" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/../../Source/Examples/Chapter3/RayCasting/bin/Release/Chapter3RayCasting.exe" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/../../Source/Examples/Chapter3/SubdivisionEllipsoid/bin/Release/Chapter3SubdivisionEllipsoid.exe" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/../../Source/Examples/Chapter3/SubdivisionSphere1/bin/Release/Chapter3SubdivisionSphere1.exe" Analyze="True" AnalyzeAllChildren="True" />
@@ -133,6 +134,19 @@
      </Module>
     </Modules>
    </Target>
+   <Target Name="$(ProjectDir)/../../Source/Examples/Chapter3/NightLights/bin/Release/Chapter3NightLights.exe">
+    <Modules>
+     <Module Name="chapter3nightlights.exe">
+      <Messages>
+       <Message TypeName="AssembliesShouldHaveValidStrongNames" Category="Microsoft.Design" CheckId="CA2210" Created="2010-02-03 23:51:44Z">
+        <Issue Name="NoStrongName">
+         <Item>'Chapter3NightLights.exe'</Item>
+        </Issue>
+       </Message>
+      </Messages>
+     </Module>
+    </Modules>
+   </Target>
    <Target Name="$(ProjectDir)/../../Source/Examples/Chapter3/RayCasting/bin/Release/Chapter3RayCasting.exe">
     <Modules>
      <Module Name="chapter3raycasting.exe">
@@ -169,27 +183,6 @@
         </Issue>
        </Message>
       </Messages>
-      <Namespaces>
-       <Namespace Name="MiniGlobe.Examples.Chapter3.SubdivisionSphere1">
-        <Types>
-         <Type Name="SubdivisionSphere1">
-          <Members>
-           <Member Name="#Dispose()">
-            <Messages>
-             <Message Id="_axes" TypeName="DisposableFieldsShouldBeDisposed" Category="Microsoft.Usage" CheckId="CA2213" Created="2010-02-02 14:22:10Z">
-              <Issue>
-               <Item>'SubdivisionSphere1'</Item>
-               <Item>'SubdivisionSphere1._axes'</Item>
-               <Item>'Axes'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-          </Members>
-         </Type>
-        </Types>
-       </Namespace>
-      </Namespaces>
      </Module>
     </Modules>
    </Target>
@@ -3832,9 +3825,6 @@
    <Rule TypeName="DeclareEventHandlersCorrectly" Category="Microsoft.Design" CheckId="CA1009">
     <Resolution Name="First">Declare the first parameter of {0} as an object named 'sender'.</Resolution>
     <Resolution Name="Second">Declare the second parameter of {0} as an EventArgs, or an instance of a type that extends EventArgs, named 'e'.</Resolution>
-   </Rule>
-   <Rule TypeName="DisposableFieldsShouldBeDisposed" Category="Microsoft.Usage" CheckId="CA2213">
-    <Resolution Name="Default">{0} contains field {1} that is of IDisposable type: {2}. Change the Dispose method on {0} to call Dispose or Close on this field.</Resolution>
    </Rule>
    <Rule TypeName="DoNotDeclareReadOnlyMutableReferenceTypes" Category="Microsoft.Security" CheckId="CA2104">
     <Resolution Name="Default">Remove the read-only designation from {0} or change the field to one that is an immutable reference type. If the reference type {1} is, in fact, immutable, exclude this message.</Resolution>
