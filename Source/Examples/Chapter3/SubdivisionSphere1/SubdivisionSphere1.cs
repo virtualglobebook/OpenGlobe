@@ -48,14 +48,14 @@ namespace MiniGlobe.Examples.Chapter3.SubdivisionSphere1
 
                   uniform mat4 mg_ModelViewPerspectiveProjectionMatrix;
                   uniform vec3 mg_CameraEye;
-                  uniform vec3 mg_LightPosition;
+                  uniform vec3 mg_CameraLightPosition;
 
                   void main()                     
                   {
                         gl_Position = mg_ModelViewPerspectiveProjectionMatrix * position; 
 
                         worldPosition = position.xyz;
-                        positionToLight = mg_LightPosition - worldPosition;
+                        positionToLight = mg_CameraLightPosition - worldPosition;
                         positionToEye = mg_CameraEye - worldPosition;
                   }";
 

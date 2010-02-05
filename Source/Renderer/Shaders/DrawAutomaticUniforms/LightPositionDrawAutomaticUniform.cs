@@ -23,7 +23,7 @@ namespace MiniGlobe.Renderer
 
         public override void Set(Context context, SceneState sceneState)
         {
-            _uniform.Value = Conversion.ToVector3(sceneState.LightPosition);
+            _uniform.Value = Conversion.ToVector3(sceneState.CameraLightPosition);
         }
 
         #endregion

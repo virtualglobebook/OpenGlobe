@@ -40,13 +40,13 @@ namespace MiniGlobe.Examples.Chapter3.SubdivisionEllipsoid
 
                   uniform mat4 mg_ModelViewPerspectiveProjectionMatrix;
                   uniform vec3 mg_CameraEye;
-                  uniform vec3 mg_LightPosition;
+                  uniform vec3 mg_CameraLightPosition;
 
                   void main()                     
                   {
                         gl_Position = mg_ModelViewPerspectiveProjectionMatrix * position; 
 
-                        positionToLight = mg_LightPosition - position.xyz;
+                        positionToLight = mg_CameraLightPosition - position.xyz;
                         positionToEye = mg_CameraEye - position.xyz;
 
                         surfaceNormal = normal;

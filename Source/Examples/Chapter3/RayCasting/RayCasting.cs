@@ -79,7 +79,7 @@ namespace MiniGlobe.Examples.Chapter3.RayCasting
 
                   uniform mat4 mg_ModelViewPerspectiveProjectionMatrix;
 
-                  uniform vec3 mg_LightPosition;
+                  uniform vec3 mg_CameraLightPosition;
                   uniform vec3 mg_CameraEye;
                   uniform vec3 u_GlobeOneOverRadiiSquared;
 
@@ -164,7 +164,7 @@ namespace MiniGlobe.Examples.Chapter3.RayCasting
                           vec3 position = mg_CameraEye + (i.Time * rayDirection);
                           vec3 normal = ComputeDeticSurfaceNormal(position, u_GlobeOneOverRadiiSquared);
 
-                          vec3 toLight = normalize(mg_LightPosition - position);
+                          vec3 toLight = normalize(mg_CameraLightPosition - position);
                           vec3 toEye = normalize(mg_CameraEye - position);
                           float intensity = LightIntensity(normal, toLight, toEye, mg_DiffuseSpecularAmbientShininess);
 

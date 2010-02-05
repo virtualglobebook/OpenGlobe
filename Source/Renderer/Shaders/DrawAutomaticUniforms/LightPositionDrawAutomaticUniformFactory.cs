@@ -17,7 +17,7 @@ namespace MiniGlobe.Renderer
 
         public override string Name
         {
-            get { return "mg_LightPosition"; }
+            get { return "mg_CameraLightPosition"; }
         }
 
         public override DrawAutomaticUniform Create(Uniform uniform)

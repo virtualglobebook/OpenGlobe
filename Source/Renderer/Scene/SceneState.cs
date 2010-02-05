@@ -30,7 +30,7 @@ namespace MiniGlobe.Renderer
         public float Shininess { get; set; }
         public Camera Camera { get; set; }
 
-        public Vector3d LightPosition
+        public Vector3d CameraLightPosition
         {
             get { return Camera.Eye + (3.0 * Camera.Up); }
         }
