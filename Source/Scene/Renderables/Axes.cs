@@ -21,7 +21,6 @@ namespace MiniGlobe.Scene
         {
             _context = context;
             _renderState = new RenderState();
-            //_renderState.RasterizationMode = RasterizationMode.Line;
 
             string vs =
                 @"#version 150
@@ -32,20 +31,20 @@ namespace MiniGlobe.Scene
                   out vec4 gsColor;
 
                   uniform mat4 mg_ModelViewPerspectiveProjectionMatrix;
-                  uniform vec4 mg_Viewport;
+                  uniform mat4 mg_ViewportTransformationMatrix;
                   uniform float u_lineLength;
+
+                  vec4 WorldToWindowCoordinates(vec4 v)
+                  {
+                      v = mg_ModelViewPerspectiveProjectionMatrix * v;                      // clip coordinates
+                      v.xyz /= v.w;                                                         // normalized device coordinates
+                      v.xyz = (mg_ViewportTransformationMatrix * vec4(v.xyz + 1.0, 1)).xyz; // windows coordinates
+                      return v;
+                  }
 
                   void main()                     
                   {
-                      vec4 v = vec4(u_lineLength * position.xyz, position.w);
-                      v = mg_ModelViewPerspectiveProjectionMatrix * v;          // clip coordinates
-                      v.xyz /= v.w;                                             // normalized device coordinates
-
-                      v.x = mg_Viewport.x + mg_Viewport.z * (v.x + 1.0) * 0.5;  // window coordinates
-                      v.y = mg_Viewport.y + mg_Viewport.w * (v.y + 1.0) * 0.5;
-                      v.z = (v.z + 1.0) * -0.5;
-
-                      gl_Position = v;
+                      gl_Position = WorldToWindowCoordinates(vec4(u_lineLength * position.xyz, position.w));
                       gsColor = color;
                   }";
             string gs =
@@ -162,6 +161,12 @@ namespace MiniGlobe.Scene
         {
             get { return _lineLength.Value; }
             set { _lineLength.Value = value; }
+        }
+
+        public bool Wireframe
+        {
+            get { return _renderState.RasterizationMode == RasterizationMode.Line; }
+            set { _renderState.RasterizationMode = value ? RasterizationMode.Line : RasterizationMode.Fill; }
         }
 
         #region IDisposable Members

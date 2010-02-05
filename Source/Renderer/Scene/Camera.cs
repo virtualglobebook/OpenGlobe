@@ -26,8 +26,11 @@ namespace MiniGlobe.Renderer
             FieldOfViewY = Math.PI / 6.0;
             AspectRatio = 1;
 
-            NearPlaneDistance = 0.01;
-            FarPlaneDistance = 64;
+            PerspectiveNearPlaneDistance = 0.01;
+            PerspectiveFarPlaneDistance = 64;
+
+            OrthographicNearPlaneDistance = 0;
+            OrthographicFarPlaneDistance = 1;
         }
 
         public Vector3d Eye { get; set; }
@@ -41,8 +44,15 @@ namespace MiniGlobe.Renderer
         public double FieldOfViewY { get; set; }
         public double AspectRatio { get; set; }
 
-        public double NearPlaneDistance { get; set; }
-        public double FarPlaneDistance { get; set; }
+        public double PerspectiveNearPlaneDistance { get; set; }
+        public double PerspectiveFarPlaneDistance { get; set; }
+
+        public double OrthographicNearPlaneDistance { get; set; }
+        public double OrthographicFarPlaneDistance { get; set; }
+        public double OrthographicDepth
+        {
+            get { return Math.Abs(OrthographicFarPlaneDistance - OrthographicNearPlaneDistance); }
+        }
 
         public void ZoomToTarget(double radius)
         {

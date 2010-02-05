@@ -137,6 +137,7 @@ namespace MiniGlobe.Renderer
             drawAutomaticUniformFactories.Add(new PerspectiveProjectionMatrixDrawAutomaticUniformFactory());
             drawAutomaticUniformFactories.Add(new OrthographicProjectionMatrixDrawAutomaticUniformFactory());
             drawAutomaticUniformFactories.Add(new ViewportDrawAutomaticUniformFactory());
+            drawAutomaticUniformFactories.Add(new ViewportTransformationMatrixDrawAutomaticUniformFactory());
             
             return drawAutomaticUniformFactories;
         }

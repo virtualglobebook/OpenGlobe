@@ -35,21 +35,37 @@ namespace MiniGlobe.Renderer
             get { return Camera.Eye + (3.0 * Camera.Up); }
         }
 
+        public Matrix4d ComputeViewportTransformationMatrix(Rectangle viewport)
+        {
+            double halfWidth = viewport.Width * 0.5;
+            double halfHeight = viewport.Height * 0.5;
+            double halfDepth = Camera.OrthographicDepth * 0.5;
+
+            //
+            // Bottom and top swapped:  MS -> OpenGL
+            //
+            return new Matrix4d(
+                halfWidth, 0, 0, 0,
+                0, halfHeight, 0, 0,
+                0, 0, -halfDepth, 0,
+                viewport.Left, viewport.Top, Camera.OrthographicNearPlaneDistance, 1);
+        }
+
         public Matrix4d ComputeOrthographicProjectionMatrix(Rectangle viewport)
         {
             //
             // Bottom and top swapped:  MS -> OpenGL
             //
             return Matrix4d.CreateOrthographicOffCenter(viewport.Left, viewport.Right, viewport.Top,
-                viewport.Bottom, Camera.NearPlaneDistance, Camera.FarPlaneDistance);
+                viewport.Bottom, Camera.OrthographicNearPlaneDistance, Camera.OrthographicFarPlaneDistance);
         }
 
         public Matrix4d PerspectiveProjectionMatrix 
         {
             get
             {
-                return Matrix4d.CreatePerspectiveFieldOfView(Camera.FieldOfViewY, Camera.AspectRatio, 
-                    Camera.NearPlaneDistance, Camera.FarPlaneDistance);
+                return Matrix4d.CreatePerspectiveFieldOfView(Camera.FieldOfViewY, Camera.AspectRatio,
+                    Camera.PerspectiveNearPlaneDistance, Camera.PerspectiveFarPlaneDistance);
             }
         }
 

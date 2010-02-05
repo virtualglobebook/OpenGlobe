@@ -137,8 +137,8 @@ namespace MiniGlobe.Examples.Chapter3.SubdivisionEllipsoid
             _sceneState.Camera.Eye = new Vector3d(-(float)(Ellipsoid.Wgs84.Radii.X * 0.5), -(float)(Ellipsoid.Wgs84.Radii.Y * 1.5), 0);
             _sceneState.Camera.Target = new Vector3d(0, -(float)Ellipsoid.Wgs84.Radii.Y, 0);
             _sceneState.Camera.Up = Vector3d.UnitZ;
-            _sceneState.Camera.NearPlaneDistance = Ellipsoid.Wgs84.Radii.Y * 0.25;
-            _sceneState.Camera.FarPlaneDistance = Ellipsoid.Wgs84.Radii.Y * 5;
+            _sceneState.Camera.PerspectiveNearPlaneDistance = Ellipsoid.Wgs84.Radii.Y * 0.25;
+            _sceneState.Camera.PerspectiveFarPlaneDistance = Ellipsoid.Wgs84.Radii.Y * 5;
         }
 
         public void OnResize()
