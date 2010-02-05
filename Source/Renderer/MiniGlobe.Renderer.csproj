@@ -69,8 +69,8 @@
     <Compile Include="Shaders\DrawAutomaticUniforms\DrawAutomaticUniform.cs" />
     <Compile Include="Shaders\DrawAutomaticUniforms\DrawAutomaticUniformFactory.cs" />
     <Compile Include="Shaders\DrawAutomaticUniforms\DrawAutomaticUniformFactoryCollection.cs" />
-    <Compile Include="Shaders\DrawAutomaticUniforms\LightPositionDrawAutomaticUniform.cs" />
-    <Compile Include="Shaders\DrawAutomaticUniforms\LightPositionDrawAutomaticUniformFactory.cs" />
+    <Compile Include="Shaders\DrawAutomaticUniforms\CameraLightPositionDrawAutomaticUniform.cs" />
+    <Compile Include="Shaders\DrawAutomaticUniforms\CameraLightPositionDrawAutomaticUniformFactory.cs" />
     <Compile Include="Shaders\DrawAutomaticUniforms\LightPropertiesDrawAutomaticUniform.cs" />
     <Compile Include="Shaders\DrawAutomaticUniforms\LightPropertiesDrawAutomaticUniformFactory.cs" />
     <Compile Include="Shaders\DrawAutomaticUniforms\ModelViewMatrixDrawAutomaticUniform.cs" />

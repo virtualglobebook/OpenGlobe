@@ -130,7 +130,7 @@ namespace MiniGlobe.Renderer
             DrawAutomaticUniformFactoryCollection drawAutomaticUniformFactories = new DrawAutomaticUniformFactoryCollection();
 
             drawAutomaticUniformFactories.Add(new LightPropertiesDrawAutomaticUniformFactory());
-            drawAutomaticUniformFactories.Add(new LightPositionDrawAutomaticUniformFactory());
+            drawAutomaticUniformFactories.Add(new CameraLightPositionDrawAutomaticUniformFactory());
             drawAutomaticUniformFactories.Add(new CameraEyeDrawAutomaticUniformFactory());
             drawAutomaticUniformFactories.Add(new ModelViewPerspectiveProjectionMatrixDrawAutomaticUniformFactory());
             drawAutomaticUniformFactories.Add(new ModelViewMatrixDrawAutomaticUniformFactory());
