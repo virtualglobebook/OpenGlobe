@@ -83,9 +83,15 @@ namespace MiniGlobe.Core.Geometry
             // Numerical Recipes in C, section 5.6: "Quadratic and Cubic Equations"
             double discriminant = b * b - 4 * a * c;
             if (discriminant < 0.0)
-                return new double[0]; // no intersections
+            {
+                // no intersections
+                return new double[0]; 
+            }
             else if (discriminant == 0.0)
-                return new double[1] { -0.5 * b / a }; // one intersection at a tangent point
+            {
+                // one intersection at a tangent point
+                return new double[1] { -0.5 * b / a };
+            }
 
             double t = -0.5 * (b + (b > 0 ? 1.0 : -1.0) * Math.Sqrt(discriminant));
             double root1 = t / a;
@@ -93,9 +99,13 @@ namespace MiniGlobe.Core.Geometry
 
             // Two intersections - return the smallest first.
             if (root1 < root2)
+            {
                 return new double[2] { root1, root2 };
+            }
             else
+            {
                 return new double[2] { root2, root1 };
+            }
         }
 
         public Vector3d DeticToVector3d(double longitude, double latitude, double height)

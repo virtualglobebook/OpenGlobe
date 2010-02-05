@@ -42,6 +42,18 @@ namespace MiniGlobe.Examples.Chapter3.RayCasting
             _sceneState = new SceneState();
             _camera = new CameraGlobeCentered(_sceneState.Camera, _window, globeShape);
 
+            _window.Keyboard.KeyDown += delegate(object sender, KeyboardKeyEventArgs e)
+            {
+                if (e.Key == KeyboardKey.P)
+                {
+                    CenterCameraOnPoint();
+                }
+                else if (e.Key == KeyboardKey.C)
+                {
+                    CenterCameraOnGlobeCenter();
+                }
+            };
+
             string vs =
                 @"#version 150
 
@@ -212,9 +224,7 @@ namespace MiniGlobe.Examples.Chapter3.RayCasting
             _sceneState.Camera.ZoomToTarget(globeShape.MaximumRadius);
             //_sceneState.Camera.LoadView(@"E:\Dropbox\My Dropbox\Book\Manuscript\GlobeRendering\Figures\RayCasting.xml");
 
-            const double degreesToRadians = Math.PI / 180.0;
-            _camera.ViewPoint(-75.697 * degreesToRadians, 40.039 * degreesToRadians, 0.0);
-            _camera.UpdateCameraFromParameters();
+            CenterCameraOnPoint();
         }
 
         public void OnResize()
@@ -256,6 +266,26 @@ namespace MiniGlobe.Examples.Chapter3.RayCasting
             //snapBuffer.SaveDepthBuffer(@"c:\depth.tif");
             Environment.Exit(0);
 #endif
+        }
+
+        private void CenterCameraOnPoint()
+        {
+            const double degreesToRadians = Math.PI / 180.0;
+            _camera.ViewPoint(-75.697 * degreesToRadians, 40.039 * degreesToRadians, 0.0);
+            _camera.Azimuth = 0.0;
+            _camera.Elevation = 0.0;
+            _camera.Range = _camera.Ellipsoid.MaximumRadius * 3.0;
+            _camera.UpdateCameraFromParameters();
+        }
+
+        private void CenterCameraOnGlobeCenter()
+        {
+            _camera.CenterPoint = Vector3d.Zero;
+            _camera.FixedToLocalRotation = Matrix3d.Identity;
+            _camera.Azimuth = 0.0;
+            _camera.Elevation = 0.0;
+            _camera.Range = _camera.Ellipsoid.MaximumRadius * 3.0;
+            _camera.UpdateCameraFromParameters();
         }
 
         #region IDisposable Members

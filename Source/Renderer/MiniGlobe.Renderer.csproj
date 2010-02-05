@@ -53,6 +53,9 @@
     <Compile Include="GL32\Input\KeyboardGL32.cs" />
     <Compile Include="GL32\Input\MouseGL32.cs" />
     <Compile Include="Input\Keyboard.cs" />
+    <Compile Include="Input\KeyboardKey.cs" />
+    <Compile Include="Input\KeyboardKeyEvent.cs" />
+    <Compile Include="Input\KeyboardKeyEventArgs.cs" />
     <Compile Include="Input\Mouse.cs" />
     <Compile Include="Input\MouseButton.cs" />
     <Compile Include="Input\MouseButtonEvent.cs" />
