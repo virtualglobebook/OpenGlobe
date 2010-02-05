@@ -36,9 +36,9 @@ namespace MiniGlobe.Scene
 
                   vec4 WorldToWindowCoordinates(vec4 v)
                   {
-                      v = mg_ModelViewPerspectiveProjectionMatrix * v;                      // clip coordinates
-                      v.xyz /= v.w;                                                         // normalized device coordinates
-                      v.xyz = (mg_ViewportTransformationMatrix * vec4(v.xyz + 1.0, 1)).xyz; // windows coordinates
+                      v = mg_ModelViewPerspectiveProjectionMatrix * v;                        // clip coordinates
+                      v.xyz /= v.w;                                                           // normalized device coordinates
+                      v.xyz = (mg_ViewportTransformationMatrix * vec4(v.xyz + 1.0, 1.0)).xyz; // windows coordinates
                       return v;
                   }
 

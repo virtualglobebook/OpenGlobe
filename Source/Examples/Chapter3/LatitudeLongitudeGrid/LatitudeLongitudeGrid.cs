@@ -91,8 +91,31 @@ namespace MiniGlobe.Examples.Chapter3.LatitudeLongitudeGrid
                   void main()
                   {
                       vec3 normal = normalize(worldPosition);
+                      vec2 textureCoordinate = ComputeTextureCoordinates(normal);
+
+                      ////////////////////////////////////////////////////////////////////////
+                      float longitudeLineSpacing = 0.05;
+                      float latitudeLineSpacing = 0.05;
+
+                      float longitudeLineWidth = 1.0;       // TODO:  Not quite pixel width
+                      float latitudeLineWidth = 1.0;
+
+                      float distanceToLongitudeLine = mod(textureCoordinate.s, longitudeLineSpacing);
+                      float distanceToLatitudeLine = mod(textureCoordinate.t, latitudeLineSpacing);
+
+                      float dFds = fwidth(textureCoordinate.s) * longitudeLineWidth;
+                      float dFdt = fwidth(textureCoordinate.t) * latitudeLineWidth;
+
+                      if ((distanceToLongitudeLine < dFds) || (distanceToLongitudeLine > (1.0 - dFds)) ||
+                          (distanceToLatitudeLine < dFdt) || (distanceToLatitudeLine > (1.0 - dFdt)))
+                      {
+                         fragColor = vec4(1.0, 0.0, 0.0, 1.0);
+                         return;
+                      }
+                      ////////////////////////////////////////////////////////////////////////
+
                       float intensity = LightIntensity(normal,  normalize(positionToLight), normalize(positionToEye), mg_DiffuseSpecularAmbientShininess);
-                      fragColor = vec4(intensity * texture2D(mg_Texture0, ComputeTextureCoordinates(normal)).rgb, 1.0);
+                      fragColor = vec4(intensity * texture2D(mg_Texture0, textureCoordinate).rgb, 1.0);
                   }";
             _sp = Device.CreateShaderProgram(vs, fs);
 
