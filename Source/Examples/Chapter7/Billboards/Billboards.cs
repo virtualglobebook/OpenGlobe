@@ -15,41 +15,25 @@ using System.Drawing;
 using MiniGlobe.Core.Geometry;
 using MiniGlobe.Renderer;
 using MiniGlobe.Scene;
-using OpenTK;
 
-namespace MiniGlobe.Examples.Chapter3.RayCasting
+namespace MiniGlobe.Examples.Chapter7.Billboards
 {
-    sealed class RayCasting : IDisposable
+    sealed class Billboards : IDisposable
     {
-        public RayCasting()
+        public Billboards()
         {
             Ellipsoid globeShape = Ellipsoid.UnitSphere;
 
-            _window = Device.CreateWindow(800, 600, "Chapter 3:  Ray Casting");
+            _window = Device.CreateWindow(800, 600, "Chapter 7:  Billboards");
             _window.Resize += OnResize;
             _window.RenderFrame += OnRenderFrame;
             _sceneState = new SceneState();
             _camera = new CameraGlobeCentered(_sceneState.Camera, _window, globeShape);
 
-            _window.Keyboard.KeyDown += delegate(object sender, KeyboardKeyEventArgs e)
-            {
-                if (e.Key == KeyboardKey.P)
-                {
-                    CenterCameraOnPoint();
-                }
-                else if (e.Key == KeyboardKey.C)
-                {
-                    CenterCameraOnGlobeCenter();
-                }
-            };
-
             _globe = new RayCastedGlobe(_window.Context, globeShape, new Bitmap("NE2_50M_SR_W_4096.jpg"));
+            _globe.ShowWireframeBoundingBox = false;
 
             _sceneState.Camera.ZoomToTarget(globeShape.MaximumRadius);
-            //CenterCameraOnPoint();
-            //CenterCameraOnGlobeCenter();
-
-            PersistentView.Execute(@"E:\Dropbox\My Dropbox\Book\Manuscript\GlobeRendering\Figures\RayCasting.xml", _window, _sceneState.Camera);
         }
 
         public void OnResize()
@@ -70,30 +54,10 @@ namespace MiniGlobe.Examples.Chapter3.RayCasting
             _globe.Render(_sceneState);
 
 #if FBO
-            snapBuffer.SaveColorBuffer(@"E:\Dropbox\My Dropbox\Book\Manuscript\GlobeRendering\Figures\RayCasting.png");
+            snapBuffer.SaveColorBuffer(@"E:\Dropbox\My Dropbox\Book\Manuscript\GlobeRendering\Figures\Billboards.png");
             //snapBuffer.SaveDepthBuffer(@"c:\depth.tif");
             Environment.Exit(0);
 #endif
-        }
-
-        private void CenterCameraOnPoint()
-        {
-            const double degreesToRadians = Math.PI / 180.0;
-            _camera.ViewPoint(-75.697 * degreesToRadians, 40.039 * degreesToRadians, 0.0);
-            _camera.Azimuth = 0.0;
-            _camera.Elevation = 0.0;
-            _camera.Range = _camera.Ellipsoid.MaximumRadius * 3.0;
-            _camera.UpdateCameraFromParameters();
-        }
-
-        private void CenterCameraOnGlobeCenter()
-        {
-            _camera.CenterPoint = Vector3d.Zero;
-            _camera.FixedToLocalRotation = Matrix3d.Identity;
-            _camera.Azimuth = 0.0;
-            _camera.Elevation = 0.0;
-            _camera.Range = _camera.Ellipsoid.MaximumRadius * 3.0;
-            _camera.UpdateCameraFromParameters();
         }
 
         #region IDisposable Members
@@ -114,7 +78,7 @@ namespace MiniGlobe.Examples.Chapter3.RayCasting
 
         static void Main()
         {
-            using (RayCasting example = new RayCasting())
+            using (Billboards example = new Billboards())
             {
                 example.Run(30.0);
             }
