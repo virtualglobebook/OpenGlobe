@@ -17,7 +17,9 @@ namespace MiniGlobe.Renderer.GL32
         internal UniformIntGL32(int programHandle, string name, int location, UniformType type)
             : base(name, location, type)
         {
-            GL.GetUniform(programHandle, location, out _value);
+            //GL.GetUniform(programHandle, location, out _value);
+            _value = 0;
+            _dirty = true;
         }
 
         #region ICleanable Uniform<>

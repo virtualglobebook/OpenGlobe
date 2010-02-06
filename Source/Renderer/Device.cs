@@ -129,6 +129,7 @@ namespace MiniGlobe.Renderer
         {
             DrawAutomaticUniformFactoryCollection drawAutomaticUniformFactories = new DrawAutomaticUniformFactoryCollection();
 
+            drawAutomaticUniformFactories.Add(new SunPositionDrawAutomaticUniformFactory());
             drawAutomaticUniformFactories.Add(new LightPropertiesDrawAutomaticUniformFactory());
             drawAutomaticUniformFactories.Add(new CameraLightPositionDrawAutomaticUniformFactory());
             drawAutomaticUniformFactories.Add(new CameraEyeDrawAutomaticUniformFactory());
