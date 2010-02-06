@@ -147,6 +147,11 @@ namespace MiniGlobe.Scene
             _context.Draw(PrimitiveType.Lines, sceneState);
         }
 
+        public Context Context
+        {
+            get { return _context; }
+        }
+
         public float Width
         {
             get { return _lineWidth; }

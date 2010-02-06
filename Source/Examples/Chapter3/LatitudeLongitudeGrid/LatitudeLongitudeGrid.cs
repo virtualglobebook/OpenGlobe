@@ -21,20 +21,11 @@ namespace MiniGlobe.Examples.Chapter3.LatitudeLongitudeGrid
 {
     sealed class LatitudeLongitudeGrid : IDisposable
     {
-        private void MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            if (e.Button == MouseButton.Middle)
-            {
-                _sceneState.Camera.SaveView(@"E:\Dropbox\My Dropbox\Book\Manuscript\GlobeRendering\Figures\LatitudeLongitudeGrid.xml");
-            }
-        }
-
         public LatitudeLongitudeGrid()
         {
             _window = Device.CreateWindow(800, 600, "Chapter 3:  Latitude Longitude Grid");
             _window.Resize += OnResize;
             _window.RenderFrame += OnRenderFrame;
-            _window.Mouse.ButtonDown += MouseDown;
             _sceneState = new SceneState();
             _camera = new CameraGlobeCentered(_sceneState.Camera, _window, Ellipsoid.UnitSphere);
 
@@ -130,7 +121,7 @@ namespace MiniGlobe.Examples.Chapter3.LatitudeLongitudeGrid
             _texture = Device.CreateTexture2D(bitmap, TextureFormat.RedGreenBlue8, false);
 
             _sceneState.Camera.ZoomToTarget(1);
-            //_sceneState.Camera.LoadView(@"E:\Dropbox\My Dropbox\Book\Manuscript\GlobeRendering\Figures\LatitudeLongitudeGrid.xml");
+            PersistentView.Execute(@"E:\Dropbox\My Dropbox\Book\Manuscript\GlobeRendering\Figures\LatitudeLongitudeGrid.xml", _window, _sceneState.Camera);
         }
 
         public void OnResize()

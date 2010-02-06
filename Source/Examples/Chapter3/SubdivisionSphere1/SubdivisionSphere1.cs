@@ -21,20 +21,11 @@ namespace MiniGlobe.Examples.Chapter3.SubdivisionSphere1
 {
     sealed class SubdivisionSphere1 : IDisposable
     {
-        private void MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            if (e.Button == MouseButton.Middle)
-            {
-                _sceneState.Camera.SaveView(@"E:\Dropbox\My Dropbox\Book\Manuscript\GlobeRendering\Figures\GeographicGridEllipsoidTessellationPole.xml");
-            }
-        }
-
         public SubdivisionSphere1()
         {
             _window = Device.CreateWindow(800, 600, "Chapter 3:  Subdivision Sphere 1");
             _window.Resize += OnResize;
             _window.RenderFrame += OnRenderFrame;
-            _window.Mouse.ButtonDown += MouseDown;
             _sceneState = new SceneState();
             _camera = new CameraGlobeCentered(_sceneState.Camera, _window, Ellipsoid.UnitSphere);
 
@@ -116,7 +107,6 @@ namespace MiniGlobe.Examples.Chapter3.SubdivisionSphere1
             _texture = Device.CreateTexture2D(bitmap, TextureFormat.RedGreenBlue8, false);
 
             _sceneState.Camera.ZoomToTarget(1);
-            //_sceneState.Camera.LoadView(@"E:\Dropbox\My Dropbox\Book\Manuscript\GlobeRendering\Figures\GeographicGridEllipsoidTessellationPole.xml");
         }
 
         public void OnResize()

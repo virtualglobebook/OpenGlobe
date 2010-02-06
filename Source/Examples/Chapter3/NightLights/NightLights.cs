@@ -21,20 +21,11 @@ namespace MiniGlobe.Examples.Chapter3.NightLights
 {
     sealed class NightLights : IDisposable
     {
-        private void MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            if (e.Button == MouseButton.Middle)
-            {
-                _sceneState.Camera.SaveView(@"E:\Dropbox\My Dropbox\Book\Manuscript\GlobeRendering\Figures\NightLights.xml");
-            }
-        }
-
         public NightLights()
         {
             _window = Device.CreateWindow(800, 600, "Chapter 3:  Night Lights");
             _window.Resize += OnResize;
             _window.RenderFrame += OnRenderFrame;
-            _window.Mouse.ButtonDown += MouseDown;
             _sceneState = new SceneState();
             _camera = new CameraGlobeCentered(_sceneState.Camera, _window, Ellipsoid.UnitSphere);
 
@@ -146,7 +137,7 @@ namespace MiniGlobe.Examples.Chapter3.NightLights
             _sceneState.SpecularIntensity = 0.15f;
             _sceneState.AmbientIntensity = 0.35f;
             _sceneState.Camera.ZoomToTarget(1);
-            //_sceneState.Camera.LoadView(@"E:\Dropbox\My Dropbox\Book\Manuscript\GlobeRendering\Figures\NightLights.xml");
+            PersistentView.Execute(@"E:\Dropbox\My Dropbox\Book\Manuscript\GlobeRendering\Figures\NightLights.xml", _window, _sceneState.Camera);
         }
 
         public void OnResize()
