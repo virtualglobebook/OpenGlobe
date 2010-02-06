@@ -27,7 +27,13 @@ namespace MiniGlobe.Renderer.GL32
                 (initialValue[3] != 0));
         }
 
-        #region ICleanable Uniform<>
+        private void Set(Vector4b value)
+        {
+            _value = value;
+            _dirty = true;
+        }
+
+        #region Uniform<> Members
 
         public override Vector4b Value
         {
@@ -35,8 +41,7 @@ namespace MiniGlobe.Renderer.GL32
             {
                 if (_value != value)
                 {
-                    _value = value;
-                    _dirty = true;
+                    Set(value);
                 }
             }
 

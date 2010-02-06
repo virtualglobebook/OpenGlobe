@@ -18,16 +18,16 @@ namespace MiniGlobe.Renderer.GL32
         internal UniformFloatMatrix32GL32(int programHandle, string name, int location)
             : base(name, location, UniformType.FloatMatrix32)
         {
-            float[] initialValue = new float[6];
-            GL.GetUniform(programHandle, location, initialValue); // TODO:  These come back wrong.  Driver bug?
-
-            Vector3 rowOne = new Vector3(initialValue[0], initialValue[2], initialValue[4]);
-            Vector3 rowTwo = new Vector3(initialValue[1], initialValue[3], initialValue[5]);
-
-            _value = new Matrix32(rowOne, rowTwo);
+            Set(new Matrix32());
         }
 
-        #region ICleanable Uniform<>
+        private void Set(Matrix32 value)
+        {
+            _value = value;
+            _dirty = true;
+        }
+
+        #region Uniform<> Members
 
         public override Matrix32 Value
         {
@@ -35,8 +35,7 @@ namespace MiniGlobe.Renderer.GL32
             {
                 if (_value != value)
                 {
-                    _value = value;
-                    _dirty = true;
+                    Set(value);
                 }
             }
 

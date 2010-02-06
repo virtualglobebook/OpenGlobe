@@ -17,12 +17,16 @@ namespace MiniGlobe.Renderer.GL32
         internal UniformBoolGL32(int programHandle, string name, int location)
             : base(name, location, UniformType.Bool)
         {
-            int initialValue;
-            GL.GetUniform(programHandle, location, out initialValue);
-            _value = (initialValue != 0);
+            Set(false);
         }
 
-        #region ICleanable Uniform<>
+        private void Set(bool value)
+        {
+            _value = value;
+            _dirty = true;
+        }
+
+        #region Uniform<> Members
 
         public override bool Value 
         {
@@ -30,8 +34,7 @@ namespace MiniGlobe.Renderer.GL32
             {
                 if (_value != value)
                 {
-                    _value = value;
-                    _dirty = true;
+                    Set(value);
                 }
             }
 

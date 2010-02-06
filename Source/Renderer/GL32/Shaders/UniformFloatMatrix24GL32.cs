@@ -18,18 +18,16 @@ namespace MiniGlobe.Renderer.GL32
         internal UniformFloatMatrix24GL32(int programHandle, string name, int location)
             : base(name, location, UniformType.FloatMatrix24)
         {
-            float[] initialValue = new float[8];
-            GL.GetUniform(programHandle, location, initialValue);
-
-            Vector2 rowOne = new Vector2(initialValue[0], initialValue[4]);
-            Vector2 rowTwo = new Vector2(initialValue[1], initialValue[5]);
-            Vector2 rowThree = new Vector2(initialValue[2], initialValue[6]);
-            Vector2 rowFour = new Vector2(initialValue[3], initialValue[7]);
-
-            _value = new Matrix24(rowOne, rowTwo, rowThree, rowFour);
+            Set(new Matrix24());
         }
 
-        #region ICleanable Uniform<>
+        private void Set(Matrix24 value)
+        {
+            _value = value;
+            _dirty = true;
+        }
+
+        #region Uniform<> Members
 
         public override Matrix24 Value
         {
@@ -37,8 +35,7 @@ namespace MiniGlobe.Renderer.GL32
             {
                 if (_value != value)
                 {
-                    _value = value;
-                    _dirty = true;
+                    Set(value);
                 }
             }
 

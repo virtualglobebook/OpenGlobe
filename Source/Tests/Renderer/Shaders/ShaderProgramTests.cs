@@ -68,34 +68,41 @@ namespace MiniGlobe.Renderer
         {
             MiniGlobeWindow window = Device.CreateWindow(1, 1);
 
+            //
+            // Uniform initializers are not supported because there may be some driver bugs:
+            //
+            //    http://www.opengl.org/discussion_boards/ubbthreads.php?ubb=showflat&Main=48817&Number=250791#Post250791
+            //    http://www.opengl.org/discussion_boards/ubbthreads.php?ubb=showflat&Main=51624&Number=266719#Post266719
+            //    http://www.opengl.org/discussion_boards/ubbthreads.php?ubb=showflat&Main=52018&Number=268866#Post268866
+            //
             string fs =
                 @"#version 150
                   #extension GL_EXT_gpu_shader4 : enable        // for texture1DArray
 
-                  uniform float exampleFloat = 0.25f;
-                  uniform vec2  exampleVec2  = vec2(0.0f, 0.0f);
-                  uniform vec3  exampleVec3  = vec3(0.0f, 1.0f, 2.0f);
-                  uniform vec4  exampleVec4  = vec4(0.0f, 1.0f, 2.0f, 3.0f);
+                  uniform float exampleFloat;
+                  uniform vec2  exampleVec2;
+                  uniform vec3  exampleVec3;
+                  uniform vec4  exampleVec4;
 
-                  uniform int   exampleInt   = 2;
-                  uniform ivec2 exampleIVec2 = ivec2(0, 1);
-                  uniform ivec3 exampleIVec3 = ivec3(0, 1, 2);
-                  uniform ivec4 exampleIVec4 = ivec4(0, 1, 2, 3);
+                  uniform int   exampleInt;
+                  uniform ivec2 exampleIVec2;
+                  uniform ivec3 exampleIVec3;
+                  uniform ivec4 exampleIVec4;
 
-                  uniform bool  exampleBool  = false;
-                  uniform bvec2 exampleBVec2 = bvec2(false, true);
-                  uniform bvec3 exampleBVec3 = bvec3(false, true, false);
-                  uniform bvec4 exampleBVec4 = bvec4(false, true, false, true);
+                  uniform bool  exampleBool;
+                  uniform bvec2 exampleBVec2;
+                  uniform bvec3 exampleBVec3;
+                  uniform bvec4 exampleBVec4;
 
-                  uniform mat4   exampleMat4  = mat4(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15);
-                  uniform mat3   exampleMat3  = mat3(0, 1, 2, 3, 4, 5, 6, 7, 8);
-                  uniform mat2   exampleMat2  = mat2(0, 1, 2, 3);
-                  uniform mat2x3 exampleMat23 = mat2x3(0, 1, 2, 3, 4, 5);
-                  uniform mat2x4 exampleMat24 = mat2x4(0, 1, 2, 3, 4, 5, 6, 7);
-                  uniform mat3x2 exampleMat32 = mat3x2(0, 1, 2, 3, 4, 5);
-                  uniform mat3x4 exampleMat34 = mat3x4(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11);
-                  uniform mat4x2 exampleMat42 = mat4x2(0, 1, 2, 3, 4, 5, 6, 7);
-                  uniform mat4x3 exampleMat43 = mat4x3(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11);
+                  uniform mat4   exampleMat4;
+                  uniform mat3   exampleMat3;
+                  uniform mat2   exampleMat2;
+                  uniform mat2x3 exampleMat23;
+                  uniform mat2x4 exampleMat24;
+                  uniform mat3x2 exampleMat32;
+                  uniform mat3x4 exampleMat34;
+                  uniform mat4x2 exampleMat42;
+                  uniform mat4x3 exampleMat43;
 
                   uniform sampler2D exampleSampler2D;
                   uniform sampler1DArray exampleSampler1DArray;
@@ -138,34 +145,31 @@ namespace MiniGlobe.Renderer
             Assert.IsEmpty(sp.UniformBlocks);
             Assert.AreEqual(23, sp.Uniforms.Count);
 
-            //
-            // I'm not verifying uniform initializer values because there may be some driver bugs:
-            //
-            //    http://www.opengl.org/discussion_boards/ubbthreads.php?ubb=showflat&Main=48817&Number=250791#Post250791
-            //    http://www.opengl.org/discussion_boards/ubbthreads.php?ubb=showflat&Main=51624&Number=266719#Post266719
-            //
-
             Uniform<float> exampleFloat = sp.Uniforms["exampleFloat"] as Uniform<float>;
             Assert.AreEqual("exampleFloat", exampleFloat.Name);
             Assert.AreEqual(UniformType.Float, exampleFloat.DataType);
+            Assert.AreEqual(0, exampleFloat.Value);
             exampleFloat.Value = 0.75f;
             Assert.AreEqual(0.75f, exampleFloat.Value);
 
             Uniform<Vector2> exampleVec2 = sp.Uniforms["exampleVec2"] as Uniform<Vector2>;
             Assert.AreEqual("exampleVec2", exampleVec2.Name);
             Assert.AreEqual(UniformType.FloatVector2, exampleVec2.DataType);
+            Assert.AreEqual(new Vector2(), exampleVec2.Value);
             exampleVec2.Value = new Vector2(1, 0.5f);
             Assert.AreEqual(new Vector2(1, 0.5f), exampleVec2.Value);
 
             Uniform<Vector3> exampleVec3 = sp.Uniforms["exampleVec3"] as Uniform<Vector3>;
             Assert.AreEqual("exampleVec3", exampleVec3.Name);
             Assert.AreEqual(UniformType.FloatVector3, exampleVec3.DataType);
+            Assert.AreEqual(new Vector3(), exampleVec3.Value);
             exampleVec3.Value = new Vector3(1, 0, 0);
             Assert.AreEqual(new Vector3(1, 0, 0), exampleVec3.Value);
 
             Uniform<Vector4> exampleVec4 = sp.Uniforms["exampleVec4"] as Uniform<Vector4>;
             Assert.AreEqual("exampleVec4", exampleVec4.Name);
             Assert.AreEqual(UniformType.FloatVector4, exampleVec4.DataType);
+            Assert.AreEqual(new Vector4(), exampleVec4.Value);
             exampleVec4.Value = new Vector4(1, 0, 0, 0);
             Assert.AreEqual(new Vector4(1, 0, 0, 0), exampleVec4.Value);
 
@@ -174,24 +178,28 @@ namespace MiniGlobe.Renderer
             Uniform<int> exampleInt = sp.Uniforms["exampleInt"] as Uniform<int>;
             Assert.AreEqual("exampleInt", exampleInt.Name);
             Assert.AreEqual(UniformType.Int, exampleInt.DataType);
+            Assert.AreEqual(0, exampleInt.Value);
             exampleInt.Value = 1;
             Assert.AreEqual(1, exampleInt.Value);
 
             Uniform<Vector2i> exampleIVec2 = sp.Uniforms["exampleIVec2"] as Uniform<Vector2i>;
             Assert.AreEqual("exampleIVec2", exampleIVec2.Name);
             Assert.AreEqual(UniformType.IntVector2, exampleIVec2.DataType);
+            Assert.AreEqual(new Vector2i(), exampleIVec2.Value);
             exampleIVec2.Value = new Vector2i(1, 0);
             Assert.AreEqual(new Vector2i(1, 0), exampleIVec2.Value);
 
             Uniform<Vector3i> exampleIVec3 = sp.Uniforms["exampleIVec3"] as Uniform<Vector3i>;
             Assert.AreEqual("exampleIVec3", exampleIVec3.Name);
             Assert.AreEqual(UniformType.IntVector3, exampleIVec3.DataType);
+            Assert.AreEqual(new Vector3i(), exampleIVec3.Value);
             exampleIVec3.Value = new Vector3i(1, 0, 0);
             Assert.AreEqual(new Vector3i(1, 0, 0), exampleIVec3.Value);
 
             Uniform<Vector4i> exampleIVec4 = sp.Uniforms["exampleIVec4"] as Uniform<Vector4i>;
             Assert.AreEqual("exampleIVec4", exampleIVec4.Name);
             Assert.AreEqual(UniformType.IntVector4, exampleIVec4.DataType);
+            Assert.AreEqual(new Vector4i(), exampleIVec4.Value);
             exampleIVec4.Value = new Vector4i(1, 0, 0, 0);
             Assert.AreEqual(new Vector4i(1, 0, 0, 0), exampleIVec4.Value);
 
@@ -200,24 +208,28 @@ namespace MiniGlobe.Renderer
             Uniform<bool> exampleBool = sp.Uniforms["exampleBool"] as Uniform<bool>;
             Assert.AreEqual("exampleBool", exampleBool.Name);
             Assert.AreEqual(UniformType.Bool, exampleBool.DataType);
+            Assert.AreEqual(false, exampleBool.Value);
             exampleBool.Value = true;
             Assert.AreEqual(true, exampleBool.Value);
 
             Uniform<Vector2b> exampleBVec2 = sp.Uniforms["exampleBVec2"] as Uniform<Vector2b>;
             Assert.AreEqual("exampleBVec2", exampleBVec2.Name);
             Assert.AreEqual(UniformType.BoolVector2, exampleBVec2.DataType);
+            Assert.AreEqual(new Vector2b(), exampleBVec2.Value);
             exampleBVec2.Value = new Vector2b(true, false);
             Assert.AreEqual(new Vector2b(true, false), exampleBVec2.Value);
 
             Uniform<Vector3b> exampleBVec3 = sp.Uniforms["exampleBVec3"] as Uniform<Vector3b>;
             Assert.AreEqual("exampleBVec3", exampleBVec3.Name);
             Assert.AreEqual(UniformType.BoolVector3, exampleBVec3.DataType);
+            Assert.AreEqual(new Vector3b(), exampleBVec3.Value);
             exampleBVec3.Value = new Vector3b(true, false, false);
             Assert.AreEqual(new Vector3b(true, false, false), exampleBVec3.Value);
 
             Uniform<Vector4b> exampleBVec4 = sp.Uniforms["exampleBVec4"] as Uniform<Vector4b>;
             Assert.AreEqual("exampleBVec4", exampleBVec4.Name);
             Assert.AreEqual(UniformType.BoolVector4, exampleBVec4.DataType);
+            Assert.AreEqual(new Vector4b(), exampleBVec4.Value);
             exampleBVec4.Value = new Vector4b(true, false, false, false);
             Assert.AreEqual(new Vector4b(true, false, false, false), exampleBVec4.Value);
 
@@ -226,12 +238,14 @@ namespace MiniGlobe.Renderer
             Uniform<int> exampleSampler2D = sp.Uniforms["exampleSampler2D"] as Uniform<int>;
             Assert.AreEqual("exampleSampler2D", exampleSampler2D.Name);
             Assert.AreEqual(UniformType.Sampler2D, exampleSampler2D.DataType);
+            Assert.AreEqual(0, exampleSampler2D.Value);
             exampleSampler2D.Value = 1;
             Assert.AreEqual(1, exampleSampler2D.Value);
 
             Uniform<int> exampleSampler1DArray = sp.Uniforms["exampleSampler1DArray"] as Uniform<int>;
             Assert.AreEqual("exampleSampler1DArray", exampleSampler1DArray.Name);
             Assert.AreEqual(UniformType.Sampler1DArray, exampleSampler1DArray.DataType);
+            Assert.AreEqual(0, exampleSampler1DArray.Value);
             exampleSampler1DArray.Value = 1;
             Assert.AreEqual(1, exampleSampler1DArray.Value);
 
@@ -245,6 +259,7 @@ namespace MiniGlobe.Renderer
             Uniform<Matrix4> exampleMat4 = sp.Uniforms["exampleMat4"] as Uniform<Matrix4>;
             Assert.AreEqual("exampleMat4", exampleMat4.Name);
             Assert.AreEqual(UniformType.FloatMatrix44, exampleMat4.DataType);
+            Assert.AreEqual(new Matrix4(), exampleMat4.Value);
             exampleMat4.Value = m4;
             Assert.AreEqual(m4, exampleMat4.Value);
 
@@ -255,6 +270,7 @@ namespace MiniGlobe.Renderer
             Uniform<Matrix3> exampleMat3 = sp.Uniforms["exampleMat3"] as Uniform<Matrix3>;
             Assert.AreEqual("exampleMat3", exampleMat3.Name);
             Assert.AreEqual(UniformType.FloatMatrix33, exampleMat3.DataType);
+            Assert.AreEqual(new Matrix3(), exampleMat3.Value);
             exampleMat3.Value = m3;
             Assert.AreEqual(m3, exampleMat3.Value);
 
@@ -264,6 +280,7 @@ namespace MiniGlobe.Renderer
             Uniform<Matrix2> exampleMat2 = sp.Uniforms["exampleMat2"] as Uniform<Matrix2>;
             Assert.AreEqual("exampleMat2", exampleMat2.Name);
             Assert.AreEqual(UniformType.FloatMatrix22, exampleMat2.DataType);
+            Assert.AreEqual(new Matrix2(), exampleMat2.Value);
             exampleMat2.Value = m2;
             Assert.AreEqual(m2, exampleMat2.Value);
 
@@ -274,6 +291,7 @@ namespace MiniGlobe.Renderer
             Uniform<Matrix23> exampleMat23 = sp.Uniforms["exampleMat23"] as Uniform<Matrix23>;
             Assert.AreEqual("exampleMat23", exampleMat23.Name);
             Assert.AreEqual(UniformType.FloatMatrix23, exampleMat23.DataType);
+            Assert.AreEqual(new Matrix23(), exampleMat23.Value);
             exampleMat23.Value = m23;
             Assert.AreEqual(m23, exampleMat23.Value);
 
@@ -285,6 +303,7 @@ namespace MiniGlobe.Renderer
             Uniform<Matrix24> exampleMat24 = sp.Uniforms["exampleMat24"] as Uniform<Matrix24>;
             Assert.AreEqual("exampleMat24", exampleMat24.Name);
             Assert.AreEqual(UniformType.FloatMatrix24, exampleMat24.DataType);
+            Assert.AreEqual(new Matrix24(), exampleMat24.Value);
             exampleMat24.Value = m24;
             Assert.AreEqual(m24, exampleMat24.Value);
 
@@ -294,6 +313,7 @@ namespace MiniGlobe.Renderer
             Uniform<Matrix32> exampleMat32 = sp.Uniforms["exampleMat32"] as Uniform<Matrix32>;
             Assert.AreEqual("exampleMat32", exampleMat32.Name);
             Assert.AreEqual(UniformType.FloatMatrix32, exampleMat32.DataType);
+            Assert.AreEqual(new Matrix32(), exampleMat32.Value);
             exampleMat32.Value = m32;
             Assert.AreEqual(m32, exampleMat32.Value);
 
@@ -305,6 +325,7 @@ namespace MiniGlobe.Renderer
             Uniform<Matrix34> exampleMat34 = sp.Uniforms["exampleMat34"] as Uniform<Matrix34>;
             Assert.AreEqual("exampleMat34", exampleMat34.Name);
             Assert.AreEqual(UniformType.FloatMatrix34, exampleMat34.DataType);
+            Assert.AreEqual(new Matrix34(), exampleMat34.Value);
             exampleMat34.Value = m34;
             Assert.AreEqual(m34, exampleMat34.Value);
 
@@ -314,6 +335,7 @@ namespace MiniGlobe.Renderer
             Uniform<Matrix42> exampleMat42 = sp.Uniforms["exampleMat42"] as Uniform<Matrix42>;
             Assert.AreEqual("exampleMat42", exampleMat42.Name);
             Assert.AreEqual(UniformType.FloatMatrix42, exampleMat42.DataType);
+            Assert.AreEqual(new Matrix42(), exampleMat42.Value);
             exampleMat42.Value = m42;
             Assert.AreEqual(m42, exampleMat42.Value);
 
@@ -324,6 +346,7 @@ namespace MiniGlobe.Renderer
             Uniform<Matrix43> exampleMat43 = sp.Uniforms["exampleMat43"] as Uniform<Matrix43>;
             Assert.AreEqual("exampleMat43", exampleMat43.Name);
             Assert.AreEqual(UniformType.FloatMatrix43, exampleMat43.DataType);
+            Assert.AreEqual(new Matrix43(), exampleMat43.Value);
             exampleMat43.Value = m43;
             Assert.AreEqual(m43, exampleMat43.Value);
 

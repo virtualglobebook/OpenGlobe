@@ -17,12 +17,16 @@ namespace MiniGlobe.Renderer.GL32
         internal UniformIntGL32(int programHandle, string name, int location, UniformType type)
             : base(name, location, type)
         {
-            //GL.GetUniform(programHandle, location, out _value);
-            _value = 0;
+            Set(0);
+        }
+
+        private void Set(int value)
+        {
+            _value = value;
             _dirty = true;
         }
 
-        #region ICleanable Uniform<>
+        #region Uniform<> Members
 
         public override int Value
         {
@@ -30,8 +34,7 @@ namespace MiniGlobe.Renderer.GL32
             {
                 if (_value != value)
                 {
-                    _value = value;
-                    _dirty = true;
+                    Set(value);
                 }
             }
 

@@ -17,10 +17,16 @@ namespace MiniGlobe.Renderer.GL32
         internal UniformFloatGL32(int programHandle, string name, int location)
             : base(name, location, UniformType.Float)
         {
-            GL.GetUniform(programHandle, location, out _value);
+            Set(0);
         }
 
-        #region ICleanable Uniform<>
+        private void Set(float value)
+        {
+            _value = value;
+            _dirty = true;
+        }
+
+        #region Uniform<> Members
 
         public override float Value
         {
@@ -28,8 +34,7 @@ namespace MiniGlobe.Renderer.GL32
             {
                 if (_value != value)
                 {
-                    _value = value;
-                    _dirty = true;
+                    Set(value);
                 }
             }
 

@@ -18,12 +18,16 @@ namespace MiniGlobe.Renderer.GL32
         internal UniformFloatVector3GL32(int programHandle, string name, int location)
             : base(name, location, UniformType.FloatVector3)
         {
-            float[] initialValue = new float[3];
-            GL.GetUniform(programHandle, location, initialValue);
-            _value = new Vector3(initialValue[0], initialValue[1], initialValue[2]);
+            Set(new Vector3());
         }
 
-        #region ICleanable Uniform<>
+        private void Set(Vector3 value)
+        {
+            _value = value;
+            _dirty = true;
+        }
+
+        #region Uniform<> Members
 
         public override Vector3 Value
         {
@@ -31,8 +35,7 @@ namespace MiniGlobe.Renderer.GL32
             {
                 if (_value != value)
                 {
-                    _value = value;
-                    _dirty = true;
+                    Set(value);
                 }
             }
 
