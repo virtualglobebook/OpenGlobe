@@ -12,6 +12,7 @@
 using System;
 using System.Drawing;
 
+using MiniGlobe.Core;
 using MiniGlobe.Core.Geometry;
 using MiniGlobe.Renderer;
 using MiniGlobe.Scene;
@@ -79,8 +80,7 @@ namespace MiniGlobe.Examples.Chapter3.RayCasting
 
         private void CenterCameraOnPoint()
         {
-            const double degreesToRadians = Math.PI / 180.0;
-            _camera.ViewPoint(-75.697 * degreesToRadians, 40.039 * degreesToRadians, 0.0);
+            _camera.ViewPoint(Trig.DegreesToRadians(-75.697), Trig.DegreesToRadians(40.039), 0.0);
             _camera.Azimuth = 0.0;
             _camera.Elevation = 0.0;
             _camera.Range = _camera.Ellipsoid.MaximumRadius * 3.0;

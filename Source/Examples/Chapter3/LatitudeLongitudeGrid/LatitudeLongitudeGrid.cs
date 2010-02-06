@@ -106,7 +106,7 @@ namespace MiniGlobe.Examples.Chapter3.LatitudeLongitudeGrid
                       ////////////////////////////////////////////////////////////////////////
 
                       float intensity = LightIntensity(normal,  normalize(positionToLight), normalize(positionToEye), mg_DiffuseSpecularAmbientShininess);
-                      fragColor = vec4(intensity * texture2D(mg_Texture0, textureCoordinate).rgb, 1.0);
+                      fragColor = vec4(intensity * texture(mg_Texture0, textureCoordinate).rgb, 1.0);
                   }";
             _sp = Device.CreateShaderProgram(vs, fs);
 

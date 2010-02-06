@@ -83,7 +83,7 @@ namespace MiniGlobe.Examples.Chapter3.SubdivisionSphere1
                   {
                       vec3 normal = normalize(worldPosition);
                       float intensity = LightIntensity(normal,  normalize(positionToLight), normalize(positionToEye), mg_DiffuseSpecularAmbientShininess);
-                      fragColor = vec4(intensity * texture2D(mg_Texture0, ComputeTextureCoordinates(normal)).rgb, 1.0);
+                      fragColor = vec4(intensity * texture(mg_Texture0, ComputeTextureCoordinates(normal)).rgb, 1.0);
                   }";
             _sp = Device.CreateShaderProgram(vs, fs);
 

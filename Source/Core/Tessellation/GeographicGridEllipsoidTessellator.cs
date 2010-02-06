@@ -77,7 +77,7 @@ namespace MiniGlobe.Core.Tessellation
 
             for (int j = 0; j < numberOfSlicePartitions; ++j)
             {
-                double theta = (2.0 * Math.PI) * (((double)j) / numberOfSlicePartitions);
+                double theta = Trig.TwoPI * (((double)j) / numberOfSlicePartitions);
                 cosTheta[j] = Math.Cos(theta);
                 sinTheta[j] = Math.Sin(theta);
             }

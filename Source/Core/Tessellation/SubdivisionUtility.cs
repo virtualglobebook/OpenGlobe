@@ -41,7 +41,7 @@ namespace MiniGlobe.Core.Tessellation
         public static Vector2h ComputeTextureCoordinate(Vector3d position)
         {
             return new Vector2h(new Vector2d(
-                (Math.Atan2(position.Y, position.X) / (2.0 * Math.PI)) + 0.5,
+                (Math.Atan2(position.Y, position.X) / Trig.TwoPI) + 0.5,
                 (Math.Asin(position.Z) / Math.PI) + 0.5));
         }
     }

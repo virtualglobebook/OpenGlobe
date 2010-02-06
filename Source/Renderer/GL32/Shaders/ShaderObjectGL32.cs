@@ -29,7 +29,7 @@ namespace MiniGlobe.Renderer.GL32
                 "const float mg_PiOverFour =   " + Math.PI / 4.0 + "; \n" +
                 "const float mg_PiOverSix =    " + Math.PI / 6.0 + "; \n" +
                 "const float mg_ThreePiOver2 = " + (3.0 * Math.PI) * 0.5 + "; \n" +
-                "const float mg_TwoPi =        " + 2.0 * Math.PI + "; \n";
+                "const float mg_TwoPi =        " + Trig.TwoPI + "; \n";
 
             string modifiedSource;
 

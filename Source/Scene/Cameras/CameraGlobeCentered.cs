@@ -11,6 +11,7 @@ using MiniGlobe.Renderer;
 using System.Drawing;
 using System;
 using OpenTK;
+using MiniGlobe.Core;
 using MiniGlobe.Core.Geometry;
 
 namespace MiniGlobe.Scene
@@ -238,16 +239,16 @@ namespace MiniGlobe.Scene
             double azimuthWindowRatio = (double)movement.Width / (double)_window.Width;
             double elevationWindowRatio = (double)movement.Height / (double)_window.Height;
 
-            _azimuth -= azimuthWindowRatio * 2.0 * Math.PI;
+            _azimuth -= azimuthWindowRatio * Trig.TwoPI;
             _elevation -= elevationWindowRatio * Math.PI;
 
             while (_azimuth > Math.PI)
             {
-                _azimuth -= 2.0 * Math.PI;
+                _azimuth -= Trig.TwoPI;
             }
             while (_azimuth < -Math.PI)
             {
-                _azimuth += 2.0 * Math.PI;
+                _azimuth += Trig.TwoPI;
             }
 
             if (_elevation < 0.0)

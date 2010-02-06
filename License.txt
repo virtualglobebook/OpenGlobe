@@ -1,3 +1,5 @@
+(C) Copyright 2009-2010 Contributors
+
 MiniGlobe is distributed under the Boost Software License, Version 1.0.
 ---------------------------------------------------------------------------
 
@@ -122,3 +124,13 @@ MiniGlobe uses data from Natural Earth:
 
 
    Terms of use:  http://www.naturalearthdata.com/about/terms-of-use/
+
+
+MiniGlobe uses icons from Yusuke Kamiyamane
+
+   http://pinvoke.com/
+
+   Data\Icons\YusukeKamiyamane
+      Copyright (C) 2010 Yusuke Kamiyamane. All rights reserved.
+      The icons are licensed under a Creative Commons Attribution
+      3.0 license. <http://creativecommons.org/licenses/by/3.0/>

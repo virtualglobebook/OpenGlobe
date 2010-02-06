@@ -85,13 +85,13 @@ namespace MiniGlobe.Examples.Chapter3.NightLights
 
                   vec4 NightColor(vec3 normal)
                   {
-                      return vec4(texture2D(mg_Texture1, ComputeTextureCoordinates(normal)).rgb, 1.0);
+                      return vec4(texture(mg_Texture1, ComputeTextureCoordinates(normal)).rgb, 1.0);
                   }
 
                   vec4 DayColor(vec3 normal, vec3 toLight, vec3 toEye, float diffuseDot, vec4 diffuseSpecularAmbientShininess)
                   {
                       float intensity = LightIntensity(normal, toLight, toEye, diffuseDot, mg_DiffuseSpecularAmbientShininess);
-                      return vec4(intensity * texture2D(mg_Texture0, ComputeTextureCoordinates(normal)).rgb, 1.0);
+                      return vec4(intensity * texture(mg_Texture0, ComputeTextureCoordinates(normal)).rgb, 1.0);
                   }
 
                   void main()

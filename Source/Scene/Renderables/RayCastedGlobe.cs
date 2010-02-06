@@ -137,7 +137,7 @@ namespace MiniGlobe.Scene
                           vec3 toEye = normalize(mg_CameraEye - position);
                           float intensity = LightIntensity(normal, toLight, toEye, mg_DiffuseSpecularAmbientShininess);
 
-                          fragColor = vec4(intensity * texture2D(mg_Texture0, ComputeTextureCoordinates(normal)).rgb, 1.0);
+                          fragColor = vec4(intensity * texture(mg_Texture0, ComputeTextureCoordinates(normal)).rgb, 1.0);
                           gl_FragDepth = ComputeWorldPositionDepth(position);
                       }
                       else

@@ -17,11 +17,16 @@ namespace MiniGlobe.Scene
 {
     public sealed class BillboardGroup : IRenderable, IDisposable
     {
-        public BillboardGroup(Context context)
+        public BillboardGroup(Context context, Vector3[] positions, Bitmap bitmap)
         {
             _context = context;
             _renderState = new RenderState();
             _renderState.FacetCulling.Enabled = false;
+            _renderState.Blending.Enabled = true;
+            _renderState.Blending.SourceRGBFactor = SourceBlendingFactor.SourceAlpha;
+            _renderState.Blending.SourceAlphaFactor = SourceBlendingFactor.SourceAlpha;
+            _renderState.Blending.DestinationRGBFactor = DestinationBlendingFactor.OneMinusSourceAlpha;
+            _renderState.Blending.DestinationAlphaFactor = DestinationBlendingFactor.OneMinusSourceAlpha;
 
             string vs =
                 @"#version 150
@@ -35,6 +40,10 @@ namespace MiniGlobe.Scene
                   vec4 WorldToWindowCoordinates(vec4 v)
                   {
                       v = mg_ModelViewPerspectiveProjectionMatrix * v;                        // clip coordinates
+
+                      // TODO:  Just to avoid z fighting with Earth for now.
+                      v.z -= 0.001;
+
                       v.xyz /= v.w;                                                           // normalized device coordinates
                       v.xyz = (mg_ViewportTransformationMatrix * vec4(v.xyz + 1.0, 1.0)).xyz; // windows coordinates
                       return v;
@@ -50,12 +59,15 @@ namespace MiniGlobe.Scene
                   layout(points) in;
                   layout(triangle_strip, max_vertices = 4) out;
 
+                  out vec2 textureCoordinates;
+
                   uniform mat4 mg_OrthographicProjectionMatrix;
+                  uniform sampler2D mg_Texture0;
 
                   void main()
                   {
                       vec4 center = gl_in[0].gl_Position;
-                      vec2 halfSize = vec2(50, 25);
+                      vec2 halfSize = vec2(textureSize(mg_Texture0, 0)) * 0.5;
 
                       vec4 v0 = vec4(center.xy - halfSize, center.z, 1.0);
                       vec4 v1 = vec4(center.xy + vec2(halfSize.x, -halfSize.y), center.z, 1.0);
@@ -63,34 +75,40 @@ namespace MiniGlobe.Scene
                       vec4 v3 = vec4(center.xy + halfSize, center.z, 1.0);
 
                       gl_Position = mg_OrthographicProjectionMatrix * v0;
+                      textureCoordinates = vec2(0, 0);
                       EmitVertex();
 
                       gl_Position = mg_OrthographicProjectionMatrix * v1;
+                      textureCoordinates = vec2(1, 0);
                       EmitVertex();
 
                       gl_Position = mg_OrthographicProjectionMatrix * v2;
+                      textureCoordinates = vec2(0, 1);
                       EmitVertex();
 
                       gl_Position = mg_OrthographicProjectionMatrix * v3;
+                      textureCoordinates = vec2(1, 1);
                       EmitVertex();
                   }";
             string fs =
                 @"#version 150
                  
+                  in vec2 textureCoordinates;
                   out vec4 fragColor;
+                  uniform sampler2D mg_Texture0;
 
                   void main()
                   {
-                      fragColor = vec4(1, 0, 0, 1);
+                      vec4 color = texture(mg_Texture0, textureCoordinates);
+
+                      if (color.a == 0.0)
+                      {
+                          discard;
+                      }
+                      fragColor = color;
                   }";
             _sp = Device.CreateShaderProgram(vs, gs, fs);
 
-            Vector3[] positions = new Vector3[] 
-            { 
-                new Vector3(1.01f, 0, 0),
-                new Vector3(0, 1.01f, 0),
-                new Vector3(0, 0, 1.01f)
-            };
             VertexBuffer positionBuffer = Device.CreateVertexBuffer(BufferHint.StaticDraw, positions.Length * Vector3.SizeInBytes);
             positionBuffer.CopyFromSystemMemory(positions);
 
@@ -98,12 +116,15 @@ namespace MiniGlobe.Scene
                 positionBuffer, VertexAttributeComponentType.Float, 3);
             _va = context.CreateVertexArray();
             _va.VertexBuffers[_sp.VertexAttributes["position"].Location] = attachedPositionBuffer;
+
+            _texture = Device.CreateTexture2D(bitmap, TextureFormat.RedGreenBlueAlpha8, false);
         }
 
         #region IRenderable Members
 
         public void Render(SceneState sceneState)
         {
+            _context.TextureUnits[0].Texture2D = _texture;
             _context.Bind(_renderState);
             _context.Bind(_sp);
             _context.Bind(_va);
@@ -127,6 +148,7 @@ namespace MiniGlobe.Scene
 
         public void Dispose()
         {
+            _texture.Dispose();
             _sp.Dispose();
             _va.Dispose();
         }
@@ -137,5 +159,6 @@ namespace MiniGlobe.Scene
         private readonly RenderState _renderState;
         private readonly ShaderProgram _sp;
         private readonly VertexArray _va;
+        private readonly Texture2D _texture;
     }
 }

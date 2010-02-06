@@ -5,7 +5,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{8a2d80d7-c920-4110-99c1-13af45ff87e4}</ProjectGuid>
+    <ProjectGuid>{8A2D80D7-C920-4110-99C1-13AF45FF87E4}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>MiniGlobe.Examples.Chapter7.Billboards</RootNamespace>
@@ -73,6 +73,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="..\..\..\..\Data\Imagery\NaturalEarth\NE2_50M_SR_W_4096.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\..\..\Data\Icons\YusukeKamiyamane\032.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

@@ -152,17 +152,17 @@ namespace MiniGlobe.Renderer
             string fs =
                 @"#version 150
                  
-                  uniform sampler2D texture;
+                  uniform sampler2D textureUnit;
                   out vec4 FragColor;
 
                   void main()
                   {
-                      FragColor = texture2D(texture, vec2(0, 0));
+                      FragColor = texture(textureUnit, vec2(0, 0));
                   }";
 
             ShaderProgram sp = Device.CreateShaderProgram(ShaderSources.PassThroughVertexShader(), fs);
 
-            Uniform<int> textureUniform = sp.Uniforms["texture"] as Uniform<int>;
+            Uniform<int> textureUniform = sp.Uniforms["textureUnit"] as Uniform<int>;
             textureUniform.Value = 0;
 
             ///////////////////////////////////////////////////////////////////
@@ -384,8 +384,8 @@ namespace MiniGlobe.Renderer
                   void main()
                   {
                       FragColor = vec4(
-                          texture2D(mg_Texture0, vec2(0, 0)).r,
-                          texture2D(mg_Texture1, vec2(0, 0)).g, 0, 1);
+                          texture(mg_Texture0, vec2(0, 0)).r,
+                          texture(mg_Texture1, vec2(0, 0)).g, 0, 1);
                   }";
         }
 

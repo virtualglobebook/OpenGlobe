@@ -63,6 +63,7 @@
     <Compile Include="Geometry\TriangleIndices.cs" />
     <Compile Include="Tessellation\SubdivisionSphereTessellatorSimple.cs" />
     <Compile Include="Tessellation\SubdivisionUtility.cs" />
+    <Compile Include="Trig.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="OpenTK, Version=0.9.9.5, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">

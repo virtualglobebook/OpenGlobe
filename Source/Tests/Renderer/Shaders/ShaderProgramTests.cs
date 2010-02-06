@@ -134,7 +134,7 @@ namespace MiniGlobe.Renderer
                       red += exampleMat34[0].x;
                       red += exampleMat42[0].x;
                       red += exampleMat43[0].x;
-                      red += texture2D(exampleSampler2D, vec2(0, 0)).r;
+                      red += texture(exampleSampler2D, vec2(0, 0)).r;
                       red += texture1DArray(exampleSampler1DArray, vec2(0, 0)).r;
 
                       FragColor = vec4(red, 0, 0, 1);
@@ -371,10 +371,10 @@ namespace MiniGlobe.Renderer
                   void main()
                   {
                       FragColor = 
-                          texture2D(mg_Texture0, vec2(0, 0)) + 
-                          texture2D(mg_Texture1, vec2(0, 0)) + 
-                          texture2D(mg_Texture2, vec2(0, 0)) + 
-                          texture2D(mg_Texture3, vec2(0, 0));
+                          texture(mg_Texture0, vec2(0, 0)) + 
+                          texture(mg_Texture1, vec2(0, 0)) + 
+                          texture(mg_Texture2, vec2(0, 0)) + 
+                          texture(mg_Texture3, vec2(0, 0));
                   }";
             ShaderProgram sp = Device.CreateShaderProgram(ShaderSources.PassThroughVertexShader(), fs);
             Assert.AreEqual(0, (sp.Uniforms["mg_Texture0"] as Uniform<int>).Value);
