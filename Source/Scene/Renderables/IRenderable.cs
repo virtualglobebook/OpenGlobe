@@ -1,18 +1,18 @@
 ﻿#region License
 //
-// (C) Copyright 2009 Patrick Cozzi and Deron Ohlarik
+// (C) Copyright 2010 Patrick Cozzi and Deron Ohlarik
 //
 // Distributed under the Boost Software License, Version 1.0.
 // See License.txt or http://www.boost.org/LICENSE_1_0.txt.
 //
 #endregion
 
-using OpenTK.Graphics.OpenGL;
+using MiniGlobe.Renderer;
 
-namespace MiniGlobe.Renderer.GL32
+namespace MiniGlobe.Scene
 {
-    internal interface ICleanable
+    public interface IRenderable
     {
-        void Clean();
+        void Render(SceneState sceneState);
     }
 }

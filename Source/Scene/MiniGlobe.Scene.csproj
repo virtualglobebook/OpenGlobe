@@ -42,7 +42,10 @@
     <Compile Include="Cameras\CameraGlobeCentered.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Renderables\Axes.cs" />
+    <Compile Include="Renderables\BillboardGroup.cs" />
+    <Compile Include="Renderables\IRenderable.cs" />
     <Compile Include="Renderables\RayCastedGlobe.cs" />
+    <Compile Include="Renderables\TessellatedGlobe.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Core\MiniGlobe.Core.csproj">

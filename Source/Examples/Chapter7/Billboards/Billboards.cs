@@ -31,7 +31,9 @@ namespace MiniGlobe.Examples.Chapter7.Billboards
             _camera = new CameraGlobeCentered(_sceneState.Camera, _window, globeShape);
 
             _globe = new RayCastedGlobe(_window.Context, globeShape, new Bitmap("NE2_50M_SR_W_4096.jpg"));
-            _globe.ShowWireframeBoundingBox = false;
+            //_globe = new TessellatedGlobe(_window.Context, globeShape, new Bitmap("NE2_50M_SR_W_4096.jpg"));
+
+            _billboards = new BillboardGroup(_window.Context);
 
             _sceneState.Camera.ZoomToTarget(globeShape.MaximumRadius);
         }
@@ -52,6 +54,7 @@ namespace MiniGlobe.Examples.Chapter7.Billboards
 
             _window.Context.Clear(ClearBuffers.ColorAndDepthBuffer, Color.White, 1, 0);
             _globe.Render(_sceneState);
+            _billboards.Render(_sceneState);
 
 #if FBO
             snapBuffer.SaveColorBuffer(@"E:\Dropbox\My Dropbox\Book\Manuscript\GlobeRendering\Figures\Billboards.png");
@@ -64,7 +67,8 @@ namespace MiniGlobe.Examples.Chapter7.Billboards
 
         public void Dispose()
         {
-            _globe.Dispose();
+            (_billboards as IDisposable).Dispose();
+            (_globe as IDisposable).Dispose();
             _camera.Dispose();
             _window.Dispose();
         }
@@ -87,6 +91,7 @@ namespace MiniGlobe.Examples.Chapter7.Billboards
         private readonly MiniGlobeWindow _window;
         private readonly SceneState _sceneState;
         private readonly CameraGlobeCentered _camera;
-        private readonly RayCastedGlobe _globe;
+        private readonly IRenderable _globe;
+        private readonly IRenderable _billboards;
     }
 }

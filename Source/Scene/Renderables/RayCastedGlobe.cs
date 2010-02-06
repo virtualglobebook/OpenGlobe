@@ -17,7 +17,7 @@ using OpenTK;
 
 namespace MiniGlobe.Scene
 {
-    public sealed class RayCastedGlobe : IDisposable
+    public sealed class RayCastedGlobe : IRenderable, IDisposable
     {
         public RayCastedGlobe(Context context, Ellipsoid globeShape, Bitmap bitmap)
         {
@@ -186,9 +186,9 @@ namespace MiniGlobe.Scene
             _boxRenderState.RasterizationMode = RasterizationMode.Line;
             _boxRenderState.FacetCulling.Face = CullFace.Front;
             _boxRenderState.FacetCulling.FrontFaceWindingOrder = mesh.FrontFaceWindingOrder;
-
-            ShowWireframeBoundingBox = true;
         }
+
+        #region IRenderable Members
 
         public void Render(SceneState sceneState)
         {
@@ -205,6 +205,8 @@ namespace MiniGlobe.Scene
                 _context.Draw(_primitiveType, sceneState);
             }
         }
+
+        #endregion
 
         public Context Context
         {

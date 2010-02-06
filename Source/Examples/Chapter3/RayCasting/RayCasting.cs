@@ -44,6 +44,7 @@ namespace MiniGlobe.Examples.Chapter3.RayCasting
             };
 
             _globe = new RayCastedGlobe(_window.Context, globeShape, new Bitmap("NE2_50M_SR_W_4096.jpg"));
+            _globe.ShowWireframeBoundingBox = true;
 
             _sceneState.Camera.ZoomToTarget(globeShape.MaximumRadius);
             //CenterCameraOnPoint();
