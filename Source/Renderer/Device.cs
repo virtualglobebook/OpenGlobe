@@ -139,6 +139,7 @@ namespace MiniGlobe.Renderer
             drawAutomaticUniformFactories.Add(new OrthographicProjectionMatrixDrawAutomaticUniformFactory());
             drawAutomaticUniformFactories.Add(new ViewportDrawAutomaticUniformFactory());
             drawAutomaticUniformFactories.Add(new ViewportTransformationMatrixDrawAutomaticUniformFactory());
+            drawAutomaticUniformFactories.Add(new ModelZToClipCoordinatesDrawAutomaticUniformFactory());
             
             return drawAutomaticUniformFactories;
         }

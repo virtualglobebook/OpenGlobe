@@ -46,7 +46,8 @@ namespace MiniGlobe.Scene
                   uniform vec4 mg_DiffuseSpecularAmbientShininess;
                   uniform sampler2D mg_Texture0;
 
-                  uniform mat4 mg_ModelViewPerspectiveProjectionMatrix;
+                  //uniform mat4 mg_ModelViewPerspectiveProjectionMatrix;
+                  uniform mat4x2 mg_ModelZToClipCoordinates;
 
                   uniform vec3 mg_CameraLightPosition;
                   uniform vec3 mg_CameraEye;
@@ -81,14 +82,7 @@ namespace MiniGlobe.Scene
                       float root1 = t / a;
                       float root2 = c / t;
 
-                      if (root1 < root2)
-                      {
-                          return Intersection(true, root1);
-                      }
-                      else
-                      {
-                          return Intersection(true, root2);
-                      }
+                      return Intersection(true, min(root1, root2));
                   }
 
                   vec3 ComputeDeticSurfaceNormal(vec3 positionOnEllipsoid, vec3 oneOverEllipsoidRadiiSquared)
@@ -97,12 +91,21 @@ namespace MiniGlobe.Scene
                   }
 
                   float ComputeWorldPositionDepth(vec3 position)
-                  {
-                      // Consider using mat4x2
-                      vec4 v = mg_ModelViewPerspectiveProjectionMatrix * vec4(position, 1);   // clip coordinates
-                      v.z /= v.w;                                                             // normalized device coordinates
-                      v.z = (v.z + 1.0) * 0.5;
-                      return v.z;
+                  { /*
+                      mat4x2 mg_ModelZToClipCoordinates = mat4x2(
+mg_ModelViewPerspectiveProjectionMatrix[0].z,
+mg_ModelViewPerspectiveProjectionMatrix[1].z,
+mg_ModelViewPerspectiveProjectionMatrix[2].z,
+mg_ModelViewPerspectiveProjectionMatrix[3].z,
+mg_ModelViewPerspectiveProjectionMatrix[0].w,
+mg_ModelViewPerspectiveProjectionMatrix[1].w,
+mg_ModelViewPerspectiveProjectionMatrix[2].w,
+mg_ModelViewPerspectiveProjectionMatrix[3].w);
+   */
+                      vec2 v = mg_ModelZToClipCoordinates * vec4(position, 1);   // clip coordinates
+                      v.x /= v.y;                                                // normalized device coordinates
+                      v.x = (v.x + 1.0) * 0.5;
+                      return v.x;
                   }
 
                   float LightIntensity(vec3 normal, vec3 toLight, vec3 toEye, vec4 diffuseSpecularAmbientShininess)

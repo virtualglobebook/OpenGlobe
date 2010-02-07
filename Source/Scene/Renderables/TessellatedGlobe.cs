@@ -81,7 +81,7 @@ namespace MiniGlobe.Scene
                   }";
             _sp = Device.CreateShaderProgram(vs, fs);
 
-            Mesh mesh = SubdivisionSphereTessellatorSimple.Compute(5);
+            Mesh mesh = GeographicGridEllipsoidTessellator.Compute(globeShape, 32, 16, GeographicGridEllipsoidVertexAttributes.Position);
             _va = context.CreateVertexArray(mesh, _sp.VertexAttributes, BufferHint.StaticDraw);
             _primitiveType = mesh.PrimitiveType;
 
