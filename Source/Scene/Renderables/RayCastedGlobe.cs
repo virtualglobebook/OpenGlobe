@@ -43,58 +43,18 @@ namespace MiniGlobe.Scene
                   in vec3 worldPosition;
                   out vec4 fragColor;
 
+                  uniform mat4x2 mg_ModelZToClipCoordinates;
                   uniform vec4 mg_DiffuseSpecularAmbientShininess;
                   uniform sampler2D mg_Texture0;
-
-                  uniform mat4x2 mg_ModelZToClipCoordinates;
-
                   uniform vec3 mg_CameraLightPosition;
                   uniform vec3 mg_CameraEye;
-                  uniform vec3 u_GlobeOneOverRadiiSquared;
-
-                  struct Intersection
-                  {
-                      bool  Intersects;
-                      float Time;         // Along ray
-                  };
-
-                  //
-                  // Assumes ellipsoid is at (0, 0, 0)
-                  //
-                  Intersection RayIntersectEllipsoid(vec3 rayOrigin, vec3 rayDirection, vec3 oneOverEllipsoidRadiiSquared)
-                  {
-                      float a = dot(rayDirection * rayDirection, oneOverEllipsoidRadiiSquared);
-                      float b = 2.0 * dot(rayOrigin * rayDirection, oneOverEllipsoidRadiiSquared);
-                      float c = dot(rayOrigin * rayOrigin, oneOverEllipsoidRadiiSquared) - 1.0;
-                      float discriminant = b * b - 4.0 * a * c;
-
-                      if (discriminant < 0.0)
-                      {
-                          return Intersection(false, 0);
-                      }
-                      else if (discriminant == 0.0)
-                      {
-                          return Intersection(true, -0.5 * b / a);
-                      }
-
-                      float t = -0.5 * (b + (b > 0 ? 1.0 : -1.0) * sqrt(discriminant));
-                      float root1 = t / a;
-                      float root2 = c / t;
-
-                      return Intersection(true, min(root1, root2));
-                  }
-
-                  vec3 ComputeDeticSurfaceNormal(vec3 positionOnEllipsoid, vec3 oneOverEllipsoidRadiiSquared)
+                  uniform vec3 u_GlobeOneOverRadiiSquared;";
+            fs += RayIntersectEllipsoidGLSL();
+            fs += ComputeWorldPositionDepthGLSL();
+            fs += 
+                @"vec3 ComputeDeticSurfaceNormal(vec3 positionOnEllipsoid, vec3 oneOverEllipsoidRadiiSquared)
                   {
                       return normalize(positionOnEllipsoid * oneOverEllipsoidRadiiSquared);
-                  }
-
-                  float ComputeWorldPositionDepth(vec3 position)
-                  { 
-                      vec2 v = mg_ModelZToClipCoordinates * vec4(position, 1);   // clip coordinates
-                      v.x /= v.y;                                                // normalized device coordinates
-                      v.x = (v.x + 1.0) * 0.5;
-                      return v.x;
                   }
 
                   float LightIntensity(vec3 normal, vec3 toLight, vec3 toEye, vec4 diffuseSpecularAmbientShininess)
@@ -150,16 +110,41 @@ namespace MiniGlobe.Scene
 
             ///////////////////////////////////////////////////////////////////
 
-            string vs2 =
+            string solidFS =
                 @"#version 150
+                 
+                  in vec3 worldPosition;
+                  out vec4 fragColor;
 
-                  in vec4 position;
-                  uniform mat4 mg_ModelViewPerspectiveProjectionMatrix;
-
-                  void main()                     
+                  uniform mat4x2 mg_ModelZToClipCoordinates;
+                  uniform vec4 mg_DiffuseSpecularAmbientShininess;
+                  uniform vec3 mg_CameraEye;
+                  uniform vec3 u_GlobeOneOverRadiiSquared;";
+            solidFS += RayIntersectEllipsoidGLSL();
+            solidFS += ComputeWorldPositionDepthGLSL();
+            solidFS +=
+                @"void main()
                   {
-                      gl_Position = mg_ModelViewPerspectiveProjectionMatrix * position; 
+                      vec3 rayDirection = normalize(worldPosition - mg_CameraEye);
+                      Intersection i = RayIntersectEllipsoid(mg_CameraEye, rayDirection, u_GlobeOneOverRadiiSquared);
+
+                      if (i.Intersects)
+                      {
+                          vec3 position = mg_CameraEye + (i.Time * rayDirection);
+
+                          fragColor = vec4(0.0, 1.0, 1.0, 1.0);
+                          gl_FragDepth = ComputeWorldPositionDepth(position);
+                      }
+                      else
+                      {
+                          fragColor = vec4(0.3, 0.3, 0.3, 1.0);
+                      }
                   }";
+            
+            _solidSP = Device.CreateShaderProgram(vs, solidFS);
+            (_solidSP.Uniforms["u_GlobeOneOverRadiiSquared"] as Uniform<Vector3>).Value = Conversion.ToVector3(globeShape.OneOverRadiiSquared);
+
+            ///////////////////////////////////////////////////////////////////
 
             string fs2 =
                 @"#version 150
@@ -170,12 +155,74 @@ namespace MiniGlobe.Scene
                   {
                       fragColor = vec4(0.0, 0.0, 0.0, 1.0);
                   }";
-            _boxSP = Device.CreateShaderProgram(vs2, fs2);
+            _boxSP = Device.CreateShaderProgram(PassThroughVS(), fs2);
 
             _boxRenderState = new RenderState();
             _boxRenderState.RasterizationMode = RasterizationMode.Line;
             _boxRenderState.FacetCulling.Face = CullFace.Front;
             _boxRenderState.FacetCulling.FrontFaceWindingOrder = mesh.FrontFaceWindingOrder;
+        }
+
+        private static string PassThroughVS()
+        {
+            return
+                @"#version 150
+
+                  in vec4 position;
+                  uniform mat4 mg_ModelViewPerspectiveProjectionMatrix;
+
+                  void main()                     
+                  {
+                      gl_Position = mg_ModelViewPerspectiveProjectionMatrix * position; 
+                  }";
+        }
+
+        private static string RayIntersectEllipsoidGLSL()
+        {
+            return
+                @"struct Intersection
+                  {
+                      bool  Intersects;
+                      float Time;         // Along ray
+                  };
+
+                  //
+                  // Assumes ellipsoid is at (0, 0, 0)
+                  //
+                  Intersection RayIntersectEllipsoid(vec3 rayOrigin, vec3 rayDirection, vec3 oneOverEllipsoidRadiiSquared)
+                  {
+                      float a = dot(rayDirection * rayDirection, oneOverEllipsoidRadiiSquared);
+                      float b = 2.0 * dot(rayOrigin * rayDirection, oneOverEllipsoidRadiiSquared);
+                      float c = dot(rayOrigin * rayOrigin, oneOverEllipsoidRadiiSquared) - 1.0;
+                      float discriminant = b * b - 4.0 * a * c;
+
+                      if (discriminant < 0.0)
+                      {
+                          return Intersection(false, 0);
+                      }
+                      else if (discriminant == 0.0)
+                      {
+                          return Intersection(true, -0.5 * b / a);
+                      }
+
+                      float t = -0.5 * (b + (b > 0 ? 1.0 : -1.0) * sqrt(discriminant));
+                      float root1 = t / a;
+                      float root2 = c / t;
+
+                      return Intersection(true, min(root1, root2));
+                  }";
+        }
+
+        private static string ComputeWorldPositionDepthGLSL()
+        {
+            return
+              @"float ComputeWorldPositionDepth(vec3 position)
+                { 
+                    vec2 v = mg_ModelZToClipCoordinates * vec4(position, 1);   // clip coordinates
+                    v.x /= v.y;                                                // normalized device coordinates
+                    v.x = (v.x + 1.0) * 0.5;
+                    return v.x;
+                }";
         }
 
         #region IRenderable Members
@@ -187,9 +234,16 @@ namespace MiniGlobe.Scene
                 throw new InvalidOperationException("Texture");
             }
 
-            _context.TextureUnits[0].Texture2D = Texture;
+            if (ShowSolidBox)
+            {
+                _context.Bind(_solidSP);
+            }
+            else
+            {
+                _context.TextureUnits[0].Texture2D = Texture;
+                _context.Bind(_sp);
+            }
             _context.Bind(_renderState);
-            _context.Bind(_sp);
             _context.Bind(_va);
             _context.Draw(_primitiveType, sceneState);
 
@@ -208,6 +262,7 @@ namespace MiniGlobe.Scene
             get { return _context; }
         }
 
+        public bool ShowSolidBox { get; set; }
         public bool ShowWireframeBoundingBox { get; set; }
         public Texture2D Texture { get; set; }
 
@@ -215,9 +270,10 @@ namespace MiniGlobe.Scene
 
         public void Dispose()
         {
-            _boxSP.Dispose();
             _sp.Dispose();
+            _solidSP.Dispose();
             _va.Dispose();
+            _boxSP.Dispose();
         }
 
         #endregion
@@ -225,6 +281,7 @@ namespace MiniGlobe.Scene
         private readonly Context _context;
         private readonly RenderState _renderState;
         private readonly ShaderProgram _sp;
+        private readonly ShaderProgram _solidSP;
         private readonly VertexArray _va;
         private readonly PrimitiveType _primitiveType;
 

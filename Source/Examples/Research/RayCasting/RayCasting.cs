@@ -14,6 +14,7 @@
 //  3 - Show/hide billboards
 //
 //  Up/Down - Increase/decrease tessellation (when tessellated globe is shown)
+//  Right - Switch between solid and shaded ray casted box (when ray casted globe is shown)
 //
 
 //#define FBO
@@ -298,6 +299,17 @@ namespace MiniGlobe.Examples.Research.RayCasting
                 _tessellatedGlobe.NumberOfSlicePartitions = _numberOfSlicePartitions;
                 _tessellatedGlobe.NumberOfStackPartitions = _numberOfSlicePartitions / 2;
             }
+            else if (_rayCastedGlobe != null)
+            {
+                if (e.Key == KeyboardKey.Right)
+                {
+                    //
+                    //  Right - Switch between solid and shaded ray casted box (when ray casted globe is shown)
+                    //
+                    _showSolidBox = !_showSolidBox;
+                    _rayCastedGlobe.ShowSolidBox = _showSolidBox;
+                }
+            }
         }
 
         #region IDisposable Members
@@ -346,5 +358,6 @@ namespace MiniGlobe.Examples.Research.RayCasting
 
         int _numberOfSlicePartitions;
         bool _wireframe;
+        bool _showSolidBox;
     }
 }
