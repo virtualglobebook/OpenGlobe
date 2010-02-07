@@ -15,7 +15,7 @@ namespace MiniGlobe.Renderer.GL32
 {
     internal class UniformFloatMatrix34GL32 : Uniform<Matrix34>, ICleanable
     {
-        internal UniformFloatMatrix34GL32(int programHandle, string name, int location)
+        internal UniformFloatMatrix34GL32(string name, int location)
             : base(name, location, UniformType.FloatMatrix34)
         {
             Set(new Matrix34());

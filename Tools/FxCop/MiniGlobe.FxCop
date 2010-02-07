@@ -27,6 +27,8 @@
   <Target Name="$(ProjectDir)/../../Source/Examples/Chapter3/SubdivisionEllipsoid/bin/Release/Chapter3SubdivisionEllipsoid.exe" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/../../Source/Examples/Chapter3/SubdivisionSphere1/bin/Release/Chapter3SubdivisionSphere1.exe" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/../../Source/Examples/Chapter3/SubdivisionSphere2/bin/Release/Chapter3SubdivisionSphere2.exe" Analyze="True" AnalyzeAllChildren="True" />
+  <Target Name="$(ProjectDir)/../../Source/Examples/Chapter7/Billboards/bin/Release/Chapter7Billboards.exe" Analyze="True" AnalyzeAllChildren="True" />
+  <Target Name="$(ProjectDir)/../../Source/Examples/Research/RayCasting/bin/Release/ResearchRayCasting.exe" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/../../Source/Tests/bin/Release/MiniGlobe.Core.dll" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/../../Source/Tests/bin/Release/MiniGlobe.Renderer.dll" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/../../Source/Tests/bin/Release/MiniGlobe.Scene.dll" Analyze="True" AnalyzeAllChildren="True" />
@@ -199,6 +201,32 @@
      </Module>
     </Modules>
    </Target>
+   <Target Name="$(ProjectDir)/../../Source/Examples/Chapter7/Billboards/bin/Release/Chapter7Billboards.exe">
+    <Modules>
+     <Module Name="chapter7billboards.exe">
+      <Messages>
+       <Message TypeName="AssembliesShouldHaveValidStrongNames" Category="Microsoft.Design" CheckId="CA2210" Created="2010-02-07 19:07:23Z">
+        <Issue Name="NoStrongName">
+         <Item>'Chapter7Billboards.exe'</Item>
+        </Issue>
+       </Message>
+      </Messages>
+     </Module>
+    </Modules>
+   </Target>
+   <Target Name="$(ProjectDir)/../../Source/Examples/Research/RayCasting/bin/Release/ResearchRayCasting.exe">
+    <Modules>
+     <Module Name="researchraycasting.exe">
+      <Messages>
+       <Message TypeName="AssembliesShouldHaveValidStrongNames" Category="Microsoft.Design" CheckId="CA2210" Created="2010-02-07 19:07:23Z">
+        <Issue Name="NoStrongName">
+         <Item>'ResearchRayCasting.exe'</Item>
+        </Issue>
+       </Message>
+      </Messages>
+     </Module>
+    </Modules>
+   </Target>
    <Target Name="$(ProjectDir)/../../Source/Tests/bin/Release/MiniGlobe.Core.dll">
     <Modules>
      <Module Name="miniglobe.core.dll">
@@ -246,6 +274,22 @@
               <Notes>
                <User Name="pjcozzi">
                 <Note Id="17" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#DeticToVector3d(System.Double,System.Double,System.Double)">
+            <Messages>
+             <Message Id="d" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Excluded" Created="2010-02-07 19:07:23Z">
+              <Issue Name="Member">
+               <Item>d</Item>
+               <Item>'Ellipsoid.DeticToVector3d(double, double, double)'</Item>
+               <Item>D</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="38" />
                </User>
               </Notes>
              </Message>
@@ -792,14 +836,406 @@
            </Member>
           </Members>
          </Type>
-         <Type Name="KeyboardGL32">
+         <Type Name="KeyboardKey">
           <Members>
-           <Member Name="#_keyboard">
+           <Member Name="#A">
             <Messages>
-             <Message TypeName="AvoidUnusedPrivateFields" Category="Microsoft.Performance" CheckId="CA1823" Created="2010-02-02 14:22:10Z">
-              <Issue>
-               <Item>'KeyboardGL32._keyboard'</Item>
+             <Message Id="A" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-02-07 19:07:23Z">
+              <Issue Name="MemberMoreMeaningfulName">
+               <Item>'KeyboardKey.A'</Item>
               </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="40" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#B">
+            <Messages>
+             <Message Id="B" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-02-07 19:07:23Z">
+              <Issue Name="MemberMoreMeaningfulName">
+               <Item>'KeyboardKey.B'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="40" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#BackSlash">
+            <Messages>
+             <Message Id="BackSlash" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Created="2010-02-07 19:07:23Z">
+              <Issue Name="MemberShouldBeDiscreteTerm">
+               <Item>BackSlash</Item>
+               <Item>'KeyboardKey.BackSlash'</Item>
+               <Item>Backslash</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#BackSpace">
+            <Messages>
+             <Message Id="BackSpace" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Created="2010-02-07 19:07:23Z">
+              <Issue Name="MemberShouldBeDiscreteTerm">
+               <Item>BackSpace</Item>
+               <Item>'KeyboardKey.BackSpace'</Item>
+               <Item>Backspace</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#C">
+            <Messages>
+             <Message Id="C" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-02-07 19:07:23Z">
+              <Issue Name="MemberMoreMeaningfulName">
+               <Item>'KeyboardKey.C'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="40" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#D">
+            <Messages>
+             <Message Id="D" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-02-07 19:07:23Z">
+              <Issue Name="MemberMoreMeaningfulName">
+               <Item>'KeyboardKey.D'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="40" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#E">
+            <Messages>
+             <Message Id="E" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-02-07 19:07:23Z">
+              <Issue Name="MemberMoreMeaningfulName">
+               <Item>'KeyboardKey.E'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="40" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#F">
+            <Messages>
+             <Message Id="F" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-02-07 19:07:23Z">
+              <Issue Name="MemberMoreMeaningfulName">
+               <Item>'KeyboardKey.F'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="40" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#G">
+            <Messages>
+             <Message Id="G" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-02-07 19:07:23Z">
+              <Issue Name="MemberMoreMeaningfulName">
+               <Item>'KeyboardKey.G'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="40" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#H">
+            <Messages>
+             <Message Id="H" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-02-07 19:07:23Z">
+              <Issue Name="MemberMoreMeaningfulName">
+               <Item>'KeyboardKey.H'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="40" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#I">
+            <Messages>
+             <Message Id="I" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-02-07 19:07:23Z">
+              <Issue Name="MemberMoreMeaningfulName">
+               <Item>'KeyboardKey.I'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="40" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#J">
+            <Messages>
+             <Message Id="J" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-02-07 19:07:23Z">
+              <Issue Name="MemberMoreMeaningfulName">
+               <Item>'KeyboardKey.J'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="40" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#K">
+            <Messages>
+             <Message Id="K" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-02-07 19:07:23Z">
+              <Issue Name="MemberMoreMeaningfulName">
+               <Item>'KeyboardKey.K'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="40" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#L">
+            <Messages>
+             <Message Id="L" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-02-07 19:07:23Z">
+              <Issue Name="MemberMoreMeaningfulName">
+               <Item>'KeyboardKey.L'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="40" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#M">
+            <Messages>
+             <Message Id="M" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-02-07 19:07:23Z">
+              <Issue Name="MemberMoreMeaningfulName">
+               <Item>'KeyboardKey.M'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="40" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#N">
+            <Messages>
+             <Message Id="N" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-02-07 19:07:23Z">
+              <Issue Name="MemberMoreMeaningfulName">
+               <Item>'KeyboardKey.N'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="40" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#NumLock">
+            <Messages>
+             <Message Id="Num" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-02-07 19:07:23Z">
+              <Issue Name="Member">
+               <Item>Num</Item>
+               <Item>'KeyboardKey.NumLock'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="40" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#O">
+            <Messages>
+             <Message Id="O" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-02-07 19:07:23Z">
+              <Issue Name="MemberMoreMeaningfulName">
+               <Item>'KeyboardKey.O'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="40" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#P">
+            <Messages>
+             <Message Id="P" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-02-07 19:07:23Z">
+              <Issue Name="MemberMoreMeaningfulName">
+               <Item>'KeyboardKey.P'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="40" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Q">
+            <Messages>
+             <Message Id="Q" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-02-07 19:07:23Z">
+              <Issue Name="MemberMoreMeaningfulName">
+               <Item>'KeyboardKey.Q'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="40" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#R">
+            <Messages>
+             <Message Id="R" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-02-07 19:07:23Z">
+              <Issue Name="MemberMoreMeaningfulName">
+               <Item>'KeyboardKey.R'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="40" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#S">
+            <Messages>
+             <Message Id="S" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-02-07 19:07:23Z">
+              <Issue Name="MemberMoreMeaningfulName">
+               <Item>'KeyboardKey.S'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="40" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#T">
+            <Messages>
+             <Message Id="T" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-02-07 19:07:23Z">
+              <Issue Name="MemberMoreMeaningfulName">
+               <Item>'KeyboardKey.T'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="40" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#U">
+            <Messages>
+             <Message Id="U" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-02-07 19:07:23Z">
+              <Issue Name="MemberMoreMeaningfulName">
+               <Item>'KeyboardKey.U'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="40" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#V">
+            <Messages>
+             <Message Id="V" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-02-07 19:07:23Z">
+              <Issue Name="MemberMoreMeaningfulName">
+               <Item>'KeyboardKey.V'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="40" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#W">
+            <Messages>
+             <Message Id="W" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-02-07 19:07:23Z">
+              <Issue Name="MemberMoreMeaningfulName">
+               <Item>'KeyboardKey.W'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="40" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#X">
+            <Messages>
+             <Message Id="X" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-02-07 19:07:23Z">
+              <Issue Name="MemberMoreMeaningfulName">
+               <Item>'KeyboardKey.X'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="40" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Y">
+            <Messages>
+             <Message Id="Y" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-02-07 19:07:23Z">
+              <Issue Name="MemberMoreMeaningfulName">
+               <Item>'KeyboardKey.Y'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="40" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Z">
+            <Messages>
+             <Message Id="Z" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-02-07 19:07:23Z">
+              <Issue Name="MemberMoreMeaningfulName">
+               <Item>'KeyboardKey.Z'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="40" />
+               </User>
+              </Notes>
              </Message>
             </Messages>
            </Member>
@@ -1208,6 +1644,105 @@
            </Member>
           </Members>
          </Type>
+         <Type Name="Matrix3d">
+          <Messages>
+           <Message Id="d" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Excluded" Created="2010-02-07 19:07:23Z">
+            <Issue Name="Type">
+             <Item>d</Item>
+             <Item>'Matrix3d'</Item>
+             <Item>D</Item>
+            </Issue>
+            <Notes>
+             <User Name="pjcozzi">
+              <Note Id="41" />
+             </User>
+            </Notes>
+           </Message>
+          </Messages>
+          <Members>
+           <Member Name="#.ctor(System.Double,System.Double,System.Double,System.Double,System.Double,System.Double,System.Double,System.Double,System.Double)">
+            <Messages>
+             <Message Id="m" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-02-07 19:07:23Z">
+              <Issue Name="MemberParameter">
+               <Item>'Matrix3d.Matrix3d(double, double, double, double, double, double, double, double, double)'</Item>
+               <Item>m</Item>
+               <Item>'m00'</Item>
+              </Issue>
+              <Issue Name="MemberParameter">
+               <Item>'Matrix3d.Matrix3d(double, double, double, double, double, double, double, double, double)'</Item>
+               <Item>m</Item>
+               <Item>'m01'</Item>
+              </Issue>
+              <Issue Name="MemberParameter">
+               <Item>'Matrix3d.Matrix3d(double, double, double, double, double, double, double, double, double)'</Item>
+               <Item>m</Item>
+               <Item>'m02'</Item>
+              </Issue>
+              <Issue Name="MemberParameter">
+               <Item>'Matrix3d.Matrix3d(double, double, double, double, double, double, double, double, double)'</Item>
+               <Item>m</Item>
+               <Item>'m10'</Item>
+              </Issue>
+              <Issue Name="MemberParameter">
+               <Item>'Matrix3d.Matrix3d(double, double, double, double, double, double, double, double, double)'</Item>
+               <Item>m</Item>
+               <Item>'m11'</Item>
+              </Issue>
+              <Issue Name="MemberParameter">
+               <Item>'Matrix3d.Matrix3d(double, double, double, double, double, double, double, double, double)'</Item>
+               <Item>m</Item>
+               <Item>'m12'</Item>
+              </Issue>
+              <Issue Name="MemberParameter">
+               <Item>'Matrix3d.Matrix3d(double, double, double, double, double, double, double, double, double)'</Item>
+               <Item>m</Item>
+               <Item>'m20'</Item>
+              </Issue>
+              <Issue Name="MemberParameter">
+               <Item>'Matrix3d.Matrix3d(double, double, double, double, double, double, double, double, double)'</Item>
+               <Item>m</Item>
+               <Item>'m21'</Item>
+              </Issue>
+              <Issue Name="MemberParameter">
+               <Item>'Matrix3d.Matrix3d(double, double, double, double, double, double, double, double, double)'</Item>
+               <Item>m</Item>
+               <Item>'m22'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="41" />
+               </User>
+              </Notes>
+             </Message>
+             <Message TypeName="ReplaceRepetitiveArgumentsWithParamsArray" Category="Microsoft.Design" CheckId="CA1025" Status="Excluded" Created="2010-02-07 19:07:23Z">
+              <Issue>
+               <Item>'Matrix3d.Matrix3d(double, double, double, double, double, double, double, double, double)'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="41" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#op_Multiply(MiniGlobe.Renderer.Matrix3d,OpenTK.Vector3d)">
+            <Messages>
+             <Message TypeName="OperatorOverloadsHaveNamedAlternates" Category="Microsoft.Usage" CheckId="CA2225" Status="Excluded" Created="2010-02-07 19:07:23Z">
+              <Issue>
+               <Item>Multiply</Item>
+               <Item>'Matrix3d.operator *(Matrix3d, Vector3d)'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="41" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
          <Type Name="Matrix42">
           <Members>
            <Member Name="#.ctor(System.Single,System.Single,System.Single,System.Single,System.Single,System.Single,System.Single,System.Single)">
@@ -1424,6 +1959,27 @@
             </Issue>
            </Message>
           </Messages>
+         </Type>
+         <Type Name="PersistentView">
+          <Members>
+           <Member Name="#Execute(System.String,MiniGlobe.Renderer.MiniGlobeWindow,MiniGlobe.Renderer.Camera)">
+            <Messages>
+             <Message Id="filename" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Status="Excluded" Created="2010-02-07 19:07:23Z">
+              <Issue Name="MemberParameterShouldBeCompoundWord">
+               <Item>'PersistentView.Execute(string, MiniGlobeWindow, Camera)'</Item>
+               <Item>filename</Item>
+               <Item>'filename'</Item>
+               <Item>fileName</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="39" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
          </Type>
          <Type Name="ReadPixelBuffer">
           <Members>
@@ -2777,6 +3333,22 @@
              </Message>
             </Messages>
            </Member>
+           <Member Name="#ViewPoint(System.Double,System.Double,System.Double)">
+            <Messages>
+             <Message Id="ViewPoint" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Status="Excluded" Created="2010-02-07 19:07:23Z">
+              <Issue Name="MemberShouldBeDiscreteTerm">
+               <Item>ViewPoint</Item>
+               <Item>'CameraGlobeCentered.ViewPoint(double, double, double)'</Item>
+               <Item>Viewpoint</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="37" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
           </Members>
          </Type>
         </Types>
@@ -3806,6 +4378,11 @@
     <Note Id="34" Modified="2010-02-02 14:22:43Z">[Test] can't be static.</Note>
     <Note Id="35" Modified="2010-02-02 14:24:45Z">filename is ok.</Note>
     <Note Id="36" Modified="2010-02-03 04:07:31Z">[Test] is ok.</Note>
+    <Note Id="37" Modified="2010-02-07 19:08:39Z">Ok.</Note>
+    <Note Id="38" Modified="2010-02-07 19:09:17Z">Ok for now - method name may change later.</Note>
+    <Note Id="39" Modified="2010-02-07 19:09:45Z">filename is ok.</Note>
+    <Note Id="40" Modified="2010-02-07 19:15:51Z">Keyboard constants are ok.</Note>
+    <Note Id="41" Modified="2010-02-07 19:17:20Z">Relax.  These mimic OpenTK types and are going away soon.</Note>
    </User>
   </Notes>
   <Rules>
@@ -3814,9 +4391,6 @@
    </Rule>
    <Rule TypeName="AvoidNamespacesWithFewTypes" Category="Microsoft.Design" CheckId="CA1020">
     <Resolution Name="Default">Consider merging the types defined in '{0}' with another namespace.</Resolution>
-   </Rule>
-   <Rule TypeName="AvoidUnusedPrivateFields" Category="Microsoft.Performance" CheckId="CA1823">
-    <Resolution Name="Default">It appears that field {0} is never used or is only ever assigned to. Use this field or remove it.</Resolution>
    </Rule>
    <Rule TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702">
     <Resolution Name="MemberParameterShouldBeCompoundWord">In member {0}, the discrete term '{1}' in parameter name {2} should be expressed as a compound word, '{3}'.</Resolution>
@@ -3837,6 +4411,7 @@
     <Resolution Name="Type">Correct the casing of '{0}' in type name {1} by changing it to '{2}'.</Resolution>
    </Rule>
    <Rule TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704">
+    <Resolution Name="Member">Correct the spelling of '{0}' in member name {1} or remove it entirely if it represents any sort of Hungarian notation.</Resolution>
     <Resolution Name="MemberMoreMeaningfulName">Consider providing a more meaningful name than member name {0}.</Resolution>
     <Resolution Name="MemberParameter">In method {0}, correct the spelling of '{1}' in parameter name {2} or remove it entirely if it represents any sort of Hungarian notation.</Resolution>
     <Resolution Name="MemberParameterMoreMeaningfulName">In method {0}, consider providing a more meaningful name than parameter name {1}.</Resolution>
@@ -3852,6 +4427,9 @@
    </Rule>
    <Rule TypeName="NestedTypesShouldNotBeVisible" Category="Microsoft.Design" CheckId="CA1034">
     <Resolution Name="Default">Do not nest type {0}. Alternatively, change its accessibility so that it is not externally visible.</Resolution>
+   </Rule>
+   <Rule TypeName="OperatorOverloadsHaveNamedAlternates" Category="Microsoft.Usage" CheckId="CA2225">
+    <Resolution Name="Default">Provide a method named '{0}' as a friendly alternate for operator {1}.</Resolution>
    </Rule>
    <Rule TypeName="ReplaceRepetitiveArgumentsWithParamsArray" Category="Microsoft.Design" CheckId="CA1025">
     <Resolution Name="Default">Consider implementing a version of {0} that accepts a parameter array argument.</Resolution>

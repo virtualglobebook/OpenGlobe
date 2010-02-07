@@ -15,16 +15,10 @@ namespace MiniGlobe.Renderer.GL32
 {
     internal class UniformBoolVector4GL32 : Uniform<Vector4b>, ICleanable
     {
-        internal UniformBoolVector4GL32(int programHandle, string name, int location)
+        internal UniformBoolVector4GL32(string name, int location)
             : base(name, location, UniformType.BoolVector4)
         {
-            int[] initialValue = new int[4];
-            GL.GetUniform(programHandle, location, initialValue);
-            _value = new Vector4b(
-                (initialValue[0] != 0), 
-                (initialValue[1] != 0), 
-                (initialValue[2] != 0), 
-                (initialValue[3] != 0));
+            Set(new Vector4b(false, false, false, false));
         }
 
         private void Set(Vector4b value)

@@ -32,7 +32,7 @@ namespace MiniGlobe.Renderer
             OnKeyDown(OpenTKToMiniGlobe(e.Key));
         }
 
-        private KeyboardKey OpenTKToMiniGlobe(Key key)
+        private static KeyboardKey OpenTKToMiniGlobe(Key key)
         {
             switch (key)
             {

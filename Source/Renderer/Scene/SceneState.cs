@@ -21,6 +21,7 @@ namespace MiniGlobe.Renderer
             AmbientIntensity = 0.10f;
             Shininess = 12;
             Camera = new Camera();
+            SunPosition = new Vector3d(200000, 0, 0);
             ModelMatrix = Matrix4d.Identity;
         }
 
@@ -30,10 +31,7 @@ namespace MiniGlobe.Renderer
         public float Shininess { get; set; }
         public Camera Camera { get; set; }
 
-        public Vector3d SunPosition
-        {
-            get { return new Vector3d(200000, 0, 0); }
-        }
+        public Vector3d SunPosition { get; set; }
 
         public Vector3d CameraLightPosition
         {

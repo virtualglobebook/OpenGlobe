@@ -15,7 +15,7 @@ namespace MiniGlobe.Renderer.GL32
 {
     internal class UniformFloatVector2GL32 : Uniform<Vector2>, ICleanable
     {
-        internal UniformFloatVector2GL32(int programHandle, string name, int location)
+        internal UniformFloatVector2GL32(string name, int location)
             : base(name, location, UniformType.FloatVector2)
         {
             Set(new Vector2());

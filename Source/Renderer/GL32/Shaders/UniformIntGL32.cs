@@ -14,7 +14,7 @@ namespace MiniGlobe.Renderer.GL32
 {
     internal class UniformIntGL32 : Uniform<int>, ICleanable
     {
-        internal UniformIntGL32(int programHandle, string name, int location, UniformType type)
+        internal UniformIntGL32(string name, int location, UniformType type)
             : base(name, location, type)
         {
             Set(0);

@@ -14,7 +14,7 @@ namespace MiniGlobe.Renderer.GL32
 {
     internal class UniformFloatGL32 : Uniform<float>, ICleanable
     {
-        internal UniformFloatGL32(int programHandle, string name, int location)
+        internal UniformFloatGL32(string name, int location)
             : base(name, location, UniformType.Float)
         {
             Set(0);

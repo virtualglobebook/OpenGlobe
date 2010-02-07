@@ -101,7 +101,7 @@ namespace MiniGlobe.Renderer.GL32
             return vertexAttributes;
         }
 
-        private UniformCollection FindUniforms(int program)
+        private static UniformCollection FindUniforms(int program)
         {
             int numberOfUniforms;
             GL.GetProgram(program, ProgramParameter.ActiveUniforms, out numberOfUniforms);
@@ -151,94 +151,94 @@ namespace MiniGlobe.Renderer.GL32
             return uniforms;
         }
 
-        private Uniform CreateUniform(
+        private static Uniform CreateUniform(
             string name, 
             int location, 
             ActiveUniformType type)
         {
             if (type == ActiveUniformType.Float)
             {
-                return new UniformFloatGL32(_program, name, location);
+                return new UniformFloatGL32(name, location);
             }
             else if (type == ActiveUniformType.FloatVec2)
             {
-                return new UniformFloatVector2GL32(_program, name, location);
+                return new UniformFloatVector2GL32(name, location);
             }
             else if (type == ActiveUniformType.FloatVec3)
             {
-                return new UniformFloatVector3GL32(_program, name, location);
+                return new UniformFloatVector3GL32(name, location);
             }
             else if (type == ActiveUniformType.FloatVec4)
             {
-                return new UniformFloatVector4GL32(_program, name, location);
+                return new UniformFloatVector4GL32(name, location);
             }
             else if (type == ActiveUniformType.Int)
             {
-                return new UniformIntGL32(_program, name, location, UniformType.Int);
+                return new UniformIntGL32(name, location, UniformType.Int);
             }
             else if (type == ActiveUniformType.IntVec2)
             {
-                return new UniformIntVector2GL32(_program, name, location);
+                return new UniformIntVector2GL32(name, location);
             }
             else if (type == ActiveUniformType.IntVec3)
             {
-                return new UniformIntVector3GL32(_program, name, location);
+                return new UniformIntVector3GL32(name, location);
             }
             else if (type == ActiveUniformType.IntVec4)
             {
-                return new UniformIntVector4GL32(_program, name, location);
+                return new UniformIntVector4GL32(name, location);
             }
             else if (type == ActiveUniformType.Bool)
             {
-                return new UniformBoolGL32(_program, name, location);
+                return new UniformBoolGL32(name, location);
             }
             else if (type == ActiveUniformType.BoolVec2)
             {
-                return new UniformBoolVector2GL32(_program, name, location);
+                return new UniformBoolVector2GL32(name, location);
             }
             else if (type == ActiveUniformType.BoolVec3)
             {
-                return new UniformBoolVector3GL32(_program, name, location);
+                return new UniformBoolVector3GL32(name, location);
             }
             else if (type == ActiveUniformType.BoolVec4)
             {
-                return new UniformBoolVector4GL32(_program, name, location);
+                return new UniformBoolVector4GL32(name, location);
             }
             else if (type == ActiveUniformType.FloatMat2)
             {
-                return new UniformFloatMatrix22GL32(_program, name, location);
+                return new UniformFloatMatrix22GL32(name, location);
             }
             else if (type == ActiveUniformType.FloatMat3)
             {
-                return new UniformFloatMatrix33GL32(_program, name, location);
+                return new UniformFloatMatrix33GL32(name, location);
             }
             else if (type == ActiveUniformType.FloatMat4)
             {
-                return new UniformFloatMatrix44GL32(_program, name, location);
+                return new UniformFloatMatrix44GL32(name, location);
             }
             else if (type == ActiveUniformType.FloatMat2x3)
             {
-                return new UniformFloatMatrix23GL32(_program, name, location);
+                return new UniformFloatMatrix23GL32(name, location);
             }
             else if (type == ActiveUniformType.FloatMat2x4)
             {
-                return new UniformFloatMatrix24GL32(_program, name, location);
+                return new UniformFloatMatrix24GL32(name, location);
             }
             else if (type == ActiveUniformType.FloatMat3x2)
             {
-                return new UniformFloatMatrix32GL32(_program, name, location);
+                return new UniformFloatMatrix32GL32(name, location);
             }
             else if (type == ActiveUniformType.FloatMat3x4)
             {
-                return new UniformFloatMatrix34GL32(_program, name, location);
+                return new UniformFloatMatrix34GL32(name, location);
             }
             else if (type == ActiveUniformType.FloatMat4x2)
             {
-                return new UniformFloatMatrix42GL32(_program, name, location);
+                return new UniformFloatMatrix42GL32(name, location);
             }
             else if (type == ActiveUniformType.FloatMat4x3)
             {
-                return new UniformFloatMatrix43GL32(_program, name, location);
+                return new UniformFloatMatrix43GL32(name, location);
             }
             else if ((type == ActiveUniformType.Sampler1D) ||
                      (type == ActiveUniformType.Sampler2D) ||
@@ -264,7 +264,7 @@ namespace MiniGlobe.Renderer.GL32
                      (type == ActiveUniformType.UnsignedIntSampler1DArray) ||
                      (type == ActiveUniformType.UnsignedIntSampler2DArray))
             {
-                return new UniformIntGL32(_program, name, location, TypeConverterGL32.To(type));
+                return new UniformIntGL32(name, location, TypeConverterGL32.To(type));
             }
 
             //

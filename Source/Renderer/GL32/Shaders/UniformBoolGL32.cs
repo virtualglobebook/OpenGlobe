@@ -14,7 +14,7 @@ namespace MiniGlobe.Renderer.GL32
 {
     internal class UniformBoolGL32 : Uniform<bool>, ICleanable
     {
-        internal UniformBoolGL32(int programHandle, string name, int location)
+        internal UniformBoolGL32(string name, int location)
             : base(name, location, UniformType.Bool)
         {
             Set(false);
