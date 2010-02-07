@@ -122,6 +122,8 @@ namespace MiniGlobe.Scene
                 throw new InvalidOperationException("Texture");
             }
 
+            _renderState.RasterizationMode = Wireframe ? RasterizationMode.Line : RasterizationMode.Fill;
+
             _context.TextureUnits[0].Texture2D = Texture;
             _context.Bind(_renderState);
             _context.Bind(_sp);
@@ -136,12 +138,7 @@ namespace MiniGlobe.Scene
             get { return _context; }
         }
 
-        public bool Wireframe
-        {
-            get { return _renderState.RasterizationMode == RasterizationMode.Line; }
-            set { _renderState.RasterizationMode = value ? RasterizationMode.Line : RasterizationMode.Fill; }
-        }
-
+        public bool Wireframe { get; set; }
         public Texture2D Texture { get; set; }
 
         public Ellipsoid Shape

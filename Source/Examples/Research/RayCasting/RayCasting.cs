@@ -7,6 +7,15 @@
 //
 #endregion
 
+//
+// Keyboards Controls
+//  1 - Switch between ray casted and tessellated globe
+//  2 - Show/hide wireframe
+//  3 - Show/hide billboards
+//
+//  Up/Down - Increase/decrease tessellation (when tessellated globe is shown)
+//
+
 //#define FBO
 
 using System;
@@ -20,12 +29,6 @@ using MiniGlobe.Core;
 
 namespace MiniGlobe.Examples.Research.RayCasting
 {
-    internal enum RenderingAlgorithm
-    {
-        RayCasting,
-        Rasterization
-    }
-
     sealed class RayCasting : IDisposable
     {
         public RayCasting()
@@ -169,10 +172,8 @@ namespace MiniGlobe.Examples.Research.RayCasting
             Bitmap bitmap = new Bitmap("NE2_50M_SR_W_4096.jpg");
             _texture = Device.CreateTexture2D(bitmap, TextureFormat.RedGreenBlue8, false);
 
-            RayCastedGlobe rayCastedGlobe = new RayCastedGlobe(_window.Context, _globeShape);
-            rayCastedGlobe.Texture = _texture;
-            _globe = rayCastedGlobe;
-            _renderingAlgorithm = RenderingAlgorithm.RayCasting;
+            _rayCastedGlobe = new RayCastedGlobe(_window.Context, _globeShape);
+            _rayCastedGlobe.Texture = _texture;
 
             _numberOfSlicePartitions = 32;
 
@@ -194,7 +195,15 @@ namespace MiniGlobe.Examples.Research.RayCasting
 #endif
 
             _window.Context.Clear(ClearBuffers.ColorAndDepthBuffer, Color.White, 1, 0);
-            _globe.Render(_sceneState);
+
+            if (_rayCastedGlobe != null)
+            {
+                _rayCastedGlobe.Render(_sceneState);
+            }
+            else if (_tessellatedGlobe != null)
+            {
+                _tessellatedGlobe.Render(_sceneState);
+            }
 
             if (_billboards != null)
             {
@@ -212,28 +221,53 @@ namespace MiniGlobe.Examples.Research.RayCasting
         {
             if (e.Key == KeyboardKey.Number1)
             {
-                (_globe as IDisposable).Dispose();
+                //
+                // 1 - Switch between ray casted and tessellated globe
+                //
+                if (_rayCastedGlobe != null)
+                {
+                    _rayCastedGlobe.Dispose();
+                    _rayCastedGlobe = null;
 
-                if (_renderingAlgorithm == RenderingAlgorithm.RayCasting)
-                {
-                    TessellatedGlobe tessellatedGlobe = new TessellatedGlobe(_window.Context);
-                    tessellatedGlobe.Shape = _globeShape;
-                    tessellatedGlobe.NumberOfSlicePartitions = _numberOfSlicePartitions;
-                    tessellatedGlobe.NumberOfStackPartitions = _numberOfSlicePartitions / 2;
-                    tessellatedGlobe.Texture = _texture;
-                    _globe = tessellatedGlobe;
-                    _renderingAlgorithm = RenderingAlgorithm.Rasterization;
+                    _tessellatedGlobe = new TessellatedGlobe(_window.Context);
+                    _tessellatedGlobe.Shape = _globeShape;
+                    _tessellatedGlobe.NumberOfSlicePartitions = _numberOfSlicePartitions;
+                    _tessellatedGlobe.NumberOfStackPartitions = _numberOfSlicePartitions / 2;
+                    _tessellatedGlobe.Wireframe = _wireframe;
+                    _tessellatedGlobe.Texture = _texture;
                 }
-                else if (_renderingAlgorithm == RenderingAlgorithm.Rasterization)
+                else if (_tessellatedGlobe != null)
                 {
-                    RayCastedGlobe rayCastedGlobe = new RayCastedGlobe(_window.Context, _globeShape);
-                    rayCastedGlobe.Texture = _texture;
-                    _globe = rayCastedGlobe;
-                    _renderingAlgorithm = RenderingAlgorithm.RayCasting;
+                    _tessellatedGlobe.Dispose();
+                    _tessellatedGlobe = null;
+
+                    _rayCastedGlobe = new RayCastedGlobe(_window.Context, _globeShape);
+                    // TODO:  Shape property
+                    _rayCastedGlobe.ShowWireframeBoundingBox = _wireframe;
+                    _rayCastedGlobe.Texture = _texture;
                 }
             }
             else if (e.Key == KeyboardKey.Number2)
             {
+                //
+                // 2 - Show/hide wireframe
+                //
+                _wireframe = !_wireframe;
+
+                if (_rayCastedGlobe != null)
+                {
+                    _rayCastedGlobe.ShowWireframeBoundingBox = _wireframe;
+                }
+                else if (_tessellatedGlobe != null)
+                {
+                    _tessellatedGlobe.Wireframe = _wireframe;
+                }
+            }
+            else if (e.Key == KeyboardKey.Number3)
+            {
+                //
+                // 3 - Show/hide billboards
+                //
                 if (_billboards != null)
                 {
                     _billboards.Dispose();
@@ -245,8 +279,11 @@ namespace MiniGlobe.Examples.Research.RayCasting
                     _billboards = new BillboardGroup(_window.Context, _billboardPositions, new Bitmap(@"032.png"));
                 }
             }
-            else if (_renderingAlgorithm == RenderingAlgorithm.Rasterization)
+            else if (_tessellatedGlobe != null)
             {
+                //
+                // Up/Down - Increase/decrease tessellation (when tessellated globe is shown)
+                //
                 if (e.Key == KeyboardKey.Up)
                 {
                     _numberOfSlicePartitions *= 2;
@@ -258,8 +295,8 @@ namespace MiniGlobe.Examples.Research.RayCasting
                     _numberOfSlicePartitions = Math.Max(_numberOfSlicePartitions, 4);
                 }
 
-                (_globe as TessellatedGlobe).NumberOfSlicePartitions = _numberOfSlicePartitions;
-                (_globe as TessellatedGlobe).NumberOfStackPartitions = _numberOfSlicePartitions / 2;
+                _tessellatedGlobe.NumberOfSlicePartitions = _numberOfSlicePartitions;
+                _tessellatedGlobe.NumberOfStackPartitions = _numberOfSlicePartitions / 2;
             }
         }
 
@@ -267,11 +304,15 @@ namespace MiniGlobe.Examples.Research.RayCasting
 
         public void Dispose()
         {
-            if (_billboards != null)
+            if (_tessellatedGlobe != null)
             {
-                _billboards.Dispose();
+                _tessellatedGlobe.Dispose();
             }
-            (_globe as IDisposable).Dispose();
+            else if (_rayCastedGlobe != null)
+            {
+                _rayCastedGlobe.Dispose();
+            }
+
             _texture.Dispose();
             _camera.Dispose();
             _window.Dispose();
@@ -299,10 +340,11 @@ namespace MiniGlobe.Examples.Research.RayCasting
         private readonly SceneState _sceneState;
         private readonly CameraGlobeCentered _camera;
         private readonly Texture2D _texture;
-        private IRenderable _globe;
+        private RayCastedGlobe _rayCastedGlobe;
+        private TessellatedGlobe _tessellatedGlobe;
         private BillboardGroup _billboards;
-        private RenderingAlgorithm _renderingAlgorithm;
 
         int _numberOfSlicePartitions;
+        bool _wireframe;
     }
 }
