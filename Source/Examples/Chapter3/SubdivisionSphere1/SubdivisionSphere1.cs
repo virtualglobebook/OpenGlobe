@@ -109,13 +109,13 @@ namespace MiniGlobe.Examples.Chapter3.SubdivisionSphere1
             _sceneState.Camera.ZoomToTarget(1);
         }
 
-        public void OnResize()
+        private void OnResize()
         {
             _window.Context.Viewport = new Rectangle(0, 0, _window.Width, _window.Height);
             _sceneState.Camera.AspectRatio = _window.Width / (double)_window.Height;
         }
 
-        public void OnRenderFrame()
+        private void OnRenderFrame()
         {
             Context context = _window.Context;
 

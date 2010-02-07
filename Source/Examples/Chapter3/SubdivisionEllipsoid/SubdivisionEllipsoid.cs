@@ -141,13 +141,13 @@ namespace MiniGlobe.Examples.Chapter3.SubdivisionEllipsoid
             _sceneState.Camera.PerspectiveFarPlaneDistance = Ellipsoid.Wgs84.Radii.Y * 5;
         }
 
-        public void OnResize()
+        private void OnResize()
         {
             _window.Context.Viewport = new Rectangle(0, 0, _window.Width, _window.Height);
             _sceneState.Camera.AspectRatio = _window.Width / (double)_window.Height;
         }
 
-        public void OnRenderFrame()
+        private void OnRenderFrame()
         {
             Context context = _window.Context;
 

@@ -44,7 +44,9 @@ namespace MiniGlobe.Examples.Chapter3.RayCasting
                 }
             };
 
-            _globe = new RayCastedGlobe(_window.Context, globeShape, new Bitmap("NE2_50M_SR_W_4096.jpg"));
+            Bitmap bitmap = new Bitmap("NE2_50M_SR_W_4096.jpg");
+            _texture = Device.CreateTexture2D(bitmap, TextureFormat.RedGreenBlue8, false);
+            _globe = new RayCastedGlobe(_window.Context, globeShape, _texture);
             _globe.ShowWireframeBoundingBox = true;
 
             _sceneState.Camera.ZoomToTarget(globeShape.MaximumRadius);
@@ -54,13 +56,13 @@ namespace MiniGlobe.Examples.Chapter3.RayCasting
             PersistentView.Execute(@"E:\Dropbox\My Dropbox\Book\Manuscript\GlobeRendering\Figures\RayCasting.xml", _window, _sceneState.Camera);
         }
 
-        public void OnResize()
+        private void OnResize()
         {
             _window.Context.Viewport = new Rectangle(0, 0, _window.Width, _window.Height);
             _sceneState.Camera.AspectRatio = _window.Width / (double)_window.Height;
         }
 
-        public void OnRenderFrame()
+        private void OnRenderFrame()
         {
 #if FBO
             HighResolutionSnapFrameBuffer snapBuffer = new HighResolutionSnapFrameBuffer(context, 3, 600, _sceneState.Camera.AspectRatio);
@@ -101,6 +103,7 @@ namespace MiniGlobe.Examples.Chapter3.RayCasting
 
         public void Dispose()
         {
+            _texture.Dispose();
             _globe.Dispose();
             _camera.Dispose();
             _window.Dispose();
@@ -125,5 +128,6 @@ namespace MiniGlobe.Examples.Chapter3.RayCasting
         private readonly SceneState _sceneState;
         private readonly CameraGlobeCentered _camera;
         private readonly RayCastedGlobe _globe;
+        private readonly Texture2D _texture;
     }
 }

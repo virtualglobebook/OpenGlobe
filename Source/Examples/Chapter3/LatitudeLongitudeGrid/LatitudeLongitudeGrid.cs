@@ -124,13 +124,13 @@ namespace MiniGlobe.Examples.Chapter3.LatitudeLongitudeGrid
             PersistentView.Execute(@"E:\Dropbox\My Dropbox\Book\Manuscript\GlobeRendering\Figures\LatitudeLongitudeGrid.xml", _window, _sceneState.Camera);
         }
 
-        public void OnResize()
+        private void OnResize()
         {
             _window.Context.Viewport = new Rectangle(0, 0, _window.Width, _window.Height);
             _sceneState.Camera.AspectRatio = _window.Width / (double)_window.Height;
         }
 
-        public void OnRenderFrame()
+        private void OnRenderFrame()
         {
             Context context = _window.Context;
 

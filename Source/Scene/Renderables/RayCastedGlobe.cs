@@ -19,7 +19,7 @@ namespace MiniGlobe.Scene
 {
     public sealed class RayCastedGlobe : IRenderable, IDisposable
     {
-        public RayCastedGlobe(Context context, Ellipsoid globeShape, Bitmap bitmap)
+        public RayCastedGlobe(Context context, Ellipsoid globeShape, Texture2D texture)
         {
             _context = context;
 
@@ -46,7 +46,6 @@ namespace MiniGlobe.Scene
                   uniform vec4 mg_DiffuseSpecularAmbientShininess;
                   uniform sampler2D mg_Texture0;
 
-                  //uniform mat4 mg_ModelViewPerspectiveProjectionMatrix;
                   uniform mat4x2 mg_ModelZToClipCoordinates;
 
                   uniform vec3 mg_CameraLightPosition;
@@ -91,17 +90,7 @@ namespace MiniGlobe.Scene
                   }
 
                   float ComputeWorldPositionDepth(vec3 position)
-                  { /*
-                      mat4x2 mg_ModelZToClipCoordinates = mat4x2(
-mg_ModelViewPerspectiveProjectionMatrix[0].z,
-mg_ModelViewPerspectiveProjectionMatrix[1].z,
-mg_ModelViewPerspectiveProjectionMatrix[2].z,
-mg_ModelViewPerspectiveProjectionMatrix[3].z,
-mg_ModelViewPerspectiveProjectionMatrix[0].w,
-mg_ModelViewPerspectiveProjectionMatrix[1].w,
-mg_ModelViewPerspectiveProjectionMatrix[2].w,
-mg_ModelViewPerspectiveProjectionMatrix[3].w);
-   */
+                  { 
                       vec2 v = mg_ModelZToClipCoordinates * vec4(position, 1);   // clip coordinates
                       v.x /= v.y;                                                // normalized device coordinates
                       v.x = (v.x + 1.0) * 0.5;
@@ -159,7 +148,7 @@ mg_ModelViewPerspectiveProjectionMatrix[3].w);
             _renderState.FacetCulling.Face = CullFace.Front;
             _renderState.FacetCulling.FrontFaceWindingOrder = mesh.FrontFaceWindingOrder;
 
-            _texture = Device.CreateTexture2D(bitmap, TextureFormat.RedGreenBlue8, false);
+            _texture = texture;
 
             ///////////////////////////////////////////////////////////////////
 
@@ -225,7 +214,6 @@ mg_ModelViewPerspectiveProjectionMatrix[3].w);
             _boxSP.Dispose();
             _sp.Dispose();
             _va.Dispose();
-            _texture.Dispose();
         }
 
         #endregion

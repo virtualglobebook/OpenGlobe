@@ -19,7 +19,7 @@ namespace MiniGlobe.Scene
 {
     public sealed class TessellatedGlobe : IRenderable, IDisposable
     {
-        public TessellatedGlobe(Context context, Ellipsoid globeShape, Bitmap bitmap)
+        public TessellatedGlobe(Context context, Ellipsoid globeShape, Texture2D texture)
         {
             _context = context;
 
@@ -88,7 +88,7 @@ namespace MiniGlobe.Scene
             _renderState = new RenderState();
             _renderState.FacetCulling.FrontFaceWindingOrder = mesh.FrontFaceWindingOrder;
 
-            _texture = Device.CreateTexture2D(bitmap, TextureFormat.RedGreenBlue8, false);
+            _texture = texture;
         }
 
         #region IRenderable Members
@@ -121,7 +121,6 @@ namespace MiniGlobe.Scene
         {
             _sp.Dispose();
             _va.Dispose();
-            _texture.Dispose();
         }
 
         #endregion

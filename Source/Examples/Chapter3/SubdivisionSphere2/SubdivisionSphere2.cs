@@ -98,14 +98,14 @@ namespace MiniGlobe.Examples.Chapter3.SubdivisionSphere2
             _texture = Device.CreateTexture2D(bitmap, TextureFormat.RedGreenBlue8, false);
         }
 
-        public void OnResize()
+        private void OnResize()
         {
             _window.Context.Viewport = new Rectangle(0, 0, _window.Width, _window.Height);
             _sceneState.Camera.AspectRatio = _window.Width / (double)_window.Height;
             _sceneState.Camera.ZoomToTarget(1);
         }
 
-        public void OnRenderFrame()
+        private void OnRenderFrame()
         {
             Context context = _window.Context;
             context.Clear(ClearBuffers.ColorAndDepthBuffer, Color.Black, 1, 0);

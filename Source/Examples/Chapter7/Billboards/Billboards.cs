@@ -159,20 +159,21 @@ namespace MiniGlobe.Examples.Chapter7.Billboards
                 Conversion.ToVector3(globeShape.DeticToVector3d(Trig.DegreesToRadians(8.31), Trig.DegreesToRadians(47.21), 0)) // Zürich, Switzerland
             };
 
-            _globe = new RayCastedGlobe(_window.Context, globeShape, new Bitmap("NE2_50M_SR_W_4096.jpg"));
-            //_globe = new TessellatedGlobe(_window.Context, globeShape, new Bitmap("NE2_50M_SR_W_4096.jpg"));
+            Bitmap bitmap = new Bitmap("NE2_50M_SR_W_4096.jpg");
+            _texture = Device.CreateTexture2D(bitmap, TextureFormat.RedGreenBlue8, false);
+            _globe = new RayCastedGlobe(_window.Context, globeShape, _texture);
             _billboards = new BillboardGroup(_window.Context, positions, new Bitmap(@"032.png"));
 
             _sceneState.Camera.ZoomToTarget(globeShape.MaximumRadius);
         }
 
-        public void OnResize()
+        private void OnResize()
         {
             _window.Context.Viewport = new Rectangle(0, 0, _window.Width, _window.Height);
             _sceneState.Camera.AspectRatio = _window.Width / (double)_window.Height;
         }
 
-        public void OnRenderFrame()
+        private void OnRenderFrame()
         {
 #if FBO
             HighResolutionSnapFrameBuffer snapBuffer = new HighResolutionSnapFrameBuffer(context, 3, 600, _sceneState.Camera.AspectRatio);
@@ -195,6 +196,7 @@ namespace MiniGlobe.Examples.Chapter7.Billboards
 
         public void Dispose()
         {
+            _texture.Dispose();
             (_billboards as IDisposable).Dispose();
             (_globe as IDisposable).Dispose();
             _camera.Dispose();
@@ -221,5 +223,6 @@ namespace MiniGlobe.Examples.Chapter7.Billboards
         private readonly CameraGlobeCentered _camera;
         private readonly IRenderable _globe;
         private readonly IRenderable _billboards;
+        private readonly Texture2D _texture;
     }
 }
