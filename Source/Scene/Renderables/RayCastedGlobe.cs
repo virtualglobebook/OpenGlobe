@@ -19,7 +19,7 @@ namespace MiniGlobe.Scene
 {
     public sealed class RayCastedGlobe : IRenderable, IDisposable
     {
-        public RayCastedGlobe(Context context, Ellipsoid globeShape, Texture2D texture)
+        public RayCastedGlobe(Context context, Ellipsoid globeShape)
         {
             _context = context;
 
@@ -148,8 +148,6 @@ namespace MiniGlobe.Scene
             _renderState.FacetCulling.Face = CullFace.Front;
             _renderState.FacetCulling.FrontFaceWindingOrder = mesh.FrontFaceWindingOrder;
 
-            _texture = texture;
-
             ///////////////////////////////////////////////////////////////////
 
             string vs2 =
@@ -184,7 +182,12 @@ namespace MiniGlobe.Scene
 
         public void Render(SceneState sceneState)
         {
-            _context.TextureUnits[0].Texture2D = _texture;
+            if (Texture == null)
+            {
+                throw new InvalidOperationException("Texture");
+            }
+
+            _context.TextureUnits[0].Texture2D = Texture;
             _context.Bind(_renderState);
             _context.Bind(_sp);
             _context.Bind(_va);
@@ -206,6 +209,7 @@ namespace MiniGlobe.Scene
         }
 
         public bool ShowWireframeBoundingBox { get; set; }
+        public Texture2D Texture { get; set; }
 
         #region IDisposable Members
 
@@ -222,7 +226,6 @@ namespace MiniGlobe.Scene
         private readonly RenderState _renderState;
         private readonly ShaderProgram _sp;
         private readonly VertexArray _va;
-        private readonly Texture2D _texture;
         private readonly PrimitiveType _primitiveType;
 
         private readonly RenderState _boxRenderState;

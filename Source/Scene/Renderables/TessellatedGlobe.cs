@@ -19,7 +19,7 @@ namespace MiniGlobe.Scene
 {
     public sealed class TessellatedGlobe : IRenderable, IDisposable
     {
-        public TessellatedGlobe(Context context, Ellipsoid globeShape, Texture2D texture)
+        public TessellatedGlobe(Context context)
         {
             _context = context;
 
@@ -81,21 +81,48 @@ namespace MiniGlobe.Scene
                   }";
             _sp = Device.CreateShaderProgram(vs, fs);
 
-            Mesh mesh = GeographicGridEllipsoidTessellator.Compute(globeShape, 32, 16, GeographicGridEllipsoidVertexAttributes.Position);
-            _va = context.CreateVertexArray(mesh, _sp.VertexAttributes, BufferHint.StaticDraw);
-            _primitiveType = mesh.PrimitiveType;
+            Shape = Ellipsoid.UnitSphere;
+            NumberOfSlicePartitions = 32;
+            NumberOfStackPartitions = 16;
+        }
 
-            _renderState = new RenderState();
-            _renderState.FacetCulling.FrontFaceWindingOrder = mesh.FrontFaceWindingOrder;
+        private void Clean()
+        {
+            if (_dirty)
+            {
+                if (_va != null)
+                {
+                    _va.Dispose();
+                }
 
-            _texture = texture;
+                Mesh mesh = GeographicGridEllipsoidTessellator.Compute(Shape,
+                    _numberOfSlicePartitions, _numberOfStackPartitions, GeographicGridEllipsoidVertexAttributes.Position);
+                _va = _context.CreateVertexArray(mesh, _sp.VertexAttributes, BufferHint.StaticDraw);
+                _primitiveType = mesh.PrimitiveType;
+                _numberOfTriangles = ((mesh.Indices as Indices<int>).Values.Count / 3);
+
+                if (_renderState == null)
+                {
+                    _renderState = new RenderState();
+                }
+                _renderState.FacetCulling.FrontFaceWindingOrder = mesh.FrontFaceWindingOrder;
+
+                _dirty = false;
+            }
         }
 
         #region IRenderable Members
 
         public void Render(SceneState sceneState)
         {
-            _context.TextureUnits[0].Texture2D = _texture;
+            Clean();
+
+            if (Texture == null)
+            {
+                throw new InvalidOperationException("Texture");
+            }
+
+            _context.TextureUnits[0].Texture2D = Texture;
             _context.Bind(_renderState);
             _context.Bind(_sp);
             _context.Bind(_va);
@@ -115,6 +142,47 @@ namespace MiniGlobe.Scene
             set { _renderState.RasterizationMode = value ? RasterizationMode.Line : RasterizationMode.Fill; }
         }
 
+        public Texture2D Texture { get; set; }
+
+        public Ellipsoid Shape
+        {
+            get { return _shape; }
+            set
+            {
+                _dirty = true;
+                _shape = value;
+            }
+        }
+
+        public int NumberOfSlicePartitions
+        {
+            get { return _numberOfSlicePartitions; }
+            set
+            {
+                _dirty = true;
+                _numberOfSlicePartitions = value;
+            }
+        }
+
+        public int NumberOfStackPartitions
+        {
+            get { return _numberOfStackPartitions; }
+            set
+            {
+                _dirty = true;
+                _numberOfStackPartitions = value;
+            }
+        }
+
+        public int NumberOfTriangles
+        {
+            get 
+            {
+                Clean();
+                return _numberOfTriangles; 
+            }
+        }
+
         #region IDisposable Members
 
         public void Dispose()
@@ -126,10 +194,16 @@ namespace MiniGlobe.Scene
         #endregion
 
         private readonly Context _context;
-        private readonly RenderState _renderState;
         private readonly ShaderProgram _sp;
-        private readonly VertexArray _va;
-        private readonly Texture2D _texture;
-        private readonly PrimitiveType _primitiveType;
+
+        private RenderState _renderState;
+        private VertexArray _va;
+        private PrimitiveType _primitiveType;
+
+        private Ellipsoid _shape;
+        private int _numberOfSlicePartitions;
+        private int _numberOfStackPartitions;
+        private int _numberOfTriangles;
+        private bool _dirty;
     }
 }
