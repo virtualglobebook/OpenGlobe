@@ -37,6 +37,16 @@ namespace MiniGlobe.Renderer
         public Vector3d Target { get; set; }
         public Vector3d Up { get; set; }
 
+        public Vector3d Forward
+        {
+            get { return Vector3d.Normalize(new Vector3d(Target - Eye)); }
+        }
+
+        public Vector3d Right
+        {
+            get { return Vector3d.Normalize(Vector3d.Cross(Forward, Up)); }
+        }
+
         public double FieldOfViewX
         {
             get { return (2.0 * Math.Atan(AspectRatio * Math.Tan(FieldOfViewY * 0.5))); }

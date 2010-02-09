@@ -31,21 +31,25 @@ namespace MiniGlobe.Scene
                   out vec4 gsPosition;
                   out vec4 gsColor;
 
-                  uniform mat4 mg_ModelViewPerspectiveProjectionMatrix;
-                  uniform mat4 mg_ViewportTransformationMatrix;
+                  uniform mat4 mg_modelViewPerspectiveProjectionMatrix;
+                  uniform mat4 mg_viewportTransformationMatrix;
                   uniform float u_lineLength;
 
-                  vec4 WorldToWindowCoordinates(vec4 v)
+                  vec4 ModelToWindowCoordinates(
+                      vec4 v, 
+                      mat4 modelViewPerspectiveProjectionMatrix,
+                      mat4 viewportTransformationMatrix)
                   {
-                      v = mg_ModelViewPerspectiveProjectionMatrix * v;                        // clip coordinates
-                      v.xyz /= v.w;                                                           // normalized device coordinates
-                      v.xyz = (mg_ViewportTransformationMatrix * vec4(v.xyz + 1.0, 1.0)).xyz; // windows coordinates
+                      v = modelViewPerspectiveProjectionMatrix * v;                        // clip coordinates
+                      v.xyz /= v.w;                                                        // normalized device coordinates
+                      v.xyz = (viewportTransformationMatrix * vec4(v.xyz + 1.0, 1.0)).xyz; // windows coordinates
                       return v;
                   }
 
                   void main()                     
                   {
-                      gl_Position = WorldToWindowCoordinates(vec4(u_lineLength * position.xyz, position.w));
+                      gl_Position = ModelToWindowCoordinates(vec4(u_lineLength * position.xyz, position.w),
+                          mg_modelViewPerspectiveProjectionMatrix, mg_viewportTransformationMatrix);
                       gsColor = color;
                   }";
             string gs =
@@ -57,7 +61,7 @@ namespace MiniGlobe.Scene
                   in vec4 gsColor[];
                   out vec4 fsColor;
 
-                  uniform mat4 mg_OrthographicProjectionMatrix;
+                  uniform mat4 mg_orthographicProjectionMatrix;
                   uniform float u_halfLineWidth;
 
                   void main()
@@ -73,19 +77,19 @@ namespace MiniGlobe.Scene
                       vec4 v2 = vec4(secondPosition.xy - (normal * u_halfLineWidth), secondPosition.z, 1.0);
                       vec4 v3 = vec4(secondPosition.xy + (normal * u_halfLineWidth), secondPosition.z, 1.0);
 
-                      gl_Position = mg_OrthographicProjectionMatrix * v0;
+                      gl_Position = mg_orthographicProjectionMatrix * v0;
                       fsColor = gsColor[0];
                       EmitVertex();
 
-                      gl_Position = mg_OrthographicProjectionMatrix * v1;
+                      gl_Position = mg_orthographicProjectionMatrix * v1;
                       fsColor = gsColor[0];
                       EmitVertex();
 
-                      gl_Position = mg_OrthographicProjectionMatrix * v2;
+                      gl_Position = mg_orthographicProjectionMatrix * v2;
                       fsColor = gsColor[1];
                       EmitVertex();
 
-                      gl_Position = mg_OrthographicProjectionMatrix * v3;
+                      gl_Position = mg_orthographicProjectionMatrix * v3;
                       fsColor = gsColor[1];
                       EmitVertex();
                   }";
@@ -93,11 +97,11 @@ namespace MiniGlobe.Scene
                 @"#version 150
                  
                   in vec4 fsColor;
-                  out vec4 fragColor;
+                  out vec4 fragmentColor;
 
                   void main()
                   {
-                      fragColor = fsColor;
+                      fragmentColor = fsColor;
                   }";
             _sp = Device.CreateShaderProgram(vs, gs, fs);
 

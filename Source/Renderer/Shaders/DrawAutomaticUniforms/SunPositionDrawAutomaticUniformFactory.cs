@@ -17,7 +17,7 @@ namespace MiniGlobe.Renderer
 
         public override string Name
         {
-            get { return "mg_SunPosition"; }
+            get { return "mg_sunPosition"; }
         }
 
         public override DrawAutomaticUniform Create(Uniform uniform)

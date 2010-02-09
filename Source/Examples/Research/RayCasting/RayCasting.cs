@@ -9,24 +9,23 @@
 
 //
 // Keyboards Controls
-//  1 - Switch between ray casted and tessellated globe
+//  1 - Switch between optimized ray casted, ray casted and tessellated globe
 //  2 - Show/hide wireframe
 //  3 - Show/hide billboards
 //
 //  Up/Down - Increase/decrease tessellation (when tessellated globe is shown)
-//  Right - Switch between solid and shaded ray casted box (when ray casted globe is shown)
+//  Right - Switch between solid and shaded ray casted globe (when ray casted globe is shown)
 //
 
 //#define FBO
 
 using System;
 using System.Drawing;
-
+using MiniGlobe.Core;
 using MiniGlobe.Core.Geometry;
 using MiniGlobe.Renderer;
 using MiniGlobe.Scene;
 using OpenTK;
-using MiniGlobe.Core;
 
 namespace MiniGlobe.Examples.Research.RayCasting
 {
@@ -173,10 +172,11 @@ namespace MiniGlobe.Examples.Research.RayCasting
             Bitmap bitmap = new Bitmap("NE2_50M_SR_W_4096.jpg");
             _texture = Device.CreateTexture2D(bitmap, TextureFormat.RedGreenBlue8, false);
 
-            _rayCastedGlobe = new RayCastedGlobe(_window.Context, _globeShape);
-            _rayCastedGlobe.Texture = _texture;
+            _optimizedRayCastedGlobe = new OptimizedRayCastedGlobe(_window.Context, _globeShape);
+            _optimizedRayCastedGlobe.Texture = _texture;
 
             _numberOfSlicePartitions = 32;
+            _shade = true;
 
             _sceneState.Camera.ZoomToTarget(_globeShape.MaximumRadius);
         }
@@ -197,7 +197,11 @@ namespace MiniGlobe.Examples.Research.RayCasting
 
             _window.Context.Clear(ClearBuffers.ColorAndDepthBuffer, Color.White, 1, 0);
 
-            if (_rayCastedGlobe != null)
+            if (_optimizedRayCastedGlobe != null)
+            {
+                _optimizedRayCastedGlobe.Render(_sceneState);
+            }
+            else if (_rayCastedGlobe != null)
             {
                 _rayCastedGlobe.Render(_sceneState);
             }
@@ -223,29 +227,55 @@ namespace MiniGlobe.Examples.Research.RayCasting
             if (e.Key == KeyboardKey.Number1)
             {
                 //
-                // 1 - Switch between ray casted and tessellated globe
+                // 1 - Switch between optimized ray casted, ray casted and tessellated globe
                 //
+                if (_optimizedRayCastedGlobe != null)
+                {
+                    _optimizedRayCastedGlobe.Dispose();
+                    _optimizedRayCastedGlobe = null;
+                }
+
                 if (_rayCastedGlobe != null)
                 {
                     _rayCastedGlobe.Dispose();
                     _rayCastedGlobe = null;
+                }
 
+                if (_tessellatedGlobe != null)
+                {
+                    _tessellatedGlobe.Dispose();
+                    _tessellatedGlobe = null;
+                }
+
+                if (++_currentAlgorithm == 3)
+                {
+                    _currentAlgorithm = 0;
+                }
+
+                if (_currentAlgorithm == 0)
+                {
+                    _optimizedRayCastedGlobe = new OptimizedRayCastedGlobe(_window.Context, _globeShape);
+                    // TODO:  Shape property
+                    _optimizedRayCastedGlobe.Shade = _shade;
+                    _optimizedRayCastedGlobe.ShowWireframeBoundingVolume = _wireframe;
+                    _optimizedRayCastedGlobe.Texture = _texture;
+                }
+                else if (_currentAlgorithm == 1)
+                {
+                    _rayCastedGlobe = new RayCastedGlobe(_window.Context, _globeShape);
+                    // TODO:  Shape property
+                    _rayCastedGlobe.Shade = _shade;
+                    _rayCastedGlobe.ShowWireframeBoundingVolume = _wireframe;
+                    _rayCastedGlobe.Texture = _texture;
+                }
+                else if (_currentAlgorithm == 2)
+                {
                     _tessellatedGlobe = new TessellatedGlobe(_window.Context);
                     _tessellatedGlobe.Shape = _globeShape;
                     _tessellatedGlobe.NumberOfSlicePartitions = _numberOfSlicePartitions;
                     _tessellatedGlobe.NumberOfStackPartitions = _numberOfSlicePartitions / 2;
                     _tessellatedGlobe.Wireframe = _wireframe;
                     _tessellatedGlobe.Texture = _texture;
-                }
-                else if (_tessellatedGlobe != null)
-                {
-                    _tessellatedGlobe.Dispose();
-                    _tessellatedGlobe = null;
-
-                    _rayCastedGlobe = new RayCastedGlobe(_window.Context, _globeShape);
-                    // TODO:  Shape property
-                    _rayCastedGlobe.ShowWireframeBoundingBox = _wireframe;
-                    _rayCastedGlobe.Texture = _texture;
                 }
             }
             else if (e.Key == KeyboardKey.Number2)
@@ -255,9 +285,13 @@ namespace MiniGlobe.Examples.Research.RayCasting
                 //
                 _wireframe = !_wireframe;
 
+                if (_optimizedRayCastedGlobe != null)
+                {
+                    _optimizedRayCastedGlobe.ShowWireframeBoundingVolume = _wireframe;
+                }
                 if (_rayCastedGlobe != null)
                 {
-                    _rayCastedGlobe.ShowWireframeBoundingBox = _wireframe;
+                    _rayCastedGlobe.ShowWireframeBoundingVolume = _wireframe;
                 }
                 else if (_tessellatedGlobe != null)
                 {
@@ -299,15 +333,20 @@ namespace MiniGlobe.Examples.Research.RayCasting
                 _tessellatedGlobe.NumberOfSlicePartitions = _numberOfSlicePartitions;
                 _tessellatedGlobe.NumberOfStackPartitions = _numberOfSlicePartitions / 2;
             }
-            else if (_rayCastedGlobe != null)
+            else if (e.Key == KeyboardKey.Right)
             {
-                if (e.Key == KeyboardKey.Right)
+                //
+                //  Right - Switch between solid and shaded ray casted globe (when ray casted globe is shown)
+                //
+                if (_optimizedRayCastedGlobe != null)
                 {
-                    //
-                    //  Right - Switch between solid and shaded ray casted box (when ray casted globe is shown)
-                    //
-                    _showSolidBox = !_showSolidBox;
-                    _rayCastedGlobe.ShowSolidBox = _showSolidBox;
+                    _shade = !_shade;
+                    _optimizedRayCastedGlobe.Shade = _shade;
+                }
+                else if (_rayCastedGlobe != null)
+                {
+                    _shade = !_shade;
+                    _rayCastedGlobe.Shade = _shade;
                 }
             }
         }
@@ -316,13 +355,17 @@ namespace MiniGlobe.Examples.Research.RayCasting
 
         public void Dispose()
         {
-            if (_tessellatedGlobe != null)
+            if (_optimizedRayCastedGlobe != null)
             {
-                _tessellatedGlobe.Dispose();
+                _optimizedRayCastedGlobe.Dispose();
             }
             else if (_rayCastedGlobe != null)
             {
                 _rayCastedGlobe.Dispose();
+            }
+            else if (_tessellatedGlobe != null)
+            {
+                _tessellatedGlobe.Dispose();
             }
 
             _texture.Dispose();
@@ -352,12 +395,14 @@ namespace MiniGlobe.Examples.Research.RayCasting
         private readonly SceneState _sceneState;
         private readonly CameraGlobeCentered _camera;
         private readonly Texture2D _texture;
+        private OptimizedRayCastedGlobe _optimizedRayCastedGlobe;
         private RayCastedGlobe _rayCastedGlobe;
         private TessellatedGlobe _tessellatedGlobe;
         private BillboardGroup _billboards;
 
+        int _currentAlgorithm;
         int _numberOfSlicePartitions;
         bool _wireframe;
-        bool _showSolidBox;
+        bool _shade;
     }
 }

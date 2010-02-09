@@ -22,14 +22,14 @@ namespace MiniGlobe.Renderer.GL32
             string builtInConstants =
                 "#version 150                                                   \n" +
                 "const float mg_E =            " + Math.E + "; \n" +
-                "const float mg_Pi =           " + Math.PI + "; \n" +
-                "const float mg_OneOverPi =    " + 1.0 / Math.PI + "; \n" +
-                "const float mg_PiOverTwo =    " + Math.PI * 0.5 + "; \n" +
-                "const float mg_PiOverThree =  " + Math.PI / 3.0 + "; \n" +
-                "const float mg_PiOverFour =   " + Math.PI / 4.0 + "; \n" +
-                "const float mg_PiOverSix =    " + Math.PI / 6.0 + "; \n" +
-                "const float mg_ThreePiOver2 = " + (3.0 * Math.PI) * 0.5 + "; \n" +
-                "const float mg_TwoPi =        " + Trig.TwoPI + "; \n";
+                "const float mg_pi =           " + Math.PI + "; \n" +
+                "const float mg_oneOverPi =    " + 1.0 / Math.PI + "; \n" +
+                "const float mg_piOverTwo =    " + Math.PI * 0.5 + "; \n" +
+                "const float mg_piOverThree =  " + Math.PI / 3.0 + "; \n" +
+                "const float mg_piOverFour =   " + Math.PI / 4.0 + "; \n" +
+                "const float mg_piOverSix =    " + Math.PI / 6.0 + "; \n" +
+                "const float mg_threePiOver2 = " + (3.0 * Math.PI) * 0.5 + "; \n" +
+                "const float mg_twoPi =        " + Trig.TwoPI + "; \n";
 
             string modifiedSource;
 

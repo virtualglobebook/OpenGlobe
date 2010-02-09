@@ -17,7 +17,7 @@ namespace MiniGlobe.Renderer
 
         public override string Name
         {
-            get { return "mg_ModelViewPerspectiveProjectionMatrix"; }
+            get { return "mg_modelViewPerspectiveProjectionMatrix"; }
         }
 
         public override DrawAutomaticUniform Create(Uniform uniform)

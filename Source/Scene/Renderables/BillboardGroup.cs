@@ -34,24 +34,28 @@ namespace MiniGlobe.Scene
                   in vec4 position;
                   out vec4 gsPosition;
 
-                  uniform mat4 mg_ModelViewPerspectiveProjectionMatrix;
-                  uniform mat4 mg_ViewportTransformationMatrix;
+                  uniform mat4 mg_modelViewPerspectiveProjectionMatrix;
+                  uniform mat4 mg_viewportTransformationMatrix;
 
-                  vec4 WorldToWindowCoordinates(vec4 v)
+                  vec4 WorldToWindowCoordinates(
+                      vec4 v, 
+                      mat4 modelViewPerspectiveProjectionMatrix, 
+                      mat4 viewportTransformationMatrix)
                   {
-                      v = mg_ModelViewPerspectiveProjectionMatrix * v;                        // clip coordinates
+                      v = modelViewPerspectiveProjectionMatrix * v;                        // clip coordinates
 
                       // TODO:  Just to avoid z fighting with Earth for now.
                       v.z -= 0.001;
 
                       v.xyz /= v.w;                                                           // normalized device coordinates
-                      v.xyz = (mg_ViewportTransformationMatrix * vec4(v.xyz + 1.0, 1.0)).xyz; // windows coordinates
+                      v.xyz = (viewportTransformationMatrix * vec4(v.xyz + 1.0, 1.0)).xyz; // windows coordinates
                       return v;
                   }
 
                   void main()                     
                   {
-                      gl_Position = WorldToWindowCoordinates(position);
+                      gl_Position = WorldToWindowCoordinates(position, 
+                          mg_modelViewPerspectiveProjectionMatrix, mg_viewportTransformationMatrix);
                   }";
             string gs =
                 @"#version 150 
@@ -61,32 +65,32 @@ namespace MiniGlobe.Scene
 
                   out vec2 textureCoordinates;
 
-                  uniform mat4 mg_OrthographicProjectionMatrix;
-                  uniform sampler2D mg_Texture0;
+                  uniform mat4 mg_orthographicProjectionMatrix;
+                  uniform sampler2D mg_texture0;
 
                   void main()
                   {
                       vec4 center = gl_in[0].gl_Position;
-                      vec2 halfSize = vec2(textureSize(mg_Texture0, 0)) * 0.5;
+                      vec2 halfSize = vec2(textureSize(mg_texture0, 0)) * 0.5;
 
                       vec4 v0 = vec4(center.xy - halfSize, center.z, 1.0);
                       vec4 v1 = vec4(center.xy + vec2(halfSize.x, -halfSize.y), center.z, 1.0);
                       vec4 v2 = vec4(center.xy + vec2(-halfSize.x, halfSize.y), center.z, 1.0);
                       vec4 v3 = vec4(center.xy + halfSize, center.z, 1.0);
 
-                      gl_Position = mg_OrthographicProjectionMatrix * v0;
+                      gl_Position = mg_orthographicProjectionMatrix * v0;
                       textureCoordinates = vec2(0, 0);
                       EmitVertex();
 
-                      gl_Position = mg_OrthographicProjectionMatrix * v1;
+                      gl_Position = mg_orthographicProjectionMatrix * v1;
                       textureCoordinates = vec2(1, 0);
                       EmitVertex();
 
-                      gl_Position = mg_OrthographicProjectionMatrix * v2;
+                      gl_Position = mg_orthographicProjectionMatrix * v2;
                       textureCoordinates = vec2(0, 1);
                       EmitVertex();
 
-                      gl_Position = mg_OrthographicProjectionMatrix * v3;
+                      gl_Position = mg_orthographicProjectionMatrix * v3;
                       textureCoordinates = vec2(1, 1);
                       EmitVertex();
                   }";
@@ -94,18 +98,18 @@ namespace MiniGlobe.Scene
                 @"#version 150
                  
                   in vec2 textureCoordinates;
-                  out vec4 fragColor;
-                  uniform sampler2D mg_Texture0;
+                  out vec4 fragmentColor;
+                  uniform sampler2D mg_texture0;
 
                   void main()
                   {
-                      vec4 color = texture(mg_Texture0, textureCoordinates);
+                      vec4 color = texture(mg_texture0, textureCoordinates);
 
                       if (color.a == 0.0)
                       {
                           discard;
                       }
-                      fragColor = color;
+                      fragmentColor = color;
                   }";
             _sp = Device.CreateShaderProgram(vs, gs, fs);
 

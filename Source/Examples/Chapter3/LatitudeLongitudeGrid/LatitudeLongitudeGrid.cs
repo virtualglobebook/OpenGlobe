@@ -37,17 +37,17 @@ namespace MiniGlobe.Examples.Chapter3.LatitudeLongitudeGrid
                   out vec3 positionToLight;
                   out vec3 positionToEye;
 
-                  uniform mat4 mg_ModelViewPerspectiveProjectionMatrix;
-                  uniform vec3 mg_CameraEye;
-                  uniform vec3 mg_CameraLightPosition;
+                  uniform mat4 mg_modelViewPerspectiveProjectionMatrix;
+                  uniform vec3 mg_cameraEye;
+                  uniform vec3 mg_cameraLightPosition;
 
                   void main()                     
                   {
-                        gl_Position = mg_ModelViewPerspectiveProjectionMatrix * position; 
+                        gl_Position = mg_modelViewPerspectiveProjectionMatrix * position; 
 
                         worldPosition = position.xyz;
-                        positionToLight = mg_CameraLightPosition - worldPosition;
-                        positionToEye = mg_CameraEye - worldPosition;
+                        positionToLight = mg_cameraLightPosition - worldPosition;
+                        positionToEye = mg_cameraEye - worldPosition;
                   }";
 
             string fs =
@@ -56,10 +56,10 @@ namespace MiniGlobe.Examples.Chapter3.LatitudeLongitudeGrid
                   in vec3 worldPosition;
                   in vec3 positionToLight;
                   in vec3 positionToEye;
-                  out vec4 fragColor;
+                  out vec4 fragmentColor;
 
-                  uniform vec4 mg_DiffuseSpecularAmbientShininess;
-                  uniform sampler2D mg_Texture0;
+                  uniform vec4 mg_diffuseSpecularAmbientShininess;
+                  uniform sampler2D mg_texture0;
 
                   float LightIntensity(vec3 normal, vec3 toLight, vec3 toEye, vec4 diffuseSpecularAmbientShininess)
                   {
@@ -67,16 +67,16 @@ namespace MiniGlobe.Examples.Chapter3.LatitudeLongitudeGrid
 
                       float diffuse = max(dot(toLight, normal), 0.0);
                       float specular = max(dot(toReflectedLight, toEye), 0.0);
-                      specular = pow(specular, mg_DiffuseSpecularAmbientShininess.w);
+                      specular = pow(specular, diffuseSpecularAmbientShininess.w);
 
-                      return (mg_DiffuseSpecularAmbientShininess.x * diffuse) +
-                             (mg_DiffuseSpecularAmbientShininess.y * specular) +
-                              mg_DiffuseSpecularAmbientShininess.z;
+                      return (diffuseSpecularAmbientShininess.x * diffuse) +
+                             (diffuseSpecularAmbientShininess.y * specular) +
+                              diffuseSpecularAmbientShininess.z;
                   }
 
                   vec2 ComputeTextureCoordinates(vec3 normal)
                   {
-                      return vec2(atan2(normal.y, normal.x) / mg_TwoPi + 0.5, asin(normal.z) / mg_Pi + 0.5);
+                      return vec2(atan2(normal.y, normal.x) / mg_twoPi + 0.5, asin(normal.z) / mg_pi + 0.5);
                   }
 
                   void main()
@@ -100,13 +100,13 @@ namespace MiniGlobe.Examples.Chapter3.LatitudeLongitudeGrid
                       if ((distanceToLongitudeLine < dFds) || (distanceToLongitudeLine > (1.0 - dFds)) ||
                           (distanceToLatitudeLine < dFdt) || (distanceToLatitudeLine > (1.0 - dFdt)))
                       {
-                         fragColor = vec4(1.0, 0.0, 0.0, 1.0);
+                         fragmentColor = vec4(1.0, 0.0, 0.0, 1.0);
                          return;
                       }
                       ////////////////////////////////////////////////////////////////////////
 
-                      float intensity = LightIntensity(normal,  normalize(positionToLight), normalize(positionToEye), mg_DiffuseSpecularAmbientShininess);
-                      fragColor = vec4(intensity * texture(mg_Texture0, textureCoordinate).rgb, 1.0);
+                      float intensity = LightIntensity(normal,  normalize(positionToLight), normalize(positionToEye), mg_diffuseSpecularAmbientShininess);
+                      fragmentColor = vec4(intensity * texture(mg_texture0, textureCoordinate).rgb, 1.0);
                   }";
             _sp = Device.CreateShaderProgram(vs, fs);
 

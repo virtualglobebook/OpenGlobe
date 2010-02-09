@@ -38,16 +38,16 @@ namespace MiniGlobe.Examples.Chapter3.SubdivisionEllipsoid
                   out vec3 surfaceNormal;
                   out vec2 surfaceTextureCoordinate;
 
-                  uniform mat4 mg_ModelViewPerspectiveProjectionMatrix;
-                  uniform vec3 mg_CameraEye;
-                  uniform vec3 mg_CameraLightPosition;
+                  uniform mat4 mg_modelViewPerspectiveProjectionMatrix;
+                  uniform vec3 mg_cameraEye;
+                  uniform vec3 mg_cameraLightPosition;
 
                   void main()                     
                   {
-                        gl_Position = mg_ModelViewPerspectiveProjectionMatrix * position; 
+                        gl_Position = mg_modelViewPerspectiveProjectionMatrix * position; 
 
-                        positionToLight = mg_CameraLightPosition - position.xyz;
-                        positionToEye = mg_CameraEye - position.xyz;
+                        positionToLight = mg_cameraLightPosition - position.xyz;
+                        positionToEye = mg_cameraEye - position.xyz;
 
                         surfaceNormal = normal;
                         surfaceTextureCoordinate = textureCoordinate;
@@ -61,10 +61,10 @@ namespace MiniGlobe.Examples.Chapter3.SubdivisionEllipsoid
                   in vec3 surfaceNormal;
                   in vec2 surfaceTextureCoordinate;
 
-                  out vec4 fragColor;
+                  out vec4 fragmentColor;
 
-                  uniform vec4 mg_DiffuseSpecularAmbientShininess;
-                  uniform sampler2D mg_Texture0;
+                  uniform vec4 mg_diffuseSpecularAmbientShininess;
+                  uniform sampler2D mg_texture0;
 
                   float LightIntensity(vec3 normal, vec3 toLight, vec3 toEye, vec4 diffuseSpecularAmbientShininess)
                   {
@@ -72,18 +72,18 @@ namespace MiniGlobe.Examples.Chapter3.SubdivisionEllipsoid
 
                       float diffuse = max(dot(toLight, normal), 0.0);
                       float specular = max(dot(toReflectedLight, toEye), 0.0);
-                      specular = pow(specular, mg_DiffuseSpecularAmbientShininess.w);
+                      specular = pow(specular, diffuseSpecularAmbientShininess.w);
 
-                      return (mg_DiffuseSpecularAmbientShininess.x * diffuse) +
-                             (mg_DiffuseSpecularAmbientShininess.y * specular) +
-                              mg_DiffuseSpecularAmbientShininess.z;
+                      return (diffuseSpecularAmbientShininess.x * diffuse) +
+                             (diffuseSpecularAmbientShininess.y * specular) +
+                              diffuseSpecularAmbientShininess.z;
                   }
 
                   void main()
                   {
                       vec3 normal = normalize(surfaceNormal);
-                      float intensity = LightIntensity(normal,  normalize(positionToLight), normalize(positionToEye), mg_DiffuseSpecularAmbientShininess);
-                      fragColor = vec4(intensity * texture(mg_Texture0, surfaceTextureCoordinate).rgb, 1.0);
+                      float intensity = LightIntensity(normal,  normalize(positionToLight), normalize(positionToEye), mg_diffuseSpecularAmbientShininess);
+                      fragmentColor = vec4(intensity * texture(mg_texture0, surfaceTextureCoordinate).rgb, 1.0);
                   }";
             _sphereShaderProgram = Device.CreateShaderProgram(sphereVS, sphereFS);
 
@@ -91,21 +91,21 @@ namespace MiniGlobe.Examples.Chapter3.SubdivisionEllipsoid
                 @"#version 150
 
                   in vec4 position;
-                  uniform mat4 mg_ModelViewPerspectiveProjectionMatrix;
+                  uniform mat4 mg_modelViewPerspectiveProjectionMatrix;
 
                   void main()                     
                   {
-                      gl_Position = mg_ModelViewPerspectiveProjectionMatrix * position; 
+                      gl_Position = mg_modelViewPerspectiveProjectionMatrix * position; 
                   }";
 
             string fs =
                 @"#version 150
                  
-                  out vec4 fragColor;
+                  out vec4 fragmentColor;
 
                   void main()
                   {
-                      fragColor = vec4(1.0, 0.0, 0.0, 1.0);
+                      fragmentColor = vec4(1.0, 0.0, 0.0, 1.0);
                   }";
             _ellipsoidShaderProgram = Device.CreateShaderProgram(vs, fs);
 

@@ -334,20 +334,20 @@ namespace MiniGlobe.Renderer
                 @"#version 150
 
                   in vec4 position;
-                  uniform mat4 mg_ModelViewMatrix;
-                  uniform mat4 mg_PerspectiveProjectionMatrix;
-                  uniform mat4 mg_ModelViewPerspectiveProjectionMatrix;
+                  uniform mat4 mg_modelViewMatrix;
+                  uniform mat4 mg_perspectiveProjectionMatrix;
+                  uniform mat4 mg_modelViewPerspectiveProjectionMatrix;
 
                   void main()
                   {
                         if (position.x > 0)
                         {
-                            mat4 modelViewProjectionMatrix = mg_PerspectiveProjectionMatrix * mg_ModelViewMatrix;
+                            mat4 modelViewProjectionMatrix = mg_perspectiveProjectionMatrix * mg_modelViewMatrix;
                             gl_Position = modelViewProjectionMatrix * position; 
                         }
                         else
                         {
-                            gl_Position = mg_ModelViewPerspectiveProjectionMatrix * position; 
+                            gl_Position = mg_modelViewPerspectiveProjectionMatrix * position; 
                         }
                   }";
             ShaderProgram sp = Device.CreateShaderProgram(vs, ShaderSources.PassThroughFragmentShader());
@@ -377,15 +377,15 @@ namespace MiniGlobe.Renderer
             return
                 @"#version 150
                  
-                  uniform sampler2D mg_Texture0;
-                  uniform sampler2D mg_Texture1;
+                  uniform sampler2D mg_texture0;
+                  uniform sampler2D mg_texture1;
                   out vec4 FragColor;
 
                   void main()
                   {
                       FragColor = vec4(
-                          texture(mg_Texture0, vec2(0, 0)).r,
-                          texture(mg_Texture1, vec2(0, 0)).g, 0, 1);
+                          texture(mg_texture0, vec2(0, 0)).r,
+                          texture(mg_texture1, vec2(0, 0)).g, 0, 1);
                   }";
         }
 

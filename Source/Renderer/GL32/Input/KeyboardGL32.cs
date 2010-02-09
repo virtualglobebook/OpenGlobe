@@ -141,7 +141,7 @@ namespace MiniGlobe.Renderer
                 case Key.Tab:
                     return KeyboardKey.Tab;
                 case Key.BackSpace:
-                    return KeyboardKey.BackSpace;
+                    return KeyboardKey.Backspace;
                 case Key.Insert:
                     return KeyboardKey.Insert;
                 case Key.Delete:
@@ -293,7 +293,7 @@ namespace MiniGlobe.Renderer
                 case Key.Slash:
                     return KeyboardKey.Slash;
                 case Key.BackSlash:
-                    return KeyboardKey.BackSlash;
+                    return KeyboardKey.Backslash;
                 default:
                     return KeyboardKey.Unknown;
             }

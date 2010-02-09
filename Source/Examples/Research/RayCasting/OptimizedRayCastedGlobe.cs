@@ -9,17 +9,19 @@
 
 using System;
 using System.Drawing;
+using System.Collections.Generic;
 using MiniGlobe.Core;
 using MiniGlobe.Core.Geometry;
 using MiniGlobe.Core.Tessellation;
 using MiniGlobe.Renderer;
+using MiniGlobe.Scene;
 using OpenTK;
 
-namespace MiniGlobe.Scene
+namespace MiniGlobe.Examples.Research.RayCasting
 {
-    public sealed class RayCastedGlobe : IRenderable, IDisposable
+    public sealed class OptimizedRayCastedGlobe : IRenderable, IDisposable
     {
-        public RayCastedGlobe(Context context, Ellipsoid globeShape)
+        public OptimizedRayCastedGlobe(Context context, Ellipsoid globeShape)
         {
             _context = context;
 
@@ -27,28 +29,27 @@ namespace MiniGlobe.Scene
                 @"#version 150
 
                   in vec4 position;
-                  out vec3 worldPosition;
-
-                  uniform mat4 mg_modelViewPerspectiveProjectionMatrix;
+                  uniform mat4 mg_orthographicProjectionMatrix;
 
                   void main()                     
                   {
-                      gl_Position = mg_modelViewPerspectiveProjectionMatrix * position; 
-                      worldPosition = position.xyz;
+                      gl_Position = mg_orthographicProjectionMatrix * position; 
                   }";
 
             string fs =
                 @"#version 150
                  
-                  in vec3 worldPosition;
                   out vec4 fragmentColor;
 
+                  uniform vec4 mg_viewport;
+                  uniform mat4 mg_windowToWorldNearPlane;
                   uniform mat4x2 mg_modelZToClipCoordinates;
                   uniform vec4 mg_diffuseSpecularAmbientShininess;
                   uniform sampler2D mg_texture0;
                   uniform vec3 mg_cameraLightPosition;
                   uniform vec3 mg_cameraEye;
                   uniform vec3 u_globeOneOverRadiiSquared;";
+            fs += WindowToNormalizedDeviceCoordinates();
             fs += RayIntersectEllipsoidGLSL();
             fs += ComputeWorldPositionDepthGLSL();
             fs +=
@@ -77,7 +78,12 @@ namespace MiniGlobe.Scene
 
                   void main()
                   {
-                      vec3 rayDirection = normalize(worldPosition - mg_cameraEye);
+                      vec2 w = WindowToNormalizedDeviceCoordinates(gl_FragCoord.xy, mg_viewport);
+                      vec3 wOnNearPlane = (mg_windowToWorldNearPlane * vec4(w.xy, 0, 1)).xyz;
+
+                      vec3 rayDirection = normalize(wOnNearPlane - mg_cameraEye);
+                      /////////////////////////////////////////////////////////
+
                       Intersection i = RayIntersectEllipsoid(mg_cameraEye, rayDirection, u_globeOneOverRadiiSquared);
 
                       if (i.Intersects)
@@ -101,52 +107,58 @@ namespace MiniGlobe.Scene
             (_sp.Uniforms["u_globeOneOverRadiiSquared"] as Uniform<Vector3>).Value = Conversion.ToVector3(globeShape.OneOverRadiiSquared);
 
             Mesh mesh = BoxTessellator.Compute(2 * globeShape.Radii);
-            _va = context.CreateVertexArray(mesh, _sp.VertexAttributes, BufferHint.StaticDraw);
-            _primitiveType = mesh.PrimitiveType;
+            _volumePositions = (mesh.Attributes["position"] as VertexAttribute<Vector3d>).Values;
+
+            _projectionPositions = Device.CreateVertexBuffer(BufferHint.StreamDraw, 4 * Vector2.SizeInBytes);
+            AttachedVertexBuffer attachedPositionBuffer = new AttachedVertexBuffer(
+                _projectionPositions, VertexAttributeComponentType.Float, 2);
+            _va = _context.CreateVertexArray();
+            _va.VertexBuffers[_sp.VertexAttributes["position"].Location] = attachedPositionBuffer;
 
             _renderState = new RenderState();
-            _renderState.FacetCulling.Face = CullFace.Front;
-            _renderState.FacetCulling.FrontFaceWindingOrder = mesh.FrontFaceWindingOrder;
+            _renderState.FacetCulling.Enabled = false;
 
             ///////////////////////////////////////////////////////////////////
 
             string solidFS =
                 @"#version 150
                  
-                  in vec3 worldPosition;
                   out vec4 fragmentColor;
 
+                  uniform vec4 mg_viewport;
+                  uniform mat4 mg_windowToWorldNearPlane;
                   uniform mat4x2 mg_modelZToClipCoordinates;
-                  uniform vec4 mg_diffuseSpecularAmbientShininess;
                   uniform vec3 mg_cameraEye;
                   uniform vec3 u_globeOneOverRadiiSquared;";
+            solidFS += WindowToNormalizedDeviceCoordinates();
             solidFS += RayIntersectEllipsoidGLSL();
             solidFS += ComputeWorldPositionDepthGLSL();
             solidFS +=
                 @"void main()
                   {
-                      vec3 rayDirection = normalize(worldPosition - mg_cameraEye);
+                      vec2 w = WindowToNormalizedDeviceCoordinates(gl_FragCoord.xy, mg_viewport);
+                      vec3 wOnNearPlane = (mg_windowToWorldNearPlane * vec4(w.xy, 0, 1)).xyz;
+
+                      vec3 rayDirection = normalize(wOnNearPlane - mg_cameraEye);
+                      /////////////////////////////////////////////////////////
+
                       Intersection i = RayIntersectEllipsoid(mg_cameraEye, rayDirection, u_globeOneOverRadiiSquared);
 
                       if (i.Intersects)
                       {
-                          vec3 position = mg_cameraEye + (i.Time * rayDirection);
-
                           fragmentColor = vec4(0.0, 1.0, 1.0, 1.0);
-                          gl_FragDepth = ComputeWorldPositionDepth(position, mg_modelZToClipCoordinates);
                       }
                       else
                       {
-                          fragmentColor = vec4(0.3, 0.3, 0.3, 1.0);
+                          fragmentColor = vec4(0.2, 0.2, 0.2, 1.0);
                       }
                   }";
-            
             _solidSP = Device.CreateShaderProgram(vs, solidFS);
             (_solidSP.Uniforms["u_globeOneOverRadiiSquared"] as Uniform<Vector3>).Value = Conversion.ToVector3(globeShape.OneOverRadiiSquared);
 
             ///////////////////////////////////////////////////////////////////
 
-            string fs2 =
+            string wireFrameFS =
                 @"#version 150
                  
                   out vec4 fragmentColor;
@@ -155,28 +167,13 @@ namespace MiniGlobe.Scene
                   {
                       fragmentColor = vec4(0.0, 0.0, 0.0, 1.0);
                   }";
-            _boxSP = Device.CreateShaderProgram(PassThroughVS(), fs2);
+            _wireFrameSP = Device.CreateShaderProgram(vs, wireFrameFS);
 
-            _boxRenderState = new RenderState();
-            _boxRenderState.RasterizationMode = RasterizationMode.Line;
-            _boxRenderState.FacetCulling.Face = CullFace.Front;
-            _boxRenderState.FacetCulling.FrontFaceWindingOrder = mesh.FrontFaceWindingOrder;
-
+            _wireframeRenderState = new RenderState();
+            _wireframeRenderState.RasterizationMode = RasterizationMode.Line;
+            _wireframeRenderState.FacetCulling.Enabled = false;
+            
             Shade = true;
-        }
-
-        private static string PassThroughVS()
-        {
-            return
-                @"#version 150
-
-                  in vec4 position;
-                  uniform mat4 mg_modelViewPerspectiveProjectionMatrix;
-
-                  void main()                     
-                  {
-                      gl_Position = mg_modelViewPerspectiveProjectionMatrix * position; 
-                  }";
         }
 
         private static string RayIntersectEllipsoidGLSL()
@@ -227,10 +224,49 @@ namespace MiniGlobe.Scene
                 }";
         }
 
+        private static string WindowToNormalizedDeviceCoordinates()
+        {
+            return
+              @"vec2 WindowToNormalizedDeviceCoordinates(vec2 fragmentCoordinate, vec4 viewport)
+                {
+                    vec2 v = vec2(fragmentCoordinate.xy / viewport.zw);
+                    v = (2.0 * v) - 1.0;                                    // Scale [0, 1] to [-1, 1]
+                    return v;
+                }";
+        }
+
         #region IRenderable Members
 
         public void Render(SceneState sceneState)
         {
+            Vector2d minWindow = new Vector2d(double.MaxValue, double.MaxValue);
+            Vector2d maxWindow = new Vector2d(double.MinValue, double.MinValue);
+
+            Matrix4d mvp = sceneState.ModelViewPerspectiveProjectionMatrix;
+            Matrix4d viewportTransform = sceneState.ComputeViewportTransformationMatrix(_context.Viewport);
+
+            for (int i = 0; i < _volumePositions.Count; ++i)
+            {
+                Vector4d model = new Vector4d(_volumePositions[i].X, _volumePositions[i].Y, _volumePositions[i].Z, 1);
+                Vector4d clip = Vector4d.Transform(model, mvp);
+                Vector4d ndc = new Vector4d(clip.X / clip.W, clip.Y / clip.W, clip.Z / clip.W, clip.W);
+                Vector4d window = Vector4d.Transform(new Vector4d(ndc.X + 1, ndc.Y + 1, ndc.Z, 1), viewportTransform);
+
+                minWindow = new Vector2d(Math.Min(minWindow.X, window.X), Math.Min(minWindow.Y, window.Y));
+                maxWindow = new Vector2d(Math.Max(maxWindow.X, window.X), Math.Max(maxWindow.Y, window.Y));
+            }
+
+            Vector2[] positions = new Vector2[] 
+            { 
+                Conversion.ToVector2(minWindow),
+                Conversion.ToVector2(new Vector2d(maxWindow.X, minWindow.Y)),
+                Conversion.ToVector2(maxWindow),
+                Conversion.ToVector2(new Vector2d(minWindow.X, maxWindow.Y))
+            };
+            _projectionPositions.CopyFromSystemMemory(positions);
+
+            ///////////////////////////////////////////////////////////////////
+
             if (Texture == null)
             {
                 throw new InvalidOperationException("Texture");
@@ -247,13 +283,13 @@ namespace MiniGlobe.Scene
             }
             _context.Bind(_renderState);
             _context.Bind(_va);
-            _context.Draw(_primitiveType, sceneState);
+            _context.Draw(PrimitiveType.TriangleFan, sceneState);
 
             if (ShowWireframeBoundingVolume)
             {
-                _context.Bind(_boxRenderState);
-                _context.Bind(_boxSP);
-                _context.Draw(_primitiveType, sceneState);
+                _context.Bind(_wireframeRenderState);
+                _context.Bind(_wireFrameSP);
+                _context.Draw(PrimitiveType.TriangleFan, sceneState);
             }
         }
 
@@ -273,21 +309,25 @@ namespace MiniGlobe.Scene
         public void Dispose()
         {
             _sp.Dispose();
-            _solidSP.Dispose();
             _va.Dispose();
-            _boxSP.Dispose();
+            _projectionPositions.Dispose();
+            _solidSP.Dispose();
+            _wireFrameSP.Dispose();
         }
 
         #endregion
 
         private readonly Context _context;
+        private readonly IList<Vector3d> _volumePositions;
+
+        private readonly VertexArray _va;
+        private readonly VertexBuffer _projectionPositions;
+
         private readonly RenderState _renderState;
         private readonly ShaderProgram _sp;
         private readonly ShaderProgram _solidSP;
-        private readonly VertexArray _va;
-        private readonly PrimitiveType _primitiveType;
 
-        private readonly RenderState _boxRenderState;
-        private readonly ShaderProgram _boxSP;
+        private readonly RenderState _wireframeRenderState;
+        private readonly ShaderProgram _wireFrameSP;
     }
 }

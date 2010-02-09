@@ -37,17 +37,17 @@ namespace MiniGlobe.Examples.Chapter3.NightLights
                   out vec3 positionToLight;
                   out vec3 positionToEye;
 
-                  uniform mat4 mg_ModelViewPerspectiveProjectionMatrix;
-                  uniform vec3 mg_CameraEye;
-                  uniform vec3 mg_SunPosition;
+                  uniform mat4 mg_modelViewPerspectiveProjectionMatrix;
+                  uniform vec3 mg_cameraEye;
+                  uniform vec3 mg_sunPosition;
 
                   void main()                     
                   {
-                        gl_Position = mg_ModelViewPerspectiveProjectionMatrix * position; 
+                        gl_Position = mg_modelViewPerspectiveProjectionMatrix * position; 
 
                         worldPosition = position.xyz;
-                        positionToLight = mg_SunPosition - worldPosition;
-                        positionToEye = mg_CameraEye - worldPosition;
+                        positionToLight = mg_sunPosition - worldPosition;
+                        positionToEye = mg_cameraEye - worldPosition;
                   }";
 
             string fs =
@@ -56,11 +56,11 @@ namespace MiniGlobe.Examples.Chapter3.NightLights
                   in vec3 worldPosition;
                   in vec3 positionToLight;
                   in vec3 positionToEye;
-                  out vec4 fragColor;
+                  out vec4 fragmentColor;
 
-                  uniform vec4 mg_DiffuseSpecularAmbientShininess;
-                  uniform sampler2D mg_Texture0;                    // Day
-                  uniform sampler2D mg_Texture1;                    // Night
+                  uniform vec4 mg_diffuseSpecularAmbientShininess;
+                  uniform sampler2D mg_texture0;                    // Day
+                  uniform sampler2D mg_texture1;                    // Night
 
                   uniform float u_blendDuration;
                   uniform float u_blendDurationScale;
@@ -71,27 +71,27 @@ namespace MiniGlobe.Examples.Chapter3.NightLights
 
                       float diffuse = max(diffuseDot, 0.0);
                       float specular = max(dot(toReflectedLight, toEye), 0.0);
-                      specular = pow(specular, mg_DiffuseSpecularAmbientShininess.w);
+                      specular = pow(specular, diffuseSpecularAmbientShininess.w);
 
-                      return (mg_DiffuseSpecularAmbientShininess.x * diffuse) +
-                             (mg_DiffuseSpecularAmbientShininess.y * specular) +
-                              mg_DiffuseSpecularAmbientShininess.z;
+                      return (diffuseSpecularAmbientShininess.x * diffuse) +
+                             (diffuseSpecularAmbientShininess.y * specular) +
+                              diffuseSpecularAmbientShininess.z;
                   }
 
                   vec2 ComputeTextureCoordinates(vec3 normal)
                   {
-                      return vec2(atan2(normal.y, normal.x) / mg_TwoPi + 0.5, asin(normal.z) / mg_Pi + 0.5);
+                      return vec2(atan2(normal.y, normal.x) / mg_twoPi + 0.5, asin(normal.z) / mg_pi + 0.5);
                   }
 
                   vec4 NightColor(vec3 normal)
                   {
-                      return vec4(texture(mg_Texture1, ComputeTextureCoordinates(normal)).rgb, 1.0);
+                      return vec4(texture(mg_texture1, ComputeTextureCoordinates(normal)).rgb, 1.0);
                   }
 
                   vec4 DayColor(vec3 normal, vec3 toLight, vec3 toEye, float diffuseDot, vec4 diffuseSpecularAmbientShininess)
                   {
-                      float intensity = LightIntensity(normal, toLight, toEye, diffuseDot, mg_DiffuseSpecularAmbientShininess);
-                      return vec4(intensity * texture(mg_Texture0, ComputeTextureCoordinates(normal)).rgb, 1.0);
+                      float intensity = LightIntensity(normal, toLight, toEye, diffuseDot, diffuseSpecularAmbientShininess);
+                      return vec4(intensity * texture(mg_texture0, ComputeTextureCoordinates(normal)).rgb, 1.0);
                   }
 
                   void main()
@@ -102,17 +102,17 @@ namespace MiniGlobe.Examples.Chapter3.NightLights
 
                       if (diffuse > u_blendDuration)
                       {
-                          fragColor = DayColor(normal, toLight, normalize(positionToEye), diffuse, mg_DiffuseSpecularAmbientShininess);
+                          fragmentColor = DayColor(normal, toLight, normalize(positionToEye), diffuse, mg_diffuseSpecularAmbientShininess);
                       }
                       else if (diffuse >= -u_blendDuration)
                       {
                           vec4 night = NightColor(normal);
-                          vec4 day = DayColor(normal, toLight, normalize(positionToEye), diffuse, mg_DiffuseSpecularAmbientShininess);
-                          fragColor = mix(night, day, (diffuse + u_blendDuration) * u_blendDurationScale);
+                          vec4 day = DayColor(normal, toLight, normalize(positionToEye), diffuse, mg_diffuseSpecularAmbientShininess);
+                          fragmentColor = mix(night, day, (diffuse + u_blendDuration) * u_blendDurationScale);
                       }
                       else
                       {
-                          fragColor = NightColor(normal);
+                          fragmentColor = NightColor(normal);
                       }
                   }";
             _sp = Device.CreateShaderProgram(vs, fs);

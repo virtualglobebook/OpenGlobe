@@ -49,7 +49,7 @@ namespace MiniGlobe.Examples.Chapter3.RayCasting
 
             _globe = new RayCastedGlobe(_window.Context, globeShape);
             _globe.Texture = _texture;
-            _globe.ShowWireframeBoundingBox = true;
+            _globe.ShowWireframeBoundingVolume = true;
 
             _sceneState.Camera.ZoomToTarget(globeShape.MaximumRadius);
             //CenterCameraOnPoint();

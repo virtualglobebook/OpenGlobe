@@ -17,7 +17,7 @@ namespace MiniGlobe.Renderer
 
         public override string Name
         {
-            get { return "mg_CameraEye"; }
+            get { return "mg_cameraEye"; }
         }
 
         public override DrawAutomaticUniform Create(Uniform uniform)

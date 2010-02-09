@@ -20,7 +20,7 @@ namespace MiniGlobe.Renderer
 
         public override string Name 
         { 
-            get { return "mg_Texture" + _textureUnit; }
+            get { return "mg_texture" + _textureUnit; }
         }
 
         public override void Set(Uniform uniform)

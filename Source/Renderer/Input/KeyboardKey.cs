@@ -64,7 +64,7 @@ namespace MiniGlobe.Renderer
         Escape,
         Space,
         Tab,
-        BackSpace,
+        Backspace,
         Insert,
         Delete,
         PageUp,
@@ -140,6 +140,6 @@ namespace MiniGlobe.Renderer
         Comma,
         Period,
         Slash,
-        BackSlash,
+        Backslash,
     }
 }
