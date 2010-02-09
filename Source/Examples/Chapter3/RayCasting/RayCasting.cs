@@ -47,9 +47,10 @@ namespace MiniGlobe.Examples.Chapter3.RayCasting
             Bitmap bitmap = new Bitmap("NE2_50M_SR_W_4096.jpg");
             _texture = Device.CreateTexture2D(bitmap, TextureFormat.RedGreenBlue8, false);
 
-            _globe = new RayCastedGlobe(_window.Context, globeShape);
+            _globe = new RayCastedGlobe(_window.Context);
+            _globe.Shape = globeShape;
             _globe.Texture = _texture;
-            _globe.ShowWireframeBoundingVolume = true;
+            _globe.ShowWireframeBoundingBox = true;
 
             _sceneState.Camera.ZoomToTarget(globeShape.MaximumRadius);
             //CenterCameraOnPoint();

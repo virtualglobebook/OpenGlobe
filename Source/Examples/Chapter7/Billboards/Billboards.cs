@@ -162,7 +162,8 @@ namespace MiniGlobe.Examples.Chapter7.Billboards
             Bitmap bitmap = new Bitmap("NE2_50M_SR_W_4096.jpg");
             _texture = Device.CreateTexture2D(bitmap, TextureFormat.RedGreenBlue8, false);
             
-            _globe = new RayCastedGlobe(_window.Context, globeShape);
+            _globe = new RayCastedGlobe(_window.Context);
+            _globe.Shape = globeShape;
             _globe.Texture = _texture;
             _billboards = new BillboardGroup(_window.Context, positions, new Bitmap(@"032.png"));
 

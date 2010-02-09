@@ -19,7 +19,7 @@ namespace MiniGlobe.Scene
 {
     public sealed class RayCastedGlobe : IRenderable, IDisposable
     {
-        public RayCastedGlobe(Context context, Ellipsoid globeShape)
+        public RayCastedGlobe(Context context)
         {
             _context = context;
 
@@ -48,6 +48,7 @@ namespace MiniGlobe.Scene
                   uniform sampler2D mg_texture0;
                   uniform vec3 mg_cameraLightPosition;
                   uniform vec3 mg_cameraEye;
+                  uniform vec3 u_cameraEyeSquared;
                   uniform vec3 u_globeOneOverRadiiSquared;";
             fs += RayIntersectEllipsoidGLSL();
             fs += ComputeWorldPositionDepthGLSL();
@@ -78,7 +79,7 @@ namespace MiniGlobe.Scene
                   void main()
                   {
                       vec3 rayDirection = normalize(worldPosition - mg_cameraEye);
-                      Intersection i = RayIntersectEllipsoid(mg_cameraEye, rayDirection, u_globeOneOverRadiiSquared);
+                      Intersection i = RayIntersectEllipsoid(mg_cameraEye, u_cameraEyeSquared, rayDirection, u_globeOneOverRadiiSquared);
 
                       if (i.Intersects)
                       {
@@ -98,15 +99,9 @@ namespace MiniGlobe.Scene
                       }
                   }";
             _sp = Device.CreateShaderProgram(vs, fs);
-            (_sp.Uniforms["u_globeOneOverRadiiSquared"] as Uniform<Vector3>).Value = Conversion.ToVector3(globeShape.OneOverRadiiSquared);
-
-            Mesh mesh = BoxTessellator.Compute(2 * globeShape.Radii);
-            _va = context.CreateVertexArray(mesh, _sp.VertexAttributes, BufferHint.StaticDraw);
-            _primitiveType = mesh.PrimitiveType;
+            _cameraEyeSquaredSP = _sp.Uniforms["u_cameraEyeSquared"] as Uniform<Vector3>;
 
             _renderState = new RenderState();
-            _renderState.FacetCulling.Face = CullFace.Front;
-            _renderState.FacetCulling.FrontFaceWindingOrder = mesh.FrontFaceWindingOrder;
 
             ///////////////////////////////////////////////////////////////////
 
@@ -119,6 +114,7 @@ namespace MiniGlobe.Scene
                   uniform mat4x2 mg_modelZToClipCoordinates;
                   uniform vec4 mg_diffuseSpecularAmbientShininess;
                   uniform vec3 mg_cameraEye;
+                  uniform vec3 u_cameraEyeSquared;
                   uniform vec3 u_globeOneOverRadiiSquared;";
             solidFS += RayIntersectEllipsoidGLSL();
             solidFS += ComputeWorldPositionDepthGLSL();
@@ -126,7 +122,7 @@ namespace MiniGlobe.Scene
                 @"void main()
                   {
                       vec3 rayDirection = normalize(worldPosition - mg_cameraEye);
-                      Intersection i = RayIntersectEllipsoid(mg_cameraEye, rayDirection, u_globeOneOverRadiiSquared);
+                      Intersection i = RayIntersectEllipsoid(mg_cameraEye, u_cameraEyeSquared, rayDirection, u_globeOneOverRadiiSquared);
 
                       if (i.Intersects)
                       {
@@ -137,12 +133,11 @@ namespace MiniGlobe.Scene
                       }
                       else
                       {
-                          fragmentColor = vec4(0.3, 0.3, 0.3, 1.0);
+                          fragmentColor = vec4(0.2, 0.2, 0.2, 1.0);
                       }
                   }";
-            
             _solidSP = Device.CreateShaderProgram(vs, solidFS);
-            (_solidSP.Uniforms["u_globeOneOverRadiiSquared"] as Uniform<Vector3>).Value = Conversion.ToVector3(globeShape.OneOverRadiiSquared);
+            _cameraEyeSquaredSolidSP = _solidSP.Uniforms["u_cameraEyeSquared"] as Uniform<Vector3>;
 
             ///////////////////////////////////////////////////////////////////
 
@@ -160,9 +155,12 @@ namespace MiniGlobe.Scene
             _boxRenderState = new RenderState();
             _boxRenderState.RasterizationMode = RasterizationMode.Line;
             _boxRenderState.FacetCulling.Face = CullFace.Front;
-            _boxRenderState.FacetCulling.FrontFaceWindingOrder = mesh.FrontFaceWindingOrder;
 
+            ///////////////////////////////////////////////////////////////////
+
+            Shape = Ellipsoid.UnitSphere;
             Shade = true;
+            ShowGlobe = true;
         }
 
         private static string PassThroughVS()
@@ -191,11 +189,11 @@ namespace MiniGlobe.Scene
                   //
                   // Assumes ellipsoid is at (0, 0, 0)
                   //
-                  Intersection RayIntersectEllipsoid(vec3 rayOrigin, vec3 rayDirection, vec3 oneOverEllipsoidRadiiSquared)
+                  Intersection RayIntersectEllipsoid(vec3 rayOrigin, vec3 rayOriginSquared, vec3 rayDirection, vec3 oneOverEllipsoidRadiiSquared)
                   {
                       float a = dot(rayDirection * rayDirection, oneOverEllipsoidRadiiSquared);
                       float b = 2.0 * dot(rayOrigin * rayDirection, oneOverEllipsoidRadiiSquared);
-                      float c = dot(rayOrigin * rayOrigin, oneOverEllipsoidRadiiSquared) - 1.0;
+                      float c = dot(rayOriginSquared, oneOverEllipsoidRadiiSquared) - 1.0;
                       float discriminant = b * b - 4.0 * a * c;
 
                       if (discriminant < 0.0)
@@ -227,6 +225,35 @@ namespace MiniGlobe.Scene
                 }";
         }
 
+        private static Vector3d MultiplyVectorComponents(Vector3d left, Vector3d right)
+        {
+            return new Vector3d(left.X * right.X, left.Y * right.Y, left.Z * right.Z);
+        }
+
+        private void Clean()
+        {
+            if (_dirty)
+            {
+                if (_va != null)
+                {
+                    _va.Dispose();
+                }
+
+                Mesh mesh = BoxTessellator.Compute(2 * _shape.Radii);
+                _va = _context.CreateVertexArray(mesh, _sp.VertexAttributes, BufferHint.StaticDraw);
+                _primitiveType = mesh.PrimitiveType;
+
+                _renderState.FacetCulling.Face = CullFace.Front;
+                _renderState.FacetCulling.FrontFaceWindingOrder = mesh.FrontFaceWindingOrder;
+                _boxRenderState.FacetCulling.FrontFaceWindingOrder = mesh.FrontFaceWindingOrder;
+
+                (_sp.Uniforms["u_globeOneOverRadiiSquared"] as Uniform<Vector3>).Value = Conversion.ToVector3(_shape.OneOverRadiiSquared);
+                (_solidSP.Uniforms["u_globeOneOverRadiiSquared"] as Uniform<Vector3>).Value = Conversion.ToVector3(_shape.OneOverRadiiSquared);
+
+                _dirty = false;
+            }
+        }
+
         #region IRenderable Members
 
         public void Render(SceneState sceneState)
@@ -236,20 +263,30 @@ namespace MiniGlobe.Scene
                 throw new InvalidOperationException("Texture");
             }
 
-            if (Shade)
-            {
-                _context.TextureUnits[0].Texture2D = Texture;
-                _context.Bind(_sp);
-            }
-            else
-            {
-                _context.Bind(_solidSP);
-            }
-            _context.Bind(_renderState);
-            _context.Bind(_va);
-            _context.Draw(_primitiveType, sceneState);
+            Clean();
 
-            if (ShowWireframeBoundingVolume)
+            if (ShowGlobe)
+            {
+                Vector3d eye = sceneState.Camera.Eye;
+                Vector3 cameraEyeSquared = Conversion.ToVector3(MultiplyVectorComponents(eye, eye));
+
+                if (Shade)
+                {
+                    _context.TextureUnits[0].Texture2D = Texture;
+                    _context.Bind(_sp);
+                    _cameraEyeSquaredSP.Value = cameraEyeSquared;
+                }
+                else
+                {
+                    _context.Bind(_solidSP);
+                    _cameraEyeSquaredSolidSP.Value = cameraEyeSquared;
+                }
+                _context.Bind(_renderState);
+                _context.Bind(_va);
+                _context.Draw(_primitiveType, sceneState);
+            }
+
+            if (ShowWireframeBoundingBox)
             {
                 _context.Bind(_boxRenderState);
                 _context.Bind(_boxSP);
@@ -264,8 +301,19 @@ namespace MiniGlobe.Scene
             get { return _context; }
         }
 
+        public Ellipsoid Shape
+        {
+            get { return _shape; }
+            set
+            {
+                _dirty = true;
+                _shape = value;
+            }
+        }
+
         public bool Shade { get; set; }
-        public bool ShowWireframeBoundingVolume { get; set; }
+        public bool ShowGlobe { get; set; }
+        public bool ShowWireframeBoundingBox { get; set; }
         public Texture2D Texture { get; set; }
 
         #region IDisposable Members
@@ -274,20 +322,31 @@ namespace MiniGlobe.Scene
         {
             _sp.Dispose();
             _solidSP.Dispose();
-            _va.Dispose();
             _boxSP.Dispose();
+
+            if (_va != null)
+            {
+                _va.Dispose();
+            }
         }
 
         #endregion
 
         private readonly Context _context;
+
         private readonly RenderState _renderState;
         private readonly ShaderProgram _sp;
+        private readonly Uniform<Vector3> _cameraEyeSquaredSP;
         private readonly ShaderProgram _solidSP;
-        private readonly VertexArray _va;
-        private readonly PrimitiveType _primitiveType;
+        private readonly Uniform<Vector3> _cameraEyeSquaredSolidSP;
 
         private readonly RenderState _boxRenderState;
         private readonly ShaderProgram _boxSP;
+
+        private VertexArray _va;
+        private PrimitiveType _primitiveType;
+
+        private Ellipsoid _shape;
+        private bool _dirty;
     }
 }

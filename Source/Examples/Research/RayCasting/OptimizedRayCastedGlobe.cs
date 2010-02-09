@@ -21,7 +21,7 @@ namespace MiniGlobe.Examples.Research.RayCasting
 {
     public sealed class OptimizedRayCastedGlobe : IRenderable, IDisposable
     {
-        public OptimizedRayCastedGlobe(Context context, Ellipsoid globeShape)
+        public OptimizedRayCastedGlobe(Context context)
         {
             _context = context;
 
@@ -29,27 +29,29 @@ namespace MiniGlobe.Examples.Research.RayCasting
                 @"#version 150
 
                   in vec4 position;
-                  uniform mat4 mg_orthographicProjectionMatrix;
+                  out vec3 worldPosition;
+
+                  uniform mat4 mg_modelViewPerspectiveProjectionMatrix;
 
                   void main()                     
                   {
-                      gl_Position = mg_orthographicProjectionMatrix * position; 
+                      gl_Position = mg_modelViewPerspectiveProjectionMatrix * position; 
+                      worldPosition = position.xyz;
                   }";
 
             string fs =
                 @"#version 150
                  
+                  in vec3 worldPosition;
                   out vec4 fragmentColor;
 
-                  uniform vec4 mg_viewport;
-                  uniform mat4 mg_windowToWorldNearPlane;
                   uniform mat4x2 mg_modelZToClipCoordinates;
                   uniform vec4 mg_diffuseSpecularAmbientShininess;
                   uniform sampler2D mg_texture0;
                   uniform vec3 mg_cameraLightPosition;
                   uniform vec3 mg_cameraEye;
+                  uniform vec3 u_cameraEyeSquared;
                   uniform vec3 u_globeOneOverRadiiSquared;";
-            fs += WindowToNormalizedDeviceCoordinates();
             fs += RayIntersectEllipsoidGLSL();
             fs += ComputeWorldPositionDepthGLSL();
             fs +=
@@ -78,13 +80,8 @@ namespace MiniGlobe.Examples.Research.RayCasting
 
                   void main()
                   {
-                      vec2 w = WindowToNormalizedDeviceCoordinates(gl_FragCoord.xy, mg_viewport);
-                      vec3 wOnNearPlane = (mg_windowToWorldNearPlane * vec4(w.xy, 0, 1)).xyz;
-
-                      vec3 rayDirection = normalize(wOnNearPlane - mg_cameraEye);
-                      /////////////////////////////////////////////////////////
-
-                      Intersection i = RayIntersectEllipsoid(mg_cameraEye, rayDirection, u_globeOneOverRadiiSquared);
+                      vec3 rayDirection = normalize(worldPosition - mg_cameraEye);
+                      Intersection i = RayIntersectEllipsoid(mg_cameraEye, u_cameraEyeSquared, rayDirection, u_globeOneOverRadiiSquared);
 
                       if (i.Intersects)
                       {
@@ -104,16 +101,7 @@ namespace MiniGlobe.Examples.Research.RayCasting
                       }
                   }";
             _sp = Device.CreateShaderProgram(vs, fs);
-            (_sp.Uniforms["u_globeOneOverRadiiSquared"] as Uniform<Vector3>).Value = Conversion.ToVector3(globeShape.OneOverRadiiSquared);
-
-            Mesh mesh = BoxTessellator.Compute(2 * globeShape.Radii);
-            _volumePositions = (mesh.Attributes["position"] as VertexAttribute<Vector3d>).Values;
-
-            _projectionPositions = Device.CreateVertexBuffer(BufferHint.StreamDraw, 4 * Vector2.SizeInBytes);
-            AttachedVertexBuffer attachedPositionBuffer = new AttachedVertexBuffer(
-                _projectionPositions, VertexAttributeComponentType.Float, 2);
-            _va = _context.CreateVertexArray();
-            _va.VertexBuffers[_sp.VertexAttributes["position"].Location] = attachedPositionBuffer;
+            _cameraEyeSquaredSP = _sp.Uniforms["u_cameraEyeSquared"] as Uniform<Vector3>;
 
             _renderState = new RenderState();
             _renderState.FacetCulling.Enabled = false;
@@ -123,26 +111,20 @@ namespace MiniGlobe.Examples.Research.RayCasting
             string solidFS =
                 @"#version 150
                  
+                  in vec3 worldPosition;
                   out vec4 fragmentColor;
 
-                  uniform vec4 mg_viewport;
-                  uniform mat4 mg_windowToWorldNearPlane;
                   uniform mat4x2 mg_modelZToClipCoordinates;
                   uniform vec3 mg_cameraEye;
+                  uniform vec3 u_cameraEyeSquared;
                   uniform vec3 u_globeOneOverRadiiSquared;";
-            solidFS += WindowToNormalizedDeviceCoordinates();
             solidFS += RayIntersectEllipsoidGLSL();
             solidFS += ComputeWorldPositionDepthGLSL();
             solidFS +=
                 @"void main()
                   {
-                      vec2 w = WindowToNormalizedDeviceCoordinates(gl_FragCoord.xy, mg_viewport);
-                      vec3 wOnNearPlane = (mg_windowToWorldNearPlane * vec4(w.xy, 0, 1)).xyz;
-
-                      vec3 rayDirection = normalize(wOnNearPlane - mg_cameraEye);
-                      /////////////////////////////////////////////////////////
-
-                      Intersection i = RayIntersectEllipsoid(mg_cameraEye, rayDirection, u_globeOneOverRadiiSquared);
+                      vec3 rayDirection = normalize(worldPosition - mg_cameraEye);
+                      Intersection i = RayIntersectEllipsoid(mg_cameraEye, u_cameraEyeSquared, rayDirection, u_globeOneOverRadiiSquared);
 
                       if (i.Intersects)
                       {
@@ -154,7 +136,7 @@ namespace MiniGlobe.Examples.Research.RayCasting
                       }
                   }";
             _solidSP = Device.CreateShaderProgram(vs, solidFS);
-            (_solidSP.Uniforms["u_globeOneOverRadiiSquared"] as Uniform<Vector3>).Value = Conversion.ToVector3(globeShape.OneOverRadiiSquared);
+            _cameraEyeSquaredSolidSP = _solidSP.Uniforms["u_cameraEyeSquared"] as Uniform<Vector3>;
 
             ///////////////////////////////////////////////////////////////////
 
@@ -172,8 +154,17 @@ namespace MiniGlobe.Examples.Research.RayCasting
             _wireframeRenderState = new RenderState();
             _wireframeRenderState.RasterizationMode = RasterizationMode.Line;
             _wireframeRenderState.FacetCulling.Enabled = false;
-            
+            _wireframeRenderState.DepthTest.Enabled = false;
+
+            ///////////////////////////////////////////////////////////////////
+
+            _va = _context.CreateVertexArray();
+
+            ///////////////////////////////////////////////////////////////////
+
+            Shape = Ellipsoid.UnitSphere;
             Shade = true;
+            NumberOfBoundingPolygonPoints = 3;
         }
 
         private static string RayIntersectEllipsoidGLSL()
@@ -188,11 +179,11 @@ namespace MiniGlobe.Examples.Research.RayCasting
                   //
                   // Assumes ellipsoid is at (0, 0, 0)
                   //
-                  Intersection RayIntersectEllipsoid(vec3 rayOrigin, vec3 rayDirection, vec3 oneOverEllipsoidRadiiSquared)
+                  Intersection RayIntersectEllipsoid(vec3 rayOrigin, vec3 rayOriginSquared, vec3 rayDirection, vec3 oneOverEllipsoidRadiiSquared)
                   {
                       float a = dot(rayDirection * rayDirection, oneOverEllipsoidRadiiSquared);
                       float b = 2.0 * dot(rayOrigin * rayDirection, oneOverEllipsoidRadiiSquared);
-                      float c = dot(rayOrigin * rayOrigin, oneOverEllipsoidRadiiSquared) - 1.0;
+                      float c = dot(rayOriginSquared, oneOverEllipsoidRadiiSquared) - 1.0;
                       float discriminant = b * b - 4.0 * a * c;
 
                       if (discriminant < 0.0)
@@ -224,46 +215,66 @@ namespace MiniGlobe.Examples.Research.RayCasting
                 }";
         }
 
-        private static string WindowToNormalizedDeviceCoordinates()
+        // TODO:  Duplicate with RayCastedGlobe.MultiplyVectorComponents
+        private static Vector3d MultiplyVectorComponents(Vector3d left, Vector3d right)
         {
-            return
-              @"vec2 WindowToNormalizedDeviceCoordinates(vec2 fragmentCoordinate, vec4 viewport)
-                {
-                    vec2 v = vec2(fragmentCoordinate.xy / viewport.zw);
-                    v = (2.0 * v) - 1.0;                                    // Scale [0, 1] to [-1, 1]
-                    return v;
-                }";
+            return new Vector3d(left.X * right.X, left.Y * right.Y, left.Z * right.Z);
+        }
+
+        private static Vector3d MostOrthogonalAxis(Vector3d v)
+        {
+            double x = Math.Abs(v.X);
+            double y = Math.Abs(v.Y);
+            double z = Math.Abs(v.Z);
+
+            if ((x < y) && (x < z))
+            {
+                return Vector3d.UnitX;
+            }
+            else if ((y < x) && (y < z))
+            {
+                return Vector3d.UnitY;
+            }
+            else
+            {
+                return Vector3d.UnitZ;
+            }
+        }
+
+        private static Vector3d[] BoundingPolygon(Vector3d q, Vector3d DInverse, int n)
+        {
+            if (n < 3)
+            {
+                throw new ArgumentOutOfRangeException("n");
+            }
+            
+            // TODO:  Place holder
+            return new Vector3d[] { Vector3d.UnitX, Vector3d.UnitY, Vector3d.UnitZ };
         }
 
         #region IRenderable Members
 
         public void Render(SceneState sceneState)
         {
-            Vector2d minWindow = new Vector2d(double.MaxValue, double.MaxValue);
-            Vector2d maxWindow = new Vector2d(double.MinValue, double.MinValue);
-
-            Matrix4d mvp = sceneState.ModelViewPerspectiveProjectionMatrix;
-            Matrix4d viewportTransform = sceneState.ComputeViewportTransformationMatrix(_context.Viewport);
-
-            for (int i = 0; i < _volumePositions.Count; ++i)
+            int sizeInBytes = NumberOfBoundingPolygonPoints * Vector3d.SizeInBytes;
+            if ((_projectionPositions == null) || (_projectionPositions.SizeInBytes != sizeInBytes))
             {
-                Vector4d model = new Vector4d(_volumePositions[i].X, _volumePositions[i].Y, _volumePositions[i].Z, 1);
-                Vector4d clip = Vector4d.Transform(model, mvp);
-                Vector4d ndc = new Vector4d(clip.X / clip.W, clip.Y / clip.W, clip.Z / clip.W, clip.W);
-                Vector4d window = Vector4d.Transform(new Vector4d(ndc.X + 1, ndc.Y + 1, ndc.Z, 1), viewportTransform);
+                _projectionPositions = Device.CreateVertexBuffer(BufferHint.StreamDraw, sizeInBytes);
+                AttachedVertexBuffer attachedPositionBuffer = new AttachedVertexBuffer(
+                    _projectionPositions, VertexAttributeComponentType.Double, 3);
 
-                minWindow = new Vector2d(Math.Min(minWindow.X, window.X), Math.Min(minWindow.Y, window.Y));
-                maxWindow = new Vector2d(Math.Max(maxWindow.X, window.X), Math.Max(maxWindow.Y, window.Y));
+                int location = _sp.VertexAttributes["position"].Location;
+                if (_va.VertexBuffers[location] != null)
+                {
+                    _va.VertexBuffers[location].VertexBuffer.Dispose();
+                }
+                _va.VertexBuffers[location] = attachedPositionBuffer;
             }
+            
+            Vector3d q = MultiplyVectorComponents(_d, sceneState.Camera.Eye);
+            Vector3d[] polygon = BoundingPolygon(q, _dInverse, NumberOfBoundingPolygonPoints);
 
-            Vector2[] positions = new Vector2[] 
-            { 
-                Conversion.ToVector2(minWindow),
-                Conversion.ToVector2(new Vector2d(maxWindow.X, minWindow.Y)),
-                Conversion.ToVector2(maxWindow),
-                Conversion.ToVector2(new Vector2d(minWindow.X, maxWindow.Y))
-            };
-            _projectionPositions.CopyFromSystemMemory(positions);
+            _projectionPositions.CopyFromSystemMemory(polygon);
 
             ///////////////////////////////////////////////////////////////////
 
@@ -272,20 +283,25 @@ namespace MiniGlobe.Examples.Research.RayCasting
                 throw new InvalidOperationException("Texture");
             }
 
+            Vector3d eye = sceneState.Camera.Eye;
+            Vector3 cameraEyeSquared = Conversion.ToVector3(MultiplyVectorComponents(eye, eye));
+
             if (Shade)
             {
                 _context.TextureUnits[0].Texture2D = Texture;
                 _context.Bind(_sp);
+                _cameraEyeSquaredSP.Value = cameraEyeSquared;
             }
             else
             {
                 _context.Bind(_solidSP);
+                _cameraEyeSquaredSolidSP.Value = cameraEyeSquared;
             }
             _context.Bind(_renderState);
             _context.Bind(_va);
             _context.Draw(PrimitiveType.TriangleFan, sceneState);
 
-            if (ShowWireframeBoundingVolume)
+            if (ShowWireframeBoundingPolygon)
             {
                 _context.Bind(_wireframeRenderState);
                 _context.Bind(_wireFrameSP);
@@ -300,8 +316,23 @@ namespace MiniGlobe.Examples.Research.RayCasting
             get { return _context; }
         }
 
+        public Ellipsoid Shape 
+        {
+            get { return _shape; }
+            set
+            {
+                _shape = value;
+                _d = new Vector3d(1 / _shape.Radii.X, 1 / _shape.Radii.Y, 1 / _shape.Radii.Z);
+                _dInverse = new Vector3d(_shape.Radii.X, _shape.Radii.Y, _shape.Radii.Z);
+
+                (_sp.Uniforms["u_globeOneOverRadiiSquared"] as Uniform<Vector3>).Value = Conversion.ToVector3(_shape.OneOverRadiiSquared);
+                (_solidSP.Uniforms["u_globeOneOverRadiiSquared"] as Uniform<Vector3>).Value = Conversion.ToVector3(_shape.OneOverRadiiSquared);
+            }
+        }
+
         public bool Shade { get; set; }
-        public bool ShowWireframeBoundingVolume { get; set; }
+        public bool ShowWireframeBoundingPolygon { get; set; }
+        public int NumberOfBoundingPolygonPoints { get; set; }
         public Texture2D Texture { get; set; }
 
         #region IDisposable Members
@@ -309,25 +340,33 @@ namespace MiniGlobe.Examples.Research.RayCasting
         public void Dispose()
         {
             _sp.Dispose();
-            _va.Dispose();
-            _projectionPositions.Dispose();
             _solidSP.Dispose();
             _wireFrameSP.Dispose();
+            _va.Dispose();
+            if (_projectionPositions != null)
+            {
+                _projectionPositions.Dispose();
+            }
         }
 
         #endregion
 
         private readonly Context _context;
-        private readonly IList<Vector3d> _volumePositions;
-
-        private readonly VertexArray _va;
-        private readonly VertexBuffer _projectionPositions;
 
         private readonly RenderState _renderState;
         private readonly ShaderProgram _sp;
+        private readonly Uniform<Vector3> _cameraEyeSquaredSP;
         private readonly ShaderProgram _solidSP;
+        private readonly Uniform<Vector3> _cameraEyeSquaredSolidSP;
 
         private readonly RenderState _wireframeRenderState;
         private readonly ShaderProgram _wireFrameSP;
+
+        private readonly VertexArray _va;
+        private VertexBuffer _projectionPositions;
+
+        private Ellipsoid _shape;
+        private Vector3d _d;
+        private Vector3d _dInverse;
     }
 }

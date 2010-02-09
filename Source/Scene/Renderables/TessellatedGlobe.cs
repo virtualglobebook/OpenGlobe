@@ -81,6 +81,8 @@ namespace MiniGlobe.Scene
                   }";
             _sp = Device.CreateShaderProgram(vs, fs);
 
+            _renderState = new RenderState();
+
             Shape = Ellipsoid.UnitSphere;
             NumberOfSlicePartitions = 32;
             NumberOfStackPartitions = 16;
@@ -101,10 +103,6 @@ namespace MiniGlobe.Scene
                 _primitiveType = mesh.PrimitiveType;
                 _numberOfTriangles = ((mesh.Indices as Indices<int>).Values.Count / 3);
 
-                if (_renderState == null)
-                {
-                    _renderState = new RenderState();
-                }
                 _renderState.FacetCulling.FrontFaceWindingOrder = mesh.FrontFaceWindingOrder;
 
                 _dirty = false;
@@ -115,12 +113,12 @@ namespace MiniGlobe.Scene
 
         public void Render(SceneState sceneState)
         {
-            Clean();
-
             if (Texture == null)
             {
                 throw new InvalidOperationException("Texture");
             }
+
+            Clean();
 
             _renderState.RasterizationMode = Wireframe ? RasterizationMode.Line : RasterizationMode.Fill;
 
@@ -185,7 +183,10 @@ namespace MiniGlobe.Scene
         public void Dispose()
         {
             _sp.Dispose();
-            _va.Dispose();
+            if (_va != null)
+            {
+                _va.Dispose();
+            }
         }
 
         #endregion
@@ -193,7 +194,7 @@ namespace MiniGlobe.Scene
         private readonly Context _context;
         private readonly ShaderProgram _sp;
 
-        private RenderState _renderState;
+        private readonly RenderState _renderState;
         private VertexArray _va;
         private PrimitiveType _primitiveType;
 
