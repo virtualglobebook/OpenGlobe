@@ -265,6 +265,11 @@ namespace MiniGlobe.Scene
 
             Clean();
 
+            if (ShowGlobe || ShowWireframeBoundingBox)
+            {
+                _context.Bind(_va);
+            }
+
             if (ShowGlobe)
             {
                 Vector3d eye = sceneState.Camera.Eye;
@@ -282,7 +287,6 @@ namespace MiniGlobe.Scene
                     _cameraEyeSquaredSolidSP.Value = cameraEyeSquared;
                 }
                 _context.Bind(_renderState);
-                _context.Bind(_va);
                 _context.Draw(_primitiveType, sceneState);
             }
 
