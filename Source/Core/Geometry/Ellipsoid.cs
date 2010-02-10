@@ -31,6 +31,10 @@ namespace MiniGlobe.Core.Geometry
             }
 
             _radii = radii;
+            _oneOverRadii = new Vector3d(
+                1.0 / radii.X,
+                1.0 / radii.Y,
+                1.0 / radii.Z);
             _oneOverRadiiSquared = new Vector3d(
                 1.0 / (radii.X * radii.X), 
                 1.0 / (radii.Y * radii.Y), 
@@ -45,6 +49,11 @@ namespace MiniGlobe.Core.Geometry
         public Vector3d Radii 
         {
             get { return _radii; }
+        }
+
+        public Vector3d OneOverRadii
+        {
+            get { return _oneOverRadii; }
         }
 
         public Vector3d OneOverRadiiSquared
@@ -132,6 +141,7 @@ namespace MiniGlobe.Core.Geometry
         }
 
         private readonly Vector3d _radii;
+        private readonly Vector3d _oneOverRadii;
         private readonly Vector3d _oneOverRadiiSquared;
     }
 }
