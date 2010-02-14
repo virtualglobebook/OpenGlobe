@@ -61,7 +61,7 @@ namespace MiniGlobe.Examples.Chapter3.SubdivisionEllipsoid
                   in vec3 surfaceNormal;
                   in vec2 surfaceTextureCoordinate;
 
-                  out vec4 fragmentColor;
+                  out vec3 fragmentColor;
 
                   uniform vec4 mg_diffuseSpecularAmbientShininess;
                   uniform sampler2D mg_texture0;
@@ -83,7 +83,7 @@ namespace MiniGlobe.Examples.Chapter3.SubdivisionEllipsoid
                   {
                       vec3 normal = normalize(surfaceNormal);
                       float intensity = LightIntensity(normal,  normalize(positionToLight), normalize(positionToEye), mg_diffuseSpecularAmbientShininess);
-                      fragmentColor = vec4(intensity * texture(mg_texture0, surfaceTextureCoordinate).rgb, 1.0);
+                      fragmentColor = intensity * texture(mg_texture0, surfaceTextureCoordinate).rgb;
                   }";
             _sphereShaderProgram = Device.CreateShaderProgram(sphereVS, sphereFS);
 
@@ -101,11 +101,11 @@ namespace MiniGlobe.Examples.Chapter3.SubdivisionEllipsoid
             string fs =
                 @"#version 150
                  
-                  out vec4 fragmentColor;
+                  out vec3 fragmentColor;
 
                   void main()
                   {
-                      fragmentColor = vec4(1.0, 0.0, 0.0, 1.0);
+                      fragmentColor = vec3(1.0, 0.0, 0.0);
                   }";
             _ellipsoidShaderProgram = Device.CreateShaderProgram(vs, fs);
 

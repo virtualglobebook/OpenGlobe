@@ -56,7 +56,7 @@ namespace MiniGlobe.Examples.Chapter3.NightLights
                   in vec3 worldPosition;
                   in vec3 positionToLight;
                   in vec3 positionToEye;
-                  out vec4 fragmentColor;
+                  out vec3 fragmentColor;
 
                   uniform vec4 mg_diffuseSpecularAmbientShininess;
                   uniform sampler2D mg_texture0;                    // Day
@@ -83,15 +83,15 @@ namespace MiniGlobe.Examples.Chapter3.NightLights
                       return vec2(atan2(normal.y, normal.x) / mg_twoPi + 0.5, asin(normal.z) / mg_pi + 0.5);
                   }
 
-                  vec4 NightColor(vec3 normal)
+                  vec3 NightColor(vec3 normal)
                   {
-                      return vec4(texture(mg_texture1, ComputeTextureCoordinates(normal)).rgb, 1.0);
+                      return texture(mg_texture1, ComputeTextureCoordinates(normal)).rgb;
                   }
 
-                  vec4 DayColor(vec3 normal, vec3 toLight, vec3 toEye, float diffuseDot, vec4 diffuseSpecularAmbientShininess)
+                  vec3 DayColor(vec3 normal, vec3 toLight, vec3 toEye, float diffuseDot, vec4 diffuseSpecularAmbientShininess)
                   {
                       float intensity = LightIntensity(normal, toLight, toEye, diffuseDot, diffuseSpecularAmbientShininess);
-                      return vec4(intensity * texture(mg_texture0, ComputeTextureCoordinates(normal)).rgb, 1.0);
+                      return intensity * texture(mg_texture0, ComputeTextureCoordinates(normal)).rgb;
                   }
 
                   void main()
@@ -106,8 +106,8 @@ namespace MiniGlobe.Examples.Chapter3.NightLights
                       }
                       else if (diffuse >= -u_blendDuration)
                       {
-                          vec4 night = NightColor(normal);
-                          vec4 day = DayColor(normal, toLight, normalize(positionToEye), diffuse, mg_diffuseSpecularAmbientShininess);
+                          vec3 night = NightColor(normal);
+                          vec3 day = DayColor(normal, toLight, normalize(positionToEye), diffuse, mg_diffuseSpecularAmbientShininess);
                           fragmentColor = mix(night, day, (diffuse + u_blendDuration) * u_blendDurationScale);
                       }
                       else

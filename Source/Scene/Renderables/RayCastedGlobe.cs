@@ -41,7 +41,7 @@ namespace MiniGlobe.Scene
                 @"#version 150
                  
                   in vec3 worldPosition;
-                  out vec4 fragmentColor;
+                  out vec3 fragmentColor;
 
                   uniform mat4x2 mg_modelZToClipCoordinates;
                   uniform vec4 mg_diffuseSpecularAmbientShininess;
@@ -90,7 +90,7 @@ namespace MiniGlobe.Scene
                           vec3 toEye = normalize(mg_cameraEye - position);
                           float intensity = LightIntensity(normal, toLight, toEye, mg_diffuseSpecularAmbientShininess);
 
-                          fragmentColor = vec4(intensity * texture(mg_texture0, ComputeTextureCoordinates(normal)).rgb, 1.0);
+                          fragmentColor = intensity * texture(mg_texture0, ComputeTextureCoordinates(normal)).rgb;
                           gl_FragDepth = ComputeWorldPositionDepth(position, mg_modelZToClipCoordinates);
                       }
                       else
@@ -109,7 +109,7 @@ namespace MiniGlobe.Scene
                 @"#version 150
                  
                   in vec3 worldPosition;
-                  out vec4 fragmentColor;
+                  out vec3 fragmentColor;
 
                   uniform mat4x2 mg_modelZToClipCoordinates;
                   uniform vec4 mg_diffuseSpecularAmbientShininess;
@@ -128,12 +128,12 @@ namespace MiniGlobe.Scene
                       {
                           vec3 position = mg_cameraEye + (i.Time * rayDirection);
 
-                          fragmentColor = vec4(0.0, 1.0, 1.0, 1.0);
+                          fragmentColor = vec3(0.0, 1.0, 1.0);
                           gl_FragDepth = ComputeWorldPositionDepth(position, mg_modelZToClipCoordinates);
                       }
                       else
                       {
-                          fragmentColor = vec4(0.2, 0.2, 0.2, 1.0);
+                          fragmentColor = vec3(0.2, 0.2, 0.2);
                       }
                   }";
             _solidSP = Device.CreateShaderProgram(vs, solidFS);
@@ -144,11 +144,11 @@ namespace MiniGlobe.Scene
             string fs2 =
                 @"#version 150
                  
-                  out vec4 fragmentColor;
+                  out vec3 fragmentColor;
 
                   void main()
                   {
-                      fragmentColor = vec4(0.0, 0.0, 0.0, 1.0);
+                      fragmentColor = vec3(0.0, 0.0, 0.0);
                   }";
             _boxSP = Device.CreateShaderProgram(PassThroughVS(), fs2);
 

@@ -56,7 +56,7 @@ namespace MiniGlobe.Examples.Chapter3.SubdivisionSphere1
                   in vec3 worldPosition;
                   in vec3 positionToLight;
                   in vec3 positionToEye;
-                  out vec4 fragmentColor;
+                  out vec3 fragmentColor;
 
                   uniform vec4 mg_diffuseSpecularAmbientShininess;
                   uniform sampler2D mg_texture0;
@@ -83,7 +83,7 @@ namespace MiniGlobe.Examples.Chapter3.SubdivisionSphere1
                   {
                       vec3 normal = normalize(worldPosition);
                       float intensity = LightIntensity(normal,  normalize(positionToLight), normalize(positionToEye), mg_diffuseSpecularAmbientShininess);
-                      fragmentColor = vec4(intensity * texture(mg_texture0, ComputeTextureCoordinates(normal)).rgb, 1.0);
+                      fragmentColor = intensity * texture(mg_texture0, ComputeTextureCoordinates(normal)).rgb;
                   }";
             _sp = Device.CreateShaderProgram(vs, fs);
 
