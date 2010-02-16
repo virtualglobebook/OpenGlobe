@@ -104,21 +104,21 @@ namespace MiniGlobe.Examples.Chapter3.NightLights
                       {
                           fragmentColor = DayColor(normal, toLight, normalize(positionToEye), diffuse, mg_diffuseSpecularAmbientShininess);
                       }
-                      else if (diffuse >= -u_blendDuration)
+                      else if (diffuse < -u_blendDuration)
+                      {
+                          fragmentColor = NightColor(normal);
+                      }
+                      else
                       {
                           vec3 night = NightColor(normal);
                           vec3 day = DayColor(normal, toLight, normalize(positionToEye), diffuse, mg_diffuseSpecularAmbientShininess);
                           fragmentColor = mix(night, day, (diffuse + u_blendDuration) * u_blendDurationScale);
                       }
-                      else
-                      {
-                          fragmentColor = NightColor(normal);
-                      }
                   }";
             _sp = Device.CreateShaderProgram(vs, fs);
 
             float blendDurationScale = 0.1f;
-            (_sp.Uniforms["u_blendDuration"] as Uniform<float>).Value = 0.1f;
+            (_sp.Uniforms["u_blendDuration"] as Uniform<float>).Value = blendDurationScale;
             (_sp.Uniforms["u_blendDurationScale"] as Uniform<float>).Value = 1 / (2 * blendDurationScale);
 
             Mesh mesh = SubdivisionSphereTessellatorSimple.Compute(5);
@@ -151,7 +151,7 @@ namespace MiniGlobe.Examples.Chapter3.NightLights
             Context context = _window.Context;
 
 #if FBO
-            HighResolutionSnapFrameBuffer snapBuffer = new HighResolutionSnapFrameBuffer(context, 3, 600, _sceneState.Camera.AspectRatio);
+            HighResolutionSnapFrameBuffer snapBuffer = new HighResolutionSnapFrameBuffer(context, 2, 600, _sceneState.Camera.AspectRatio);
             _window.Context.Viewport = new Rectangle(0, 0, snapBuffer.WidthInPixels, snapBuffer.HeightInPixels);
             context.Bind(snapBuffer.FrameBuffer);
 #endif
@@ -165,7 +165,7 @@ namespace MiniGlobe.Examples.Chapter3.NightLights
             context.Draw(_primitiveType, _sceneState);
 
 #if FBO
-            snapBuffer.SaveColorBuffer(@"E:\Dropbox\My Dropbox\Book\Manuscript\GlobeRendering\Figures\NightLights.png");
+            snapBuffer.SaveColorBuffer(@"E:\Dropbox\My Dropbox\Book\Manuscript\GlobeRendering\Figures\NightLightsPointTwo.png");
             //snapBuffer.SaveDepthBuffer(@"c:\depth.tif");
             Environment.Exit(0);
 #endif
