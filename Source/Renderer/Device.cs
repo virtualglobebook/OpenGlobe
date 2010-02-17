@@ -141,6 +141,7 @@ namespace MiniGlobe.Renderer
             drawAutomaticUniformFactories.Add(new ViewportTransformationMatrixDrawAutomaticUniformFactory());
             drawAutomaticUniformFactories.Add(new ModelZToClipCoordinatesDrawAutomaticUniformFactory());
             drawAutomaticUniformFactories.Add(new WindowToWorldNearPlaneDrawAutomaticUniformFactory());
+            drawAutomaticUniformFactories.Add(new Wgs84AltitudeDrawAutomaticUniformFactory());
                         
             return drawAutomaticUniformFactories;
         }

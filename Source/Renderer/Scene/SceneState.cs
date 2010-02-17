@@ -98,9 +98,6 @@ namespace MiniGlobe.Renderer
                 // Bottom two rows of model-view-projection matirx
                 //
                 Matrix4d m = ModelViewPerspectiveProjectionMatrix;
-                //return new Matrix42(
-                //    (float)m.M31, (float)m.M32, (float)m.M33, (float)m.M34,
-                //    (float)m.M41, (float)m.M42, (float)m.M43, (float)m.M44);
                 return new Matrix42(
                     (float)m.M13, (float)m.M23, (float)m.M33, (float)m.M43,
                     (float)m.M14, (float)m.M24, (float)m.M34, (float)m.M44);

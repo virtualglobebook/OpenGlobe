@@ -11,6 +11,7 @@ using System;
 using System.IO;
 using System.Xml;
 using System.Globalization;
+using MiniGlobe.Core.Geometry;
 using OpenTK;
 
 namespace MiniGlobe.Renderer
@@ -118,6 +119,12 @@ namespace MiniGlobe.Renderer
                 Convert.ToDouble(up[0], CultureInfo.InvariantCulture),
                 Convert.ToDouble(up[1], CultureInfo.InvariantCulture),
                 Convert.ToDouble(up[2], CultureInfo.InvariantCulture));
+        }
+
+        // TODO:  This is not accurate
+        public double Altitude(Ellipsoid shape)
+        {
+            return Eye.Length - shape.MinimumRadius;
         }
     }
 }

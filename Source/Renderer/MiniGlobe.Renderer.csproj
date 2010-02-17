@@ -90,6 +90,8 @@
     <Compile Include="Shaders\DrawAutomaticUniforms\ViewportTransformationMatrixDrawAutomaticUniform.cs" />
     <Compile Include="Shaders\DrawAutomaticUniforms\ViewportTransformationMatrixDrawAutomaticUniformFactory.cs" />
     <Compile Include="Shaders\DrawAutomaticUniforms\ModelZToClipCoordinatesDrawAutomaticUniformFactory.cs" />
+    <Compile Include="Shaders\DrawAutomaticUniforms\Wgs84AltitudeDrawAutomaticUniform.cs" />
+    <Compile Include="Shaders\DrawAutomaticUniforms\Wgs84AltitudeDrawAutomaticUniformFactory.cs" />
     <Compile Include="Shaders\DrawAutomaticUniforms\WindowToWorldNearPlaneDrawAutomaticUniform.cs" />
     <Compile Include="Shaders\DrawAutomaticUniforms\WindowToWorldNearPlaneDrawAutomaticUniformFactory.cs" />
     <Compile Include="Shaders\LinkAutomaticUniforms\LinkAutomaticUniform.cs" />
