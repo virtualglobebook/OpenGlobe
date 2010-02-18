@@ -100,7 +100,7 @@ namespace MiniGlobe.Scene
         public double Azimuth
         {
             get { return _azimuth; }
-            set { _azimuth = value; }
+            set { _azimuth = value; UpdateCameraFromParameters(); }
         }
 
         /// <summary>
@@ -111,7 +111,7 @@ namespace MiniGlobe.Scene
         public double Elevation
         {
             get { return _elevation; }
-            set { _elevation = value; }
+            set { _elevation = value; UpdateCameraFromParameters(); }
         }
 
         /// <summary>
@@ -120,7 +120,7 @@ namespace MiniGlobe.Scene
         public double Range
         {
             get { return _range; }
-            set { _range = value; }
+            set { _range = value; UpdateCameraFromParameters(); }
         }
 
         /// <summary>
@@ -130,7 +130,7 @@ namespace MiniGlobe.Scene
         public Vector3d CenterPoint
         {
             get { return _centerPoint; }
-            set { _centerPoint = value; }
+            set { _centerPoint = value; UpdateCameraFromParameters(); }
         }
 
         /// <summary>
@@ -140,7 +140,7 @@ namespace MiniGlobe.Scene
         public Matrix3d FixedToLocalRotation
         {
             get { return _fixedToLocalRotation; }
-            set { _fixedToLocalRotation = value; }
+            set { _fixedToLocalRotation = value; UpdateCameraFromParameters(); }
         }
 
         /// <summary>
@@ -166,8 +166,14 @@ namespace MiniGlobe.Scene
                 new Matrix3d(-sinLon,            cosLon,             0.0,
                              -sinLat * cosLon,   -sinLat * sinLon,   cosLat,
                              cosLat * cosLon,    cosLat * sinLon,    sinLat);
+
+            UpdateCameraFromParameters();
         }
 
+        /// <summary>
+        /// Updates <see cref="Azimuth"/>, <see cref="Elevation"/>, and <see cref="Range"/>
+        /// properties based on the current position of the renderer <see cref="Camera"/>.
+        /// </summary>
         public void UpdateParametersFromCamera()
         {
             Vector3d eyePosition = _fixedToLocalRotation * (_camera.Eye - _camera.Target);
@@ -194,7 +200,7 @@ namespace MiniGlobe.Scene
             }
         }
 
-        public void UpdateCameraFromParameters()
+        private void UpdateCameraFromParameters()
         {
             _camera.Target = _centerPoint;
 
@@ -219,6 +225,11 @@ namespace MiniGlobe.Scene
             _camera.Up = localToFixed * _camera.Up;
         }
 
+        /// <summary>
+        /// Simulates a press of a mouse button at a particular point in client window coordinates.
+        /// </summary>
+        /// <param name="button">The mouse button that is pressed.</param>
+        /// <param name="point">The point at which the mouse button was pressed, in client window coordinates.</param>
         public void MouseDown(MouseButton button, Point point)
         {
             if (button == MouseButton.Left)
@@ -233,6 +244,11 @@ namespace MiniGlobe.Scene
             _lastPoint = point;
         }
 
+        /// <summary>
+        /// Simulates a release of a mouse button at a particular point in client window coordinates.
+        /// </summary>
+        /// <param name="button">The mouse button that was released.</param>
+        /// <param name="point">The point at which the mouse button was released, in client window coordinates.</param>
         public void MouseUp(MouseButton button, Point point)
         {
             if (button == MouseButton.Left)
@@ -245,6 +261,10 @@ namespace MiniGlobe.Scene
             }
         }
 
+        /// <summary>
+        /// Simulates a mouse move to a particular point in client window coordinates.
+        /// </summary>
+        /// <param name="point">The point to which the mouse moved, in client window coordinates.</param>
         public void MouseMove(Point point)
         {
             if (!_leftButtonDown && !_rightButtonDown)

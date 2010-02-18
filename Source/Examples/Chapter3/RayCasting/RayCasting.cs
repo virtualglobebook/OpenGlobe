@@ -89,7 +89,6 @@ namespace MiniGlobe.Examples.Chapter3.RayCasting
             _camera.Azimuth = 0.0;
             _camera.Elevation = Math.PI / 4.0;
             _camera.Range = _camera.Ellipsoid.MaximumRadius * 3.0;
-            _camera.UpdateCameraFromParameters();
         }
 
         private void CenterCameraOnGlobeCenter()
@@ -99,7 +98,6 @@ namespace MiniGlobe.Examples.Chapter3.RayCasting
             _camera.Azimuth = 0.0;
             _camera.Elevation = 0.0;
             _camera.Range = _camera.Ellipsoid.MaximumRadius * 3.0;
-            _camera.UpdateCameraFromParameters();
         }
 
         #region IDisposable Members

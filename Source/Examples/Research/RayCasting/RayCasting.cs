@@ -227,7 +227,6 @@ namespace MiniGlobe.Examples.Research.RayCasting
             _camera.Azimuth = 0.0;
             _camera.Elevation = Trig.ToRadians(10);
             _camera.Range = _globeShape.MaximumRadius * 0.05;
-            _camera.UpdateCameraFromParameters();
         }
 
         private void CenterCameraOnGlobeCenter()
