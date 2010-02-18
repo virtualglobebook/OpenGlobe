@@ -18,6 +18,12 @@ namespace MiniGlobe.Scene
 {
     public sealed class CameraGlobeCentered : IDisposable
     {
+        /// <summary>
+        /// Initializes a new instance.
+        /// </summary>
+        /// <param name="camera">The renderer camera that is to be manipulated by the new instance.</param>
+        /// <param name="window">The window in which the scene is drawn.</param>
+        /// <param name="ellipsoid">The ellipsoid defining the shape of the globe.</param>
         public CameraGlobeCentered(Camera camera, MiniGlobeWindow window, Ellipsoid ellipsoid)
         {
             if (camera == null)
@@ -40,6 +46,10 @@ namespace MiniGlobe.Scene
             _window.Mouse.Move += MouseMove;
         }
 
+        /// <summary>
+        /// Disposes the camera.  After it is disposed, the camera will not longer respond to
+        /// input events.
+        /// </summary>
         public void Dispose()
         {
             if (_window != null)
@@ -51,51 +61,91 @@ namespace MiniGlobe.Scene
             }
         }
 
+        /// <summary>
+        /// Gets the renderer camera that is manipulated by this instance.
+        /// </summary>
         public Camera Camera
         {
             get { return _camera; }
         }
-
+        
+        /// <summary>
+        /// Gets the window in which the scene is drawn.
+        /// </summary>
         public MiniGlobeWindow Window
         {
             get { return _window; }
         }
 
+        /// <summary>
+        /// Gets the ellipsoid defining the shape of the globe.
+        /// </summary>
         public Ellipsoid Ellipsoid
         {
             get { return _ellipsoid; }
         }
 
+        /// <summary>
+        /// Gets or sets the azimuth angle defining the position of the camera, in radians.  Azimuth is defined
+        /// as the angle between the positive X-axis and the projection of the camera position into the
+        /// X-Y plane.  Azimuth is positive toward the Y-axis.
+        /// </summary>
         public double Azimuth
         {
             get { return _azimuth; }
             set { _azimuth = value; }
         }
 
+        /// <summary>
+        /// Gets or sets the elevation angle defining the position of the camera, in radians.  Elevation is
+        /// defined as the angle of the camera out of the X-Y plane.  A positive elevation angle means a
+        /// positive Z coordinate, and a negative elevation angle means a negative Z coordinate.
+        /// </summary>
         public double Elevation
         {
             get { return _elevation; }
             set { _elevation = value; }
         }
 
+        /// <summary>
+        /// Gets or sets the camera's distance from the <see cref="CenterPoint"/>, in meters.
+        /// </summary>
         public double Range
         {
             get { return _range; }
             set { _range = value; }
         }
 
+        /// <summary>
+        /// Gets or sets the center point of the camera.  The camera always faces this point even as
+        /// <see cref="Azimuth"/>, <see cref="Elevation"/>, and <see cref="Range"/> change.
+        /// </summary>
         public Vector3d CenterPoint
         {
             get { return _centerPoint; }
             set { _centerPoint = value; }
         }
 
+        /// <summary>
+        /// Gets or sets the transformation from the <see cref="Ellipsoid"/> fixed axes to
+        /// the local axes in which the <see cref="Azimuth"/> and <see cref="Elevation"/> are defined.
+        /// </summary>
         public Matrix3d FixedToLocalRotation
         {
             get { return _fixedToLocalRotation; }
             set { _fixedToLocalRotation = value; }
         }
 
+        /// <summary>
+        /// Sets the <see cref="CenterPoint"/> and <see cref="FixedToLocalRotation"/> properties so that the
+        /// camera is looking at a given longitude, latitude, and height and is oriented in that point's local
+        /// East-North-Up frame.  This method does not change the <see cref="Azimuth"/>, <see cref="Elevation"/>,
+        /// or <see cref="Range"/> properties, but the existing values of those properties are interpreted in the
+        /// new reference frame.
+        /// </summary>
+        /// <param name="longitude">The longitude of the point to look at, in radians.</param>
+        /// <param name="latitude">The latitude of the point to look at, in radians.</param>
+        /// <param name="height">The height of the point to look at, in meters above the <see cref="Ellipsoid"/> surface.</param>
         public void ViewPoint(double longitude, double latitude, double height)
         {
             _centerPoint = _ellipsoid.DeticToVector3d(longitude, latitude, height);
@@ -117,7 +167,7 @@ namespace MiniGlobe.Scene
             Vector3d up = _fixedToLocalRotation * _camera.Up;
 
             _range = Math.Sqrt(eyePosition.X * eyePosition.X + eyePosition.Y * eyePosition.Y + eyePosition.Z * eyePosition.Z);
-            _elevation = Math.Acos(eyePosition.Z / _range);
+            _elevation = Math.Asin(eyePosition.Z / _range);
 
             if (eyePosition.Xy.LengthSquared < up.Xy.LengthSquared)
             {
@@ -141,10 +191,10 @@ namespace MiniGlobe.Scene
         {
             _camera.Target = _centerPoint;
 
-            double rangeTimesSinElevation = _range * Math.Sin(_elevation);
+            double rangeTimesSinElevation = _range * Math.Cos(_elevation);
             _camera.Eye = new Vector3d(rangeTimesSinElevation * Math.Cos(_azimuth),
                                        rangeTimesSinElevation * Math.Sin(_azimuth),
-                                       _range * Math.Cos(_elevation));
+                                       _range * Math.Sin(_elevation));
 
             Vector3d right = Vector3d.Cross(_camera.Eye, Vector3d.UnitZ);
             _camera.Up = Vector3d.Normalize(Vector3d.Cross(right, _camera.Eye));
@@ -240,7 +290,7 @@ namespace MiniGlobe.Scene
             double elevationWindowRatio = (double)movement.Height / (double)_window.Height;
 
             _azimuth -= azimuthWindowRatio * Trig.TwoPI;
-            _elevation -= elevationWindowRatio * Math.PI;
+            _elevation += elevationWindowRatio * Math.PI;
 
             while (_azimuth > Math.PI)
             {
@@ -251,13 +301,13 @@ namespace MiniGlobe.Scene
                 _azimuth += Trig.TwoPI;
             }
 
-            if (_elevation < 0.0)
+            if (_elevation < -Trig.HalfPI)
             {
-                _elevation = 0.0;
+                _elevation = -Trig.HalfPI;
             }
-            else if (_elevation > Math.PI)
+            else if (_elevation > Trig.HalfPI)
             {
-                _elevation = Math.PI;
+                _elevation = Trig.HalfPI;
             }
         }
 

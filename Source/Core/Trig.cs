@@ -14,6 +14,7 @@ namespace MiniGlobe.Core
     public static class Trig
     {
         public const double TwoPI = 2.0 * Math.PI;
+        public const double HalfPI = 0.5 * Math.PI;
         public const double RadiansPerDegree = Math.PI / 180.0;
 
         public static double ToRadians(double degrees)
