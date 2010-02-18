@@ -30,7 +30,7 @@ namespace MiniGlobe.Examples.Chapter7.Billboards
             _window.Resize += OnResize;
             _window.RenderFrame += OnRenderFrame;
             _sceneState = new SceneState();
-            _camera = new CameraGlobeCentered(_sceneState.Camera, _window, globeShape);
+            _camera = new CameraLookAtPoint(_sceneState.Camera, _window, globeShape);
 
             //
             // From http://www.infoplease.com/ipa/A0001769.html
@@ -223,7 +223,7 @@ namespace MiniGlobe.Examples.Chapter7.Billboards
 
         private readonly MiniGlobeWindow _window;
         private readonly SceneState _sceneState;
-        private readonly CameraGlobeCentered _camera;
+        private readonly CameraLookAtPoint _camera;
         private readonly RayCastedGlobe _globe;
         private readonly BillboardGroup _billboards;
         private readonly Texture2D _texture;

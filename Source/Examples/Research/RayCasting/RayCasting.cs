@@ -48,7 +48,7 @@ namespace MiniGlobe.Examples.Research.RayCasting
             _window.RenderFrame += OnRenderFrame;
             _window.Keyboard.KeyDown += OnKeyDown;
             _sceneState = new SceneState();
-            _camera = new CameraGlobeCentered(_sceneState.Camera, _window, _globeShape);
+            _camera = new CameraLookAtPoint(_sceneState.Camera, _window, _globeShape);
 
             Bitmap bitmap = new Bitmap("NE2_50M_SR_W_4096.jpg");
             _texture = Device.CreateTexture2D(bitmap, TextureFormat.RedGreenBlue8, false);
@@ -664,7 +664,7 @@ namespace MiniGlobe.Examples.Research.RayCasting
 
         private readonly MiniGlobeWindow _window;
         private readonly SceneState _sceneState;
-        private readonly CameraGlobeCentered _camera;
+        private readonly CameraLookAtPoint _camera;
         private readonly Texture2D _texture;
         private OptimizedRayCastedGlobe _optimizedRayCastedGlobe;
         private RayCastedGlobe _rayCastedGlobe;

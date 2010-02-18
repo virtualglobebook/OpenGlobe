@@ -16,7 +16,14 @@ using MiniGlobe.Core.Geometry;
 
 namespace MiniGlobe.Scene
 {
-    public sealed class CameraGlobeCentered : IDisposable
+    /// <summary>
+    /// A camera that always faces a particular point.  The location of the camera, from which
+    /// it views the point, is specified by an <see cref="Azimuth"/>, <see cref="Elevation"/>,
+    /// and <see cref="Range"/>.  <see cref="FixedToLocalRotation"/> defines the transformation
+    /// from the <see cref="Camera">Camera's</see> axes to a local set of axes in which the azimuth,
+    /// elevation, and range are defined.
+    /// </summary>
+    public sealed class CameraLookAtPoint : IDisposable
     {
         /// <summary>
         /// Initializes a new instance.
@@ -24,7 +31,7 @@ namespace MiniGlobe.Scene
         /// <param name="camera">The renderer camera that is to be manipulated by the new instance.</param>
         /// <param name="window">The window in which the scene is drawn.</param>
         /// <param name="ellipsoid">The ellipsoid defining the shape of the globe.</param>
-        public CameraGlobeCentered(Camera camera, MiniGlobeWindow window, Ellipsoid ellipsoid)
+        public CameraLookAtPoint(Camera camera, MiniGlobeWindow window, Ellipsoid ellipsoid)
         {
             if (camera == null)
             {

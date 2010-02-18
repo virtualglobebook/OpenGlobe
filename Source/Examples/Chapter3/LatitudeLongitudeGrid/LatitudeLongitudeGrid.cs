@@ -99,7 +99,7 @@ namespace MiniGlobe.Examples.Chapter3.LatitudeLongitudeGrid
             _window.Resize += OnResize;
             _window.RenderFrame += OnRenderFrame;
             _sceneState = new SceneState();
-            _camera = new CameraGlobeCentered(_sceneState.Camera, _window, Ellipsoid.UnitSphere);
+            _camera = new CameraLookAtPoint(_sceneState.Camera, _window, Ellipsoid.UnitSphere);
 
             string vs =
                 @"#version 150
@@ -285,7 +285,7 @@ namespace MiniGlobe.Examples.Chapter3.LatitudeLongitudeGrid
         private readonly Ellipsoid _globeShape;
         private readonly MiniGlobeWindow _window;
         private readonly SceneState _sceneState;
-        private readonly CameraGlobeCentered _camera;
+        private readonly CameraLookAtPoint _camera;
         private readonly RenderState _renderState;
         private readonly ShaderProgram _sp;
         private readonly VertexArray _va;

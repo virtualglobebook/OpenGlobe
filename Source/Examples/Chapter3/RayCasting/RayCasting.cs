@@ -30,7 +30,7 @@ namespace MiniGlobe.Examples.Chapter3.RayCasting
             _window.Resize += OnResize;
             _window.RenderFrame += OnRenderFrame;
             _sceneState = new SceneState();
-            _camera = new CameraGlobeCentered(_sceneState.Camera, _window, globeShape);
+            _camera = new CameraLookAtPoint(_sceneState.Camera, _window, globeShape);
 
             _window.Keyboard.KeyDown += delegate(object sender, KeyboardKeyEventArgs e)
             {
@@ -129,7 +129,7 @@ namespace MiniGlobe.Examples.Chapter3.RayCasting
 
         private readonly MiniGlobeWindow _window;
         private readonly SceneState _sceneState;
-        private readonly CameraGlobeCentered _camera;
+        private readonly CameraLookAtPoint _camera;
         private readonly RayCastedGlobe _globe;
         private readonly Texture2D _texture;
     }
