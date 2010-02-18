@@ -68,6 +68,26 @@ namespace MiniGlobe.Core.Coordinates
         }
 
         [Test]
+        public void NormalizeZeroVector()
+        {
+            Vector3d v = new Vector3d(0.0, 0.0, 0.0);
+            
+            Vector3d n1 = v.Normalize();
+            Assert.IsNaN(n1.X);
+            Assert.IsNaN(n1.Y);
+            Assert.IsNaN(n1.Z);
+            Assert.IsTrue(n1.IsUndefined);
+
+            double magnitude;
+            Vector3d n2 = v.Normalize(out magnitude);
+            Assert.IsNaN(n2.X);
+            Assert.IsNaN(n2.Y);
+            Assert.IsNaN(n2.Z);
+            Assert.IsTrue(n2.IsUndefined);
+            Assert.AreEqual(0.0, magnitude);
+        }
+
+        [Test]
         public void Add()
         {
             Vector3d v1 = new Vector3d(1.0, 2.0, 3.0);
@@ -136,6 +156,55 @@ namespace MiniGlobe.Core.Coordinates
             Assert.AreEqual(2.0, v3.X, 1e-14);
             Assert.AreEqual(4.0, v3.Y, 1e-14);
             Assert.AreEqual(6.0, v3.Z, 1e-14);
+        }
+
+        [Test]
+        public void Zero()
+        {
+            Assert.AreEqual(0.0, Vector3d.Zero.X);
+            Assert.AreEqual(0.0, Vector3d.Zero.Y);
+            Assert.AreEqual(0.0, Vector3d.Zero.Z);
+        }
+
+        [Test]
+        public void UnitX()
+        {
+            Assert.AreEqual(1.0, Vector3d.UnitX.X);
+            Assert.AreEqual(0.0, Vector3d.UnitX.Y);
+            Assert.AreEqual(0.0, Vector3d.UnitX.Z);
+        }
+
+        [Test]
+        public void UnitY()
+        {
+            Assert.AreEqual(0.0, Vector3d.UnitY.X);
+            Assert.AreEqual(1.0, Vector3d.UnitY.Y);
+            Assert.AreEqual(0.0, Vector3d.UnitY.Z);
+        }
+
+        [Test]
+        public void UnitZ()
+        {
+            Assert.AreEqual(0.0, Vector3d.UnitZ.X);
+            Assert.AreEqual(0.0, Vector3d.UnitZ.Y);
+            Assert.AreEqual(1.0, Vector3d.UnitZ.Z);
+        }
+
+        [Test]
+        public void Undefined()
+        {
+            Assert.IsNaN(Vector3d.Undefined.X);
+            Assert.IsNaN(Vector3d.Undefined.Y);
+            Assert.IsNaN(Vector3d.Undefined.Z);
+        }
+
+        [Test]
+        public void TestUndefined()
+        {
+            Assert.IsTrue(Vector3d.Undefined.IsUndefined);
+            Assert.IsFalse(Vector3d.UnitX.IsUndefined);
+            Assert.IsFalse(Vector3d.UnitY.IsUndefined);
+            Assert.IsFalse(Vector3d.UnitZ.IsUndefined);
         }
     }
 }

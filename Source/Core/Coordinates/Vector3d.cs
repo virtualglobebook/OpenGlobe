@@ -20,6 +20,31 @@ namespace MiniGlobe.Core.Coordinates
     /// </summary>
     public struct Vector3d
     {
+        public static Vector3d Zero
+        {
+            get { return new Vector3d(0.0, 0.0, 0.0); }
+        }
+
+        public static Vector3d UnitX
+        {
+            get { return new Vector3d(1.0, 0.0, 0.0); }
+        }
+
+        public static Vector3d UnitY
+        {
+            get { return new Vector3d(0.0, 1.0, 0.0); }
+        }
+
+        public static Vector3d UnitZ
+        {
+            get { return new Vector3d(0.0, 0.0, 1.0); }
+        }
+
+        public static Vector3d Undefined
+        {
+            get { return new Vector3d(Double.NaN, Double.NaN, Double.NaN); }
+        }
+
         public Vector3d(double x, double y, double z)
         {
             _x = x;
@@ -50,6 +75,11 @@ namespace MiniGlobe.Core.Coordinates
         public double Magnitude
         {
             get { return Math.Sqrt(MagnitudeSquared); }
+        }
+
+        public bool IsUndefined
+        {
+            get { return Double.IsNaN(_x); }
         }
 
         public Vector3d Normalize(out double magnitude)
