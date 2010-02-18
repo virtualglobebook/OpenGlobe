@@ -32,6 +32,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Conversion.cs" />
+    <Compile Include="Coordinates\Vector3d.cs" />
     <Compile Include="Disposable.cs" />
     <Compile Include="Geometry\Ellipsoid.cs" />
     <Compile Include="Geometry\Indices\Indices.cs" />
