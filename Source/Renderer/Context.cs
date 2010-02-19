@@ -233,6 +233,7 @@ namespace MiniGlobe.Renderer
         {
             Bind(renderState.PrimitiveRestart);
             Bind(renderState.FacetCulling);
+            Bind(renderState.ProgramPointSize);
             Bind(renderState.RasterizationMode);
             Bind(renderState.ScissorTest);
             Bind(renderState.StencilTest);
@@ -242,6 +243,7 @@ namespace MiniGlobe.Renderer
 
         public abstract void Bind(PrimitiveRestart primitiveRestart);
         public abstract void Bind(FacetCulling facetCulling);
+        public abstract void Bind(ProgramPointSize programPointSize);
         public abstract void Bind(RasterizationMode rasterizationMode);
         public abstract void Bind(ScissorTest scissorTest);
         public abstract void Bind(StencilTest stencilTest);

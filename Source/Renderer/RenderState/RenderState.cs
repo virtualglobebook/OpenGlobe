@@ -11,6 +11,12 @@ using System.Drawing;
 
 namespace MiniGlobe.Renderer
 {
+    public enum ProgramPointSize
+    {
+        Enabled,
+        Disabled
+    }
+
     public enum RasterizationMode
     {
         Point,
@@ -24,6 +30,7 @@ namespace MiniGlobe.Renderer
         {
             PrimitiveRestart = new PrimitiveRestart();
             FacetCulling = new FacetCulling();
+            ProgramPointSize = ProgramPointSize.Disabled;
             RasterizationMode = RasterizationMode.Fill;
             ScissorTest = new ScissorTest();
             StencilTest = new StencilTest();
@@ -33,6 +40,7 @@ namespace MiniGlobe.Renderer
 
         public PrimitiveRestart PrimitiveRestart { get; set; }
         public FacetCulling FacetCulling { get; set; }
+        public ProgramPointSize ProgramPointSize { get; set; }
         public RasterizationMode RasterizationMode { get; set; }
         public ScissorTest ScissorTest { get; set; }
         public StencilTest StencilTest { get; set; }

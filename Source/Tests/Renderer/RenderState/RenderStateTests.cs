@@ -41,6 +41,15 @@ namespace MiniGlobe.Renderer
         }
 
         [Test]
+        public void ProgramPointSize()
+        {
+            RenderState renderState = new RenderState();
+            renderState.ProgramPointSize = MiniGlobe.Renderer.ProgramPointSize.Disabled;
+
+            Assert.AreEqual(MiniGlobe.Renderer.ProgramPointSize.Disabled, renderState.ProgramPointSize);
+        }
+
+        [Test]
         public void RasterizationMode()
         {
             RenderState renderState = new RenderState();

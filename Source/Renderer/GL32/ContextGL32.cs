@@ -52,6 +52,7 @@ namespace MiniGlobe.Renderer.GL32
             GL.CullFace(TypeConverterGL32.To(renderState.FacetCulling.Face));
             GL.FrontFace(TypeConverterGL32.To(renderState.FacetCulling.FrontFaceWindingOrder));
 
+            Enable(EnableCap.ProgramPointSize, renderState.ProgramPointSize == ProgramPointSize.Enabled);
             GL.PolygonMode(MaterialFace.FrontAndBack, TypeConverterGL32.To(renderState.RasterizationMode));
 
             Enable(EnableCap.ScissorTest, renderState.ScissorTest.Enabled);
@@ -187,6 +188,15 @@ namespace MiniGlobe.Renderer.GL32
             {
                 GL.FrontFace(TypeConverterGL32.To(facetCulling.FrontFaceWindingOrder));
                 _renderState.FacetCulling.FrontFaceWindingOrder = facetCulling.FrontFaceWindingOrder;
+            }
+        }
+
+        public override void Bind(ProgramPointSize programPointSize)
+        {
+            if (_renderState.ProgramPointSize != programPointSize)
+            {
+                Enable(EnableCap.ProgramPointSize, programPointSize == ProgramPointSize.Enabled);
+                _renderState.ProgramPointSize = programPointSize;
             }
         }
 
