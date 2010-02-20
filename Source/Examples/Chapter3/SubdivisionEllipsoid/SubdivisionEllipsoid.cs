@@ -15,7 +15,7 @@ using MiniGlobe.Core.Geometry;
 using MiniGlobe.Core.Tessellation;
 using MiniGlobe.Renderer;
 
-namespace MiniGlobe.Examples.Chapter3.SubdivisionEllipsoid
+namespace MiniGlobe.Examples.Chapter3
 {
     sealed class SubdivisionEllipsoid : IDisposable
     {

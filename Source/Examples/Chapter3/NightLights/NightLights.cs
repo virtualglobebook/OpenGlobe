@@ -17,7 +17,7 @@ using MiniGlobe.Core.Tessellation;
 using MiniGlobe.Renderer;
 using MiniGlobe.Scene;
 
-namespace MiniGlobe.Examples.Chapter3.NightLights
+namespace MiniGlobe.Examples.Chapter3
 {
     sealed class NightLights : IDisposable
     {

@@ -17,7 +17,7 @@ using MiniGlobe.Core.Tessellation;
 using MiniGlobe.Renderer;
 using MiniGlobe.Scene;
 
-namespace MiniGlobe.Examples.Chapter3.SubdivisionSphere1
+namespace MiniGlobe.Examples.Chapter3
 {
     sealed class SubdivisionSphere1 : IDisposable
     {

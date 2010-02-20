@@ -18,7 +18,7 @@ using MiniGlobe.Scene;
 using OpenTK;
 using MiniGlobe.Core;
 
-namespace MiniGlobe.Examples.Chapter7.Billboards
+namespace MiniGlobe.Examples.Chapter7
 {
     sealed class Billboards : IDisposable
     {

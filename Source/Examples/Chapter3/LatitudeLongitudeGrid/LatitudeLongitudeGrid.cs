@@ -20,76 +20,8 @@ using MiniGlobe.Renderer;
 using MiniGlobe.Scene;
 using OpenTK;
 
-namespace MiniGlobe.Examples.Chapter3.LatitudeLongitudeGrid
+namespace MiniGlobe.Examples.Chapter3
 {
-    ///////////////////////////////////////////////////////////////////////
-    public enum IntervalEndPoint
-    {
-        Open,
-        Closed
-    }
-
-    // TODO:  Move to core
-    // TODO:  Add unit tests
-    // TODO:  full struct implementation
-    // TODO:  Add POI marker to this example
-    // TODO:  Add equator, etc.
-    public struct Interval
-    {
-        public Interval(double minimum, double maximum)
-            : this(minimum, maximum, IntervalEndPoint.Closed, IntervalEndPoint.Closed)
-        {
-        }
-
-        public Interval(double minimum, double maximum, IntervalEndPoint minimumEndPoint, IntervalEndPoint maximumEndPoint)
-        {
-            if (maximum < minimum)
-            {
-                throw new ArgumentException("maximum < minimum");
-            }
-
-            _minimum = minimum;
-            _maximum = maximum;
-            _minimumEndPoint = minimumEndPoint;
-            _maximumEndPoint = maximumEndPoint;
-        }
-
-        public double Minimum { get { return _minimum; } }
-        public double Maximum { get { return _maximum; } }
-        public IntervalEndPoint MinimumEndPoint { get { return _minimumEndPoint; } }
-        public IntervalEndPoint MaximumEndPoint { get { return _maximumEndPoint; } }
-
-        public bool Contains(double value)
-        {
-            bool satisfiesMinimum = (_minimumEndPoint == IntervalEndPoint.Closed) ? (value >= _minimum) : (value > _minimum);
-            bool satisfiesMaximum = (_maximumEndPoint == IntervalEndPoint.Closed) ? (value <= _maximum) : (value < _maximum);
-
-            return satisfiesMinimum && satisfiesMaximum;
-        }
-
-        private readonly double _minimum;
-        private readonly double _maximum;
-        private readonly IntervalEndPoint _minimumEndPoint;
-        private readonly IntervalEndPoint _maximumEndPoint;
-    }
-    ///////////////////////////////////////////////////////////////////////
-
-    class GridResolution
-    {
-        public GridResolution(Interval interval, Vector2 resolution)
-        {
-            _interval = interval;
-            _resolution = resolution;
-        }
-
-        public Interval Interval { get { return _interval;  } }
-        public Vector2 Resolution { get { return _resolution;  } }
-
-        private readonly Interval _interval;
-        private readonly Vector2 _resolution;
-    }
-    ///////////////////////////////////////////////////////////////////////
-
     sealed class LatitudeLongitudeGrid : IDisposable
     {
         public LatitudeLongitudeGrid()
@@ -203,16 +135,16 @@ namespace MiniGlobe.Examples.Chapter3.LatitudeLongitudeGrid
             _gridResolutions = new List<GridResolution>();
             _gridResolutions.Add(new GridResolution(
                 new Interval(0, 1000000, IntervalEndPoint.Closed, IntervalEndPoint.Open),
-                new Vector2(0.005f, 0.005f)));
+                new Vector2d(0.005, 0.005)));
             _gridResolutions.Add(new GridResolution(
                 new Interval(1000000, 2000000, IntervalEndPoint.Closed, IntervalEndPoint.Open),
-                new Vector2(0.01f, 0.01f)));
+                new Vector2d(0.01, 0.01)));
             _gridResolutions.Add(new GridResolution(
                 new Interval(2000000, 20000000, IntervalEndPoint.Closed, IntervalEndPoint.Open),
-                new Vector2(0.05f, 0.05f)));
+                new Vector2d(0.05, 0.05)));
             _gridResolutions.Add(new GridResolution(
                 new Interval(20000000, double.MaxValue, IntervalEndPoint.Closed, IntervalEndPoint.Open),
-                new Vector2(0.1f, 0.1f)));
+                new Vector2d(0.1, 0.1)));
         }
 
         private void OnResize()
@@ -229,7 +161,7 @@ namespace MiniGlobe.Examples.Chapter3.LatitudeLongitudeGrid
             {
                 if (_gridResolutions[i].Interval.Contains(altitude))
                 {
-                    _gridResolution.Value = _gridResolutions[i].Resolution;
+                    _gridResolution.Value = Conversion.ToVector2(_gridResolutions[i].Resolution);
                     break;
                 }
             }

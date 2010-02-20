@@ -18,7 +18,7 @@ using MiniGlobe.Renderer;
 using MiniGlobe.Scene;
 using OpenTK;
 
-namespace MiniGlobe.Examples.Chapter3.RayCasting
+namespace MiniGlobe.Examples.Chapter3
 {
     sealed class RayCasting : IDisposable
     {

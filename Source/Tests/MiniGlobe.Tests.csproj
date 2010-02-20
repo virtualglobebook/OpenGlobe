@@ -50,6 +50,7 @@
     <Compile Include="Core\Geometry\GeometryTests.cs" />
     <Compile Include="Core\SystemTests.cs" />
     <Compile Include="Core\Tessellation\TessellationTests.cs" />
+    <Compile Include="IntervalTests.cs" />
     <Compile Include="MiniGlobeAssert.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Renderer\Scene\CameraTest.cs" />
