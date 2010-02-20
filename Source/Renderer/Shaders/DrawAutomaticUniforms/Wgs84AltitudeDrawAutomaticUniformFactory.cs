@@ -11,7 +11,7 @@ using OpenTK;
 
 namespace MiniGlobe.Renderer
 {
-    internal class Wgs84AltitudeDrawAutomaticUniformFactory : DrawAutomaticUniformFactory
+    internal class Wgs84AltitudeUniformFactory : DrawAutomaticUniformFactory
     {
         #region DrawAutomaticUniformFactory Members
 
@@ -22,7 +22,7 @@ namespace MiniGlobe.Renderer
 
         public override DrawAutomaticUniform Create(Uniform uniform)
         {
-            return new Wgs84AltitudeDrawAutomaticUniform(uniform);
+            return new Wgs84AltitudeUniform(uniform);
         }
 
         #endregion

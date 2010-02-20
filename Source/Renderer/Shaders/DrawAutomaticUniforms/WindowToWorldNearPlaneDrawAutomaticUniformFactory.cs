@@ -11,7 +11,7 @@ using OpenTK;
 
 namespace MiniGlobe.Renderer
 {
-    internal class WindowToWorldNearPlaneDrawAutomaticUniformFactory : DrawAutomaticUniformFactory
+    internal class WindowToWorldNearPlaneUniformFactory : DrawAutomaticUniformFactory
     {
         #region DrawAutomaticUniformFactory Members
 
@@ -22,7 +22,7 @@ namespace MiniGlobe.Renderer
 
         public override DrawAutomaticUniform Create(Uniform uniform)
         {
-            return new WindowToWorldNearPlaneDrawAutomaticUniform(uniform);
+            return new WindowToWorldNearPlaneUniform(uniform);
         }
 
         #endregion

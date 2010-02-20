@@ -11,7 +11,7 @@ using OpenTK;
 
 namespace MiniGlobe.Renderer
 {
-    internal class CameraEyeDrawAutomaticUniformFactory : DrawAutomaticUniformFactory
+    internal class CameraEyeUniformFactory : DrawAutomaticUniformFactory
     {
         #region DrawAutomaticUniformFactory Members
 
@@ -22,7 +22,7 @@ namespace MiniGlobe.Renderer
 
         public override DrawAutomaticUniform Create(Uniform uniform)
         {
-            return new CameraEyeDrawAutomaticUniform(uniform);
+            return new CameraEyeUniform(uniform);
         }
 
         #endregion

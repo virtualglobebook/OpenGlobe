@@ -12,9 +12,9 @@ using MiniGlobe.Core;
 
 namespace MiniGlobe.Renderer
 {
-    internal class ViewportTransformationMatrixDrawAutomaticUniform : DrawAutomaticUniform
+    internal class ViewportTransformationMatrixUniform : DrawAutomaticUniform
     {
-        public ViewportTransformationMatrixDrawAutomaticUniform(Uniform uniform)
+        public ViewportTransformationMatrixUniform(Uniform uniform)
         {
             _uniform = uniform as Uniform<Matrix4>;
         }

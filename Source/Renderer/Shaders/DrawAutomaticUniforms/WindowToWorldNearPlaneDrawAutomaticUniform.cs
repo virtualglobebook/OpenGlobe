@@ -13,9 +13,9 @@ using MiniGlobe.Core;
 
 namespace MiniGlobe.Renderer
 {
-    internal class WindowToWorldNearPlaneDrawAutomaticUniform : DrawAutomaticUniform
+    internal class WindowToWorldNearPlaneUniform : DrawAutomaticUniform
     {
-        public WindowToWorldNearPlaneDrawAutomaticUniform(Uniform uniform)
+        public WindowToWorldNearPlaneUniform(Uniform uniform)
         {
             _uniform = uniform as Uniform<Matrix4>;
         }

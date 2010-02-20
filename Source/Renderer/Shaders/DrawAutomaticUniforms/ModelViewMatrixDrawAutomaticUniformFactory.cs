@@ -11,7 +11,7 @@ using OpenTK;
 
 namespace MiniGlobe.Renderer
 {
-    internal class ModelViewMatrixDrawAutomaticUniformFactory : DrawAutomaticUniformFactory
+    internal class ModelViewMatrixUniformFactory : DrawAutomaticUniformFactory
     {
         #region DrawAutomaticUniformFactory Members
 
@@ -22,7 +22,7 @@ namespace MiniGlobe.Renderer
 
         public override DrawAutomaticUniform Create(Uniform uniform)
         {
-            return new ModelViewMatrixDrawAutomaticUniform(uniform);
+            return new ModelViewMatrixUniform(uniform);
         }
 
         #endregion

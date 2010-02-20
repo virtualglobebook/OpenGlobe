@@ -11,7 +11,7 @@ using OpenTK;
 
 namespace MiniGlobe.Renderer
 {
-    internal class LightPropertiesDrawAutomaticUniformFactory : DrawAutomaticUniformFactory
+    internal class LightPropertiesUniformFactory : DrawAutomaticUniformFactory
     {
         #region DrawAutomaticUniformFactory Members
 
@@ -22,7 +22,7 @@ namespace MiniGlobe.Renderer
 
         public override DrawAutomaticUniform Create(Uniform uniform)
         {
-            return new LightPropertiesDrawAutomaticUniform(uniform);
+            return new LightPropertiesUniform(uniform);
         }
 
         #endregion

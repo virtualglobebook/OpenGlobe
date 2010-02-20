@@ -12,9 +12,9 @@ using MiniGlobe.Core;
 
 namespace MiniGlobe.Renderer
 {
-    internal class ModelViewPerspectiveProjectionMatrixDrawAutomaticUniform : DrawAutomaticUniform
+    internal class ModelViewPerspectiveProjectionMatrixUniform : DrawAutomaticUniform
     {
-        public ModelViewPerspectiveProjectionMatrixDrawAutomaticUniform(Uniform uniform)
+        public ModelViewPerspectiveProjectionMatrixUniform(Uniform uniform)
         {
             _uniform = uniform as Uniform<Matrix4>;
         }

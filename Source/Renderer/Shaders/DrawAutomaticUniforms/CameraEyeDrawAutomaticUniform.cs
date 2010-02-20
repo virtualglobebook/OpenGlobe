@@ -12,9 +12,9 @@ using MiniGlobe.Core;
 
 namespace MiniGlobe.Renderer
 {
-    internal class CameraEyeDrawAutomaticUniform : DrawAutomaticUniform
+    internal class CameraEyeUniform : DrawAutomaticUniform
     {
-        public CameraEyeDrawAutomaticUniform(Uniform uniform)
+        public CameraEyeUniform(Uniform uniform)
         {
             _uniform = uniform as Uniform<Vector3>;
         }

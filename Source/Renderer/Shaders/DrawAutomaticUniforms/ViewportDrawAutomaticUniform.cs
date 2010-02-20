@@ -13,9 +13,9 @@ using MiniGlobe.Core;
 
 namespace MiniGlobe.Renderer
 {
-    internal class ViewportDrawAutomaticUniform : DrawAutomaticUniform
+    internal class ViewportUniform : DrawAutomaticUniform
     {
-        public ViewportDrawAutomaticUniform(Uniform uniform)
+        public ViewportUniform(Uniform uniform)
         {
             _uniform = uniform as Uniform<Vector4>;
         }

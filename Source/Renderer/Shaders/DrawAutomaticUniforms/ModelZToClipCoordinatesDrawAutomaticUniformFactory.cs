@@ -11,7 +11,7 @@ using OpenTK;
 
 namespace MiniGlobe.Renderer
 {
-    internal class ModelZToClipCoordinatesDrawAutomaticUniformFactory : DrawAutomaticUniformFactory
+    internal class ModelZToClipCoordinatesUniformFactory : DrawAutomaticUniformFactory
     {
         #region DrawAutomaticUniformFactory Members
 
@@ -22,7 +22,7 @@ namespace MiniGlobe.Renderer
 
         public override DrawAutomaticUniform Create(Uniform uniform)
         {
-            return new ModelZToClipCoordinatesDrawAutomaticUniform(uniform);
+            return new ModelZToClipCoordinatesUniform(uniform);
         }
 
         #endregion

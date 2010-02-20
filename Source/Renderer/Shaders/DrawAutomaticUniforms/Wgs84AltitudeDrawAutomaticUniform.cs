@@ -13,9 +13,9 @@ using MiniGlobe.Core.Geometry;
 
 namespace MiniGlobe.Renderer
 {
-    internal class Wgs84AltitudeDrawAutomaticUniform : DrawAutomaticUniform
+    internal class Wgs84AltitudeUniform : DrawAutomaticUniform
     {
-        public Wgs84AltitudeDrawAutomaticUniform(Uniform uniform)
+        public Wgs84AltitudeUniform(Uniform uniform)
         {
             _uniform = uniform as Uniform<float>;
         }

@@ -12,9 +12,9 @@ using MiniGlobe.Core;
 
 namespace MiniGlobe.Renderer
 {
-    internal class ModelZToClipCoordinatesDrawAutomaticUniform : DrawAutomaticUniform
+    internal class ModelZToClipCoordinatesUniform : DrawAutomaticUniform
     {
-        public ModelZToClipCoordinatesDrawAutomaticUniform(Uniform uniform)
+        public ModelZToClipCoordinatesUniform(Uniform uniform)
         {
             _uniform = uniform as Uniform<Matrix42>;
         }

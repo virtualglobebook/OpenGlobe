@@ -12,9 +12,9 @@ using MiniGlobe.Core;
 
 namespace MiniGlobe.Renderer
 {
-    internal class SunPositionDrawAutomaticUniform : DrawAutomaticUniform
+    internal class SunPositionUniform : DrawAutomaticUniform
     {
-        public SunPositionDrawAutomaticUniform(Uniform uniform)
+        public SunPositionUniform(Uniform uniform)
         {
             _uniform = uniform as Uniform<Vector3>;
         }

@@ -11,7 +11,7 @@ using OpenTK;
 
 namespace MiniGlobe.Renderer
 {
-    internal class OrthographicProjectionMatrixDrawAutomaticUniformFactory : DrawAutomaticUniformFactory
+    internal class OrthographicProjectionMatrixUniformFactory : DrawAutomaticUniformFactory
     {
         #region DrawAutomaticUniformFactory Members
 
@@ -22,7 +22,7 @@ namespace MiniGlobe.Renderer
 
         public override DrawAutomaticUniform Create(Uniform uniform)
         {
-            return new OrthographicProjectionMatrixDrawAutomaticUniform(uniform);
+            return new OrthographicProjectionMatrixUniform(uniform);
         }
 
         #endregion

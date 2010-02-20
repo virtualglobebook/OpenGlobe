@@ -11,9 +11,9 @@ using OpenTK;
 
 namespace MiniGlobe.Renderer
 {
-    internal class LightPropertiesDrawAutomaticUniform : DrawAutomaticUniform
+    internal class LightPropertiesUniform : DrawAutomaticUniform
     {
-        public LightPropertiesDrawAutomaticUniform(Uniform uniform)
+        public LightPropertiesUniform(Uniform uniform)
         {
             _uniform = uniform as Uniform<Vector4>;
         }

@@ -9,9 +9,9 @@
 
 namespace MiniGlobe.Renderer
 {
-    internal class TextureLinkAutomaticUniform : LinkAutomaticUniform
+    internal class TextureUniform : LinkAutomaticUniform
     {
-        public TextureLinkAutomaticUniform(int textureUnit)
+        public TextureUniform(int textureUnit)
 	    {
             _textureUnit = textureUnit;
         }

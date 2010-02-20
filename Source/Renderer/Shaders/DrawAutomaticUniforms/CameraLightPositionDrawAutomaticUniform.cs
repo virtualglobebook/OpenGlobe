@@ -12,9 +12,9 @@ using MiniGlobe.Core;
 
 namespace MiniGlobe.Renderer
 {
-    internal class CameraLightPositionDrawAutomaticUniform : DrawAutomaticUniform
+    internal class CameraLightPositionUniform : DrawAutomaticUniform
     {
-        public CameraLightPositionDrawAutomaticUniform(Uniform uniform)
+        public CameraLightPositionUniform(Uniform uniform)
         {
             _uniform = uniform as Uniform<Vector3>;
         }

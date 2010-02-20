@@ -118,7 +118,7 @@ namespace MiniGlobe.Renderer
             {
                 for (int i = 0; i < window.Context.TextureUnits.Count; ++i)
                 {
-                    linkAutomaticUniforms.Add(new TextureLinkAutomaticUniform(i));
+                    linkAutomaticUniforms.Add(new TextureUniform(i));
                 }
             }
 
@@ -129,19 +129,19 @@ namespace MiniGlobe.Renderer
         {
             DrawAutomaticUniformFactoryCollection drawAutomaticUniformFactories = new DrawAutomaticUniformFactoryCollection();
 
-            drawAutomaticUniformFactories.Add(new SunPositionDrawAutomaticUniformFactory());
-            drawAutomaticUniformFactories.Add(new LightPropertiesDrawAutomaticUniformFactory());
-            drawAutomaticUniformFactories.Add(new CameraLightPositionDrawAutomaticUniformFactory());
-            drawAutomaticUniformFactories.Add(new CameraEyeDrawAutomaticUniformFactory());
-            drawAutomaticUniformFactories.Add(new ModelViewPerspectiveProjectionMatrixDrawAutomaticUniformFactory());
-            drawAutomaticUniformFactories.Add(new ModelViewMatrixDrawAutomaticUniformFactory());
-            drawAutomaticUniformFactories.Add(new PerspectiveProjectionMatrixDrawAutomaticUniformFactory());
-            drawAutomaticUniformFactories.Add(new OrthographicProjectionMatrixDrawAutomaticUniformFactory());
-            drawAutomaticUniformFactories.Add(new ViewportDrawAutomaticUniformFactory());
-            drawAutomaticUniformFactories.Add(new ViewportTransformationMatrixDrawAutomaticUniformFactory());
-            drawAutomaticUniformFactories.Add(new ModelZToClipCoordinatesDrawAutomaticUniformFactory());
-            drawAutomaticUniformFactories.Add(new WindowToWorldNearPlaneDrawAutomaticUniformFactory());
-            drawAutomaticUniformFactories.Add(new Wgs84AltitudeDrawAutomaticUniformFactory());
+            drawAutomaticUniformFactories.Add(new SunPositionUniformFactory());
+            drawAutomaticUniformFactories.Add(new LightPropertiesUniformFactory());
+            drawAutomaticUniformFactories.Add(new CameraLightPositionUniformFactory());
+            drawAutomaticUniformFactories.Add(new CameraEyeUniformFactory());
+            drawAutomaticUniformFactories.Add(new ModelViewPerspectiveProjectionMatrixUniformFactory());
+            drawAutomaticUniformFactories.Add(new ModelViewMatrixUniformFactory());
+            drawAutomaticUniformFactories.Add(new PerspectiveProjectionMatrixUniformFactory());
+            drawAutomaticUniformFactories.Add(new OrthographicProjectionMatrixUniformFactory());
+            drawAutomaticUniformFactories.Add(new ViewportUniformFactory());
+            drawAutomaticUniformFactories.Add(new ViewportTransformationMatrixUniformFactory());
+            drawAutomaticUniformFactories.Add(new ModelZToClipCoordinatesUniformFactory());
+            drawAutomaticUniformFactories.Add(new WindowToWorldNearPlaneUniformFactory());
+            drawAutomaticUniformFactories.Add(new Wgs84AltitudeUniformFactory());
                         
             return drawAutomaticUniformFactories;
         }
