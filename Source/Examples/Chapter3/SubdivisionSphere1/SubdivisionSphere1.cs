@@ -7,8 +7,6 @@
 //
 #endregion
 
-//#define FBO
-
 using System;
 using System.Drawing;
 
@@ -107,6 +105,13 @@ namespace MiniGlobe.Examples.Chapter3
             _texture = Device.CreateTexture2D(bitmap, TextureFormat.RedGreenBlue8, false);
 
             _sceneState.Camera.ZoomToTarget(1);
+
+            HighResolutionSnap snap = new HighResolutionSnap(_window, _sceneState.Camera);
+            snap.ColorFilename = @"E:\Dropbox\My Dropbox\Book\Manuscript\GlobeRendering\Figures\GeographicGridEllipsoidTessellationPol.png";
+            snap.WidthInInches = 3;
+            snap.DotsPerInch = 600;
+            snap.ExitAfterSnap = true;
+            snap.Enabled = false;
         }
 
         private void OnResize()
@@ -118,25 +123,12 @@ namespace MiniGlobe.Examples.Chapter3
         private void OnRenderFrame()
         {
             Context context = _window.Context;
-
-#if FBO
-            HighResolutionSnapFrameBuffer snapBuffer = new HighResolutionSnapFrameBuffer(context, 3, 600, _sceneState.Camera.AspectRatio);
-            _window.Context.Viewport = new Rectangle(0, 0, snapBuffer.WidthInPixels, snapBuffer.HeightInPixels);
-            context.Bind(snapBuffer.FrameBuffer);
-#endif
-
             context.Clear(ClearBuffers.ColorAndDepthBuffer, Color.White, 1, 0);
             context.TextureUnits[0].Texture2D = _texture;
             context.Bind(_renderState);
             context.Bind(_sp);
             context.Bind(_va);
             context.Draw(_primitiveType, _sceneState);
-
-#if FBO
-            snapBuffer.SaveColorBuffer(@"E:\Dropbox\My Dropbox\Book\Manuscript\GlobeRendering\Figures\GeographicGridEllipsoidTessellationPol.png");
-            //snapBuffer.SaveDepthBuffer(@"c:\depth.tif");
-            Environment.Exit(0);
-#endif
         }
 
         #region IDisposable Members

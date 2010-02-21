@@ -7,8 +7,6 @@
 //
 #endregion
 
-//#define FBO
-
 using System;
 using System.Drawing;
 
@@ -57,6 +55,13 @@ namespace MiniGlobe.Examples.Chapter3
             //CenterCameraOnGlobeCenter();
 
             PersistentView.Execute(@"E:\Dropbox\My Dropbox\Book\Manuscript\GlobeRendering\Figures\RayCasting.xml", _window, _sceneState.Camera);
+
+            HighResolutionSnap snap = new HighResolutionSnap(_window, _sceneState.Camera);
+            snap.ColorFilename = @"E:\Dropbox\My Dropbox\Book\Manuscript\GlobeRendering\Figures\RayCasting.png";
+            snap.WidthInInches = 3;
+            snap.DotsPerInch = 600;
+            snap.ExitAfterSnap = true;
+            snap.Enabled = false;
         }
 
         private void OnResize()
@@ -67,20 +72,8 @@ namespace MiniGlobe.Examples.Chapter3
 
         private void OnRenderFrame()
         {
-#if FBO
-            HighResolutionSnapFrameBuffer snapBuffer = new HighResolutionSnapFrameBuffer(context, 3, 600, _sceneState.Camera.AspectRatio);
-            _window.Context.Viewport = new Rectangle(0, 0, snapBuffer.WidthInPixels, snapBuffer.HeightInPixels);
-            context.Bind(snapBuffer.FrameBuffer);
-#endif
-
             _window.Context.Clear(ClearBuffers.ColorAndDepthBuffer, Color.White, 1, 0);
             _globe.Render(_sceneState);
-
-#if FBO
-            snapBuffer.SaveColorBuffer(@"E:\Dropbox\My Dropbox\Book\Manuscript\GlobeRendering\Figures\RayCasting.png");
-            //snapBuffer.SaveDepthBuffer(@"c:\depth.tif");
-            Environment.Exit(0);
-#endif
         }
 
         private void CenterCameraOnPoint()

@@ -7,8 +7,6 @@
 //
 #endregion
 
-//#define FBO
-
 using System;
 using System.Drawing;
 using System.Collections.Generic;
@@ -132,6 +130,13 @@ namespace MiniGlobe.Examples.Chapter3
             _sceneState.Camera.ZoomToTarget(_globeShape.MaximumRadius);
             PersistentView.Execute(@"E:\Dropbox\My Dropbox\Book\Manuscript\GlobeRendering\Figures\LatitudeLongitudeGrid.xml", _window, _sceneState.Camera);
 
+            HighResolutionSnap snap = new HighResolutionSnap(_window, _sceneState.Camera);
+            snap.ColorFilename = @"E:\Dropbox\My Dropbox\Book\Manuscript\GlobeRendering\Figures\LatitudeLongitudeGrid.png";
+            snap.WidthInInches = 3;
+            snap.DotsPerInch = 600;
+            snap.ExitAfterSnap = true;
+            snap.Enabled = false;
+
             _gridResolutions = new List<GridResolution>();
             _gridResolutions.Add(new GridResolution(
                 new Interval(0, 1000000, IntervalEndPoint.Closed, IntervalEndPoint.Open),
@@ -145,6 +150,12 @@ namespace MiniGlobe.Examples.Chapter3
             _gridResolutions.Add(new GridResolution(
                 new Interval(20000000, double.MaxValue, IntervalEndPoint.Closed, IntervalEndPoint.Open),
                 new Vector2d(0.1, 0.1)));
+
+            Vector3[] positions = new[]
+            {
+                Conversion.ToVector3(_globeShape.DeticToVector3d(Trig.ToRadians(-123.06), Trig.ToRadians(49.13), 0)), // Vancouver, B.C., Can.
+            };
+            _billboard = new BillboardGroup(_window.Context, positions, new Bitmap(@"building.png"));
         }
 
         private void OnResize()
@@ -167,13 +178,6 @@ namespace MiniGlobe.Examples.Chapter3
             }
 
             Context context = _window.Context;
-
-#if FBO
-            HighResolutionSnapFrameBuffer snapBuffer = new HighResolutionSnapFrameBuffer(context, 3, 600, _sceneState.Camera.AspectRatio);
-            _window.Context.Viewport = new Rectangle(0, 0, snapBuffer.WidthInPixels, snapBuffer.HeightInPixels);
-            context.Bind(snapBuffer.FrameBuffer);
-#endif
-
             context.Clear(ClearBuffers.ColorAndDepthBuffer, Color.White, 1, 0);
             context.TextureUnits[0].Texture2D = _texture;
             context.Bind(_renderState);
@@ -181,11 +185,7 @@ namespace MiniGlobe.Examples.Chapter3
             context.Bind(_va);
             context.Draw(_primitiveType, _sceneState);
 
-#if FBO
-            snapBuffer.SaveColorBuffer(@"E:\Dropbox\My Dropbox\Book\Manuscript\GlobeRendering\Figures\LatitudeLongitudeGrid.png");
-            //snapBuffer.SaveDepthBuffer(@"c:\depth.tif");
-            Environment.Exit(0);
-#endif
+            _billboard.Render(_sceneState);
         }
 
         #region IDisposable Members
@@ -197,6 +197,7 @@ namespace MiniGlobe.Examples.Chapter3
             _sp.Dispose();
             _camera.Dispose();
             _window.Dispose();
+            _billboard.Dispose();
         }
 
         #endregion
@@ -225,5 +226,6 @@ namespace MiniGlobe.Examples.Chapter3
         private readonly PrimitiveType _primitiveType;
         private readonly Uniform<Vector2> _gridResolution;
         private readonly IList<GridResolution> _gridResolutions;
+        private readonly BillboardGroup _billboard;
     }
 }

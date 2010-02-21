@@ -7,8 +7,6 @@
 //
 #endregion
 
-//#define FBO
-
 using System;
 using System.Drawing;
 
@@ -168,6 +166,13 @@ namespace MiniGlobe.Examples.Chapter7
             _billboards = new BillboardGroup(_window.Context, positions, new Bitmap(@"032.png"));
 
             _sceneState.Camera.ZoomToTarget(globeShape.MaximumRadius);
+
+            HighResolutionSnap snap = new HighResolutionSnap(_window, _sceneState.Camera);
+            snap.ColorFilename = @"E:\Dropbox\My Dropbox\Book\Manuscript\GlobeRendering\Figures\Billboards.png";
+            snap.WidthInInches = 3;
+            snap.DotsPerInch = 600;
+            snap.ExitAfterSnap = true;
+            snap.Enabled = false;
         }
 
         private void OnResize()
@@ -178,21 +183,9 @@ namespace MiniGlobe.Examples.Chapter7
 
         private void OnRenderFrame()
         {
-#if FBO
-            HighResolutionSnapFrameBuffer snapBuffer = new HighResolutionSnapFrameBuffer(context, 3, 600, _sceneState.Camera.AspectRatio);
-            _window.Context.Viewport = new Rectangle(0, 0, snapBuffer.WidthInPixels, snapBuffer.HeightInPixels);
-            context.Bind(snapBuffer.FrameBuffer);
-#endif
-
             _window.Context.Clear(ClearBuffers.ColorAndDepthBuffer, Color.White, 1, 0);
             _globe.Render(_sceneState);
             _billboards.Render(_sceneState);
-
-#if FBO
-            snapBuffer.SaveColorBuffer(@"E:\Dropbox\My Dropbox\Book\Manuscript\GlobeRendering\Figures\Billboards.png");
-            //snapBuffer.SaveDepthBuffer(@"c:\depth.tif");
-            Environment.Exit(0);
-#endif
         }
 
         #region IDisposable Members

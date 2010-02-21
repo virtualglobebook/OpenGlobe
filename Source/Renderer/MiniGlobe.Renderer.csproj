@@ -47,6 +47,7 @@
     <Compile Include="Extensions.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="FrameBuffer\HighResolutionSnap.cs" />
     <Compile Include="FrameBuffer\HighResolutionSnapFrameBuffer.cs" />
     <Compile Include="GL32\ExtensionsGL32.cs" />
     <Compile Include="GL32\ICleanable.cs" />

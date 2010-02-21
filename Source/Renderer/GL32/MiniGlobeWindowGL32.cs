@@ -42,7 +42,9 @@ namespace MiniGlobe.Renderer.GL32
 
         private void OnRenderFrame<T>(object sender, T e)
         {
+            OnPreRenderFrame();
             OnRenderFrame();
+            OnPostRenderFrame();
             _gameWindw.SwapBuffers();
         }
 

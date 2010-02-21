@@ -21,8 +21,6 @@
 //  Space - Switch between whole earth and horizon view
 //
 
-//#define FBO
-
 using System;
 using System.Drawing;
 using System.Collections.Generic;
@@ -61,6 +59,13 @@ namespace MiniGlobe.Examples.Research.RayCasting
             LoadGlobe();
 
             _sceneState.Camera.ZoomToTarget(_globeShape.MaximumRadius);
+
+            HighResolutionSnap snap = new HighResolutionSnap(_window, _sceneState.Camera);
+            snap.ColorFilename = @"E:\Dropbox\My Dropbox\Book\Manuscript\GlobeRendering\Figures\RayCasting.png";
+            snap.WidthInInches = 3;
+            snap.DotsPerInch = 600;
+            snap.ExitAfterSnap = true;
+            snap.Enabled = false;
         }
 
         private void OnResize()
@@ -71,12 +76,6 @@ namespace MiniGlobe.Examples.Research.RayCasting
 
         private void OnRenderFrame()
         {
-#if FBO
-            HighResolutionSnapFrameBuffer snapBuffer = new HighResolutionSnapFrameBuffer(context, 3, 600, _sceneState.Camera.AspectRatio);
-            _window.Context.Viewport = new Rectangle(0, 0, snapBuffer.WidthInPixels, snapBuffer.HeightInPixels);
-            context.Bind(snapBuffer.FrameBuffer);
-#endif
-
             _window.Context.Clear(ClearBuffers.ColorAndDepthBuffer, Color.White, 1, 0);
 
             if (_optimizedRayCastedGlobe != null)
@@ -96,12 +95,6 @@ namespace MiniGlobe.Examples.Research.RayCasting
             {
                 _billboards[i].Render(_sceneState);
             }
-
-#if FBO
-            snapBuffer.SaveColorBuffer(@"E:\Dropbox\My Dropbox\Book\Manuscript\GlobeRendering\Figures\RayCasting.png");
-            //snapBuffer.SaveDepthBuffer(@"c:\depth.tif");
-            Environment.Exit(0);
-#endif
         }
 
         private void OnKeyDown(object sender, KeyboardKeyEventArgs e)

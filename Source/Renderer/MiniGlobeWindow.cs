@@ -17,7 +17,10 @@ namespace MiniGlobe.Renderer
 
         public event MiniGlobeHandler Resize;
         public event MiniGlobeHandler UpdateFrame;
+
+        public event MiniGlobeHandler PreRenderFrame;
         public event MiniGlobeHandler RenderFrame;
+        public event MiniGlobeHandler PostRenderFrame;
 
         protected virtual void OnResize()
         {
@@ -37,9 +40,27 @@ namespace MiniGlobe.Renderer
             }
         }
 
+        protected virtual void OnPreRenderFrame()
+        {
+            MiniGlobeHandler handler = PreRenderFrame;
+            if (handler != null)
+            {
+                handler();
+            }
+        }
+
         protected virtual void OnRenderFrame()
         {
             MiniGlobeHandler handler = RenderFrame;
+            if (handler != null)
+            {
+                handler();
+            }
+        }
+
+        protected virtual void OnPostRenderFrame()
+        {
+            MiniGlobeHandler handler = PostRenderFrame;
             if (handler != null)
             {
                 handler();
