@@ -106,12 +106,10 @@ namespace MiniGlobe.Examples.Chapter3
 
             _sceneState.Camera.ZoomToTarget(1);
 
-            HighResolutionSnap snap = new HighResolutionSnap(_window, _sceneState.Camera);
+            HighResolutionSnap snap = new HighResolutionSnap(_window, _sceneState);
             snap.ColorFilename = @"E:\Dropbox\My Dropbox\Book\Manuscript\GlobeRendering\Figures\GeographicGridEllipsoidTessellationPol.png";
             snap.WidthInInches = 3;
             snap.DotsPerInch = 600;
-            snap.ExitAfterSnap = true;
-            snap.Enabled = false;
         }
 
         private void OnResize()

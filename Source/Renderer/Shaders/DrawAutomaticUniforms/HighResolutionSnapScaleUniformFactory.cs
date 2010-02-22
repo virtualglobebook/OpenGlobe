@@ -9,18 +9,18 @@
 
 namespace MiniGlobe.Renderer
 {
-    internal class CameraEyeUniformFactory : DrawAutomaticUniformFactory
+    internal class HighResolutionSnapScaleUniformFactory : DrawAutomaticUniformFactory
     {
-        #region DrawAutomaticUniformFactory Members
+        #region HighResolutionSnapScaleUniformFactory Members
 
         public override string Name
         {
-            get { return "mg_cameraEye"; }
+            get { return "mg_highResolutionSnapScale"; }
         }
 
         public override DrawAutomaticUniform Create(Uniform uniform)
         {
-            return new CameraEyeUniform(uniform);
+            return new HighResolutionSnapScaleUniform(uniform);
         }
 
         #endregion

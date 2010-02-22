@@ -148,6 +148,9 @@ namespace MiniGlobe.Scene
 
         public void Render(SceneState sceneState)
         {
+            _halfLineWidth.Value = (float)(Width * 0.5 * sceneState.HighResolutionSnapScale);
+            _lineLength.Value = (float)Length;
+
             _context.Bind(_renderState);
             _context.Bind(_sp);
             _context.Bind(_va);
@@ -161,21 +164,8 @@ namespace MiniGlobe.Scene
             get { return _context; }
         }
 
-        public float Width
-        {
-            get { return _lineWidth; }
-            set 
-            {
-                _lineWidth = value;
-                _halfLineWidth.Value = _lineWidth * 0.5f; ; 
-            }
-        }
-
-        public float Length
-        {
-            get { return _lineLength.Value; }
-            set { _lineLength.Value = value; }
-        }
+        public double Width { get; set; }
+        public double Length { get; set; }
 
         public bool Wireframe
         {
@@ -196,7 +186,6 @@ namespace MiniGlobe.Scene
         private readonly Context _context;
         private readonly RenderState _renderState;
         private readonly ShaderProgram _sp;
-        private float _lineWidth;
         private readonly Uniform<float> _halfLineWidth;
         private readonly Uniform<float> _lineLength;
         private readonly VertexArray _va;

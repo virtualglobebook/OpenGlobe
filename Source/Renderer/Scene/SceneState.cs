@@ -23,6 +23,7 @@ namespace MiniGlobe.Renderer
             Camera = new Camera();
             SunPosition = new Vector3d(200000, 0, 0);
             ModelMatrix = Matrix4d.Identity;
+            HighResolutionSnapScale = 1;
         }
 
         public float DiffuseIntensity { get; set; }
@@ -103,5 +104,7 @@ namespace MiniGlobe.Renderer
                     (float)m.M14, (float)m.M24, (float)m.M34, (float)m.M44);
             }
         }
+
+        public double HighResolutionSnapScale { get; set; }
     }
 }

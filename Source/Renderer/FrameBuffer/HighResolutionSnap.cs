@@ -14,21 +14,32 @@ namespace MiniGlobe.Renderer
 {
     public sealed class HighResolutionSnap : IDisposable
     {
-        public HighResolutionSnap(MiniGlobeWindow window, Camera camera)
+        public HighResolutionSnap(MiniGlobeWindow window, SceneState sceneState)
         {
             _window = window;
-            _camera = camera;
+            _sceneState = sceneState;
+
+            window.Keyboard.KeyDown += delegate(object sender, KeyboardKeyEventArgs e)
+            {
+                if (e.Key == KeyboardKey.Space)
+                {
+                    Enabled = true;
+                }
+            };
         }
 
         private void PreRenderFrame()
         {
             Context context = _window.Context;
 
-            _snapBuffer = new HighResolutionSnapFrameBuffer(context, WidthInInches, DotsPerInch, _camera.AspectRatio);
+            _snapBuffer = new HighResolutionSnapFrameBuffer(context, WidthInInches, DotsPerInch, _sceneState.Camera.AspectRatio);
             context.Bind(_snapBuffer.FrameBuffer);
 
             _previousViewport = context.Viewport;
             context.Viewport = new Rectangle(0, 0, _snapBuffer.WidthInPixels, _snapBuffer.HeightInPixels);
+
+            _previousSnapScale = _sceneState.HighResolutionSnapScale;
+            _sceneState.HighResolutionSnapScale = (double)context.Viewport.Width / (double)_previousViewport.Width;
         }
 
         private void PostRenderFrame()
@@ -43,13 +54,13 @@ namespace MiniGlobe.Renderer
                 _snapBuffer.SaveDepthBuffer(DepthFilename);
             }
 
-            if (ExitAfterSnap)
-            {
-                Environment.Exit(0);
-            }
-
-            _window.Context.Viewport = _previousViewport;
             _window.Context.Bind(null as FrameBuffer);
+            _window.Context.Viewport = _previousViewport;
+            _sceneState.HighResolutionSnapScale = _previousSnapScale;
+
+            Enabled = false;
+            _snapBuffer.Dispose();
+            _snapBuffer = null;
         }
 
         #region IDisposable Members
@@ -62,12 +73,15 @@ namespace MiniGlobe.Renderer
                 _window.PostRenderFrame -= PostRenderFrame;
             }
 
-            _snapBuffer.Dispose();
+            if (_snapBuffer != null)
+            {
+                _snapBuffer.Dispose();
+            }
         }
 
         #endregion
 
-        public bool Enabled
+        private bool Enabled
         {
             get { return _enabled; }
 
@@ -96,17 +110,17 @@ namespace MiniGlobe.Renderer
         public double WidthInInches { get; set; }
         public int DotsPerInch { get; set; }
 
-        public bool ExitAfterSnap { get; set; }
-
         public HighResolutionSnapFrameBuffer SnapBuffer
         {
             get { return _snapBuffer; }
         }
 
         private MiniGlobeWindow _window;
-        private Camera _camera;
+        private SceneState _sceneState;
         private bool _enabled;
         private HighResolutionSnapFrameBuffer _snapBuffer;
+
         private Rectangle _previousViewport;
+        private double _previousSnapScale;
     }
 }

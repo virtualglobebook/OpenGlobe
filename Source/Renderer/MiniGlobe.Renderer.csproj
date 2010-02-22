@@ -73,6 +73,8 @@
     <Compile Include="Shaders\DrawAutomaticUniforms\DrawAutomaticUniformFactoryCollection.cs" />
     <Compile Include="Shaders\DrawAutomaticUniforms\CameraLightPositionUniform.cs" />
     <Compile Include="Shaders\DrawAutomaticUniforms\CameraLightPositionUniformFactory.cs" />
+    <Compile Include="Shaders\DrawAutomaticUniforms\HighResolutionSnapScaleUniform.cs" />
+    <Compile Include="Shaders\DrawAutomaticUniforms\HighResolutionSnapScaleUniformFactory.cs" />
     <Compile Include="Shaders\DrawAutomaticUniforms\LightPropertiesUniform.cs" />
     <Compile Include="Shaders\DrawAutomaticUniforms\LightPropertiesUniformFactory.cs" />
     <Compile Include="Shaders\DrawAutomaticUniforms\ModelViewMatrixUniform.cs" />

@@ -137,12 +137,10 @@ namespace MiniGlobe.Examples.Chapter3
             _sceneState.Camera.ZoomToTarget(1);
             PersistentView.Execute(@"E:\Dropbox\My Dropbox\Book\Manuscript\GlobeRendering\Figures\NightLights.xml", _window, _sceneState.Camera);
 
-            HighResolutionSnap snap = new HighResolutionSnap(_window, _sceneState.Camera);
+            HighResolutionSnap snap = new HighResolutionSnap(_window, _sceneState);
             snap.ColorFilename = @"E:\Dropbox\My Dropbox\Book\Manuscript\GlobeRendering\Figures\NightLightsPointTwo.png";
             snap.WidthInInches = 2;
             snap.DotsPerInch = 600;
-            snap.ExitAfterSnap = true;
-            snap.Enabled = false;
         }
 
         private void OnResize()

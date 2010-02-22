@@ -112,7 +112,7 @@ namespace MiniGlobe.Examples.Chapter3
                   }";
             _sp = Device.CreateShaderProgram(vs, fs);
             (_sp.Uniforms["u_globeOneOverRadiiSquared"] as Uniform<Vector3>).Value = Conversion.ToVector3(_globeShape.OneOverRadiiSquared);
-            (_sp.Uniforms["u_gridLineWidth"] as Uniform<Vector2>).Value = new Vector2(1, 1);
+            _gridWidth = _sp.Uniforms["u_gridLineWidth"] as Uniform<Vector2>;
             _gridResolution = _sp.Uniforms["u_gridResolution"] as Uniform<Vector2>;
 
             Mesh mesh = GeographicGridEllipsoidTessellator.Compute(_globeShape, 64, 32, GeographicGridEllipsoidVertexAttributes.Position);
@@ -130,12 +130,10 @@ namespace MiniGlobe.Examples.Chapter3
             _sceneState.Camera.ZoomToTarget(_globeShape.MaximumRadius);
             PersistentView.Execute(@"E:\Dropbox\My Dropbox\Book\Manuscript\GlobeRendering\Figures\LatitudeLongitudeGrid.xml", _window, _sceneState.Camera);
 
-            HighResolutionSnap snap = new HighResolutionSnap(_window, _sceneState.Camera);
+            HighResolutionSnap snap = new HighResolutionSnap(_window, _sceneState);
             snap.ColorFilename = @"E:\Dropbox\My Dropbox\Book\Manuscript\GlobeRendering\Figures\LatitudeLongitudeGrid.png";
             snap.WidthInInches = 3;
             snap.DotsPerInch = 600;
-            snap.ExitAfterSnap = true;
-            snap.Enabled = false;
 
             _gridResolutions = new List<GridResolution>();
             _gridResolutions.Add(new GridResolution(
@@ -176,6 +174,9 @@ namespace MiniGlobe.Examples.Chapter3
                     break;
                 }
             }
+
+            float width = (float)_sceneState.HighResolutionSnapScale;
+            _gridWidth.Value = new Vector2(width, width);
 
             Context context = _window.Context;
             context.Clear(ClearBuffers.ColorAndDepthBuffer, Color.White, 1, 0);
@@ -224,6 +225,7 @@ namespace MiniGlobe.Examples.Chapter3
         private readonly VertexArray _va;
         private readonly Texture2D _texture;
         private readonly PrimitiveType _primitiveType;
+        private readonly Uniform<Vector2> _gridWidth;
         private readonly Uniform<Vector2> _gridResolution;
         private readonly IList<GridResolution> _gridResolutions;
         private readonly BillboardGroup _billboard;
