@@ -12,6 +12,12 @@ using System.Diagnostics;
 using MiniGlobe.Renderer.GL32;
 using OpenTK.Graphics.OpenGL;
 
+public enum WindowSize
+{
+    UserDefined = 0,
+    FullScreen = 1
+}
+
 namespace MiniGlobe.Renderer
 {
     public static class Device
@@ -23,7 +29,12 @@ namespace MiniGlobe.Renderer
 
         public static MiniGlobeWindow CreateWindow(int width, int height, string title)
         {
-            return new MiniGlobeWindowGL32(width, height, title);
+            return CreateWindow(width, height, title, WindowSize.UserDefined);
+        }
+
+        public static MiniGlobeWindow CreateWindow(int width, int height, string title, WindowSize windowSize)
+        {
+            return new MiniGlobeWindowGL32(width, height, title, windowSize);
         }
 
         public static ShaderProgram CreateShaderProgram(
