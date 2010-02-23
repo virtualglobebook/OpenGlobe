@@ -68,6 +68,7 @@ namespace MiniGlobe.Scene
                   uniform mat4 mg_orthographicProjectionMatrix;
                   uniform sampler2D mg_texture0;
                   uniform float mg_highResolutionSnapScale;
+                  uniform vec4 mg_viewport;
 
                   void main()
                   {
@@ -78,6 +79,15 @@ namespace MiniGlobe.Scene
                       vec4 v1 = vec4(center.xy + vec2(halfSize.x, -halfSize.y), center.z, 1.0);
                       vec4 v2 = vec4(center.xy + vec2(-halfSize.x, halfSize.y), center.z, 1.0);
                       vec4 v3 = vec4(center.xy + halfSize, center.z, 1.0);
+
+                      //
+                      // Cull - could also cull in z.
+                      //
+                      if ((v3.x < mg_viewport.x) || (v3.y < mg_viewport.y) ||
+                          (v0.x > mg_viewport.z) || (v0.y > mg_viewport.w))
+                      {
+                          return;
+                      }
 
                       gl_Position = mg_orthographicProjectionMatrix * v0;
                       textureCoordinates = vec2(0, 0);
