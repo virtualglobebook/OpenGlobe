@@ -46,6 +46,7 @@
     <Compile Include="Renderables\IRenderable.cs" />
     <Compile Include="Renderables\RayCastedGlobe.cs" />
     <Compile Include="Renderables\TessellatedGlobe.cs" />
+    <Compile Include="Renderables\Wireframe.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Core\MiniGlobe.Core.csproj">

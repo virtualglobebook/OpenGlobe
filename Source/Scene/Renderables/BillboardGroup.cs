@@ -32,7 +32,6 @@ namespace MiniGlobe.Scene
                 @"#version 150
 
                   in vec4 position;
-                  out vec4 gsPosition;
 
                   uniform mat4 mg_modelViewPerspectiveProjectionMatrix;
                   uniform mat4 mg_viewportTransformationMatrix;

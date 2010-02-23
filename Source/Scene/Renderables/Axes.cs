@@ -28,7 +28,6 @@ namespace MiniGlobe.Scene
 
                   in vec4 position;
                   in vec4 color;
-                  out vec4 gsPosition;
                   out vec4 gsColor;
 
                   uniform mat4 mg_modelViewPerspectiveProjectionMatrix;
