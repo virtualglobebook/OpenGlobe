@@ -20,10 +20,10 @@ namespace MiniGlobe.Core
             Interval interval = new Interval(0, 1);
             Assert.AreEqual(0, interval.Minimum);
             Assert.AreEqual(1, interval.Maximum);
-            Assert.AreEqual(IntervalEndPoint.Closed, interval.MinimumEndPoint);
-            Assert.AreEqual(IntervalEndPoint.Closed, interval.MaximumEndPoint);
+            Assert.AreEqual(IntervalEndpoint.Closed, interval.MinimumEndpoint);
+            Assert.AreEqual(IntervalEndpoint.Closed, interval.MaximumEndpoint);
 
-            Interval interval2 = new Interval(1, 2, IntervalEndPoint.Open, IntervalEndPoint.Open);
+            Interval interval2 = new Interval(1, 2, IntervalEndpoint.Open, IntervalEndpoint.Open);
 
             Interval interval3 = interval2;
             Assert.AreEqual(interval2, interval3);
@@ -33,7 +33,7 @@ namespace MiniGlobe.Core
         [Test]
         public void Contains()
         {
-            Interval interval = new Interval(0, 1, IntervalEndPoint.Closed, IntervalEndPoint.Open);
+            Interval interval = new Interval(0, 1, IntervalEndpoint.Closed, IntervalEndpoint.Open);
             Assert.IsFalse(interval.Contains(-1));
             Assert.IsTrue(interval.Contains(0));
             Assert.IsTrue(interval.Contains(0.5));

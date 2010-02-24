@@ -23,7 +23,7 @@ namespace MiniGlobe.Renderer
             {
                 if (e.Key == KeyboardKey.Space)
                 {
-                    Enabled = true;
+                    Enable(true);
                 }
             };
         }
@@ -58,7 +58,7 @@ namespace MiniGlobe.Renderer
             _window.Context.Viewport = _previousViewport;
             _sceneState.HighResolutionSnapScale = _previousSnapScale;
 
-            Enabled = false;
+            Enable(false);
             _snapBuffer.Dispose();
             _snapBuffer = null;
         }
@@ -67,11 +67,7 @@ namespace MiniGlobe.Renderer
 
         public void Dispose()
         {
-            if (_enabled)
-            {
-                _window.PreRenderFrame -= PreRenderFrame;
-                _window.PostRenderFrame -= PostRenderFrame;
-            }
+            Enable(false);
 
             if (_snapBuffer != null)
             {
@@ -81,27 +77,22 @@ namespace MiniGlobe.Renderer
 
         #endregion
 
-        private bool Enabled
+        private void Enable(bool value)
         {
-            get { return _enabled; }
-
-            set
+            if (_enabled != value)
             {
-                if (_enabled != value)
+                if (value)
                 {
-                    if (value)
-                    {
-                        _window.PreRenderFrame += PreRenderFrame;
-                        _window.PostRenderFrame += PostRenderFrame;
-                    }
-                    else
-                    {
-                        _window.PreRenderFrame -= PreRenderFrame;
-                        _window.PostRenderFrame -= PostRenderFrame;
-                    }
-
-                    _enabled = value;
+                    _window.PreRenderFrame += PreRenderFrame;
+                    _window.PostRenderFrame += PostRenderFrame;
                 }
+                else
+                {
+                    _window.PreRenderFrame -= PreRenderFrame;
+                    _window.PostRenderFrame -= PostRenderFrame;
+                }
+
+                _enabled = value;
             }
         }
 

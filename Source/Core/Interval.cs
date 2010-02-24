@@ -12,7 +12,7 @@ using System.Globalization;
 
 namespace MiniGlobe.Core
 {
-    public enum IntervalEndPoint
+    public enum IntervalEndpoint
     {
         Open,
         Closed
@@ -21,11 +21,11 @@ namespace MiniGlobe.Core
     public struct Interval : IEquatable<Interval>
     {
         public Interval(double minimum, double maximum)
-            : this(minimum, maximum, IntervalEndPoint.Closed, IntervalEndPoint.Closed)
+            : this(minimum, maximum, IntervalEndpoint.Closed, IntervalEndpoint.Closed)
         {
         }
 
-        public Interval(double minimum, double maximum, IntervalEndPoint minimumEndPoint, IntervalEndPoint maximumEndPoint)
+        public Interval(double minimum, double maximum, IntervalEndpoint minimumEndpoint, IntervalEndpoint maximumEndpoint)
         {
             if (maximum < minimum)
             {
@@ -34,19 +34,19 @@ namespace MiniGlobe.Core
 
             _minimum = minimum;
             _maximum = maximum;
-            _minimumEndPoint = minimumEndPoint;
-            _maximumEndPoint = maximumEndPoint;
+            _minimumEndpoint = minimumEndpoint;
+            _maximumEndpoint = maximumEndpoint;
         }
 
         public double Minimum { get { return _minimum; } }
         public double Maximum { get { return _maximum; } }
-        public IntervalEndPoint MinimumEndPoint { get { return _minimumEndPoint; } }
-        public IntervalEndPoint MaximumEndPoint { get { return _maximumEndPoint; } }
+        public IntervalEndpoint MinimumEndpoint { get { return _minimumEndpoint; } }
+        public IntervalEndpoint MaximumEndpoint { get { return _maximumEndpoint; } }
 
         public bool Contains(double value)
         {
-            bool satisfiesMinimum = (_minimumEndPoint == IntervalEndPoint.Closed) ? (value >= _minimum) : (value > _minimum);
-            bool satisfiesMaximum = (_maximumEndPoint == IntervalEndPoint.Closed) ? (value <= _maximum) : (value < _maximum);
+            bool satisfiesMinimum = (_minimumEndpoint == IntervalEndpoint.Closed) ? (value >= _minimum) : (value > _minimum);
+            bool satisfiesMaximum = (_maximumEndpoint == IntervalEndpoint.Closed) ? (value <= _maximum) : (value < _maximum);
 
             return satisfiesMinimum && satisfiesMaximum;
         }
@@ -64,13 +64,13 @@ namespace MiniGlobe.Core
         public override string ToString()
         {
             return string.Format(CultureInfo.CurrentCulture, "{0}{1}, {2},{3}",
-                _minimumEndPoint == IntervalEndPoint.Closed ? '[' : '(', _minimum,
-                _maximum, _maximumEndPoint == IntervalEndPoint.Closed ? ']' : ')');
+                _minimumEndpoint == IntervalEndpoint.Closed ? '[' : '(', _minimum,
+                _maximum, _maximumEndpoint == IntervalEndpoint.Closed ? ']' : ')');
         }
 
         public override int GetHashCode()
         {
-            return _minimum.GetHashCode() ^ _maximum.GetHashCode() ^ _minimumEndPoint.GetHashCode() ^ _maximumEndPoint.GetHashCode();
+            return _minimum.GetHashCode() ^ _maximum.GetHashCode() ^ _minimumEndpoint.GetHashCode() ^ _maximumEndpoint.GetHashCode();
         }
 
         public override bool Equals(object obj)
@@ -88,15 +88,15 @@ namespace MiniGlobe.Core
             return
                 (_minimum == other._minimum) &&
                 (_maximum == other._maximum) &&
-                (_minimumEndPoint == other._minimumEndPoint) &&
-                (_maximumEndPoint == other._maximumEndPoint);
+                (_minimumEndpoint == other._minimumEndpoint) &&
+                (_maximumEndpoint == other._maximumEndpoint);
         }
 
         #endregion
 
         private readonly double _minimum;
         private readonly double _maximum;
-        private readonly IntervalEndPoint _minimumEndPoint;
-        private readonly IntervalEndPoint _maximumEndPoint;
+        private readonly IntervalEndpoint _minimumEndpoint;
+        private readonly IntervalEndpoint _maximumEndpoint;
     }
 }

@@ -15,10 +15,10 @@ namespace MiniGlobe.Renderer.GL32
 {
     internal class MiniGlobeWindowGL32 : MiniGlobeWindow
     {
-        public MiniGlobeWindowGL32(int width, int height, string title, WindowSize windowSize)
+        public MiniGlobeWindowGL32(int width, int height, string title, WindowType windowType)
         {
-            GameWindowFlags fameWindowFlags = (windowSize == WindowSize.UserDefined) ? GameWindowFlags.Default : GameWindowFlags.Fullscreen;
-            if (windowSize == WindowSize.FullScreen)
+            GameWindowFlags fameWindowFlags = (windowType == WindowType.Default) ? GameWindowFlags.Default : GameWindowFlags.Fullscreen;
+            if (windowType == WindowType.FullScreen)
             {
                 width = DisplayDevice.Default.Width;
                 height = DisplayDevice.Default.Height;
