@@ -78,7 +78,7 @@ namespace MiniGlobe.Examples.Chapter3
 
                   vec2 ComputeTextureCoordinates(vec3 normal)
                   {
-                      return vec2(atan2(normal.y, normal.x) / mg_twoPi + 0.5, asin(normal.z) / mg_pi + 0.5);
+                      return vec2(atan(normal.y, normal.x) / mg_twoPi + 0.5, asin(normal.z) / mg_pi + 0.5);
                   }
 
                   vec3 NightColor(vec3 normal)
