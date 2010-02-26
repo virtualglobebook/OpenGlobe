@@ -18,7 +18,7 @@
 //  2 - Switch between solid and shaded ray casted globe (when ray casted globe is shown)
 //  3 - Show/hide billboards
 //
-//  Space - Switch between whole earth and horizon view
+//  Enter - Switch between whole earth and horizon view
 //
 
 using System;
@@ -41,7 +41,7 @@ namespace MiniGlobe.Examples.Research.RayCasting
 
             _billboardPositions = AllCities(); 
 
-            _window = Device.CreateWindow(800, 600, "Research:  Ray Casting");
+            _window = Device.CreateWindow(800, 600, "Research:  Ray Casting", WindowType.Default);
             _window.Resize += OnResize;
             _window.RenderFrame += OnRenderFrame;
             _window.Keyboard.KeyDown += OnKeyDown;
@@ -59,11 +59,6 @@ namespace MiniGlobe.Examples.Research.RayCasting
             LoadGlobe();
 
             _sceneState.Camera.ZoomToTarget(_globeShape.MaximumRadius);
-
-            HighResolutionSnap snap = new HighResolutionSnap(_window, _sceneState);
-            snap.ColorFilename = @"E:\Dropbox\My Dropbox\Book\Manuscript\GlobeRendering\Figures\RayCasting.png";
-            snap.WidthInInches = 3;
-            snap.DotsPerInch = 600;
         }
 
         private void OnResize()
@@ -198,7 +193,7 @@ namespace MiniGlobe.Examples.Research.RayCasting
                     LoadBillboards();
                 }
             }
-            else if (e.Key == KeyboardKey.Space)
+            else if (e.Key == KeyboardKey.Enter)
             {
                 _viewingHorizon = !_viewingHorizon;
                 if (_viewingHorizon)
@@ -209,6 +204,10 @@ namespace MiniGlobe.Examples.Research.RayCasting
                 {
                     CenterCameraOnGlobeCenter();
                 }
+            }
+            else if (e.Key == KeyboardKey.Escape)
+            {
+                Environment.Exit(0);
             }
         }
 

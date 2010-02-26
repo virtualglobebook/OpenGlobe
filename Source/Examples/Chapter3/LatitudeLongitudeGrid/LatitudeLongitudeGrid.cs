@@ -87,7 +87,7 @@ namespace MiniGlobe.Examples.Chapter3
 
                   vec2 ComputeTextureCoordinates(vec3 normal)
                   {
-                      return vec2(atan(normal.y, normal.x) / mg_twoPi + 0.5, asin(normal.z) / mg_pi + 0.5);
+                      return vec2(atan(normal.y, normal.x) * mg_oneOverTwoPi + 0.5, asin(normal.z) * mg_oneOverPi + 0.5);
                   }
 
                   void main()
@@ -99,6 +99,25 @@ namespace MiniGlobe.Examples.Chapter3
                       vec2 dx = abs(dFdx(textureCoordinate));
                       vec2 dy = abs(dFdy(textureCoordinate));
                       vec2 dF = vec2(max(dx.s, dy.s), max(dx.t, dy.t)) * u_gridLineWidth;
+
+//                      if (abs(0.5 - textureCoordinate.t) < (dF.y * 2.0))                        // Equator
+//                      {
+//                          fragmentColor = vec3(1.0, 1.0, 0.0);
+//                          return;
+//                      }
+//                      else if ((abs(0.5 + (23.5 / 180.0) - textureCoordinate.t) < dF.y) ||      // Tropic of Cancer
+//                               (abs(0.5 - (23.5 / 180.0) - textureCoordinate.t) < dF.y)  ||     // Tropic of Capricorn
+//                               (abs(0.5 + (66.56083 / 180.0) - textureCoordinate.t) < dF.y) ||  // Arctic Circle
+//                               (abs(0.5 - (66.56083 / 180.0) - textureCoordinate.t) < dF.y))    // Antarctic Circle
+//                      {
+//                          fragmentColor = vec3(1.0, 1.0, 0.0);
+//                          return;
+//                      }
+//                      else if (abs(0.5 - textureCoordinate.s) < dF.x)                           // Prime Meridian
+//                      {
+//                          fragmentColor = vec3(0.0, 1.0, 0.0);
+//                          return;
+//                      }
 
                       if (any(lessThan(distanceToLine, dF)))
                       {
@@ -128,11 +147,11 @@ namespace MiniGlobe.Examples.Chapter3
             _sceneState.Camera.PerspectiveNearPlaneDistance = 0.01 * _globeShape.MaximumRadius;
             _sceneState.Camera.PerspectiveFarPlaneDistance = 10.0 * _globeShape.MaximumRadius;
             _sceneState.Camera.ZoomToTarget(_globeShape.MaximumRadius);
-            PersistentView.Execute(@"E:\Dropbox\My Dropbox\Book\Manuscript\GlobeRendering\Figures\LatitudeLongitudeGrid.xml", _window, _sceneState.Camera);
+            PersistentView.Execute(@"E:\Dropbox\My Dropbox\Book\Manuscript\GlobeRendering\Figures\LatitudeLongitudeGridClosest.xml", _window, _sceneState.Camera);
 
             HighResolutionSnap snap = new HighResolutionSnap(_window, _sceneState);
-            snap.ColorFilename = @"E:\Dropbox\My Dropbox\Book\Manuscript\GlobeRendering\Figures\LatitudeLongitudeGrid.png";
-            snap.WidthInInches = 3;
+            snap.ColorFilename = @"E:\Dropbox\My Dropbox\Book\Manuscript\GlobeRendering\Figures\LatitudeLongitudeGridClosest.png";
+            snap.WidthInInches = 1.5;
             snap.DotsPerInch = 600;
 
             _gridResolutions = new List<GridResolution>();
@@ -149,11 +168,35 @@ namespace MiniGlobe.Examples.Chapter3
                 new Interval(20000000, double.MaxValue, IntervalEndpoint.Closed, IntervalEndpoint.Open),
                 new Vector2d(0.1, 0.1)));
 
-            Vector3[] positions = new[]
+            //_billboard = new BillboardGroup(_window.Context, positions, new Bitmap(@"building.png"));
+
+            _billboards = new List<BillboardGroup>();
+            _billboards.Add(
+                new BillboardGroup(_window.Context,
+                new[] { Conversion.ToVector3(_globeShape.DeticToVector3d(Trig.ToRadians(-123.06), Trig.ToRadians(49.13), 0)) },
+                Device.CreateBitmapFromText("* Vancouver", new Font("Arial", 24))));
+            //_billboards.Add(
+            //    new BillboardGroup(_window.Context, 
+            //    new[] { Conversion.ToVector3(_globeShape.DeticToVector3d(Trig.ToRadians(10), Trig.ToRadians(0), 0)) },
+            //    Device.CreateBitmapFromText("Equator", new Font("Arial", 24))));
+            //_billboards.Add(
+            //    new BillboardGroup(_window.Context,
+            //    new[] { Conversion.ToVector3(_globeShape.DeticToVector3d(Trig.ToRadians(10), Trig.ToRadians(23.5), 0)) },
+            //    Device.CreateBitmapFromText("Tropic of Cancer", new Font("Arial", 24))));
+            //_billboards.Add(
+            //    new BillboardGroup(_window.Context,
+            //    new[] { Conversion.ToVector3(_globeShape.DeticToVector3d(Trig.ToRadians(10), Trig.ToRadians(-23.5), 0)) },
+            //    Device.CreateBitmapFromText("Tropic of Capricorn", new Font("Arial", 24))));
+            //_billboards.Add(
+            //    new BillboardGroup(_window.Context,
+            //    new[] { Conversion.ToVector3(_globeShape.DeticToVector3d(Trig.ToRadians(10), Trig.ToRadians(66.56083), 0)) },
+            //    Device.CreateBitmapFromText("Arctic Circle", new Font("Arial", 24))));
+                      
+            foreach (BillboardGroup billboardGroup in _billboards)
             {
-                Conversion.ToVector3(_globeShape.DeticToVector3d(Trig.ToRadians(-123.06), Trig.ToRadians(49.13), 0)), // Vancouver, B.C., Can.
-            };
-            _billboard = new BillboardGroup(_window.Context, positions, new Bitmap(@"building.png"));
+                //billboardGroup.Color = Color.Yellow;
+                billboardGroup.DepthTestEnabled = false;
+            }
         }
 
         private void OnResize()
@@ -164,8 +207,10 @@ namespace MiniGlobe.Examples.Chapter3
 
         private void OnRenderFrame()
         {
+            //
+            // This could be improved to exploit temporal coherence as described in section x.x.
+            //
             double altitude = _sceneState.Camera.Altitude(_globeShape);
-
             for (int i = 0; i < _gridResolutions.Count; ++i)
             {
                 if (_gridResolutions[i].Interval.Contains(altitude))
@@ -186,7 +231,10 @@ namespace MiniGlobe.Examples.Chapter3
             context.Bind(_va);
             context.Draw(_primitiveType, _sceneState);
 
-            _billboard.Render(_sceneState);
+            foreach (BillboardGroup billboardGroup in _billboards)
+            {
+                billboardGroup.Render(_sceneState);
+            }
         }
 
         #region IDisposable Members
@@ -198,7 +246,11 @@ namespace MiniGlobe.Examples.Chapter3
             _sp.Dispose();
             _camera.Dispose();
             _window.Dispose();
-            _billboard.Dispose();
+
+            foreach (BillboardGroup billboardGroup in _billboards)
+            {
+                billboardGroup.Dispose();
+            }
         }
 
         #endregion
@@ -228,6 +280,6 @@ namespace MiniGlobe.Examples.Chapter3
         private readonly Uniform<Vector2> _gridWidth;
         private readonly Uniform<Vector2> _gridResolution;
         private readonly IList<GridResolution> _gridResolutions;
-        private readonly BillboardGroup _billboard;
+        private readonly IList<BillboardGroup> _billboards;
     }
 }

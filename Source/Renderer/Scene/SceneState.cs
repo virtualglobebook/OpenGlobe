@@ -36,7 +36,7 @@ namespace MiniGlobe.Renderer
 
         public Vector3d CameraLightPosition
         {
-            get { return Camera.Eye + (3.0 * Camera.Up); }
+            get { return Camera.Eye; }
         }
 
         public Matrix4d ComputeViewportTransformationMatrix(Rectangle viewport)

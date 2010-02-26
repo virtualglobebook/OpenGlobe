@@ -74,6 +74,8 @@ namespace MiniGlobe.Scene
                       vec4 center = gl_in[0].gl_Position;
                       vec2 halfSize = vec2(textureSize(mg_texture0, 0)) * 0.5 * mg_highResolutionSnapScale;
 
+//center.x += halfSize.x;
+
                       vec4 v0 = vec4(center.xy - halfSize, center.z, 1.0);
                       vec4 v1 = vec4(center.xy + vec2(halfSize.x, -halfSize.y), center.z, 1.0);
                       vec4 v2 = vec4(center.xy + vec2(-halfSize.x, halfSize.y), center.z, 1.0);
@@ -109,6 +111,7 @@ namespace MiniGlobe.Scene
                  
                   in vec2 textureCoordinates;
                   out vec4 fragmentColor;
+                  uniform vec3 u_colorUniform;
                   uniform sampler2D mg_texture0;
 
                   void main()
@@ -119,9 +122,11 @@ namespace MiniGlobe.Scene
                       {
                           discard;
                       }
-                      fragmentColor = color;
+                      fragmentColor = vec4(color.rgb * u_colorUniform, color.a);
                   }";
             _sp = Device.CreateShaderProgram(vs, gs, fs);
+            _colorUniform = _sp.Uniforms["u_colorUniform"] as Uniform<Vector3>;
+            Color = Color.White;
 
             VertexBuffer positionBuffer = Device.CreateVertexBuffer(BufferHint.StaticDraw, positions.Length * Vector3.SizeInBytes);
             positionBuffer.CopyFromSystemMemory(positions);
@@ -158,6 +163,23 @@ namespace MiniGlobe.Scene
             set { _renderState.RasterizationMode = value ? RasterizationMode.Line : RasterizationMode.Fill; }
         }
 
+        public bool DepthTestEnabled
+        {
+            get { return _renderState.DepthTest.Enabled; }
+            set { _renderState.DepthTest.Enabled = value; }
+        }
+
+        public Color Color
+        {
+            get { return _color; }
+
+            set
+            {
+                _color = value;
+                _colorUniform.Value = new Vector3(_color.R / 255.0f, _color.G / 255.0f, _color.B / 255.0f);
+            }
+        }
+
         #region IDisposable Members
 
         public void Dispose()
@@ -174,5 +196,7 @@ namespace MiniGlobe.Scene
         private readonly ShaderProgram _sp;
         private readonly VertexArray _va;
         private readonly Texture2D _texture;
+        private readonly Uniform<Vector3> _colorUniform;
+        private Color _color;
     }
 }

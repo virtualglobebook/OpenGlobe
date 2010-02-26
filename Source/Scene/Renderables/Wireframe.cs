@@ -41,6 +41,11 @@ namespace MiniGlobe.Scene
             //    Solid Wireframe
             //    http://developer.download.nvidia.com/SDK/10.5/direct3d/Source/SolidWireframe/Doc/SolidWireframe.pdf
             //
+            // More recent work, which I was not aware of at the time, is:
+            //
+            //    Two Methods for Antialiased Wireframe Drawing with Hidden Line Removal
+            //    http://orbit.dtu.dk/getResource?recordId=219956&objectId=1&versionId=1
+            //
             string vs =
                 @"#version 150
 

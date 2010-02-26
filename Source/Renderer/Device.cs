@@ -7,10 +7,12 @@
 //
 #endregion
 
+using System;
 using System.Drawing;
 using System.Diagnostics;
 using MiniGlobe.Renderer.GL32;
 using OpenTK.Graphics.OpenGL;
+using ImagingPixelFormat = System.Drawing.Imaging.PixelFormat;
 
 namespace MiniGlobe.Renderer
 {
@@ -91,6 +93,27 @@ namespace MiniGlobe.Renderer
                 TextureUtility.ImagingPixelFormatToDataType(bitmap.PixelFormat));
 
             return texture;
+        }
+
+        public static Bitmap CreateBitmapFromText(string text, Font font)
+        {
+            Bitmap tmpbitmap = new Bitmap(1, 1);
+            Graphics tmpGraphics = Graphics.FromImage(tmpbitmap);
+            SizeF size = tmpGraphics.MeasureString(text, font);
+            tmpGraphics.Dispose();
+            tmpbitmap.Dispose();
+
+            Bitmap bitmap = new Bitmap(
+                (int)Math.Ceiling(size.Width),
+                (int)Math.Ceiling(size.Height),
+                ImagingPixelFormat.Format32bppArgb);
+            Graphics graphics = Graphics.FromImage(bitmap);
+            graphics.DrawString(text, font, new SolidBrush(Color.White), new PointF());
+
+            font.Dispose();
+            graphics.Dispose();
+
+            return bitmap;
         }
 
         public static Extensions Extensions
