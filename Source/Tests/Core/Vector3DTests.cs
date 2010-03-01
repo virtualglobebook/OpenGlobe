@@ -199,12 +199,58 @@ namespace MiniGlobe.Core
         }
 
         [Test]
-        public void TestUndefined()
+        public void IsUndefined()
         {
             Assert.IsTrue(Vector3D.Undefined.IsUndefined);
             Assert.IsFalse(Vector3D.UnitX.IsUndefined);
             Assert.IsFalse(Vector3D.UnitY.IsUndefined);
             Assert.IsFalse(Vector3D.UnitZ.IsUndefined);
+        }
+
+        [Test]
+        public void TestEquals()
+        {
+            Vector3D a = new Vector3D(1.0, 2.0, 3.0);
+            Vector3D b = new Vector3D(4.0, 5.0, 6.0);
+            Vector3D c = new Vector3D(1.0, 2.0, 3.0);
+
+            Assert.IsTrue(a.Equals(c));
+            Assert.IsTrue(c.Equals(a));
+            Assert.IsTrue(a == c);
+            Assert.IsTrue(c == a);
+            Assert.IsFalse(c != a);
+            Assert.IsFalse(c != a);
+            Assert.IsFalse(a.Equals(b));
+            Assert.IsFalse(b.Equals(a));
+            Assert.IsFalse(a == b);
+            Assert.IsFalse(b == a);
+            Assert.IsTrue(a != b);
+            Assert.IsTrue(b != a);
+
+            object objA = a;
+            object objB = b;
+            object objC = c;
+
+            Assert.IsTrue(a.Equals(objA));
+            Assert.IsTrue(a.Equals(objC));
+            Assert.IsFalse(a.Equals(objB));
+
+            Assert.IsTrue(objA.Equals(objC));
+            Assert.IsFalse(objA.Equals(objB));
+
+            Assert.IsFalse(a.Equals(null));
+            Assert.IsFalse(a.Equals(5));
+        }
+
+        [Test]
+        public void TestGetHashCode()
+        {
+            Vector3D a = new Vector3D(1.0, 2.0, 3.0);
+            Vector3D b = new Vector3D(4.0, 5.0, 6.0);
+            Vector3D c = new Vector3D(1.0, 2.0, 3.0);
+
+            Assert.AreEqual(a.GetHashCode(), c.GetHashCode());
+            Assert.AreNotEqual(a.GetHashCode(), b.GetHashCode());
         }
     }
 }

@@ -165,7 +165,7 @@ namespace MiniGlobe.Core
 
         public override int GetHashCode()
         {
-            return base.GetHashCode();
+            return _x.GetHashCode() ^ _y.GetHashCode() ^ _z.GetHashCode();
         }
 
         private readonly double _x;
