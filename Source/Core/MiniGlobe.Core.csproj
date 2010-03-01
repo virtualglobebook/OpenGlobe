@@ -31,6 +31,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Cartographic3D.cs" />
     <Compile Include="Conversion.cs" />
     <Compile Include="Disposable.cs" />
     <Compile Include="Geometry\Ellipsoid.cs" />

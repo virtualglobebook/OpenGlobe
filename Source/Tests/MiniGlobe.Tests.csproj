@@ -45,6 +45,7 @@
     <Reference Include="System.Drawing" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Core\Cartographic3DTests.cs" />
     <Compile Include="Core\Geometry\EllipsoidTests.cs" />
     <Compile Include="Core\Geometry\GeometryTests.cs" />
     <Compile Include="Core\SystemTests.cs" />
