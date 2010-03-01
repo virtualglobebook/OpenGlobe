@@ -18,7 +18,7 @@ namespace MiniGlobe.Core
     /// <see cref="X"/>, <see cref="Y"/>, and <see cref="Z"/>, are represented as
     /// double-precision (64-bit) floating point numbers.
     /// </summary>
-    public struct Vector3D
+    public struct Vector3D : IEquatable<Vector3D>
     {
         public static Vector3D Zero
         {
@@ -114,6 +114,11 @@ namespace MiniGlobe.Core
             return this / scalar;
         }
 
+        public bool Equals(Vector3D other)
+        {
+            return _x == other._x && _y == other._y && _z == other._z;
+        }
+
         public static Vector3D operator +(Vector3D left, Vector3D right)
         {
             return new Vector3D(left._x + right._x, left._y + right._y, left._z + right._z);
@@ -137,6 +142,30 @@ namespace MiniGlobe.Core
         public static Vector3D operator /(Vector3D left, double right)
         {
             return new Vector3D(left._x / right, left._y / right, left._z / right);
+        }
+
+        public static bool operator ==(Vector3D left, Vector3D right)
+        {
+            return left.Equals(right);
+        }
+
+        public static bool operator !=(Vector3D left, Vector3D right)
+        {
+            return !left.Equals(right);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is Vector3D)
+            {
+                return Equals((Vector3D)obj);
+            }
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
         }
 
         private readonly double _x;
