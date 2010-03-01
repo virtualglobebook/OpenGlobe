@@ -18,34 +18,34 @@ namespace MiniGlobe.Core.Coordinates
     /// <see cref="X"/>, <see cref="Y"/>, and <see cref="Z"/>, are represented as
     /// double-precision (64-bit) floating point numbers.
     /// </summary>
-    public struct Vector3d
+    public struct Vector3D
     {
-        public static Vector3d Zero
+        public static Vector3D Zero
         {
-            get { return new Vector3d(0.0, 0.0, 0.0); }
+            get { return new Vector3D(0.0, 0.0, 0.0); }
         }
 
-        public static Vector3d UnitX
+        public static Vector3D UnitX
         {
-            get { return new Vector3d(1.0, 0.0, 0.0); }
+            get { return new Vector3D(1.0, 0.0, 0.0); }
         }
 
-        public static Vector3d UnitY
+        public static Vector3D UnitY
         {
-            get { return new Vector3d(0.0, 1.0, 0.0); }
+            get { return new Vector3D(0.0, 1.0, 0.0); }
         }
 
-        public static Vector3d UnitZ
+        public static Vector3D UnitZ
         {
-            get { return new Vector3d(0.0, 0.0, 1.0); }
+            get { return new Vector3D(0.0, 0.0, 1.0); }
         }
 
-        public static Vector3d Undefined
+        public static Vector3D Undefined
         {
-            get { return new Vector3d(Double.NaN, Double.NaN, Double.NaN); }
+            get { return new Vector3D(Double.NaN, Double.NaN, Double.NaN); }
         }
 
-        public Vector3d(double x, double y, double z)
+        public Vector3D(double x, double y, double z)
         {
             _x = x;
             _y = y;
@@ -82,61 +82,61 @@ namespace MiniGlobe.Core.Coordinates
             get { return Double.IsNaN(_x); }
         }
 
-        public Vector3d Normalize(out double magnitude)
+        public Vector3D Normalize(out double magnitude)
         {
             magnitude = Magnitude;
             return this / magnitude;
         }
 
-        public Vector3d Normalize()
+        public Vector3D Normalize()
         {
             double magnitude;
             return Normalize(out magnitude);
         }
 
-        public Vector3d Add(Vector3d addend)
+        public Vector3D Add(Vector3D addend)
         {
             return this + addend;
         }
 
-        public Vector3d Subtract(Vector3d subtrahend)
+        public Vector3D Subtract(Vector3D subtrahend)
         {
             return this - subtrahend;
         }
 
-        public Vector3d Multiply(double scalar)
+        public Vector3D Multiply(double scalar)
         {
             return this * scalar;
         }
 
-        public Vector3d Divide(double scalar)
+        public Vector3D Divide(double scalar)
         {
             return this / scalar;
         }
 
-        public static Vector3d operator +(Vector3d left, Vector3d right)
+        public static Vector3D operator +(Vector3D left, Vector3D right)
         {
-            return new Vector3d(left._x + right._x, left._y + right._y, left._z + right._z);
+            return new Vector3D(left._x + right._x, left._y + right._y, left._z + right._z);
         }
 
-        public static Vector3d operator -(Vector3d left, Vector3d right)
+        public static Vector3D operator -(Vector3D left, Vector3D right)
         {
-            return new Vector3d(left._x - right._x, left._y - right._y, left._z - right._z);
+            return new Vector3D(left._x - right._x, left._y - right._y, left._z - right._z);
         }
 
-        public static Vector3d operator *(Vector3d left, double right)
+        public static Vector3D operator *(Vector3D left, double right)
         {
-            return new Vector3d(left._x * right, left._y * right, left._z * right);
+            return new Vector3D(left._x * right, left._y * right, left._z * right);
         }
 
-        public static Vector3d operator *(double left, Vector3d right)
+        public static Vector3D operator *(double left, Vector3D right)
         {
             return right * left;
         }
 
-        public static Vector3d operator /(Vector3d left, double right)
+        public static Vector3D operator /(Vector3D left, double right)
         {
-            return new Vector3d(left._x / right, left._y / right, left._z / right);
+            return new Vector3D(left._x / right, left._y / right, left._z / right);
         }
 
         private readonly double _x;

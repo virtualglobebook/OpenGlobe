@@ -32,7 +32,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Conversion.cs" />
-    <Compile Include="Coordinates\Vector3d.cs" />
     <Compile Include="Disposable.cs" />
     <Compile Include="Geometry\Ellipsoid.cs" />
     <Compile Include="Geometry\Indices\Indices.cs" />
@@ -66,6 +65,7 @@
     <Compile Include="Tessellation\SubdivisionSphereTessellatorSimple.cs" />
     <Compile Include="Tessellation\SubdivisionUtility.cs" />
     <Compile Include="Trig.cs" />
+    <Compile Include="Vector3D.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="OpenTK, Version=0.9.9.5, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">

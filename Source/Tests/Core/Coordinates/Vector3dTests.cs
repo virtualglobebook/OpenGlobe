@@ -17,7 +17,7 @@ namespace MiniGlobe.Core.Coordinates
         [Test]
         public void Construct()
         {
-            Vector3d v = new Vector3d(1.0, 2.0, 3.0);
+            Vector3D v = new Vector3D(1.0, 2.0, 3.0);
             Assert.AreEqual(1.0, v.X);
             Assert.AreEqual(2.0, v.Y);
             Assert.AreEqual(3.0, v.Z);
@@ -26,15 +26,15 @@ namespace MiniGlobe.Core.Coordinates
         [Test]
         public void Magnitude()
         {
-            Vector3d v = new Vector3d(3.0, 4.0, 0.0);
+            Vector3D v = new Vector3D(3.0, 4.0, 0.0);
             Assert.AreEqual(25.0, v.MagnitudeSquared, 1e-14);
             Assert.AreEqual(5.0, v.Magnitude, 1e-14);
 
-            v = new Vector3d(3.0, 0.0, 4.0);
+            v = new Vector3D(3.0, 0.0, 4.0);
             Assert.AreEqual(25.0, v.MagnitudeSquared, 1e-14);
             Assert.AreEqual(5.0, v.Magnitude, 1e-14);
 
-            v = new Vector3d(0.0, 3.0, 4.0);
+            v = new Vector3D(0.0, 3.0, 4.0);
             Assert.AreEqual(25.0, v.MagnitudeSquared, 1e-14);
             Assert.AreEqual(5.0, v.Magnitude, 1e-14);
         }
@@ -42,24 +42,24 @@ namespace MiniGlobe.Core.Coordinates
         [Test]
         public void Normalize()
         {
-            Vector3d v, n1, n2;
+            Vector3D v, n1, n2;
             double magnitude;
 
-            v = new Vector3d(3.0, 4.0, 0.0);
+            v = new Vector3D(3.0, 4.0, 0.0);
             n1 = v.Normalize();
             n2 = v.Normalize(out magnitude);
             Assert.AreEqual(1.0, n1.Magnitude, 1e-14);
             Assert.AreEqual(1.0, n2.Magnitude, 1e-14);
             Assert.AreEqual(5.0, magnitude, 1e-14);
 
-            v = new Vector3d(3.0, 0.0, 4.0);
+            v = new Vector3D(3.0, 0.0, 4.0);
             n1 = v.Normalize();
             n2 = v.Normalize(out magnitude);
             Assert.AreEqual(1.0, n1.Magnitude, 1e-14);
             Assert.AreEqual(1.0, n2.Magnitude, 1e-14);
             Assert.AreEqual(5.0, magnitude, 1e-14);
 
-            v = new Vector3d(0.0, 3.0, 4.0);
+            v = new Vector3D(0.0, 3.0, 4.0);
             n1 = v.Normalize();
             n2 = v.Normalize(out magnitude);
             Assert.AreEqual(1.0, n1.Magnitude, 1e-14);
@@ -70,16 +70,16 @@ namespace MiniGlobe.Core.Coordinates
         [Test]
         public void NormalizeZeroVector()
         {
-            Vector3d v = new Vector3d(0.0, 0.0, 0.0);
+            Vector3D v = new Vector3D(0.0, 0.0, 0.0);
             
-            Vector3d n1 = v.Normalize();
+            Vector3D n1 = v.Normalize();
             Assert.IsNaN(n1.X);
             Assert.IsNaN(n1.Y);
             Assert.IsNaN(n1.Z);
             Assert.IsTrue(n1.IsUndefined);
 
             double magnitude;
-            Vector3d n2 = v.Normalize(out magnitude);
+            Vector3D n2 = v.Normalize(out magnitude);
             Assert.IsNaN(n2.X);
             Assert.IsNaN(n2.Y);
             Assert.IsNaN(n2.Z);
@@ -90,15 +90,15 @@ namespace MiniGlobe.Core.Coordinates
         [Test]
         public void Add()
         {
-            Vector3d v1 = new Vector3d(1.0, 2.0, 3.0);
-            Vector3d v2 = new Vector3d(4.0, 5.0, 6.0);
+            Vector3D v1 = new Vector3D(1.0, 2.0, 3.0);
+            Vector3D v2 = new Vector3D(4.0, 5.0, 6.0);
             
-            Vector3d v3 = v1 + v2;
+            Vector3D v3 = v1 + v2;
             Assert.AreEqual(5.0, v3.X, 1e-14);
             Assert.AreEqual(7.0, v3.Y, 1e-14);
             Assert.AreEqual(9.0, v3.Z, 1e-14);
 
-            Vector3d v4 = v1.Add(v2);
+            Vector3D v4 = v1.Add(v2);
             Assert.AreEqual(5.0, v4.X, 1e-14);
             Assert.AreEqual(7.0, v4.Y, 1e-14);
             Assert.AreEqual(9.0, v4.Z, 1e-14);
@@ -107,15 +107,15 @@ namespace MiniGlobe.Core.Coordinates
         [Test]
         public void Subtract()
         {
-            Vector3d v1 = new Vector3d(1.0, 2.0, 3.0);
-            Vector3d v2 = new Vector3d(4.0, 5.0, 6.0);
+            Vector3D v1 = new Vector3D(1.0, 2.0, 3.0);
+            Vector3D v2 = new Vector3D(4.0, 5.0, 6.0);
 
-            Vector3d v3 = v1 - v2;
+            Vector3D v3 = v1 - v2;
             Assert.AreEqual(-3.0, v3.X, 1e-14);
             Assert.AreEqual(-3.0, v3.Y, 1e-14);
             Assert.AreEqual(-3.0, v3.Z, 1e-14);
 
-            Vector3d v4 = v1.Subtract(v2);
+            Vector3D v4 = v1.Subtract(v2);
             Assert.AreEqual(-3.0, v4.X, 1e-14);
             Assert.AreEqual(-3.0, v4.Y, 1e-14);
             Assert.AreEqual(-3.0, v4.Z, 1e-14);
@@ -124,19 +124,19 @@ namespace MiniGlobe.Core.Coordinates
         [Test]
         public void Multiply()
         {
-            Vector3d v1 = new Vector3d(1.0, 2.0, 3.0);
+            Vector3D v1 = new Vector3D(1.0, 2.0, 3.0);
 
-            Vector3d v2 = v1 * 5.0;
+            Vector3D v2 = v1 * 5.0;
             Assert.AreEqual(5.0, v2.X, 1e-14);
             Assert.AreEqual(10.0, v2.Y, 1e-14);
             Assert.AreEqual(15.0, v2.Z, 1e-14);
 
-            Vector3d v3 = 5.0 * v1;
+            Vector3D v3 = 5.0 * v1;
             Assert.AreEqual(5.0, v3.X, 1e-14);
             Assert.AreEqual(10.0, v3.Y, 1e-14);
             Assert.AreEqual(15.0, v3.Z, 1e-14);
 
-            Vector3d v4 = v1.Multiply(5.0);
+            Vector3D v4 = v1.Multiply(5.0);
             Assert.AreEqual(5.0, v4.X, 1e-14);
             Assert.AreEqual(10.0, v4.Y, 1e-14);
             Assert.AreEqual(15.0, v4.Z, 1e-14);
@@ -145,14 +145,14 @@ namespace MiniGlobe.Core.Coordinates
         [Test]
         public void Divide()
         {
-            Vector3d v1 = new Vector3d(10.0, 20.0, 30.0);
+            Vector3D v1 = new Vector3D(10.0, 20.0, 30.0);
 
-            Vector3d v2 = v1 / 5.0;
+            Vector3D v2 = v1 / 5.0;
             Assert.AreEqual(2.0, v2.X, 1e-14);
             Assert.AreEqual(4.0, v2.Y, 1e-14);
             Assert.AreEqual(6.0, v2.Z, 1e-14);
 
-            Vector3d v3 = v1.Divide(5.0);
+            Vector3D v3 = v1.Divide(5.0);
             Assert.AreEqual(2.0, v3.X, 1e-14);
             Assert.AreEqual(4.0, v3.Y, 1e-14);
             Assert.AreEqual(6.0, v3.Z, 1e-14);
@@ -161,50 +161,50 @@ namespace MiniGlobe.Core.Coordinates
         [Test]
         public void Zero()
         {
-            Assert.AreEqual(0.0, Vector3d.Zero.X);
-            Assert.AreEqual(0.0, Vector3d.Zero.Y);
-            Assert.AreEqual(0.0, Vector3d.Zero.Z);
+            Assert.AreEqual(0.0, Vector3D.Zero.X);
+            Assert.AreEqual(0.0, Vector3D.Zero.Y);
+            Assert.AreEqual(0.0, Vector3D.Zero.Z);
         }
 
         [Test]
         public void UnitX()
         {
-            Assert.AreEqual(1.0, Vector3d.UnitX.X);
-            Assert.AreEqual(0.0, Vector3d.UnitX.Y);
-            Assert.AreEqual(0.0, Vector3d.UnitX.Z);
+            Assert.AreEqual(1.0, Vector3D.UnitX.X);
+            Assert.AreEqual(0.0, Vector3D.UnitX.Y);
+            Assert.AreEqual(0.0, Vector3D.UnitX.Z);
         }
 
         [Test]
         public void UnitY()
         {
-            Assert.AreEqual(0.0, Vector3d.UnitY.X);
-            Assert.AreEqual(1.0, Vector3d.UnitY.Y);
-            Assert.AreEqual(0.0, Vector3d.UnitY.Z);
+            Assert.AreEqual(0.0, Vector3D.UnitY.X);
+            Assert.AreEqual(1.0, Vector3D.UnitY.Y);
+            Assert.AreEqual(0.0, Vector3D.UnitY.Z);
         }
 
         [Test]
         public void UnitZ()
         {
-            Assert.AreEqual(0.0, Vector3d.UnitZ.X);
-            Assert.AreEqual(0.0, Vector3d.UnitZ.Y);
-            Assert.AreEqual(1.0, Vector3d.UnitZ.Z);
+            Assert.AreEqual(0.0, Vector3D.UnitZ.X);
+            Assert.AreEqual(0.0, Vector3D.UnitZ.Y);
+            Assert.AreEqual(1.0, Vector3D.UnitZ.Z);
         }
 
         [Test]
         public void Undefined()
         {
-            Assert.IsNaN(Vector3d.Undefined.X);
-            Assert.IsNaN(Vector3d.Undefined.Y);
-            Assert.IsNaN(Vector3d.Undefined.Z);
+            Assert.IsNaN(Vector3D.Undefined.X);
+            Assert.IsNaN(Vector3D.Undefined.Y);
+            Assert.IsNaN(Vector3D.Undefined.Z);
         }
 
         [Test]
         public void TestUndefined()
         {
-            Assert.IsTrue(Vector3d.Undefined.IsUndefined);
-            Assert.IsFalse(Vector3d.UnitX.IsUndefined);
-            Assert.IsFalse(Vector3d.UnitY.IsUndefined);
-            Assert.IsFalse(Vector3d.UnitZ.IsUndefined);
+            Assert.IsTrue(Vector3D.Undefined.IsUndefined);
+            Assert.IsFalse(Vector3D.UnitX.IsUndefined);
+            Assert.IsFalse(Vector3D.UnitY.IsUndefined);
+            Assert.IsFalse(Vector3D.UnitZ.IsUndefined);
         }
     }
 }
