@@ -233,6 +233,41 @@
         </Issue>
        </Message>
       </Messages>
+      <Namespaces>
+       <Namespace Name="MiniGlobe.Examples.Research.RayCasting">
+        <Types>
+         <Type Name="OptimizedRayCastedGlobe">
+          <Members>
+           <Member Name="#BoundingPolygon(OpenTK.Vector3d,OpenTK.Vector3d,System.Int32)">
+            <Messages>
+             <Message Id="DInverse" TypeName="ReviewUnusedParameters" Category="Microsoft.Usage" CheckId="CA1801" Created="2010-03-01 00:35:48Z" FixCategory="NonBreaking">
+              <Issue>
+               <Item>'DInverse'</Item>
+               <Item>'OptimizedRayCastedGlobe.BoundingPolygon(Vector3d, Vector3d, int)'</Item>
+              </Issue>
+             </Message>
+             <Message Id="q" TypeName="ReviewUnusedParameters" Category="Microsoft.Usage" CheckId="CA1801" Created="2010-03-01 00:35:48Z" FixCategory="NonBreaking">
+              <Issue>
+               <Item>'q'</Item>
+               <Item>'OptimizedRayCastedGlobe.BoundingPolygon(Vector3d, Vector3d, int)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#MostOrthogonalAxis(OpenTK.Vector3d)">
+            <Messages>
+             <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Created="2010-03-01 00:35:48Z">
+              <Issue>
+               <Item>'OptimizedRayCastedGlobe.MostOrthogonalAxis(Vector3d)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+        </Types>
+       </Namespace>
+      </Namespaces>
      </Module>
     </Modules>
    </Target>
@@ -247,102 +282,100 @@
        </Message>
       </Messages>
       <Namespaces>
-       <Namespace Name="MiniGlobe.Core.Coordinates">
+       <Namespace Name="MiniGlobe.Core">
         <Types>
-         <Type Name="Vector3d">
-          <Messages>
-           <Message Id="d" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Created="2010-02-24 12:09:42Z">
-            <Issue Name="Type">
-             <Item>d</Item>
-             <Item>'Vector3d'</Item>
-             <Item>D</Item>
-            </Issue>
-           </Message>
-           <Message TypeName="OverrideEqualsAndOperatorEqualsOnValueTypes" Category="Microsoft.Performance" CheckId="CA1815" Created="2010-02-24 12:09:42Z">
-            <Issue Name="Equals">
-             <Item>'Vector3d'</Item>
-            </Issue>
-            <Issue Name="op_Equality">
-             <Item>'Vector3d'</Item>
-            </Issue>
-           </Message>
-          </Messages>
+         <Type Name="Vector3D">
           <Members>
            <Member Name="#.ctor(System.Double,System.Double,System.Double)">
             <Messages>
-             <Message Id="x" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-02-24 12:09:42Z">
+             <Message Id="x" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-03-01 00:35:48Z">
               <Issue Name="MemberParameterMoreMeaningfulName">
-               <Item>'Vector3d.Vector3d(double, double, double)'</Item>
+               <Item>'Vector3D.Vector3D(double, double, double)'</Item>
                <Item>'x'</Item>
               </Issue>
+              <Notes>
+               <User Name="Kevin Ring">
+                <Note Id="2" />
+               </User>
+              </Notes>
              </Message>
-             <Message Id="y" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-02-24 12:09:42Z">
+             <Message Id="y" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-03-01 00:35:48Z">
               <Issue Name="MemberParameterMoreMeaningfulName">
-               <Item>'Vector3d.Vector3d(double, double, double)'</Item>
+               <Item>'Vector3D.Vector3D(double, double, double)'</Item>
                <Item>'y'</Item>
               </Issue>
+              <Notes>
+               <User Name="Kevin Ring">
+                <Note Id="3" />
+               </User>
+              </Notes>
              </Message>
-             <Message Id="z" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-02-24 12:09:42Z">
+             <Message Id="z" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-03-01 00:35:48Z">
               <Issue Name="MemberParameterMoreMeaningfulName">
-               <Item>'Vector3d.Vector3d(double, double, double)'</Item>
+               <Item>'Vector3D.Vector3D(double, double, double)'</Item>
                <Item>'z'</Item>
               </Issue>
+              <Notes>
+               <User Name="Kevin Ring">
+                <Note Id="4" />
+               </User>
+              </Notes>
              </Message>
             </Messages>
            </Member>
            <Member Name="#Normalize(System.Double&amp;)">
             <Messages>
-             <Message Id="0#" TypeName="AvoidOutParameters" Category="Microsoft.Design" CheckId="CA1021" Created="2010-02-24 12:09:42Z">
+             <Message Id="0#" TypeName="AvoidOutParameters" Category="Microsoft.Design" CheckId="CA1021" Status="Excluded" Created="2010-03-01 00:35:48Z">
               <Issue>
                <Item>'magnitude'</Item>
               </Issue>
-             </Message>
-            </Messages>
-           </Member>
-           <Member Name="#op_Addition(MiniGlobe.Core.Coordinates.Vector3d,MiniGlobe.Core.Coordinates.Vector3d)">
-            <Messages>
-             <Message TypeName="OverloadOperatorEqualsOnOverloadingAddAndSubtract" Category="Microsoft.Design" CheckId="CA1013" Created="2010-02-24 12:09:42Z">
-              <Issue>
-               <Item>'Vector3d'</Item>
-               <Item>'Vector3d.operator +(Vector3d, Vector3d)'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-           <Member Name="#op_Subtraction(MiniGlobe.Core.Coordinates.Vector3d,MiniGlobe.Core.Coordinates.Vector3d)">
-            <Messages>
-             <Message TypeName="OverloadOperatorEqualsOnOverloadingAddAndSubtract" Category="Microsoft.Design" CheckId="CA1013" Created="2010-02-24 12:09:42Z">
-              <Issue>
-               <Item>'Vector3d'</Item>
-               <Item>'Vector3d.operator -(Vector3d, Vector3d)'</Item>
-              </Issue>
+              <Notes>
+               <User Name="Kevin Ring">
+                <Note Id="0" />
+               </User>
+              </Notes>
              </Message>
             </Messages>
            </Member>
            <Member Name="#X">
             <Messages>
-             <Message Id="X" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-02-24 12:09:42Z">
+             <Message Id="X" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-03-01 00:35:48Z">
               <Issue Name="MemberMoreMeaningfulName">
-               <Item>'Vector3d.X'</Item>
+               <Item>'Vector3D.X'</Item>
               </Issue>
+              <Notes>
+               <User Name="Kevin Ring">
+                <Note Id="1" />
+               </User>
+              </Notes>
              </Message>
             </Messages>
            </Member>
            <Member Name="#Y">
             <Messages>
-             <Message Id="Y" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-02-24 12:09:42Z">
+             <Message Id="Y" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-03-01 00:35:48Z">
               <Issue Name="MemberMoreMeaningfulName">
-               <Item>'Vector3d.Y'</Item>
+               <Item>'Vector3D.Y'</Item>
               </Issue>
+              <Notes>
+               <User Name="Kevin Ring">
+                <Note Id="5" />
+               </User>
+              </Notes>
              </Message>
             </Messages>
            </Member>
            <Member Name="#Z">
             <Messages>
-             <Message Id="Z" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-02-24 12:09:42Z">
+             <Message Id="Z" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-03-01 00:35:48Z">
               <Issue Name="MemberMoreMeaningfulName">
-               <Item>'Vector3d.Z'</Item>
+               <Item>'Vector3D.Z'</Item>
               </Issue>
+              <Notes>
+               <User Name="Kevin Ring">
+                <Note Id="6" />
+               </User>
+              </Notes>
              </Message>
             </Messages>
            </Member>
@@ -4761,6 +4794,15 @@
    </Target>
   </Targets>
   <Notes>
+   <User Name="Kevin Ring">
+    <Note Id="0" Modified="2010-03-01 00:36:25Z">The out parameter is optional, and the same functionality is accessible (alebit less efficiently) without using an out parameter.</Note>
+    <Note Id="1" Modified="2010-03-01 00:36:34Z">It's a perfect name, trust me.</Note>
+    <Note Id="2" Modified="2010-03-01 00:36:37Z">It's a perfect name, trust me.</Note>
+    <Note Id="3" Modified="2010-03-01 00:36:40Z">It's a perfect name, trust me.</Note>
+    <Note Id="4" Modified="2010-03-01 00:36:42Z">It's a perfect name, trust me.</Note>
+    <Note Id="5" Modified="2010-03-01 00:36:45Z">It's a perfect name, trust me.</Note>
+    <Note Id="6" Modified="2010-03-01 00:36:47Z">It's a perfect name, trust me.</Note>
+   </User>
    <User Name="pjcozzi">
     <Note Id="0" Modified="2009-12-14 17:38:53Z">[Test] cannot be static</Note>
     <Note Id="1" Modified="2009-12-14 18:00:30Z">[Test] cannot be static.</Note>
@@ -4818,6 +4860,9 @@
    <Rule TypeName="AvoidOutParameters" Category="Microsoft.Design" CheckId="CA1021">
     <Resolution Name="Default">Consider a design that does not require that {0} be an out parameter.</Resolution>
    </Rule>
+   <Rule TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811">
+    <Resolution Name="Default">{0} appears to have no upstream public or protected callers.</Resolution>
+   </Rule>
    <Rule TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702">
     <Resolution Name="MemberParameterShouldBeCompoundWord">In member {0}, the discrete term '{1}' in parameter name {2} should be expressed as a compound word, '{3}'.</Resolution>
     <Resolution Name="MemberShouldBeCompoundWord">The discrete term '{0}' in member name {1} should be expressed as a compound word, '{2}'.</Resolution>
@@ -4857,13 +4902,6 @@
    </Rule>
    <Rule TypeName="OperatorOverloadsHaveNamedAlternates" Category="Microsoft.Usage" CheckId="CA2225">
     <Resolution Name="Default">Provide a method named '{0}' as a friendly alternate for operator {1}.</Resolution>
-   </Rule>
-   <Rule TypeName="OverloadOperatorEqualsOnOverloadingAddAndSubtract" Category="Microsoft.Design" CheckId="CA1013">
-    <Resolution Name="Default">Consider adding an overload of the equality operator for {0} that takes the same parameters as {1}.</Resolution>
-   </Rule>
-   <Rule TypeName="OverrideEqualsAndOperatorEqualsOnValueTypes" Category="Microsoft.Performance" CheckId="CA1815">
-    <Resolution Name="Equals">{0} should override Equals.</Resolution>
-    <Resolution Name="op_Equality">{0} should override the equality (==) and inequality (!=) operators.</Resolution>
    </Rule>
    <Rule TypeName="ReplaceRepetitiveArgumentsWithParamsArray" Category="Microsoft.Design" CheckId="CA1025">
     <Resolution Name="Default">Consider implementing a version of {0} that accepts a parameter array argument.</Resolution>
