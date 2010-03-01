@@ -9,10 +9,10 @@
 
 using NUnit.Framework;
 
-namespace MiniGlobe.Core.Coordinates
+namespace MiniGlobe.Core
 {
     [TestFixture]
-    public class Vector3dTests
+    public class Vector3DTests
     {
         [Test]
         public void Construct()

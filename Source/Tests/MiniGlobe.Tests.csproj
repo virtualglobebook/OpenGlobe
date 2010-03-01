@@ -45,11 +45,11 @@
     <Reference Include="System.Drawing" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Core\Coordinates\Vector3dTests.cs" />
     <Compile Include="Core\Geometry\EllipsoidTests.cs" />
     <Compile Include="Core\Geometry\GeometryTests.cs" />
     <Compile Include="Core\SystemTests.cs" />
     <Compile Include="Core\Tessellation\TessellationTests.cs" />
+    <Compile Include="Core\Vector3DTests.cs" />
     <Compile Include="IntervalTests.cs" />
     <Compile Include="MiniGlobeAssert.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
