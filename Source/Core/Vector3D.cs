@@ -11,7 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace MiniGlobe.Core.Coordinates
+namespace MiniGlobe.Core
 {
     /// <summary>
     /// A set of 3-dimensional cartesian coordinates where the three components,
