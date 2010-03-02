@@ -29,7 +29,7 @@ namespace MiniGlobe.Core.Tessellation
         {
             public Ellipsoid Ellipsoid { get; set; }
             public int NumberOfPartitions { get; set; }
-            public IList<Vector3d> Positions { get; set; }
+            public IList<Vector3D> Positions { get; set; }
             public IList<Vector3h> Normals { get; set; }
             public IList<Vector2h> TextureCoordinate { get; set; }
             public IndicesInt Indices { get; set; }
@@ -92,14 +92,14 @@ namespace MiniGlobe.Core.Tessellation
             //
             // Similarly, p4 to p7 are in the plane z = 1.
             //
-            CubeMapMesh.Positions.Add(new Vector3d(-1, 0, -1));
-            CubeMapMesh.Positions.Add(new Vector3d(0, -1, -1));
-            CubeMapMesh.Positions.Add(new Vector3d(1, 0, -1));
-            CubeMapMesh.Positions.Add(new Vector3d(0, 1, -1));
-            CubeMapMesh.Positions.Add(new Vector3d(-1, 0, 1));
-            CubeMapMesh.Positions.Add(new Vector3d(0, -1, 1));
-            CubeMapMesh.Positions.Add(new Vector3d(1, 0, 1));
-            CubeMapMesh.Positions.Add(new Vector3d(0, 1, 1));
+            CubeMapMesh.Positions.Add(new Vector3D(-1, 0, -1));
+            CubeMapMesh.Positions.Add(new Vector3D(0, -1, -1));
+            CubeMapMesh.Positions.Add(new Vector3D(1, 0, -1));
+            CubeMapMesh.Positions.Add(new Vector3D(0, 1, -1));
+            CubeMapMesh.Positions.Add(new Vector3D(-1, 0, 1));
+            CubeMapMesh.Positions.Add(new Vector3D(0, -1, 1));
+            CubeMapMesh.Positions.Add(new Vector3D(1, 0, 1));
+            CubeMapMesh.Positions.Add(new Vector3D(0, 1, 1));
 
             //
             // Edges
@@ -136,15 +136,15 @@ namespace MiniGlobe.Core.Tessellation
 
         private static int[] AddEdgePositions(int i0, int i1, CubeMapMesh CubeMapMesh)
         {
-            IList<Vector3d> positions = CubeMapMesh.Positions;
+            IList<Vector3D> positions = CubeMapMesh.Positions;
             int numberOfPartitions = CubeMapMesh.NumberOfPartitions;
 
             int[] indices = new int[2 + (numberOfPartitions - 1)];
             indices[0] = i0;
             indices[indices.Length - 1] = i1;
 
-            Vector3d origin = positions[i0];
-            Vector3d direction = positions[i1] - positions[i0];
+            Vector3D origin = positions[i0];
+            Vector3D direction = positions[i1] - positions[i0];
 
             for (int i = 1; i < numberOfPartitions; ++i)
             {
@@ -164,13 +164,13 @@ namespace MiniGlobe.Core.Tessellation
             int[] topLeftToRight,
             CubeMapMesh CubeMapMesh)
         {
-            IList<Vector3d> positions = CubeMapMesh.Positions;
+            IList<Vector3D> positions = CubeMapMesh.Positions;
             IndicesInt indices = CubeMapMesh.Indices;
             int numberOfPartitions = CubeMapMesh.NumberOfPartitions;
 
-            Vector3d origin = positions[bottomLeftToRight[0]];
-            Vector3d x = positions[bottomLeftToRight[bottomLeftToRight.Length - 1]] - origin;
-            Vector3d y = positions[topLeftToRight[0]] - origin;
+            Vector3D origin = positions[bottomLeftToRight[0]];
+            Vector3D x = positions[bottomLeftToRight[bottomLeftToRight.Length - 1]] - origin;
+            Vector3D y = positions[topLeftToRight[0]] - origin;
 
             int[] bottomIndicesBuffer = new int[numberOfPartitions + 1];
             int[] topIndicesBuffer = new int[numberOfPartitions + 1];
@@ -195,12 +195,12 @@ namespace MiniGlobe.Core.Tessellation
                     topIndicesBuffer[numberOfPartitions] = rightBottomToTop[j];
 
                     double deltaY = j / (double)numberOfPartitions;
-                    Vector3d offsetY = deltaY * y;
+                    Vector3D offsetY = deltaY * y;
 
                     for (int i = 1; i < numberOfPartitions; ++i)
                     {
                         double deltaX = i / (double)numberOfPartitions;
-                        Vector3d offsetX = deltaX * x;
+                        Vector3D offsetX = deltaX * x;
 
                         topIndicesBuffer[i] = CubeMapMesh.Positions.Count;
                         positions.Add(origin + offsetX + offsetY);
@@ -227,19 +227,19 @@ namespace MiniGlobe.Core.Tessellation
 
         private static void CubeToEllipsoid(CubeMapMesh CubeMapMesh)
         {
-            IList<Vector3d> positions = CubeMapMesh.Positions;
+            IList<Vector3D> positions = CubeMapMesh.Positions;
 
             for (int i = 0; i < positions.Count; ++i)
             {
-                positions[i] = Vector3d.Multiply(Vector3d.Normalize(positions[i]), CubeMapMesh.Ellipsoid.Radii);
+                positions[i] = positions[i].Normalize() * CubeMapMesh.Ellipsoid.Radii;
 
                 if ((CubeMapMesh.Normals != null) || (CubeMapMesh.TextureCoordinate != null))
                 {
-                    Vector3d deticSurfaceNormal = CubeMapMesh.Ellipsoid.DeticSurfaceNormal(positions[i]);
+                    Vector3D deticSurfaceNormal = CubeMapMesh.Ellipsoid.DeticSurfaceNormal(positions[i]);
 
                     if (CubeMapMesh.Normals != null)
                     {
-                        CubeMapMesh.Normals.Add(new Vector3h(deticSurfaceNormal));
+                        CubeMapMesh.Normals.Add(new Vector3h((float)deticSurfaceNormal.X, (float)deticSurfaceNormal.Y, (float)deticSurfaceNormal.Z));
                     }
 
                     if (CubeMapMesh.TextureCoordinate != null)

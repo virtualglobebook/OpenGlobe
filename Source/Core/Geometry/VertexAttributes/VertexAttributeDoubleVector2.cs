@@ -7,11 +7,9 @@
 //
 #endregion
 
-using OpenTK;
-
 namespace MiniGlobe.Core.Geometry
 {
-    public class VertexAttributeDoubleVector2 : VertexAttribute<Vector2d>
+    public class VertexAttributeDoubleVector2 : VertexAttribute<Vector2D>
     {
         public VertexAttributeDoubleVector2(string name)
             : base(name, VertexAttributeType.DoubleVector2)

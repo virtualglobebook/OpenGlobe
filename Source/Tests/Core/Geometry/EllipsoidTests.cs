@@ -18,24 +18,24 @@ namespace MiniGlobe.Core.Geometry
         [Test]
         public void Construct()
         {
-            Ellipsoid ellipsoid = new Ellipsoid(new Vector3d(1, 2, 3));
+            Ellipsoid ellipsoid = new Ellipsoid(new Vector3D(1, 2, 3));
             Assert.AreEqual(1, ellipsoid.Radii.X);
             Assert.AreEqual(2, ellipsoid.Radii.Y);
             Assert.AreEqual(3, ellipsoid.Radii.Z);
 
             Ellipsoid ellipsoid2 = new Ellipsoid(4, 5, 6);
-            Assert.AreNotEqual(new Vector3d(4, 5, 6), ellipsoid2.Radii);
+            Assert.AreEqual(new Vector3D(4, 5, 6), ellipsoid2.Radii);
 
             Ellipsoid sphere = Ellipsoid.UnitSphere;
-            Assert.IsTrue(sphere.OneOverRadii.Equals((new Vector3d(1, 1, 1))));
-            Assert.IsTrue(sphere.OneOverRadiiSquared.Equals((new Vector3d(1, 1, 1))));
+            Assert.IsTrue(sphere.OneOverRadii.Equals((new Vector3D(1, 1, 1))));
+            Assert.IsTrue(sphere.OneOverRadiiSquared.Equals((new Vector3D(1, 1, 1))));
         }
 
         [Test]
         public void DeticSurfaceNormal()
         {
-            Assert.IsTrue(new Vector3d(1, 0, 0).Equals(Ellipsoid.UnitSphere.DeticSurfaceNormal(new Vector3d(1, 0, 0))));
-            Assert.IsTrue(new Vector3d(0, 0, 1).Equals(Ellipsoid.UnitSphere.DeticSurfaceNormal(new Vector3d(0, 0, 1))));
+            Assert.IsTrue(new Vector3D(1, 0, 0).Equals(Ellipsoid.UnitSphere.DeticSurfaceNormal(new Vector3D(1, 0, 0))));
+            Assert.IsTrue(new Vector3D(0, 0, 1).Equals(Ellipsoid.UnitSphere.DeticSurfaceNormal(new Vector3D(0, 0, 1))));
         }
 
         [Test]
@@ -43,55 +43,55 @@ namespace MiniGlobe.Core.Geometry
         {
             Ellipsoid unitSphere = Ellipsoid.UnitSphere;
             
-            double[] intersections = unitSphere.Intersections(new Vector3d(2.0, 0.0, 0.0), new Vector3d(-1.0, 0.0, 0.0));
+            double[] intersections = unitSphere.Intersections(new Vector3D(2.0, 0.0, 0.0), new Vector3D(-1.0, 0.0, 0.0));
             Assert.AreEqual(2, intersections.Length);
             Assert.AreEqual(1.0, intersections[0], 1e-14);
             Assert.AreEqual(3.0, intersections[1], 1e-14);
 
-            intersections = unitSphere.Intersections(new Vector3d(0.0, 2.0, 0.0), new Vector3d(0.0, -1.0, 0.0));
+            intersections = unitSphere.Intersections(new Vector3D(0.0, 2.0, 0.0), new Vector3D(0.0, -1.0, 0.0));
             Assert.AreEqual(2, intersections.Length);
             Assert.AreEqual(1.0, intersections[0], 1e-14);
             Assert.AreEqual(3.0, intersections[1], 1e-14);
 
-            intersections = unitSphere.Intersections(new Vector3d(0.0, 0.0, 2.0), new Vector3d(0.0, 0.0, -1.0));
+            intersections = unitSphere.Intersections(new Vector3D(0.0, 0.0, 2.0), new Vector3D(0.0, 0.0, -1.0));
             Assert.AreEqual(2, intersections.Length);
             Assert.AreEqual(1.0, intersections[0], 1e-14);
             Assert.AreEqual(3.0, intersections[1], 1e-14);
 
-            intersections = unitSphere.Intersections(new Vector3d(1.0, 1.0, 0.0), new Vector3d(-1.0, 0.0, 0.0));
+            intersections = unitSphere.Intersections(new Vector3D(1.0, 1.0, 0.0), new Vector3D(-1.0, 0.0, 0.0));
             Assert.AreEqual(1, intersections.Length);
             Assert.AreEqual(1.0, intersections[0], 1e-14);
 
-            intersections = unitSphere.Intersections(new Vector3d(-2.0, 0.0, 0.0), new Vector3d(1.0, 0.0, 0.0));
+            intersections = unitSphere.Intersections(new Vector3D(-2.0, 0.0, 0.0), new Vector3D(1.0, 0.0, 0.0));
             Assert.AreEqual(2, intersections.Length);
             Assert.AreEqual(1.0, intersections[0], 1e-14);
             Assert.AreEqual(3.0, intersections[1], 1e-14);
 
-            intersections = unitSphere.Intersections(new Vector3d(0.0, -2.0, 0.0), new Vector3d(0.0, 1.0, 0.0));
+            intersections = unitSphere.Intersections(new Vector3D(0.0, -2.0, 0.0), new Vector3D(0.0, 1.0, 0.0));
             Assert.AreEqual(2, intersections.Length);
             Assert.AreEqual(1.0, intersections[0], 1e-14);
             Assert.AreEqual(3.0, intersections[1], 1e-14);
 
-            intersections = unitSphere.Intersections(new Vector3d(0.0, 0.0, -2.0), new Vector3d(0.0, 0.0, 1.0));
+            intersections = unitSphere.Intersections(new Vector3D(0.0, 0.0, -2.0), new Vector3D(0.0, 0.0, 1.0));
             Assert.AreEqual(2, intersections.Length);
             Assert.AreEqual(1.0, intersections[0], 1e-14);
             Assert.AreEqual(3.0, intersections[1], 1e-14);
 
-            intersections = unitSphere.Intersections(new Vector3d(-1.0, -1.0, 0.0), new Vector3d(1.0, 0.0, 0.0));
+            intersections = unitSphere.Intersections(new Vector3D(-1.0, -1.0, 0.0), new Vector3D(1.0, 0.0, 0.0));
             Assert.AreEqual(1, intersections.Length);
             Assert.AreEqual(1.0, intersections[0], 1e-14);
 
-            intersections = unitSphere.Intersections(new Vector3d(-2.0, 0.0, 0.0), new Vector3d(-1.0, 0.0, 0.0));
+            intersections = unitSphere.Intersections(new Vector3D(-2.0, 0.0, 0.0), new Vector3D(-1.0, 0.0, 0.0));
             Assert.AreEqual(2, intersections.Length);
             Assert.AreEqual(-3.0, intersections[0], 1e-14);
             Assert.AreEqual(-1.0, intersections[1], 1e-14);
 
-            intersections = unitSphere.Intersections(new Vector3d(0.0, -2.0, 0.0), new Vector3d(0.0, -1.0, 0.0));
+            intersections = unitSphere.Intersections(new Vector3D(0.0, -2.0, 0.0), new Vector3D(0.0, -1.0, 0.0));
             Assert.AreEqual(2, intersections.Length);
             Assert.AreEqual(-3.0, intersections[0], 1e-14);
             Assert.AreEqual(-1.0, intersections[1], 1e-14);
 
-            intersections = unitSphere.Intersections(new Vector3d(0.0, 0.0, -2.0), new Vector3d(0.0, 0.0, -1.0));
+            intersections = unitSphere.Intersections(new Vector3D(0.0, 0.0, -2.0), new Vector3D(0.0, 0.0, -1.0));
             Assert.AreEqual(2, intersections.Length);
             Assert.AreEqual(-3.0, intersections[0], 1e-14);
             Assert.AreEqual(-1.0, intersections[1], 1e-14);
@@ -104,17 +104,17 @@ namespace MiniGlobe.Core.Geometry
 
             double[] intersections;
 
-            intersections = unitSphere.Intersections(new Vector3d(0.0, 0.0, 0.0), new Vector3d(0.0, 0.0, 1.0));
+            intersections = unitSphere.Intersections(new Vector3D(0.0, 0.0, 0.0), new Vector3D(0.0, 0.0, 1.0));
             Assert.AreEqual(2, intersections.Length);
             Assert.AreEqual(-1.0, intersections[0], 1e-14);
             Assert.AreEqual(1.0, intersections[1], 1e-14);
 
-            intersections = unitSphere.Intersections(new Vector3d(0.0, 0.5, 0.0), new Vector3d(0.0, 1.0, 0.0));
+            intersections = unitSphere.Intersections(new Vector3D(0.0, 0.5, 0.0), new Vector3D(0.0, 1.0, 0.0));
             Assert.AreEqual(2, intersections.Length);
             Assert.AreEqual(-1.5, intersections[0], 1e-14);
             Assert.AreEqual(0.5, intersections[1], 1e-14);
 
-            intersections = unitSphere.Intersections(new Vector3d(0.0, 0.5, 0.0), new Vector3d(0.0, -1.0, 0.0));
+            intersections = unitSphere.Intersections(new Vector3D(0.0, 0.5, 0.0), new Vector3D(0.0, -1.0, 0.0));
             Assert.AreEqual(2, intersections.Length);
             Assert.AreEqual(-0.5, intersections[0], 1e-14);
             Assert.AreEqual(1.5, intersections[1], 1e-14);
@@ -127,28 +127,28 @@ namespace MiniGlobe.Core.Geometry
 
             double[] intersections;
 
-            intersections = unitSphere.Intersections(new Vector3d(1.0, 0.0, 0.0), new Vector3d(0.0, 0.0, 1.0));
+            intersections = unitSphere.Intersections(new Vector3D(1.0, 0.0, 0.0), new Vector3D(0.0, 0.0, 1.0));
             Assert.AreEqual(1, intersections.Length);
             Assert.AreEqual(0.0, intersections[0], 1e-14);
 
-            intersections = unitSphere.Intersections(new Vector3d(1.0, 0.0, 0.0), new Vector3d(0.0, 1.0, 0.0));
+            intersections = unitSphere.Intersections(new Vector3D(1.0, 0.0, 0.0), new Vector3D(0.0, 1.0, 0.0));
             Assert.AreEqual(1, intersections.Length);
             Assert.AreEqual(0.0, intersections[0], 1e-14);
 
-            intersections = unitSphere.Intersections(new Vector3d(1.0, 0.0, 0.0), new Vector3d(1.0, 0.0, 0.0));
+            intersections = unitSphere.Intersections(new Vector3D(1.0, 0.0, 0.0), new Vector3D(1.0, 0.0, 0.0));
             Assert.AreEqual(2, intersections.Length);
             Assert.AreEqual(-2.0, intersections[0], 1e-14);
             Assert.AreEqual(0.0, intersections[1], 1e-14);
 
-            intersections = unitSphere.Intersections(new Vector3d(1.0, 0.0, 0.0), new Vector3d(0.0, 0.0, -1.0));
+            intersections = unitSphere.Intersections(new Vector3D(1.0, 0.0, 0.0), new Vector3D(0.0, 0.0, -1.0));
             Assert.AreEqual(1, intersections.Length);
             Assert.AreEqual(0.0, intersections[0], 1e-14);
 
-            intersections = unitSphere.Intersections(new Vector3d(1.0, 0.0, 0.0), new Vector3d(0.0, -1.0, 0.0));
+            intersections = unitSphere.Intersections(new Vector3D(1.0, 0.0, 0.0), new Vector3D(0.0, -1.0, 0.0));
             Assert.AreEqual(1, intersections.Length);
             Assert.AreEqual(0.0, intersections[0], 1e-14);
 
-            intersections = unitSphere.Intersections(new Vector3d(1.0, 0.0, 0.0), new Vector3d(-1.0, 0.0, 0.0));
+            intersections = unitSphere.Intersections(new Vector3D(1.0, 0.0, 0.0), new Vector3D(-1.0, 0.0, 0.0));
             Assert.AreEqual(2, intersections.Length);
             Assert.AreEqual(0.0, intersections[0], 1e-14);
             Assert.AreEqual(2.0, intersections[1], 1e-14);
@@ -161,16 +161,16 @@ namespace MiniGlobe.Core.Geometry
 
             double[] intersections;
 
-            intersections = unitSphere.Intersections(new Vector3d(2.0, 0.0, 0.0), new Vector3d(0.0, 0.0, 1.0));
+            intersections = unitSphere.Intersections(new Vector3D(2.0, 0.0, 0.0), new Vector3D(0.0, 0.0, 1.0));
             Assert.AreEqual(0, intersections.Length);
 
-            intersections = unitSphere.Intersections(new Vector3d(2.0, 0.0, 0.0), new Vector3d(0.0, 0.0, -1.0));
+            intersections = unitSphere.Intersections(new Vector3D(2.0, 0.0, 0.0), new Vector3D(0.0, 0.0, -1.0));
             Assert.AreEqual(0, intersections.Length);
 
-            intersections = unitSphere.Intersections(new Vector3d(2.0, 0.0, 0.0), new Vector3d(0.0, 1.0, 0.0));
+            intersections = unitSphere.Intersections(new Vector3D(2.0, 0.0, 0.0), new Vector3D(0.0, 1.0, 0.0));
             Assert.AreEqual(0, intersections.Length);
 
-            intersections = unitSphere.Intersections(new Vector3d(2.0, 0.0, 0.0), new Vector3d(0.0, -1.0, 0.0));
+            intersections = unitSphere.Intersections(new Vector3D(2.0, 0.0, 0.0), new Vector3D(0.0, -1.0, 0.0));
             Assert.AreEqual(0, intersections.Length);
         }
     }

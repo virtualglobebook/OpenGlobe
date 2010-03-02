@@ -7,7 +7,6 @@
 //
 #endregion
 
-using OpenTK;
 using System.Collections.Generic;
 
 namespace MiniGlobe.Core.Geometry

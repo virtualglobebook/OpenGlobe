@@ -44,7 +44,7 @@ namespace MiniGlobe.Core
         [Test]
         public void RenderBox()
         {
-            Render(BoxTessellator.Compute(new Vector3d(1, 1, 1)));
+            Render(BoxTessellator.Compute(new Vector3D(1, 1, 1)));
         }
 
         private static void Render(Mesh mesh)

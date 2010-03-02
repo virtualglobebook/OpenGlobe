@@ -85,8 +85,8 @@ namespace MiniGlobe.Core.Tessellation
             //
             // Create positions
             //
-            IList<Vector3d> positions = positionsAttribute.Values;
-            positions.Add(new Vector3d(0, 0, ellipsoid.Radii.Z));
+            IList<Vector3D> positions = positionsAttribute.Values;
+            positions.Add(new Vector3D(0, 0, ellipsoid.Radii.Z));
 
             for (int i = 1; i < numberOfStackPartitions; ++i)
             {
@@ -99,20 +99,20 @@ namespace MiniGlobe.Core.Tessellation
 
                 for (int j = 0; j < numberOfSlicePartitions; ++j)
                 {
-                    positions.Add(new Vector3d(cosTheta[j] * xSinPhi, sinTheta[j] * ySinPhi, zCosPhi));
+                    positions.Add(new Vector3D(cosTheta[j] * xSinPhi, sinTheta[j] * ySinPhi, zCosPhi));
                 }
             }
-            positions.Add(new Vector3d(0, 0, -ellipsoid.Radii.Z));
+            positions.Add(new Vector3D(0, 0, -ellipsoid.Radii.Z));
 
             if ((normals != null) || (textureCoordinates != null))
             {
                 for (int i = 0; i < positions.Count; ++i)
                 {
-                    Vector3d deticSurfaceNormal = ellipsoid.DeticSurfaceNormal(positions[i]);
+                    Vector3D deticSurfaceNormal = ellipsoid.DeticSurfaceNormal(positions[i]);
 
                     if (normals != null)
                     {
-                        normals.Add(new Vector3h(deticSurfaceNormal));
+                        normals.Add(new Vector3h((float)deticSurfaceNormal.X, (float)deticSurfaceNormal.Y, (float)deticSurfaceNormal.Z));
                     }
 
                     if (textureCoordinates != null)

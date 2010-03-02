@@ -126,6 +126,11 @@ namespace MiniGlobe.Core
             return this * scalar;
         }
 
+        public Vector3D Multiply(Vector3D scale)
+        {
+            return this * scale;
+        }
+
         public Vector3D Divide(double scalar)
         {
             return this / scalar;
@@ -159,6 +164,11 @@ namespace MiniGlobe.Core
         public static Vector3D operator *(double left, Vector3D right)
         {
             return right * left;
+        }
+
+        public static Vector3D operator *(Vector3D left, Vector3D right)
+        {
+            return new Vector3D(left.X * right.X, left.Y * right.Y, left.Z * right.Z);
         }
 
         public static Vector3D operator /(Vector3D left, double right)

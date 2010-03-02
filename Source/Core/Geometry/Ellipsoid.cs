@@ -9,7 +9,6 @@
 
 using System;
 using System.Globalization;
-using OpenTK;
 
 namespace MiniGlobe.Core.Geometry
 {
@@ -19,11 +18,11 @@ namespace MiniGlobe.Core.Geometry
         public static readonly Ellipsoid UnitSphere = new Ellipsoid(1, 1, 1);
 
         public Ellipsoid(double x, double y, double z)
-            : this(new Vector3d(x, y, z))
+            : this(new Vector3D(x, y, z))
         {
         }
 
-        public Ellipsoid(Vector3d radii)
+        public Ellipsoid(Vector3D radii)
         {
             if ((radii.X <= 0) || (radii.Y <= 0) || (radii.Z <= 0))
             {
@@ -31,32 +30,32 @@ namespace MiniGlobe.Core.Geometry
             }
 
             _radii = radii;
-            _oneOverRadii = new Vector3d(
+            _oneOverRadii = new Vector3D(
                 1.0 / radii.X,
                 1.0 / radii.Y,
                 1.0 / radii.Z);
-            _oneOverRadiiSquared = new Vector3d(
+            _oneOverRadiiSquared = new Vector3D(
                 1.0 / (radii.X * radii.X), 
                 1.0 / (radii.Y * radii.Y), 
                 1.0 / (radii.Z * radii.Z));
         }
 
-        public Vector3d DeticSurfaceNormal(Vector3d positionOnEllipsoid)
+        public Vector3D DeticSurfaceNormal(Vector3D positionOnEllipsoid)
         {
-            return Vector3d.Normalize(Vector3d.Multiply(positionOnEllipsoid, _oneOverRadiiSquared));
+            return (positionOnEllipsoid * _oneOverRadiiSquared).Normalize();
         }
 
-        public Vector3d Radii 
+        public Vector3D Radii 
         {
             get { return _radii; }
         }
 
-        public Vector3d OneOverRadii
+        public Vector3D OneOverRadii
         {
             get { return _oneOverRadii; }
         }
 
-        public Vector3d OneOverRadiiSquared
+        public Vector3D OneOverRadiiSquared
         {
             get { return _oneOverRadiiSquared; }
         }
@@ -71,7 +70,7 @@ namespace MiniGlobe.Core.Geometry
             get { return Math.Max(_radii.X, Math.Max(_radii.Y, _radii.Z)); }
         }
 
-        public double[] Intersections(Vector3d origin, Vector3d direction)
+        public double[] Intersections(Vector3D origin, Vector3D direction)
         {
             direction.Normalize();
 
@@ -140,8 +139,8 @@ namespace MiniGlobe.Core.Geometry
             return new Vector3D(x, y, z);
         }
 
-        private readonly Vector3d _radii;
-        private readonly Vector3d _oneOverRadii;
-        private readonly Vector3d _oneOverRadiiSquared;
+        private readonly Vector3D _radii;
+        private readonly Vector3D _oneOverRadii;
+        private readonly Vector3D _oneOverRadiiSquared;
     }
 }

@@ -7,7 +7,6 @@
 //
 #endregion
 
-using OpenTK;
 using System;
 using System.Collections.Generic;
 using MiniGlobe.Core.Geometry;
@@ -16,7 +15,7 @@ namespace MiniGlobe.Core.Tessellation
 {
     public static class BoxTessellator
     {
-        public static Mesh Compute(Vector3d length)
+        public static Mesh Compute(Vector3D length)
         {
             if (length.X < 0 || length.Y < 0 || length.Z < 0)
             {
@@ -36,17 +35,17 @@ namespace MiniGlobe.Core.Tessellation
             //
             // 8 corner points
             //
-            IList<Vector3d> positions = positionsAttribute.Values;
+            IList<Vector3D> positions = positionsAttribute.Values;
 
-            Vector3d corner = 0.5 * length;
-            positions.Add(new Vector3d(-corner.X, -corner.Y, -corner.Z));
-            positions.Add(new Vector3d(corner.X, -corner.Y, -corner.Z));
-            positions.Add(new Vector3d(corner.X, corner.Y, -corner.Z));
-            positions.Add(new Vector3d(-corner.X, corner.Y, -corner.Z));
-            positions.Add(new Vector3d(-corner.X, -corner.Y, corner.Z));
-            positions.Add(new Vector3d(corner.X, -corner.Y, corner.Z));
-            positions.Add(new Vector3d(corner.X, corner.Y, corner.Z));
-            positions.Add(new Vector3d(-corner.X, corner.Y, corner.Z));
+            Vector3D corner = 0.5 * length;
+            positions.Add(new Vector3D(-corner.X, -corner.Y, -corner.Z));
+            positions.Add(new Vector3D(corner.X, -corner.Y, -corner.Z));
+            positions.Add(new Vector3D(corner.X, corner.Y, -corner.Z));
+            positions.Add(new Vector3D(-corner.X, corner.Y, -corner.Z));
+            positions.Add(new Vector3D(-corner.X, -corner.Y, corner.Z));
+            positions.Add(new Vector3D(corner.X, -corner.Y, corner.Z));
+            positions.Add(new Vector3D(corner.X, corner.Y, corner.Z));
+            positions.Add(new Vector3D(-corner.X, corner.Y, corner.Z));
 
             //
             // 6 faces, 2 triangles each

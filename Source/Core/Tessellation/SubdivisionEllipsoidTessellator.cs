@@ -28,7 +28,7 @@ namespace MiniGlobe.Core.Tessellation
         internal class SubdivisionMesh
         {
             public Ellipsoid Ellipsoid { get; set; }
-            public IList<Vector3d> Positions { get; set; }
+            public IList<Vector3D> Positions { get; set; }
             public IList<Vector3h> Normals { get; set; }
             public IList<Vector2h> TextureCoordinate { get; set; }
             public IndicesInt Indices { get; set; }
@@ -83,15 +83,15 @@ namespace MiniGlobe.Core.Tessellation
             const double negativeOneThird = -1.0 / 3.0;
             double rootSixOverThree = Math.Sqrt(6.0) / 3.0;
 
-            Vector3d n0 = new Vector3d(0, 0, 1);
-            Vector3d n1 = new Vector3d(0, (2.0 * Math.Sqrt(2.0)) / 3.0, negativeOneThird);
-            Vector3d n2 = new Vector3d(-rootSixOverThree, negativeRootTwoOverThree, negativeOneThird);
-            Vector3d n3 = new Vector3d(rootSixOverThree, negativeRootTwoOverThree, negativeOneThird);
+            Vector3D n0 = new Vector3D(0, 0, 1);
+            Vector3D n1 = new Vector3D(0, (2.0 * Math.Sqrt(2.0)) / 3.0, negativeOneThird);
+            Vector3D n2 = new Vector3D(-rootSixOverThree, negativeRootTwoOverThree, negativeOneThird);
+            Vector3D n3 = new Vector3D(rootSixOverThree, negativeRootTwoOverThree, negativeOneThird);
 
-            Vector3d p0 = Vector3d.Multiply(n0, ellipsoid.Radii);
-            Vector3d p1 = Vector3d.Multiply(n1, ellipsoid.Radii);
-            Vector3d p2 = Vector3d.Multiply(n2, ellipsoid.Radii);
-            Vector3d p3 = Vector3d.Multiply(n3, ellipsoid.Radii);
+            Vector3D p0 = n0 * ellipsoid.Radii;
+            Vector3D p1 = n1 * ellipsoid.Radii;
+            Vector3D p2 = n2 * ellipsoid.Radii;
+            Vector3D p3 = n3 * ellipsoid.Radii;
             
             subdivisionMesh.Positions.Add(p0);
             subdivisionMesh.Positions.Add(p1);
@@ -100,17 +100,17 @@ namespace MiniGlobe.Core.Tessellation
 
             if ((subdivisionMesh.Normals != null) || (subdivisionMesh.TextureCoordinate != null))
             {
-                Vector3d d0 = ellipsoid.DeticSurfaceNormal(p0);
-                Vector3d d1 = ellipsoid.DeticSurfaceNormal(p1);
-                Vector3d d2 = ellipsoid.DeticSurfaceNormal(p2);
-                Vector3d d3 = ellipsoid.DeticSurfaceNormal(p3);
+                Vector3D d0 = ellipsoid.DeticSurfaceNormal(p0);
+                Vector3D d1 = ellipsoid.DeticSurfaceNormal(p1);
+                Vector3D d2 = ellipsoid.DeticSurfaceNormal(p2);
+                Vector3D d3 = ellipsoid.DeticSurfaceNormal(p3);
 
                 if (subdivisionMesh.Normals != null)
                 {
-                    subdivisionMesh.Normals.Add(new Vector3h(d0));
-                    subdivisionMesh.Normals.Add(new Vector3h(d1));
-                    subdivisionMesh.Normals.Add(new Vector3h(d2));
-                    subdivisionMesh.Normals.Add(new Vector3h(d3));
+                    subdivisionMesh.Normals.Add(new Vector3h((float)d0.X, (float)d0.Y, (float)d0.Z));
+                    subdivisionMesh.Normals.Add(new Vector3h((float)d1.X, (float)d1.Y, (float)d1.Z));
+                    subdivisionMesh.Normals.Add(new Vector3h((float)d2.X, (float)d2.Y, (float)d2.Z));
+                    subdivisionMesh.Normals.Add(new Vector3h((float)d3.X, (float)d3.Y, (float)d3.Z));
                 }
 
                 if (subdivisionMesh.TextureCoordinate != null)
@@ -134,14 +134,14 @@ namespace MiniGlobe.Core.Tessellation
         {
             if (level > 0)
             {
-                IList<Vector3d> positions = subdivisionMesh.Positions;
-                Vector3d n01 = Vector3d.Normalize((positions[triangle.I0] + positions[triangle.I1]) * 0.5);
-                Vector3d n12 = Vector3d.Normalize((positions[triangle.I1] + positions[triangle.I2]) * 0.5);
-                Vector3d n20 = Vector3d.Normalize((positions[triangle.I2] + positions[triangle.I0]) * 0.5);
+                IList<Vector3D> positions = subdivisionMesh.Positions;
+                Vector3D n01 = ((positions[triangle.I0] + positions[triangle.I1]) * 0.5).Normalize();
+                Vector3D n12 = ((positions[triangle.I1] + positions[triangle.I2]) * 0.5).Normalize();
+                Vector3D n20 = ((positions[triangle.I2] + positions[triangle.I0]) * 0.5).Normalize();
 
-                Vector3d p01 = Vector3d.Multiply(n01, subdivisionMesh.Ellipsoid.Radii);
-                Vector3d p12 = Vector3d.Multiply(n12, subdivisionMesh.Ellipsoid.Radii);
-                Vector3d p20 = Vector3d.Multiply(n20, subdivisionMesh.Ellipsoid.Radii);
+                Vector3D p01 = n01 * subdivisionMesh.Ellipsoid.Radii;
+                Vector3D p12 = n12 * subdivisionMesh.Ellipsoid.Radii;
+                Vector3D p20 = n20 * subdivisionMesh.Ellipsoid.Radii;
 
                 positions.Add(p01);
                 positions.Add(p12);
@@ -153,15 +153,15 @@ namespace MiniGlobe.Core.Tessellation
 
                 if ((subdivisionMesh.Normals != null) || (subdivisionMesh.TextureCoordinate != null))
                 {
-                    Vector3d d01 = subdivisionMesh.Ellipsoid.DeticSurfaceNormal(p01);
-                    Vector3d d12 = subdivisionMesh.Ellipsoid.DeticSurfaceNormal(p12);
-                    Vector3d d20 = subdivisionMesh.Ellipsoid.DeticSurfaceNormal(p20);
+                    Vector3D d01 = subdivisionMesh.Ellipsoid.DeticSurfaceNormal(p01);
+                    Vector3D d12 = subdivisionMesh.Ellipsoid.DeticSurfaceNormal(p12);
+                    Vector3D d20 = subdivisionMesh.Ellipsoid.DeticSurfaceNormal(p20);
 
                     if (subdivisionMesh.Normals != null)
                     {
-                        subdivisionMesh.Normals.Add(new Vector3h(d01));
-                        subdivisionMesh.Normals.Add(new Vector3h(d12));
-                        subdivisionMesh.Normals.Add(new Vector3h(d20));
+                        subdivisionMesh.Normals.Add(new Vector3h((float)d01.X, (float)d01.Y, (float)d01.Z));
+                        subdivisionMesh.Normals.Add(new Vector3h((float)d12.X, (float)d12.Y, (float)d12.Z));
+                        subdivisionMesh.Normals.Add(new Vector3h((float)d20.X, (float)d20.Y, (float)d20.Z));
                     }
 
                     if (subdivisionMesh.TextureCoordinate != null)

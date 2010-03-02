@@ -27,7 +27,7 @@ namespace MiniGlobe.Core.Tessellation
     {
         internal class SubdivisionMesh
         {
-            public IList<Vector3d> Positions { get; set; }
+            public IList<Vector3D> Positions { get; set; }
             public IList<Vector3h> Normals { get; set; }
             public IList<Vector2h> TextureCoordinate { get; set; }
             public IndicesInt Indices { get; set; }
@@ -81,10 +81,10 @@ namespace MiniGlobe.Core.Tessellation
             const double negativeOneThird = -1.0 / 3.0;
             double rootSixOverThree = Math.Sqrt(6.0) / 3.0;
 
-            Vector3d p0 = new Vector3d(0, 0, 1);
-            Vector3d p1 = new Vector3d(0, (2.0 * Math.Sqrt(2.0)) / 3.0, negativeOneThird);
-            Vector3d p2 = new Vector3d(-rootSixOverThree, negativeRootTwoOverThree, negativeOneThird);
-            Vector3d p3 = new Vector3d(rootSixOverThree, negativeRootTwoOverThree, negativeOneThird);
+            Vector3D p0 = new Vector3D(0, 0, 1);
+            Vector3D p1 = new Vector3D(0, (2.0 * Math.Sqrt(2.0)) / 3.0, negativeOneThird);
+            Vector3D p2 = new Vector3D(-rootSixOverThree, negativeRootTwoOverThree, negativeOneThird);
+            Vector3D p3 = new Vector3D(rootSixOverThree, negativeRootTwoOverThree, negativeOneThird);
             
             subdivisionMesh.Positions.Add(p0);
             subdivisionMesh.Positions.Add(p1);
@@ -93,10 +93,10 @@ namespace MiniGlobe.Core.Tessellation
 
             if (subdivisionMesh.Normals != null)
             {
-                subdivisionMesh.Normals.Add(new Vector3h(p0));
-                subdivisionMesh.Normals.Add(new Vector3h(p1));
-                subdivisionMesh.Normals.Add(new Vector3h(p2));
-                subdivisionMesh.Normals.Add(new Vector3h(p3));
+                subdivisionMesh.Normals.Add(new Vector3h((float)p0.X, (float)p0.Y, (float)p0.Z));
+                subdivisionMesh.Normals.Add(new Vector3h((float)p1.X, (float)p1.Y, (float)p1.Z));
+                subdivisionMesh.Normals.Add(new Vector3h((float)p2.X, (float)p2.Y, (float)p2.Z));
+                subdivisionMesh.Normals.Add(new Vector3h((float)p3.X, (float)p3.Y, (float)p3.Z));
             }
 
             if (subdivisionMesh.TextureCoordinate != null)
@@ -119,10 +119,10 @@ namespace MiniGlobe.Core.Tessellation
         {
             if (level > 0)
             {
-                IList<Vector3d> positions = subdivisionMesh.Positions;
-                Vector3d p01 = Vector3d.Normalize((positions[triangle.I0] + positions[triangle.I1]) * 0.5);
-                Vector3d p12 = Vector3d.Normalize((positions[triangle.I1] + positions[triangle.I2]) * 0.5);
-                Vector3d p20 = Vector3d.Normalize((positions[triangle.I2] + positions[triangle.I0]) * 0.5);
+                IList<Vector3D> positions = subdivisionMesh.Positions;
+                Vector3D p01 = ((positions[triangle.I0] + positions[triangle.I1]) * 0.5).Normalize();
+                Vector3D p12 = ((positions[triangle.I1] + positions[triangle.I2]) * 0.5).Normalize();
+                Vector3D p20 = ((positions[triangle.I2] + positions[triangle.I0]) * 0.5).Normalize();
 
                 positions.Add(p01);
                 positions.Add(p12);
@@ -134,9 +134,9 @@ namespace MiniGlobe.Core.Tessellation
 
                 if (subdivisionMesh.Normals != null)
                 {
-                    subdivisionMesh.Normals.Add(new Vector3h(p01));
-                    subdivisionMesh.Normals.Add(new Vector3h(p12));
-                    subdivisionMesh.Normals.Add(new Vector3h(p20));
+                    subdivisionMesh.Normals.Add(new Vector3h((float)p01.X, (float)p01.Y, (float)p01.Z));
+                    subdivisionMesh.Normals.Add(new Vector3h((float)p12.X, (float)p12.Y, (float)p12.Z));
+                    subdivisionMesh.Normals.Add(new Vector3h((float)p20.X, (float)p20.Y, (float)p20.Z));
                 }
 
                 if (subdivisionMesh.TextureCoordinate != null)

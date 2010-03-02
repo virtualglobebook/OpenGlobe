@@ -88,7 +88,7 @@ namespace MiniGlobe.Core.Tessellation
         [Test]
         public void BoxTessellatorTest()
         {
-            Mesh mesh = BoxTessellator.Compute(new Vector3d(1, 1, 1));
+            Mesh mesh = BoxTessellator.Compute(new Vector3D(1, 1, 1));
 
             Assert.IsNotNull(mesh.Attributes["position"] as VertexAttributeDoubleVector3);
             Assert.IsNotNull(mesh.Indices as IndicesByte);

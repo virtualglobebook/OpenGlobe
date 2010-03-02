@@ -7,7 +7,6 @@
 //
 #endregion
 
-using OpenTK;
 using System;
 using System.Collections.Generic;
 using MiniGlobe.Core.Geometry;
@@ -41,11 +40,11 @@ namespace MiniGlobe.Core.Tessellation
             const double negativeOneThird = -1.0 / 3.0;
             double rootSixOverThree = Math.Sqrt(6.0) / 3.0;
 
-            IList<Vector3d> positions = positionsAttribute.Values;
-            positions.Add(new Vector3d(0, 0, 1));
-            positions.Add(new Vector3d(0, (2.0 * Math.Sqrt(2.0)) / 3.0, negativeOneThird));
-            positions.Add(new Vector3d(-rootSixOverThree, negativeRootTwoOverThree, negativeOneThird));
-            positions.Add(new Vector3d(rootSixOverThree, negativeRootTwoOverThree, negativeOneThird));
+            IList<Vector3D> positions = positionsAttribute.Values;
+            positions.Add(new Vector3D(0, 0, 1));
+            positions.Add(new Vector3D(0, (2.0 * Math.Sqrt(2.0)) / 3.0, negativeOneThird));
+            positions.Add(new Vector3D(-rootSixOverThree, negativeRootTwoOverThree, negativeOneThird));
+            positions.Add(new Vector3D(rootSixOverThree, negativeRootTwoOverThree, negativeOneThird));
 
             Subdivide(positions, indices, new TriangleIndices<int>(0, 1, 2), numberOfSubdivisions);
             Subdivide(positions, indices, new TriangleIndices<int>(0, 2, 3), numberOfSubdivisions);
@@ -55,13 +54,13 @@ namespace MiniGlobe.Core.Tessellation
             return mesh;
         }
 
-        private static void Subdivide(IList<Vector3d> positions, IndicesInt indices, TriangleIndices<int> triangle, int level)
+        private static void Subdivide(IList<Vector3D> positions, IndicesInt indices, TriangleIndices<int> triangle, int level)
         {
             if (level > 0)
             {
-                positions.Add(Vector3d.Normalize((positions[triangle.I0] + positions[triangle.I1]) * 0.5));
-                positions.Add(Vector3d.Normalize((positions[triangle.I1] + positions[triangle.I2]) * 0.5));
-                positions.Add(Vector3d.Normalize((positions[triangle.I2] + positions[triangle.I0]) * 0.5));
+                positions.Add(((positions[triangle.I0] + positions[triangle.I1]) * 0.5).Normalize());
+                positions.Add(((positions[triangle.I1] + positions[triangle.I2]) * 0.5).Normalize());
+                positions.Add(((positions[triangle.I2] + positions[triangle.I0]) * 0.5).Normalize());
 
                 int i01 = positions.Count - 3;
                 int i12 = positions.Count - 2;

@@ -14,6 +14,7 @@ using System.Runtime.InteropServices;
 using System.Diagnostics;
 using OpenTK;
 using MiniGlobe.Core.Geometry;
+using MiniGlobe.Core;
 
 namespace MiniGlobe.Renderer
 {
@@ -114,7 +115,7 @@ namespace MiniGlobe.Renderer
                 }
                 else if (attribute.DataType == VertexAttributeType.DoubleVector3)
                 {
-                    IList<Vector3d> values = (attribute as VertexAttribute<Vector3d>).Values;
+                    IList<Vector3D> values = (attribute as VertexAttribute<Vector3D>).Values;
 
                     Vector3[] valuesArray = new Vector3[values.Count];
                     for (int i = 0; i < values.Count; ++i)

@@ -38,7 +38,7 @@ namespace MiniGlobe.Core.Tessellation
             return numberOfVertices;
         }
 
-        public static Vector2h ComputeTextureCoordinate(Vector3d position)
+        public static Vector2h ComputeTextureCoordinate(Vector3D position)
         {
             return new Vector2h(new Vector2d(
                 (Math.Atan2(position.Y, position.X) / Trig.TwoPI) + 0.5,

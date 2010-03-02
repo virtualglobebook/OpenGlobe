@@ -7,8 +7,6 @@
 //
 #endregion
 
-using OpenTK;
-
 namespace MiniGlobe.Core.Geometry
 {
     public class IndicesByte : Indices<byte>

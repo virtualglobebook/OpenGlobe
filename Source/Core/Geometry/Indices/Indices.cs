@@ -7,7 +7,6 @@
 //
 #endregion
 
-using OpenTK;
 using System;
 using System.Collections.Generic;
 
