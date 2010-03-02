@@ -23,6 +23,11 @@ namespace MiniGlobe.Core
             return new Vector3((float)vector.X, (float)vector.Y, (float)vector.Z);
         }
 
+        public static Vector3 ToVector3(Vector3D vector)
+        {
+            return new Vector3((float)vector.X, (float)vector.Y, (float)vector.Z);
+        }
+
         public static Matrix4 ToMatrix4(Matrix4d matrix)
         {
             return new Matrix4(

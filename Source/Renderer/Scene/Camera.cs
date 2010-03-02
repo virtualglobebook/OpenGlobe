@@ -8,11 +8,10 @@
 #endregion
 
 using System;
-using System.IO;
-using System.Xml;
 using System.Globalization;
+using System.Xml;
+using MiniGlobe.Core;
 using MiniGlobe.Core.Geometry;
-using OpenTK;
 
 namespace MiniGlobe.Renderer
 {
@@ -20,9 +19,9 @@ namespace MiniGlobe.Renderer
     {
         public Camera()
         {
-            Eye = -Vector3d.UnitY;
-            Target = Vector3d.Zero;
-            Up = Vector3d.UnitZ;
+            Eye = -Vector3D.UnitY;
+            Target = Vector3D.Zero;
+            Up = Vector3D.UnitZ;
 
             FieldOfViewY = Math.PI / 6.0;
             AspectRatio = 1;
@@ -34,18 +33,18 @@ namespace MiniGlobe.Renderer
             OrthographicFarPlaneDistance = 1;
         }
 
-        public Vector3d Eye { get; set; }
-        public Vector3d Target { get; set; }
-        public Vector3d Up { get; set; }
+        public Vector3D Eye { get; set; }
+        public Vector3D Target { get; set; }
+        public Vector3D Up { get; set; }
 
-        public Vector3d Forward
+        public Vector3D Forward
         {
-            get { return Vector3d.Normalize(new Vector3d(Target - Eye)); }
+            get { return (Target - Eye).Normalize(); }
         }
 
-        public Vector3d Right
+        public Vector3D Right
         {
-            get { return Vector3d.Normalize(Vector3d.Cross(Forward, Up)); }
+            get { return Forward.Cross(Up).Normalize(); }
         }
 
         public double FieldOfViewX
@@ -67,7 +66,7 @@ namespace MiniGlobe.Renderer
 
         public void ZoomToTarget(double radius)
         {
-            Vector3d toEye = Vector3d.Normalize(Eye - Target);
+            Vector3D toEye = (Eye - Target).Normalize();
 
             double sin = Math.Sin(Math.Min(FieldOfViewX, FieldOfViewY) * 0.5);
             double distance = (radius / sin);
@@ -91,7 +90,7 @@ namespace MiniGlobe.Renderer
             xmlDocument.Save(filename);
         }
 
-        static private void SaveVector(XmlDocument xmlDocument, string name, Vector3d value, XmlElement parentNode)
+        static private void SaveVector(XmlDocument xmlDocument, string name, Vector3D value, XmlElement parentNode)
         {
             XmlElement node = xmlDocument.CreateElement(name);
             node.AppendChild(xmlDocument.CreateTextNode(value.X + " " + value.Y + " " + value.Z));
@@ -105,17 +104,17 @@ namespace MiniGlobe.Renderer
             XmlNodeList nodeList = xmlDocument.GetElementsByTagName("Camera");
             
             string[] eye = nodeList[0].ChildNodes[0].InnerText.Split(new[] { ' ' });
-            Eye = new Vector3d(
+            Eye = new Vector3D(
                 Convert.ToDouble(eye[0], CultureInfo.InvariantCulture), 
                 Convert.ToDouble(eye[1], CultureInfo.InvariantCulture), 
                 Convert.ToDouble(eye[2], CultureInfo.InvariantCulture));
             string[] target = nodeList[0].ChildNodes[1].InnerText.Split(new[] { ' ' });
-            Target = new Vector3d(
+            Target = new Vector3D(
                 Convert.ToDouble(target[0], CultureInfo.InvariantCulture),
                 Convert.ToDouble(target[1], CultureInfo.InvariantCulture),
                 Convert.ToDouble(target[2], CultureInfo.InvariantCulture));
             string[] up = nodeList[0].ChildNodes[2].InnerText.Split(new[] { ' ' });
-            Up = new Vector3d(
+            Up = new Vector3D(
                 Convert.ToDouble(up[0], CultureInfo.InvariantCulture),
                 Convert.ToDouble(up[1], CultureInfo.InvariantCulture),
                 Convert.ToDouble(up[2], CultureInfo.InvariantCulture));
@@ -124,7 +123,7 @@ namespace MiniGlobe.Renderer
         // TODO:  This is not accurate
         public double Altitude(Ellipsoid shape)
         {
-            return Eye.Length - shape.MinimumRadius;
+            return Eye.Magnitude - shape.MinimumRadius;
         }
     }
 }

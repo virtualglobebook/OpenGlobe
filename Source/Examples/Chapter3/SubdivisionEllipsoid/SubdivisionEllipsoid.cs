@@ -14,6 +14,7 @@ using OpenTK;
 using MiniGlobe.Core.Geometry;
 using MiniGlobe.Core.Tessellation;
 using MiniGlobe.Renderer;
+using MiniGlobe.Core;
 
 namespace MiniGlobe.Examples.Chapter3
 {
@@ -134,9 +135,9 @@ namespace MiniGlobe.Examples.Chapter3
             //Vector3d eye = new Vector3d(0, -(float)(Ellipsoid.Wgs84.Radii.Y * 3), 0);
             //Vector3d to = Vector3d.Zero;
             //Vector3d up = Vector3d.UnitZ;
-            _sceneState.Camera.Eye = new Vector3d(-(float)(Ellipsoid.Wgs84.Radii.X * 0.5), -(float)(Ellipsoid.Wgs84.Radii.Y * 1.5), 0);
-            _sceneState.Camera.Target = new Vector3d(0, -(float)Ellipsoid.Wgs84.Radii.Y, 0);
-            _sceneState.Camera.Up = Vector3d.UnitZ;
+            _sceneState.Camera.Eye = new Vector3D(-(float)(Ellipsoid.Wgs84.Radii.X * 0.5), -(float)(Ellipsoid.Wgs84.Radii.Y * 1.5), 0);
+            _sceneState.Camera.Target = new Vector3D(0, -(float)Ellipsoid.Wgs84.Radii.Y, 0);
+            _sceneState.Camera.Up = Vector3D.UnitZ;
             _sceneState.Camera.PerspectiveNearPlaneDistance = Ellipsoid.Wgs84.Radii.Y * 0.25;
             _sceneState.Camera.PerspectiveFarPlaneDistance = Ellipsoid.Wgs84.Radii.Y * 5;
         }

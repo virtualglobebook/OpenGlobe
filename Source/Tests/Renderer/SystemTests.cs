@@ -354,9 +354,9 @@ namespace MiniGlobe.Renderer
             VertexArray va = CreateVertexArray(window.Context, sp.VertexAttributes["position"].Location);
 
             SceneState sceneState = new SceneState();
-            sceneState.Camera.Eye = 2 * Vector3d.UnitX;
-            sceneState.Camera.Target = Vector3d.Zero;
-            sceneState.Camera.Up = Vector3d.UnitZ;
+            sceneState.Camera.Eye = 2 * Vector3D.UnitX;
+            sceneState.Camera.Target = Vector3D.Zero;
+            sceneState.Camera.Up = Vector3D.UnitZ;
 
             window.Context.Bind(frameBuffer);
             window.Context.Bind(sp);

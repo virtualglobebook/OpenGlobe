@@ -10,6 +10,7 @@
 using System.IO;
 using NUnit.Framework;
 using OpenTK;
+using MiniGlobe.Core;
 
 namespace MiniGlobe.Renderer
 {
@@ -22,9 +23,9 @@ namespace MiniGlobe.Renderer
             string filename = "view.xml";
 
             Camera camera = new Camera();
-            camera.Eye = Vector3d.Zero;
-            camera.Target = -Vector3d.UnitZ;
-            camera.Up = Vector3d.UnitY;
+            camera.Eye = Vector3D.Zero;
+            camera.Target = -Vector3D.UnitZ;
+            camera.Up = Vector3D.UnitY;
 
             try
             {

@@ -216,12 +216,12 @@ namespace MiniGlobe.Examples.Research.RayCasting
         }
 
         // TODO:  Duplicate with RayCastedGlobe.MultiplyVectorComponents
-        private static Vector3d MultiplyVectorComponents(Vector3d left, Vector3d right)
+        private static Vector3D MultiplyVectorComponents(Vector3D left, Vector3D right)
         {
-            return new Vector3d(left.X * right.X, left.Y * right.Y, left.Z * right.Z);
+            return new Vector3D(left.X * right.X, left.Y * right.Y, left.Z * right.Z);
         }
 
-        private static Vector3d MostOrthogonalAxis(Vector3d v)
+        private static Vector3D MostOrthogonalAxis(Vector3D v)
         {
             double x = Math.Abs(v.X);
             double y = Math.Abs(v.Y);
@@ -229,19 +229,19 @@ namespace MiniGlobe.Examples.Research.RayCasting
 
             if ((x < y) && (x < z))
             {
-                return Vector3d.UnitX;
+                return Vector3D.UnitX;
             }
             else if ((y < x) && (y < z))
             {
-                return Vector3d.UnitY;
+                return Vector3D.UnitY;
             }
             else
             {
-                return Vector3d.UnitZ;
+                return Vector3D.UnitZ;
             }
         }
 
-        private static Vector3d[] BoundingPolygon(Vector3d q, Vector3d DInverse, int n)
+        private static Vector3D[] BoundingPolygon(Vector3D q, Vector3D DInverse, int n)
         {
             if (n < 3)
             {
@@ -249,7 +249,7 @@ namespace MiniGlobe.Examples.Research.RayCasting
             }
             
             // TODO:  Place holder
-            return new Vector3d[] { Vector3d.UnitX, Vector3d.UnitY, Vector3d.UnitZ };
+            return new Vector3D[] { Vector3D.UnitX, Vector3D.UnitY, Vector3D.UnitZ };
         }
 
         #region IRenderable Members
@@ -271,8 +271,8 @@ namespace MiniGlobe.Examples.Research.RayCasting
                 _va.VertexBuffers[location] = attachedPositionBuffer;
             }
             
-            Vector3d q = MultiplyVectorComponents(_d, sceneState.Camera.Eye);
-            Vector3d[] polygon = BoundingPolygon(q, _dInverse, NumberOfBoundingPolygonPoints);
+            Vector3D q = MultiplyVectorComponents(_d, sceneState.Camera.Eye);
+            Vector3D[] polygon = BoundingPolygon(q, _dInverse, NumberOfBoundingPolygonPoints);
 
             _projectionPositions.CopyFromSystemMemory(polygon);
 
@@ -283,7 +283,7 @@ namespace MiniGlobe.Examples.Research.RayCasting
                 throw new InvalidOperationException("Texture");
             }
 
-            Vector3d eye = sceneState.Camera.Eye;
+            Vector3D eye = sceneState.Camera.Eye;
             Vector3 cameraEyeSquared = Conversion.ToVector3(MultiplyVectorComponents(eye, eye));
 
             if (Shade)
@@ -322,8 +322,8 @@ namespace MiniGlobe.Examples.Research.RayCasting
             set
             {
                 _shape = value;
-                _d = new Vector3d(1 / _shape.Radii.X, 1 / _shape.Radii.Y, 1 / _shape.Radii.Z);
-                _dInverse = new Vector3d(_shape.Radii.X, _shape.Radii.Y, _shape.Radii.Z);
+                _d = new Vector3D(1 / _shape.Radii.X, 1 / _shape.Radii.Y, 1 / _shape.Radii.Z);
+                _dInverse = new Vector3D(_shape.Radii.X, _shape.Radii.Y, _shape.Radii.Z);
 
                 (_sp.Uniforms["u_globeOneOverRadiiSquared"] as Uniform<Vector3>).Value = Conversion.ToVector3(_shape.OneOverRadiiSquared);
                 (_solidSP.Uniforms["u_globeOneOverRadiiSquared"] as Uniform<Vector3>).Value = Conversion.ToVector3(_shape.OneOverRadiiSquared);
@@ -366,7 +366,7 @@ namespace MiniGlobe.Examples.Research.RayCasting
         private VertexBuffer _projectionPositions;
 
         private Ellipsoid _shape;
-        private Vector3d _d;
-        private Vector3d _dInverse;
+        private Vector3D _d;
+        private Vector3D _dInverse;
     }
 }

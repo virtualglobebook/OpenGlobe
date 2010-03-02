@@ -67,6 +67,11 @@ namespace MiniGlobe.Core
             get { return _z; }
         }
 
+        public Vector2D XY
+        {
+            get { return new Vector2D(X, Y); }
+        }
+
         public double MagnitudeSquared
         {
             get { return _x * _x + _y * _y + _z * _z; }
@@ -94,6 +99,18 @@ namespace MiniGlobe.Core
             return Normalize(out magnitude);
         }
 
+        public Vector3D Cross(Vector3D other)
+        {
+            return new Vector3D(Y * other.Z - Z * other.Y,
+                                Z * other.X - X * other.Z,
+                                X * other.Y - Y * other.X);
+        }
+
+        public double Dot(Vector3D other)
+        {
+            return X * other.X + Y * other.Y + Z * other.Z;
+        }
+
         public Vector3D Add(Vector3D addend)
         {
             return this + addend;
@@ -117,6 +134,11 @@ namespace MiniGlobe.Core
         public bool Equals(Vector3D other)
         {
             return _x == other._x && _y == other._y && _z == other._z;
+        }
+
+        public static Vector3D operator -(Vector3D vector)
+        {
+            return new Vector3D(-vector.X, vector.Y, vector.Z);
         }
 
         public static Vector3D operator +(Vector3D left, Vector3D right)

@@ -33,9 +33,9 @@ namespace MiniGlobe.Renderer
             // Coordinate system for the near plane:  origin is at center, x and y
             // span [-1, 1] just like noramlized device coordinates.
             //
-            Vector3d origin = camera.Eye + (nearDistance * camera.Forward);    // Project eye onto near plane
-            Vector3d xAxis = camera.Right * (nearDistance * Math.Tan(theta));  // Rescale right to near plane
-            Vector3d yAxis = camera.Up * (nearDistance * Math.Tan(phi));       // Rescale up to near plane
+            Vector3D origin = camera.Eye + (nearDistance * camera.Forward);    // Project eye onto near plane
+            Vector3D xAxis = camera.Right * (nearDistance * Math.Tan(theta));  // Rescale right to near plane
+            Vector3D yAxis = camera.Up * (nearDistance * Math.Tan(phi));       // Rescale up to near plane
 
             _uniform.Value = Conversion.ToMatrix4(new Matrix4d(
                     xAxis.X, xAxis.Y, xAxis.Z, 0,

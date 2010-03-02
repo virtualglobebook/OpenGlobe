@@ -11,6 +11,7 @@ using System;
 using System.Globalization;
 using System.Runtime.InteropServices;
 using OpenTK;
+using MiniGlobe.Core;
 
 namespace MiniGlobe.Renderer
 {
@@ -22,15 +23,15 @@ namespace MiniGlobe.Renderer
         /// <summary>
         /// Top row of the matrix
         /// </summary>
-        public Vector3d Row0 { get; set; }
+        public Vector3D Row0 { get; set; }
         /// <summary>
         /// 2nd row of the matrix
         /// </summary>
-        public Vector3d Row1 { get; set; }
+        public Vector3D Row1 { get; set; }
         /// <summary>
         /// 3rd row of the matrix
         /// </summary>
-        public Vector3d Row2 { get; set; }
+        public Vector3D Row2 { get; set; }
 
         /// <summary>
         /// Constructs a new instance.
@@ -38,7 +39,7 @@ namespace MiniGlobe.Renderer
         /// <param name="row0">Top row of the matrix</param>
         /// <param name="row1">Second row of the matrix</param>
         /// <param name="row2">Third row of the matrix</param>
-        public Matrix3d(Vector3d row0, Vector3d row1, Vector3d row2)
+        public Matrix3d(Vector3D row0, Vector3D row1, Vector3D row2)
             : this()
         {
             Row0 = row0;
@@ -64,33 +65,33 @@ namespace MiniGlobe.Renderer
             double m20, double m21, double m22)
             : this()
         {
-            Row0 = new Vector3d(m00, m01, m02);
-            Row1 = new Vector3d(m10, m11, m12);
-            Row2 = new Vector3d(m20, m21, m22);
+            Row0 = new Vector3D(m00, m01, m02);
+            Row1 = new Vector3D(m10, m11, m12);
+            Row2 = new Vector3D(m20, m21, m22);
         }
 
         /// <summary>
         /// The first column of this matrix
         /// </summary>
-        public Vector3d Column0
+        public Vector3D Column0
         {
-            get { return new Vector3d(Row0.X, Row1.X, Row2.X); }
+            get { return new Vector3D(Row0.X, Row1.X, Row2.X); }
         }
 
         /// <summary>
         /// The second column of this matrix
         /// </summary>
-        public Vector3d Column1
+        public Vector3D Column1
         {
-            get { return new Vector3d(Row0.Y, Row1.Y, Row2.Y); }
+            get { return new Vector3D(Row0.Y, Row1.Y, Row2.Y); }
         }
 
         /// <summary>
         /// The third column of this matrix
         /// </summary>
-        public Vector3d Column2
+        public Vector3D Column2
         {
-            get { return new Vector3d(Row0.Z, Row1.Z, Row2.Z); }
+            get { return new Vector3D(Row0.Z, Row1.Z, Row2.Z); }
         }
 
         /// <summary>
@@ -183,11 +184,11 @@ namespace MiniGlobe.Renderer
             return new Matrix3d(Column0, Column1, Column2);
         }
 
-        public static Vector3d operator *(Matrix3d left, Vector3d right)
+        public static Vector3D operator *(Matrix3d left, Vector3D right)
         {
-            return new Vector3d(Vector3d.Dot(left.Row0, right),
-                                Vector3d.Dot(left.Row1, right),
-                                Vector3d.Dot(left.Row2, right));
+            return new Vector3D(left.Row0.Dot(right),
+                                left.Row1.Dot(right),
+                                left.Row2.Dot(right));
         }
 
         public static Matrix3d Identity

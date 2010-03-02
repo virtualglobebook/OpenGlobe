@@ -117,7 +117,7 @@ namespace MiniGlobe.Core.Geometry
             }
         }
 
-        public Vector3d DeticToVector3d(double longitude, double latitude, double height)
+        public Vector3D DeticToVector3d(double longitude, double latitude, double height)
         {
             // Algorithm is from Wikipedia's "Geodetic System" topic.
 
@@ -137,7 +137,7 @@ namespace MiniGlobe.Core.Geometry
             double y = normalPlusHeight * cosLat * sinLon;
             double z = (normal * (1 - firstEccentricitySquared) + height) * sinLat;
 
-            return new Vector3d(x, y, z);
+            return new Vector3D(x, y, z);
         }
 
         private readonly Vector3d _radii;

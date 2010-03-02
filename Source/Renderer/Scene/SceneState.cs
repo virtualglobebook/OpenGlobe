@@ -9,6 +9,7 @@
 
 using OpenTK;
 using System.Drawing;
+using MiniGlobe.Core;
 
 namespace MiniGlobe.Renderer
 {
@@ -21,7 +22,7 @@ namespace MiniGlobe.Renderer
             AmbientIntensity = 0.10f;
             Shininess = 12;
             Camera = new Camera();
-            SunPosition = new Vector3d(200000, 0, 0);
+            SunPosition = new Vector3D(200000, 0, 0);
             ModelMatrix = Matrix4d.Identity;
             HighResolutionSnapScale = 1;
         }
@@ -32,9 +33,9 @@ namespace MiniGlobe.Renderer
         public float Shininess { get; set; }
         public Camera Camera { get; set; }
 
-        public Vector3d SunPosition { get; set; }
+        public Vector3D SunPosition { get; set; }
 
-        public Vector3d CameraLightPosition
+        public Vector3D CameraLightPosition
         {
             get { return Camera.Eye; }
         }
@@ -75,7 +76,7 @@ namespace MiniGlobe.Renderer
 
         public Matrix4d ViewMatrix
         {
-            get  { return Matrix4d.LookAt(Camera.Eye, Camera.Target, Camera.Up); }
+            get { return Matrix4d.LookAt(Camera.Eye.X, Camera.Eye.Y, Camera.Eye.Z, Camera.Target.X, Camera.Target.Y, Camera.Target.Z, Camera.Up.X, Camera.Up.Y, Camera.Up.Z); }
         }
 
         public Matrix4d ModelMatrix { get; set; }

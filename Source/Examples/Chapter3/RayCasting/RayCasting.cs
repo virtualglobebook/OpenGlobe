@@ -84,7 +84,7 @@ namespace MiniGlobe.Examples.Chapter3
 
         private void CenterCameraOnGlobeCenter()
         {
-            _camera.CenterPoint = Vector3d.Zero;
+            _camera.CenterPoint = Vector3D.Zero;
             _camera.FixedToLocalRotation = Matrix3d.Identity;
             _camera.Azimuth = 0.0;
             _camera.Elevation = 0.0;

@@ -225,9 +225,9 @@ namespace MiniGlobe.Scene
                 }";
         }
 
-        private static Vector3d MultiplyVectorComponents(Vector3d left, Vector3d right)
+        private static Vector3D MultiplyVectorComponents(Vector3D left, Vector3D right)
         {
-            return new Vector3d(left.X * right.X, left.Y * right.Y, left.Z * right.Z);
+            return new Vector3D(left.X * right.X, left.Y * right.Y, left.Z * right.Z);
         }
 
         private void Clean()
@@ -272,7 +272,7 @@ namespace MiniGlobe.Scene
 
             if (ShowGlobe)
             {
-                Vector3d eye = sceneState.Camera.Eye;
+                Vector3D eye = sceneState.Camera.Eye;
                 Vector3 cameraEyeSquared = Conversion.ToVector3(MultiplyVectorComponents(eye, eye));
 
                 if (Shade)

@@ -221,9 +221,9 @@ namespace MiniGlobe.Examples.Research.RayCasting
 
         private void CenterCameraOnGlobeCenter()
         {
-            _sceneState.Camera.Target = Vector3d.Zero;
-            _sceneState.Camera.Up = new Vector3d(0, 0, 1);
-            _sceneState.Camera.Eye = new Vector3d(0, -1, 0);
+            _sceneState.Camera.Target = Vector3D.Zero;
+            _sceneState.Camera.Up = new Vector3D(0, 0, 1);
+            _sceneState.Camera.Eye = new Vector3D(0, -1, 0);
             _sceneState.Camera.ZoomToTarget(_globeShape.MaximumRadius);
             _camera.UpdateParametersFromCamera();
         }

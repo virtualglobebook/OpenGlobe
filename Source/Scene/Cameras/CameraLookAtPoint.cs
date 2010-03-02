@@ -127,7 +127,7 @@ namespace MiniGlobe.Scene
         /// Gets or sets the center point of the camera.  The camera always faces this point even as
         /// <see cref="Azimuth"/>, <see cref="Elevation"/>, and <see cref="Range"/> change.
         /// </summary>
-        public Vector3d CenterPoint
+        public Vector3D CenterPoint
         {
             get { return _centerPoint; }
             set { _centerPoint = value; UpdateCameraFromParameters(); }
@@ -176,13 +176,13 @@ namespace MiniGlobe.Scene
         /// </summary>
         public void UpdateParametersFromCamera()
         {
-            Vector3d eyePosition = _fixedToLocalRotation * (_camera.Eye - _camera.Target);
-            Vector3d up = _fixedToLocalRotation * _camera.Up;
+            Vector3D eyePosition = _fixedToLocalRotation * (_camera.Eye - _camera.Target);
+            Vector3D up = _fixedToLocalRotation * _camera.Up;
 
             _range = Math.Sqrt(eyePosition.X * eyePosition.X + eyePosition.Y * eyePosition.Y + eyePosition.Z * eyePosition.Z);
             _elevation = Math.Asin(eyePosition.Z / _range);
 
-            if (eyePosition.Xy.LengthSquared < up.Xy.LengthSquared)
+            if (eyePosition.XY.MagnitudeSquared < up.XY.MagnitudeSquared)
             {
                 // Near the poles, determine the azimuth from the Up direction instead of from the Eye position.
                 if (eyePosition.Z > 0.0)
@@ -205,18 +205,18 @@ namespace MiniGlobe.Scene
             _camera.Target = _centerPoint;
 
             double rangeTimesSinElevation = _range * Math.Cos(_elevation);
-            _camera.Eye = new Vector3d(rangeTimesSinElevation * Math.Cos(_azimuth),
+            _camera.Eye = new Vector3D(rangeTimesSinElevation * Math.Cos(_azimuth),
                                        rangeTimesSinElevation * Math.Sin(_azimuth),
                                        _range * Math.Sin(_elevation));
 
-            Vector3d right = Vector3d.Cross(_camera.Eye, Vector3d.UnitZ);
-            _camera.Up = Vector3d.Normalize(Vector3d.Cross(right, _camera.Eye));
+            Vector3D right = _camera.Eye.Cross(Vector3D.UnitZ);
+            _camera.Up = right.Cross(_camera.Eye).Normalize();
 
-            if (Double.IsNaN(_camera.Up.X))
+            if (_camera.Up.IsUndefined)
             {
                 // Up vector is invalid because _camera.Eye is all Z (or very close to it).
                 // So compute the Up vector directly assuming no Z component.
-                _camera.Up = new Vector3d(-Math.Cos(_azimuth), -Math.Sin(_azimuth), 0.0);
+                _camera.Up = new Vector3D(-Math.Cos(_azimuth), -Math.Sin(_azimuth), 0.0);
             }
 
             Matrix3d localToFixed = _fixedToLocalRotation.Transpose();
@@ -340,7 +340,7 @@ namespace MiniGlobe.Scene
 
         private void Zoom(Size movement)
         {
-            double approximateDistanceFromSurface = Math.Abs(_camera.Eye.Length - _ellipsoid.MinimumRadius);
+            double approximateDistanceFromSurface = Math.Abs(_camera.Eye.Magnitude - _ellipsoid.MinimumRadius);
             approximateDistanceFromSurface = Math.Max(approximateDistanceFromSurface, _ellipsoid.MinimumRadius / 100.0);
             double rangeWindowRatio = (double)movement.Height / (double)_window.Height;
             _range -= 5.0 * approximateDistanceFromSurface * rangeWindowRatio;
@@ -358,7 +358,7 @@ namespace MiniGlobe.Scene
         private double _elevation;
         private double _range;
 
-        private Vector3d _centerPoint = Vector3d.Zero;
+        private Vector3D _centerPoint = Vector3D.Zero;
         private Matrix3d _fixedToLocalRotation = Matrix3d.Identity;
     }
 }

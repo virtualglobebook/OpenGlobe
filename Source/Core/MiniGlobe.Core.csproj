@@ -66,6 +66,7 @@
     <Compile Include="Tessellation\SubdivisionSphereTessellatorSimple.cs" />
     <Compile Include="Tessellation\SubdivisionUtility.cs" />
     <Compile Include="Trig.cs" />
+    <Compile Include="Vector2D.cs" />
     <Compile Include="Vector3D.cs" />
   </ItemGroup>
   <ItemGroup>
