@@ -21,6 +21,7 @@
   <IgnoreGeneratedCode>False</IgnoreGeneratedCode>
  </ProjectOptions>
  <Targets>
+  <Target Name="$(ProjectDir)/../../Source/Examples/Chapter2/EllipsoidSurfaceNormals/bin/Release/Chapter2EllipsoidSurfaceNormals.exe" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/../../Source/Examples/Chapter3/LatitudeLongitudeGrid/bin/Release/Chapter3LatitudeLongitudeGrid.exe" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/../../Source/Examples/Chapter3/NightLights/bin/Release/Chapter3NightLights.exe" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/../../Source/Examples/Chapter3/RayCasting/bin/Release/Chapter3RayCasting.exe" Analyze="True" AnalyzeAllChildren="True" />
@@ -79,15 +80,6 @@
      </Message>
     </Messages>
    </Namespace>
-   <Namespace Name="MiniGlobe.Core.Coordinates">
-    <Messages>
-     <Message TypeName="AvoidNamespacesWithFewTypes" Category="Microsoft.Design" CheckId="CA1020" Created="2010-02-24 12:09:42Z">
-      <Issue>
-       <Item>MiniGlobe.Core.Coordinates</Item>
-      </Issue>
-     </Message>
-    </Messages>
-   </Namespace>
    <Namespace Name="MiniGlobe.Core.Tessellation">
     <Messages>
      <Message TypeName="AvoidNamespacesWithFewTypes" Category="Microsoft.Design" CheckId="CA1020" Status="Excluded" Created="2009-12-23 01:33:54Z">
@@ -132,6 +124,19 @@
    </Namespace>
   </Namespaces>
   <Targets>
+   <Target Name="$(ProjectDir)/../../Source/Examples/Chapter2/EllipsoidSurfaceNormals/bin/Release/Chapter2EllipsoidSurfaceNormals.exe">
+    <Modules>
+     <Module Name="chapter2ellipsoidsurfacenormals.exe">
+      <Messages>
+       <Message TypeName="AssembliesShouldHaveValidStrongNames" Category="Microsoft.Design" CheckId="CA2210" Created="2010-03-03 23:33:07Z">
+        <Issue Name="NoStrongName">
+         <Item>'Chapter2EllipsoidSurfaceNormals.exe'</Item>
+        </Issue>
+       </Message>
+      </Messages>
+     </Module>
+    </Modules>
+   </Target>
    <Target Name="$(ProjectDir)/../../Source/Examples/Chapter3/LatitudeLongitudeGrid/bin/Release/Chapter3LatitudeLongitudeGrid.exe">
     <Modules>
      <Module Name="chapter3latitudelongitudegrid.exe">
@@ -233,41 +238,6 @@
         </Issue>
        </Message>
       </Messages>
-      <Namespaces>
-       <Namespace Name="MiniGlobe.Examples.Research.RayCasting">
-        <Types>
-         <Type Name="OptimizedRayCastedGlobe">
-          <Members>
-           <Member Name="#BoundingPolygon(OpenTK.Vector3d,OpenTK.Vector3d,System.Int32)">
-            <Messages>
-             <Message Id="DInverse" TypeName="ReviewUnusedParameters" Category="Microsoft.Usage" CheckId="CA1801" Created="2010-03-01 00:35:48Z" FixCategory="NonBreaking">
-              <Issue>
-               <Item>'DInverse'</Item>
-               <Item>'OptimizedRayCastedGlobe.BoundingPolygon(Vector3d, Vector3d, int)'</Item>
-              </Issue>
-             </Message>
-             <Message Id="q" TypeName="ReviewUnusedParameters" Category="Microsoft.Usage" CheckId="CA1801" Created="2010-03-01 00:35:48Z" FixCategory="NonBreaking">
-              <Issue>
-               <Item>'q'</Item>
-               <Item>'OptimizedRayCastedGlobe.BoundingPolygon(Vector3d, Vector3d, int)'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-           <Member Name="#MostOrthogonalAxis(OpenTK.Vector3d)">
-            <Messages>
-             <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Created="2010-03-01 00:35:48Z">
-              <Issue>
-               <Item>'OptimizedRayCastedGlobe.MostOrthogonalAxis(Vector3d)'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-          </Members>
-         </Type>
-        </Types>
-       </Namespace>
-      </Namespaces>
      </Module>
     </Modules>
    </Target>
@@ -284,6 +254,63 @@
       <Namespaces>
        <Namespace Name="MiniGlobe.Core">
         <Types>
+         <Type Name="Vector2D">
+          <Members>
+           <Member Name="#.ctor(System.Double,System.Double)">
+            <Messages>
+             <Message Id="x" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-03-03 23:33:07Z">
+              <Issue Name="MemberParameterMoreMeaningfulName">
+               <Item>'Vector2D.Vector2D(double, double)'</Item>
+               <Item>'x'</Item>
+              </Issue>
+             </Message>
+             <Message Id="y" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-03-03 23:33:07Z">
+              <Issue Name="MemberParameterMoreMeaningfulName">
+               <Item>'Vector2D.Vector2D(double, double)'</Item>
+               <Item>'y'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Normalize(System.Double&amp;)">
+            <Messages>
+             <Message Id="0#" TypeName="AvoidOutParameters" Category="Microsoft.Design" CheckId="CA1021" Created="2010-03-03 23:33:07Z">
+              <Issue>
+               <Item>'magnitude'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#op_UnaryNegation(MiniGlobe.Core.Vector2D)">
+            <Messages>
+             <Message TypeName="OperatorOverloadsHaveNamedAlternates" Category="Microsoft.Usage" CheckId="CA2225" Created="2010-03-03 23:33:07Z">
+              <Issue>
+               <Item>Negate</Item>
+               <Item>'Vector2D.operator -(Vector2D)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#X">
+            <Messages>
+             <Message Id="X" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-03-03 23:33:07Z">
+              <Issue Name="MemberMoreMeaningfulName">
+               <Item>'Vector2D.X'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Y">
+            <Messages>
+             <Message Id="Y" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-03-03 23:33:07Z">
+              <Issue Name="MemberMoreMeaningfulName">
+               <Item>'Vector2D.Y'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
          <Type Name="Vector3D">
           <Members>
            <Member Name="#.ctor(System.Double,System.Double,System.Double)">
@@ -334,6 +361,16 @@
                 <Note Id="0" />
                </User>
               </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#op_UnaryNegation(MiniGlobe.Core.Vector3D)">
+            <Messages>
+             <Message TypeName="OperatorOverloadsHaveNamedAlternates" Category="Microsoft.Usage" CheckId="CA2225" Created="2010-03-03 23:33:07Z">
+              <Issue>
+               <Item>Negate</Item>
+               <Item>'Vector3D.operator -(Vector3D)'</Item>
+              </Issue>
              </Message>
             </Messages>
            </Member>
@@ -419,22 +456,6 @@
               <Notes>
                <User Name="pjcozzi">
                 <Note Id="17" />
-               </User>
-              </Notes>
-             </Message>
-            </Messages>
-           </Member>
-           <Member Name="#DeticToVector3d(System.Double,System.Double,System.Double)">
-            <Messages>
-             <Message Id="d" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Excluded" Created="2010-02-07 19:07:23Z">
-              <Issue Name="Member">
-               <Item>d</Item>
-               <Item>'Ellipsoid.DeticToVector3d(double, double, double)'</Item>
-               <Item>D</Item>
-              </Issue>
-              <Notes>
-               <User Name="pjcozzi">
-                <Note Id="38" />
                </User>
               </Notes>
              </Message>
@@ -1885,18 +1906,13 @@
              </Message>
             </Messages>
            </Member>
-           <Member Name="#op_Multiply(MiniGlobe.Renderer.Matrix3d,OpenTK.Vector3d)">
+           <Member Name="#op_Multiply(MiniGlobe.Renderer.Matrix3d,MiniGlobe.Core.Vector3D)">
             <Messages>
-             <Message TypeName="OperatorOverloadsHaveNamedAlternates" Category="Microsoft.Usage" CheckId="CA2225" Status="Excluded" Created="2010-02-07 19:07:23Z">
+             <Message TypeName="OperatorOverloadsHaveNamedAlternates" Category="Microsoft.Usage" CheckId="CA2225" Created="2010-03-03 23:33:07Z">
               <Issue>
                <Item>Multiply</Item>
-               <Item>'Matrix3d.operator *(Matrix3d, Vector3d)'</Item>
+               <Item>'Matrix3d.operator *(Matrix3d, Vector3D)'</Item>
               </Issue>
-              <Notes>
-               <User Name="pjcozzi">
-                <Note Id="41" />
-               </User>
-              </Notes>
              </Message>
             </Messages>
            </Member>
@@ -3528,23 +3544,63 @@
              </Message>
             </Messages>
            </Member>
-           <Member Name="#ViewPoint(System.Double,System.Double,System.Double)">
+           <Member Name="#ViewPoint(MiniGlobe.Core.Cartographic3D)">
             <Messages>
-             <Message Id="ViewPoint" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Status="Excluded" Created="2010-02-24 12:09:42Z">
+             <Message Id="ViewPoint" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Status="Excluded" Created="2010-03-03 23:33:07Z">
               <Issue Name="MemberShouldBeDiscreteTerm">
                <Item>ViewPoint</Item>
-               <Item>'CameraLookAtPoint.ViewPoint(double, double, double)'</Item>
+               <Item>'CameraLookAtPoint.ViewPoint(Cartographic3D)'</Item>
                <Item>Viewpoint</Item>
               </Issue>
               <Notes>
                <User Name="pjcozzi">
-                <Note Id="43" />
+                <Note Id="46" />
                </User>
               </Notes>
              </Message>
             </Messages>
            </Member>
           </Members>
+         </Type>
+         <Type Name="Plane">
+          <Members>
+           <Member Name="#.ctor(MiniGlobe.Renderer.Context,MiniGlobe.Core.Vector3D,MiniGlobe.Core.Vector3D,MiniGlobe.Core.Vector3D)">
+            <Messages>
+             <Message Id="x" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-03-03 23:33:07Z">
+              <Issue Name="MemberParameterMoreMeaningfulName">
+               <Item>'Plane.Plane(Context, Vector3D, Vector3D, Vector3D)'</Item>
+               <Item>'x'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="37" />
+               </User>
+              </Notes>
+             </Message>
+             <Message Id="y" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-03-03 23:33:07Z">
+              <Issue Name="MemberParameterMoreMeaningfulName">
+               <Item>'Plane.Plane(Context, Vector3D, Vector3D, Vector3D)'</Item>
+               <Item>'y'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="37" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="Polyline">
+          <Messages>
+           <Message Id="Polyline" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-03-03 23:33:07Z">
+            <Issue Name="Type">
+             <Item>Polyline</Item>
+             <Item>'Polyline'</Item>
+            </Issue>
+           </Message>
+          </Messages>
          </Type>
         </Types>
        </Namespace>
@@ -3565,6 +3621,52 @@
       <Namespaces>
        <Namespace Name="MiniGlobe.Core">
         <Types>
+         <Type Name="Cartographic3DTests">
+          <Members>
+           <Member Name="#Construct()">
+            <Messages>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-03-03 23:33:07Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'Cartographic3DTests.Construct()'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="33" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#TestEquals()">
+            <Messages>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-03-03 23:33:07Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'Cartographic3DTests.TestEquals()'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="33" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#TestGetHashCode()">
+            <Messages>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-03-03 23:33:07Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'Cartographic3DTests.TestGetHashCode()'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="33" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
          <Type Name="IntervalTests">
           <Members>
            <Member Name="#Construct()">
@@ -3657,30 +3759,17 @@
            </Member>
           </Members>
          </Type>
-        </Types>
-       </Namespace>
-       <Namespace Name="MiniGlobe.Core.Coordinates">
-        <Types>
-         <Type Name="Vector3dTests">
-          <Messages>
-           <Message Id="d" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Created="2010-02-24 12:09:42Z">
-            <Issue Name="Type">
-             <Item>d</Item>
-             <Item>'Vector3dTests'</Item>
-             <Item>D</Item>
-            </Issue>
-           </Message>
-          </Messages>
+         <Type Name="Vector2DTests">
           <Members>
            <Member Name="#Add()">
             <Messages>
-             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-02-24 12:09:42Z" FixCategory="DependsOnFix">
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-03-03 23:33:07Z" FixCategory="DependsOnFix">
               <Issue>
-               <Item>'Vector3dTests.Add()'</Item>
+               <Item>'Vector2DTests.Add()'</Item>
               </Issue>
               <Notes>
                <User Name="pjcozzi">
-                <Note Id="42" />
+                <Note Id="33" />
                </User>
               </Notes>
              </Message>
@@ -3688,13 +3777,13 @@
            </Member>
            <Member Name="#Construct()">
             <Messages>
-             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-02-24 12:09:42Z" FixCategory="DependsOnFix">
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-03-03 23:33:07Z" FixCategory="DependsOnFix">
               <Issue>
-               <Item>'Vector3dTests.Construct()'</Item>
+               <Item>'Vector2DTests.Construct()'</Item>
               </Issue>
               <Notes>
                <User Name="pjcozzi">
-                <Note Id="42" />
+                <Note Id="33" />
                </User>
               </Notes>
              </Message>
@@ -3702,13 +3791,27 @@
            </Member>
            <Member Name="#Divide()">
             <Messages>
-             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-02-24 12:09:42Z" FixCategory="DependsOnFix">
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-03-03 23:33:07Z" FixCategory="DependsOnFix">
               <Issue>
-               <Item>'Vector3dTests.Divide()'</Item>
+               <Item>'Vector2DTests.Divide()'</Item>
               </Issue>
               <Notes>
                <User Name="pjcozzi">
-                <Note Id="42" />
+                <Note Id="33" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#IsUndefined()">
+            <Messages>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-03-03 23:33:07Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'Vector2DTests.IsUndefined()'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="33" />
                </User>
               </Notes>
              </Message>
@@ -3716,13 +3819,13 @@
            </Member>
            <Member Name="#Magnitude()">
             <Messages>
-             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-02-24 12:09:42Z" FixCategory="DependsOnFix">
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-03-03 23:33:07Z" FixCategory="DependsOnFix">
               <Issue>
-               <Item>'Vector3dTests.Magnitude()'</Item>
+               <Item>'Vector2DTests.Magnitude()'</Item>
               </Issue>
               <Notes>
                <User Name="pjcozzi">
-                <Note Id="42" />
+                <Note Id="33" />
                </User>
               </Notes>
              </Message>
@@ -3730,13 +3833,13 @@
            </Member>
            <Member Name="#Multiply()">
             <Messages>
-             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-02-24 12:09:42Z" FixCategory="DependsOnFix">
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-03-03 23:33:07Z" FixCategory="DependsOnFix">
               <Issue>
-               <Item>'Vector3dTests.Multiply()'</Item>
+               <Item>'Vector2DTests.Multiply()'</Item>
               </Issue>
               <Notes>
                <User Name="pjcozzi">
-                <Note Id="42" />
+                <Note Id="33" />
                </User>
               </Notes>
              </Message>
@@ -3744,13 +3847,13 @@
            </Member>
            <Member Name="#Normalize()">
             <Messages>
-             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-02-24 12:09:42Z" FixCategory="DependsOnFix">
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-03-03 23:33:07Z" FixCategory="DependsOnFix">
               <Issue>
-               <Item>'Vector3dTests.Normalize()'</Item>
+               <Item>'Vector2DTests.Normalize()'</Item>
               </Issue>
               <Notes>
                <User Name="pjcozzi">
-                <Note Id="42" />
+                <Note Id="33" />
                </User>
               </Notes>
              </Message>
@@ -3758,13 +3861,13 @@
            </Member>
            <Member Name="#NormalizeZeroVector()">
             <Messages>
-             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-02-24 12:09:42Z" FixCategory="DependsOnFix">
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-03-03 23:33:07Z" FixCategory="DependsOnFix">
               <Issue>
-               <Item>'Vector3dTests.NormalizeZeroVector()'</Item>
+               <Item>'Vector2DTests.NormalizeZeroVector()'</Item>
               </Issue>
               <Notes>
                <User Name="pjcozzi">
-                <Note Id="42" />
+                <Note Id="33" />
                </User>
               </Notes>
              </Message>
@@ -3772,27 +3875,41 @@
            </Member>
            <Member Name="#Subtract()">
             <Messages>
-             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-02-24 12:09:42Z" FixCategory="DependsOnFix">
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-03-03 23:33:07Z" FixCategory="DependsOnFix">
               <Issue>
-               <Item>'Vector3dTests.Subtract()'</Item>
+               <Item>'Vector2DTests.Subtract()'</Item>
               </Issue>
               <Notes>
                <User Name="pjcozzi">
-                <Note Id="42" />
+                <Note Id="33" />
                </User>
               </Notes>
              </Message>
             </Messages>
            </Member>
-           <Member Name="#TestUndefined()">
+           <Member Name="#TestEquals()">
             <Messages>
-             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-02-24 12:09:42Z" FixCategory="DependsOnFix">
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-03-03 23:33:07Z" FixCategory="DependsOnFix">
               <Issue>
-               <Item>'Vector3dTests.TestUndefined()'</Item>
+               <Item>'Vector2DTests.TestEquals()'</Item>
               </Issue>
               <Notes>
                <User Name="pjcozzi">
-                <Note Id="42" />
+                <Note Id="33" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#TestGetHashCode()">
+            <Messages>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-03-03 23:33:07Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'Vector2DTests.TestGetHashCode()'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="33" />
                </User>
               </Notes>
              </Message>
@@ -3800,13 +3917,13 @@
            </Member>
            <Member Name="#Undefined()">
             <Messages>
-             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-02-24 12:09:42Z" FixCategory="DependsOnFix">
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-03-03 23:33:07Z" FixCategory="DependsOnFix">
               <Issue>
-               <Item>'Vector3dTests.Undefined()'</Item>
+               <Item>'Vector2DTests.Undefined()'</Item>
               </Issue>
               <Notes>
                <User Name="pjcozzi">
-                <Note Id="42" />
+                <Note Id="33" />
                </User>
               </Notes>
              </Message>
@@ -3814,13 +3931,13 @@
            </Member>
            <Member Name="#UnitX()">
             <Messages>
-             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-02-24 12:09:42Z" FixCategory="DependsOnFix">
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-03-03 23:33:07Z" FixCategory="DependsOnFix">
               <Issue>
-               <Item>'Vector3dTests.UnitX()'</Item>
+               <Item>'Vector2DTests.UnitX()'</Item>
               </Issue>
               <Notes>
                <User Name="pjcozzi">
-                <Note Id="42" />
+                <Note Id="33" />
                </User>
               </Notes>
              </Message>
@@ -3828,27 +3945,13 @@
            </Member>
            <Member Name="#UnitY()">
             <Messages>
-             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-02-24 12:09:42Z" FixCategory="DependsOnFix">
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-03-03 23:33:07Z" FixCategory="DependsOnFix">
               <Issue>
-               <Item>'Vector3dTests.UnitY()'</Item>
+               <Item>'Vector2DTests.UnitY()'</Item>
               </Issue>
               <Notes>
                <User Name="pjcozzi">
-                <Note Id="42" />
-               </User>
-              </Notes>
-             </Message>
-            </Messages>
-           </Member>
-           <Member Name="#UnitZ()">
-            <Messages>
-             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-02-24 12:09:42Z" FixCategory="DependsOnFix">
-              <Issue>
-               <Item>'Vector3dTests.UnitZ()'</Item>
-              </Issue>
-              <Notes>
-               <User Name="pjcozzi">
-                <Note Id="42" />
+                <Note Id="33" />
                </User>
               </Notes>
              </Message>
@@ -3856,13 +3959,269 @@
            </Member>
            <Member Name="#Zero()">
             <Messages>
-             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-02-24 12:09:42Z" FixCategory="DependsOnFix">
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-03-03 23:33:07Z" FixCategory="DependsOnFix">
               <Issue>
-               <Item>'Vector3dTests.Zero()'</Item>
+               <Item>'Vector2DTests.Zero()'</Item>
               </Issue>
               <Notes>
                <User Name="pjcozzi">
-                <Note Id="42" />
+                <Note Id="33" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="Vector3DTests">
+          <Members>
+           <Member Name="#Add()">
+            <Messages>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-03-03 23:33:07Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'Vector3DTests.Add()'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="33" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Construct()">
+            <Messages>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-03-03 23:33:07Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'Vector3DTests.Construct()'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="33" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Divide()">
+            <Messages>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-03-03 23:33:07Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'Vector3DTests.Divide()'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="33" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#IsUndefined()">
+            <Messages>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-03-03 23:33:07Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'Vector3DTests.IsUndefined()'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="33" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Magnitude()">
+            <Messages>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-03-03 23:33:07Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'Vector3DTests.Magnitude()'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="33" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#MostOrthogonalAxis()">
+            <Messages>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-03-03 23:33:07Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'Vector3DTests.MostOrthogonalAxis()'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="33" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Multiply()">
+            <Messages>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-03-03 23:33:07Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'Vector3DTests.Multiply()'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="33" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#MultiplyComponents()">
+            <Messages>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-03-03 23:33:07Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'Vector3DTests.MultiplyComponents()'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="33" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Normalize()">
+            <Messages>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-03-03 23:33:07Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'Vector3DTests.Normalize()'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="33" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#NormalizeZeroVector()">
+            <Messages>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-03-03 23:33:07Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'Vector3DTests.NormalizeZeroVector()'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="33" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Subtract()">
+            <Messages>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-03-03 23:33:07Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'Vector3DTests.Subtract()'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="33" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#TestEquals()">
+            <Messages>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-03-03 23:33:07Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'Vector3DTests.TestEquals()'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="33" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#TestGetHashCode()">
+            <Messages>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-03-03 23:33:07Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'Vector3DTests.TestGetHashCode()'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="33" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Undefined()">
+            <Messages>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-03-03 23:33:07Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'Vector3DTests.Undefined()'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="33" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#UnitX()">
+            <Messages>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-03-03 23:33:07Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'Vector3DTests.UnitX()'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="33" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#UnitY()">
+            <Messages>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-03-03 23:33:07Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'Vector3DTests.UnitY()'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="33" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#UnitZ()">
+            <Messages>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-03-03 23:33:07Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'Vector3DTests.UnitZ()'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="33" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Zero()">
+            <Messages>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-03-03 23:33:07Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'Vector3DTests.Zero()'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="33" />
                </User>
               </Notes>
              </Message>
@@ -3876,6 +4235,20 @@
         <Types>
          <Type Name="EllipsoidTests">
           <Members>
+           <Member Name="#CentricSurfaceNormal()">
+            <Messages>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-03-03 23:33:07Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'EllipsoidTests.CentricSurfaceNormal()'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="33" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
            <Member Name="#Construct()">
             <Messages>
              <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-01-13 21:00:18Z" FixCategory="DependsOnFix">
@@ -3955,6 +4328,20 @@
               <Notes>
                <User Name="pjcozzi">
                 <Note Id="34" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#ToVector3D()">
+            <Messages>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-03-03 23:33:07Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'EllipsoidTests.ToVector3D()'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="33" />
                </User>
               </Notes>
              </Message>
@@ -4837,17 +5224,18 @@
     <Note Id="30" Modified="2010-01-13 21:06:32Z">In graphics, it is a vertex attribute.</Note>
     <Note Id="31" Modified="2010-01-13 21:08:11Z">Ellipsoid is immutable.</Note>
     <Note Id="32" Modified="2010-01-13 21:09:01Z">This is the same as Bitmap.Save().</Note>
+    <Note Id="33" Modified="2010-03-03 23:33:44Z">[Test] can be static.</Note>
     <Note Id="34" Modified="2010-02-02 14:22:43Z">[Test] can't be static.</Note>
     <Note Id="35" Modified="2010-02-02 14:24:45Z">filename is ok.</Note>
     <Note Id="36" Modified="2010-02-03 04:07:31Z">[Test] is ok.</Note>
-    <Note Id="38" Modified="2010-02-07 19:09:17Z">Ok for now - method name may change later.</Note>
+    <Note Id="37" Modified="2010-03-03 23:34:48Z">x and y are ok.</Note>
     <Note Id="39" Modified="2010-02-07 19:09:45Z">filename is ok.</Note>
     <Note Id="40" Modified="2010-02-07 19:15:51Z">Keyboard constants are ok.</Note>
     <Note Id="41" Modified="2010-02-07 19:17:20Z">Relax.  These mimic OpenTK types and are going away soon.</Note>
     <Note Id="42" Modified="2010-02-24 12:11:26Z">[Test] can be static.</Note>
-    <Note Id="43" Modified="2010-02-24 12:12:46Z">View and point are two different words in this case.</Note>
     <Note Id="44" Modified="2010-02-24 12:13:27Z">This is a delegate.</Note>
     <Note Id="45" Modified="2010-02-24 12:13:59Z">Filename can be one word.</Note>
+    <Note Id="46" Modified="2010-03-03 23:35:11Z">ViewPoint is meant to be two words here.</Note>
    </User>
   </Notes>
   <Rules>
@@ -4859,9 +5247,6 @@
    </Rule>
    <Rule TypeName="AvoidOutParameters" Category="Microsoft.Design" CheckId="CA1021">
     <Resolution Name="Default">Consider a design that does not require that {0} be an out parameter.</Resolution>
-   </Rule>
-   <Rule TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811">
-    <Resolution Name="Default">{0} appears to have no upstream public or protected callers.</Resolution>
    </Rule>
    <Rule TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702">
     <Resolution Name="MemberParameterShouldBeCompoundWord">In member {0}, the discrete term '{1}' in parameter name {2} should be expressed as a compound word, '{3}'.</Resolution>
@@ -4887,6 +5272,7 @@
     <Resolution Name="MemberMoreMeaningfulName">Consider providing a more meaningful name than member name {0}.</Resolution>
     <Resolution Name="MemberParameter">In method {0}, correct the spelling of '{1}' in parameter name {2} or remove it entirely if it represents any sort of Hungarian notation.</Resolution>
     <Resolution Name="MemberParameterMoreMeaningfulName">In method {0}, consider providing a more meaningful name than parameter name {1}.</Resolution>
+    <Resolution Name="Type">Correct the spelling of '{0}' in type name {1}.</Resolution>
    </Rule>
    <Rule TypeName="IdentifiersShouldHaveCorrectSuffix" Category="Microsoft.Naming" CheckId="CA1710">
     <Resolution Name="Default">Rename {0} to end in '{1}'.</Resolution>
