@@ -165,6 +165,14 @@ namespace MiniGlobe.Core
             }
         }
 
+        public bool EqualsEpsilon(Vector3D other, double epsilon)
+        {
+            return
+                (Math.Abs(_x - other._x) <= epsilon) &&
+                (Math.Abs(_y - other._y) <= epsilon) &&
+                (Math.Abs(_z - other._z) <= epsilon);
+        }
+
         public bool Equals(Vector3D other)
         {
             return _x == other._x && _y == other._y && _z == other._z;

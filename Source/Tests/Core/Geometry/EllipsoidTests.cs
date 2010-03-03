@@ -39,6 +39,13 @@ namespace MiniGlobe.Core.Geometry
         }
 
         [Test]
+        public void CentricSurfaceNormal()
+        {
+            Vector3D v = new Vector3D(1, 2, 3);
+            Assert.AreEqual(v.Normalize(), Ellipsoid.CentricSurfaceNormal(v));
+        }
+
+        [Test]
         public void SphereIntersectionsTwoFromOutside()
         {
             Ellipsoid unitSphere = Ellipsoid.UnitSphere;
@@ -172,6 +179,16 @@ namespace MiniGlobe.Core.Geometry
 
             intersections = unitSphere.Intersections(new Vector3D(2.0, 0.0, 0.0), new Vector3D(0.0, -1.0, 0.0));
             Assert.AreEqual(0, intersections.Length);
+        }
+
+        [Test]
+        public void ToVector3D()
+        {
+            Ellipsoid ellipsoid = new Ellipsoid(1, 1, 0.7);
+
+            Assert.IsTrue(Vector3D.UnitX.EqualsEpsilon(ellipsoid.ToVector3D(new Cartographic3D(0, 0, 0)), 1e-10));
+            Assert.IsTrue(Vector3D.UnitY.EqualsEpsilon(ellipsoid.ToVector3D(new Cartographic3D(Trig.ToRadians(90), 0, 0)), 1e-10));
+            Assert.IsTrue(new Vector3D(0, 0, 0.7).EqualsEpsilon(ellipsoid.ToVector3D(new Cartographic3D(0, Trig.ToRadians(90), 0)), 1e-10));
         }
     }
 }

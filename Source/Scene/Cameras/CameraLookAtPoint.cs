@@ -153,15 +153,15 @@ namespace MiniGlobe.Scene
         /// <param name="longitude">The longitude of the point to look at, in radians.</param>
         /// <param name="latitude">The latitude of the point to look at, in radians.</param>
         /// <param name="height">The height of the point to look at, in meters above the <see cref="Ellipsoid"/> surface.</param>
-        public void ViewPoint(double longitude, double latitude, double height)
+        public void ViewPoint(Cartographic3D geographic)
         {
-            _centerPoint = _ellipsoid.DeticToVector3d(longitude, latitude, height);
+            _centerPoint = _ellipsoid.ToVector3D(geographic);
             
             // Fixed to East-North-Up rotation, from Wikipedia's "Geodetic System" topic.
-            double cosLon = Math.Cos(longitude);
-            double cosLat = Math.Cos(latitude);
-            double sinLon = Math.Sin(longitude);
-            double sinLat = Math.Sin(latitude);
+            double cosLon = Math.Cos(geographic.Longitude);
+            double cosLat = Math.Cos(geographic.Latitude);
+            double sinLon = Math.Sin(geographic.Longitude);
+            double sinLat = Math.Sin(geographic.Latitude);
             _fixedToLocalRotation =
                 new Matrix3d(-sinLon,            cosLon,             0.0,
                              -sinLat * cosLon,   -sinLat * sinLon,   cosLat,

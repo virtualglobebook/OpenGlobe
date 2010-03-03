@@ -40,6 +40,11 @@ namespace MiniGlobe.Core.Geometry
                 1.0 / (radii.Z * radii.Z));
         }
 
+        public static Vector3D CentricSurfaceNormal(Vector3D positionOnEllipsoid)
+        {
+            return positionOnEllipsoid.Normalize();
+        }
+
         public Vector3D DeticSurfaceNormal(Vector3D positionOnEllipsoid)
         {
             return (positionOnEllipsoid.MultiplyComponents(_oneOverRadiiSquared)).Normalize();
@@ -116,25 +121,25 @@ namespace MiniGlobe.Core.Geometry
             }
         }
 
-        public Vector3D DeticToVector3d(double longitude, double latitude, double height)
+        public Vector3D ToVector3D(Cartographic3D geodetic)
         {
-            // Algorithm is from Wikipedia's "Geodetic System" topic.
+            double cosLon = Math.Cos(geodetic.Longitude);
+            double cosLat = Math.Cos(geodetic.Latitude);
+            double sinLon = Math.Sin(geodetic.Longitude);
+            double sinLat = Math.Sin(geodetic.Latitude);
 
-            double cosLon = Math.Cos(longitude);
-            double cosLat = Math.Cos(latitude);
-            double sinLon = Math.Sin(longitude);
-            double sinLat = Math.Sin(latitude);
+            double a = MaximumRadius;
+            double b = MinimumRadius;
+            double aSquared = a * a;
+            double firstEccentricitySquared = (aSquared - (b * b)) / aSquared;
 
-            double major = MaximumRadius;
-            double minor = MinimumRadius;
-            double firstEccentricitySquared = 1.0 - (major * major) / (minor * minor);
-            double chi = Math.Sqrt(1 - firstEccentricitySquared * cosLat * cosLat);
-            double normal = major / chi;
-            double normalPlusHeight = normal + height;
+            double chi = Math.Sqrt(1.0 - firstEccentricitySquared * sinLat * sinLat);
+            double normal = a / chi;
+            double normalPlusHeight = normal + geodetic.Height;
 
             double x = normalPlusHeight * cosLat * cosLon;
             double y = normalPlusHeight * cosLat * sinLon;
-            double z = (normal * (1 - firstEccentricitySquared) + height) * sinLat;
+            double z = (normal * (1.0 - firstEccentricitySquared) + geodetic.Height) * sinLat;
 
             return new Vector3D(x, y, z);
         }
