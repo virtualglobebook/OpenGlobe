@@ -231,7 +231,7 @@ namespace MiniGlobe.Core.Tessellation
 
             for (int i = 0; i < positions.Count; ++i)
             {
-                positions[i] = positions[i].Normalize() * CubeMapMesh.Ellipsoid.Radii;
+                positions[i] = positions[i].Normalize().MultiplyComponents(CubeMapMesh.Ellipsoid.Radii);
 
                 if ((CubeMapMesh.Normals != null) || (CubeMapMesh.TextureCoordinate != null))
                 {

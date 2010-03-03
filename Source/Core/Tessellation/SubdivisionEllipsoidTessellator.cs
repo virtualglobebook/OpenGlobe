@@ -88,10 +88,10 @@ namespace MiniGlobe.Core.Tessellation
             Vector3D n2 = new Vector3D(-rootSixOverThree, negativeRootTwoOverThree, negativeOneThird);
             Vector3D n3 = new Vector3D(rootSixOverThree, negativeRootTwoOverThree, negativeOneThird);
 
-            Vector3D p0 = n0 * ellipsoid.Radii;
-            Vector3D p1 = n1 * ellipsoid.Radii;
-            Vector3D p2 = n2 * ellipsoid.Radii;
-            Vector3D p3 = n3 * ellipsoid.Radii;
+            Vector3D p0 = n0.MultiplyComponents(ellipsoid.Radii);
+            Vector3D p1 = n1.MultiplyComponents(ellipsoid.Radii);
+            Vector3D p2 = n2.MultiplyComponents(ellipsoid.Radii);
+            Vector3D p3 = n3.MultiplyComponents(ellipsoid.Radii);
             
             subdivisionMesh.Positions.Add(p0);
             subdivisionMesh.Positions.Add(p1);
@@ -139,9 +139,9 @@ namespace MiniGlobe.Core.Tessellation
                 Vector3D n12 = ((positions[triangle.I1] + positions[triangle.I2]) * 0.5).Normalize();
                 Vector3D n20 = ((positions[triangle.I2] + positions[triangle.I0]) * 0.5).Normalize();
 
-                Vector3D p01 = n01 * subdivisionMesh.Ellipsoid.Radii;
-                Vector3D p12 = n12 * subdivisionMesh.Ellipsoid.Radii;
-                Vector3D p20 = n20 * subdivisionMesh.Ellipsoid.Radii;
+                Vector3D p01 = n01.MultiplyComponents(subdivisionMesh.Ellipsoid.Radii);
+                Vector3D p12 = n12.MultiplyComponents(subdivisionMesh.Ellipsoid.Radii);
+                Vector3D p20 = n20.MultiplyComponents(subdivisionMesh.Ellipsoid.Radii);
 
                 positions.Add(p01);
                 positions.Add(p12);

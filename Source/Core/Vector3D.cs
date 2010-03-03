@@ -10,6 +10,8 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Runtime.InteropServices;
+using System.Globalization;
 
 namespace MiniGlobe.Core
 {
@@ -18,8 +20,12 @@ namespace MiniGlobe.Core
     /// <see cref="X"/>, <see cref="Y"/>, and <see cref="Z"/>, are represented as
     /// double-precision (64-bit) floating point numbers.
     /// </summary>
+    [Serializable]
+    [StructLayout(LayoutKind.Sequential)]
     public struct Vector3D : IEquatable<Vector3D>
     {
+        public static readonly int SizeInBytes = Marshal.SizeOf(new Vector3D());
+
         public static Vector3D Zero
         {
             get { return new Vector3D(0.0, 0.0, 0.0); }
@@ -126,14 +132,37 @@ namespace MiniGlobe.Core
             return this * scalar;
         }
 
-        public Vector3D Multiply(Vector3D scale)
+        public Vector3D MultiplyComponents(Vector3D scale)
         {
-            return this * scale;
+            return new Vector3D(X * scale.X, Y * scale.Y, Z * scale.Z);
         }
 
         public Vector3D Divide(double scalar)
         {
             return this / scalar;
+        }
+
+        public Vector3D MostOrthogonalAxis
+        {
+            get
+            {
+                double x = Math.Abs(X);
+                double y = Math.Abs(Y);
+                double z = Math.Abs(Z);
+
+                if ((x < y) && (x < z))
+                {
+                    return UnitX;
+                }
+                else if ((y < x) && (y < z))
+                {
+                    return UnitY;
+                }
+                else
+                {
+                    return UnitZ;
+                }
+            }
         }
 
         public bool Equals(Vector3D other)
@@ -143,7 +172,7 @@ namespace MiniGlobe.Core
 
         public static Vector3D operator -(Vector3D vector)
         {
-            return new Vector3D(-vector.X, vector.Y, vector.Z);
+            return new Vector3D(-vector.X, -vector.Y, -vector.Z);
         }
 
         public static Vector3D operator +(Vector3D left, Vector3D right)
@@ -164,11 +193,6 @@ namespace MiniGlobe.Core
         public static Vector3D operator *(double left, Vector3D right)
         {
             return right * left;
-        }
-
-        public static Vector3D operator *(Vector3D left, Vector3D right)
-        {
-            return new Vector3D(left.X * right.X, left.Y * right.Y, left.Z * right.Z);
         }
 
         public static Vector3D operator /(Vector3D left, double right)
@@ -193,6 +217,11 @@ namespace MiniGlobe.Core
                 return Equals((Vector3D)obj);
             }
             return false;
+        }
+
+        public override string ToString()
+        {
+            return string.Format(CultureInfo.CurrentCulture, "({0}, {1}, {2})", X, Y, Z);
         }
 
         public override int GetHashCode()

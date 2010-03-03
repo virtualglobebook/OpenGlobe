@@ -42,7 +42,7 @@ namespace MiniGlobe.Core.Geometry
 
         public Vector3D DeticSurfaceNormal(Vector3D positionOnEllipsoid)
         {
-            return (positionOnEllipsoid * _oneOverRadiiSquared).Normalize();
+            return (positionOnEllipsoid.MultiplyComponents(_oneOverRadiiSquared)).Normalize();
         }
 
         public Vector3D Radii 

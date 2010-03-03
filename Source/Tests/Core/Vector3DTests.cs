@@ -143,6 +143,15 @@ namespace MiniGlobe.Core
         }
 
         [Test]
+        public void MultiplyComponents()
+        {
+            Vector3D v1 = new Vector3D(1, 2, 3);
+            Vector3D v2 = new Vector3D(4, 8, 12);
+
+            Assert.AreEqual(new Vector3D(4, 16, 36), v1.MultiplyComponents(v2));
+        }
+
+        [Test]
         public void Divide()
         {
             Vector3D v1 = new Vector3D(10.0, 20.0, 30.0);
@@ -156,6 +165,19 @@ namespace MiniGlobe.Core
             Assert.AreEqual(2.0, v3.X, 1e-14);
             Assert.AreEqual(4.0, v3.Y, 1e-14);
             Assert.AreEqual(6.0, v3.Z, 1e-14);
+        }
+
+        [Test]
+        public void MostOrthogonalAxis()
+        {
+            Vector3D v1 = new Vector3D(1, 2, 3);
+            Assert.AreEqual(Vector3D.UnitX, v1.MostOrthogonalAxis);
+
+            Vector3D v2 = new Vector3D(-3, -1, -2);
+            Assert.AreEqual(Vector3D.UnitY, v2.MostOrthogonalAxis);
+
+            Vector3D v3 = new Vector3D(3, 2, 1);
+            Assert.AreEqual(Vector3D.UnitZ, v3.MostOrthogonalAxis);
         }
 
         [Test]

@@ -10,6 +10,8 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Globalization;
+using System.Runtime.InteropServices;
 
 namespace MiniGlobe.Core
 {
@@ -18,8 +20,12 @@ namespace MiniGlobe.Core
     /// <see cref="X"/> and <see cref="Y"/>, are represented as
     /// double-precision (64-bit) floating point numbers.
     /// </summary>
+    [Serializable]
+    [StructLayout(LayoutKind.Sequential)]
     public struct Vector2D : IEquatable<Vector2D>
     {
+        public static readonly int SizeInBytes = Marshal.SizeOf(new Vector3D());
+
         public static Vector2D Zero
         {
             get { return new Vector2D(0.0, 0.0); }
@@ -115,7 +121,7 @@ namespace MiniGlobe.Core
 
         public static Vector2D operator -(Vector2D vector)
         {
-            return new Vector2D(-vector.X, vector.Y);
+            return new Vector2D(-vector.X, -vector.Y);
         }
 
         public static Vector2D operator +(Vector2D left, Vector2D right)
@@ -160,6 +166,11 @@ namespace MiniGlobe.Core
                 return Equals((Vector2D)obj);
             }
             return false;
+        }
+
+        public override string ToString()
+        {
+            return string.Format(CultureInfo.CurrentCulture, "({0}, {1})", X, Y);
         }
 
         public override int GetHashCode()
