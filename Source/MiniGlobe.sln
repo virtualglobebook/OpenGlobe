@@ -31,6 +31,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chapter7Billboards", "Examp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ResearchRayCasting", "Examples\Research\RayCasting\ResearchRayCasting.csproj", "{3B9524CC-F1D8-4F24-9FA5-18177F20ACE7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chapter2EllipsoidSurfaceNormals", "Examples\Chapter2\EllipsoidSurfaceNormals\Chapter2EllipsoidSurfaceNormals.csproj", "{C0198B9E-97B8-4075-912E-70D231EE9D8E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -85,6 +87,10 @@ Global
 		{3B9524CC-F1D8-4F24-9FA5-18177F20ACE7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3B9524CC-F1D8-4F24-9FA5-18177F20ACE7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3B9524CC-F1D8-4F24-9FA5-18177F20ACE7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C0198B9E-97B8-4075-912E-70D231EE9D8E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C0198B9E-97B8-4075-912E-70D231EE9D8E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C0198B9E-97B8-4075-912E-70D231EE9D8E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C0198B9E-97B8-4075-912E-70D231EE9D8E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

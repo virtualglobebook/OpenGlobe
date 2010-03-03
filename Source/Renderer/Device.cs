@@ -110,7 +110,6 @@ namespace MiniGlobe.Renderer
             Graphics graphics = Graphics.FromImage(bitmap);
             graphics.DrawString(text, font, new SolidBrush(Color.White), new PointF());
 
-            font.Dispose();
             graphics.Dispose();
 
             return bitmap;

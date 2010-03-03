@@ -5,13 +5,15 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{71ABD41E-1545-45DF-B016-58E89111A4F3}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <ProjectGuid>{C0198B9E-97B8-4075-912E-70D231EE9D8E}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MiniGlobe.Scene</RootNamespace>
-    <AssemblyName>MiniGlobe.Scene</AssemblyName>
+    <RootNamespace>MiniGlobe.Examples.Chapter2.EllipsoidSurfaceNormals</RootNamespace>
+    <AssemblyName>Chapter2EllipsoidSurfaceNormals</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <StartupObject>
+    </StartupObject>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -30,36 +32,6 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="OpenTK, Version=0.9.9.5, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\ThirdParty\opentk-1.0-beta-2\Binaries\OpenTK\Release\OpenTK.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Drawing" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Cameras\CameraLookAtPoint.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Renderables\Axes.cs" />
-    <Compile Include="Renderables\BillboardGroup.cs" />
-    <Compile Include="Renderables\IRenderable.cs" />
-    <Compile Include="Renderables\Plane.cs" />
-    <Compile Include="Renderables\Polyline.cs" />
-    <Compile Include="Renderables\RayCastedGlobe.cs" />
-    <Compile Include="Renderables\TessellatedGlobe.cs" />
-    <Compile Include="Renderables\Wireframe.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Core\MiniGlobe.Core.csproj">
-      <Project>{51502B9C-1A97-4F2C-8541-7D9D61ED6C6D}</Project>
-      <Name>MiniGlobe.Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Renderer\MiniGlobe.Renderer.csproj">
-      <Project>{E735AB3A-EB92-4C51-814E-E5E1F2173AA4}</Project>
-      <Name>MiniGlobe.Renderer</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
@@ -68,4 +40,35 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+  <ItemGroup>
+    <Reference Include="OpenTK, Version=0.9.9.5, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\ThirdParty\opentk-1.0-beta-2\Binaries\OpenTK\Release\OpenTK.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Drawing" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="EllipsoidSurfaceNormals.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\..\ThirdParty\opentk-1.0-beta-2\Source\OpenTK\OpenTK.dll.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Core\MiniGlobe.Core.csproj">
+      <Project>{51502B9C-1A97-4F2C-8541-7D9D61ED6C6D}</Project>
+      <Name>MiniGlobe.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Renderer\MiniGlobe.Renderer.csproj">
+      <Project>{E735AB3A-EB92-4C51-814E-E5E1F2173AA4}</Project>
+      <Name>MiniGlobe.Renderer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Scene\MiniGlobe.Scene.csproj">
+      <Project>{71ABD41E-1545-45DF-B016-58E89111A4F3}</Project>
+      <Name>MiniGlobe.Scene</Name>
+    </ProjectReference>
+  </ItemGroup>
 </Project>
