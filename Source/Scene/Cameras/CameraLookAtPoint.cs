@@ -62,7 +62,7 @@ namespace MiniGlobe.Scene
         /// <param name="window">The window in which the scene is drawn.</param>
         /// <param name="ellipsoid">The ellipsoid defining the shape of the globe.</param>
         public CameraLookAtPoint(Camera camera, MiniGlobeWindow window, Ellipsoid ellipsoid) :
-            this(camera, window, ellipsoid, new Vector3D(0.0, 0.0, 0.0))
+            this(camera, window, ellipsoid, Vector3D.Zero)
         {
         }
 

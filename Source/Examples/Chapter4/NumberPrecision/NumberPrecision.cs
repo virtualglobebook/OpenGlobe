@@ -7,8 +7,6 @@
 //
 #endregion
 
-//#define FBO
-
 using System;
 using System.Drawing;
 using System.Collections.Generic;
@@ -123,9 +121,6 @@ namespace MiniGlobe.Examples.Chapter3.NumberPrecision
 
             _bg = new BillboardGroup(_window.Context, new[] { Conversion.ToVector3(p) }, Device.CreateBitmapFromText("131072.00f", font));
             _bg.Color = Color.Black;
-
-
-
         }
 
         private void OnResize()
