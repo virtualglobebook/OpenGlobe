@@ -12,9 +12,9 @@ using MiniGlobe.Core;
 
 namespace MiniGlobe.Renderer
 {
-    internal class OrthographicProjectionMatrixUniform : DrawAutomaticUniform
+    internal class ModelViewOrthographicProjectionMatrixUniform : DrawAutomaticUniform
     {
-        public OrthographicProjectionMatrixUniform(Uniform uniform)
+        public ModelViewOrthographicProjectionMatrixUniform(Uniform uniform)
         {
             _uniform = uniform as Uniform<Matrix4>;
         }
@@ -23,7 +23,7 @@ namespace MiniGlobe.Renderer
 
         public override void Set(Context context, SceneState sceneState)
         {
-            _uniform.Value = Conversion.ToMatrix4(sceneState.OrthographicProjectionMatrix);
+            _uniform.Value = Conversion.ToMatrix4(sceneState.ModelViewOrthographicProjectionMatrix);
         }
 
         #endregion

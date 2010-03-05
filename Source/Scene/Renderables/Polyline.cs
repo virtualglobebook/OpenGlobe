@@ -65,7 +65,7 @@ namespace MiniGlobe.Scene
                   in vec4 gsColor[];
                   out vec4 fsColor;
 
-                  uniform mat4 mg_orthographicProjectionMatrix;
+                  uniform mat4 mg_viewportOrthographicProjectionMatrix;
                   uniform float u_halfLineWidth;
 
                   void main()
@@ -81,19 +81,19 @@ namespace MiniGlobe.Scene
                       vec4 v2 = vec4(secondPosition.xy - (normal * u_halfLineWidth), secondPosition.z, 1.0);
                       vec4 v3 = vec4(secondPosition.xy + (normal * u_halfLineWidth), secondPosition.z, 1.0);
 
-                      gl_Position = mg_orthographicProjectionMatrix * v0;
+                      gl_Position = mg_viewportOrthographicProjectionMatrix * v0;
                       fsColor = gsColor[0];
                       EmitVertex();
 
-                      gl_Position = mg_orthographicProjectionMatrix * v1;
+                      gl_Position = mg_viewportOrthographicProjectionMatrix * v1;
                       fsColor = gsColor[0];
                       EmitVertex();
 
-                      gl_Position = mg_orthographicProjectionMatrix * v2;
+                      gl_Position = mg_viewportOrthographicProjectionMatrix * v2;
                       fsColor = gsColor[1];
                       EmitVertex();
 
-                      gl_Position = mg_orthographicProjectionMatrix * v3;
+                      gl_Position = mg_viewportOrthographicProjectionMatrix * v3;
                       fsColor = gsColor[1];
                       EmitVertex();
                   }";

@@ -79,6 +79,8 @@
     <Compile Include="Shaders\DrawAutomaticUniforms\LightPropertiesUniformFactory.cs" />
     <Compile Include="Shaders\DrawAutomaticUniforms\ModelViewMatrixUniform.cs" />
     <Compile Include="Shaders\DrawAutomaticUniforms\ModelViewMatrixUniformFactory.cs" />
+    <Compile Include="Shaders\DrawAutomaticUniforms\ModelViewOrthographicProjectionMatrixUniform.cs" />
+    <Compile Include="Shaders\DrawAutomaticUniforms\ModelViewOrthographicProjectionMatrixUniformFactory.cs" />
     <Compile Include="Shaders\DrawAutomaticUniforms\ModelViewPerspectiveProjectionMatrixUniform.cs" />
     <Compile Include="Shaders\DrawAutomaticUniforms\ModelViewPerspectiveProjectionMatrixUniformFactory.cs" />
     <Compile Include="Shaders\DrawAutomaticUniforms\ModelZToClipCoordinatesUniform.cs" />
@@ -88,6 +90,8 @@
     <Compile Include="Shaders\DrawAutomaticUniforms\PerspectiveProjectionMatrixUniformFactory.cs" />
     <Compile Include="Shaders\DrawAutomaticUniforms\SunPositionUniform.cs" />
     <Compile Include="Shaders\DrawAutomaticUniforms\SunPositionUniformFactory.cs" />
+    <Compile Include="Shaders\DrawAutomaticUniforms\ViewportOrthographicProjectionMatrixUniform.cs" />
+    <Compile Include="Shaders\DrawAutomaticUniforms\ViewportOrthographicProjectionMatrixUniformFactory.cs" />
     <Compile Include="Shaders\DrawAutomaticUniforms\ViewportUniform.cs" />
     <Compile Include="Shaders\DrawAutomaticUniforms\ViewportUniformFactory.cs" />
     <Compile Include="Shaders\DrawAutomaticUniforms\ViewportTransformationMatrixUniform.cs" />

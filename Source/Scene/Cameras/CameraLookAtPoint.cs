@@ -10,7 +10,6 @@
 using MiniGlobe.Renderer;
 using System.Drawing;
 using System;
-using OpenTK;
 using MiniGlobe.Core;
 using MiniGlobe.Core.Geometry;
 
@@ -31,7 +30,8 @@ namespace MiniGlobe.Scene
         /// <param name="camera">The renderer camera that is to be manipulated by the new instance.</param>
         /// <param name="window">The window in which the scene is drawn.</param>
         /// <param name="ellipsoid">The ellipsoid defining the shape of the globe.</param>
-        public CameraLookAtPoint(Camera camera, MiniGlobeWindow window, Ellipsoid ellipsoid)
+        /// <param name="ellipsoidCenter">The position of the ellipsoid center.</param>
+        public CameraLookAtPoint(Camera camera, MiniGlobeWindow window, Ellipsoid ellipsoid, Vector3D ellipsoidCenter)
         {
             if (camera == null)
             {
@@ -45,12 +45,25 @@ namespace MiniGlobe.Scene
             _camera = camera;
             _window = window;
             _ellipsoid = ellipsoid;
+            _ellipsoidCenter = ellipsoidCenter;
 
             _range = ellipsoid.MaximumRadius * 2.0;
 
+            _enableMouse = true;
             _window.Mouse.ButtonDown += MouseDown;
             _window.Mouse.ButtonUp += MouseUp;
             _window.Mouse.Move += MouseMove;
+        }
+        
+        /// <summary>
+        /// Initializes a new instance.
+        /// </summary>
+        /// <param name="camera">The renderer camera that is to be manipulated by the new instance.</param>
+        /// <param name="window">The window in which the scene is drawn.</param>
+        /// <param name="ellipsoid">The ellipsoid defining the shape of the globe.</param>
+        public CameraLookAtPoint(Camera camera, MiniGlobeWindow window, Ellipsoid ellipsoid) :
+            this(camera, window, ellipsoid, new Vector3D(0.0, 0.0, 0.0))
+        {
         }
 
         /// <summary>
@@ -93,6 +106,14 @@ namespace MiniGlobe.Scene
         }
 
         /// <summary>
+        /// Gets the ellipsoid center defining the shape of the globe.
+        /// </summary>
+        public Vector3D EllipsoidCenter
+        {
+            get { return _ellipsoidCenter; }
+        }
+
+        /// <summary>
         /// Gets or sets the azimuth angle defining the position of the camera, in radians.  Azimuth is defined
         /// as the angle between the positive X-axis and the projection of the camera position into the
         /// X-Y plane.  Azimuth is positive toward the Y-axis.
@@ -101,6 +122,33 @@ namespace MiniGlobe.Scene
         {
             get { return _azimuth; }
             set { _azimuth = value; UpdateCameraFromParameters(); }
+        }
+
+        /// <summary>
+        /// Gets if the mouse is enabled. Sets enabling or disabling the mouse. 
+        /// </summary>
+        public bool EnableMouse
+        {
+            get { return _enableMouse; }
+            set
+            {
+                if (value != _enableMouse)
+                {
+                    _enableMouse = value;
+                    if (_enableMouse)
+                    {
+                        _window.Mouse.ButtonDown += MouseDown;
+                        _window.Mouse.ButtonUp += MouseUp;
+                        _window.Mouse.Move += MouseMove;
+                    }
+                    else
+                    {
+                        _window.Mouse.ButtonDown -= MouseDown;
+                        _window.Mouse.ButtonUp -= MouseUp;
+                        _window.Mouse.Move -= MouseMove;
+                    }
+                }
+            }
         }
 
         /// <summary>
@@ -340,7 +388,7 @@ namespace MiniGlobe.Scene
 
         private void Zoom(Size movement)
         {
-            double approximateDistanceFromSurface = Math.Abs(_camera.Eye.Magnitude - _ellipsoid.MinimumRadius);
+            double approximateDistanceFromSurface = Math.Abs((_camera.Eye - _ellipsoidCenter).Magnitude - _ellipsoid.MinimumRadius);
             approximateDistanceFromSurface = Math.Max(approximateDistanceFromSurface, _ellipsoid.MinimumRadius / 100.0);
             double rangeWindowRatio = (double)movement.Height / (double)_window.Height;
             _range -= 5.0 * approximateDistanceFromSurface * rangeWindowRatio;
@@ -349,6 +397,7 @@ namespace MiniGlobe.Scene
         private Camera _camera;
         private MiniGlobeWindow _window;
         private Ellipsoid _ellipsoid;
+        private Vector3D _ellipsoidCenter;
 
         private bool _leftButtonDown;
         private bool _rightButtonDown;
@@ -357,6 +406,8 @@ namespace MiniGlobe.Scene
         private double _azimuth;
         private double _elevation;
         private double _range;
+
+        private bool _enableMouse;
 
         private Vector3D _centerPoint = Vector3D.Zero;
         private Matrix3d _fixedToLocalRotation = Matrix3d.Identity;

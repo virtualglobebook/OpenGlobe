@@ -31,6 +31,12 @@ namespace MiniGlobe.Renderer
 
             OrthographicNearPlaneDistance = 0;
             OrthographicFarPlaneDistance = 1;
+
+            OrthographicLeft = 0;
+            OrthographicRight = 1;
+
+            OrthographicBottom = 0;
+            OrthographicTop = 1;
         }
 
         public Vector3D Eye { get; set; }
@@ -63,6 +69,10 @@ namespace MiniGlobe.Renderer
         {
             get { return Math.Abs(OrthographicFarPlaneDistance - OrthographicNearPlaneDistance); }
         }
+        public double OrthographicLeft { get; set; }
+        public double OrthographicRight { get; set; }
+        public double OrthographicBottom { get; set; }
+        public double OrthographicTop { get; set; }
 
         public void ZoomToTarget(double radius)
         {

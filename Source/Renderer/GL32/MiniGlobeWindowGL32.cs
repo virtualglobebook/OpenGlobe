@@ -17,14 +17,14 @@ namespace MiniGlobe.Renderer.GL32
     {
         public MiniGlobeWindowGL32(int width, int height, string title, WindowType windowType)
         {
-            GameWindowFlags fameWindowFlags = (windowType == WindowType.Default) ? GameWindowFlags.Default : GameWindowFlags.Fullscreen;
+            GameWindowFlags gameWindowFlags = (windowType == WindowType.Default) ? GameWindowFlags.Default : GameWindowFlags.Fullscreen;
             if (windowType == WindowType.FullScreen)
             {
                 width = DisplayDevice.Default.Width;
                 height = DisplayDevice.Default.Height;
             }
 
-            _gameWindw = new GameWindow(width, height, new GraphicsMode(32, 24, 8), title, fameWindowFlags,
+            _gameWindw = new GameWindow(width, height, new GraphicsMode(32, 24, 8), title, gameWindowFlags,
                 DisplayDevice.Default, 3, 2, GraphicsContextFlags.ForwardCompatible | GraphicsContextFlags.Debug);
 
             _gameWindw.Resize += new EventHandler<EventArgs>(this.OnResize);

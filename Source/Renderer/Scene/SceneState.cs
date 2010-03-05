@@ -65,6 +65,19 @@ namespace MiniGlobe.Renderer
                 viewport.Bottom, Camera.OrthographicNearPlaneDistance, Camera.OrthographicFarPlaneDistance);
         }
 
+        public Matrix4d OrthographicProjectionMatrix
+        {
+            //
+            // Bottom and top swapped:  MS -> OpenGL
+            //
+            get
+            {
+                return Matrix4d.CreateOrthographicOffCenter(Camera.OrthographicLeft, Camera.OrthographicRight, 
+                    Camera.OrthographicTop, Camera.OrthographicBottom,
+                    Camera.OrthographicNearPlaneDistance, Camera.OrthographicFarPlaneDistance);
+            }
+        }
+
         public Matrix4d PerspectiveProjectionMatrix 
         {
             get
@@ -91,13 +104,18 @@ namespace MiniGlobe.Renderer
             get { return ModelViewMatrix * PerspectiveProjectionMatrix; }
         }
 
+        public Matrix4d ModelViewOrthographicProjectionMatrix
+        {
+            get { return ModelViewMatrix * OrthographicProjectionMatrix; }
+        }
+
         // TODO:  Should return matrix in double precision
         public Matrix42 ModelZToClipCoordinates
         {
             get
             {
                 //
-                // Bottom two rows of model-view-projection matirx
+                // Bottom two rows of model-view-projection matrix
                 //
                 Matrix4d m = ModelViewPerspectiveProjectionMatrix;
                 return new Matrix42(

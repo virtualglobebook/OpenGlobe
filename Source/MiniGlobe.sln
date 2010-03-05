@@ -33,6 +33,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ResearchRayCasting", "Examp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chapter2EllipsoidSurfaceNormals", "Examples\Chapter2\EllipsoidSurfaceNormals\Chapter2EllipsoidSurfaceNormals.csproj", "{C0198B9E-97B8-4075-912E-70D231EE9D8E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chapter4NumberPrecision", "Examples\Chapter4\NumberPrecision\Chapter4NumberPrecision.csproj", "{F5438C0E-87EB-41C3-8403-220164D58E4A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -91,6 +93,10 @@ Global
 		{C0198B9E-97B8-4075-912E-70D231EE9D8E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C0198B9E-97B8-4075-912E-70D231EE9D8E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C0198B9E-97B8-4075-912E-70D231EE9D8E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F5438C0E-87EB-41C3-8403-220164D58E4A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F5438C0E-87EB-41C3-8403-220164D58E4A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F5438C0E-87EB-41C3-8403-220164D58E4A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F5438C0E-87EB-41C3-8403-220164D58E4A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

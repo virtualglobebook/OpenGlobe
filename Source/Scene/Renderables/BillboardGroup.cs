@@ -44,7 +44,7 @@ namespace MiniGlobe.Scene
                       v = modelViewPerspectiveProjectionMatrix * v;                        // clip coordinates
 
                       // TODO:  Just to avoid z fighting with Earth for now.
-                      v.z -= 0.001;
+                     // v.z -= 0.001;
 
                       v.xyz /= v.w;                                                           // normalized device coordinates
                       v.xyz = (viewportTransformationMatrix * vec4(v.xyz + 1.0, 1.0)).xyz; // windows coordinates
@@ -64,7 +64,7 @@ namespace MiniGlobe.Scene
 
                   out vec2 textureCoordinates;
 
-                  uniform mat4 mg_orthographicProjectionMatrix;
+                  uniform mat4 mg_viewportOrthographicProjectionMatrix;
                   uniform sampler2D mg_texture0;
                   uniform float mg_highResolutionSnapScale;
                   uniform vec4 mg_viewport;
@@ -90,19 +90,19 @@ namespace MiniGlobe.Scene
                           return;
                       }
 
-                      gl_Position = mg_orthographicProjectionMatrix * v0;
+                      gl_Position = mg_viewportOrthographicProjectionMatrix * v0;
                       textureCoordinates = vec2(0, 0);
                       EmitVertex();
 
-                      gl_Position = mg_orthographicProjectionMatrix * v1;
+                      gl_Position = mg_viewportOrthographicProjectionMatrix * v1;
                       textureCoordinates = vec2(1, 0);
                       EmitVertex();
 
-                      gl_Position = mg_orthographicProjectionMatrix * v2;
+                      gl_Position = mg_viewportOrthographicProjectionMatrix * v2;
                       textureCoordinates = vec2(0, 1);
                       EmitVertex();
 
-                      gl_Position = mg_orthographicProjectionMatrix * v3;
+                      gl_Position = mg_viewportOrthographicProjectionMatrix * v3;
                       textureCoordinates = vec2(1, 1);
                       EmitVertex();
                   }";
