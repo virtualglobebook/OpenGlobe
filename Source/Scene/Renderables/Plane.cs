@@ -115,16 +115,6 @@ namespace MiniGlobe.Scene
             VertexBuffer positionBuffer = Device.CreateVertexBuffer(BufferHint.StaticDraw, positions.Length * Vector3.SizeInBytes);
             positionBuffer.CopyFromSystemMemory(positions);
 
-            ushort[] lineIndices = new ushort[] { 0, 1, 1, 2, 2, 3, 3, 0 };
-            IndexBuffer lineIndexBuffer = Device.CreateIndexBuffer(BufferHint.StaticDraw, lineIndices.Length * sizeof(ushort));
-            lineIndexBuffer.CopyFromSystemMemory(lineIndices);
-
-            AttachedVertexBuffer attachedPositionBuffer = new AttachedVertexBuffer(
-                positionBuffer, VertexAttributeComponentType.Float, 3);
-            _lineVA = context.CreateVertexArray();
-            _lineVA.VertexBuffers[_lineSP.VertexAttributes["position"].Location] = attachedPositionBuffer;
-            _lineVA.IndexBuffer = lineIndexBuffer;
-
             ///////////////////////////////////////////////////////////////////
 
             _fillRS = new RenderState();
@@ -164,13 +154,21 @@ namespace MiniGlobe.Scene
             _fillAlphaUniform = _fillSP.Uniforms["u_alpha"] as Uniform<float>;
             FillTranslucency = 0.5f;
 
-            ushort[] fillIndices = new ushort[] { 0, 1, 2, 0, 2, 3 };
-            IndexBuffer fillIndexBuffer = Device.CreateIndexBuffer(BufferHint.StaticDraw, fillIndices.Length * sizeof(ushort));
-            fillIndexBuffer.CopyFromSystemMemory(fillIndices);
+            ///////////////////////////////////////////////////////////////////
 
-            _fillVA = context.CreateVertexArray();
-            _fillVA.VertexBuffers[_lineSP.VertexAttributes["position"].Location] = attachedPositionBuffer;
-            _fillVA.IndexBuffer = fillIndexBuffer;
+            ushort[] indices = new ushort[] 
+            { 
+                0, 1, 2, 3,                             // Line loop
+                0, 1, 2, 0, 2, 3                        // Triangles
+            };
+            IndexBuffer indexBuffer = Device.CreateIndexBuffer(BufferHint.StaticDraw, indices.Length * sizeof(ushort));
+            indexBuffer.CopyFromSystemMemory(indices);
+
+            AttachedVertexBuffer attachedPositionBuffer = new AttachedVertexBuffer(
+                positionBuffer, VertexAttributeComponentType.Float, 3);
+            _va = context.CreateVertexArray();
+            _va.VertexBuffers[_lineSP.VertexAttributes["position"].Location] = attachedPositionBuffer;
+            _va.IndexBuffer = indexBuffer;
 
             ShowOutline = true;
             ShowFill = true;
@@ -178,6 +176,8 @@ namespace MiniGlobe.Scene
 
         public void Render(SceneState sceneState)
         {
+            _context.Bind(_va);
+
             if (ShowOutline)
             {
                 //
@@ -186,8 +186,7 @@ namespace MiniGlobe.Scene
                 _halfLineWidth.Value = (float)(OutlineWidth * 0.5 * sceneState.HighResolutionSnapScale);
                 _context.Bind(_lineRS);
                 _context.Bind(_lineSP);
-                _context.Bind(_lineVA);
-                _context.Draw(PrimitiveType.Lines, sceneState);
+                _context.Draw(PrimitiveType.LineLoop, 0, 4, sceneState);
             }
 
             if (ShowFill)
@@ -197,8 +196,7 @@ namespace MiniGlobe.Scene
                 //
                 _context.Bind(_fillRS);
                 _context.Bind(_fillSP);
-                _context.Bind(_fillVA);
-                _context.Draw(PrimitiveType.Triangles, sceneState);
+                _context.Draw(PrimitiveType.Triangles, 4, 6, sceneState);
             }
         }
 
@@ -249,9 +247,8 @@ namespace MiniGlobe.Scene
         public void Dispose()
         {
             _lineSP.Dispose();
-            _lineVA.Dispose();
             _fillSP.Dispose();
-            _fillVA.Dispose();
+            _va.Dispose();
         }
 
         #endregion
@@ -259,7 +256,6 @@ namespace MiniGlobe.Scene
         private readonly Context _context;
         private readonly RenderState _lineRS;
         private readonly ShaderProgram _lineSP;
-        private readonly VertexArray _lineVA;
 
         private readonly Uniform<float> _halfLineWidth;
         private readonly Uniform<Vector3> _lineColorUniform;
@@ -267,7 +263,8 @@ namespace MiniGlobe.Scene
 
         private readonly RenderState _fillRS;
         private readonly ShaderProgram _fillSP;
-        private readonly VertexArray _fillVA;
+
+        private readonly VertexArray _va;
 
         private readonly Uniform<Vector3> _fillColorUniform;
         private Color _fillColor;
