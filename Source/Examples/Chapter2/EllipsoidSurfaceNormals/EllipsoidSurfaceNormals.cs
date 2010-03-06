@@ -65,6 +65,8 @@ namespace MiniGlobe.Examples.Chapter2
             context.Bind(_va);
             context.Draw(_primitiveType, _sceneState);
 
+            _wireframe.Render(_sceneState);
+            _axes.Render(_sceneState);
             _normals.Render(_sceneState);
             _deticBillboard.Render(_sceneState);
             _centricBillboard.Render(_sceneState);
@@ -162,6 +164,17 @@ namespace MiniGlobe.Examples.Chapter2
 
             ///////////////////////////////////////////////////////////////////
 
+            _wireframe = new Wireframe(_window.Context, mesh);
+            _wireframe.Width = 2;
+
+            ///////////////////////////////////////////////////////////////////
+
+            _axes = new Axes(_window.Context);
+            _axes.Width = 3;
+            _axes.Length = 1.5;
+
+            ///////////////////////////////////////////////////////////////////
+
             Vector3D p = globeShape.ToVector3D(new Cartographic3D(0, Trig.ToRadians(45), 0));
             Vector3D deticNormal = globeShape.DeticSurfaceNormal(p);
             Vector3D centricNormal = Ellipsoid.CentricSurfaceNormal(p);
@@ -224,6 +237,16 @@ namespace MiniGlobe.Examples.Chapter2
                 _va.Dispose();
             }
 
+            if (_wireframe != null)
+            {
+                _wireframe.Dispose();
+            }
+
+            if (_axes != null)
+            {
+                _axes.Dispose();
+            }
+
             if (_deticBillboard != null)
             {
                 _deticBillboard.Dispose();
@@ -278,6 +301,8 @@ namespace MiniGlobe.Examples.Chapter2
         private VertexArray _va;
         private PrimitiveType _primitiveType;
 
+        private Wireframe _wireframe;
+        private Axes _axes;
         private BillboardGroup _deticBillboard;
         private BillboardGroup _centricBillboard;
         private Polyline _normals;

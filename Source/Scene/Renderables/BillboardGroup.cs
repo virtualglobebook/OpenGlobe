@@ -74,7 +74,7 @@ namespace MiniGlobe.Scene
                       vec4 center = gl_in[0].gl_Position;
                       vec2 halfSize = vec2(textureSize(mg_texture0, 0)) * 0.5 * mg_highResolutionSnapScale;
 
-//center.x += halfSize.x;
+center.x -= halfSize.x;
 
                       vec4 v0 = vec4(center.xy - halfSize, center.z, 1.0);
                       vec4 v1 = vec4(center.xy + vec2(halfSize.x, -halfSize.y), center.z, 1.0);
