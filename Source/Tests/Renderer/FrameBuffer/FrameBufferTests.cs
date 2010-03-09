@@ -138,6 +138,8 @@ namespace MiniGlobe.Renderer
             Assert.AreEqual(1, snap.HeightInInches);
             Assert.AreEqual(10, snap.HeightInPixels);
 
+            window.Context.Bind(snap.FrameBuffer);
+            window.Context.Viewport = new Rectangle(0, 0, snap.WidthInPixels, snap.HeightInPixels);
             window.Context.Clear(ClearBuffers.ColorAndDepthBuffer, Color.Red, 0.5f, 0);
 
             string colorFile = "color.bmp";
