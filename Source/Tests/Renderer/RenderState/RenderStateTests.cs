@@ -121,6 +121,17 @@ namespace MiniGlobe.Renderer
         }
 
         [Test]
+        public void DepthRange()
+        {
+            DepthRange depthRange = new DepthRange();
+            depthRange.Near = 0.25;
+            depthRange.Far = 0.75;
+
+            Assert.AreEqual(0.25, depthRange.Near);
+            Assert.AreEqual(0.75, depthRange.Far);
+        }
+
+        [Test]
         public void Blending()
         {
             Blending blending = new Blending();
@@ -162,6 +173,7 @@ namespace MiniGlobe.Renderer
             window.Context.Bind(new ScissorTest());
             window.Context.Bind(new StencilTest());
             window.Context.Bind(new DepthTest());
+            window.Context.Bind(new DepthRange());
             window.Context.Bind(new Blending());
 
             window.Dispose();

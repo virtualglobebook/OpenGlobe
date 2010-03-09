@@ -35,6 +35,7 @@ namespace MiniGlobe.Renderer
             ScissorTest = new ScissorTest();
             StencilTest = new StencilTest();
             DepthTest = new DepthTest();
+            DepthRange = new DepthRange();
             Blending = new Blending();
         }
 
@@ -45,6 +46,7 @@ namespace MiniGlobe.Renderer
         public ScissorTest ScissorTest { get; set; }
         public StencilTest StencilTest { get; set; }
         public DepthTest DepthTest { get; set; }
+        public DepthRange DepthRange { get; set; }
         public Blending Blending { get; set; }
     }
 }

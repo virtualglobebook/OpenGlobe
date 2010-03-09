@@ -65,6 +65,8 @@ namespace MiniGlobe.Renderer.GL32
             Enable(EnableCap.DepthTest, renderState.DepthTest.Enabled);
             GL.DepthFunc(TypeConverterGL32.To(renderState.DepthTest.Function));
 
+            GL.DepthRange(renderState.DepthRange.Near, renderState.DepthRange.Far);
+
             Enable(EnableCap.Blend, renderState.Blending.Enabled);
             GL.BlendFuncSeparate(
                 TypeConverterGL32.To(renderState.Blending.SourceRGBFactor),
@@ -281,6 +283,21 @@ namespace MiniGlobe.Renderer.GL32
             {
                 GL.DepthFunc(TypeConverterGL32.To(depthTest.Function));
                 _renderState.DepthTest.Function = depthTest.Function;
+            }
+        }
+
+        public override void Bind(DepthRange depthRange)
+        {
+            Debug.Assert(depthRange.Near >= 0.0 && depthRange.Near <= 1.0);
+            Debug.Assert(depthRange.Far >= 0.0 && depthRange.Far <= 1.0);
+
+            if ((_renderState.DepthRange.Near != depthRange.Near) ||
+                (_renderState.DepthRange.Far != depthRange.Far))
+            {
+                GL.DepthRange(depthRange.Near, depthRange.Far);
+
+                _renderState.DepthRange.Near = depthRange.Near;
+                _renderState.DepthRange.Far = depthRange.Far;
             }
         }
 

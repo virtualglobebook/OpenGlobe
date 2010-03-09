@@ -239,6 +239,7 @@ namespace MiniGlobe.Renderer
             Bind(renderState.ScissorTest);
             Bind(renderState.StencilTest);
             Bind(renderState.DepthTest);
+            Bind(renderState.DepthRange);
             Bind(renderState.Blending);
         }
 
@@ -249,11 +250,12 @@ namespace MiniGlobe.Renderer
         public abstract void Bind(ScissorTest scissorTest);
         public abstract void Bind(StencilTest stencilTest);
         public abstract void Bind(DepthTest depthTest);
+        public abstract void Bind(DepthRange depthRange);
         public abstract void Bind(Blending blending);
         public abstract void Bind(VertexArray vertexArray);
         public abstract void Bind(ShaderProgram shaderProgram);
         public abstract void Bind(FrameBuffer frameBuffer);
-
+        
         public virtual void Draw(PrimitiveType primitiveType, int offset, int count)
         {
             Draw(primitiveType, offset, count, null);

@@ -23,7 +23,7 @@ namespace MiniGlobe.Renderer
 
         public override void Set(Context context, SceneState sceneState)
         {
-            _uniform.Value = Conversion.ToMatrix4(sceneState.ComputeOrthographicProjectionMatrix(context.Viewport));
+            _uniform.Value = Conversion.ToMatrix4(sceneState.ComputeViewportOrthographicProjectionMatrix(context.Viewport));
         }
 
         #endregion
