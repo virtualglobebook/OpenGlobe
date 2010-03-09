@@ -168,6 +168,21 @@ namespace MiniGlobe.Scene
             }
         }
 
+        public bool FacetCullingEnabled
+        {
+            get { return _renderState.FacetCulling.Enabled; }
+            set { _renderState.FacetCulling.Enabled = value; }
+        }
+
+        public CullFace FacetCullingFace
+        {
+            get { return _renderState.FacetCulling.Face; }
+            set { _renderState.FacetCulling.Face = value; }
+        }
+
+        public bool Enabled { get; set; }
+        public WindingOrder FrontFaceWindingOrder { get; set; }
+
         #region IDisposable Members
 
         public void Dispose()

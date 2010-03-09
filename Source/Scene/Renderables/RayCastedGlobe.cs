@@ -141,23 +141,6 @@ namespace MiniGlobe.Scene
 
             ///////////////////////////////////////////////////////////////////
 
-            string fs2 =
-                @"#version 150
-                 
-                  out vec3 fragmentColor;
-
-                  void main()
-                  {
-                      fragmentColor = vec3(0.0, 0.0, 0.0);
-                  }";
-            _boxSP = Device.CreateShaderProgram(PassThroughVS(), fs2);
-
-            _boxRenderState = new RenderState();
-            _boxRenderState.RasterizationMode = RasterizationMode.Line;
-            _boxRenderState.FacetCulling.Face = CullFace.Front;
-
-            ///////////////////////////////////////////////////////////////////
-
             Shape = Ellipsoid.UnitSphere;
             Shade = true;
             ShowGlobe = true;
@@ -240,10 +223,17 @@ namespace MiniGlobe.Scene
 
                 _renderState.FacetCulling.Face = CullFace.Front;
                 _renderState.FacetCulling.FrontFaceWindingOrder = mesh.FrontFaceWindingOrder;
-                _boxRenderState.FacetCulling.FrontFaceWindingOrder = mesh.FrontFaceWindingOrder;
 
                 (_sp.Uniforms["u_globeOneOverRadiiSquared"] as Uniform<Vector3>).Value = Conversion.ToVector3(_shape.OneOverRadiiSquared);
                 (_solidSP.Uniforms["u_globeOneOverRadiiSquared"] as Uniform<Vector3>).Value = Conversion.ToVector3(_shape.OneOverRadiiSquared);
+
+                if (_wireframe != null)
+                {
+                    _wireframe.Dispose();
+                }
+                _wireframe = new Wireframe(_context, mesh);
+                _wireframe.FacetCullingFace = CullFace.Front;
+                _wireframe.Width = 3;
 
                 _dirty = false;
             }
@@ -287,9 +277,7 @@ namespace MiniGlobe.Scene
 
             if (ShowWireframeBoundingBox)
             {
-                _context.Bind(_boxRenderState);
-                _context.Bind(_boxSP);
-                _context.Draw(_primitiveType, sceneState);
+                _wireframe.Render(sceneState);
             }
         }
 
@@ -321,11 +309,15 @@ namespace MiniGlobe.Scene
         {
             _sp.Dispose();
             _solidSP.Dispose();
-            _boxSP.Dispose();
 
             if (_va != null)
             {
                 _va.Dispose();
+            }
+
+            if (_wireframe != null)
+            {
+                _wireframe.Dispose();
             }
         }
 
@@ -339,11 +331,10 @@ namespace MiniGlobe.Scene
         private readonly ShaderProgram _solidSP;
         private readonly Uniform<Vector3> _cameraEyeSquaredSolidSP;
 
-        private readonly RenderState _boxRenderState;
-        private readonly ShaderProgram _boxSP;
-
         private VertexArray _va;
         private PrimitiveType _primitiveType;
+
+        private Wireframe _wireframe;
 
         private Ellipsoid _shape;
         private bool _dirty;
