@@ -115,7 +115,7 @@ namespace MiniGlobe.Renderer.GL32
                 int uniformNameLength;
                 int uniformSize;
                 ActiveUniformType uniformType;
-                StringBuilder uniformNameBuilder = new StringBuilder();
+                StringBuilder uniformNameBuilder = new StringBuilder(uniformNameMaxLength);
 
                 GL.GetActiveUniform(program, i, uniformNameMaxLength,
                     out uniformNameLength, out uniformSize, out uniformType, uniformNameBuilder);
