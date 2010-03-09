@@ -134,8 +134,7 @@ namespace MiniGlobe.Renderer.GL32
                 // Skip uniforms in a named block
                 //
                 int uniformBlockIndex;
-                GL.GetActiveUniforms(program, 1, ref i, ArbUniformBufferObject.UniformBlockIndex, out uniformBlockIndex);
-
+                GL.GetActiveUniforms(program, 1, ref i, ActiveUniformParameter.UniformBlockIndex, out uniformBlockIndex);
                 if (uniformBlockIndex != -1)
                 {
                     continue;
@@ -314,12 +313,12 @@ namespace MiniGlobe.Renderer.GL32
                 int[] uniformArrayStridesInBytes = new int[numberOfUniformsInBlock];
                 int[] uniformmatrixStrideInBytess = new int[numberOfUniformsInBlock];
                 int[] uniformRowMajors = new int[numberOfUniformsInBlock];
-                GL.GetActiveUniforms(program, numberOfUniformsInBlock, uniformIndicesInBlock, ArbUniformBufferObject.UniformType, uniformTypes);
-                GL.GetActiveUniforms(program, numberOfUniformsInBlock, uniformIndicesInBlock, ArbUniformBufferObject.UniformOffset, uniformOffsetsInBytes);
-                GL.GetActiveUniforms(program, numberOfUniformsInBlock, uniformIndicesInBlock, ArbUniformBufferObject.UniformSize, uniformLengths);
-                GL.GetActiveUniforms(program, numberOfUniformsInBlock, uniformIndicesInBlock, ArbUniformBufferObject.UniformArrayStride, uniformArrayStridesInBytes);
-                GL.GetActiveUniforms(program, numberOfUniformsInBlock, uniformIndicesInBlock, ArbUniformBufferObject.UniformMatrixStride, uniformmatrixStrideInBytess);
-                GL.GetActiveUniforms(program, numberOfUniformsInBlock, uniformIndicesInBlock, ArbUniformBufferObject.UniformIsRowMajor, uniformRowMajors);
+                GL.GetActiveUniforms(program, numberOfUniformsInBlock, uniformIndicesInBlock, ActiveUniformParameter.UniformType, uniformTypes);
+                GL.GetActiveUniforms(program, numberOfUniformsInBlock, uniformIndicesInBlock, ActiveUniformParameter.UniformOffset, uniformOffsetsInBytes);
+                GL.GetActiveUniforms(program, numberOfUniformsInBlock, uniformIndicesInBlock, ActiveUniformParameter.UniformSize, uniformLengths);
+                GL.GetActiveUniforms(program, numberOfUniformsInBlock, uniformIndicesInBlock, ActiveUniformParameter.UniformArrayStride, uniformArrayStridesInBytes);
+                GL.GetActiveUniforms(program, numberOfUniformsInBlock, uniformIndicesInBlock, ActiveUniformParameter.UniformMatrixStride, uniformmatrixStrideInBytess);
+                GL.GetActiveUniforms(program, numberOfUniformsInBlock, uniformIndicesInBlock, ActiveUniformParameter.UniformIsRowMajor, uniformRowMajors);
 
                 UniformBlock uniformBlock = new UniformBlockGL32(uniformBlockName, uniformBlockSizeInBytes, i);
 

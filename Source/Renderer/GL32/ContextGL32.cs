@@ -44,8 +44,7 @@ namespace MiniGlobe.Renderer.GL32
 
         private static void ForceApply(RenderState renderState)
         {
-            // TODO:  Use EnableCap enum
-            Enable((EnableCap)0x8F9D, renderState.PrimitiveRestart.Enabled);
+            Enable(EnableCap.PrimitiveRestart, renderState.PrimitiveRestart.Enabled);
             GL.PrimitiveRestartIndex(renderState.PrimitiveRestart.Index);
 
             Enable(EnableCap.CullFace, renderState.FacetCulling.Enabled);
@@ -158,8 +157,7 @@ namespace MiniGlobe.Renderer.GL32
         {
             if (_renderState.PrimitiveRestart.Enabled != primitiveRestart.Enabled)
             {
-                // TODO:  Use EnableCap enum
-                Enable((EnableCap)0x8F9D, primitiveRestart.Enabled);
+                Enable(EnableCap.PrimitiveRestart, primitiveRestart.Enabled);
                 _renderState.PrimitiveRestart.Enabled = primitiveRestart.Enabled;
             }
 
