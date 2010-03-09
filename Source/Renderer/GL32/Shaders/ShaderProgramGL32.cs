@@ -77,7 +77,7 @@ namespace MiniGlobe.Renderer.GL32
                 int attributeNameLength;
                 int attributeLength;
                 ActiveAttribType attributeType;
-                StringBuilder attributeNameBuilder = new StringBuilder();
+                StringBuilder attributeNameBuilder = new StringBuilder(attributeNameMaxLength);
 
                 GL.GetActiveAttrib(program, i, attributeNameMaxLength,
                     out attributeNameLength, out attributeLength, out attributeType, attributeNameBuilder);
