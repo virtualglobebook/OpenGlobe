@@ -180,6 +180,12 @@ namespace MiniGlobe.Scene
             set { _renderState.FacetCulling.Face = value; }
         }
 
+        public bool DepthTestEnabled
+        {
+            get { return _renderState.DepthTest.Enabled; }
+            set { _renderState.DepthTest.Enabled = value; }
+        }
+
         public bool Enabled { get; set; }
         public WindingOrder FrontFaceWindingOrder { get; set; }
 
