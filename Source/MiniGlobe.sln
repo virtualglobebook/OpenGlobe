@@ -19,8 +19,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chapter3SubdivisionSphere2"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiniGlobe.Scene", "Scene\MiniGlobe.Scene.csproj", "{71ABD41E-1545-45DF-B016-58E89111A4F3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chapter3SubdivisionEllipsoid", "Examples\Chapter3\SubdivisionEllipsoid\Chapter3SubdivisionEllipsoid.csproj", "{D26223CF-C385-45BE-A9E5-7977D4F0C004}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chapter3RayCasting", "Examples\Chapter3\RayCasting\Chapter3RayCasting.csproj", "{2ABF9F7F-B818-44DC-9237-C1D1DC22ADE7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chapter3LatitudeLongitudeGrid", "Examples\Chapter3\LatitudeLongitudeGrid\Chapter3LatitudeLongitudeGrid.csproj", "{89A86599-4C34-4016-BD0B-23AA6511EB03}"
@@ -65,10 +63,6 @@ Global
 		{71ABD41E-1545-45DF-B016-58E89111A4F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{71ABD41E-1545-45DF-B016-58E89111A4F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{71ABD41E-1545-45DF-B016-58E89111A4F3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D26223CF-C385-45BE-A9E5-7977D4F0C004}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D26223CF-C385-45BE-A9E5-7977D4F0C004}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D26223CF-C385-45BE-A9E5-7977D4F0C004}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D26223CF-C385-45BE-A9E5-7977D4F0C004}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2ABF9F7F-B818-44DC-9237-C1D1DC22ADE7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{2ABF9F7F-B818-44DC-9237-C1D1DC22ADE7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2ABF9F7F-B818-44DC-9237-C1D1DC22ADE7}.Release|Any CPU.ActiveCfg = Release|Any CPU

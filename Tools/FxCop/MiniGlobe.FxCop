@@ -21,11 +21,13 @@
   <IgnoreGeneratedCode>False</IgnoreGeneratedCode>
  </ProjectOptions>
  <Targets>
+  <AssemblyReferenceDirectories>
+   <Directory>$(ProjectDir)/../../Source/Examples/Chapter3/SubdivisionEllipsoid/bin/Release/</Directory>
+  </AssemblyReferenceDirectories>
   <Target Name="$(ProjectDir)/../../Source/Examples/Chapter2/EllipsoidSurfaceNormals/bin/Release/Chapter2EllipsoidSurfaceNormals.exe" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/../../Source/Examples/Chapter3/LatitudeLongitudeGrid/bin/Release/Chapter3LatitudeLongitudeGrid.exe" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/../../Source/Examples/Chapter3/NightLights/bin/Release/Chapter3NightLights.exe" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/../../Source/Examples/Chapter3/RayCasting/bin/Release/Chapter3RayCasting.exe" Analyze="True" AnalyzeAllChildren="True" />
-  <Target Name="$(ProjectDir)/../../Source/Examples/Chapter3/SubdivisionEllipsoid/bin/Release/Chapter3SubdivisionEllipsoid.exe" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/../../Source/Examples/Chapter3/SubdivisionSphere1/bin/Release/Chapter3SubdivisionSphere1.exe" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/../../Source/Examples/Chapter3/SubdivisionSphere2/bin/Release/Chapter3SubdivisionSphere2.exe" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/../../Source/Examples/Chapter7/Billboards/bin/Release/Chapter7Billboards.exe" Analyze="True" AnalyzeAllChildren="True" />
@@ -170,19 +172,6 @@
        <Message TypeName="AssembliesShouldHaveValidStrongNames" Category="Microsoft.Design" CheckId="CA2210" Created="2010-02-02 18:33:41Z">
         <Issue Name="NoStrongName">
          <Item>'Chapter3RayCasting.exe'</Item>
-        </Issue>
-       </Message>
-      </Messages>
-     </Module>
-    </Modules>
-   </Target>
-   <Target Name="$(ProjectDir)/../../Source/Examples/Chapter3/SubdivisionEllipsoid/bin/Release/Chapter3SubdivisionEllipsoid.exe">
-    <Modules>
-     <Module Name="chapter3subdivisionellipsoid.exe">
-      <Messages>
-       <Message TypeName="AssembliesShouldHaveValidStrongNames" Category="Microsoft.Design" CheckId="CA2210" Created="2010-01-05 17:55:49Z">
-        <Issue Name="NoStrongName">
-         <Item>'Chapter3SubdivisionEllipsoid.exe'</Item>
         </Issue>
        </Message>
       </Messages>
@@ -3594,11 +3583,16 @@
          </Type>
          <Type Name="Polyline">
           <Messages>
-           <Message Id="Polyline" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-03-03 23:33:07Z">
+           <Message Id="Polyline" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-03-03 23:33:07Z">
             <Issue Name="Type">
              <Item>Polyline</Item>
              <Item>'Polyline'</Item>
             </Issue>
+            <Notes>
+             <User Name="pjcozzi">
+              <Note Id="38" />
+             </User>
+            </Notes>
            </Message>
           </Messages>
          </Type>
@@ -5229,6 +5223,7 @@
     <Note Id="35" Modified="2010-02-02 14:24:45Z">filename is ok.</Note>
     <Note Id="36" Modified="2010-02-03 04:07:31Z">[Test] is ok.</Note>
     <Note Id="37" Modified="2010-03-03 23:34:48Z">x and y are ok.</Note>
+    <Note Id="38" Modified="2010-03-10 21:13:25Z">Polyline is ok (and is in the custom dictionary, what is going on?).</Note>
     <Note Id="39" Modified="2010-02-07 19:09:45Z">filename is ok.</Note>
     <Note Id="40" Modified="2010-02-07 19:15:51Z">Keyboard constants are ok.</Note>
     <Note Id="41" Modified="2010-02-07 19:17:20Z">Relax.  These mimic OpenTK types and are going away soon.</Note>
