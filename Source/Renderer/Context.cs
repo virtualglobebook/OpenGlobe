@@ -30,7 +30,7 @@ namespace MiniGlobe.Renderer
 
     public abstract class Context
     {
-        public virtual VertexArray CreateVertexArray(Mesh mesh, ShaderVertexAttributeCollection sharedAttributes, BufferHint usageHint)
+        public virtual VertexArray CreateVertexArray(Mesh mesh, ShaderVertexAttributeCollection shaderAttributes, BufferHint usageHint)
         {
             VertexArray va = CreateVertexArray();
 
@@ -80,8 +80,15 @@ namespace MiniGlobe.Renderer
             }
 
             // TODO:  Not tested exhaustively
-            foreach (VertexAttribute attribute in mesh.Attributes)
+            foreach (ShaderVertexAttribute shaderAttribute in shaderAttributes)
             {
+                if (!mesh.Attributes.Contains(shaderAttribute.Name))
+                {
+                    throw new ArgumentException("Shader requires vertex attribute \"" + shaderAttribute.Name + "\", which is not present in mesh.");
+                }
+
+                VertexAttribute attribute = mesh.Attributes[shaderAttribute.Name];
+                
                 if (attribute.DataType == VertexAttributeType.Double)
                 {
                     IList<double> values = (attribute as VertexAttribute<double>).Values;
@@ -94,7 +101,7 @@ namespace MiniGlobe.Renderer
 
                     VertexBuffer vertexBuffer = Device.CreateVertexBuffer(usageHint, valuesArray.Length * sizeof(float));
                     vertexBuffer.CopyFromSystemMemory(valuesArray);
-                    va.VertexBuffers[sharedAttributes[attribute.Name].Location] =
+                    va.VertexBuffers[shaderAttribute.Location] =
                         new AttachedVertexBuffer(vertexBuffer, VertexAttributeComponentType.Float, 1);
                 }
                 else if (attribute.DataType == VertexAttributeType.DoubleVector2)
@@ -110,7 +117,7 @@ namespace MiniGlobe.Renderer
 
                     VertexBuffer vertexBuffer = Device.CreateVertexBuffer(usageHint, valuesArray.Length * Vector2.SizeInBytes);
                     vertexBuffer.CopyFromSystemMemory(valuesArray);
-                    va.VertexBuffers[sharedAttributes[attribute.Name].Location] =
+                    va.VertexBuffers[shaderAttribute.Location] =
                         new AttachedVertexBuffer(vertexBuffer, VertexAttributeComponentType.Float, 2);
                 }
                 else if (attribute.DataType == VertexAttributeType.DoubleVector3)
@@ -127,7 +134,7 @@ namespace MiniGlobe.Renderer
 
                     VertexBuffer vertexBuffer = Device.CreateVertexBuffer(usageHint, valuesArray.Length * Vector3.SizeInBytes);
                     vertexBuffer.CopyFromSystemMemory(valuesArray);
-                    va.VertexBuffers[sharedAttributes[attribute.Name].Location] =
+                    va.VertexBuffers[shaderAttribute.Location] =
                         new AttachedVertexBuffer(vertexBuffer, VertexAttributeComponentType.Float, 3);
                 }
                 else if (attribute.DataType == VertexAttributeType.DoubleVector4)
@@ -145,63 +152,63 @@ namespace MiniGlobe.Renderer
 
                     VertexBuffer vertexBuffer = Device.CreateVertexBuffer(usageHint, valuesArray.Length * Vector4.SizeInBytes);
                     vertexBuffer.CopyFromSystemMemory(valuesArray);
-                    va.VertexBuffers[sharedAttributes[attribute.Name].Location] =
+                    va.VertexBuffers[shaderAttribute.Location] =
                         new AttachedVertexBuffer(vertexBuffer, VertexAttributeComponentType.Float, 4);
                 }
                 else if (attribute.DataType == VertexAttributeType.HalfFloat)
                 {
                     VertexBuffer vertexBuffer = CreateVertexBuffer((attribute as VertexAttribute<Half>).Values, Half.SizeInBytes, usageHint);
 
-                    va.VertexBuffers[sharedAttributes[attribute.Name].Location] =
+                    va.VertexBuffers[shaderAttribute.Location] =
                         new AttachedVertexBuffer(vertexBuffer, VertexAttributeComponentType.HalfFloat, 1);
                 }
                 else if (attribute.DataType == VertexAttributeType.HalfFloatVector2)
                 {
                     VertexBuffer vertexBuffer = CreateVertexBuffer((attribute as VertexAttribute<Vector2h>).Values, Vector2h.SizeInBytes, usageHint);
 
-                    va.VertexBuffers[sharedAttributes[attribute.Name].Location] =
+                    va.VertexBuffers[shaderAttribute.Location] =
                         new AttachedVertexBuffer(vertexBuffer, VertexAttributeComponentType.HalfFloat, 2);
                 }
                 else if (attribute.DataType == VertexAttributeType.HalfFloatVector3)
                 {
                     VertexBuffer vertexBuffer = CreateVertexBuffer((attribute as VertexAttribute<Vector3h>).Values, Vector3h.SizeInBytes, usageHint);
 
-                    va.VertexBuffers[sharedAttributes[attribute.Name].Location] =
+                    va.VertexBuffers[shaderAttribute.Location] =
                         new AttachedVertexBuffer(vertexBuffer, VertexAttributeComponentType.HalfFloat, 3);
                 }
                 else if (attribute.DataType == VertexAttributeType.HalfFloatVector4)
                 {
                     VertexBuffer vertexBuffer = CreateVertexBuffer((attribute as VertexAttribute<Vector4h>).Values, Vector4h.SizeInBytes, usageHint);
 
-                    va.VertexBuffers[sharedAttributes[attribute.Name].Location] =
+                    va.VertexBuffers[shaderAttribute.Location] =
                         new AttachedVertexBuffer(vertexBuffer, VertexAttributeComponentType.HalfFloat, 4);
                 }
                 else if (attribute.DataType == VertexAttributeType.Float)
                 {
                     VertexBuffer vertexBuffer = CreateVertexBuffer((attribute as VertexAttribute<float>).Values, sizeof(float), usageHint);
 
-                    va.VertexBuffers[sharedAttributes[attribute.Name].Location] =
+                    va.VertexBuffers[shaderAttribute.Location] =
                         new AttachedVertexBuffer(vertexBuffer, VertexAttributeComponentType.Float, 1);
                 }
                 else if (attribute.DataType == VertexAttributeType.FloatVector2)
                 {
                     VertexBuffer vertexBuffer = CreateVertexBuffer((attribute as VertexAttribute<Vector2>).Values, Vector2.SizeInBytes, usageHint);
 
-                    va.VertexBuffers[sharedAttributes[attribute.Name].Location] =
+                    va.VertexBuffers[shaderAttribute.Location] =
                         new AttachedVertexBuffer(vertexBuffer, VertexAttributeComponentType.Float, 2);
                 }
                 else if (attribute.DataType == VertexAttributeType.FloatVector3)
                 {
                     VertexBuffer vertexBuffer = CreateVertexBuffer((attribute as VertexAttribute<Vector3>).Values, Vector3.SizeInBytes, usageHint);
 
-                    va.VertexBuffers[sharedAttributes[attribute.Name].Location] =
+                    va.VertexBuffers[shaderAttribute.Location] =
                         new AttachedVertexBuffer(vertexBuffer, VertexAttributeComponentType.Float, 3);
                 }
                 else if (attribute.DataType == VertexAttributeType.FloatVector4)
                 {
                     VertexBuffer vertexBuffer = CreateVertexBuffer((attribute as VertexAttribute<Vector4>).Values, Vector4.SizeInBytes, usageHint);
 
-                    va.VertexBuffers[sharedAttributes[attribute.Name].Location] =
+                    va.VertexBuffers[shaderAttribute.Location] =
                         new AttachedVertexBuffer(vertexBuffer, VertexAttributeComponentType.Float, 4);
                 }
                 else
