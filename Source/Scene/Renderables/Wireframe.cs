@@ -15,7 +15,7 @@ using OpenTK;
 
 namespace MiniGlobe.Scene
 {
-    public sealed class Wireframe : IRenderable, IDisposable
+    public sealed class Wireframe : IDisposable
     {
         public Wireframe(Context context, Mesh mesh)
         {
@@ -137,8 +137,6 @@ namespace MiniGlobe.Scene
             _primitiveType = mesh.PrimitiveType;
         }
 
-        #region IRenderable Members
-
         public void Render(SceneState sceneState)
         {
             _lineWidth.Value = (float)(0.5 * Width * sceneState.HighResolutionSnapScale);
@@ -148,8 +146,6 @@ namespace MiniGlobe.Scene
             _context.Bind(_va);
             _context.Draw(_primitiveType, sceneState);
         }
-
-        #endregion
 
         public Context Context
         {

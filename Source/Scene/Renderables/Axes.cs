@@ -15,7 +15,7 @@ using OpenTK;
 
 namespace MiniGlobe.Scene
 {
-    public sealed class Axes : IRenderable, IDisposable
+    public sealed class Axes : IDisposable
     {
         public Axes(Context context)
         {
@@ -143,8 +143,6 @@ namespace MiniGlobe.Scene
             _va.VertexBuffers[_sp.VertexAttributes["color"].Location] = attachedColorBuffer;
         }
 
-        #region IRenderable Members
-
         public void Render(SceneState sceneState)
         {
             _halfLineWidth.Value = (float)(Width * 0.5 * sceneState.HighResolutionSnapScale);
@@ -155,8 +153,6 @@ namespace MiniGlobe.Scene
             _context.Bind(_va);
             _context.Draw(PrimitiveType.Lines, sceneState);
         }
-
-        #endregion
 
         public Context Context
         {

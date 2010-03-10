@@ -17,7 +17,7 @@ using OpenTK;
 
 namespace MiniGlobe.Scene
 {
-    public sealed class TessellatedGlobe : IRenderable, IDisposable
+    public sealed class TessellatedGlobe : IDisposable
     {
         public TessellatedGlobe(Context context)
         {
@@ -109,8 +109,6 @@ namespace MiniGlobe.Scene
             }
         }
 
-        #region IRenderable Members
-
         public void Render(SceneState sceneState)
         {
             if (Texture == null)
@@ -128,8 +126,6 @@ namespace MiniGlobe.Scene
             _context.Bind(_va);
             _context.Draw(_primitiveType, sceneState);
         }
-
-        #endregion
 
         public Context Context
         {

@@ -15,7 +15,7 @@ using OpenTK;
 
 namespace MiniGlobe.Scene
 {
-    public sealed class BillboardGroup : IRenderable, IDisposable
+    public sealed class BillboardGroup : IDisposable
     {
         public BillboardGroup(Context context, Vector3[] positions, Bitmap bitmap)
         {
@@ -139,8 +139,6 @@ center.x -= halfSize.x;
             _texture = Device.CreateTexture2D(bitmap, TextureFormat.RedGreenBlueAlpha8, false);
         }
 
-        #region IRenderable Members
-
         public void Render(SceneState sceneState)
         {
             _context.TextureUnits[0].Texture2D = _texture;
@@ -149,8 +147,6 @@ center.x -= halfSize.x;
             _context.Bind(_va);
             _context.Draw(PrimitiveType.Points, sceneState);
         }
-
-        #endregion
 
         public Context Context
         {

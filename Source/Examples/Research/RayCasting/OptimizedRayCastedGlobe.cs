@@ -45,7 +45,7 @@ using OpenTK;
 
 namespace MiniGlobe.Examples.Research.RayCasting
 {
-    public sealed class OptimizedRayCastedGlobe : IRenderable, IDisposable
+    public sealed class OptimizedRayCastedGlobe : IDisposable
     {
         public OptimizedRayCastedGlobe(Context context)
         {
@@ -304,8 +304,6 @@ namespace MiniGlobe.Examples.Research.RayCasting
             return result;
         }
 
-        #region IRenderable Members
-
         public void Render(SceneState sceneState)
         {
             int sizeInBytes = NumberOfBoundingPolygonPoints * Vector3D.SizeInBytes;
@@ -364,8 +362,6 @@ namespace MiniGlobe.Examples.Research.RayCasting
                 _context.Draw(PrimitiveType.TriangleFan, sceneState);
             }
         }
-
-        #endregion
 
         public Context Context
         {

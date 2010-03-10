@@ -17,7 +17,7 @@ using OpenTK;
 
 namespace MiniGlobe.Scene
 {
-    public sealed class RayCastedGlobe : IRenderable, IDisposable
+    public sealed class RayCastedGlobe : IDisposable
     {
         public RayCastedGlobe(Context context)
         {
@@ -239,8 +239,6 @@ namespace MiniGlobe.Scene
             }
         }
 
-        #region IRenderable Members
-
         public void Render(SceneState sceneState)
         {
             if (Texture == null)
@@ -280,8 +278,6 @@ namespace MiniGlobe.Scene
                 _wireframe.Render(sceneState);
             }
         }
-
-        #endregion
 
         public Context Context
         {
