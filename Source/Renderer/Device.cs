@@ -108,8 +108,28 @@ namespace MiniGlobe.Renderer
                 (int)Math.Ceiling(size.Height),
                 ImagingPixelFormat.Format32bppArgb);
             Graphics graphics = Graphics.FromImage(bitmap);
-            graphics.DrawString(text, font, new SolidBrush(Color.White), new PointF());
+            Brush brush = new SolidBrush(Color.White);
+            graphics.DrawString(text, font, brush, new PointF());
 
+            brush.Dispose();
+            graphics.Dispose();
+
+            return bitmap;
+        }
+
+        public static Bitmap CreateBitmapFromPoint(int diameter)
+        {
+            if (diameter < 1)
+            {
+                throw new ArgumentOutOfRangeException("diameter");
+            }
+
+            Bitmap bitmap = new Bitmap(diameter, diameter, ImagingPixelFormat.Format32bppArgb);
+            Graphics graphics = Graphics.FromImage(bitmap);
+            Brush brush = new SolidBrush(Color.White);
+            graphics.FillEllipse(new SolidBrush(Color.White), 0, 0, diameter, diameter);
+
+            brush.Dispose();
             graphics.Dispose();
 
             return bitmap;
