@@ -30,6 +30,7 @@
   <Target Name="$(ProjectDir)/../../Source/Examples/Chapter3/RayCasting/bin/Release/Chapter3RayCasting.exe" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/../../Source/Examples/Chapter3/SubdivisionSphere1/bin/Release/Chapter3SubdivisionSphere1.exe" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/../../Source/Examples/Chapter3/SubdivisionSphere2/bin/Release/Chapter3SubdivisionSphere2.exe" Analyze="True" AnalyzeAllChildren="True" />
+  <Target Name="$(ProjectDir)/../../Source/Examples/Chapter4/NumberPrecision/bin/Release/Chapter4NumberPrecision.exe" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/../../Source/Examples/Chapter7/Billboards/bin/Release/Chapter7Billboards.exe" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/../../Source/Examples/Research/RayCasting/bin/Release/ResearchRayCasting.exe" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/../../Source/Tests/bin/Release/MiniGlobe.Core.dll" Analyze="True" AnalyzeAllChildren="True" />
@@ -198,6 +199,19 @@
        <Message TypeName="AssembliesShouldHaveValidStrongNames" Category="Microsoft.Design" CheckId="CA2210" Created="2009-12-29 14:04:17Z">
         <Issue Name="NoStrongName">
          <Item>'Chapter3SubdivisionSphere2.exe'</Item>
+        </Issue>
+       </Message>
+      </Messages>
+     </Module>
+    </Modules>
+   </Target>
+   <Target Name="$(ProjectDir)/../../Source/Examples/Chapter4/NumberPrecision/bin/Release/Chapter4NumberPrecision.exe">
+    <Modules>
+     <Module Name="chapter4numberprecision.exe">
+      <Messages>
+       <Message TypeName="AssembliesShouldHaveValidStrongNames" Category="Microsoft.Design" CheckId="CA2210" Created="2010-03-10 21:45:43Z">
+        <Issue Name="NoStrongName">
+         <Item>'Chapter4NumberPrecision.exe'</Item>
         </Issue>
        </Message>
       </Messages>
@@ -4709,6 +4723,20 @@
              </Message>
             </Messages>
            </Member>
+           <Member Name="#DepthRange()">
+            <Messages>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-03-10 21:45:43Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'RenderStateTests.DepthRange()'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="43" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
            <Member Name="#DepthTest()">
             <Messages>
              <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2009-12-11 23:38:35Z" FixCategory="DependsOnFix">
@@ -5228,6 +5256,7 @@
     <Note Id="40" Modified="2010-02-07 19:15:51Z">Keyboard constants are ok.</Note>
     <Note Id="41" Modified="2010-02-07 19:17:20Z">Relax.  These mimic OpenTK types and are going away soon.</Note>
     <Note Id="42" Modified="2010-02-24 12:11:26Z">[Test] can be static.</Note>
+    <Note Id="43" Modified="2010-03-10 21:47:35Z">[Test] cannot be static</Note>
     <Note Id="44" Modified="2010-02-24 12:13:27Z">This is a delegate.</Note>
     <Note Id="45" Modified="2010-02-24 12:13:59Z">Filename can be one word.</Note>
     <Note Id="46" Modified="2010-03-03 23:35:11Z">ViewPoint is meant to be two words here.</Note>
@@ -5267,7 +5296,6 @@
     <Resolution Name="MemberMoreMeaningfulName">Consider providing a more meaningful name than member name {0}.</Resolution>
     <Resolution Name="MemberParameter">In method {0}, correct the spelling of '{1}' in parameter name {2} or remove it entirely if it represents any sort of Hungarian notation.</Resolution>
     <Resolution Name="MemberParameterMoreMeaningfulName">In method {0}, consider providing a more meaningful name than parameter name {1}.</Resolution>
-    <Resolution Name="Type">Correct the spelling of '{0}' in type name {1}.</Resolution>
    </Rule>
    <Rule TypeName="IdentifiersShouldHaveCorrectSuffix" Category="Microsoft.Naming" CheckId="CA1710">
     <Resolution Name="Default">Rename {0} to end in '{1}'.</Resolution>

@@ -146,20 +146,6 @@ namespace MiniGlobe.Scene
             ShowGlobe = true;
         }
 
-        private static string PassThroughVS()
-        {
-            return
-                @"#version 150
-
-                  in vec4 position;
-                  uniform mat4 mg_modelViewPerspectiveProjectionMatrix;
-
-                  void main()                     
-                  {
-                      gl_Position = mg_modelViewPerspectiveProjectionMatrix * position; 
-                  }";
-        }
-
         private static string RayIntersectEllipsoidGLSL()
         {
             return

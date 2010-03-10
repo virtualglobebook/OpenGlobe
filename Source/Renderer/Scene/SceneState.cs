@@ -56,7 +56,7 @@ namespace MiniGlobe.Renderer
                 viewport.Left, viewport.Top, Camera.OrthographicNearPlaneDistance, 1);
         }
 
-        public Matrix4d ComputeViewportOrthographicProjectionMatrix(Rectangle viewport)
+        public static Matrix4d ComputeViewportOrthographicProjectionMatrix(Rectangle viewport)
         {
             //
             // Bottom and top swapped:  MS -> OpenGL
