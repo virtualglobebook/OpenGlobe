@@ -11,7 +11,7 @@ using OpenTK;
 
 namespace MiniGlobe.Core.Geometry
 {
-    public class VertexAttributeDoubleVector4 : VertexAttribute<Vector4d>
+    public class VertexAttributeDoubleVector4 : VertexAttribute<Vector4D>
     {
         public VertexAttributeDoubleVector4(string name)
             : base(name, VertexAttributeType.DoubleVector4)

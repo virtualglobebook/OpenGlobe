@@ -106,7 +106,7 @@ namespace MiniGlobe.Renderer
                 }
                 else if (attribute.DataType == VertexAttributeType.DoubleVector2)
                 {
-                    IList<Vector2d> values = (attribute as VertexAttribute<Vector2d>).Values;
+                    IList<Vector2D> values = (attribute as VertexAttribute<Vector2D>).Values;
 
                     Vector2[] valuesArray = new Vector2[values.Count];
                     for (int i = 0; i < values.Count; ++i)
@@ -139,7 +139,7 @@ namespace MiniGlobe.Renderer
                 }
                 else if (attribute.DataType == VertexAttributeType.DoubleVector4)
                 {
-                    IList<Vector4d> values = (attribute as VertexAttribute<Vector4d>).Values;
+                    IList<Vector4D> values = (attribute as VertexAttribute<Vector4D>).Values;
 
                     Vector4[] valuesArray = new Vector4[values.Count];
                     for (int i = 0; i < values.Count; ++i)
