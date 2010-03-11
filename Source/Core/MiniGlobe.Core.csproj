@@ -68,6 +68,7 @@
     <Compile Include="Trig.cs" />
     <Compile Include="Vector2D.cs" />
     <Compile Include="Vector3D.cs" />
+    <Compile Include="Vector4D.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="OpenTK, Version=0.9.9.5, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
