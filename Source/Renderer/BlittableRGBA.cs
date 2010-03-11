@@ -23,7 +23,7 @@ namespace MiniGlobe.Renderer
         public byte B { get; set; }
         public byte A { get; set; }
 
-        public static readonly int SizeInBytes = Marshal.SizeOf(new BlittableRGBA());
+        public static readonly int SizeInBytes = Marshal.SizeOf(typeof(BlittableRGBA));
         public static readonly ImageFormat Format = ImageFormat.RedGreenBlueAlpha;
         public static readonly ImageDataType DataType = ImageDataType.UnsignedByte;
 

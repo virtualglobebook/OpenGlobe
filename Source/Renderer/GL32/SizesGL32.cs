@@ -36,36 +36,36 @@ namespace MiniGlobe.Renderer.GL32
             if ((type == VertexAttributeComponentType.Byte) ||
                 (type == VertexAttributeComponentType.UnsignedByte))
             {
-                return Marshal.SizeOf(new byte());
+                return sizeof(byte);
             }
             else if (type == VertexAttributeComponentType.Short)
             {
-                return Marshal.SizeOf(new short());
+                return sizeof(short);
             }
             else if (type == VertexAttributeComponentType.UnsignedShort)
             {
-                return Marshal.SizeOf(new ushort());
+                return sizeof(ushort);
             }
             else if (type == VertexAttributeComponentType.Int)
             {
-                return Marshal.SizeOf(new int());
+                return sizeof(int);
             }
             else if (type == VertexAttributeComponentType.UnsignedInt)
             {
-                return Marshal.SizeOf(new uint());
+                return sizeof(uint);
             }
             else if (type == VertexAttributeComponentType.Float)
             {
-                return Marshal.SizeOf(new float());
+                return sizeof(float);
             }
             else if (type == VertexAttributeComponentType.Double)
             {
-                return Marshal.SizeOf(new double());
+                return sizeof(double);
             }
 
             
             Debug.Assert(type == VertexAttributeComponentType.HalfFloat);
-            return Marshal.SizeOf(new Half());
+            return Marshal.SizeOf(typeof(Half));
         }
     }
 }

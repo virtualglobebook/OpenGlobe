@@ -157,16 +157,16 @@ namespace MiniGlobe.Examples.Chapter3
             _gridResolutions = new List<GridResolution>();
             _gridResolutions.Add(new GridResolution(
                 new Interval(0, 1000000, IntervalEndpoint.Closed, IntervalEndpoint.Open),
-                new Vector2d(0.005, 0.005)));
+                new Vector2D(0.005, 0.005)));
             _gridResolutions.Add(new GridResolution(
                 new Interval(1000000, 2000000, IntervalEndpoint.Closed, IntervalEndpoint.Open),
-                new Vector2d(0.01, 0.01)));
+                new Vector2D(0.01, 0.01)));
             _gridResolutions.Add(new GridResolution(
                 new Interval(2000000, 20000000, IntervalEndpoint.Closed, IntervalEndpoint.Open),
-                new Vector2d(0.05, 0.05)));
+                new Vector2D(0.05, 0.05)));
             _gridResolutions.Add(new GridResolution(
                 new Interval(20000000, double.MaxValue, IntervalEndpoint.Closed, IntervalEndpoint.Open),
-                new Vector2d(0.1, 0.1)));
+                new Vector2D(0.1, 0.1)));
 
             //_billboard = new BillboardGroup(_window.Context, positions, new Bitmap(@"building.png"));
 

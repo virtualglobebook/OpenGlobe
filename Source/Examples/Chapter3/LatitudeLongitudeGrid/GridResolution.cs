@@ -8,7 +8,6 @@
 #endregion
 
 using MiniGlobe.Core;
-using OpenTK;
 
 namespace MiniGlobe.Examples.Chapter3
 {
@@ -16,16 +15,16 @@ namespace MiniGlobe.Examples.Chapter3
     // TODO:  Add equator, etc.
     class GridResolution
     {
-        public GridResolution(Interval interval, Vector2d resolution)
+        public GridResolution(Interval interval, Vector2D resolution)
         {
             _interval = interval;
             _resolution = resolution;
         }
 
         public Interval Interval { get { return _interval; } }
-        public Vector2d Resolution { get { return _resolution; } }
+        public Vector2D Resolution { get { return _resolution; } }
 
         private readonly Interval _interval;
-        private readonly Vector2d _resolution;
+        private readonly Vector2D _resolution;
     }
 }

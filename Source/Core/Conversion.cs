@@ -13,14 +13,9 @@ namespace MiniGlobe.Core
 {
     public static class Conversion
     {
-        public static Vector2 ToVector2(Vector2d vector)
+        public static Vector2 ToVector2(Vector2D vector)
         {
             return new Vector2((float)vector.X, (float)vector.Y);
-        }
-
-        public static Vector3 ToVector3(Vector3d vector)
-        {
-            return new Vector3((float)vector.X, (float)vector.Y, (float)vector.Z);
         }
 
         public static Vector3 ToVector3(Vector3D vector)
