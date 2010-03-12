@@ -47,7 +47,7 @@ namespace MiniGlobe.Examples.Chapter2
             HighResolutionSnap snap = new HighResolutionSnap(_window, _sceneState);
             snap.ColorFilename = @"E:\Dropbox\My Dropbox\Book\Manuscript\VirtualGlobeFoundations\Figures\EllipsoidSurfaceNormals1.png";
             snap.WidthInInches = 1.5;
-            snap.DotsPerInch = 600;
+            snap.DotsPerInch = 1200;
         }
 
         private void OnResize()
@@ -68,8 +68,8 @@ namespace MiniGlobe.Examples.Chapter2
             _wireframe.Render(_sceneState);
             _axes.Render(_sceneState);
             _normals.Render(_sceneState);
-            _deticBillboard.Render(_sceneState);
-            _centricBillboard.Render(_sceneState);
+            _geodeticBillboard.Render(_sceneState);
+            _geocentricBillboard.Render(_sceneState);
             _tangentPlane.Render(_sceneState);
         }
 
@@ -205,15 +205,15 @@ namespace MiniGlobe.Examples.Chapter2
             ///////////////////////////////////////////////////////////////////
             Font font = new Font("Arial", 24);
 
-            _deticBillboard = new BillboardGroup(_window.Context, 
+            _geodeticBillboard = new BillboardGroup(_window.Context, 
                 new[] { Conversion.ToVector3(pDetic) },
-                Device.CreateBitmapFromText("Detic", font));
-            _deticBillboard.Color = Color.DarkGreen;
+                Device.CreateBitmapFromText("Geodetic", font));
+            _geodeticBillboard.Color = Color.DarkGreen;
 
-            _centricBillboard = new BillboardGroup(_window.Context,
+            _geocentricBillboard = new BillboardGroup(_window.Context,
                 new[] { Conversion.ToVector3(pCentric) },
-                Device.CreateBitmapFromText("Centric", font));
-            _centricBillboard.Color = Color.DarkCyan;
+                Device.CreateBitmapFromText("Geocentric", font));
+            _geocentricBillboard.Color = Color.DarkCyan;
 
             font.Dispose();
 
@@ -247,14 +247,14 @@ namespace MiniGlobe.Examples.Chapter2
                 _axes.Dispose();
             }
 
-            if (_deticBillboard != null)
+            if (_geodeticBillboard != null)
             {
-                _deticBillboard.Dispose();
+                _geodeticBillboard.Dispose();
             }
 
-            if (_centricBillboard != null)
+            if (_geocentricBillboard != null)
             {
-                _centricBillboard.Dispose();
+                _geocentricBillboard.Dispose();
             }
 
             if (_normals != null)
@@ -303,8 +303,8 @@ namespace MiniGlobe.Examples.Chapter2
 
         private Wireframe _wireframe;
         private Axes _axes;
-        private BillboardGroup _deticBillboard;
-        private BillboardGroup _centricBillboard;
+        private BillboardGroup _geodeticBillboard;
+        private BillboardGroup _geocentricBillboard;
         private Polyline _normals;
         private Plane _tangentPlane;
 
