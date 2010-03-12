@@ -27,8 +27,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chapter3NightLights", "Exam
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chapter7Billboards", "Examples\Chapter7\Billboards\Chapter7Billboards.csproj", "{8A2D80D7-C920-4110-99C1-13AF45FF87E4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ResearchRayCasting", "Examples\Research\RayCasting\ResearchRayCasting.csproj", "{3B9524CC-F1D8-4F24-9FA5-18177F20ACE7}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chapter2EllipsoidSurfaceNormals", "Examples\Chapter2\EllipsoidSurfaceNormals\Chapter2EllipsoidSurfaceNormals.csproj", "{C0198B9E-97B8-4075-912E-70D231EE9D8E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chapter4NumberPrecision", "Examples\Chapter4\NumberPrecision\Chapter4NumberPrecision.csproj", "{F5438C0E-87EB-41C3-8403-220164D58E4A}"
@@ -79,10 +77,6 @@ Global
 		{8A2D80D7-C920-4110-99C1-13AF45FF87E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8A2D80D7-C920-4110-99C1-13AF45FF87E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8A2D80D7-C920-4110-99C1-13AF45FF87E4}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3B9524CC-F1D8-4F24-9FA5-18177F20ACE7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3B9524CC-F1D8-4F24-9FA5-18177F20ACE7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3B9524CC-F1D8-4F24-9FA5-18177F20ACE7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3B9524CC-F1D8-4F24-9FA5-18177F20ACE7}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C0198B9E-97B8-4075-912E-70D231EE9D8E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{C0198B9E-97B8-4075-912E-70D231EE9D8E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C0198B9E-97B8-4075-912E-70D231EE9D8E}.Release|Any CPU.ActiveCfg = Release|Any CPU
