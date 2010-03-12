@@ -46,15 +46,12 @@ namespace OpenTK.Platform.Windows
     {
         #region Fields
 
-        readonly static object SyncRoot = new object();
-
         const ExtendedWindowStyle ParentStyleEx = ExtendedWindowStyle.WindowEdge | ExtendedWindowStyle.ApplicationWindow;
         const ExtendedWindowStyle ChildStyleEx = 0;
 
         readonly IntPtr Instance = Marshal.GetHINSTANCE(typeof(WinGLNative).Module);
         readonly IntPtr ClassName;
         readonly WindowProcedure WindowProcedureDelegate;
-        readonly UIntPtr ModalLoopTimerId;
         readonly uint ModalLoopTimerPeriod = 1;
         UIntPtr timer_handle;
         readonly Functions.TimerProc ModalLoopCallback;
@@ -95,20 +92,13 @@ namespace OpenTK.Platform.Windows
 
         KeyPressEventArgs key_press = new KeyPressEventArgs((char)0);
 
-        static int window_count;
-
         #endregion
 
         #region Contructors
 
         public WinGLNative(int x, int y, int width, int height, string title, GameWindowFlags options, DisplayDevice device)
         {
-            lock (SyncRoot)
-            {
-                ++window_count;
-                ClassName = Marshal.StringToHGlobalAuto(typeof(WinGLNative).Name + window_count.ToString());
-                ModalLoopTimerId = new UIntPtr((uint)window_count);
-            }
+            ClassName = Marshal.StringToHGlobalAuto(Guid.NewGuid().ToString());
 
             // This is the main window procedure callback. We need the callback in order to create the window, so
             // don't move it below the CreateWindow calls.
@@ -498,7 +488,7 @@ namespace OpenTK.Platform.Windows
         {
             if (timer_handle == UIntPtr.Zero)
             {
-                timer_handle = Functions.SetTimer(handle, ModalLoopTimerId, ModalLoopTimerPeriod, ModalLoopCallback);
+                timer_handle = Functions.SetTimer(handle, new UIntPtr(1), ModalLoopTimerPeriod, ModalLoopCallback);
                 if (timer_handle == UIntPtr.Zero)
                     Debug.Print("[Warning] Failed to set modal loop timer callback ({0}:{1}->{2}).",
                         GetType().Name, handle, Marshal.GetLastWin32Error());
