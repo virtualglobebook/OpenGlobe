@@ -24,7 +24,7 @@ namespace MiniGlobe.Renderer
 
             Vector3[] positions = new Vector3[] 
             { 
-                new Vector3(0, 0, 0),
+                Vector3.Zero,
                 new Vector3(1, 0, 0),
                 new Vector3(0, 1, 0)
             };
@@ -51,12 +51,16 @@ namespace MiniGlobe.Renderer
             //
             // Verify modiying a subset of the vertex buffer
             //
-            Vector3 modifiedPosition = new Vector3(0, 1, 0);
-            vertexBuffer.CopyFromSystemMemory(new[] { modifiedPosition }, Vector3.SizeInBytes);
+            Vector3[] modifiedPositions = new Vector3[] 
+            { 
+                new Vector3(0, 1, 0),
+                Vector3.Zero
+            };
+            vertexBuffer.CopyFromSystemMemory(modifiedPositions, Vector3.SizeInBytes, Vector3.SizeInBytes);
 
             Vector3[] positions3 = vertexBuffer.CopyToSystemMemory<Vector3>(0, vertexBuffer.SizeInBytes);
             Assert.AreEqual(positions[0], positions3[0]);
-            Assert.AreEqual(modifiedPosition, positions3[1]);
+            Assert.AreEqual(modifiedPositions[0], positions3[1]);
             Assert.AreEqual(positions[2], positions3[2]);
 
             vertexBuffer.Dispose();

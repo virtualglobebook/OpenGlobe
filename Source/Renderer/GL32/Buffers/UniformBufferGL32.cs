@@ -26,9 +26,12 @@ namespace MiniGlobe.Renderer.GL32
 
         #region UniformBuffer Members
 
-        public override void CopyFromSystemMemory<T>(T[] bufferInSystemMemory, int destinationOffsetInBytes)
+        public override void CopyFromSystemMemory<T>(
+            T[] bufferInSystemMemory,
+            int destinationOffsetInBytes,
+            int lengthInBytes)
         {
-            _bufferObject.CopyFromSystemMemory(bufferInSystemMemory, destinationOffsetInBytes);
+            _bufferObject.CopyFromSystemMemory(bufferInSystemMemory, destinationOffsetInBytes, lengthInBytes);
         }
 
         public override T[] CopyToSystemMemory<T>(int offsetInBytes, int sizeInBytes)

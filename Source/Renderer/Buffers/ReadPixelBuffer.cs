@@ -9,6 +9,7 @@
 
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.Runtime.InteropServices;
 using MiniGlobe.Core;
 
 namespace MiniGlobe.Renderer
@@ -20,7 +21,19 @@ namespace MiniGlobe.Renderer
             CopyFromSystemMemory<T>(bufferInSystemMemory, 0);
         }
 
-        public abstract void CopyFromSystemMemory<T>(T[] bufferInSystemMemory, int destinationOffsetInBytes) where T : struct;
+        public virtual void CopyFromSystemMemory<T>(T[] bufferInSystemMemory, int destinationOffsetInBytes) where T : struct
+        {
+            int sizeOfT = Marshal.SizeOf(typeof(T));
+            int lengthInBytes = bufferInSystemMemory.Length * sizeOfT;
+
+            CopyFromSystemMemory<T>(bufferInSystemMemory, destinationOffsetInBytes, lengthInBytes);
+        }
+
+        public abstract void CopyFromSystemMemory<T>(
+            T[] bufferInSystemMemory,
+            int destinationOffsetInBytes,
+            int lengthInBytes) where T : struct;
+
         public abstract void CopyFromBitmap(Bitmap bitmap);
 
         public virtual T[] CopyToSystemMemory<T>() where T : struct

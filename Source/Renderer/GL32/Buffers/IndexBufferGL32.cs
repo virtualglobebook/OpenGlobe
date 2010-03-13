@@ -38,7 +38,10 @@ namespace MiniGlobe.Renderer.GL32
         
         #region IndexBuffer Members
 
-        public override void CopyFromSystemMemory<T>(T[] bufferInSystemMemory, int destinationOffsetInBytes)
+        public override void CopyFromSystemMemory<T>(
+            T[] bufferInSystemMemory,
+            int destinationOffsetInBytes,
+            int lengthInBytes)
         {
             if (typeof(T) == typeof(byte))
             {
@@ -54,8 +57,7 @@ namespace MiniGlobe.Renderer.GL32
                 _dataType = IndexBufferDataType.UnsignedInt;
             }
             _count = _bufferObject.SizeInBytes / Marshal.SizeOf(typeof(T));
-
-            _bufferObject.CopyFromSystemMemory(bufferInSystemMemory, destinationOffsetInBytes);
+            _bufferObject.CopyFromSystemMemory(bufferInSystemMemory, destinationOffsetInBytes, lengthInBytes);
         }
 
         public override T[] CopyToSystemMemory<T>(int offsetInBytes, int sizeInBytes)

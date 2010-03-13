@@ -30,9 +30,12 @@ namespace MiniGlobe.Renderer.GL32
 
         #region ReadPixelBuffer Members
 
-        public override void CopyFromSystemMemory<T>(T[] bufferInSystemMemory, int destinationOffsetInBytes)
+        public override void CopyFromSystemMemory<T>(
+            T[] bufferInSystemMemory,
+            int destinationOffsetInBytes,
+            int lengthInBytes)
         {
-            _bufferObject.CopyFromSystemMemory(bufferInSystemMemory, destinationOffsetInBytes);
+            _bufferObject.CopyFromSystemMemory(bufferInSystemMemory, destinationOffsetInBytes, lengthInBytes);
         }
 
         public override void CopyFromBitmap(Bitmap bitmap)

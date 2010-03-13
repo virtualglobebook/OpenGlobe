@@ -45,17 +45,21 @@ namespace MiniGlobe.Renderer.GL32
             GL.BufferData(_type, new IntPtr(sizeInBytes), new IntPtr(), _usageHint);
         }
 
-        public void CopyFromSystemMemory<T>(T[] bufferInSystemMemory, int destinationOffsetInBytes) where T : struct
+        public void CopyFromSystemMemory<T>(
+            T[] bufferInSystemMemory,
+            int destinationOffsetInBytes,
+            int lengthInBytes) where T : struct
         {
-            int sizeOfT = Marshal.SizeOf(typeof(T));
-
             Debug.Assert(destinationOffsetInBytes >= 0);
-            Debug.Assert(destinationOffsetInBytes + (bufferInSystemMemory.Length * sizeOfT) <= _sizeInBytes);
+            Debug.Assert(destinationOffsetInBytes + lengthInBytes <= _sizeInBytes);
+
+            Debug.Assert(lengthInBytes >= 0);
+            Debug.Assert(lengthInBytes <= bufferInSystemMemory.Length * Marshal.SizeOf(typeof(T)));
 
             Bind();
             GL.BufferSubData<T>(_type,
-                new IntPtr(destinationOffsetInBytes), 
-                new IntPtr(bufferInSystemMemory.Length * sizeOfT), 
+                new IntPtr(destinationOffsetInBytes),
+                new IntPtr(lengthInBytes),
                 bufferInSystemMemory);
         }
 
