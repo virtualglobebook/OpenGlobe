@@ -43,6 +43,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Renderables\Axes.cs" />
     <Compile Include="Renderables\BillboardGroup.cs" />
+    <Compile Include="Renderables\BillboardGroup\Billboard.cs" />
+    <Compile Include="Renderables\BillboardGroup\BillboardGroup.cs" />
     <Compile Include="Renderables\Plane.cs" />
     <Compile Include="Renderables\Polyline.cs" />
     <Compile Include="Renderables\RayCastedGlobe.cs" />
