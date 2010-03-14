@@ -308,8 +308,9 @@ namespace MiniGlobe.Renderer
             RenderState renderState = new RenderState();
             renderState.StencilTest = stencilTest;
 
-            window.Context.Bind(renderState);
             window.Context.Bind(frameBuffer);
+            window.Context.Clear(ClearBuffers.All, Color.Black, 1, 0);
+            window.Context.Bind(renderState);
             window.Context.Bind(sp);
             window.Context.Bind(va);
             window.Context.Draw(PrimitiveType.Points, 0, 1);
