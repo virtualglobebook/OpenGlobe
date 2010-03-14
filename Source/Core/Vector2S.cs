@@ -18,7 +18,7 @@ namespace MiniGlobe.Core
     /// <summary>
     /// A set of 2-dimensional cartesian coordinates where the two components,
     /// <see cref="X"/> and <see cref="Y"/>, are represented as
-    /// float-precision (64-bit) floating point numbers.
+    /// single-precision (32-bit) floating point numbers.
     /// </summary>
     [Serializable]
     [StructLayout(LayoutKind.Sequential)]
