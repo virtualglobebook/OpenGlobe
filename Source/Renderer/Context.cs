@@ -107,14 +107,13 @@ namespace MiniGlobe.Renderer
                 {
                     IList<Vector2D> values = (attribute as VertexAttribute<Vector2D>).Values;
 
-                    OpenTK.Vector2[] valuesArray = new OpenTK.Vector2[values.Count];
+                    Vector2S[] valuesArray = new Vector2S[values.Count];
                     for (int i = 0; i < values.Count; ++i)
                     {
-                        valuesArray[i].X = (float)values[i].X;
-                        valuesArray[i].Y = (float)values[i].Y;
+                        valuesArray[i] = values[i].ToVector2S();
                     }
 
-                    VertexBuffer vertexBuffer = Device.CreateVertexBuffer(usageHint, valuesArray.Length * OpenTK.Vector2.SizeInBytes);
+                    VertexBuffer vertexBuffer = Device.CreateVertexBuffer(usageHint, valuesArray.Length * Vector2S.SizeInBytes);
                     vertexBuffer.CopyFromSystemMemory(valuesArray);
                     va.VertexBuffers[shaderAttribute.Location] =
                         new AttachedVertexBuffer(vertexBuffer, VertexAttributeComponentType.Float, 2);
@@ -191,7 +190,7 @@ namespace MiniGlobe.Renderer
                 }
                 else if (attribute.DataType == VertexAttributeType.FloatVector2)
                 {
-                    VertexBuffer vertexBuffer = CreateVertexBuffer((attribute as VertexAttribute<OpenTK.Vector2>).Values, OpenTK.Vector2.SizeInBytes, usageHint);
+                    VertexBuffer vertexBuffer = CreateVertexBuffer((attribute as VertexAttribute<Vector2S>).Values, Vector2S.SizeInBytes, usageHint);
 
                     va.VertexBuffers[shaderAttribute.Location] =
                         new AttachedVertexBuffer(vertexBuffer, VertexAttributeComponentType.Float, 2);

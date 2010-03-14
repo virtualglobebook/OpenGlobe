@@ -131,8 +131,8 @@ namespace MiniGlobe.Examples.Chapter3
                   }";
             _sp = Device.CreateShaderProgram(vs, fs);
             (_sp.Uniforms["u_globeOneOverRadiiSquared"] as Uniform<Vector3>).Value = Conversion.ToVector3(_globeShape.OneOverRadiiSquared);
-            _gridWidth = _sp.Uniforms["u_gridLineWidth"] as Uniform<Vector2>;
-            _gridResolution = _sp.Uniforms["u_gridResolution"] as Uniform<Vector2>;
+            _gridWidth = _sp.Uniforms["u_gridLineWidth"] as Uniform<Vector2S>;
+            _gridResolution = _sp.Uniforms["u_gridResolution"] as Uniform<Vector2S>;
 
             Mesh mesh = GeographicGridEllipsoidTessellator.Compute(_globeShape, 64, 32, GeographicGridEllipsoidVertexAttributes.Position);
             _va = _window.Context.CreateVertexArray(mesh, _sp.VertexAttributes, BufferHint.StaticDraw);
@@ -215,13 +215,13 @@ namespace MiniGlobe.Examples.Chapter3
             {
                 if (_gridResolutions[i].Interval.Contains(altitude))
                 {
-                    _gridResolution.Value = Conversion.ToVector2(_gridResolutions[i].Resolution);
+                    _gridResolution.Value = _gridResolutions[i].Resolution.ToVector2S();
                     break;
                 }
             }
 
             float width = (float)_sceneState.HighResolutionSnapScale;
-            _gridWidth.Value = new Vector2(width, width);
+            _gridWidth.Value = new Vector2S(width, width);
 
             Context context = _window.Context;
             context.Clear(ClearBuffers.ColorAndDepthBuffer, Color.White, 1, 0);
@@ -277,8 +277,8 @@ namespace MiniGlobe.Examples.Chapter3
         private readonly VertexArray _va;
         private readonly Texture2D _texture;
         private readonly PrimitiveType _primitiveType;
-        private readonly Uniform<Vector2> _gridWidth;
-        private readonly Uniform<Vector2> _gridResolution;
+        private readonly Uniform<Vector2S> _gridWidth;
+        private readonly Uniform<Vector2S> _gridResolution;
         private readonly IList<GridResolution> _gridResolutions;
         private readonly IList<BillboardGroup> _billboards;
     }

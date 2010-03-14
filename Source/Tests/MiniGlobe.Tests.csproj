@@ -52,6 +52,7 @@
     <Compile Include="Core\SystemTests.cs" />
     <Compile Include="Core\Tessellation\TessellationTests.cs" />
     <Compile Include="Core\Vector2DTests.cs" />
+    <Compile Include="Core\Vector2STests.cs" />
     <Compile Include="Core\Vector3DTests.cs" />
     <Compile Include="Core\Vector4DTests.cs" />
     <Compile Include="IntervalTests.cs" />

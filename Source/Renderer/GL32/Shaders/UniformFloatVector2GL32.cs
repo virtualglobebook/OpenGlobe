@@ -9,19 +9,20 @@
 
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
+using MiniGlobe.Core;
 using MiniGlobe.Renderer;
 
 namespace MiniGlobe.Renderer.GL32
 {
-    internal class UniformFloatVector2GL32 : Uniform<Vector2>, ICleanable
+    internal class UniformFloatVector2GL32 : Uniform<Vector2S>, ICleanable
     {
         internal UniformFloatVector2GL32(string name, int location)
             : base(name, location, UniformType.FloatVector2)
         {
-            Set(new Vector2());
+            Set(new Vector2S());
         }
 
-        private void Set(Vector2 value)
+        private void Set(Vector2S value)
         {
             _value = value;
             _dirty = true;
@@ -29,7 +30,7 @@ namespace MiniGlobe.Renderer.GL32
 
         #region Uniform<> Members
 
-        public override Vector2 Value
+        public override Vector2S Value
         {
             set
             {
@@ -50,14 +51,14 @@ namespace MiniGlobe.Renderer.GL32
         {
             if (_dirty)
             {
-                GL.Uniform2(Location, _value);
+                GL.Uniform2(Location, _value.X, _value.Y);
                 _dirty = false;
             }
         }
 
         #endregion
 
-        private Vector2 _value;
+        private Vector2S _value;
         private bool _dirty;
     }
 }

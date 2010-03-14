@@ -24,7 +24,7 @@ namespace MiniGlobe.Core
     [StructLayout(LayoutKind.Sequential)]
     public struct Vector2D : IEquatable<Vector2D>
     {
-        public static readonly int SizeInBytes = Marshal.SizeOf(typeof(Vector3D));
+        public static readonly int SizeInBytes = Marshal.SizeOf(typeof(Vector2D));
 
         public static Vector2D Zero
         {
@@ -176,6 +176,11 @@ namespace MiniGlobe.Core
         public override int GetHashCode()
         {
             return _x.GetHashCode() ^ _y.GetHashCode();
+        }
+
+        public Vector2S ToVector2S()
+        {
+            return new Vector2S((float)_x, (float)_y);
         }
 
         private readonly double _x;

@@ -9,6 +9,7 @@
 
 using NUnit.Framework;
 using OpenTK;
+using MiniGlobe.Core;
 
 namespace MiniGlobe.Renderer
 {
@@ -152,12 +153,12 @@ namespace MiniGlobe.Renderer
             exampleFloat.Value = 0.75f;
             Assert.AreEqual(0.75f, exampleFloat.Value);
 
-            Uniform<Vector2> exampleVec2 = sp.Uniforms["exampleVec2"] as Uniform<Vector2>;
+            Uniform<Vector2S> exampleVec2 = sp.Uniforms["exampleVec2"] as Uniform<Vector2S>;
             Assert.AreEqual("exampleVec2", exampleVec2.Name);
             Assert.AreEqual(UniformType.FloatVector2, exampleVec2.DataType);
-            Assert.AreEqual(new Vector2(), exampleVec2.Value);
-            exampleVec2.Value = new Vector2(1, 0.5f);
-            Assert.AreEqual(new Vector2(1, 0.5f), exampleVec2.Value);
+            Assert.AreEqual(new Vector2S(), exampleVec2.Value);
+            exampleVec2.Value = new Vector2S(1, 0.5f);
+            Assert.AreEqual(new Vector2S(1, 0.5f), exampleVec2.Value);
 
             Uniform<Vector3> exampleVec3 = sp.Uniforms["exampleVec3"] as Uniform<Vector3>;
             Assert.AreEqual("exampleVec3", exampleVec3.Name);
