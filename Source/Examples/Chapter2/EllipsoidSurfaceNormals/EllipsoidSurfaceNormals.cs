@@ -175,7 +175,7 @@ namespace MiniGlobe.Examples.Chapter2
 
             ///////////////////////////////////////////////////////////////////
 
-            Vector3D p = globeShape.ToVector3D(new Cartographic3D(0, Trig.ToRadians(45), 0));
+            Vector3D p = globeShape.ToVector3D(new Geodetic3D(0, Trig.ToRadians(45), 0));
             Vector3D deticNormal = globeShape.DeticSurfaceNormal(p);
             Vector3D centricNormal = Ellipsoid.CentricSurfaceNormal(p);
 

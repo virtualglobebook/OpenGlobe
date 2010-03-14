@@ -11,9 +11,9 @@ using System;
 
 namespace MiniGlobe.Core
 {
-    public struct Cartographic3D : IEquatable<Cartographic3D>
+    public struct Geodetic3D : IEquatable<Geodetic3D>
     {
-        public Cartographic3D(double longitude, double latitude, double height)
+        public Geodetic3D(double longitude, double latitude, double height)
         {
             _longitude = longitude;
             _latitude = latitude;
@@ -35,26 +35,26 @@ namespace MiniGlobe.Core
             get { return _height; }
         }
 
-        public bool Equals(Cartographic3D other)
+        public bool Equals(Geodetic3D other)
         {
             return _longitude == other._longitude && _latitude == other._latitude && _height == other._height;
         }
 
-        public static bool operator ==(Cartographic3D left, Cartographic3D right)
+        public static bool operator ==(Geodetic3D left, Geodetic3D right)
         {
             return left.Equals(right);
         }
 
-        public static bool operator !=(Cartographic3D left, Cartographic3D right)
+        public static bool operator !=(Geodetic3D left, Geodetic3D right)
         {
             return !left.Equals(right);
         }
 
         public override bool Equals(object obj)
         {
-            if (obj is Cartographic3D)
+            if (obj is Geodetic3D)
             {
-                return Equals((Cartographic3D)obj);
+                return Equals((Geodetic3D)obj);
             }
             return false;
         }

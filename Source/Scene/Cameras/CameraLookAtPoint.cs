@@ -201,7 +201,7 @@ namespace MiniGlobe.Scene
         /// <param name="longitude">The longitude of the point to look at, in radians.</param>
         /// <param name="latitude">The latitude of the point to look at, in radians.</param>
         /// <param name="height">The height of the point to look at, in meters above the <see cref="Ellipsoid"/> surface.</param>
-        public void ViewPoint(Cartographic3D geographic)
+        public void ViewPoint(Geodetic3D geographic)
         {
             _centerPoint = _ellipsoid.ToVector3D(geographic);
             

@@ -14,6 +14,8 @@ using MiniGlobe.Core.Geometry;
 using MiniGlobe.Core.Tessellation;
 using MiniGlobe.Renderer;
 using MiniGlobe.Scene;
+using System.Collections.Generic;
+using MiniGlobe.Core;
 
 namespace MiniGlobe.Examples.Chapter3
 {
@@ -110,7 +112,22 @@ namespace MiniGlobe.Examples.Chapter3
             snap.ColorFilename = @"E:\Dropbox\My Dropbox\Book\Manuscript\GlobeRendering\Figures\GeographicGridEllipsoidTessellationPol.png";
             snap.WidthInInches = 3;
             snap.DotsPerInch = 600;
+
+            IList<Billboard> billboards = new List<Billboard>();
+            _b = new Billboard();
+            _b.Position = new Vector3D(0, 0, 2);
+            billboards.Add(_b);
+
+            _b2 = new Billboard();
+            _b2.Position = new Vector3D(0, 0, 3);
+            billboards.Add(_b2);
+
+            _group = new BillboardGroup2(_window.Context, billboards, Device.CreateBitmapFromPoint(20));
         }
+
+
+        Billboard _b;
+        Billboard _b2;
 
         private void OnResize()
         {
@@ -121,12 +138,16 @@ namespace MiniGlobe.Examples.Chapter3
         private void OnRenderFrame()
         {
             Context context = _window.Context;
-            context.Clear(ClearBuffers.ColorAndDepthBuffer, Color.White, 1, 0);
+            context.Clear(ClearBuffers.ColorAndDepthBuffer, Color.Black, 1, 0);
             context.TextureUnits[0].Texture2D = _texture;
             context.Bind(_renderState);
             context.Bind(_sp);
             context.Bind(_va);
             context.Draw(_primitiveType, _sceneState);
+
+            _b.Position = new Vector3D(0, 0, _b.Position.Z + 0.0001);
+            _b2.Position = new Vector3D(_b2.Position.X + 0.0001, 0, 0);
+            _group.Render(_sceneState);
         }
 
         #region IDisposable Members
@@ -163,5 +184,7 @@ namespace MiniGlobe.Examples.Chapter3
         private readonly VertexArray _va;
         private readonly Texture2D _texture;
         private readonly PrimitiveType _primitiveType;
+
+        BillboardGroup2 _group;
     }
 }

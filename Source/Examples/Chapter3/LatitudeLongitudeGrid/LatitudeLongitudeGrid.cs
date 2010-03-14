@@ -173,23 +173,23 @@ namespace MiniGlobe.Examples.Chapter3
             _billboards = new List<BillboardGroup>();
             _billboards.Add(
                 new BillboardGroup(_window.Context,
-                new[] { Conversion.ToVector3(_globeShape.ToVector3D(new Cartographic3D(Trig.ToRadians(-123.06), Trig.ToRadians(49.13), 0))) },
+                new[] { Conversion.ToVector3(_globeShape.ToVector3D(new Geodetic3D(Trig.ToRadians(-123.06), Trig.ToRadians(49.13), 0))) },
                 Device.CreateBitmapFromText("* Vancouver", new Font("Arial", 24))));
             //_billboards.Add(
             //    new BillboardGroup(_window.Context, 
-            //    new[] { Conversion.ToVector3(_globeShape.ToVector3D(new Cartographic3D(Trig.ToRadians(10), Trig.ToRadians(0), 0))) },
+            //    new[] { Conversion.ToVector3(_globeShape.ToVector3D(new Geodetic3D(Trig.ToRadians(10), Trig.ToRadians(0), 0))) },
             //    Device.CreateBitmapFromText("Equator", new Font("Arial", 24))));
             //_billboards.Add(
             //    new BillboardGroup(_window.Context,
-            //    new[] { Conversion.ToVector3(_globeShape.ToVector3D(new Cartographic3D(Trig.ToRadians(10), Trig.ToRadians(23.5), 0))) },
+            //    new[] { Conversion.ToVector3(_globeShape.ToVector3D(new Geodetic3D(Trig.ToRadians(10), Trig.ToRadians(23.5), 0))) },
             //    Device.CreateBitmapFromText("Tropic of Cancer", new Font("Arial", 24))));
             //_billboards.Add(
             //    new BillboardGroup(_window.Context,
-            //    new[] { Conversion.ToVector3(_globeShape.ToVector3D(new Cartographic3D(Trig.ToRadians(10), Trig.ToRadians(-23.5), 0))) },
+            //    new[] { Conversion.ToVector3(_globeShape.ToVector3D(new Geodetic3D(Trig.ToRadians(10), Trig.ToRadians(-23.5), 0))) },
             //    Device.CreateBitmapFromText("Tropic of Capricorn", new Font("Arial", 24))));
             //_billboards.Add(
             //    new BillboardGroup(_window.Context,
-            //    new[] { Conversion.ToVector3(_globeShape.ToVector3D(new Cartographic3D(Trig.ToRadians(10), Trig.ToRadians(66.56083), 0))) },
+            //    new[] { Conversion.ToVector3(_globeShape.ToVector3D(new Geodetic3D(Trig.ToRadians(10), Trig.ToRadians(66.56083), 0))) },
             //    Device.CreateBitmapFromText("Arctic Circle", new Font("Arial", 24))));
                       
             foreach (BillboardGroup billboardGroup in _billboards)

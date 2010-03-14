@@ -17,7 +17,7 @@ namespace MiniGlobe.Core
         [Test]
         public void Construct()
         {
-            Cartographic3D a = new Cartographic3D(1.0, 2.0, 3.0);
+            Geodetic3D a = new Geodetic3D(1.0, 2.0, 3.0);
             Assert.AreEqual(1.0, a.Longitude);
             Assert.AreEqual(2.0, a.Latitude);
             Assert.AreEqual(3.0, a.Height);
@@ -26,11 +26,11 @@ namespace MiniGlobe.Core
         [Test]
         public void TestEquals()
         {
-            Cartographic3D a = new Cartographic3D(1.0, 2.0, 3.0);
-            Cartographic3D b = new Cartographic3D(1.0, 2.0, 4.0);
-            Cartographic3D c = new Cartographic3D(1.0, 3.0, 3.0);
-            Cartographic3D d = new Cartographic3D(2.0, 2.0, 3.0);
-            Cartographic3D e = new Cartographic3D(1.0, 2.0, 3.0);
+            Geodetic3D a = new Geodetic3D(1.0, 2.0, 3.0);
+            Geodetic3D b = new Geodetic3D(1.0, 2.0, 4.0);
+            Geodetic3D c = new Geodetic3D(1.0, 3.0, 3.0);
+            Geodetic3D d = new Geodetic3D(2.0, 2.0, 3.0);
+            Geodetic3D e = new Geodetic3D(1.0, 2.0, 3.0);
 
             object objA = a;
             object objB = b;
@@ -80,11 +80,11 @@ namespace MiniGlobe.Core
         [Test]
         public void TestGetHashCode()
         {
-            Cartographic3D a = new Cartographic3D(1.0, 2.0, 3.0);
-            Cartographic3D b = new Cartographic3D(1.0, 2.0, 4.0);
-            Cartographic3D c = new Cartographic3D(1.0, 3.0, 3.0);
-            Cartographic3D d = new Cartographic3D(2.0, 2.0, 3.0);
-            Cartographic3D e = new Cartographic3D(1.0, 2.0, 3.0);
+            Geodetic3D a = new Geodetic3D(1.0, 2.0, 3.0);
+            Geodetic3D b = new Geodetic3D(1.0, 2.0, 4.0);
+            Geodetic3D c = new Geodetic3D(1.0, 3.0, 3.0);
+            Geodetic3D d = new Geodetic3D(2.0, 2.0, 3.0);
+            Geodetic3D e = new Geodetic3D(1.0, 2.0, 3.0);
 
             Assert.AreEqual(a.GetHashCode(), e.GetHashCode());
             Assert.AreNotEqual(a.GetHashCode(), b.GetHashCode());

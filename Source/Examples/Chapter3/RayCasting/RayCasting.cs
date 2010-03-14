@@ -76,7 +76,7 @@ namespace MiniGlobe.Examples.Chapter3
 
         private void CenterCameraOnPoint()
         {
-            _camera.ViewPoint(new Cartographic3D(Trig.ToRadians(-75.697), Trig.ToRadians(40.039), 0.0));
+            _camera.ViewPoint(new Geodetic3D(Trig.ToRadians(-75.697), Trig.ToRadians(40.039), 0.0));
             _camera.Azimuth = 0.0;
             _camera.Elevation = Math.PI / 4.0;
             _camera.Range = _camera.Ellipsoid.MaximumRadius * 3.0;

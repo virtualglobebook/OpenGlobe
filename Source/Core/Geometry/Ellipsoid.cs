@@ -121,7 +121,7 @@ namespace MiniGlobe.Core.Geometry
             }
         }
 
-        public Vector3D ToVector3D(Cartographic3D geodetic)
+        public Vector3D ToVector3D(Geodetic3D geodetic)
         {
             double cosLon = Math.Cos(geodetic.Longitude);
             double cosLat = Math.Cos(geodetic.Latitude);
