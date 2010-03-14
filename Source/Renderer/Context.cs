@@ -12,7 +12,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Diagnostics;
-using OpenTK;
 using MiniGlobe.Core.Geometry;
 using MiniGlobe.Core;
 
@@ -108,14 +107,14 @@ namespace MiniGlobe.Renderer
                 {
                     IList<Vector2D> values = (attribute as VertexAttribute<Vector2D>).Values;
 
-                    Vector2[] valuesArray = new Vector2[values.Count];
+                    OpenTK.Vector2[] valuesArray = new OpenTK.Vector2[values.Count];
                     for (int i = 0; i < values.Count; ++i)
                     {
                         valuesArray[i].X = (float)values[i].X;
                         valuesArray[i].Y = (float)values[i].Y;
                     }
 
-                    VertexBuffer vertexBuffer = Device.CreateVertexBuffer(usageHint, valuesArray.Length * Vector2.SizeInBytes);
+                    VertexBuffer vertexBuffer = Device.CreateVertexBuffer(usageHint, valuesArray.Length * OpenTK.Vector2.SizeInBytes);
                     vertexBuffer.CopyFromSystemMemory(valuesArray);
                     va.VertexBuffers[shaderAttribute.Location] =
                         new AttachedVertexBuffer(vertexBuffer, VertexAttributeComponentType.Float, 2);
@@ -124,7 +123,7 @@ namespace MiniGlobe.Renderer
                 {
                     IList<Vector3D> values = (attribute as VertexAttribute<Vector3D>).Values;
 
-                    Vector3[] valuesArray = new Vector3[values.Count];
+                    OpenTK.Vector3[] valuesArray = new OpenTK.Vector3[values.Count];
                     for (int i = 0; i < values.Count; ++i)
                     {
                         valuesArray[i].X = (float)values[i].X;
@@ -132,7 +131,7 @@ namespace MiniGlobe.Renderer
                         valuesArray[i].Z = (float)values[i].Z;
                     }
 
-                    VertexBuffer vertexBuffer = Device.CreateVertexBuffer(usageHint, valuesArray.Length * Vector3.SizeInBytes);
+                    VertexBuffer vertexBuffer = Device.CreateVertexBuffer(usageHint, valuesArray.Length * OpenTK.Vector3.SizeInBytes);
                     vertexBuffer.CopyFromSystemMemory(valuesArray);
                     va.VertexBuffers[shaderAttribute.Location] =
                         new AttachedVertexBuffer(vertexBuffer, VertexAttributeComponentType.Float, 3);
@@ -141,7 +140,7 @@ namespace MiniGlobe.Renderer
                 {
                     IList<Vector4D> values = (attribute as VertexAttribute<Vector4D>).Values;
 
-                    Vector4[] valuesArray = new Vector4[values.Count];
+                    OpenTK.Vector4[] valuesArray = new OpenTK.Vector4[values.Count];
                     for (int i = 0; i < values.Count; ++i)
                     {
                         valuesArray[i].X = (float)values[i].X;
@@ -150,35 +149,35 @@ namespace MiniGlobe.Renderer
                         valuesArray[i].W = (float)values[i].W;
                     }
 
-                    VertexBuffer vertexBuffer = Device.CreateVertexBuffer(usageHint, valuesArray.Length * Vector4.SizeInBytes);
+                    VertexBuffer vertexBuffer = Device.CreateVertexBuffer(usageHint, valuesArray.Length * OpenTK.Vector4.SizeInBytes);
                     vertexBuffer.CopyFromSystemMemory(valuesArray);
                     va.VertexBuffers[shaderAttribute.Location] =
                         new AttachedVertexBuffer(vertexBuffer, VertexAttributeComponentType.Float, 4);
                 }
                 else if (attribute.DataType == VertexAttributeType.HalfFloat)
                 {
-                    VertexBuffer vertexBuffer = CreateVertexBuffer((attribute as VertexAttribute<Half>).Values, Half.SizeInBytes, usageHint);
+                    VertexBuffer vertexBuffer = CreateVertexBuffer((attribute as VertexAttribute<Half>).Values, MiniGlobe.Core.Half.SizeInBytes, usageHint);
 
                     va.VertexBuffers[shaderAttribute.Location] =
                         new AttachedVertexBuffer(vertexBuffer, VertexAttributeComponentType.HalfFloat, 1);
                 }
                 else if (attribute.DataType == VertexAttributeType.HalfFloatVector2)
                 {
-                    VertexBuffer vertexBuffer = CreateVertexBuffer((attribute as VertexAttribute<Vector2h>).Values, Vector2h.SizeInBytes, usageHint);
+                    VertexBuffer vertexBuffer = CreateVertexBuffer((attribute as VertexAttribute<OpenTK.Vector2h>).Values, OpenTK.Vector2h.SizeInBytes, usageHint);
 
                     va.VertexBuffers[shaderAttribute.Location] =
                         new AttachedVertexBuffer(vertexBuffer, VertexAttributeComponentType.HalfFloat, 2);
                 }
                 else if (attribute.DataType == VertexAttributeType.HalfFloatVector3)
                 {
-                    VertexBuffer vertexBuffer = CreateVertexBuffer((attribute as VertexAttribute<Vector3h>).Values, Vector3h.SizeInBytes, usageHint);
+                    VertexBuffer vertexBuffer = CreateVertexBuffer((attribute as VertexAttribute<OpenTK.Vector3h>).Values, OpenTK.Vector3h.SizeInBytes, usageHint);
 
                     va.VertexBuffers[shaderAttribute.Location] =
                         new AttachedVertexBuffer(vertexBuffer, VertexAttributeComponentType.HalfFloat, 3);
                 }
                 else if (attribute.DataType == VertexAttributeType.HalfFloatVector4)
                 {
-                    VertexBuffer vertexBuffer = CreateVertexBuffer((attribute as VertexAttribute<Vector4h>).Values, Vector4h.SizeInBytes, usageHint);
+                    VertexBuffer vertexBuffer = CreateVertexBuffer((attribute as VertexAttribute<OpenTK.Vector4h>).Values, OpenTK.Vector4h.SizeInBytes, usageHint);
 
                     va.VertexBuffers[shaderAttribute.Location] =
                         new AttachedVertexBuffer(vertexBuffer, VertexAttributeComponentType.HalfFloat, 4);
@@ -192,21 +191,21 @@ namespace MiniGlobe.Renderer
                 }
                 else if (attribute.DataType == VertexAttributeType.FloatVector2)
                 {
-                    VertexBuffer vertexBuffer = CreateVertexBuffer((attribute as VertexAttribute<Vector2>).Values, Vector2.SizeInBytes, usageHint);
+                    VertexBuffer vertexBuffer = CreateVertexBuffer((attribute as VertexAttribute<OpenTK.Vector2>).Values, OpenTK.Vector2.SizeInBytes, usageHint);
 
                     va.VertexBuffers[shaderAttribute.Location] =
                         new AttachedVertexBuffer(vertexBuffer, VertexAttributeComponentType.Float, 2);
                 }
                 else if (attribute.DataType == VertexAttributeType.FloatVector3)
                 {
-                    VertexBuffer vertexBuffer = CreateVertexBuffer((attribute as VertexAttribute<Vector3>).Values, Vector3.SizeInBytes, usageHint);
+                    VertexBuffer vertexBuffer = CreateVertexBuffer((attribute as VertexAttribute<OpenTK.Vector3>).Values, OpenTK.Vector3.SizeInBytes, usageHint);
 
                     va.VertexBuffers[shaderAttribute.Location] =
                         new AttachedVertexBuffer(vertexBuffer, VertexAttributeComponentType.Float, 3);
                 }
                 else if (attribute.DataType == VertexAttributeType.FloatVector4)
                 {
-                    VertexBuffer vertexBuffer = CreateVertexBuffer((attribute as VertexAttribute<Vector4>).Values, Vector4.SizeInBytes, usageHint);
+                    VertexBuffer vertexBuffer = CreateVertexBuffer((attribute as VertexAttribute<OpenTK.Vector4>).Values, OpenTK.Vector4.SizeInBytes, usageHint);
 
                     va.VertexBuffers[shaderAttribute.Location] =
                         new AttachedVertexBuffer(vertexBuffer, VertexAttributeComponentType.Float, 4);

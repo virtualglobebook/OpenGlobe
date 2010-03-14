@@ -55,6 +55,7 @@
     <Compile Include="Geometry\VertexAttributes\VertexAttributeHalfFloatVector2.cs" />
     <Compile Include="Geometry\VertexAttributes\VertexAttributeHalfFloatVector3.cs" />
     <Compile Include="Geometry\VertexAttributes\VertexAttributeHalfFloatVector4.cs" />
+    <Compile Include="Half.cs" />
     <Compile Include="Interval.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tessellation\BoxTessellator.cs" />
