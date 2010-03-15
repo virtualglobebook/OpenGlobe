@@ -173,48 +173,57 @@ namespace MiniGlobe.Scene
         {
             if (_billboardsAddedOrRemoved)
             {
-                //
-                // Since billboards were added or removed, all billboards are 
-                // rewritten so dirty billboards are automatically cleaned.
-                //
-                _dirtyBillboards.Clear();
-                
-                //
-                // Create vertex array with appropriately sized vertex buffers
-                //
-                DisposeVertexArray();
-                CreateVertexArray(_billboards.Count);
-
-                //
-                // Write vertex buffers
-                //
-                Vector3S[] positions = new Vector3S[_billboards.Count];
-                for (int i = 0; i < _billboards.Count; ++i)
-                {
-                    Billboard b = _billboards[i];
-
-                    positions[i] = b.Position.ToVector3S();
-                    b.VertexBufferOffset = i;
-                    b.Dirty = false;
-                }
-                _positionBuffer.CopyFromSystemMemory(positions, 0);
-
-                _billboardsAddedOrRemoved = false;
+                UpdateAll();
             }
+            else if (_dirtyBillboards.Count != 0)
+            {
+                UpdateDirty();
+            }
+        }
 
-            //if (_dirtyBillboards.Count != 0)
-            //{
-            //    Vector3S[] dirtyPosition = new Vector3S[1];
-            //    foreach (Billboard b in _dirtyBillboards)
-            //    {
-            //        // TODO: Combine for performance
-            //        dirtyPosition[0] = b.Position.ToVector3S();
-            //        _positionBuffer.CopyFromSystemMemory(dirtyPosition, b.VertexBufferOffset * Vector3S.SizeInBytes);
+        private void UpdateAll()
+        {
+            //
+            // Since billboards were added or removed, all billboards are 
+            // rewritten so dirty billboards are automatically cleaned.
+            //
+            _dirtyBillboards.Clear();
 
-            //        b.Dirty = false;
-            //    }
-            //    _dirtyBillboards.Clear();
-            //}
+            //
+            // Create vertex array with appropriately sized vertex buffers
+            //
+            DisposeVertexArray();
+            CreateVertexArray(_billboards.Count);
+
+            //
+            // Write vertex buffers
+            //
+            Vector3S[] positions = new Vector3S[_billboards.Count];
+            for (int i = 0; i < _billboards.Count; ++i)
+            {
+                Billboard b = _billboards[i];
+
+                positions[i] = b.Position.ToVector3S();
+                b.VertexBufferOffset = i;
+                b.Dirty = false;
+            }
+            _positionBuffer.CopyFromSystemMemory(positions, 0);
+
+            _billboardsAddedOrRemoved = false;
+        }
+
+        private void UpdateDirty()
+        {
+            Vector3S[] dirtyPosition = new Vector3S[1];
+            foreach (Billboard b in _dirtyBillboards)
+            {
+                // TODO: Combine for performance
+                dirtyPosition[0] = b.Position.ToVector3S();
+                _positionBuffer.CopyFromSystemMemory(dirtyPosition, b.VertexBufferOffset * Vector3S.SizeInBytes);
+
+                b.Dirty = false;
+            }
+            _dirtyBillboards.Clear();
         }
 
         public void Render(SceneState sceneState)
@@ -278,6 +287,11 @@ namespace MiniGlobe.Scene
 
             if (b)
             {
+                if (billboard.Dirty)
+                {
+                    _dirtyBillboards.Remove(billboard);
+                }
+
                 _billboardsAddedOrRemoved = true;
                 RemoveBillboard(billboard);
             }

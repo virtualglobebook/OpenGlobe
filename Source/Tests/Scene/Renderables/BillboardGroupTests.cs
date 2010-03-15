@@ -89,6 +89,7 @@ namespace MiniGlobe.Scene
 
                 group.Add(b);
                 Assert.AreEqual(group, b.Group);
+                b.Position = Vector3D.UnitX;        // Make billboard dirty;
                 Assert.IsTrue(group.Remove(b));
                 Assert.IsNull(b.Group);
             }
