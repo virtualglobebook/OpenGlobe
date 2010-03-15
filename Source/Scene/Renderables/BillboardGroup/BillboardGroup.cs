@@ -13,7 +13,6 @@ using System.Collections.Generic;
 using MiniGlobe.Core;
 using MiniGlobe.Core.Geometry;
 using MiniGlobe.Renderer;
-using OpenTK;
 using System.Collections;
 
 namespace MiniGlobe.Scene
@@ -214,15 +213,34 @@ namespace MiniGlobe.Scene
 
         private void UpdateDirty()
         {
-            Vector3S[] dirtyPosition = new Vector3S[1];
-            foreach (Billboard b in _dirtyBillboards)
-            {
-                // TODO: Combine for performance
-                dirtyPosition[0] = b.Position.ToVector3S();
-                _positionBuffer.CopyFromSystemMemory(dirtyPosition, b.VertexBufferOffset * Vector3S.SizeInBytes);
+            // PERFORMANCE:  Sort by buffer offset
+            // PERFORMANCE:  Map buffer range
+            // PERFORMANCE:  Round robin multiple buffers
 
+            Vector3S[] positions = new Vector3S[_dirtyBillboards.Count];
+
+            int bufferOffset = _dirtyBillboards[0].VertexBufferOffset;
+            int previousBufferOffset = bufferOffset - 1;
+            int length = 0;
+
+            for (int i = 0; i < _dirtyBillboards.Count; ++i)
+            {
+                Billboard b = _dirtyBillboards[i];
+
+                if (previousBufferOffset != b.VertexBufferOffset - 1)
+                {
+                    _positionBuffer.CopyFromSystemMemory(positions, bufferOffset * Vector3S.SizeInBytes, length * Vector3S.SizeInBytes);
+
+                    bufferOffset = b.VertexBufferOffset;
+                    length = 0;
+                }
+
+                positions[length++] = b.Position.ToVector3S();
+                previousBufferOffset = b.VertexBufferOffset;
                 b.Dirty = false;
             }
+            _positionBuffer.CopyFromSystemMemory(positions, bufferOffset * Vector3S.SizeInBytes, length * Vector3S.SizeInBytes);
+
             _dirtyBillboards.Clear();
         }
 
