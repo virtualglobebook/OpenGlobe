@@ -24,6 +24,7 @@ namespace MiniGlobe.Scene
             Billboard b = new Billboard();
             b.Position = new Vector3D(0, 1, 2);
             Assert.AreEqual(new Vector3D(0, 1, 2), b.Position);
+            Assert.IsNull(b.Group);
         }
 
         [Test]
@@ -50,6 +51,7 @@ namespace MiniGlobe.Scene
             foreach (Billboard b in group)
             {
                 Assert.AreEqual(billboards[i++], b);
+                Assert.AreEqual(group, b.Group);
             }
 
             billboardGroup.Dispose();
@@ -74,6 +76,21 @@ namespace MiniGlobe.Scene
                 Billboard b = new Billboard() { Position = Vector3D.Zero };
                 billboardGroup.Group.Add(b);
                 billboardGroup.Group.Add(b);
+            }
+        }
+
+        [Test]
+        public void Remove()
+        {
+            using (BillboardGroupTest billboardGroup = new BillboardGroupTest())
+            {
+                BillboardGroup2 group = billboardGroup.Group;
+                Billboard b = new Billboard() { Position = Vector3D.Zero };
+
+                group.Add(b);
+                Assert.AreEqual(group, b.Group);
+                Assert.IsTrue(group.Remove(b));
+                Assert.IsNull(b.Group);
             }
         }
 

@@ -29,15 +29,19 @@ namespace MiniGlobe.Scene
             {
                 Dirty = true;
 
-                if (Owner != null)
+                if (Group != null)
                 {
-                    Owner.NotifyDirty(this);
+                    Group.NotifyDirty(this);
                 }
             }
         }
 
         internal bool Dirty { get; set; }
-        internal BillboardGroup2 Owner { get; set; }
+        public BillboardGroup2 Group 
+        { 
+            get; 
+            internal set; 
+        }
         internal int VertexBufferOffset { get; set; }
 
         private Vector3D _position;

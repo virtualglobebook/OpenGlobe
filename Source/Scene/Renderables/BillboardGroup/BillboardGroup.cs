@@ -171,11 +171,11 @@ namespace MiniGlobe.Scene
 
         private void Update()
         {
-            if (_billboardsAdded)
+            if (_billboardsAddedOrRemoved)
             {
                 //
-                // Since billboards were added, all billboards are rewritten
-                // so dirty billboards are automatically cleaned.
+                // Since billboards were added or removed, all billboards are 
+                // rewritten so dirty billboards are automatically cleaned.
                 //
                 _dirtyBillboards.Clear();
                 
@@ -199,7 +199,7 @@ namespace MiniGlobe.Scene
                 }
                 _positionBuffer.CopyFromSystemMemory(positions, 0);
 
-                _billboardsAdded = false;
+                _billboardsAddedOrRemoved = false;
             }
 
             //if (_dirtyBillboards.Count != 0)
@@ -254,9 +254,9 @@ namespace MiniGlobe.Scene
                 throw new ArgumentNullException("billboard");
             }
 
-            if (billboard.Owner != null)
+            if (billboard.Group != null)
             {
-                if (billboard.Owner != this)
+                if (billboard.Group != this)
                 {
                     throw new ArgumentException("billboard is already in another BillboardGroup.");
                 }
@@ -266,13 +266,24 @@ namespace MiniGlobe.Scene
                 }
             }
 
-            billboard.Owner = this;
+            billboard.Group = this;
 
             _billboards.Add(billboard);
-            _billboardsAdded = true;
+            _billboardsAddedOrRemoved = true;
         }
 
-        // TODO:  Remove()
+        public bool Remove(Billboard billboard)
+        {
+            bool b = _billboards.Remove(billboard);
+
+            if (b)
+            {
+                _billboardsAddedOrRemoved = true;
+                RemoveBillboard(billboard);
+            }
+
+            return b;
+        }
 
         public Billboard this[int index] 
         {
@@ -298,9 +309,7 @@ namespace MiniGlobe.Scene
         {
             foreach (Billboard b in _billboards)
             {
-                b.Dirty = false;
-                b.Owner = null;
-                b.VertexBufferOffset = 0;
+                RemoveBillboard(b);
             }
 
             _sp.Dispose();
@@ -321,6 +330,13 @@ namespace MiniGlobe.Scene
             {
                 _va.Dispose();
             }
+        }
+
+        private static void RemoveBillboard(Billboard billboard)
+        {
+            billboard.Dirty = false;
+            billboard.Group = null;
+            billboard.VertexBufferOffset = 0;
         }
 
         internal void NotifyDirty(Billboard billboard)
@@ -349,7 +365,7 @@ namespace MiniGlobe.Scene
         private readonly IList<Billboard> _billboards;
         private readonly IList<Billboard> _dirtyBillboards;
 
-        private bool _billboardsAdded;
+        private bool _billboardsAddedOrRemoved;
 
         private readonly Context _context;
         private readonly RenderState _renderState;
