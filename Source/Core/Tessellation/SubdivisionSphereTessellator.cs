@@ -29,7 +29,7 @@ namespace MiniGlobe.Core.Tessellation
         {
             public IList<Vector3D> Positions { get; set; }
             public IList<Vector3h> Normals { get; set; }
-            public IList<Vector2h> TextureCoordinate { get; set; }
+            public IList<Vector2H> TextureCoordinate { get; set; }
             public IndicesInt Indices { get; set; }
         }
 

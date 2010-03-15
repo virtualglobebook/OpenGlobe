@@ -18,152 +18,87 @@ namespace MiniGlobe.Core
     /// <summary>
     /// A set of 2-dimensional cartesian coordinates where the two components,
     /// <see cref="X"/> and <see cref="Y"/>, are represented as
-    /// single-precision (32-bit) floating point numbers.
+    /// half-precision (16-bit) floating point numbers.
     /// </summary>
     [Serializable]
     [StructLayout(LayoutKind.Sequential)]
-    public struct Vector2S : IEquatable<Vector2S>
+    public struct Vector2H : IEquatable<Vector2H>
     {
-        public static readonly int SizeInBytes = Marshal.SizeOf(typeof(Vector2S));
+        public static readonly int SizeInBytes = Marshal.SizeOf(typeof(Vector2H));
 
-        public static Vector2S Zero
+        public static Vector2H Zero
         {
-            get { return new Vector2S(0.0f, 0.0f); }
+            get { return new Vector2H(0.0f, 0.0f); }
         }
 
-        public static Vector2S UnitX
+        public static Vector2H UnitX
         {
-            get { return new Vector2S(1.0f, 0.0f); }
+            get { return new Vector2H(1.0f, 0.0f); }
         }
 
-        public static Vector2S UnitY
+        public static Vector2H UnitY
         {
-            get { return new Vector2S(0.0f, 1.0f); }
+            get { return new Vector2H(0.0f, 1.0f); }
         }
 
-        public static Vector2S Undefined
+        public static Vector2H Undefined
         {
-            get { return new Vector2S(float.NaN, float.NaN); }
+            get { return new Vector2H(Half.NaN, Half.NaN); }
         }
 
-        public Vector2S(float x, float y)
+        public Vector2H(Half x, Half y)
         {
             _x = x;
             _y = y;
         }
 
-        public float X
+        public Vector2H(float x, float y)
+        {
+            _x = new Half(x);
+            _y = new Half(y);
+        }
+
+        public Vector2H(double x, double y)
+        {
+            _x = new Half(x);
+            _y = new Half(y);
+        }
+
+        public Half X
         {
             get { return _x; }
         }
 
-        public float Y
+        public Half Y
         {
             get { return _y; }
         }
 
-        public float MagnitudeSquared
-        {
-            get { return _x * _x + _y * _y; }
-        }
-
-        public float Magnitude
-        {
-            get { return (float)Math.Sqrt(MagnitudeSquared); }
-        }
-
         public bool IsUndefined
         {
-            get { return float.IsNaN(_x); }
+            get { return _x.IsNaN; }
         }
 
-        public Vector2S Normalize(out float magnitude)
-        {
-            magnitude = Magnitude;
-            return this / magnitude;
-        }
-
-        public Vector2S Normalize()
-        {
-            float magnitude;
-            return Normalize(out magnitude);
-        }
-
-        public float Dot(Vector2S other)
-        {
-            return X * other.X + Y * other.Y;
-        }
-
-        public Vector2S Add(Vector2S addend)
-        {
-            return this + addend;
-        }
-
-        public Vector2S Subtract(Vector2S subtrahend)
-        {
-            return this - subtrahend;
-        }
-
-        public Vector2S Multiply(float scalar)
-        {
-            return this * scalar;
-        }
-
-        public Vector2S Divide(float scalar)
-        {
-            return this / scalar;
-        }
-
-        public bool Equals(Vector2S other)
+        public bool Equals(Vector2H other)
         {
             return _x == other._x && _y == other._y;
         }
 
-        public static Vector2S operator -(Vector2S vector)
-        {
-            return new Vector2S(-vector.X, -vector.Y);
-        }
-
-        public static Vector2S operator +(Vector2S left, Vector2S right)
-        {
-            return new Vector2S(left._x + right._x, left._y + right._y);
-        }
-
-        public static Vector2S operator -(Vector2S left, Vector2S right)
-        {
-            return new Vector2S(left._x - right._x, left._y - right._y);
-        }
-
-        public static Vector2S operator *(Vector2S left, float right)
-        {
-            return new Vector2S(left._x * right, left._y * right);
-        }
-
-        public static Vector2S operator *(float left, Vector2S right)
-        {
-            return right * left;
-        }
-
-        public static Vector2S operator /(Vector2S left, float right)
-        {
-            return new Vector2S(left._x / right, left._y / right);
-        }
-
-        public static bool operator ==(Vector2S left, Vector2S right)
+        public static bool operator ==(Vector2H left, Vector2H right)
         {
             return left.Equals(right);
         }
 
-        public static bool operator !=(Vector2S left, Vector2S right)
+        public static bool operator !=(Vector2H left, Vector2H right)
         {
             return !left.Equals(right);
         }
 
         public override bool Equals(object obj)
         {
-            if (obj is Vector2S)
+            if (obj is Vector2H)
             {
-                return Equals((Vector2S)obj);
+                return Equals((Vector2H)obj);
             }
             return false;
         }
@@ -178,7 +113,7 @@ namespace MiniGlobe.Core
             return _x.GetHashCode() ^ _y.GetHashCode();
         }
 
-        private readonly float _x;
-        private readonly float _y;
+        private readonly Half _x;
+        private readonly Half _y;
     }
 }

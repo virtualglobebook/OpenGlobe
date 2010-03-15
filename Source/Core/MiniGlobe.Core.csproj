@@ -68,6 +68,7 @@
     <Compile Include="Tessellation\SubdivisionUtility.cs" />
     <Compile Include="Trig.cs" />
     <Compile Include="Vector2D.cs" />
+    <Compile Include="Vector2H.cs" />
     <Compile Include="Vector2S.cs" />
     <Compile Include="Vector3D.cs" />
     <Compile Include="Vector4D.cs" />

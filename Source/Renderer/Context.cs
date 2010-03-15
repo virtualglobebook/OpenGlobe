@@ -155,14 +155,14 @@ namespace MiniGlobe.Renderer
                 }
                 else if (attribute.DataType == VertexAttributeType.HalfFloat)
                 {
-                    VertexBuffer vertexBuffer = CreateVertexBuffer((attribute as VertexAttribute<Half>).Values, MiniGlobe.Core.Half.SizeInBytes, usageHint);
+                    VertexBuffer vertexBuffer = CreateVertexBuffer((attribute as VertexAttribute<Half>).Values, Half.SizeInBytes, usageHint);
 
                     va.VertexBuffers[shaderAttribute.Location] =
                         new AttachedVertexBuffer(vertexBuffer, VertexAttributeComponentType.HalfFloat, 1);
                 }
                 else if (attribute.DataType == VertexAttributeType.HalfFloatVector2)
                 {
-                    VertexBuffer vertexBuffer = CreateVertexBuffer((attribute as VertexAttribute<OpenTK.Vector2h>).Values, OpenTK.Vector2h.SizeInBytes, usageHint);
+                    VertexBuffer vertexBuffer = CreateVertexBuffer((attribute as VertexAttribute<Vector2H>).Values, Vector2H.SizeInBytes, usageHint);
 
                     va.VertexBuffers[shaderAttribute.Location] =
                         new AttachedVertexBuffer(vertexBuffer, VertexAttributeComponentType.HalfFloat, 2);

@@ -61,7 +61,7 @@ namespace MiniGlobe.Core.Tessellation
                 normals = normalsAttribute.Values;
             }
 
-            IList<Vector2h> textureCoordinates = null;
+            IList<Vector2H> textureCoordinates = null;
             if ((vertexAttributes & GeographicGridEllipsoidVertexAttributes.TextureCoordinate) == GeographicGridEllipsoidVertexAttributes.TextureCoordinate)
             {
                 VertexAttributeHalfFloatVector2 textureCoordinateAttribute = new VertexAttributeHalfFloatVector2("textureCoordinate", numberOfVertices);
