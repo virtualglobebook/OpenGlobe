@@ -7,7 +7,6 @@
 //
 #endregion
 
-using OpenTK;
 using System;
 
 namespace MiniGlobe.Core.Tessellation

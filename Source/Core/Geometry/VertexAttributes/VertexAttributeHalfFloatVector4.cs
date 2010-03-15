@@ -7,11 +7,9 @@
 //
 #endregion
 
-using OpenTK;
-
 namespace MiniGlobe.Core.Geometry
 {
-    public class VertexAttributeHalfFloatVector4 : VertexAttribute<Vector4h>
+    public class VertexAttributeHalfFloatVector4 : VertexAttribute<Vector4H>
     {
         public VertexAttributeHalfFloatVector4(string name)
             : base(name, VertexAttributeType.HalfFloatVector4)

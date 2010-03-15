@@ -71,8 +71,10 @@
     <Compile Include="Vector2H.cs" />
     <Compile Include="Vector2S.cs" />
     <Compile Include="Vector3D.cs" />
+    <Compile Include="Vector3H.cs" />
     <Compile Include="Vector3S.cs" />
     <Compile Include="Vector4D.cs" />
+    <Compile Include="Vector4H.cs" />
     <Compile Include="Vector4S.cs" />
   </ItemGroup>
   <ItemGroup>

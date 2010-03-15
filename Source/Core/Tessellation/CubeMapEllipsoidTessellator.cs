@@ -7,7 +7,6 @@
 //
 #endregion
 
-using OpenTK;
 using System;
 using System.Collections.Generic;
 using MiniGlobe.Core.Geometry;
@@ -30,7 +29,7 @@ namespace MiniGlobe.Core.Tessellation
             public Ellipsoid Ellipsoid { get; set; }
             public int NumberOfPartitions { get; set; }
             public IList<Vector3D> Positions { get; set; }
-            public IList<Vector3h> Normals { get; set; }
+            public IList<Vector3H> Normals { get; set; }
             public IList<Vector2H> TextureCoordinate { get; set; }
             public IndicesInt Indices { get; set; }
         }
@@ -239,7 +238,7 @@ namespace MiniGlobe.Core.Tessellation
 
                     if (CubeMapMesh.Normals != null)
                     {
-                        CubeMapMesh.Normals.Add(new Vector3h((float)deticSurfaceNormal.X, (float)deticSurfaceNormal.Y, (float)deticSurfaceNormal.Z));
+                        CubeMapMesh.Normals.Add(deticSurfaceNormal.ToVector3H());
                     }
 
                     if (CubeMapMesh.TextureCoordinate != null)

@@ -7,7 +7,6 @@
 //
 #endregion
 
-using OpenTK;
 using System;
 using System.Collections.Generic;
 using MiniGlobe.Core.Geometry;
@@ -53,7 +52,7 @@ namespace MiniGlobe.Core.Tessellation
             IndicesInt indices = new IndicesInt(3 * NumberOfTriangles(numberOfSlicePartitions, numberOfStackPartitions));
             mesh.Indices = indices;
 
-            IList<Vector3h> normals = null;
+            IList<Vector3H> normals = null;
             if ((vertexAttributes & GeographicGridEllipsoidVertexAttributes.Normal) == GeographicGridEllipsoidVertexAttributes.Normal)
             {
                 VertexAttributeHalfFloatVector3 normalsAttribute = new VertexAttributeHalfFloatVector3("normal", numberOfVertices);
@@ -112,7 +111,7 @@ namespace MiniGlobe.Core.Tessellation
 
                     if (normals != null)
                     {
-                        normals.Add(new Vector3h((float)deticSurfaceNormal.X, (float)deticSurfaceNormal.Y, (float)deticSurfaceNormal.Z));
+                        normals.Add(deticSurfaceNormal.ToVector3H());
                     }
 
                     if (textureCoordinates != null)

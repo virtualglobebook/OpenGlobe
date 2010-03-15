@@ -7,7 +7,6 @@
 //
 #endregion
 
-using OpenTK;
 using System;
 using System.Collections.Generic;
 using MiniGlobe.Core.Geometry;
@@ -29,7 +28,7 @@ namespace MiniGlobe.Core.Tessellation
         {
             public Ellipsoid Ellipsoid { get; set; }
             public IList<Vector3D> Positions { get; set; }
-            public IList<Vector3h> Normals { get; set; }
+            public IList<Vector3H> Normals { get; set; }
             public IList<Vector2H> TextureCoordinate { get; set; }
             public IndicesInt Indices { get; set; }
         }
@@ -107,10 +106,10 @@ namespace MiniGlobe.Core.Tessellation
 
                 if (subdivisionMesh.Normals != null)
                 {
-                    subdivisionMesh.Normals.Add(new Vector3h((float)d0.X, (float)d0.Y, (float)d0.Z));
-                    subdivisionMesh.Normals.Add(new Vector3h((float)d1.X, (float)d1.Y, (float)d1.Z));
-                    subdivisionMesh.Normals.Add(new Vector3h((float)d2.X, (float)d2.Y, (float)d2.Z));
-                    subdivisionMesh.Normals.Add(new Vector3h((float)d3.X, (float)d3.Y, (float)d3.Z));
+                    subdivisionMesh.Normals.Add(d0.ToVector3H());
+                    subdivisionMesh.Normals.Add(d1.ToVector3H());
+                    subdivisionMesh.Normals.Add(d2.ToVector3H());
+                    subdivisionMesh.Normals.Add(d3.ToVector3H());
                 }
 
                 if (subdivisionMesh.TextureCoordinate != null)
@@ -159,9 +158,9 @@ namespace MiniGlobe.Core.Tessellation
 
                     if (subdivisionMesh.Normals != null)
                     {
-                        subdivisionMesh.Normals.Add(new Vector3h((float)d01.X, (float)d01.Y, (float)d01.Z));
-                        subdivisionMesh.Normals.Add(new Vector3h((float)d12.X, (float)d12.Y, (float)d12.Z));
-                        subdivisionMesh.Normals.Add(new Vector3h((float)d20.X, (float)d20.Y, (float)d20.Z));
+                        subdivisionMesh.Normals.Add(d01.ToVector3H());
+                        subdivisionMesh.Normals.Add(d12.ToVector3H());
+                        subdivisionMesh.Normals.Add(d20.ToVector3H());
                     }
 
                     if (subdivisionMesh.TextureCoordinate != null)

@@ -7,7 +7,6 @@
 //
 #endregion
 
-using OpenTK;
 using System;
 using System.Collections.Generic;
 using MiniGlobe.Core.Geometry;
@@ -28,7 +27,7 @@ namespace MiniGlobe.Core.Tessellation
         internal class SubdivisionMesh
         {
             public IList<Vector3D> Positions { get; set; }
-            public IList<Vector3h> Normals { get; set; }
+            public IList<Vector3H> Normals { get; set; }
             public IList<Vector2H> TextureCoordinate { get; set; }
             public IndicesInt Indices { get; set; }
         }
@@ -93,10 +92,10 @@ namespace MiniGlobe.Core.Tessellation
 
             if (subdivisionMesh.Normals != null)
             {
-                subdivisionMesh.Normals.Add(new Vector3h((float)p0.X, (float)p0.Y, (float)p0.Z));
-                subdivisionMesh.Normals.Add(new Vector3h((float)p1.X, (float)p1.Y, (float)p1.Z));
-                subdivisionMesh.Normals.Add(new Vector3h((float)p2.X, (float)p2.Y, (float)p2.Z));
-                subdivisionMesh.Normals.Add(new Vector3h((float)p3.X, (float)p3.Y, (float)p3.Z));
+                subdivisionMesh.Normals.Add(p0.ToVector3H());
+                subdivisionMesh.Normals.Add(p1.ToVector3H());
+                subdivisionMesh.Normals.Add(p2.ToVector3H());
+                subdivisionMesh.Normals.Add(p3.ToVector3H());
             }
 
             if (subdivisionMesh.TextureCoordinate != null)
@@ -134,9 +133,9 @@ namespace MiniGlobe.Core.Tessellation
 
                 if (subdivisionMesh.Normals != null)
                 {
-                    subdivisionMesh.Normals.Add(new Vector3h((float)p01.X, (float)p01.Y, (float)p01.Z));
-                    subdivisionMesh.Normals.Add(new Vector3h((float)p12.X, (float)p12.Y, (float)p12.Z));
-                    subdivisionMesh.Normals.Add(new Vector3h((float)p20.X, (float)p20.Y, (float)p20.Z));
+                    subdivisionMesh.Normals.Add(p01.ToVector3H());
+                    subdivisionMesh.Normals.Add(p12.ToVector3H());
+                    subdivisionMesh.Normals.Add(p20.ToVector3H());
                 }
 
                 if (subdivisionMesh.TextureCoordinate != null)

@@ -242,6 +242,11 @@ namespace MiniGlobe.Core
             return new Vector3S((float)_x, (float)_y, (float)_z);
         }
 
+        public Vector3H ToVector3H()
+        {
+            return new Vector3H(_x, _y, _z);
+        }
+
         private readonly double _x;
         private readonly double _y;
         private readonly double _z;
