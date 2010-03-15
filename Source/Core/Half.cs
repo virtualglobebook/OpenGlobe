@@ -67,40 +67,80 @@ using System;
 
 namespace MiniGlobe.Core
 {
+    /// <summary>
+    /// A half-precision (16-bit) floating-point number.  This format has
+    /// 1 sign bit, 5 exponent bits, and 11 significand bits (10 explicitly
+    /// stored).  It conforms to the IEEE 754-2008 binary16 format. 
+    /// </summary>
     [Serializable]
     public struct Half : IEquatable<Half>, IComparable<Half>
     {
-        /// <summary>Returns true if the Half is zero.</summary>
+        /// <summary>
+        /// Represents a value that is not-a-number (NaN).
+        /// </summary>
+        public static readonly Half NaN = new Half(0x7C01);
+
+        /// <summary>
+        /// Represents positive infinity.
+        /// </summary>
+        public static readonly Half PositiveInfinity = new Half(31744);
+
+        /// <summary>
+        /// Represents negative infinity.
+        /// </summary>
+        public static readonly Half NegativeInfinity = new Half(64512);
+
+        /// <summary>
+        /// Determines if this instance is zero.  It returns <see langword="true" />
+        /// if this instance is either positive or negative zero.
+        /// </summary>
         public bool IsZero { get { return (_bits == 0) || (_bits == 0x8000); } }
 
-        /// <summary>Returns true if the Half represents Not A Number (NaN)</summary>
+        /// <summary>
+        /// Determines if this instance is Not-A-Number (NaN).
+        /// </summary>
         public bool IsNaN { get { return (((_bits & 0x7C00) == 0x7C00) && (_bits & 0x03FF) != 0x0000); } }
 
-        /// <summary>Returns true if the Half represents positive infinity.</summary>
+        /// <summary>
+        /// Determines if this instance represents positive infinity.
+        /// </summary>
         public bool IsPositiveInfinity { get { return (_bits == 31744); } }
 
-        /// <summary>Returns true if the Half represents negative infinity.</summary>
+        /// <summary>
+        /// Determines if this instance represents negative infinity.
+        /// </summary>
         public bool IsNegativeInfinity { get { return (_bits == 64512); } }
 
         /// <summary>
-        /// The new Half instance will convert the parameter into 16-bit half-precision floating-point.
+        /// Determines if this instance represents either positive or negative infinity.
         /// </summary>
-        /// <param name="f">32-bit single-precision floating-point number.</param>
-        public Half(float f) : this((double)f)
+        public bool IsInfinity { get { return (_bits & 31744) == 31744; } }
+
+        /// <summary>
+        /// Initializes a new instance from a 32-bit single-precision floating-point number.
+        /// </summary>
+        /// <param name="value">A 32-bit, single-precision floating-point number.</param>
+        public Half(float value) : this((double)value)
         {
         }
 
         /// <summary>
-        /// The new Half instance will convert the parameter into 16-bit half-precision floating-point.
+        /// Initializes a new instance from a 64-bit double-precision floating-point number.
         /// </summary>
-        /// <param name="d">64-bit double-precision floating-point number.</param>
-        public Half(double d)
+        /// <param name="value">A 64-bit, double-precision floating-point number.</param>
+        public Half(double value)
         {
-            _bits = DoubleToHalf(BitConverter.DoubleToInt64Bits(d));
+            _bits = DoubleToHalf(BitConverter.DoubleToInt64Bits(value));
         }
 
-        /// <summary>Converts the 16-bit half to 32-bit floating-point.</summary>
-        /// <returns>A single-precision floating-point number.</returns>
+        private Half(ushort value)
+        {
+            _bits = value;
+        }
+
+        /// <summary>
+        /// Converts this instance to a 32-bit, single-precision floating-point number.</summary>
+        /// <returns>The 32-bit, single-precision floating-point number.</returns>
         public float ToSingle()
         {
             // If it's problematic, this heap allocation can be eliminated by replacing
@@ -109,67 +149,56 @@ namespace MiniGlobe.Core
             return BitConverter.ToSingle(bytes, 0);
         }
 
-        /// <summary>Converts the 16-bit half to 64-bit floating-point.</summary>
-        /// <returns>A double-precision floating-point number.</returns>
+        /// <summary>
+        /// Converts this instance to a 64-bit, double-precision floating-point number.</summary>
+        /// <returns>The 64-bit, double-precision floating-point number.</returns>
         public double ToDouble()
         {
             return ToSingle();
         }
 
         /// <summary>
-        /// Converts a System.Single to a OpenTK.Half.
+        /// Converts a 32-bit, single-precision, floating-point number to a 16-bit,
+        /// half-precision, floating-point number.
         /// </summary>
-        /// <param name="f">The value to convert.
-        /// A <see cref="System.Single"/>
-        /// </param>
-        /// <returns>The result of the conversion.
-        /// A <see cref="Half"/>
-        /// </returns>
-        public static explicit operator Half(float f)
+        /// <param name="value">The value to convert.</param>
+        /// <returns>The result of the conversion.</returns>
+        public static explicit operator Half(float value)
         {
-            return new Half(f);
+            return new Half(value);
         }
 
         /// <summary>
-        /// Converts a System.Double to a OpenTK.Half.
+        /// Converts a 64-bit, double-precision, floating-point number to a 16-bit,
+        /// half-precision, floating-point number.
         /// </summary>
-        /// <param name="d">The value to convert.
-        /// A <see cref="System.Double"/>
-        /// </param>
-        /// <returns>The result of the conversion.
-        /// A <see cref="Half"/>
-        /// </returns>
-        public static explicit operator Half(double d)
+        /// <param name="value">The value to convert.</param>
+        /// <returns>The result of the conversion.</returns>
+        public static explicit operator Half(double value)
         {
-            return new Half(d);
+            return new Half(value);
         }
 
         /// <summary>
-        /// Converts a <see cref="Half"/> to a <see cref="Single"/>.
+        /// Converts a 16-bit, half-precision, floating-point number to a 
+        /// 32-bit, single-precision, floating-point number.
         /// </summary>
-        /// <param name="h">The value to convert.
-        /// A <see cref="Half"/>
-        /// </param>
-        /// <returns>The result of the conversion.
-        /// A <see cref="System.Single"/>
-        /// </returns>
-        public static implicit operator float(Half h)
+        /// <param name="value">The value to convert.</param>
+        /// <returns>The result of the conversion.</returns>
+        public static implicit operator float(Half value)
         {
-            return h.ToSingle();
+            return value.ToSingle();
         }
 
         /// <summary>
-        /// Converts a <see cref="Half"/> a <see cref="Double"/>.
+        /// Converts a 16-bit, half-precision, floating-point number to a
+        /// 64-bit, double-precision, floating-point number.
         /// </summary>
-        /// <param name="h">The value to convert.
-        /// A <see cref="Half"/>
-        /// </param>
-        /// <returns>The result of the conversion.
-        /// A <see cref="System.Double"/>
-        /// </returns>
-        public static implicit operator double(Half h)
+        /// <param name="value">The value to convert.</param>
+        /// <returns>The result of the conversion.</returns>
+        public static implicit operator double(Half value)
         {
-            return h.ToDouble();
+            return value.ToDouble();
         }
 
         private static ushort DoubleToHalf(long bits)
@@ -316,48 +345,41 @@ namespace MiniGlobe.Core
             return (sign << 31) | (exponent << 23) | mantissa;
         }
 
-        /// <summary>The size in bytes for an instance of the Half struct.</summary>
-        public static readonly Int32 SizeInBytes = 2;
-
-        /// <summary>Smallest positive half</summary>
-        public static readonly Single MinValue = 5.96046448e-08f;
-
-        /// <summary>Smallest positive normalized half</summary>
-        public static readonly Single MinNormalizedValue = 6.10351562e-05f;
-
-        /// <summary>Largest positive half</summary>
-        public static readonly Single MaxValue = 65504.0f;
-
-        /// <summary>Smallest positive e for which half (1.0 + e) != half (1.0)</summary>
-        public static readonly Single Epsilon = 0.00097656f;
-
-        const int maxUlps = 1;
+        /// <summary>
+        /// The size, in bytes, of an instance of the <see cref="Half"/> type.
+        /// </summary>
+        public static readonly int SizeInBytes = 2;
 
         /// <summary>
-        /// Returns a value indicating whether this instance is equal to a specified OpenTK.Half value.
+        /// The smallest positive <see cref="Half"/>.
         /// </summary>
-        /// <param name="other">OpenTK.Half object to compare to this instance..</param>
-        /// <returns>True, if other is equal to this instance; false otherwise.</returns>
+        public static readonly float MinValue = 5.96046448e-08f;
+
+        /// <summary>
+        /// The smallest positive normalized <see cref="Half"/>.
+        /// </summary>
+        public static readonly float MinNormalizedValue = 6.10351562e-05f;
+
+        /// <summary>
+        /// The largest positive <see cref="Half"/>.
+        /// </summary>
+        public static readonly float MaxValue = 65504.0f;
+
+        /// <summary>
+        /// Smallest positive value e for which <see cref="Half"/> (1.0 + e) != <see cref="Half"/> (1.0).
+        /// </summary>
+        public static readonly float Epsilon = 0.00097656f;
+
+        /// <summary>
+        /// Returns a value indicating whether this instance is equal to another
+        /// instance.
+        /// </summary>
+        /// <param name="other">The other instance to which to compare this instance.</param>
+        /// <returns>
+        /// <see langword="true" /> if this instance exactly equals another; otherwise <see langword="false" />.</returns>
         public bool Equals(Half other)
         {
-            short aInt, bInt;
-            unchecked { aInt = (short)other._bits; }
-            unchecked { bInt = (short)this._bits; }
-
-            // Make aInt lexicographically ordered as a twos-complement int
-            if (aInt < 0)
-                aInt = (short)(0x8000 - aInt);
-
-            // Make bInt lexicographically ordered as a twos-complement int
-            if (bInt < 0)
-                bInt = (short)(0x8000 - bInt);
-
-            short intDiff = System.Math.Abs((short)(aInt - bInt));
-
-            if (intDiff <= maxUlps)
-                return true;
-
-            return false;
+            return ToSingle().Equals(other.ToSingle());
         }
 
         /// <summary>
@@ -369,27 +391,33 @@ namespace MiniGlobe.Core
         /// <param name="other">A half-precision floating-point number to compare.</param>
         /// <returns>
         /// A signed number indicating the relative values of this instance and value. If the number is:
-        /// <para>Less than zero, then this instance is less than other, or this instance is not a number
-        /// (OpenTK.Half.NaN) and other is a number.</para>
-        /// <para>Zero: this instance is equal to value, or both this instance and other
-        /// are not a number (OpenTK.Half.NaN), OpenTK.Half.PositiveInfinity, or
-        /// OpenTK.Half.NegativeInfinity.</para>
-        /// <para>Greater than zero: this instance is greater than othrs, or this instance is a number
-        /// and other is not a number (OpenTK.Half.NaN).</para>
+        /// <para>
+        /// Less than zero, then this instance is less than other, or this instance is not a number
+        /// (<see cref="NaN"/>) and other is a number.
+        /// </para>
+        /// <para>
+        /// Zero: this instance is equal to value, or both this instance and other
+        /// are not a number (<see cref="NaN"/>), <see cref="PositiveInfinity"/>, or
+        /// <see cref="NegativeInfinity"/>.
+        /// </para>
+        /// <para>
+        /// Greater than zero: this instance is greater than othrs, or this instance is a number
+        /// and other is not a number (<see cref="NaN"/>).
+        /// </para>
         /// </returns>
         public int CompareTo(Half other)
         {
             return ToSingle().CompareTo(other.ToSingle());
         }
 
-        /// <summary>Converts this Half into a human-legible string representation.</summary>
+        /// <summary>Converts this instance into a human-legible string representation.</summary>
         /// <returns>The string representation of this instance.</returns>
         public override string ToString()
         {
             return ToSingle().ToString();
         }
 
-        /// <summary>Converts this Half into a human-legible string representation.</summary>
+        /// <summary>Converts this instance into a human-legible string representation.</summary>
         /// <param name="format">Formatting for the output string.</param>
         /// <param name="formatProvider">Culture-specific formatting information.</param>
         /// <returns>The string representation of this instance.</returns>
@@ -400,7 +428,7 @@ namespace MiniGlobe.Core
 
         /// <summary>Converts the string representation of a number to a half-precision floating-point equivalent.</summary>
         /// <param name="s">String representation of the number to convert.</param>
-        /// <returns>A new Half instance.</returns>
+        /// <returns>A new <see cref="Half"/> instance.</returns>
         public static Half Parse(string s)
         {
             return new Half(Double.Parse(s));
@@ -408,18 +436,18 @@ namespace MiniGlobe.Core
 
         /// <summary>Converts the string representation of a number to a half-precision floating-point equivalent.</summary>
         /// <param name="s">String representation of the number to convert.</param>
-        /// <param name="style">Specifies the format of s.</param>
+        /// <param name="style">Specifies the format of <paramref name="s"/>.</param>
         /// <param name="provider">Culture-specific formatting information.</param>
-        /// <returns>A new Half instance.</returns>
+        /// <returns>A new <see cref="Half"/> instance.</returns>
         public static Half Parse(string s, System.Globalization.NumberStyles style, IFormatProvider provider)
         {
             return new Half(Double.Parse(s, style, provider));
         }
 
-        /// <summary>Converts the string representation of a number to a half-precision floating-point equivalent. Returns success.</summary>
+        /// <summary>Converts the string representation of a number to a half-precision floating-point equivalent.</summary>
         /// <param name="s">String representation of the number to convert.</param>
-        /// <param name="result">The Half instance to write to.</param>
-        /// <returns>Success.</returns>
+        /// <param name="result">The <see cref="Half"/> instance to write to.</param>
+        /// <returns><see langword="true" /> true if parsing succeeded; otherwise <see langword="false"/>.</returns>
         public static bool TryParse(string s, out Half result)
         {
             double f;
@@ -428,12 +456,12 @@ namespace MiniGlobe.Core
             return b;
         }
 
-        /// <summary>Converts the string representation of a number to a half-precision floating-point equivalent. Returns success.</summary>
+        /// <summary>Converts the string representation of a number to a half-precision floating-point equivalent.</summary>
         /// <param name="s">String representation of the number to convert.</param>
-        /// <param name="style">Specifies the format of s.</param>
+        /// <param name="style">Specifies the format of <paramref name="s"/>.</param>
         /// <param name="provider">Culture-specific formatting information.</param>
         /// <param name="result">The Half instance to write to.</param>
-        /// <returns>Success.</returns>
+        /// <returns><see langword="true" /> true if parsing succeeded; otherwise <see langword="false"/>.</returns>
         public static bool TryParse(string s, System.Globalization.NumberStyles style, IFormatProvider provider, out Half result)
         {
             double f;

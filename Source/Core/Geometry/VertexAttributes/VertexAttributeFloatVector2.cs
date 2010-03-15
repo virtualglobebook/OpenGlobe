@@ -7,8 +7,6 @@
 //
 #endregion
 
-using OpenTK;
-
 namespace MiniGlobe.Core.Geometry
 {
     public class VertexAttributeFloatVector2 : VertexAttribute<Vector2S>

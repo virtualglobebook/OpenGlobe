@@ -48,6 +48,7 @@
     <Compile Include="Core\Geodetic3DTests.cs" />
     <Compile Include="Core\Geometry\EllipsoidTests.cs" />
     <Compile Include="Core\Geometry\GeometryTests.cs" />
+    <Compile Include="Core\HalfTests.cs" />
     <Compile Include="Core\SystemTests.cs" />
     <Compile Include="Core\Tessellation\TessellationTests.cs" />
     <Compile Include="Core\Vector2DTests.cs" />
