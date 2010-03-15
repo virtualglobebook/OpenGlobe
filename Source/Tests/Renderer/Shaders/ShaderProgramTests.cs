@@ -160,19 +160,19 @@ namespace MiniGlobe.Renderer
             exampleVec2.Value = new Vector2S(1, 0.5f);
             Assert.AreEqual(new Vector2S(1, 0.5f), exampleVec2.Value);
 
-            Uniform<Vector3> exampleVec3 = sp.Uniforms["exampleVec3"] as Uniform<Vector3>;
+            Uniform<Vector3S> exampleVec3 = sp.Uniforms["exampleVec3"] as Uniform<Vector3S>;
             Assert.AreEqual("exampleVec3", exampleVec3.Name);
             Assert.AreEqual(UniformType.FloatVector3, exampleVec3.DataType);
-            Assert.AreEqual(new Vector3(), exampleVec3.Value);
-            exampleVec3.Value = new Vector3(1, 0, 0);
-            Assert.AreEqual(new Vector3(1, 0, 0), exampleVec3.Value);
+            Assert.AreEqual(new Vector3S(), exampleVec3.Value);
+            exampleVec3.Value = new Vector3S(1, 0, 0);
+            Assert.AreEqual(new Vector3S(1, 0, 0), exampleVec3.Value);
 
-            Uniform<Vector4> exampleVec4 = sp.Uniforms["exampleVec4"] as Uniform<Vector4>;
+            Uniform<Vector4S> exampleVec4 = sp.Uniforms["exampleVec4"] as Uniform<Vector4S>;
             Assert.AreEqual("exampleVec4", exampleVec4.Name);
             Assert.AreEqual(UniformType.FloatVector4, exampleVec4.DataType);
-            Assert.AreEqual(new Vector4(), exampleVec4.Value);
-            exampleVec4.Value = new Vector4(1, 0, 0, 0);
-            Assert.AreEqual(new Vector4(1, 0, 0, 0), exampleVec4.Value);
+            Assert.AreEqual(new Vector4S(), exampleVec4.Value);
+            exampleVec4.Value = new Vector4S(1, 0, 0, 0);
+            Assert.AreEqual(new Vector4S(1, 0, 0, 0), exampleVec4.Value);
 
             ///////////////////////////////////////////////////////////////////
 

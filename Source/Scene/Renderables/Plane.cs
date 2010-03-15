@@ -101,18 +101,18 @@ namespace MiniGlobe.Scene
             _halfLineWidth = _lineSP.Uniforms["u_halfLineWidth"] as Uniform<float>;
             OutlineWidth = 1;
 
-            _lineColorUniform = _lineSP.Uniforms["u_color"] as Uniform<Vector3>;
+            _lineColorUniform = _lineSP.Uniforms["u_color"] as Uniform<Vector3S>;
             OutlineColor = Color.Gray;
 
-            Vector3[] positions = new Vector3[] 
+            Vector3S[] positions = new Vector3S[] 
             { 
-                Conversion.ToVector3(centerOrigin - x - y), 
-                Conversion.ToVector3(centerOrigin + x - y), 
-                Conversion.ToVector3(centerOrigin + x + y), 
-                Conversion.ToVector3(centerOrigin - x + y)
+                (centerOrigin - x - y).ToVector3S(), 
+                (centerOrigin + x - y).ToVector3S(), 
+                (centerOrigin + x + y).ToVector3S(), 
+                (centerOrigin - x + y).ToVector3S()
             };
 
-            VertexBuffer positionBuffer = Device.CreateVertexBuffer(BufferHint.StaticDraw, positions.Length * Vector3.SizeInBytes);
+            VertexBuffer positionBuffer = Device.CreateVertexBuffer(BufferHint.StaticDraw, positions.Length * Vector3S.SizeInBytes);
             positionBuffer.CopyFromSystemMemory(positions);
 
             ///////////////////////////////////////////////////////////////////
@@ -148,7 +148,7 @@ namespace MiniGlobe.Scene
                   }";
             _fillSP = Device.CreateShaderProgram(fillVS, fillFS);
 
-            _fillColorUniform = _fillSP.Uniforms["u_color"] as Uniform<Vector3>;
+            _fillColorUniform = _fillSP.Uniforms["u_color"] as Uniform<Vector3S>;
             FillColor = Color.Gray;
 
             _fillAlphaUniform = _fillSP.Uniforms["u_alpha"] as Uniform<float>;
@@ -216,7 +216,7 @@ namespace MiniGlobe.Scene
             set
             {
                 _lineColor = value;
-                _lineColorUniform.Value = new Vector3(value.R / 255.0f, value.G / 255.0f, value.B / 255.0f);
+                _lineColorUniform.Value = new Vector3S(value.R / 255.0f, value.G / 255.0f, value.B / 255.0f);
             }
         }
 
@@ -227,7 +227,7 @@ namespace MiniGlobe.Scene
             set
             {
                 _fillColor = value;
-                _fillColorUniform.Value = new Vector3(value.R / 255.0f, value.G / 255.0f, value.B / 255.0f);
+                _fillColorUniform.Value = new Vector3S(value.R / 255.0f, value.G / 255.0f, value.B / 255.0f);
             }
         }
 
@@ -258,7 +258,7 @@ namespace MiniGlobe.Scene
         private readonly ShaderProgram _lineSP;
 
         private readonly Uniform<float> _halfLineWidth;
-        private readonly Uniform<Vector3> _lineColorUniform;
+        private readonly Uniform<Vector3S> _lineColorUniform;
         private Color _lineColor;
 
         private readonly RenderState _fillRS;
@@ -266,7 +266,7 @@ namespace MiniGlobe.Scene
 
         private readonly VertexArray _va;
 
-        private readonly Uniform<Vector3> _fillColorUniform;
+        private readonly Uniform<Vector3S> _fillColorUniform;
         private Color _fillColor;
         private readonly Uniform<float> _fillAlphaUniform;
         private float _fillTranslucency;

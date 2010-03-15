@@ -11,6 +11,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using NUnit.Framework;
 using OpenTK;
+using MiniGlobe.Core;
 
 namespace MiniGlobe.Renderer
 {
@@ -22,17 +23,17 @@ namespace MiniGlobe.Renderer
         {
             MiniGlobeWindow window = Device.CreateWindow(1, 1);
 
-            Vector3[] positions = new Vector3[] 
+            Vector3S[] positions = new Vector3S[] 
             { 
-                Vector3.Zero,
-                new Vector3(1, 0, 0),
-                new Vector3(0, 1, 0)
+                Vector3S.Zero,
+                new Vector3S(1, 0, 0),
+                new Vector3S(0, 1, 0)
             };
 
             //
             // Verify creating vertex buffer
             //
-            int sizeInBytes = positions.Length * Vector3.SizeInBytes;
+            int sizeInBytes = positions.Length * Vector3S.SizeInBytes;
             VertexBuffer vertexBuffer = Device.CreateVertexBuffer(BufferHint.StaticDraw, sizeInBytes);
             Assert.IsNotNull(vertexBuffer);
             Assert.AreEqual(BufferHint.StaticDraw, vertexBuffer.UsageHint);
@@ -43,7 +44,7 @@ namespace MiniGlobe.Renderer
             //
             vertexBuffer.CopyFromSystemMemory(positions);
 
-            Vector3[] positions2 = vertexBuffer.CopyToSystemMemory<Vector3>(0, vertexBuffer.SizeInBytes);
+            Vector3S[] positions2 = vertexBuffer.CopyToSystemMemory<Vector3S>(0, vertexBuffer.SizeInBytes);
             Assert.AreEqual(positions[0], positions2[0]);
             Assert.AreEqual(positions[1], positions2[1]);
             Assert.AreEqual(positions[2], positions2[2]);
@@ -51,14 +52,14 @@ namespace MiniGlobe.Renderer
             //
             // Verify modiying a subset of the vertex buffer
             //
-            Vector3[] modifiedPositions = new Vector3[] 
+            Vector3S[] modifiedPositions = new Vector3S[] 
             { 
-                new Vector3(0, 1, 0),
-                Vector3.Zero
+                new Vector3S(0, 1, 0),
+                Vector3S.Zero
             };
-            vertexBuffer.CopyFromSystemMemory(modifiedPositions, Vector3.SizeInBytes, Vector3.SizeInBytes);
+            vertexBuffer.CopyFromSystemMemory(modifiedPositions, Vector3S.SizeInBytes, Vector3S.SizeInBytes);
 
-            Vector3[] positions3 = vertexBuffer.CopyToSystemMemory<Vector3>(0, vertexBuffer.SizeInBytes);
+            Vector3S[] positions3 = vertexBuffer.CopyToSystemMemory<Vector3S>(0, vertexBuffer.SizeInBytes);
             Assert.AreEqual(positions[0], positions3[0]);
             Assert.AreEqual(modifiedPositions[0], positions3[1]);
             Assert.AreEqual(positions[2], positions3[2]);

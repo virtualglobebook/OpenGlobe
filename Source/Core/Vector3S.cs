@@ -18,57 +18,57 @@ namespace MiniGlobe.Core
     /// <summary>
     /// A set of 3-dimensional cartesian coordinates where the three components,
     /// <see cref="X"/>, <see cref="Y"/>, and <see cref="Z"/>, are represented as
-    /// double-precision (64-bit) floating point numbers.
+    /// single-precision (32-bit) floating point numbers.
     /// </summary>
     [Serializable]
     [StructLayout(LayoutKind.Sequential)]
-    public struct Vector3D : IEquatable<Vector3D>
+    public struct Vector3S : IEquatable<Vector3S>
     {
-        public static readonly int SizeInBytes = Marshal.SizeOf(typeof(Vector3D));
+        public static readonly int SizeInBytes = Marshal.SizeOf(typeof(Vector3S));
 
-        public static Vector3D Zero
+        public static Vector3S Zero
         {
-            get { return new Vector3D(0.0, 0.0, 0.0); }
+            get { return new Vector3S(0.0f, 0.0f, 0.0f); }
         }
 
-        public static Vector3D UnitX
+        public static Vector3S UnitX
         {
-            get { return new Vector3D(1.0, 0.0, 0.0); }
+            get { return new Vector3S(1.0f, 0.0f, 0.0f); }
         }
 
-        public static Vector3D UnitY
+        public static Vector3S UnitY
         {
-            get { return new Vector3D(0.0, 1.0, 0.0); }
+            get { return new Vector3S(0.0f, 1.0f, 0.0f); }
         }
 
-        public static Vector3D UnitZ
+        public static Vector3S UnitZ
         {
-            get { return new Vector3D(0.0, 0.0, 1.0); }
+            get { return new Vector3S(0.0f, 0.0f, 1.0f); }
         }
 
-        public static Vector3D Undefined
+        public static Vector3S Undefined
         {
-            get { return new Vector3D(Double.NaN, Double.NaN, Double.NaN); }
+            get { return new Vector3S(Single.NaN, Single.NaN, Single.NaN); }
         }
 
-        public Vector3D(double x, double y, double z)
+        public Vector3S(float x, float y, float z)
         {
             _x = x;
             _y = y;
             _z = z;
         }
 
-        public double X
+        public float X
         {
             get { return _x; }
         }
 
-        public double Y
+        public float Y
         {
             get { return _y; }
         }
 
-        public double Z
+        public float Z
         {
             get { return _z; }
         }
@@ -78,14 +78,14 @@ namespace MiniGlobe.Core
             get { return new Vector2D(X, Y); }
         }
 
-        public double MagnitudeSquared
+        public float MagnitudeSquared
         {
             get { return _x * _x + _y * _y + _z * _z; }
         }
 
-        public double Magnitude
+        public float Magnitude
         {
-            get { return Math.Sqrt(MagnitudeSquared); }
+            get { return (float)Math.Sqrt(MagnitudeSquared); }
         }
 
         public bool IsUndefined
@@ -93,62 +93,62 @@ namespace MiniGlobe.Core
             get { return Double.IsNaN(_x); }
         }
 
-        public Vector3D Normalize(out double magnitude)
+        public Vector3S Normalize(out float magnitude)
         {
             magnitude = Magnitude;
             return this / magnitude;
         }
 
-        public Vector3D Normalize()
+        public Vector3S Normalize()
         {
-            double magnitude;
+            float magnitude;
             return Normalize(out magnitude);
         }
 
-        public Vector3D Cross(Vector3D other)
+        public Vector3S Cross(Vector3S other)
         {
-            return new Vector3D(Y * other.Z - Z * other.Y,
+            return new Vector3S(Y * other.Z - Z * other.Y,
                                 Z * other.X - X * other.Z,
                                 X * other.Y - Y * other.X);
         }
 
-        public double Dot(Vector3D other)
+        public float Dot(Vector3S other)
         {
             return X * other.X + Y * other.Y + Z * other.Z;
         }
 
-        public Vector3D Add(Vector3D addend)
+        public Vector3S Add(Vector3S addend)
         {
             return this + addend;
         }
 
-        public Vector3D Subtract(Vector3D subtrahend)
+        public Vector3S Subtract(Vector3S subtrahend)
         {
             return this - subtrahend;
         }
 
-        public Vector3D Multiply(double scalar)
+        public Vector3S Multiply(float scalar)
         {
             return this * scalar;
         }
 
-        public Vector3D MultiplyComponents(Vector3D scale)
+        public Vector3S MultiplyComponents(Vector3S scale)
         {
-            return new Vector3D(X * scale.X, Y * scale.Y, Z * scale.Z);
+            return new Vector3S(X * scale.X, Y * scale.Y, Z * scale.Z);
         }
 
-        public Vector3D Divide(double scalar)
+        public Vector3S Divide(float scalar)
         {
             return this / scalar;
         }
 
-        public Vector3D MostOrthogonalAxis
+        public Vector3S MostOrthogonalAxis
         {
             get
             {
-                double x = Math.Abs(X);
-                double y = Math.Abs(Y);
-                double z = Math.Abs(Z);
+                float x = Math.Abs(X);
+                float y = Math.Abs(Y);
+                float z = Math.Abs(Z);
 
                 if ((x < y) && (x < z))
                 {
@@ -165,7 +165,7 @@ namespace MiniGlobe.Core
             }
         }
 
-        public bool EqualsEpsilon(Vector3D other, double epsilon)
+        public bool EqualsEpsilon(Vector3S other, float epsilon)
         {
             return
                 (Math.Abs(_x - other._x) <= epsilon) &&
@@ -173,56 +173,56 @@ namespace MiniGlobe.Core
                 (Math.Abs(_z - other._z) <= epsilon);
         }
 
-        public bool Equals(Vector3D other)
+        public bool Equals(Vector3S other)
         {
             return _x == other._x && _y == other._y && _z == other._z;
         }
 
-        public static Vector3D operator -(Vector3D vector)
+        public static Vector3S operator -(Vector3S vector)
         {
-            return new Vector3D(-vector.X, -vector.Y, -vector.Z);
+            return new Vector3S(-vector.X, -vector.Y, -vector.Z);
         }
 
-        public static Vector3D operator +(Vector3D left, Vector3D right)
+        public static Vector3S operator +(Vector3S left, Vector3S right)
         {
-            return new Vector3D(left._x + right._x, left._y + right._y, left._z + right._z);
+            return new Vector3S(left._x + right._x, left._y + right._y, left._z + right._z);
         }
 
-        public static Vector3D operator -(Vector3D left, Vector3D right)
+        public static Vector3S operator -(Vector3S left, Vector3S right)
         {
-            return new Vector3D(left._x - right._x, left._y - right._y, left._z - right._z);
+            return new Vector3S(left._x - right._x, left._y - right._y, left._z - right._z);
         }
 
-        public static Vector3D operator *(Vector3D left, double right)
+        public static Vector3S operator *(Vector3S left, float right)
         {
-            return new Vector3D(left._x * right, left._y * right, left._z * right);
+            return new Vector3S(left._x * right, left._y * right, left._z * right);
         }
 
-        public static Vector3D operator *(double left, Vector3D right)
+        public static Vector3S operator *(float left, Vector3S right)
         {
             return right * left;
         }
 
-        public static Vector3D operator /(Vector3D left, double right)
+        public static Vector3S operator /(Vector3S left, float right)
         {
-            return new Vector3D(left._x / right, left._y / right, left._z / right);
+            return new Vector3S(left._x / right, left._y / right, left._z / right);
         }
 
-        public static bool operator ==(Vector3D left, Vector3D right)
+        public static bool operator ==(Vector3S left, Vector3S right)
         {
             return left.Equals(right);
         }
 
-        public static bool operator !=(Vector3D left, Vector3D right)
+        public static bool operator !=(Vector3S left, Vector3S right)
         {
             return !left.Equals(right);
         }
 
         public override bool Equals(object obj)
         {
-            if (obj is Vector3D)
+            if (obj is Vector3S)
             {
-                return Equals((Vector3D)obj);
+                return Equals((Vector3S)obj);
             }
             return false;
         }
@@ -237,8 +237,8 @@ namespace MiniGlobe.Core
             return _x.GetHashCode() ^ _y.GetHashCode() ^ _z.GetHashCode();
         }
 
-        private readonly double _x;
-        private readonly double _y;
-        private readonly double _z;
+        private readonly float _x;
+        private readonly float _y;
+        private readonly float _z;
     }
 }

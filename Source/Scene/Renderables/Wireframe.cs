@@ -9,6 +9,7 @@
 
 using System;
 using System.Drawing;
+using MiniGlobe.Core;
 using MiniGlobe.Core.Geometry;
 using MiniGlobe.Renderer;
 using OpenTK;
@@ -130,7 +131,7 @@ namespace MiniGlobe.Scene
             _lineWidth = _sp.Uniforms["u_halfLineWidth"] as Uniform<float>;
             Width = 1;
 
-            _colorUniform = _sp.Uniforms["u_colorUniform"] as Uniform<Vector3>;
+            _colorUniform = _sp.Uniforms["u_colorUniform"] as Uniform<Vector3S>;
             Color = Color.Black;
 
             _va = context.CreateVertexArray(mesh, _sp.VertexAttributes, BufferHint.StaticDraw);
@@ -160,7 +161,7 @@ namespace MiniGlobe.Scene
             set
             {
                 _color = value;
-                _colorUniform.Value = new Vector3(_color.R / 255.0f, _color.G / 255.0f, _color.B / 255.0f);
+                _colorUniform.Value = new Vector3S(_color.R / 255.0f, _color.G / 255.0f, _color.B / 255.0f);
             }
         }
 
@@ -199,7 +200,7 @@ namespace MiniGlobe.Scene
         private readonly RenderState _renderState;
         private readonly ShaderProgram _sp;
         private readonly Uniform<float> _lineWidth;
-        private readonly Uniform<Vector3> _colorUniform;
+        private readonly Uniform<Vector3S> _colorUniform;
         private Color _color;
         private readonly VertexArray _va;
         private readonly PrimitiveType _primitiveType;

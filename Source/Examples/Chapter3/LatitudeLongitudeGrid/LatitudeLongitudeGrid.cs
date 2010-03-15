@@ -130,7 +130,7 @@ namespace MiniGlobe.Examples.Chapter3
                       }
                   }";
             _sp = Device.CreateShaderProgram(vs, fs);
-            (_sp.Uniforms["u_globeOneOverRadiiSquared"] as Uniform<Vector3>).Value = Conversion.ToVector3(_globeShape.OneOverRadiiSquared);
+            (_sp.Uniforms["u_globeOneOverRadiiSquared"] as Uniform<Vector3S>).Value = _globeShape.OneOverRadiiSquared.ToVector3S();
             _gridWidth = _sp.Uniforms["u_gridLineWidth"] as Uniform<Vector2S>;
             _gridResolution = _sp.Uniforms["u_gridResolution"] as Uniform<Vector2S>;
 
@@ -173,7 +173,7 @@ namespace MiniGlobe.Examples.Chapter3
             _billboards = new List<BillboardGroup>();
             _billboards.Add(
                 new BillboardGroup(_window.Context,
-                new[] { Conversion.ToVector3(_globeShape.ToVector3D(new Geodetic3D(Trig.ToRadians(-123.06), Trig.ToRadians(49.13), 0))) },
+                new[] { _globeShape.ToVector3D(new Geodetic3D(Trig.ToRadians(-123.06), Trig.ToRadians(49.13), 0)).ToVector3S() },
                 Device.CreateBitmapFromText("* Vancouver", new Font("Arial", 24))));
             //_billboards.Add(
             //    new BillboardGroup(_window.Context, 

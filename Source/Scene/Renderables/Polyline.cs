@@ -9,6 +9,7 @@
 
 using System;
 using System.Drawing;
+using MiniGlobe.Core;
 using MiniGlobe.Core.Geometry;
 using MiniGlobe.Renderer;
 using OpenTK;
@@ -17,7 +18,7 @@ namespace MiniGlobe.Scene
 {
     public sealed class Polyline : IDisposable
     {
-        public Polyline(Context context, Vector3[] positions, BlittableRGBA[] colors)
+        public Polyline(Context context, Vector3S[] positions, BlittableRGBA[] colors)
         {
             if (positions.Length != colors.Length)
             {
@@ -115,7 +116,7 @@ namespace MiniGlobe.Scene
             _lineLength = _sp.Uniforms["u_lineLength"] as Uniform<float>;
             Length = 1;
 
-            VertexBuffer positionBuffer = Device.CreateVertexBuffer(BufferHint.StaticDraw, positions.Length * Vector3.SizeInBytes);
+            VertexBuffer positionBuffer = Device.CreateVertexBuffer(BufferHint.StaticDraw, positions.Length * Vector3S.SizeInBytes);
             positionBuffer.CopyFromSystemMemory(positions);
 
             VertexBuffer colorBuffer = Device.CreateVertexBuffer(BufferHint.StaticDraw, colors.Length * BlittableRGBA.SizeInBytes);

@@ -18,45 +18,45 @@ namespace MiniGlobe.Core
     /// <summary>
     /// A set of 4-dimensional cartesian coordinates where the four components,
     /// <see cref="X"/>, <see cref="Y"/>, <see cref="Z"/>, and <see cref="W"/>
-    /// are represented as double-precision (64-bit) floating point numbers.
+    /// are represented as single-precision (32-bit) floating point numbers.
     /// </summary>
     [Serializable]
     [StructLayout(LayoutKind.Sequential)]
-    public struct Vector4D : IEquatable<Vector4D>
+    public struct Vector4S : IEquatable<Vector4S>
     {
-        public static readonly int SizeInBytes = Marshal.SizeOf(typeof(Vector4D));
+        public static readonly int SizeInBytes = Marshal.SizeOf(typeof(Vector4S));
 
-        public static Vector4D Zero
+        public static Vector4S Zero
         {
-            get { return new Vector4D(0.0, 0.0, 0.0, 0.0); }
+            get { return new Vector4S(0.0f, 0.0f, 0.0f, 0.0f); }
         }
 
-        public static Vector4D UnitX
+        public static Vector4S UnitX
         {
-            get { return new Vector4D(1.0, 0.0, 0.0, 0.0); }
+            get { return new Vector4S(1.0f, 0.0f, 0.0f, 0.0f); }
         }
 
-        public static Vector4D UnitY
+        public static Vector4S UnitY
         {
-            get { return new Vector4D(0.0, 1.0, 0.0, 0.0); }
+            get { return new Vector4S(0.0f, 1.0f, 0.0f, 0.0f); }
         }
 
-        public static Vector4D UnitZ
+        public static Vector4S UnitZ
         {
-            get { return new Vector4D(0.0, 0.0, 1.0, 0.0); }
+            get { return new Vector4S(0.0f, 0.0f, 1.0f, 0.0f); }
         }
 
-        public static Vector4D UnitW
+        public static Vector4S UnitW
         {
-            get { return new Vector4D(0.0, 0.0, 0.0, 1.0); }
+            get { return new Vector4S(0.0f, 0.0f, 0.0f, 1.0f); }
         }
 
-        public static Vector4D Undefined
+        public static Vector4S Undefined
         {
-            get { return new Vector4D(Double.NaN, Double.NaN, Double.NaN, Double.NaN); }
+            get { return new Vector4S(Single.NaN, Single.NaN, Single.NaN, Single.NaN); }
         }
 
-        public Vector4D(double x, double y, double z, double w)
+        public Vector4S(float x, float y, float z, float w)
         {
             _x = x;
             _y = y;
@@ -64,22 +64,22 @@ namespace MiniGlobe.Core
             _w = w;
         }
 
-        public double X
+        public float X
         {
             get { return _x; }
         }
 
-        public double Y
+        public float Y
         {
             get { return _y; }
         }
 
-        public double Z
+        public float Z
         {
             get { return _z; }
         }
 
-        public double W
+        public float W
         {
             get { return _w; }
         }
@@ -94,71 +94,71 @@ namespace MiniGlobe.Core
             get { return new Vector3D(X, Y, Z); }
         }
 
-        public double MagnitudeSquared
+        public float MagnitudeSquared
         {
             get { return _x * _x + _y * _y + _z * _z + _w * _w; }
         }
 
-        public double Magnitude
+        public float Magnitude
         {
-            get { return Math.Sqrt(MagnitudeSquared); }
+            get { return (float)Math.Sqrt(MagnitudeSquared); }
         }
 
         public bool IsUndefined
         {
-            get { return Double.IsNaN(_x); }
+            get { return Single.IsNaN(_x); }
         }
 
-        public Vector4D Normalize(out double magnitude)
+        public Vector4S Normalize(out float magnitude)
         {
             magnitude = Magnitude;
             return this / magnitude;
         }
 
-        public Vector4D Normalize()
+        public Vector4S Normalize()
         {
-            double magnitude;
+            float magnitude;
             return Normalize(out magnitude);
         }
 
-        public double Dot(Vector4D other)
+        public float Dot(Vector4S other)
         {
             return X * other.X + Y * other.Y + Z * other.Z + W * other.W;
         }
 
-        public Vector4D Add(Vector4D addend)
+        public Vector4S Add(Vector4S addend)
         {
             return this + addend;
         }
 
-        public Vector4D Subtract(Vector4D subtrahend)
+        public Vector4S Subtract(Vector4S subtrahend)
         {
             return this - subtrahend;
         }
 
-        public Vector4D Multiply(double scalar)
+        public Vector4S Multiply(float scalar)
         {
             return this * scalar;
         }
 
-        public Vector4D MultiplyComponents(Vector4D scale)
+        public Vector4S MultiplyComponents(Vector4S scale)
         {
-            return new Vector4D(X * scale.X, Y * scale.Y, Z * scale.Z, W * scale.W);
+            return new Vector4S(X * scale.X, Y * scale.Y, Z * scale.Z, W * scale.W);
         }
 
-        public Vector4D Divide(double scalar)
+        public Vector4S Divide(float scalar)
         {
             return this / scalar;
         }
 
-        public Vector4D MostOrthogonalAxis
+        public Vector4S MostOrthogonalAxis
         {
             get
             {
-                double x = Math.Abs(X);
-                double y = Math.Abs(Y);
-                double z = Math.Abs(Z);
-                double w = Math.Abs(W);
+                float x = Math.Abs(X);
+                float y = Math.Abs(Y);
+                float z = Math.Abs(Z);
+                float w = Math.Abs(W);
 
                 if ((x < y) && (x < z) && (x < w))
                 {
@@ -179,7 +179,7 @@ namespace MiniGlobe.Core
             }
         }
 
-        public bool EqualsEpsilon(Vector4D other, double epsilon)
+        public bool EqualsEpsilon(Vector4S other, float epsilon)
         {
             return (Math.Abs(_x - other._x) <= epsilon) &&
                    (Math.Abs(_y - other._y) <= epsilon) &&
@@ -187,56 +187,56 @@ namespace MiniGlobe.Core
                    (Math.Abs(_w - other._w) <= epsilon);
         }
 
-        public bool Equals(Vector4D other)
+        public bool Equals(Vector4S other)
         {
             return _x == other._x && _y == other._y && _z == other._z && _w == other._w;
         }
 
-        public static Vector4D operator -(Vector4D vector)
+        public static Vector4S operator -(Vector4S vector)
         {
-            return new Vector4D(-vector.X, -vector.Y, -vector.Z, -vector.W);
+            return new Vector4S(-vector.X, -vector.Y, -vector.Z, -vector.W);
         }
 
-        public static Vector4D operator +(Vector4D left, Vector4D right)
+        public static Vector4S operator +(Vector4S left, Vector4S right)
         {
-            return new Vector4D(left._x + right._x, left._y + right._y, left._z + right._z, left._w + right._w);
+            return new Vector4S(left._x + right._x, left._y + right._y, left._z + right._z, left._w + right._w);
         }
 
-        public static Vector4D operator -(Vector4D left, Vector4D right)
+        public static Vector4S operator -(Vector4S left, Vector4S right)
         {
-            return new Vector4D(left._x - right._x, left._y - right._y, left._z - right._z, left._w - right._w);
+            return new Vector4S(left._x - right._x, left._y - right._y, left._z - right._z, left._w - right._w);
         }
 
-        public static Vector4D operator *(Vector4D left, double right)
+        public static Vector4S operator *(Vector4S left, float right)
         {
-            return new Vector4D(left._x * right, left._y * right, left._z * right, left._w * right);
+            return new Vector4S(left._x * right, left._y * right, left._z * right, left._w * right);
         }
 
-        public static Vector4D operator *(double left, Vector4D right)
+        public static Vector4S operator *(float left, Vector4S right)
         {
             return right * left;
         }
 
-        public static Vector4D operator /(Vector4D left, double right)
+        public static Vector4S operator /(Vector4S left, float right)
         {
-            return new Vector4D(left._x / right, left._y / right, left._z / right, left._w / right);
+            return new Vector4S(left._x / right, left._y / right, left._z / right, left._w / right);
         }
 
-        public static bool operator ==(Vector4D left, Vector4D right)
+        public static bool operator ==(Vector4S left, Vector4S right)
         {
             return left.Equals(right);
         }
 
-        public static bool operator !=(Vector4D left, Vector4D right)
+        public static bool operator !=(Vector4S left, Vector4S right)
         {
             return !left.Equals(right);
         }
 
         public override bool Equals(object obj)
         {
-            if (obj is Vector4D)
+            if (obj is Vector4S)
             {
-                return Equals((Vector4D)obj);
+                return Equals((Vector4S)obj);
             }
             return false;
         }
@@ -251,9 +251,9 @@ namespace MiniGlobe.Core
             return _x.GetHashCode() ^ _y.GetHashCode() ^ _z.GetHashCode() ^ _w.GetHashCode();
         }
 
-        private readonly double _x;
-        private readonly double _y;
-        private readonly double _z;
-        private readonly double _w;
+        private readonly float _x;
+        private readonly float _y;
+        private readonly float _z;
+        private readonly float _w;
     }
 }

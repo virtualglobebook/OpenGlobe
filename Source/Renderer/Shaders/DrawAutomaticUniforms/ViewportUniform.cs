@@ -8,7 +8,6 @@
 #endregion
 
 using System.Drawing;
-using OpenTK;
 using MiniGlobe.Core;
 
 namespace MiniGlobe.Renderer
@@ -17,7 +16,7 @@ namespace MiniGlobe.Renderer
     {
         public ViewportUniform(Uniform uniform)
         {
-            _uniform = uniform as Uniform<Vector4>;
+            _uniform = uniform as Uniform<Vector4S>;
         }
 
         #region DrawAutomaticUniform Members
@@ -28,11 +27,11 @@ namespace MiniGlobe.Renderer
             // viewport.Bottom should really be used but Rectangle goes top to botom, not bottom to top.
             //
             Rectangle viewport = context.Viewport;
-            _uniform.Value = new Vector4(viewport.Left, viewport.Top, viewport.Width, viewport.Height);
+            _uniform.Value = new Vector4S(viewport.Left, viewport.Top, viewport.Width, viewport.Height);
         }
 
         #endregion
 
-        private Uniform<Vector4> _uniform;
+        private Uniform<Vector4S> _uniform;
     }
 }

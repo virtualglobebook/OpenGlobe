@@ -7,7 +7,7 @@
 //
 #endregion
 
-using OpenTK;
+using MiniGlobe.Core;
 
 namespace MiniGlobe.Renderer
 {
@@ -15,14 +15,14 @@ namespace MiniGlobe.Renderer
     {
         public LightPropertiesUniform(Uniform uniform)
         {
-            _uniform = uniform as Uniform<Vector4>;
+            _uniform = uniform as Uniform<Vector4S>;
         }
 
         #region DrawAutomaticUniform Members
 
         public override void Set(Context context, SceneState sceneState)
         {
-            _uniform.Value = new Vector4(
+            _uniform.Value = new Vector4S(
                 sceneState.DiffuseIntensity,
                 sceneState.SpecularIntensity,
                 sceneState.AmbientIntensity,
@@ -31,6 +31,6 @@ namespace MiniGlobe.Renderer
 
         #endregion
 
-        private Uniform<Vector4> _uniform;
+        private Uniform<Vector4S> _uniform;
     }
 }

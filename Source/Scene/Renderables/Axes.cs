@@ -11,6 +11,7 @@ using System;
 using System.Drawing;
 using MiniGlobe.Core.Geometry;
 using MiniGlobe.Renderer;
+using MiniGlobe.Core;
 using OpenTK;
 
 namespace MiniGlobe.Scene
@@ -110,16 +111,16 @@ namespace MiniGlobe.Scene
             _lineLength = _sp.Uniforms["u_lineLength"] as Uniform<float>;
             Length = 1;
 
-            Vector3[] positions = new Vector3[] 
+            Vector3S[] positions = new Vector3S[] 
             { 
-                new Vector3(0, 0, 0),
-                new Vector3(1, 0, 0),
-                new Vector3(0, 0, 0),
-                new Vector3(0, 1, 0),
-                new Vector3(0, 0, 0),
-                new Vector3(0, 0, 1)
+                new Vector3S(0, 0, 0),
+                new Vector3S(1, 0, 0),
+                new Vector3S(0, 0, 0),
+                new Vector3S(0, 1, 0),
+                new Vector3S(0, 0, 0),
+                new Vector3S(0, 0, 1)
             };
-            VertexBuffer positionBuffer = Device.CreateVertexBuffer(BufferHint.StaticDraw, positions.Length * Vector3.SizeInBytes);
+            VertexBuffer positionBuffer = Device.CreateVertexBuffer(BufferHint.StaticDraw, positions.Length * Vector3S.SizeInBytes);
             positionBuffer.CopyFromSystemMemory(positions);
 
             BlittableRGBA[] colors = new BlittableRGBA[] 

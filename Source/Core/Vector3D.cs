@@ -237,6 +237,11 @@ namespace MiniGlobe.Core
             return _x.GetHashCode() ^ _y.GetHashCode() ^ _z.GetHashCode();
         }
 
+        public Vector3S ToVector3S()
+        {
+            return new Vector3S((float)_x, (float)_y, (float)_z);
+        }
+
         private readonly double _x;
         private readonly double _y;
         private readonly double _z;

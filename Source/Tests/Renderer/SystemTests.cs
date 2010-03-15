@@ -88,13 +88,13 @@ namespace MiniGlobe.Renderer
 
             ShaderProgram sp = Device.CreateShaderProgram(ShaderSources.PassThroughVertexShader(), ShaderSources.PassThroughFragmentShader());
 
-            Vector4[] positions = new[] 
+            Vector4S[] positions = new[] 
             { 
-                new Vector4(-0.5f, -0.5f, 0, 1),
-                new Vector4(0.5f, -0.5f, 0, 1),
-                new Vector4(0.5f, 0.5f, 0, 1) 
+                new Vector4S(-0.5f, -0.5f, 0, 1),
+                new Vector4S(0.5f, -0.5f, 0, 1),
+                new Vector4S(0.5f, 0.5f, 0, 1) 
             };
-            VertexBuffer positionsBuffer = Device.CreateVertexBuffer(BufferHint.StaticDraw, positions.Length * Vector4.SizeInBytes);
+            VertexBuffer positionsBuffer = Device.CreateVertexBuffer(BufferHint.StaticDraw, positions.Length * Vector4S.SizeInBytes);
             positionsBuffer.CopyFromSystemMemory(positions);
 
             ushort[] indices = new ushort[] 
@@ -410,8 +410,8 @@ namespace MiniGlobe.Renderer
 
         private static VertexArray CreateVertexArray(Context context, int positionLocation)
         {
-            Vector4[] positions = new[] { new Vector4(0, 0, 0, 1) };
-            VertexBuffer positionsBuffer = Device.CreateVertexBuffer(BufferHint.StaticDraw, positions.Length * Vector4.SizeInBytes);
+            Vector4S[] positions = new[] { new Vector4S(0, 0, 0, 1) };
+            VertexBuffer positionsBuffer = Device.CreateVertexBuffer(BufferHint.StaticDraw, positions.Length * Vector4S.SizeInBytes);
             positionsBuffer.CopyFromSystemMemory(positions);
 
             VertexArray va = context.CreateVertexArray();

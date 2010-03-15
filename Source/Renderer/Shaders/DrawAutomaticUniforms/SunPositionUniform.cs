@@ -16,18 +16,18 @@ namespace MiniGlobe.Renderer
     {
         public SunPositionUniform(Uniform uniform)
         {
-            _uniform = uniform as Uniform<Vector3>;
+            _uniform = uniform as Uniform<Vector3S>;
         }
 
         #region DrawAutomaticUniform Members
 
         public override void Set(Context context, SceneState sceneState)
         {
-            _uniform.Value = Conversion.ToVector3(sceneState.SunPosition);
+            _uniform.Value = sceneState.SunPosition.ToVector3S();
         }
 
         #endregion
 
-        private Uniform<Vector3> _uniform;
+        private Uniform<Vector3S> _uniform;
     }
 }

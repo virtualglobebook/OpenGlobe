@@ -11,7 +11,7 @@ using OpenTK;
 
 namespace MiniGlobe.Core.Geometry
 {
-    public class VertexAttributeFloatVector4 : VertexAttribute<Vector4>
+    public class VertexAttributeFloatVector4 : VertexAttribute<Vector4S>
     {
         public VertexAttributeFloatVector4(string name)
             : base(name, VertexAttributeType.FloatVector4)

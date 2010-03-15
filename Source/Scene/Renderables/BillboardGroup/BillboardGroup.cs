@@ -167,7 +167,7 @@ namespace MiniGlobe.Scene
             _sp = Device.CreateShaderProgram(vs, gs, fs);
 
             // TODO:  Hint
-            _positionBuffer = Device.CreateVertexBuffer(BufferHint.StaticDraw, numberOfBillboards * Vector3.SizeInBytes);
+            _positionBuffer = Device.CreateVertexBuffer(BufferHint.StaticDraw, numberOfBillboards * Vector3S.SizeInBytes);
 
             AttachedVertexBuffer attachedPositionBuffer = new AttachedVertexBuffer(
                 _positionBuffer, VertexAttributeComponentType.Float, 3);
@@ -181,12 +181,12 @@ namespace MiniGlobe.Scene
         {
             if (_dirtyBillboards.Count != 0)
             {
-                Vector3[] dirtyPosition = new Vector3[1];
+                Vector3S[] dirtyPosition = new Vector3S[1];
                 foreach (Billboard b in _dirtyBillboards)
                 {
                     // TODO: Combine for performance
-                    dirtyPosition[0] = Conversion.ToVector3(b.Position);
-                    _positionBuffer.CopyFromSystemMemory(dirtyPosition, b.VertexBufferOffset * Vector3.SizeInBytes);
+                    dirtyPosition[0] = b.Position.ToVector3S();
+                    _positionBuffer.CopyFromSystemMemory(dirtyPosition, b.VertexBufferOffset * Vector3S.SizeInBytes);
 
                     b.Dirty = false;
                 }

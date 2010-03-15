@@ -153,7 +153,7 @@ namespace MiniGlobe.Examples.Chapter2
                       fragmentColor = vec3(intensity, 0, intensity);
                   }";
             _sp = Device.CreateShaderProgram(vs, fs);
-            (_sp.Uniforms["u_globeOneOverRadiiSquared"] as Uniform<Vector3>).Value = Conversion.ToVector3(globeShape.OneOverRadiiSquared);
+            (_sp.Uniforms["u_globeOneOverRadiiSquared"] as Uniform<Vector3S>).Value = globeShape.OneOverRadiiSquared.ToVector3S();
 
             Mesh mesh = GeographicGridEllipsoidTessellator.Compute(globeShape, 64, 32, GeographicGridEllipsoidVertexAttributes.Position);
             _va = _window.Context.CreateVertexArray(mesh, _sp.VertexAttributes, BufferHint.StaticDraw);
@@ -183,12 +183,12 @@ namespace MiniGlobe.Examples.Chapter2
             Vector3D pDetic = p + (normalLength * deticNormal);
             Vector3D pCentric = p + (normalLength * centricNormal);
 
-            Vector3[] normalPositions = new Vector3[] 
+            Vector3S[] normalPositions = new Vector3S[] 
             { 
-                Conversion.ToVector3(p),
-                Conversion.ToVector3(pDetic),
-                Conversion.ToVector3(p),
-                Conversion.ToVector3(pCentric)
+                p.ToVector3S(),
+                pDetic.ToVector3S(),
+                p.ToVector3S(),
+                pCentric.ToVector3S()
             };
 
             BlittableRGBA[] normalColors = new BlittableRGBA[] 
@@ -206,12 +206,12 @@ namespace MiniGlobe.Examples.Chapter2
             Font font = new Font("Arial", 24);
 
             _geodeticBillboard = new BillboardGroup(_window.Context, 
-                new[] { Conversion.ToVector3(pDetic) },
+                new[] { pDetic.ToVector3S() },
                 Device.CreateBitmapFromText("Geodetic", font));
             _geodeticBillboard.Color = Color.DarkGreen;
 
             _geocentricBillboard = new BillboardGroup(_window.Context,
-                new[] { Conversion.ToVector3(pCentric) },
+                new[] { pCentric.ToVector3S() },
                 Device.CreateBitmapFromText("Geocentric", font));
             _geocentricBillboard.Color = Color.DarkCyan;
 

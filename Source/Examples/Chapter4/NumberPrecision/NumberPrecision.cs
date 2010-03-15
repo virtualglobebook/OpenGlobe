@@ -119,7 +119,7 @@ namespace MiniGlobe.Examples.Chapter3.NumberPrecision
             Vector3D p = new Vector3D(_viewCenterX, 0.0, 0.0);
             Font font = new Font("Arial", 24);
 
-            _bg = new BillboardGroup(_window.Context, new[] { Conversion.ToVector3(p) }, Device.CreateBitmapFromText("131072.00f", font));
+            _bg = new BillboardGroup(_window.Context, new[] { p.ToVector3S() }, Device.CreateBitmapFromText("131072.00f", font));
             _bg.Color = Color.Black;
         }
 

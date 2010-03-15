@@ -99,7 +99,7 @@ namespace MiniGlobe.Scene
                       }
                   }";
             _sp = Device.CreateShaderProgram(vs, fs);
-            _cameraEyeSquaredSP = _sp.Uniforms["u_cameraEyeSquared"] as Uniform<Vector3>;
+            _cameraEyeSquaredSP = _sp.Uniforms["u_cameraEyeSquared"] as Uniform<Vector3S>;
 
             _renderState = new RenderState();
 
@@ -137,7 +137,7 @@ namespace MiniGlobe.Scene
                       }
                   }";
             _solidSP = Device.CreateShaderProgram(vs, solidFS);
-            _cameraEyeSquaredSolidSP = _solidSP.Uniforms["u_cameraEyeSquared"] as Uniform<Vector3>;
+            _cameraEyeSquaredSolidSP = _solidSP.Uniforms["u_cameraEyeSquared"] as Uniform<Vector3S>;
 
             ///////////////////////////////////////////////////////////////////
 
@@ -210,8 +210,8 @@ namespace MiniGlobe.Scene
                 _renderState.FacetCulling.Face = CullFace.Front;
                 _renderState.FacetCulling.FrontFaceWindingOrder = mesh.FrontFaceWindingOrder;
 
-                (_sp.Uniforms["u_globeOneOverRadiiSquared"] as Uniform<Vector3>).Value = Conversion.ToVector3(_shape.OneOverRadiiSquared);
-                (_solidSP.Uniforms["u_globeOneOverRadiiSquared"] as Uniform<Vector3>).Value = Conversion.ToVector3(_shape.OneOverRadiiSquared);
+                (_sp.Uniforms["u_globeOneOverRadiiSquared"] as Uniform<Vector3S>).Value = _shape.OneOverRadiiSquared.ToVector3S();
+                (_solidSP.Uniforms["u_globeOneOverRadiiSquared"] as Uniform<Vector3S>).Value = _shape.OneOverRadiiSquared.ToVector3S();
 
                 if (_wireframe != null)
                 {
@@ -242,7 +242,7 @@ namespace MiniGlobe.Scene
             if (ShowGlobe)
             {
                 Vector3D eye = sceneState.Camera.Eye;
-                Vector3 cameraEyeSquared = Conversion.ToVector3(eye.MultiplyComponents(eye));
+                Vector3S cameraEyeSquared = eye.MultiplyComponents(eye).ToVector3S();
 
                 if (Shade)
                 {
@@ -309,9 +309,9 @@ namespace MiniGlobe.Scene
 
         private readonly RenderState _renderState;
         private readonly ShaderProgram _sp;
-        private readonly Uniform<Vector3> _cameraEyeSquaredSP;
+        private readonly Uniform<Vector3S> _cameraEyeSquaredSP;
         private readonly ShaderProgram _solidSP;
-        private readonly Uniform<Vector3> _cameraEyeSquaredSolidSP;
+        private readonly Uniform<Vector3S> _cameraEyeSquaredSolidSP;
 
         private VertexArray _va;
         private PrimitiveType _primitiveType;

@@ -9,6 +9,7 @@
 
 using NUnit.Framework;
 using OpenTK;
+using MiniGlobe.Core;
 
 namespace MiniGlobe.Renderer
 {
@@ -23,13 +24,13 @@ namespace MiniGlobe.Renderer
             //
             // Create vertex buffer
             //
-            Vector3[] positions = new Vector3[] 
+            Vector3S[] positions = new Vector3S[] 
             { 
-                new Vector3(0, 0, 0),
-                new Vector3(1, 0, 0),
-                new Vector3(0, 1, 0)
+                new Vector3S(0, 0, 0),
+                new Vector3S(1, 0, 0),
+                new Vector3S(0, 1, 0)
             };
-            int vbSizeInBytes = positions.Length * Vector3.SizeInBytes;
+            int vbSizeInBytes = positions.Length * Vector3S.SizeInBytes;
             VertexBuffer vertexBuffer = Device.CreateVertexBuffer(BufferHint.StaticDraw, vbSizeInBytes);
             vertexBuffer.CopyFromSystemMemory(positions);
 

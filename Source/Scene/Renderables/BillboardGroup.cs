@@ -9,6 +9,7 @@
 
 using System;
 using System.Drawing;
+using MiniGlobe.Core;
 using MiniGlobe.Core.Geometry;
 using MiniGlobe.Renderer;
 using OpenTK;
@@ -17,7 +18,7 @@ namespace MiniGlobe.Scene
 {
     public sealed class BillboardGroup : IDisposable
     {
-        public BillboardGroup(Context context, Vector3[] positions, Bitmap bitmap)
+        public BillboardGroup(Context context, Vector3S[] positions, Bitmap bitmap)
         {
             _context = context;
             _renderState = new RenderState();
@@ -125,10 +126,10 @@ center.x -= halfSize.x;
                       fragmentColor = vec4(color.rgb * u_colorUniform, color.a);
                   }";
             _sp = Device.CreateShaderProgram(vs, gs, fs);
-            _colorUniform = _sp.Uniforms["u_colorUniform"] as Uniform<Vector3>;
+            _colorUniform = _sp.Uniforms["u_colorUniform"] as Uniform<Vector3S>;
             Color = Color.White;
 
-            VertexBuffer positionBuffer = Device.CreateVertexBuffer(BufferHint.StaticDraw, positions.Length * Vector3.SizeInBytes);
+            VertexBuffer positionBuffer = Device.CreateVertexBuffer(BufferHint.StaticDraw, positions.Length * Vector3S.SizeInBytes);
             positionBuffer.CopyFromSystemMemory(positions);
 
             AttachedVertexBuffer attachedPositionBuffer = new AttachedVertexBuffer(
@@ -172,7 +173,7 @@ center.x -= halfSize.x;
             set
             {
                 _color = value;
-                _colorUniform.Value = new Vector3(_color.R / 255.0f, _color.G / 255.0f, _color.B / 255.0f);
+                _colorUniform.Value = new Vector3S(_color.R / 255.0f, _color.G / 255.0f, _color.B / 255.0f);
             }
         }
 
@@ -192,7 +193,7 @@ center.x -= halfSize.x;
         private readonly ShaderProgram _sp;
         private readonly VertexArray _va;
         private readonly Texture2D _texture;
-        private readonly Uniform<Vector3> _colorUniform;
+        private readonly Uniform<Vector3S> _colorUniform;
         private Color _color;
     }
 }
