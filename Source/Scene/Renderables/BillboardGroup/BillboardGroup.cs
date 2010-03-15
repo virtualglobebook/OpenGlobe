@@ -14,21 +14,22 @@ using MiniGlobe.Core;
 using MiniGlobe.Core.Geometry;
 using MiniGlobe.Renderer;
 using OpenTK;
+using System.Collections;
 
 namespace MiniGlobe.Scene
 {
     public sealed class BillboardGroup2 : IDisposable
     {
-        public BillboardGroup2(Context context, IEnumerable<Billboard> billboards, Bitmap bitmap)
+        public BillboardGroup2(Context context, Bitmap bitmap)
+            : this(context, bitmap, 0)
+        {
+        }
+
+        public BillboardGroup2(Context context, Bitmap bitmap, int capacity)
         {
             if (context == null)
             {
                 throw new ArgumentNullException("context");
-            }
-
-            if (billboards == null)
-            {
-                throw new ArgumentNullException("billboards");
             }
 
             if (bitmap == null)
@@ -36,28 +37,16 @@ namespace MiniGlobe.Scene
                 throw new ArgumentNullException("bitmap");
             }
 
+            if (capacity < 0)
+            {
+                throw new ArgumentOutOfRangeException("capacity");
+            }
+
             ///////////////////////////////////////////////////////////////////
 
-            int numberOfBillboards = EnumerableCount(billboards);
-            
-            _billboards = billboards;
-            _dirtyBillboards = new List<Billboard>(numberOfBillboards);
+            _billboards = new List<Billboard>(capacity);
+            _dirtyBillboards = new List<Billboard>();
 
-            int offset = 0;
-            foreach (Billboard b in _billboards)
-            {
-                if (b.Owner != null)
-                {
-                    throw new ArgumentException("A billboard in billboards is already in another BillboardGroup.");
-                }
-
-                b.Dirty = true;
-                b.Owner = this;
-                b.VertexBufferOffset = offset++;
-
-                _dirtyBillboards.Add(b);
-            }
-            
             ///////////////////////////////////////////////////////////////////
 
             _context = context;
@@ -166,43 +155,77 @@ namespace MiniGlobe.Scene
                   }";
             _sp = Device.CreateShaderProgram(vs, gs, fs);
 
+            _texture = Device.CreateTexture2D(bitmap, TextureFormat.RedGreenBlueAlpha8, false);
+        }
+
+        private void CreateVertexArray(int count)
+        {
             // TODO:  Hint
-            _positionBuffer = Device.CreateVertexBuffer(BufferHint.StaticDraw, numberOfBillboards * Vector3S.SizeInBytes);
+            _positionBuffer = Device.CreateVertexBuffer(BufferHint.StaticDraw, count * Vector3S.SizeInBytes);
 
             AttachedVertexBuffer attachedPositionBuffer = new AttachedVertexBuffer(
                 _positionBuffer, VertexAttributeComponentType.Float, 3);
-            _va = context.CreateVertexArray();
+            _va = _context.CreateVertexArray();
             _va.VertexBuffers[_sp.VertexAttributes["position"].Location] = attachedPositionBuffer;
+        }
 
-            _texture = Device.CreateTexture2D(bitmap, TextureFormat.RedGreenBlueAlpha8, false);
+        private void Update()
+        {
+            if (_billboardsAdded)
+            {
+                //
+                // Since billboards were added, all billboards are rewritten
+                // so dirty billboards are automatically cleaned.
+                //
+                _dirtyBillboards.Clear();
+                
+                //
+                // Create vertex array with appropriately sized vertex buffers
+                //
+                DisposeVertexArray();
+                CreateVertexArray(_billboards.Count);
+
+                //
+                // Write vertex buffers
+                //
+                Vector3S[] positions = new Vector3S[_billboards.Count];
+                for (int i = 0; i < _billboards.Count; ++i)
+                {
+                    Billboard b = _billboards[i];
+
+                    positions[i] = b.Position.ToVector3S();
+                    b.VertexBufferOffset = i;
+                    b.Dirty = false;
+                }
+                _positionBuffer.CopyFromSystemMemory(positions, 0);
+
+                _billboardsAdded = false;
+            }
+
+            //if (_dirtyBillboards.Count != 0)
+            //{
+            //    Vector3S[] dirtyPosition = new Vector3S[1];
+            //    foreach (Billboard b in _dirtyBillboards)
+            //    {
+            //        // TODO: Combine for performance
+            //        dirtyPosition[0] = b.Position.ToVector3S();
+            //        _positionBuffer.CopyFromSystemMemory(dirtyPosition, b.VertexBufferOffset * Vector3S.SizeInBytes);
+
+            //        b.Dirty = false;
+            //    }
+            //    _dirtyBillboards.Clear();
+            //}
         }
 
         public void Render(SceneState sceneState)
         {
-            if (_dirtyBillboards.Count != 0)
-            {
-                Vector3S[] dirtyPosition = new Vector3S[1];
-                foreach (Billboard b in _dirtyBillboards)
-                {
-                    // TODO: Combine for performance
-                    dirtyPosition[0] = b.Position.ToVector3S();
-                    _positionBuffer.CopyFromSystemMemory(dirtyPosition, b.VertexBufferOffset * Vector3S.SizeInBytes);
-
-                    b.Dirty = false;
-                }
-                _dirtyBillboards.Clear();
-            }
+            Update();
 
             _context.TextureUnits[0].Texture2D = _texture;
             _context.Bind(_renderState);
             _context.Bind(_sp);
             _context.Bind(_va);
             _context.Draw(PrimitiveType.Points, sceneState);
-        }
-
-        public IEnumerable<Billboard> Billboards
-        {
-            get { return _billboards; }
         }
 
         public Context Context
@@ -222,6 +245,53 @@ namespace MiniGlobe.Scene
             set { _renderState.DepthTest.Enabled = value; }
         }
 
+        #region Collection Members
+
+        public void Add(Billboard billboard)
+        {
+            if (billboard == null)
+            {
+                throw new ArgumentNullException("billboard");
+            }
+
+            if (billboard.Owner != null)
+            {
+                if (billboard.Owner != this)
+                {
+                    throw new ArgumentException("billboard is already in another BillboardGroup.");
+                }
+                else
+                {
+                    throw new ArgumentException("billboard was already added to this BillboardGroup.");
+                }
+            }
+
+            billboard.Owner = this;
+
+            _billboards.Add(billboard);
+            _billboardsAdded = true;
+        }
+
+        // TODO:  Remove()
+
+        public Billboard this[int index] 
+        {
+            get { return _billboards[index]; }
+            set { _billboards[index] = value; }
+        }
+
+        public int Count
+        {
+            get { return _billboards.Count; }
+        }
+
+        public IEnumerator GetEnumerator()
+        {
+            return _billboards.GetEnumerator();
+        }
+
+        #endregion
+
         #region IDisposable Members
 
         public void Dispose()
@@ -234,43 +304,59 @@ namespace MiniGlobe.Scene
             }
 
             _sp.Dispose();
-            _positionBuffer.Dispose();
-            _va.Dispose();
             _texture.Dispose();
+            DisposeVertexArray();
         }
 
         #endregion
+
+        private void DisposeVertexArray()
+        {
+            if (_positionBuffer != null)
+            {
+                _positionBuffer.Dispose();
+            }
+
+            if (_va != null)
+            {
+                _va.Dispose();
+            }
+        }
 
         internal void NotifyDirty(Billboard billboard)
         {
             _dirtyBillboards.Add(billboard);
         }
 
-        private static int EnumerableCount<T>(IEnumerable<T> enumerable)
-        {
-            IList<T> list = enumerable as IList<T>;
+        //private static int EnumerableCount<T>(IEnumerable<T> enumerable)
+        //{
+        //    IList<T> list = enumerable as IList<T>;
 
-            if (list != null)
-            {
-                return list.Count;
-            }
+        //    if (list != null)
+        //    {
+        //        return list.Count;
+        //    }
 
-            int count = 0;
-            foreach (T t in enumerable)
-            {
-                ++count;
-            }
+        //    int count = 0;
+        //    foreach (T t in enumerable)
+        //    {
+        //        ++count;
+        //    }
 
-            return count;
-        }
+        //    return count;
+        //}
 
-        private readonly IEnumerable<Billboard> _billboards;
+        private readonly IList<Billboard> _billboards;
         private readonly IList<Billboard> _dirtyBillboards;
+
+        private bool _billboardsAdded;
+
         private readonly Context _context;
         private readonly RenderState _renderState;
         private readonly ShaderProgram _sp;
-        private readonly VertexBuffer _positionBuffer;
-        private readonly VertexArray _va;
         private readonly Texture2D _texture;
+
+        private VertexBuffer _positionBuffer;
+        private VertexArray _va;
     }
 }
