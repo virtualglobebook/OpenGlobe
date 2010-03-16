@@ -8,6 +8,7 @@
 #endregion
 
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using NUnit.Framework;
 using MiniGlobe.Core;
@@ -33,19 +34,33 @@ namespace MiniGlobe.Scene
             BillboardGroupTest billboardGroup = new BillboardGroupTest();
             BillboardGroup2 group = billboardGroup.Group;
 
-            Billboard b1 = new Billboard() { Position = new Vector3D(0, 1, 2) };
-            Billboard b2 = new Billboard() { Position = new Vector3D(3, 4, 5) };
-            Billboard[] billboards = new Billboard[] { b1, b2 };
-            group.Add(b1);
-            group.Add(b2);
-
             Assert.AreEqual(billboardGroup.Context, group.Context);
             Assert.IsTrue(group.DepthTestEnabled);
             Assert.IsFalse(group.Wireframe);
 
+            billboardGroup.Dispose();
+        }
+
+        [Test]
+        public void List()
+        {
+            BillboardGroupTest billboardGroup = new BillboardGroupTest();
+            IList<Billboard> group = billboardGroup.Group;
+
+            Assert.AreEqual(0, group.Count);
+            Assert.IsFalse(group.IsReadOnly);
+
+            Billboard b0 = new Billboard() { Position = new Vector3D(0, 1, 2) };
+            Billboard b1 = new Billboard() { Position = new Vector3D(3, 4, 5) };
+            Billboard[] billboards = new Billboard[] { b0, b1 };
+            group.Add(b0);
+            group.Add(b1);
+
             Assert.AreEqual(billboards.Length, group.Count);
-            Assert.AreEqual(billboards[0], group[0]);
-            Assert.AreEqual(billboards[1], group[1]);
+            Assert.AreEqual(b0, group[0]);
+            Assert.AreEqual(0, group.IndexOf(b0));
+            Assert.AreEqual(b1, group[1]);
+            Assert.AreEqual(1, group.IndexOf(b1));
 
             int i = 0;
             foreach (Billboard b in group)
@@ -53,6 +68,11 @@ namespace MiniGlobe.Scene
                 Assert.AreEqual(billboards[i++], b);
                 Assert.AreEqual(group, b.Group);
             }
+
+            Assert.IsTrue(group.Contains(b0));
+            group.Clear();
+            Assert.AreEqual(0, group.Count);
+            Assert.IsFalse(group.Contains(b0));
 
             billboardGroup.Dispose();
         }

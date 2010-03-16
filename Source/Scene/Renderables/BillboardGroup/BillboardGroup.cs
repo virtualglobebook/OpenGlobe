@@ -17,7 +17,7 @@ using System.Collections;
 
 namespace MiniGlobe.Scene
 {
-    public sealed class BillboardGroup2 : IDisposable
+    public sealed class BillboardGroup2 : IList<Billboard>, IDisposable
     {
         public BillboardGroup2(Context context, Bitmap bitmap)
             : this(context, bitmap, 0)
@@ -157,10 +157,10 @@ namespace MiniGlobe.Scene
             _texture = Device.CreateTexture2D(bitmap, TextureFormat.RedGreenBlueAlpha8, false);
         }
 
-        private void CreateVertexArray(int count)
+        private void CreateVertexArray()
         {
             // TODO:  Hint
-            _positionBuffer = Device.CreateVertexBuffer(BufferHint.StaticDraw, count * Vector3S.SizeInBytes);
+            _positionBuffer = Device.CreateVertexBuffer(BufferHint.StaticDraw, _billboards.Count * Vector3S.SizeInBytes);
 
             AttachedVertexBuffer attachedPositionBuffer = new AttachedVertexBuffer(
                 _positionBuffer, VertexAttributeComponentType.Float, 3);
@@ -170,7 +170,7 @@ namespace MiniGlobe.Scene
 
         private void Update()
         {
-            if (_billboardsAddedOrRemoved)
+            if (_rewriteBillboards)
             {
                 UpdateAll();
             }
@@ -192,23 +192,27 @@ namespace MiniGlobe.Scene
             // Create vertex array with appropriately sized vertex buffers
             //
             DisposeVertexArray();
-            CreateVertexArray(_billboards.Count);
 
-            //
-            // Write vertex buffers
-            //
-            Vector3S[] positions = new Vector3S[_billboards.Count];
-            for (int i = 0; i < _billboards.Count; ++i)
+            if (_billboards.Count != 0)
             {
-                Billboard b = _billboards[i];
+                CreateVertexArray();
 
-                positions[i] = b.Position.ToVector3S();
-                b.VertexBufferOffset = i;
-                b.Dirty = false;
+                //
+                // Write vertex buffers
+                //
+                Vector3S[] positions = new Vector3S[_billboards.Count];
+                for (int i = 0; i < _billboards.Count; ++i)
+                {
+                    Billboard b = _billboards[i];
+
+                    positions[i] = b.Position.ToVector3S();
+                    b.VertexBufferOffset = i;
+                    b.Dirty = false;
+                }
+                _positionBuffer.CopyFromSystemMemory(positions, 0);
+
+                _rewriteBillboards = false;
             }
-            _positionBuffer.CopyFromSystemMemory(positions, 0);
-
-            _billboardsAddedOrRemoved = false;
         }
 
         private void UpdateDirty()
@@ -248,11 +252,14 @@ namespace MiniGlobe.Scene
         {
             Update();
 
-            _context.TextureUnits[0].Texture2D = _texture;
-            _context.Bind(_renderState);
-            _context.Bind(_sp);
-            _context.Bind(_va);
-            _context.Draw(PrimitiveType.Points, sceneState);
+            if (_va != null)
+            {
+                _context.TextureUnits[0].Texture2D = _texture;
+                _context.Bind(_renderState);
+                _context.Bind(_sp);
+                _context.Bind(_va);
+                _context.Draw(PrimitiveType.Points, sceneState);
+            }
         }
 
         public Context Context
@@ -272,9 +279,115 @@ namespace MiniGlobe.Scene
             set { _renderState.DepthTest.Enabled = value; }
         }
 
-        #region Collection Members
+        #region IList<Billboard> Members
+
+        public Billboard this[int index] 
+        {
+            get { return _billboards[index]; }
+            set 
+            {
+                Billboard b = _billboards[index];
+
+                AddBillboad(value);
+                RemoveBillboad(b);
+                _billboards[index] = value; 
+            }
+        }
+
+        public int IndexOf(Billboard billboard)
+        {
+            return _billboards.IndexOf(billboard);
+        }
+
+        public void Insert(int index, Billboard billboard)
+        {
+            if (index < Count)
+            {
+                Billboard b = _billboards[index];
+                AddBillboad(billboard);
+                RemoveBillboad(b);
+            }
+            else
+            {
+                AddBillboad(billboard);
+            }
+
+            _billboards.Insert(index, billboard);
+        }
+
+        public void RemoveAt(int index)
+        {
+            Billboard b = _billboards[index];
+            RemoveBillboad(b);
+            _billboards.RemoveAt(index);
+        }
+
+        #endregion
+
+        #region ICollection<Billboard> Members
 
         public void Add(Billboard billboard)
+        {
+            AddBillboad(billboard);
+            _billboards.Add(billboard);
+        }
+
+        public bool Remove(Billboard billboard)
+        {
+            bool b = _billboards.Remove(billboard);
+
+            if (b)
+            {
+                RemoveBillboad(billboard);
+            }
+
+            return b;
+        }
+
+        public int Count
+        {
+            get { return _billboards.Count; }
+        }
+
+        public void Clear()
+        {
+            _billboards.Clear();
+            _dirtyBillboards.Clear();
+            _rewriteBillboards = true;
+        }
+
+        public bool Contains(Billboard billboard)
+        {
+            return _billboards.Contains(billboard);
+        }
+
+        public void CopyTo(Billboard[] array, int arrayIndex)
+        {
+            _billboards.CopyTo(array, arrayIndex);
+        }
+
+        public bool IsReadOnly
+        {
+            get { return _billboards.IsReadOnly; }
+        }
+
+        #endregion
+
+        #region IEnumerable<Billboard> Members
+
+        IEnumerator<Billboard> IEnumerable<Billboard>.GetEnumerator()
+        {
+            return _billboards.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return _billboards.GetEnumerator();
+        }
+
+        #endregion
+
+        private void AddBillboad(Billboard billboard)
         {
             if (billboard == null)
             {
@@ -294,46 +407,24 @@ namespace MiniGlobe.Scene
             }
 
             billboard.Group = this;
-
-            _billboards.Add(billboard);
-            _billboardsAddedOrRemoved = true;
+            _rewriteBillboards = true;
         }
 
-        public bool Remove(Billboard billboard)
+        private void RemoveBillboad(Billboard billboard)
         {
-            bool b = _billboards.Remove(billboard);
-
-            if (b)
+            if (billboard.Dirty)
             {
-                if (billboard.Dirty)
-                {
-                    _dirtyBillboards.Remove(billboard);
-                }
-
-                _billboardsAddedOrRemoved = true;
-                RemoveBillboard(billboard);
+                _dirtyBillboards.Remove(billboard);
             }
 
-            return b;
+            _rewriteBillboards = true;
+            ReleaseBillboard(billboard);
         }
 
-        public Billboard this[int index] 
+        internal void NotifyDirty(Billboard billboard)
         {
-            get { return _billboards[index]; }
-            set { _billboards[index] = value; }
+            _dirtyBillboards.Add(billboard);
         }
-
-        public int Count
-        {
-            get { return _billboards.Count; }
-        }
-
-        public IEnumerator GetEnumerator()
-        {
-            return _billboards.GetEnumerator();
-        }
-
-        #endregion
 
         #region IDisposable Members
 
@@ -341,7 +432,7 @@ namespace MiniGlobe.Scene
         {
             foreach (Billboard b in _billboards)
             {
-                RemoveBillboard(b);
+                ReleaseBillboard(b);
             }
 
             _sp.Dispose();
@@ -356,24 +447,21 @@ namespace MiniGlobe.Scene
             if (_positionBuffer != null)
             {
                 _positionBuffer.Dispose();
+                _positionBuffer = null;
             }
 
             if (_va != null)
             {
                 _va.Dispose();
+                _va = null;
             }
         }
-
-        private static void RemoveBillboard(Billboard billboard)
+        
+        private static void ReleaseBillboard(Billboard billboard)
         {
             billboard.Dirty = false;
             billboard.Group = null;
             billboard.VertexBufferOffset = 0;
-        }
-
-        internal void NotifyDirty(Billboard billboard)
-        {
-            _dirtyBillboards.Add(billboard);
         }
 
         //private static int EnumerableCount<T>(IEnumerable<T> enumerable)
@@ -397,7 +485,7 @@ namespace MiniGlobe.Scene
         private readonly IList<Billboard> _billboards;
         private readonly IList<Billboard> _dirtyBillboards;
 
-        private bool _billboardsAddedOrRemoved;
+        private bool _rewriteBillboards;
 
         private readonly Context _context;
         private readonly RenderState _renderState;
