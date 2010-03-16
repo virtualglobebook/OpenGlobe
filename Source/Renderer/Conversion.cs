@@ -9,7 +9,7 @@
 
 using OpenTK;
 
-namespace MiniGlobe.Core
+namespace MiniGlobe.Renderer
 {
     public static class Conversion
     {

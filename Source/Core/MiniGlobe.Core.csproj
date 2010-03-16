@@ -32,7 +32,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Geodetic3D.cs" />
-    <Compile Include="Conversion.cs" />
     <Compile Include="Disposable.cs" />
     <Compile Include="Geometry\Ellipsoid.cs" />
     <Compile Include="Geometry\Indices\Indices.cs" />
@@ -76,12 +75,6 @@
     <Compile Include="Vector4D.cs" />
     <Compile Include="Vector4H.cs" />
     <Compile Include="Vector4S.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="OpenTK, Version=0.9.9.5, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\ThirdParty\opentk-1.0-beta-3\Binaries\OpenTK\Release\OpenTK.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
