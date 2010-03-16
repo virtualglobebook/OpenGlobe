@@ -119,6 +119,13 @@ namespace MiniGlobe.Core
             return -this;
         }
 
+        public bool EqualsEpsilon(Vector2S other, float epsilon)
+        {
+            return
+                (Math.Abs(_x - other._x) <= epsilon) &&
+                (Math.Abs(_y - other._y) <= epsilon);
+        }
+
         public bool Equals(Vector2S other)
         {
             return _x == other._x && _y == other._y;

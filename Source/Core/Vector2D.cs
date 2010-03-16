@@ -119,6 +119,13 @@ namespace MiniGlobe.Core
             return -this;
         }
 
+        public bool EqualsEpsilon(Vector2D other, double epsilon)
+        {
+            return
+                (Math.Abs(_x - other._x) <= epsilon) &&
+                (Math.Abs(_y - other._y) <= epsilon);
+        }
+
         public bool Equals(Vector2D other)
         {
             return _x == other._x && _y == other._y;
@@ -186,6 +193,11 @@ namespace MiniGlobe.Core
         public Vector2S ToVector2S()
         {
             return new Vector2S((float)_x, (float)_y);
+        }
+
+        public Vector2H ToVector2H()
+        {
+            return new Vector2H(_x, _y);
         }
 
         private readonly double _x;

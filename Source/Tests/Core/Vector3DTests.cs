@@ -284,5 +284,66 @@ namespace MiniGlobe.Core
             double dot = a.Dot(b);
             Assert.AreEqual(1.0 * 4.0 + 2.0 * 5.0 + 3.0 * 6.0, dot, 1e-14);
         }
+
+        [Test]
+        public void Invert()
+        {
+            Vector3D a = new Vector3D(1.0, 2.0, 3.0);
+            Vector3D invertedA1 = a.Invert();
+            Assert.AreEqual(-1.0, invertedA1.X, 1e-14);
+            Assert.AreEqual(-2.0, invertedA1.Y, 1e-14);
+            Assert.AreEqual(-3.0, invertedA1.Z, 1e-14);
+            Vector3D invertedA2 = -a;
+            Assert.AreEqual(-1.0, invertedA2.X, 1e-14);
+            Assert.AreEqual(-2.0, invertedA2.Y, 1e-14);
+            Assert.AreEqual(-3.0, invertedA2.Z, 1e-14);
+
+            Vector3D b = new Vector3D(-1.0, -2.0, -3.0);
+            Vector3D invertedB1 = b.Invert();
+            Assert.AreEqual(1.0, invertedB1.X, 1e-14);
+            Assert.AreEqual(2.0, invertedB1.Y, 1e-14);
+            Assert.AreEqual(3.0, invertedB1.Z, 1e-14);
+            Vector3D invertedB2 = -b;
+            Assert.AreEqual(1.0, invertedB2.X, 1e-14);
+            Assert.AreEqual(2.0, invertedB2.Y, 1e-14);
+            Assert.AreEqual(3.0, invertedB2.Z, 1e-14);
+        }
+
+        [Test]
+        public void ToVector3S()
+        {
+            Vector3D a = new Vector3D(1.0, 2.0, 3.0);
+            Vector3S sA = a.ToVector3S();
+            Assert.AreEqual(1.0f, sA.X, 1e-7);
+            Assert.AreEqual(2.0f, sA.Y, 1e-7);
+            Assert.AreEqual(3.0f, sA.Z, 1e-7);
+        }
+
+        [Test]
+        public void ToVector2H()
+        {
+            Vector3D a = new Vector3D(1.0, 2.0, 3.0);
+            Vector3H sA = a.ToVector3H();
+            Assert.AreEqual((Half)1.0, sA.X, 1e-7);
+            Assert.AreEqual((Half)2.0, sA.Y, 1e-7);
+            Assert.AreEqual((Half)3.0, sA.Z, 1e-7);
+        }
+
+        [Test]
+        public void Cross()
+        {
+            Vector3D a = new Vector3D(1.0, 0.0, 0.0);
+            Vector3D b = new Vector3D(0.0, 1.0, 0.0);
+            
+            Vector3D cross1 = a.Cross(b);
+            Assert.AreEqual(0.0, cross1.X, 1e-14);
+            Assert.AreEqual(0.0, cross1.Y, 1e-14);
+            Assert.AreEqual(1.0, cross1.Z, 1e-14);
+
+            Vector3D cross2 = b.Cross(a);
+            Assert.AreEqual(0.0, cross2.X, 1e-14);
+            Assert.AreEqual(0.0, cross2.Y, 1e-14);
+            Assert.AreEqual(-1.0, cross2.Z, 1e-14);
+        }
     }
 }
