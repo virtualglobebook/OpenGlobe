@@ -205,5 +205,15 @@ namespace MiniGlobe.Core
             Assert.AreEqual(a.GetHashCode(), c.GetHashCode());
             Assert.AreNotEqual(a.GetHashCode(), b.GetHashCode());
         }
+
+        [Test]
+        public void Dot()
+        {
+            Vector2S a = new Vector2S(1.0f, 2.0f);
+            Vector2S b = new Vector2S(4.0f, 5.0f);
+
+            float dot = a.Dot(b);
+            Assert.AreEqual(1.0f * 4.0f + 2.0f * 5.0f, dot, 1e-7);
+        }
     }
 }

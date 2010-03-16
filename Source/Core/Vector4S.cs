@@ -179,6 +179,11 @@ namespace MiniGlobe.Core
             }
         }
 
+        public Vector4S Invert()
+        {
+            return -this;
+        }
+
         public bool EqualsEpsilon(Vector4S other, float epsilon)
         {
             return (Math.Abs(_x - other._x) <= epsilon) &&

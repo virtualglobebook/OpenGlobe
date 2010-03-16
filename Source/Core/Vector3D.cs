@@ -165,6 +165,11 @@ namespace MiniGlobe.Core
             }
         }
 
+        public Vector3D Invert()
+        {
+            return -this;
+        }
+
         public bool EqualsEpsilon(Vector3D other, double epsilon)
         {
             return

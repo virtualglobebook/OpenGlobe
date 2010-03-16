@@ -114,6 +114,11 @@ namespace MiniGlobe.Core
             return this / scalar;
         }
 
+        public Vector2S Invert()
+        {
+            return -this;
+        }
+
         public bool Equals(Vector2S other)
         {
             return _x == other._x && _y == other._y;
