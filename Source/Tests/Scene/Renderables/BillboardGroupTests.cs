@@ -39,6 +39,16 @@ namespace MiniGlobe.Scene
         }
 
         [Test]
+        public void BillboardColor()
+        {
+            Billboard b = new Billboard();
+            Assert.AreEqual(Color.White, b.Color);
+
+            b.Color = Color.Green;
+            Assert.AreEqual(Color.Green, b.Color);
+        }
+
+        [Test]
         public void Construct()
         {
             BillboardGroupTest billboardGroup = new BillboardGroupTest();

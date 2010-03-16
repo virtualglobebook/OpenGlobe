@@ -8,6 +8,7 @@
 #endregion
 
 using MiniGlobe.Core;
+using System.Drawing;
 
 namespace MiniGlobe.Scene
 {
@@ -44,6 +45,19 @@ namespace MiniGlobe.Scene
             }
         }
 
+        public Color Color
+        {
+            get { return _color; }
+            set
+            {
+                if (_color != value)
+                {
+                    _color = value;
+                    MakeDirty();
+                }
+            }
+        }
+
         private void MakeDirty()
         {
             if (!Dirty)
@@ -67,5 +81,6 @@ namespace MiniGlobe.Scene
 
         private Vector3D _position;
         private RectangleH _textureCoordinates;
+        private Color _color;
     }
 }

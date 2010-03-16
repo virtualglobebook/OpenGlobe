@@ -15,13 +15,13 @@
 
 using System;
 using System.Drawing;
+using System.Collections.Generic;
 
 using MiniGlobe.Core;
 using MiniGlobe.Core.Geometry;
 using MiniGlobe.Core.Tessellation;
 using MiniGlobe.Renderer;
 using MiniGlobe.Scene;
-using OpenTK;
 
 namespace MiniGlobe.Examples.Chapter2
 {
@@ -68,8 +68,7 @@ namespace MiniGlobe.Examples.Chapter2
             _wireframe.Render(_sceneState);
             _axes.Render(_sceneState);
             _normals.Render(_sceneState);
-            _geodeticBillboard.Render(_sceneState);
-            _geocentricBillboard.Render(_sceneState);
+            _labels.Render(_sceneState);
             _tangentPlane.Render(_sceneState);
         }
 
@@ -204,18 +203,25 @@ namespace MiniGlobe.Examples.Chapter2
 
             ///////////////////////////////////////////////////////////////////
             Font font = new Font("Arial", 24);
-
-            _geodeticBillboard = new BillboardGroup(_window.Context, 
-                new[] { pDetic.ToVector3S() },
-                Device.CreateBitmapFromText("Geodetic", font));
-            _geodeticBillboard.Color = Color.DarkGreen;
-
-            _geocentricBillboard = new BillboardGroup(_window.Context,
-                new[] { pCentric.ToVector3S() },
-                Device.CreateBitmapFromText("Geocentric", font));
-            _geocentricBillboard.Color = Color.DarkCyan;
-
+            IList<Bitmap> labelBitmaps = new List<Bitmap>(2);
+            labelBitmaps.Add(Device.CreateBitmapFromText("Geodetic", font));
+            labelBitmaps.Add(Device.CreateBitmapFromText("Geocentric", font));
             font.Dispose();
+
+            TextureAtlas atlas = new TextureAtlas(labelBitmaps);
+            _labels = new BillboardGroup2(_window.Context, atlas.Bitmap, 2);
+            _labels.Add(new Billboard()
+                {
+                    Position = pDetic,
+                    TextureCoordinates = atlas.TextureCoordinates[0],
+                    Color = Color.DarkGreen
+                });
+            _labels.Add(new Billboard()
+                {
+                    Position = pCentric,
+                    TextureCoordinates = atlas.TextureCoordinates[1],
+                    Color = Color.DarkCyan
+                });
 
             ///////////////////////////////////////////////////////////////////
             Vector3D east = Vector3D.UnitZ.Cross(deticNormal);
@@ -247,14 +253,9 @@ namespace MiniGlobe.Examples.Chapter2
                 _axes.Dispose();
             }
 
-            if (_geodeticBillboard != null)
+            if (_labels != null)
             {
-                _geodeticBillboard.Dispose();
-            }
-
-            if (_geocentricBillboard != null)
-            {
-                _geocentricBillboard.Dispose();
+                _labels.Dispose();
             }
 
             if (_normals != null)
@@ -303,8 +304,7 @@ namespace MiniGlobe.Examples.Chapter2
 
         private Wireframe _wireframe;
         private Axes _axes;
-        private BillboardGroup _geodeticBillboard;
-        private BillboardGroup _geocentricBillboard;
+        private BillboardGroup2 _labels;
         private Polyline _normals;
         private Plane _tangentPlane;
 
