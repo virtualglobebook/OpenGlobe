@@ -61,6 +61,8 @@ namespace MiniGlobe.Scene
                 @"#version 150
 
                   in vec4 position;
+                  in vec4 textureCoordinates;
+                  out vec4 gsTextureCoordinates;
 
                   uniform mat4 mg_modelViewPerspectiveProjectionMatrix;
                   uniform mat4 mg_viewportTransformationMatrix;
@@ -84,6 +86,7 @@ namespace MiniGlobe.Scene
                   {
                       gl_Position = WorldToWindowCoordinates(position, 
                           mg_modelViewPerspectiveProjectionMatrix, mg_viewportTransformationMatrix);
+                      gsTextureCoordinates = textureCoordinates;
                   }";
             string gs =
                 @"#version 150 
@@ -91,7 +94,8 @@ namespace MiniGlobe.Scene
                   layout(points) in;
                   layout(triangle_strip, max_vertices = 4) out;
 
-                  out vec2 textureCoordinates;
+                  in vec4 gsTextureCoordinates[];
+                  out vec2 fsTextureCoordinates;
 
                   uniform mat4 mg_viewportOrthographicProjectionMatrix;
                   uniform sampler2D mg_texture0;
@@ -119,32 +123,34 @@ namespace MiniGlobe.Scene
                           return;
                       }
 
+                      vec4 textureCoordinate = gsTextureCoordinates[0];
+
                       gl_Position = mg_viewportOrthographicProjectionMatrix * v0;
-                      textureCoordinates = vec2(0, 0);
+                      fsTextureCoordinates = textureCoordinate.st;
                       EmitVertex();
 
                       gl_Position = mg_viewportOrthographicProjectionMatrix * v1;
-                      textureCoordinates = vec2(1, 0);
+                      fsTextureCoordinates = textureCoordinate.pt;
                       EmitVertex();
 
                       gl_Position = mg_viewportOrthographicProjectionMatrix * v2;
-                      textureCoordinates = vec2(0, 1);
+                      fsTextureCoordinates = textureCoordinate.sq;
                       EmitVertex();
 
                       gl_Position = mg_viewportOrthographicProjectionMatrix * v3;
-                      textureCoordinates = vec2(1, 1);
+                      fsTextureCoordinates = textureCoordinate.pq;
                       EmitVertex();
                   }";
             string fs =
                 @"#version 150
                  
-                  in vec2 textureCoordinates;
+                  in vec2 fsTextureCoordinates;
                   out vec4 fragmentColor;
                   uniform sampler2D mg_texture0;
 
                   void main()
                   {
-                      vec4 color = texture(mg_texture0, textureCoordinates);
+                      vec4 color = texture(mg_texture0, fsTextureCoordinates);
 
                       if (color.a == 0.0)
                       {
@@ -159,13 +165,18 @@ namespace MiniGlobe.Scene
 
         private void CreateVertexArray()
         {
-            // TODO:  Hint
+            // TODO:  Hint per buffer?  One hint?
             _positionBuffer = Device.CreateVertexBuffer(BufferHint.StaticDraw, _billboards.Count * Vector3S.SizeInBytes);
+            _textureCoordinatesBuffer = Device.CreateVertexBuffer(BufferHint.StaticDraw, _billboards.Count * Vector4H.SizeInBytes);
 
             AttachedVertexBuffer attachedPositionBuffer = new AttachedVertexBuffer(
                 _positionBuffer, VertexAttributeComponentType.Float, 3);
+            AttachedVertexBuffer attachedTextureCoordinatesBuffer = new AttachedVertexBuffer(
+                _textureCoordinatesBuffer, VertexAttributeComponentType.HalfFloat, 4);
+
             _va = _context.CreateVertexArray();
             _va.VertexBuffers[_sp.VertexAttributes["position"].Location] = attachedPositionBuffer;
+            _va.VertexBuffers[_sp.VertexAttributes["textureCoordinates"].Location] = attachedTextureCoordinatesBuffer;
         }
 
         private void Update()
@@ -201,15 +212,20 @@ namespace MiniGlobe.Scene
                 // Write vertex buffers
                 //
                 Vector3S[] positions = new Vector3S[_billboards.Count];
+                Vector4H[] textureCoordinates = new Vector4H[_billboards.Count];
                 for (int i = 0; i < _billboards.Count; ++i)
                 {
                     Billboard b = _billboards[i];
 
                     positions[i] = b.Position.ToVector3S();
+                    textureCoordinates[i] = new Vector4H(
+                        b.LowerLeftTextureCoordinate.X, b.LowerLeftTextureCoordinate.Y,
+                        b.UpperRightTextureCoordinate.X, b.UpperRightTextureCoordinate.Y);
+
                     b.VertexBufferOffset = i;
                     b.Dirty = false;
                 }
-                _positionBuffer.CopyFromSystemMemory(positions, 0);
+                CopyBillboardsFromSystemMemory(positions, textureCoordinates, 0, _billboards.Count);
 
                 _rewriteBillboards = false;
             }
@@ -222,6 +238,7 @@ namespace MiniGlobe.Scene
             // PERFORMANCE:  Round robin multiple buffers
 
             Vector3S[] positions = new Vector3S[_dirtyBillboards.Count];
+            Vector4H[] textureCoordinates = new Vector4H[_dirtyBillboards.Count];
 
             int bufferOffset = _dirtyBillboards[0].VertexBufferOffset;
             int previousBufferOffset = bufferOffset - 1;
@@ -233,19 +250,38 @@ namespace MiniGlobe.Scene
 
                 if (previousBufferOffset != b.VertexBufferOffset - 1)
                 {
-                    _positionBuffer.CopyFromSystemMemory(positions, bufferOffset * Vector3S.SizeInBytes, length * Vector3S.SizeInBytes);
+                    CopyBillboardsFromSystemMemory(positions, textureCoordinates, bufferOffset, length);
 
                     bufferOffset = b.VertexBufferOffset;
                     length = 0;
                 }
 
-                positions[length++] = b.Position.ToVector3S();
+                positions[length] = b.Position.ToVector3S();
+                textureCoordinates[length] = new Vector4H(
+                    b.LowerLeftTextureCoordinate.X, b.LowerLeftTextureCoordinate.Y,
+                    b.UpperRightTextureCoordinate.X, b.UpperRightTextureCoordinate.Y);
+                ++length;
+
                 previousBufferOffset = b.VertexBufferOffset;
                 b.Dirty = false;
             }
-            _positionBuffer.CopyFromSystemMemory(positions, bufferOffset * Vector3S.SizeInBytes, length * Vector3S.SizeInBytes);
+            CopyBillboardsFromSystemMemory(positions, textureCoordinates, bufferOffset, length);
 
             _dirtyBillboards.Clear();
+        }
+
+        private void CopyBillboardsFromSystemMemory(
+            Vector3S[] positions,
+            Vector4H[] textureCoordinates,
+            int bufferOffset, 
+            int length)
+        {
+            _positionBuffer.CopyFromSystemMemory(positions, 
+                bufferOffset * Vector3S.SizeInBytes, 
+                length * Vector3S.SizeInBytes);
+            _textureCoordinatesBuffer.CopyFromSystemMemory(textureCoordinates, 
+                bufferOffset * Vector4H.SizeInBytes, 
+                length * Vector4H.SizeInBytes);
         }
 
         public void Render(SceneState sceneState)
@@ -450,6 +486,12 @@ namespace MiniGlobe.Scene
                 _positionBuffer = null;
             }
 
+            if (_textureCoordinatesBuffer != null)
+            {
+                _textureCoordinatesBuffer.Dispose();
+                _textureCoordinatesBuffer = null;
+            }
+
             if (_va != null)
             {
                 _va.Dispose();
@@ -493,6 +535,7 @@ namespace MiniGlobe.Scene
         private readonly Texture2D _texture;
 
         private VertexBuffer _positionBuffer;
+        private VertexBuffer _textureCoordinatesBuffer;
         private VertexArray _va;
     }
 }

@@ -20,12 +20,26 @@ namespace MiniGlobe.Scene
     public class BillboardGroupTests
     {
         [Test]
-        public void Billboard()
+        public void BillboardPosition()
         {
             Billboard b = new Billboard();
             b.Position = new Vector3D(0, 1, 2);
             Assert.AreEqual(new Vector3D(0, 1, 2), b.Position);
             Assert.IsNull(b.Group);
+        }
+
+        [Test]
+        public void BillboardTextureCoordinates()
+        {
+            Billboard b = new Billboard();
+            Assert.AreEqual(Vector2H.Zero, b.LowerLeftTextureCoordinate);
+            Assert.AreEqual(new Vector2H(1.0, 1.0), b.UpperRightTextureCoordinate);
+
+            b.LowerLeftTextureCoordinate = new Vector2H(2.0, 3.0);
+            b.UpperRightTextureCoordinate = new Vector2H(4.0, 5.0);
+
+            Assert.AreEqual(new Vector2H(2.0, 3.0), b.LowerLeftTextureCoordinate);
+            Assert.AreEqual(new Vector2H(4.0, 5.0), b.UpperRightTextureCoordinate);
         }
 
         [Test]
