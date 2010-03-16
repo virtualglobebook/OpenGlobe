@@ -15,8 +15,7 @@ namespace MiniGlobe.Scene
     {
         public Billboard()
         {
-            _lowerLeftTextureCoordinate = Vector2H.Zero;
-            _upperRightTextureCoordinate = new Vector2H(1.0, 1.0);
+            _textureCoordinates = new RectangleH(Vector2H.Zero, new Vector2H(1.0, 1.0));
         }
 
         public Vector3D Position 
@@ -32,27 +31,14 @@ namespace MiniGlobe.Scene
             }
         }
 
-        public Vector2H LowerLeftTextureCoordinate
+        public RectangleH TextureCoordinates
         {
-            get { return _lowerLeftTextureCoordinate; }
+            get { return _textureCoordinates; }
             set
             {
-                if (_lowerLeftTextureCoordinate != value)
+                if (_textureCoordinates != value)
                 {
-                    _lowerLeftTextureCoordinate = value;
-                    MakeDirty();
-                }
-            }
-        }
-
-        public Vector2H UpperRightTextureCoordinate
-        {
-            get { return _upperRightTextureCoordinate; }
-            set
-            {
-                if (_upperRightTextureCoordinate != value)
-                {
-                    _upperRightTextureCoordinate = value;
+                    _textureCoordinates = value;
                     MakeDirty();
                 }
             }
@@ -80,7 +66,6 @@ namespace MiniGlobe.Scene
         internal int VertexBufferOffset { get; set; }
 
         private Vector3D _position;
-        private Vector2H _lowerLeftTextureCoordinate;       // TODO:  Introduce texture rectangle?  Or use Vector4H?
-        private Vector2H _upperRightTextureCoordinate;
+        private RectangleH _textureCoordinates;
     }
 }

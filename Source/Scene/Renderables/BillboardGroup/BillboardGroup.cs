@@ -219,8 +219,8 @@ namespace MiniGlobe.Scene
 
                     positions[i] = b.Position.ToVector3S();
                     textureCoordinates[i] = new Vector4H(
-                        b.LowerLeftTextureCoordinate.X, b.LowerLeftTextureCoordinate.Y,
-                        b.UpperRightTextureCoordinate.X, b.UpperRightTextureCoordinate.Y);
+                        b.TextureCoordinates.LowerLeft.X, b.TextureCoordinates.LowerLeft.Y,
+                        b.TextureCoordinates.UpperRight.X, b.TextureCoordinates.UpperRight.Y);
 
                     b.VertexBufferOffset = i;
                     b.Dirty = false;
@@ -258,8 +258,8 @@ namespace MiniGlobe.Scene
 
                 positions[length] = b.Position.ToVector3S();
                 textureCoordinates[length] = new Vector4H(
-                    b.LowerLeftTextureCoordinate.X, b.LowerLeftTextureCoordinate.Y,
-                    b.UpperRightTextureCoordinate.X, b.UpperRightTextureCoordinate.Y);
+                    b.TextureCoordinates.LowerLeft.X, b.TextureCoordinates.LowerLeft.Y,
+                    b.TextureCoordinates.UpperRight.X, b.TextureCoordinates.UpperRight.Y);
                 ++length;
 
                 previousBufferOffset = b.VertexBufferOffset;

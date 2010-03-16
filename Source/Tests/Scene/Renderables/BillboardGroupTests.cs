@@ -32,14 +32,10 @@ namespace MiniGlobe.Scene
         public void BillboardTextureCoordinates()
         {
             Billboard b = new Billboard();
-            Assert.AreEqual(Vector2H.Zero, b.LowerLeftTextureCoordinate);
-            Assert.AreEqual(new Vector2H(1.0, 1.0), b.UpperRightTextureCoordinate);
+            Assert.AreEqual(new RectangleH(Vector2H.Zero, new Vector2H(1.0, 1.0)), b.TextureCoordinates);
 
-            b.LowerLeftTextureCoordinate = new Vector2H(2.0, 3.0);
-            b.UpperRightTextureCoordinate = new Vector2H(4.0, 5.0);
-
-            Assert.AreEqual(new Vector2H(2.0, 3.0), b.LowerLeftTextureCoordinate);
-            Assert.AreEqual(new Vector2H(4.0, 5.0), b.UpperRightTextureCoordinate);
+            b.TextureCoordinates = new RectangleH(new Vector2H(2.0, 3.0), new Vector2H(4.0, 5.0));
+            Assert.AreEqual(new RectangleH(new Vector2H(2.0, 3.0), new Vector2H(4.0, 5.0)), b.TextureCoordinates);
         }
 
         [Test]
