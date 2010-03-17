@@ -102,6 +102,19 @@ namespace MiniGlobe.Scene
             }
         }
 
+        public Vector2H PixelOffset
+        {
+            get { return _pixelOffset; }
+            set
+            {
+                if (_pixelOffset != value)
+                {
+                    _pixelOffset = value;
+                    MakeDirty();
+                }
+            }
+        }
+
         private void MakeDirty()
         {
             if (!Dirty)
@@ -127,6 +140,7 @@ namespace MiniGlobe.Scene
         private RectangleH _textureCoordinates;
         private Color _color;
         private uint _origins;
+        private Vector2H _pixelOffset;
 
         private const short _horizontalOriginShift = 0;
         private const short _verticalOriginShift = 2;

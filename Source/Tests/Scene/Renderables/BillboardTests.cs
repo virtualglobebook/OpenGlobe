@@ -91,5 +91,15 @@ namespace MiniGlobe.Scene
             Assert.AreEqual(HorizontalOrigin.Right, b.HorizontalOrigin);
             Assert.AreEqual(VerticalOrigin.Top, b.VerticalOrigin);
         }
+
+        [Test]
+        public void PixelOffset()
+        {
+            Billboard b = new Billboard();
+            Assert.AreEqual(new Vector2H(0, 0), b.PixelOffset);
+
+            b.PixelOffset = new Vector2H(1, 2);
+            Assert.AreEqual(new Vector2H(1, 2), b.PixelOffset);
+        }
     }
 }

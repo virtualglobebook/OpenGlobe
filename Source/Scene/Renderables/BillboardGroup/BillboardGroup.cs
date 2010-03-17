@@ -64,10 +64,12 @@ namespace MiniGlobe.Scene
                   in vec4 textureCoordinates;
                   in vec4 color;
                   in vec2 origin;
+                  in vec2 pixelOffset;
 
                   out vec4 gsTextureCoordinates;
                   out vec4 gsColor;
                   out vec2 gsOrigin;
+                  out vec2 gsPixelOffset;
 
                   uniform mat4 mg_modelViewPerspectiveProjectionMatrix;
                   uniform mat4 mg_viewportTransformationMatrix;
@@ -94,6 +96,7 @@ namespace MiniGlobe.Scene
                       gsTextureCoordinates = textureCoordinates;
                       gsColor = color;
                       gsOrigin = origin;
+                      gsPixelOffset = pixelOffset;
                   }";
             string gs =
                 @"#version 150 
@@ -104,6 +107,7 @@ namespace MiniGlobe.Scene
                   in vec4 gsTextureCoordinates[];
                   in vec4 gsColor[];
                   in vec2 gsOrigin[];
+                  in vec2 gsPixelOffset[];
 
                   out vec2 fsTextureCoordinates;
                   out vec4 fsColor;
@@ -124,6 +128,7 @@ namespace MiniGlobe.Scene
 
                       vec4 center = gl_in[0].gl_Position;
                       center.xy += (gsOrigin[0] * halfSize);
+                      center.xy += gsPixelOffset[0];
 
                       vec4 v0 = vec4(center.xy - halfSize, center.z, 1.0);
                       vec4 v1 = vec4(center.xy + vec2(halfSize.x, -halfSize.y), center.z, 1.0);
@@ -189,6 +194,7 @@ namespace MiniGlobe.Scene
             _positionBuffer = Device.CreateVertexBuffer(BufferHint.StaticDraw, _billboards.Count * Vector3S.SizeInBytes);
             _colorBuffer = Device.CreateVertexBuffer(BufferHint.StaticDraw, _billboards.Count * BlittableRGBA.SizeInBytes);
             _originBuffer = Device.CreateVertexBuffer(BufferHint.StaticDraw, _billboards.Count * Vector2H.SizeInBytes);
+            _pixelOffsetBuffer = Device.CreateVertexBuffer(BufferHint.StaticDraw, _billboards.Count * Vector2H.SizeInBytes);
             _textureCoordinatesBuffer = Device.CreateVertexBuffer(BufferHint.StaticDraw, _billboards.Count * Vector4H.SizeInBytes);
 
             AttachedVertexBuffer attachedPositionBuffer = new AttachedVertexBuffer(
@@ -197,6 +203,8 @@ namespace MiniGlobe.Scene
                 _colorBuffer, VertexAttributeComponentType.UnsignedByte, 4);
             AttachedVertexBuffer attachedOriginBuffer = new AttachedVertexBuffer(
                 _originBuffer, VertexAttributeComponentType.HalfFloat, 2);
+            AttachedVertexBuffer attachedPixelOffsetBuffer = new AttachedVertexBuffer(
+                _pixelOffsetBuffer, VertexAttributeComponentType.HalfFloat, 2);
             AttachedVertexBuffer attachedTextureCoordinatesBuffer = new AttachedVertexBuffer(
                 _textureCoordinatesBuffer, VertexAttributeComponentType.HalfFloat, 4);
 
@@ -205,6 +213,7 @@ namespace MiniGlobe.Scene
             _va.VertexBuffers[_sp.VertexAttributes["textureCoordinates"].Location] = attachedTextureCoordinatesBuffer;
             _va.VertexBuffers[_sp.VertexAttributes["color"].Location] = attachedColorBuffer;
             _va.VertexBuffers[_sp.VertexAttributes["origin"].Location] = attachedOriginBuffer;
+            _va.VertexBuffers[_sp.VertexAttributes["pixelOffset"].Location] = attachedPixelOffsetBuffer;
         }
 
         private void Update()
@@ -243,6 +252,7 @@ namespace MiniGlobe.Scene
                 Vector4H[] textureCoordinates = new Vector4H[_billboards.Count];
                 BlittableRGBA[] colors = new BlittableRGBA[_billboards.Count];
                 Vector2H[] origins = new Vector2H[_billboards.Count];
+                Vector2H[] pixelOffets = new Vector2H[_billboards.Count];
 
                 for (int i = 0; i < _billboards.Count; ++i)
                 {
@@ -254,11 +264,12 @@ namespace MiniGlobe.Scene
                         b.TextureCoordinates.UpperRight.X, b.TextureCoordinates.UpperRight.Y);
                     colors[i] = new BlittableRGBA(b.Color);
                     origins[i] = BillboardOrigin(b);
+                    pixelOffets[i] = b.PixelOffset;
 
                     b.VertexBufferOffset = i;
                     b.Dirty = false;
                 }
-                CopyBillboardsFromSystemMemory(positions, textureCoordinates, colors, origins, 0, _billboards.Count);
+                CopyBillboardsFromSystemMemory(positions, textureCoordinates, colors, origins, pixelOffets, 0, _billboards.Count);
 
                 _rewriteBillboards = false;
             }
@@ -274,6 +285,7 @@ namespace MiniGlobe.Scene
             Vector4H[] textureCoordinates = new Vector4H[_dirtyBillboards.Count];
             BlittableRGBA[] colors = new BlittableRGBA[_dirtyBillboards.Count];
             Vector2H[] origins = new Vector2H[_dirtyBillboards.Count];
+            Vector2H[] pixelOffets = new Vector2H[_dirtyBillboards.Count];
 
             int bufferOffset = _dirtyBillboards[0].VertexBufferOffset;
             int previousBufferOffset = bufferOffset - 1;
@@ -285,7 +297,7 @@ namespace MiniGlobe.Scene
 
                 if (previousBufferOffset != b.VertexBufferOffset - 1)
                 {
-                    CopyBillboardsFromSystemMemory(positions, textureCoordinates, colors, origins, bufferOffset, length);
+                    CopyBillboardsFromSystemMemory(positions, textureCoordinates, colors, origins, pixelOffets, bufferOffset, length);
 
                     bufferOffset = b.VertexBufferOffset;
                     length = 0;
@@ -297,12 +309,13 @@ namespace MiniGlobe.Scene
                     b.TextureCoordinates.UpperRight.X, b.TextureCoordinates.UpperRight.Y);
                 colors[length] = new BlittableRGBA(b.Color);
                 origins[length] = BillboardOrigin(b);
+                pixelOffets[length] = b.PixelOffset;
                 ++length;
 
                 previousBufferOffset = b.VertexBufferOffset;
                 b.Dirty = false;
             }
-            CopyBillboardsFromSystemMemory(positions, textureCoordinates, colors, origins, bufferOffset, length);
+            CopyBillboardsFromSystemMemory(positions, textureCoordinates, colors, origins, pixelOffets, bufferOffset, length);
 
             _dirtyBillboards.Clear();
         }
@@ -312,6 +325,7 @@ namespace MiniGlobe.Scene
             Vector4H[] textureCoordinates,
             BlittableRGBA[] colors,
             Vector2H[] origins,
+            Vector2H[] pixelOffsets,
             int bufferOffset, 
             int length)
         {
@@ -325,6 +339,9 @@ namespace MiniGlobe.Scene
                 bufferOffset * BlittableRGBA.SizeInBytes,
                 length * BlittableRGBA.SizeInBytes);
             _originBuffer.CopyFromSystemMemory(origins, 
+                bufferOffset * Vector2H.SizeInBytes, 
+                length * Vector2H.SizeInBytes);
+            _pixelOffsetBuffer.CopyFromSystemMemory(pixelOffsets, 
                 bufferOffset * Vector2H.SizeInBytes, 
                 length * Vector2H.SizeInBytes);
         }
@@ -556,6 +573,12 @@ namespace MiniGlobe.Scene
                 _originBuffer = null;
             }
 
+            if (_pixelOffsetBuffer != null)
+            {
+                _pixelOffsetBuffer.Dispose();
+                _pixelOffsetBuffer = null;
+            }
+
             if (_va != null)
             {
                 _va.Dispose();
@@ -602,6 +625,7 @@ namespace MiniGlobe.Scene
         private VertexBuffer _textureCoordinatesBuffer;
         private VertexBuffer _colorBuffer;
         private VertexBuffer _originBuffer;
+        private VertexBuffer _pixelOffsetBuffer;
         private VertexArray _va;
 
         private static readonly Half[] _originScale = new Half[] { new Half(0.0), new Half(1.0), new Half(-1.0) };
