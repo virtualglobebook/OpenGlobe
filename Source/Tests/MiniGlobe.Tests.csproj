@@ -75,6 +75,7 @@
     <Compile Include="Renderer\SystemTests.cs" />
     <Compile Include="Renderer\Textures\Texture2DTests.cs" />
     <Compile Include="Scene\Renderables\BillboardGroupTests.cs" />
+    <Compile Include="Scene\Renderables\BillboardTests.cs" />
     <Compile Include="Scene\SystemTests.cs" />
     <Compile Include="TestUtility.cs" />
     <Compile Include="Core\Vector3STests.cs" />
