@@ -12,7 +12,7 @@ using NUnit.Framework;
 namespace MiniGlobe.Core
 {
     [TestFixture]
-    public class Cartographic3DTests
+    public class Geodetic3DTests
     {
         [Test]
         public void Construct()
