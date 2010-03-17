@@ -49,6 +49,54 @@ namespace MiniGlobe.Scene
         }
 
         [Test]
+        public void BillboardOrigin()
+        {
+            Billboard b = new Billboard();
+            Assert.AreEqual(HorizontalOrigin.Center, b.HorizontalOrigin);
+            Assert.AreEqual(VerticalOrigin.Center, b.VerticalOrigin);
+
+            b.HorizontalOrigin = HorizontalOrigin.Left;
+            Assert.AreEqual(HorizontalOrigin.Left, b.HorizontalOrigin);
+            Assert.AreEqual(VerticalOrigin.Center, b.VerticalOrigin);
+
+            b.HorizontalOrigin = HorizontalOrigin.Center;
+            Assert.AreEqual(HorizontalOrigin.Center, b.HorizontalOrigin);
+            Assert.AreEqual(VerticalOrigin.Center, b.VerticalOrigin);
+
+            b.HorizontalOrigin = HorizontalOrigin.Right;
+            Assert.AreEqual(HorizontalOrigin.Right, b.HorizontalOrigin);
+            Assert.AreEqual(VerticalOrigin.Center, b.VerticalOrigin);
+
+            b.VerticalOrigin = VerticalOrigin.Bottom;
+
+            b.HorizontalOrigin = HorizontalOrigin.Left;
+            Assert.AreEqual(HorizontalOrigin.Left, b.HorizontalOrigin);
+            Assert.AreEqual(VerticalOrigin.Bottom, b.VerticalOrigin);
+
+            b.HorizontalOrigin = HorizontalOrigin.Center;
+            Assert.AreEqual(HorizontalOrigin.Center, b.HorizontalOrigin);
+            Assert.AreEqual(VerticalOrigin.Bottom, b.VerticalOrigin);
+
+            b.HorizontalOrigin = HorizontalOrigin.Right;
+            Assert.AreEqual(HorizontalOrigin.Right, b.HorizontalOrigin);
+            Assert.AreEqual(VerticalOrigin.Bottom, b.VerticalOrigin);
+
+            b.VerticalOrigin = VerticalOrigin.Top;
+
+            b.HorizontalOrigin = HorizontalOrigin.Left;
+            Assert.AreEqual(HorizontalOrigin.Left, b.HorizontalOrigin);
+            Assert.AreEqual(VerticalOrigin.Top, b.VerticalOrigin);
+
+            b.HorizontalOrigin = HorizontalOrigin.Center;
+            Assert.AreEqual(HorizontalOrigin.Center, b.HorizontalOrigin);
+            Assert.AreEqual(VerticalOrigin.Top, b.VerticalOrigin);
+
+            b.HorizontalOrigin = HorizontalOrigin.Right;
+            Assert.AreEqual(HorizontalOrigin.Right, b.HorizontalOrigin);
+            Assert.AreEqual(VerticalOrigin.Top, b.VerticalOrigin);
+        }
+
+        [Test]
         public void Construct()
         {
             BillboardGroupTest billboardGroup = new BillboardGroupTest();

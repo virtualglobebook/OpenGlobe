@@ -214,13 +214,17 @@ namespace MiniGlobe.Examples.Chapter2
                 {
                     Position = pDetic,
                     TextureCoordinates = atlas.TextureCoordinates[0],
-                    Color = Color.DarkGreen
+                    Color = Color.DarkGreen,
+                    HorizontalOrigin = HorizontalOrigin.Right,
+                    VerticalOrigin = VerticalOrigin.Bottom
                 });
             _labels.Add(new Billboard()
                 {
                     Position = pCentric,
                     TextureCoordinates = atlas.TextureCoordinates[1],
-                    Color = Color.DarkCyan
+                    Color = Color.DarkCyan,
+                    HorizontalOrigin = HorizontalOrigin.Right,
+                    VerticalOrigin = VerticalOrigin.Bottom
                 });
 
             ///////////////////////////////////////////////////////////////////
