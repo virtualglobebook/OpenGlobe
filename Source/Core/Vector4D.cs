@@ -261,6 +261,11 @@ namespace MiniGlobe.Core
             return new Vector4S((float)_x, (float)_y, (float)_z, (float)_w);
         }
 
+        public Vector4H ToVector4H()
+        {
+            return new Vector4H(_x, _y, _z, _w);
+        }
+
         private readonly double _x;
         private readonly double _y;
         private readonly double _z;

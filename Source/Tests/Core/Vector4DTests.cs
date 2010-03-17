@@ -8,6 +8,8 @@
 #endregion
 
 using NUnit.Framework;
+using System.Globalization;
+using System.Threading;
 
 namespace MiniGlobe.Core
 {
@@ -321,6 +323,100 @@ namespace MiniGlobe.Core
 
             double dot = a.Dot(b);
             Assert.AreEqual(1.0 * 4.0 + 2.0 * 5.0 + 3.0 * 6.0 + 4.0 * 7.0, dot, 1e-14);
+        }
+
+        [Test]
+        public void Invert()
+        {
+            Vector4D a = new Vector4D(1.0, 2.0, 3.0, 4.0);
+            Vector4D invertedA1 = a.Invert();
+            Assert.AreEqual(-1.0, invertedA1.X, 1e-14);
+            Assert.AreEqual(-2.0, invertedA1.Y, 1e-14);
+            Assert.AreEqual(-3.0, invertedA1.Z, 1e-14);
+            Assert.AreEqual(-4.0, invertedA1.W, 1e-14);
+            Vector4D invertedA2 = -a;
+            Assert.AreEqual(-1.0, invertedA2.X, 1e-14);
+            Assert.AreEqual(-2.0, invertedA2.Y, 1e-14);
+            Assert.AreEqual(-3.0, invertedA2.Z, 1e-14);
+            Assert.AreEqual(-4.0, invertedA2.W, 1e-14);
+
+            Vector4D b = new Vector4D(-1.0, -2.0, -3.0, -4.0);
+            Vector4D invertedB1 = b.Invert();
+            Assert.AreEqual(1.0, invertedB1.X, 1e-14);
+            Assert.AreEqual(2.0, invertedB1.Y, 1e-14);
+            Assert.AreEqual(3.0, invertedB1.Z, 1e-14);
+            Assert.AreEqual(4.0, invertedB1.W, 1e-14);
+            Vector4D invertedB2 = -b;
+            Assert.AreEqual(1.0, invertedB2.X, 1e-14);
+            Assert.AreEqual(2.0, invertedB2.Y, 1e-14);
+            Assert.AreEqual(3.0, invertedB2.Z, 1e-14);
+            Assert.AreEqual(4.0, invertedB2.W, 1e-14);
+        }
+
+        [Test]
+        public void ToVector4S()
+        {
+            Vector4D a = new Vector4D(1.0, 2.0, 3.0, 4.0);
+            Vector4S sA = a.ToVector4S();
+            Assert.AreEqual(1.0f, sA.X, 1e-7);
+            Assert.AreEqual(2.0f, sA.Y, 1e-7);
+            Assert.AreEqual(3.0f, sA.Z, 1e-7);
+            Assert.AreEqual(4.0f, sA.W, 1e-7);
+        }
+
+        [Test]
+        public void ToVector4H()
+        {
+            Vector4D a = new Vector4D(1.0, 2.0, 3.0, 4.0);
+            Vector4H sA = a.ToVector4H();
+            Assert.AreEqual((Half)1.0, sA.X, 1e-7);
+            Assert.AreEqual((Half)2.0, sA.Y, 1e-7);
+            Assert.AreEqual((Half)3.0, sA.Z, 1e-7);
+            Assert.AreEqual((Half)4.0, sA.W, 1e-7);
+        }
+
+        [Test]
+        public void TestToString()
+        {
+            CultureInfo originalCulture = Thread.CurrentThread.CurrentCulture;
+            try
+            {
+                Thread.CurrentThread.CurrentCulture = new CultureInfo("tr-TR");
+                Vector4D a = new Vector4D(1.23, 2.34, 3.45, 4.56);
+                Assert.AreEqual("(1,23, 2,34, 3,45, 4,56)", a.ToString());
+            }
+            finally
+            {
+                Thread.CurrentThread.CurrentCulture = originalCulture;
+            }
+        }
+
+        [Test]
+        public void EqualsEpsilon()
+        {
+            Vector4D a = new Vector4D(1.23, 2.34, 3.45, 4.56);
+            Vector4D b = new Vector4D(1.24, 2.35, 3.46, 4.57);
+            Assert.IsTrue(a.EqualsEpsilon(b, 0.011));
+            Assert.IsFalse(a.EqualsEpsilon(b, 0.009));
+        }
+
+        [Test]
+        public void XY()
+        {
+            Vector4D a = new Vector4D(1.23, 2.34, 3.45, 4.56);
+            Vector2D xy = a.XY;
+            Assert.AreEqual(1.23, xy.X, 1e-14);
+            Assert.AreEqual(2.34, xy.Y, 1e-14);
+        }
+
+        [Test]
+        public void XYZ()
+        {
+            Vector4D a = new Vector4D(1.23, 2.34, 3.45, 4.56);
+            Vector3D xyz = a.XYZ;
+            Assert.AreEqual(1.23, xyz.X, 1e-14);
+            Assert.AreEqual(2.34, xyz.Y, 1e-14);
+            Assert.AreEqual(3.45, xyz.Z, 1e-14);
         }
     }
 }

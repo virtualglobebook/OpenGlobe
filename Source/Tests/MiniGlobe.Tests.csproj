@@ -52,9 +52,15 @@
     <Compile Include="Core\SystemTests.cs" />
     <Compile Include="Core\Tessellation\TessellationTests.cs" />
     <Compile Include="Core\Vector2DTests.cs" />
-    <Compile Include="Core\Vector2STests.cs" />
+    <Compile Include="Core\Vector2HTests.cs" />
+    <Compile Include="Core\Vector2STests.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Core\Vector3DTests.cs" />
+    <Compile Include="Core\Vector3HTests.cs" />
     <Compile Include="Core\Vector4DTests.cs" />
+    <Compile Include="Core\Vector4HTests.cs" />
+    <Compile Include="Core\Vector4STests.cs" />
     <Compile Include="IntervalTests.cs" />
     <Compile Include="MiniGlobeAssert.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -71,6 +77,7 @@
     <Compile Include="Scene\Renderables\BillboardGroupTests.cs" />
     <Compile Include="Scene\SystemTests.cs" />
     <Compile Include="TestUtility.cs" />
+    <Compile Include="Core\Vector3STests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Core\MiniGlobe.Core.csproj">

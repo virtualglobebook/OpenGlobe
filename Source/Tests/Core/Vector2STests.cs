@@ -8,6 +8,8 @@
 #endregion
 
 using NUnit.Framework;
+using System.Threading;
+using System.Globalization;
 
 namespace MiniGlobe.Core
 {
@@ -214,6 +216,69 @@ namespace MiniGlobe.Core
 
             float dot = a.Dot(b);
             Assert.AreEqual(1.0f * 4.0f + 2.0f * 5.0f, dot, 1e-7);
+        }
+
+        [Test]
+        public void Invert()
+        {
+            Vector2S a = new Vector2S(1.0f, 2.0f);
+            Vector2S invertedA1 = a.Invert();
+            Assert.AreEqual(-1.0f, invertedA1.X, 1e-7);
+            Assert.AreEqual(-2.0f, invertedA1.Y, 1e-7);
+            Vector2S invertedA2 = -a;
+            Assert.AreEqual(-1.0f, invertedA2.X, 1e-7);
+            Assert.AreEqual(-2.0f, invertedA2.Y, 1e-7);
+
+            Vector2S b = new Vector2S(-1.0f, -2.0f);
+            Vector2S invertedB1 = b.Invert();
+            Assert.AreEqual(1.0f, invertedB1.X, 1e-7);
+            Assert.AreEqual(2.0f, invertedB1.Y, 1e-7);
+            Vector2S invertedB2 = -b;
+            Assert.AreEqual(1.0f, invertedB2.X, 1e-7);
+            Assert.AreEqual(2.0f, invertedB2.Y, 1e-7);
+        }
+
+        [Test]
+        public void TestToString()
+        {
+            CultureInfo originalCulture = Thread.CurrentThread.CurrentCulture;
+            try
+            {
+                Thread.CurrentThread.CurrentCulture = new CultureInfo("tr-TR");
+                Vector2S a = new Vector2S(1.23f, 2.34f);
+                Assert.AreEqual("(1,23, 2,34)", a.ToString());
+            }
+            finally
+            {
+                Thread.CurrentThread.CurrentCulture = originalCulture;
+            }
+        }
+
+        [Test]
+        public void EqualsEpsilon()
+        {
+            Vector2S a = new Vector2S(1.23f, 2.34f);
+            Vector2S b = new Vector2S(1.24f, 2.35f);
+            Assert.IsTrue(a.EqualsEpsilon(b, 0.011f));
+            Assert.IsFalse(a.EqualsEpsilon(b, 0.009f));
+        }
+
+        [Test]
+        public void ToVector2D()
+        {
+            Vector2S a = new Vector2S(1.0f, 2.0f);
+            Vector2D sA = a.ToVector2D();
+            Assert.AreEqual(1.0, sA.X, 1e-14);
+            Assert.AreEqual(2.0, sA.Y, 1e-14);
+        }
+
+        [Test]
+        public void ToVector2H()
+        {
+            Vector2S a = new Vector2S(1.0f, 2.0f);
+            Vector2H sA = a.ToVector2H();
+            Assert.AreEqual((Half)1.0, sA.X, 1e-7);
+            Assert.AreEqual((Half)2.0, sA.Y, 1e-7);
         }
     }
 }

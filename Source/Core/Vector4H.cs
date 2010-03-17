@@ -149,6 +149,16 @@ namespace MiniGlobe.Core
             return _x.GetHashCode() ^ _y.GetHashCode() ^ _z.GetHashCode() ^ _w.GetHashCode();
         }
 
+        public Vector4D ToVector4D()
+        {
+            return new Vector4D(_x, _y, _z, _w);
+        }
+
+        public Vector4S ToVector4S()
+        {
+            return new Vector4S(_x, _y, _z, _w);
+        }
+
         private readonly Half _x;
         private readonly Half _y;
         private readonly Half _z;

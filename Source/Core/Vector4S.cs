@@ -84,14 +84,14 @@ namespace MiniGlobe.Core
             get { return _w; }
         }
 
-        public Vector2D XY
+        public Vector2S XY
         {
-            get { return new Vector2D(X, Y); }
+            get { return new Vector2S(X, Y); }
         }
 
-        public Vector3D XYZ
+        public Vector3S XYZ
         {
-            get { return new Vector3D(X, Y, Z); }
+            get { return new Vector3S(X, Y, Z); }
         }
 
         public float MagnitudeSquared
@@ -254,6 +254,16 @@ namespace MiniGlobe.Core
         public override int GetHashCode()
         {
             return _x.GetHashCode() ^ _y.GetHashCode() ^ _z.GetHashCode() ^ _w.GetHashCode();
+        }
+
+        public Vector4D ToVector4D()
+        {
+            return new Vector4D(_x, _y, _z, _w);
+        }
+
+        public Vector4H ToVector4H()
+        {
+            return new Vector4H(_x, _y, _z, _w);
         }
 
         private readonly float _x;

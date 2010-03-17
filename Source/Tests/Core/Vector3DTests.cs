@@ -8,6 +8,8 @@
 #endregion
 
 using NUnit.Framework;
+using System.Globalization;
+using System.Threading;
 
 namespace MiniGlobe.Core
 {
@@ -320,7 +322,7 @@ namespace MiniGlobe.Core
         }
 
         [Test]
-        public void ToVector2H()
+        public void ToVector3H()
         {
             Vector3D a = new Vector3D(1.0, 2.0, 3.0);
             Vector3H sA = a.ToVector3H();
@@ -344,6 +346,40 @@ namespace MiniGlobe.Core
             Assert.AreEqual(0.0, cross2.X, 1e-14);
             Assert.AreEqual(0.0, cross2.Y, 1e-14);
             Assert.AreEqual(-1.0, cross2.Z, 1e-14);
+        }
+
+        [Test]
+        public void TestToString()
+        {
+            CultureInfo originalCulture = Thread.CurrentThread.CurrentCulture;
+            try
+            {
+                Thread.CurrentThread.CurrentCulture = new CultureInfo("tr-TR");
+                Vector3D a = new Vector3D(1.23, 2.34, 3.45);
+                Assert.AreEqual("(1,23, 2,34, 3,45)", a.ToString());
+            }
+            finally
+            {
+                Thread.CurrentThread.CurrentCulture = originalCulture;
+            }
+        }
+
+        [Test]
+        public void EqualsEpsilon()
+        {
+            Vector3D a = new Vector3D(1.23, 2.34, 3.45);
+            Vector3D b = new Vector3D(1.24, 2.35, 3.46);
+            Assert.IsTrue(a.EqualsEpsilon(b, 0.011));
+            Assert.IsFalse(a.EqualsEpsilon(b, 0.009));
+        }
+
+        [Test]
+        public void XY()
+        {
+            Vector3D a = new Vector3D(1.23, 2.34, 3.45);
+            Vector2D xy = a.XY;
+            Assert.AreEqual(1.23, xy.X, 1e-14);
+            Assert.AreEqual(2.34, xy.Y, 1e-14);
         }
     }
 }

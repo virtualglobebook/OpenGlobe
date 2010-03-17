@@ -382,6 +382,23 @@ namespace MiniGlobe.Core
             return ToSingle().Equals(other.ToSingle());
         }
 
+        public override bool Equals(object obj)
+        {
+            if (obj is Half)
+            {
+                return Equals((Half)obj);
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public override int GetHashCode()
+        {
+            return _bits.GetHashCode();
+        }
+
         /// <summary>
         /// Compares this instance to a specified half-precision floating-point number
         /// and returns an integer that indicates whether the value of this instance
