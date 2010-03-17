@@ -73,6 +73,11 @@ namespace MiniGlobe.Renderer
             int yOffset = 0;
             int rowHeight = 0;
 
+            //
+            // TODO:  Pack more tightly based on algorithm in
+            //
+            //     http://www-ui.is.s.u-tokyo.ac.jp/~takeo/papers/i3dg2001.pdf
+            //
             for (int i = 0; i < bitmapList.Count; ++i)
             {
                 Bitmap b = bitmapList[i];
@@ -141,16 +146,15 @@ namespace MiniGlobe.Renderer
 
         private static int ComputeAtlasWidth(IList<Bitmap> bitmaps, int borderWidthInPixels)
         {
-            // TODO:  This needs a real algorithm
             int maxWidth = 0;
-            int totalWidth = 0;
+            int area = 0;
             for (int i = 0; i < bitmaps.Count; ++i)
             {
+                area += (bitmaps[i].Width + borderWidthInPixels) * (bitmaps[i].Height + borderWidthInPixels);
                 maxWidth = Math.Max(maxWidth, bitmaps[i].Width);
-                totalWidth += bitmaps[i].Width + borderWidthInPixels;
             }
 
-            return Math.Min((maxWidth + borderWidthInPixels) * 4, totalWidth);
+            return Math.Max((int)Math.Sqrt((double)area), maxWidth + borderWidthInPixels);
         }
 
         private readonly Bitmap _bitmap;

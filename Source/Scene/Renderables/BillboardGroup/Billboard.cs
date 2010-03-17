@@ -17,6 +17,7 @@ namespace MiniGlobe.Scene
         public Billboard()
         {
             _textureCoordinates = new RectangleH(Vector2H.Zero, new Vector2H(1.0, 1.0));
+            _color = Color.White;
         }
 
         public Vector3D Position 
