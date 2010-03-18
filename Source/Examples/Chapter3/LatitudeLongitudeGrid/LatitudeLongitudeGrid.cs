@@ -176,7 +176,7 @@ namespace MiniGlobe.Examples.Chapter3
                 Device.CreateBitmapFromText("Vancouver", new Font("Arial", 24))
             });
 
-            _vancouverLabel = new BillboardGroup2(_window.Context, atlas.Bitmap);
+            _vancouverLabel = new BillboardGroup(_window.Context, atlas.Bitmap);
             _vancouverLabel.Add(new Billboard()
             {
                 Position = vancouver,
@@ -265,6 +265,6 @@ namespace MiniGlobe.Examples.Chapter3
         private readonly Uniform<Vector2S> _gridWidth;
         private readonly Uniform<Vector2S> _gridResolution;
         private readonly IList<GridResolution> _gridResolutions;
-        private readonly BillboardGroup2 _vancouverLabel;
+        private readonly BillboardGroup _vancouverLabel;
     }
 }

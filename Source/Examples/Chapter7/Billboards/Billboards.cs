@@ -36,7 +36,7 @@ namespace MiniGlobe.Examples.Chapter7
             _globe.Shape = globeShape;
             _globe.Texture = _texture;
 
-            _billboards = new BillboardGroup2(_window.Context, new Bitmap(@"032.png"));
+            _billboards = new BillboardGroup(_window.Context, new Bitmap(@"032.png"));
             Vector3D[] positions = Cities.International(globeShape);
             foreach (Vector3D position in positions)
             {
@@ -95,7 +95,7 @@ namespace MiniGlobe.Examples.Chapter7
         private readonly SceneState _sceneState;
         private readonly CameraLookAtPoint _camera;
         private readonly RayCastedGlobe _globe;
-        private readonly BillboardGroup2 _billboards;
+        private readonly BillboardGroup _billboards;
         private readonly Texture2D _texture;
     }
 }

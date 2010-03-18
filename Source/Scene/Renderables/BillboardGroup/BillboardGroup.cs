@@ -17,14 +17,14 @@ using System.Collections;
 
 namespace MiniGlobe.Scene
 {
-    public sealed class BillboardGroup2 : IList<Billboard>, IDisposable
+    public sealed class BillboardGroup : IList<Billboard>, IDisposable
     {
-        public BillboardGroup2(Context context, Bitmap bitmap)
+        public BillboardGroup(Context context, Bitmap bitmap)
             : this(context, bitmap, 0)
         {
         }
 
-        public BillboardGroup2(Context context, Bitmap bitmap, int capacity)
+        public BillboardGroup(Context context, Bitmap bitmap, int capacity)
         {
             if (context == null)
             {

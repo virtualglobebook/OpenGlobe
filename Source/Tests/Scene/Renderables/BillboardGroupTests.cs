@@ -23,7 +23,7 @@ namespace MiniGlobe.Scene
         public void Construct()
         {
             BillboardGroupTest billboardGroup = new BillboardGroupTest();
-            BillboardGroup2 group = billboardGroup.Group;
+            BillboardGroup group = billboardGroup.Group;
 
             Assert.AreEqual(billboardGroup.Context, group.Context);
             Assert.IsTrue(group.DepthTestEnabled);
@@ -95,7 +95,7 @@ namespace MiniGlobe.Scene
         {
             using (BillboardGroupTest billboardGroup = new BillboardGroupTest())
             {
-                BillboardGroup2 group = billboardGroup.Group;
+                BillboardGroup group = billboardGroup.Group;
                 Billboard b = new Billboard() { Position = Vector3D.Zero };
 
                 group.Add(b);
@@ -112,7 +112,7 @@ namespace MiniGlobe.Scene
             {
                 _window = Device.CreateWindow(1, 1);
                 _bitmap = new Bitmap(1, 1);
-                _group = new BillboardGroup2(_window.Context, _bitmap);
+                _group = new BillboardGroup(_window.Context, _bitmap);
             }
 
             public Context Context
@@ -120,7 +120,7 @@ namespace MiniGlobe.Scene
                 get { return _window.Context; }
             }
 
-            public BillboardGroup2 Group
+            public BillboardGroup Group
             {
                 get { return _group; }
             }
@@ -138,7 +138,7 @@ namespace MiniGlobe.Scene
 
             private MiniGlobeWindow _window;
             private Bitmap _bitmap;
-            private BillboardGroup2 _group;
+            private BillboardGroup _group;
         }
     }
 }

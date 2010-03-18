@@ -209,7 +209,7 @@ namespace MiniGlobe.Examples.Chapter2
             font.Dispose();
 
             TextureAtlas atlas = new TextureAtlas(labelBitmaps);
-            _labels = new BillboardGroup2(_window.Context, atlas.Bitmap, 2);
+            _labels = new BillboardGroup(_window.Context, atlas.Bitmap, 2);
             _labels.Add(new Billboard()
                 {
                     Position = pDetic,
@@ -308,7 +308,7 @@ namespace MiniGlobe.Examples.Chapter2
 
         private Wireframe _wireframe;
         private Axes _axes;
-        private BillboardGroup2 _labels;
+        private BillboardGroup _labels;
         private Polyline _normals;
         private Plane _tangentPlane;
 
