@@ -8,11 +8,9 @@
 #endregion
 
 using System;
-using System.Drawing;
 using MiniGlobe.Core;
 using MiniGlobe.Core.Geometry;
 using MiniGlobe.Renderer;
-using OpenTK;
 
 namespace MiniGlobe.Scene
 {

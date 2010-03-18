@@ -5,7 +5,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{2ABF9F7F-B818-44dc-9237-C1D1DC22ADE7}</ProjectGuid>
+    <ProjectGuid>{2ABF9F7F-B818-44DC-9237-C1D1DC22ADE7}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>MiniGlobe.Examples.Chapter3.RayCasting</RootNamespace>
@@ -41,10 +41,6 @@
   </Target>
   -->
   <ItemGroup>
-    <Reference Include="OpenTK, Version=0.9.9.5, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\ThirdParty\opentk-1.0-beta-3\Binaries\OpenTK\Release\OpenTK.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Drawing" />
   </ItemGroup>

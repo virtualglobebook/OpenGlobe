@@ -12,7 +12,6 @@ using System.Drawing;
 using MiniGlobe.Core.Geometry;
 using MiniGlobe.Renderer;
 using MiniGlobe.Core;
-using OpenTK;
 
 namespace MiniGlobe.Scene
 {

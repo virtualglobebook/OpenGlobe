@@ -7,11 +7,11 @@
 //
 #endregion
 
-using MiniGlobe.Renderer;
-using System.Drawing;
 using System;
+using System.Drawing;
 using MiniGlobe.Core;
 using MiniGlobe.Core.Geometry;
+using MiniGlobe.Renderer;
 
 namespace MiniGlobe.Scene
 {

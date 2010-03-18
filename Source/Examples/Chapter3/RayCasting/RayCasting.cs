@@ -14,7 +14,6 @@ using MiniGlobe.Core;
 using MiniGlobe.Core.Geometry;
 using MiniGlobe.Renderer;
 using MiniGlobe.Scene;
-using OpenTK;
 
 namespace MiniGlobe.Examples.Chapter3
 {

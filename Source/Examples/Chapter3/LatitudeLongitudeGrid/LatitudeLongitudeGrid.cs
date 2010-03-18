@@ -16,7 +16,6 @@ using MiniGlobe.Core.Geometry;
 using MiniGlobe.Core.Tessellation;
 using MiniGlobe.Renderer;
 using MiniGlobe.Scene;
-using OpenTK;
 
 namespace MiniGlobe.Examples.Chapter3
 {
