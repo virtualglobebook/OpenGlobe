@@ -128,7 +128,7 @@ namespace MiniGlobe.Scene
 
                       vec4 center = gl_in[0].gl_Position;
                       center.xy += (gsOrigin[0] * halfSize);
-                      center.xy += gsPixelOffset[0];
+                      center.xy += (gsPixelOffset[0] * mg_highResolutionSnapScale);
 
                       vec4 v0 = vec4(center.xy - halfSize, center.z, 1.0);
                       vec4 v1 = vec4(center.xy + vec2(halfSize.x, -halfSize.y), center.z, 1.0);
@@ -200,7 +200,7 @@ namespace MiniGlobe.Scene
             AttachedVertexBuffer attachedPositionBuffer = new AttachedVertexBuffer(
                 _positionBuffer, VertexAttributeComponentType.Float, 3);
             AttachedVertexBuffer attachedColorBuffer = new AttachedVertexBuffer(
-                _colorBuffer, VertexAttributeComponentType.UnsignedByte, 4);
+                _colorBuffer, VertexAttributeComponentType.UnsignedByte, 4, true);
             AttachedVertexBuffer attachedOriginBuffer = new AttachedVertexBuffer(
                 _originBuffer, VertexAttributeComponentType.HalfFloat, 2);
             AttachedVertexBuffer attachedPixelOffsetBuffer = new AttachedVertexBuffer(

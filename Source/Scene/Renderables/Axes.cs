@@ -138,7 +138,7 @@ namespace MiniGlobe.Scene
             AttachedVertexBuffer attachedPositionBuffer = new AttachedVertexBuffer(
                 positionBuffer, VertexAttributeComponentType.Float, 3);
             AttachedVertexBuffer attachedColorBuffer = new AttachedVertexBuffer(
-                colorBuffer, VertexAttributeComponentType.UnsignedByte, 4);
+                colorBuffer, VertexAttributeComponentType.UnsignedByte, 4, true);
             _va = context.CreateVertexArray();
             _va.VertexBuffers[_sp.VertexAttributes["position"].Location] = attachedPositionBuffer;
             _va.VertexBuffers[_sp.VertexAttributes["color"].Location] = attachedColorBuffer;
