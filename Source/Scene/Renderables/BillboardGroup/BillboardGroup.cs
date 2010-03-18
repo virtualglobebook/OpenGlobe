@@ -80,10 +80,6 @@ namespace MiniGlobe.Scene
                       mat4 viewportTransformationMatrix)
                   {
                       v = modelViewPerspectiveProjectionMatrix * v;                        // clip coordinates
-
-                      // TODO:  Just to avoid z fighting with Earth for now.
-                     // v.z -= 0.001;
-
                       v.xyz /= v.w;                                                           // normalized device coordinates
                       v.xyz = (viewportTransformationMatrix * vec4(v.xyz + 1.0, 1.0)).xyz; // windows coordinates
                       return v;
@@ -171,7 +167,9 @@ namespace MiniGlobe.Scene
                   in vec4 fsColor;
 
                   out vec4 fragmentColor;
+
                   uniform sampler2D mg_texture0;
+                  uniform float u_zOffset;
 
                   void main()
                   {
@@ -182,8 +180,10 @@ namespace MiniGlobe.Scene
                           discard;
                       }
                       fragmentColor = vec4(color.rgb * fsColor.rgb, color.a);
+                      gl_FragDepth = gl_FragCoord.z + u_zOffset;
                   }";
             _sp = Device.CreateShaderProgram(vs, gs, fs);
+            _zOffsetUniform = _sp.Uniforms["u_zOffset"] as Uniform<float>;
 
             _texture = Device.CreateTexture2D(bitmap, TextureFormat.RedGreenBlueAlpha8, false);
         }
@@ -359,6 +359,7 @@ namespace MiniGlobe.Scene
 
             if (_va != null)
             {
+                _zOffsetUniform.Value = (float)ZOffset;
                 _context.TextureUnits[0].Texture2D = _texture;
                 _context.Bind(_renderState);
                 _context.Bind(_sp);
@@ -383,6 +384,9 @@ namespace MiniGlobe.Scene
             get { return _renderState.DepthTest.Enabled; }
             set { _renderState.DepthTest.Enabled = value; }
         }
+
+        // TODO:  Better way to avoid z fighting
+        public double ZOffset { get; set; }
 
         #region IList<Billboard> Members
 
@@ -601,6 +605,7 @@ namespace MiniGlobe.Scene
         private readonly Context _context;
         private readonly RenderState _renderState;
         private readonly ShaderProgram _sp;
+        private readonly Uniform<float> _zOffsetUniform;
         private readonly Texture2D _texture;
 
         private VertexBuffer _positionBuffer;

@@ -42,6 +42,7 @@ namespace MiniGlobe.Examples.Chapter7
             {
                 _billboards.Add(new Billboard() { Position = position });
             }
+            _billboards.ZOffset = -0.0001;
 
             _sceneState.Camera.ZoomToTarget(globeShape.MaximumRadius);
 
