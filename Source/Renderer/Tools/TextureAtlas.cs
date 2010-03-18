@@ -29,7 +29,7 @@ namespace MiniGlobe.Renderer
                 throw new ArgumentNullException("bitmaps");
             }
 
-            int numberOfBitmaps = EnumerableCount(bitmaps);
+            int numberOfBitmaps = CollectionAlgorithms.EnumerableCount(bitmaps);
 
             if (numberOfBitmaps == 0)
             {
@@ -169,24 +169,6 @@ namespace MiniGlobe.Renderer
             }
 
             return Math.Max((int)Math.Sqrt((double)area), maxWidth + borderWidthInPixels);
-        }
-
-        private static int EnumerableCount<T>(IEnumerable<T> enumerable)
-        {
-            IList<T> list = enumerable as IList<T>;
-
-            if (list != null)
-            {
-                return list.Count;
-            }
-
-            int count = 0;
-            foreach (T t in enumerable)
-            {
-                ++count;
-            }
-
-            return count;
         }
 
         private readonly Bitmap _bitmap;
