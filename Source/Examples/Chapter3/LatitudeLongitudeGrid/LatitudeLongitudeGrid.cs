@@ -168,35 +168,28 @@ namespace MiniGlobe.Examples.Chapter3
                 new Interval(20000000, double.MaxValue, IntervalEndpoint.Closed, IntervalEndpoint.Open),
                 new Vector2D(0.1, 0.1)));
 
-            //_billboard = new BillboardGroup(_window.Context, positions, new Bitmap(@"building.png"));
+            ///////////////////////////////////////////////////////////////////
+            Vector3D vancouver = _globeShape.ToVector3D(new Geodetic3D(Trig.ToRadians(-123.06), Trig.ToRadians(49.13), 0));
 
-            _billboards = new List<BillboardGroup>();
-            _billboards.Add(
-                new BillboardGroup(_window.Context,
-                new[] { _globeShape.ToVector3D(new Geodetic3D(Trig.ToRadians(-123.06), Trig.ToRadians(49.13), 0)).ToVector3S() },
-                Device.CreateBitmapFromText("* Vancouver", new Font("Arial", 24))));
-            //_billboards.Add(
-            //    new BillboardGroup(_window.Context, 
-            //    new[] { Conversion.ToVector3(_globeShape.ToVector3D(new Geodetic3D(Trig.ToRadians(10), Trig.ToRadians(0), 0))) },
-            //    Device.CreateBitmapFromText("Equator", new Font("Arial", 24))));
-            //_billboards.Add(
-            //    new BillboardGroup(_window.Context,
-            //    new[] { Conversion.ToVector3(_globeShape.ToVector3D(new Geodetic3D(Trig.ToRadians(10), Trig.ToRadians(23.5), 0))) },
-            //    Device.CreateBitmapFromText("Tropic of Cancer", new Font("Arial", 24))));
-            //_billboards.Add(
-            //    new BillboardGroup(_window.Context,
-            //    new[] { Conversion.ToVector3(_globeShape.ToVector3D(new Geodetic3D(Trig.ToRadians(10), Trig.ToRadians(-23.5), 0))) },
-            //    Device.CreateBitmapFromText("Tropic of Capricorn", new Font("Arial", 24))));
-            //_billboards.Add(
-            //    new BillboardGroup(_window.Context,
-            //    new[] { Conversion.ToVector3(_globeShape.ToVector3D(new Geodetic3D(Trig.ToRadians(10), Trig.ToRadians(66.56083), 0))) },
-            //    Device.CreateBitmapFromText("Arctic Circle", new Font("Arial", 24))));
-                      
-            foreach (BillboardGroup billboardGroup in _billboards)
+            TextureAtlas atlas = new TextureAtlas(new Bitmap[]
             {
-                //billboardGroup.Color = Color.Yellow;
-                billboardGroup.DepthTestEnabled = false;
-            }
+                new Bitmap("building.png"),
+                Device.CreateBitmapFromText("Vancouver", new Font("Arial", 24))
+            });
+
+            _vancouverLabel = new BillboardGroup2(_window.Context, atlas.Bitmap);
+            _vancouverLabel.Add(new Billboard()
+            {
+                Position = vancouver,
+                TextureCoordinates = atlas.TextureCoordinates[0]
+            });
+            _vancouverLabel.Add(new Billboard()
+            {
+                Position = vancouver,
+                TextureCoordinates = atlas.TextureCoordinates[1],
+                HorizontalOrigin = HorizontalOrigin.Left
+            });
+            _vancouverLabel.DepthTestEnabled = false;
         }
 
         private void OnResize()
@@ -231,26 +224,19 @@ namespace MiniGlobe.Examples.Chapter3
             context.Bind(_va);
             context.Draw(_primitiveType, _sceneState);
 
-            foreach (BillboardGroup billboardGroup in _billboards)
-            {
-                billboardGroup.Render(_sceneState);
-            }
+            _vancouverLabel.Render(_sceneState);
         }
 
         #region IDisposable Members
 
         public void Dispose()
         {
-            _texture.Dispose();
-            _va.Dispose();
-            _sp.Dispose();
-            _camera.Dispose();
             _window.Dispose();
-
-            foreach (BillboardGroup billboardGroup in _billboards)
-            {
-                billboardGroup.Dispose();
-            }
+            _camera.Dispose();
+            _sp.Dispose();
+            _va.Dispose();
+            _texture.Dispose();
+            _vancouverLabel.Dispose();
         }
 
         #endregion
@@ -280,6 +266,6 @@ namespace MiniGlobe.Examples.Chapter3
         private readonly Uniform<Vector2S> _gridWidth;
         private readonly Uniform<Vector2S> _gridResolution;
         private readonly IList<GridResolution> _gridResolutions;
-        private readonly IList<BillboardGroup> _billboards;
+        private readonly BillboardGroup2 _vancouverLabel;
     }
 }

@@ -593,24 +593,6 @@ namespace MiniGlobe.Scene
             billboard.VertexBufferOffset = 0;
         }
 
-        //private static int EnumerableCount<T>(IEnumerable<T> enumerable)
-        //{
-        //    IList<T> list = enumerable as IList<T>;
-
-        //    if (list != null)
-        //    {
-        //        return list.Count;
-        //    }
-
-        //    int count = 0;
-        //    foreach (T t in enumerable)
-        //    {
-        //        ++count;
-        //    }
-
-        //    return count;
-        //}
-
         private readonly IList<Billboard> _billboards;
         private readonly IList<Billboard> _dirtyBillboards;
 
