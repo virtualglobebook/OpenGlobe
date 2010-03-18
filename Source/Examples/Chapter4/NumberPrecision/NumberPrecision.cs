@@ -115,12 +115,14 @@ namespace MiniGlobe.Examples.Chapter3.NumberPrecision
             _renderState = new RenderState();
             _renderState.ProgramPointSize = ProgramPointSize.Enabled;
 
-
-            Vector3D p = new Vector3D(_viewCenterX, 0.0, 0.0);
             Font font = new Font("Arial", 24);
-
-            _bg = new BillboardGroup(_window.Context, new[] { p.ToVector3S() }, Device.CreateBitmapFromText("131072.00f", font));
-            _bg.Color = Color.Black;
+            _bg = new BillboardGroup2(_window.Context, Device.CreateBitmapFromText("131072.00f", font));
+            _bg.Add(new Billboard()
+                {
+                    Position = new Vector3D(_viewCenterX, 0.0, 0.0),
+                    Color = Color.Black
+                });
+            font.Dispose();
         }
 
         private void OnResize()
@@ -197,7 +199,7 @@ namespace MiniGlobe.Examples.Chapter3.NumberPrecision
         private readonly CameraLookAtPoint _camera;
         private ShaderProgram _sp;
         private VertexArray _va;
-        private readonly BillboardGroup _bg;
+        private readonly BillboardGroup2 _bg;
         private VertexBuffer _positionVertexBuffer;
         private readonly RenderState _renderState;
         private double _viewCenterX = 131071.50;
