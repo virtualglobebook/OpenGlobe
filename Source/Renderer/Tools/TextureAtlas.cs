@@ -18,7 +18,7 @@ namespace MiniGlobe.Renderer
     public class TextureAtlas
     {
         public TextureAtlas(IEnumerable<Bitmap> bitmaps)
-            : this(bitmaps, 0)
+            : this(bitmaps, 1)
         {
         }
 
@@ -29,33 +29,40 @@ namespace MiniGlobe.Renderer
                 throw new ArgumentNullException("bitmaps");
             }
 
-            List<Bitmap> bitmapList = new List<Bitmap>(bitmaps);
+            int numberOfBitmaps = EnumerableCount(bitmaps);
 
-            if (bitmapList.Count == 0)
+            if (numberOfBitmaps == 0)
             {
                 throw new ArgumentException("bitmaps does not contain any items.");
             }
 
-            if (bitmapList[0] == null)
+            List<AnnotatedBitmap> annotatedBitmaps = new List<AnnotatedBitmap>(numberOfBitmaps);
+
+            PixelFormat pixelFormat = PixelFormat.Undefined;
+
+            int j = 0;
+            foreach (Bitmap b in bitmaps)
             {
-                throw new ArgumentNullException("An item in bitmaps is null.");
-            }
-
-            PixelFormat pixelFormat = bitmapList[0].PixelFormat;
-
-            for (int i = 1; i < bitmapList.Count; ++i)
-            {
-                Bitmap b = bitmapList[i];
-
                 if (b == null)
                 {
                     throw new ArgumentNullException("An item in bitmaps is null.");
                 }
 
-                if (b.PixelFormat != pixelFormat)
+                if (pixelFormat == PixelFormat.Undefined)
+                {
+                    pixelFormat = b.PixelFormat;
+                }
+                else if (b.PixelFormat != pixelFormat)
                 {
                     throw new ArgumentException("All bitmaps must have the same PixelFormat.");
                 }
+
+                annotatedBitmaps.Add(new AnnotatedBitmap(b, j++));
+            }
+
+            if (pixelFormat == PixelFormat.Undefined)
+            {
+                throw new ArgumentException("All bitmaps have PixelFormat.Undefined.");
             }
 
             if (borderWidthInPixels < 0)
@@ -65,10 +72,10 @@ namespace MiniGlobe.Renderer
 
             ///////////////////////////////////////////////////////////////////
 
-            bitmapList.Sort(new BitmapMaximumToMinimumHeight());
+            annotatedBitmaps.Sort(new BitmapMaximumToMinimumHeight());
 
-            IList<Point> offsets = new List<Point>(bitmapList.Count);
-            int width = ComputeAtlasWidth(bitmapList, borderWidthInPixels);
+            IList<Point> offsets = new List<Point>(annotatedBitmaps.Count);
+            int width = ComputeAtlasWidth(annotatedBitmaps, borderWidthInPixels);
             int xOffset = 0;
             int yOffset = 0;
             int rowHeight = 0;
@@ -78,9 +85,9 @@ namespace MiniGlobe.Renderer
             //
             //     http://www-ui.is.s.u-tokyo.ac.jp/~takeo/papers/i3dg2001.pdf
             //
-            for (int i = 0; i < bitmapList.Count; ++i)
+            for (int i = 0; i < numberOfBitmaps; ++i)
             {
-                Bitmap b = bitmapList[i];
+                Bitmap b = annotatedBitmaps[i].Bitmap;
 
                 int widthIncrement = b.Width + borderWidthInPixels;
 
@@ -106,32 +113,33 @@ namespace MiniGlobe.Renderer
 
             ///////////////////////////////////////////////////////////////////
 
-            IList<RectangleH> textureCoordinates = new List<RectangleH>(bitmapList.Count);
+            RectangleH[] textureCoordinates = new RectangleH[annotatedBitmaps.Count];
             Bitmap bitmap = new Bitmap(width, height, pixelFormat);
             Graphics graphics = Graphics.FromImage(bitmap);
 
             double widthD = width;
             double heightD = height;
 
-            for (int i = 0; i < bitmapList.Count; ++i)
+            for (int i = 0; i < numberOfBitmaps; ++i)
             {
                 Point upperLeft = offsets[i];
-                Bitmap b = bitmapList[i];
+                AnnotatedBitmap b = annotatedBitmaps[i];
 
-                textureCoordinates.Add(new RectangleH(
-                    new Vector2H(                                       // Lower Left
+                textureCoordinates[b.Index] = new RectangleH(
+                    new Vector2H(                                                       // Lower Left
                         (double)upperLeft.X / widthD,
-                        (heightD - (double)(upperLeft.Y + b.Height)) / heightD),
-                    new Vector2H(                                       // Upper Right
-                        (double)(upperLeft.X + b.Width) / widthD,
-                        (heightD - (double)upperLeft.Y) / heightD)));
+                        (heightD - (double)(upperLeft.Y + b.Bitmap.Height)) / heightD),
+                    new Vector2H(                                                       // Upper Right
+                        (double)(upperLeft.X + b.Bitmap.Width) / widthD,
+                        (heightD - (double)upperLeft.Y) / heightD));
 
-                graphics.DrawImageUnscaled(b, upperLeft);
+                graphics.DrawImageUnscaled(b.Bitmap, upperLeft);
             }
             graphics.Dispose();
 
             _bitmap = bitmap;
             _textureCoordinates = textureCoordinates;
+            _borderWidth = borderWidthInPixels;
         }
 
         public Bitmap Bitmap
@@ -139,32 +147,72 @@ namespace MiniGlobe.Renderer
             get { return _bitmap; }
         }
 
-        public IList<RectangleH> TextureCoordinates
-        {
-            get { return _textureCoordinates; }
+        public IList<RectangleH> TextureCoordinates 
+        { 
+            get { return _textureCoordinates; } 
         }
 
-        private static int ComputeAtlasWidth(IList<Bitmap> bitmaps, int borderWidthInPixels)
+        public int BorderWidth 
+        { 
+            get { return _borderWidth; }
+        }
+
+        private static int ComputeAtlasWidth(IList<AnnotatedBitmap> bitmaps, int borderWidthInPixels)
         {
             int maxWidth = 0;
             int area = 0;
             for (int i = 0; i < bitmaps.Count; ++i)
             {
-                area += (bitmaps[i].Width + borderWidthInPixels) * (bitmaps[i].Height + borderWidthInPixels);
-                maxWidth = Math.Max(maxWidth, bitmaps[i].Width);
+                Bitmap b = bitmaps[i].Bitmap;
+                area += (b.Width + borderWidthInPixels) * (b.Height + borderWidthInPixels);
+                maxWidth = Math.Max(maxWidth, b.Width);
             }
 
             return Math.Max((int)Math.Sqrt((double)area), maxWidth + borderWidthInPixels);
         }
 
-        private readonly Bitmap _bitmap;
-        private readonly IList<RectangleH> _textureCoordinates;
-
-        private class BitmapMaximumToMinimumHeight : IComparer<Bitmap>
+        private static int EnumerableCount<T>(IEnumerable<T> enumerable)
         {
-            public int Compare(Bitmap left, Bitmap right)
+            IList<T> list = enumerable as IList<T>;
+
+            if (list != null)
             {
-                return right.Height - left.Height;
+                return list.Count;
+            }
+
+            int count = 0;
+            foreach (T t in enumerable)
+            {
+                ++count;
+            }
+
+            return count;
+        }
+
+        private readonly Bitmap _bitmap;
+        private readonly RectangleH[] _textureCoordinates;
+        private readonly int _borderWidth;
+
+        private class AnnotatedBitmap
+        {
+            public AnnotatedBitmap(Bitmap bitmap, int index)
+            {
+                _bitmap = bitmap;
+                _index = index;
+            }
+
+            public Bitmap Bitmap { get { return _bitmap; } }
+            public int Index { get { return _index; } }
+
+            private Bitmap _bitmap;
+            private int _index;
+        }
+
+        private class BitmapMaximumToMinimumHeight : IComparer<AnnotatedBitmap>
+        {
+            public int Compare(AnnotatedBitmap left, AnnotatedBitmap right)
+            {
+                return right.Bitmap.Height - left.Bitmap.Height;
             }
         }
     }
