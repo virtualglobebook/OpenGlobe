@@ -19,21 +19,16 @@ namespace MiniGlobe.Scene
 {
     public sealed class BillboardGroup : IList<Billboard>, IDisposable
     {
-        public BillboardGroup(Context context, Bitmap bitmap)
-            : this(context, bitmap, 0)
+        public BillboardGroup(Context context)
+            : this(context, 0)
         {
         }
 
-        public BillboardGroup(Context context, Bitmap bitmap, int capacity)
+        public BillboardGroup(Context context, int capacity)
         {
             if (context == null)
             {
                 throw new ArgumentNullException("context");
-            }
-
-            if (bitmap == null)
-            {
-                throw new ArgumentNullException("bitmap");
             }
 
             if (capacity < 0)
@@ -184,8 +179,6 @@ namespace MiniGlobe.Scene
                   }";
             _sp = Device.CreateShaderProgram(vs, gs, fs);
             _zOffsetUniform = _sp.Uniforms["u_zOffset"] as Uniform<float>;
-
-            _texture = Device.CreateTexture2D(bitmap, TextureFormat.RedGreenBlueAlpha8, false);
         }
 
         private void CreateVertexArray()
@@ -357,10 +350,15 @@ namespace MiniGlobe.Scene
         {
             Update();
 
+            if (Texture == null)
+            {
+                throw new InvalidOperationException("Texture");
+            }
+
             if (_va != null)
             {
                 _zOffsetUniform.Value = (float)ZOffset;
-                _context.TextureUnits[0].Texture2D = _texture;
+                _context.TextureUnits[0].Texture2D = Texture;
                 _context.Bind(_renderState);
                 _context.Bind(_sp);
                 _context.Bind(_va);
@@ -372,6 +370,8 @@ namespace MiniGlobe.Scene
         {
             get { return _context; }
         }
+
+        public Texture2D Texture { get; set; }
 
         public bool Wireframe
         {
@@ -545,7 +545,6 @@ namespace MiniGlobe.Scene
             }
 
             _sp.Dispose();
-            _texture.Dispose();
             DisposeVertexArray();
         }
 
@@ -606,7 +605,6 @@ namespace MiniGlobe.Scene
         private readonly RenderState _renderState;
         private readonly ShaderProgram _sp;
         private readonly Uniform<float> _zOffsetUniform;
-        private readonly Texture2D _texture;
 
         private VertexBuffer _positionBuffer;
         private VertexBuffer _textureCoordinatesBuffer;

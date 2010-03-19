@@ -36,12 +36,14 @@ namespace MiniGlobe.Examples.Chapter7
             _globe.Shape = globeShape;
             _globe.Texture = _texture;
 
-            _billboards = new BillboardGroup(_window.Context, new Bitmap(@"032.png"));
-            Vector3D[] positions = Cities.International(globeShape);
+            _billboardTexture = Device.CreateTexture2D(new Bitmap(@"032.png"), TextureFormat.RedGreenBlueAlpha8, false);
+            _billboards = new BillboardGroup(_window.Context);
+            Vector3D[] positions = Cities.World(globeShape);
             foreach (Vector3D position in positions)
             {
                 _billboards.Add(new Billboard() { Position = position });
             }
+            _billboards.Texture = _billboardTexture;
             _billboards.ZOffset = -0.0001;
 
             _sceneState.Camera.ZoomToTarget(globeShape.MaximumRadius);
@@ -69,11 +71,12 @@ namespace MiniGlobe.Examples.Chapter7
 
         public void Dispose()
         {
-            _texture.Dispose();
-            _billboards.Dispose();
-            _globe.Dispose();
-            _camera.Dispose();
             _window.Dispose();
+            _camera.Dispose();
+            _globe.Dispose();
+            _texture.Dispose();
+            _billboardTexture.Dispose();
+            _billboards.Dispose();
         }
 
         #endregion
@@ -95,7 +98,8 @@ namespace MiniGlobe.Examples.Chapter7
         private readonly SceneState _sceneState;
         private readonly CameraLookAtPoint _camera;
         private readonly RayCastedGlobe _globe;
-        private readonly BillboardGroup _billboards;
         private readonly Texture2D _texture;
+        private readonly Texture2D _billboardTexture;
+        private readonly BillboardGroup _billboards;
     }
 }

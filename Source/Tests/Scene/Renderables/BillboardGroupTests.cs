@@ -111,8 +111,7 @@ namespace MiniGlobe.Scene
             public BillboardGroupTest()
             {
                 _window = Device.CreateWindow(1, 1);
-                _bitmap = new Bitmap(1, 1);
-                _group = new BillboardGroup(_window.Context, _bitmap);
+                _group = new BillboardGroup(_window.Context);
             }
 
             public Context Context
@@ -130,14 +129,12 @@ namespace MiniGlobe.Scene
             public void Dispose()
             {
                 _window.Dispose();
-                _bitmap.Dispose();
                 _group.Dispose();
             }
 
             #endregion
 
             private MiniGlobeWindow _window;
-            private Bitmap _bitmap;
             private BillboardGroup _group;
         }
     }

@@ -14,7 +14,7 @@ namespace MiniGlobe.Examples.Chapter7
 {
     public static class Cities
     {
-        public static Vector3D[] International(Ellipsoid globeShape)
+        public static Vector3D[] World(Ellipsoid globeShape)
         {
             //
             // From http://www.infoplease.com/ipa/A0001769.html
