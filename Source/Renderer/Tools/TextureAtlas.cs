@@ -138,7 +138,7 @@ namespace MiniGlobe.Renderer
             graphics.Dispose();
 
             _bitmap = bitmap;
-            _textureCoordinates = textureCoordinates;
+            _textureCoordinates = new TextureCoordinateCollection(textureCoordinates);
             _borderWidth = borderWidthInPixels;
         }
 
@@ -147,7 +147,7 @@ namespace MiniGlobe.Renderer
             get { return _bitmap; }
         }
 
-        public IList<RectangleH> TextureCoordinates 
+        public TextureCoordinateCollection TextureCoordinates 
         { 
             get { return _textureCoordinates; } 
         }
@@ -172,7 +172,7 @@ namespace MiniGlobe.Renderer
         }
 
         private readonly Bitmap _bitmap;
-        private readonly RectangleH[] _textureCoordinates;
+        private readonly TextureCoordinateCollection _textureCoordinates;
         private readonly int _borderWidth;
 
         private class AnnotatedBitmap

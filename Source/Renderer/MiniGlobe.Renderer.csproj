@@ -108,6 +108,7 @@
     <Compile Include="Shaders\LinkAutomaticUniforms\TextureUniform.cs" />
     <Compile Include="Textures\TextureUtility.cs" />
     <Compile Include="Tools\TextureAtlas.cs" />
+    <Compile Include="Tools\TextureCoordinateCollection.cs" />
     <Compile Include="VertexArray\AttachedVertexBuffer.cs" />
     <Compile Include="VertexArray\AttachedVertexBuffers.cs" />
     <Compile Include="VertexArray\VertexArray.cs" />
