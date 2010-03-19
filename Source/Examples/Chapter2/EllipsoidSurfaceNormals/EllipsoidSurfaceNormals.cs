@@ -36,6 +36,13 @@ namespace MiniGlobe.Examples.Chapter2
             _sceneState = new SceneState();
             _camera = new CameraLookAtPoint(_sceneState.Camera, _window, Ellipsoid.UnitSphere);
 
+            _instructions = new HeadsUpDisplay(_window.Context);
+            _instructions.Texture = Device.CreateTexture2D(
+                Device.CreateBitmapFromText("Up - Increase semi-minor axis\nDown - Decrease semi-minor axis", 
+                    new Font("Arial", 24)),
+                TextureFormat.RedGreenBlueAlpha8, false);
+            _instructions.Color = Color.Black;
+
             CreateScene();
 
             ///////////////////////////////////////////////////////////////////
@@ -70,6 +77,8 @@ namespace MiniGlobe.Examples.Chapter2
             _normals.Render(_sceneState);
             _labels.Render(_sceneState);
             _tangentPlane.Render(_sceneState);
+
+            _instructions.Render(_sceneState);
         }
 
         private void OnKeyDown(object sender, KeyboardKeyEventArgs e)
@@ -284,6 +293,7 @@ namespace MiniGlobe.Examples.Chapter2
         {
             _window.Dispose();
             _camera.Dispose();
+            _instructions.Dispose();
             DisposeScene();
         }
 
@@ -305,6 +315,7 @@ namespace MiniGlobe.Examples.Chapter2
         private readonly MiniGlobeWindow _window;
         private readonly SceneState _sceneState;
         private readonly CameraLookAtPoint _camera;
+        private readonly HeadsUpDisplay _instructions;
 
         private RenderState _renderState;
         private ShaderProgram _sp;
