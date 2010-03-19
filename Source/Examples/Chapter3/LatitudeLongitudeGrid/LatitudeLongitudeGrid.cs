@@ -175,9 +175,10 @@ namespace MiniGlobe.Examples.Chapter3
                 new Bitmap("building.png"),
                 Device.CreateBitmapFromText("Vancouver", new Font("Arial", 24))
             });
-            _textureAtlas = Device.CreateTexture2D(atlas.Bitmap, TextureFormat.RedGreenBlueAlpha8, false);
 
             _vancouverLabel = new BillboardGroup(_window.Context);
+            _vancouverLabel.Texture = Device.CreateTexture2D(atlas.Bitmap, TextureFormat.RedGreenBlueAlpha8, false);
+            _vancouverLabel.DepthTestEnabled = false;
             _vancouverLabel.Add(new Billboard()
             {
                 Position = vancouver,
@@ -189,8 +190,8 @@ namespace MiniGlobe.Examples.Chapter3
                 TextureCoordinates = atlas.TextureCoordinates[1],
                 HorizontalOrigin = HorizontalOrigin.Left
             });
-            _vancouverLabel.Texture = _textureAtlas;
-            _vancouverLabel.DepthTestEnabled = false;
+
+            atlas.Dispose();
         }
 
         private void OnResize()
@@ -237,7 +238,7 @@ namespace MiniGlobe.Examples.Chapter3
             _sp.Dispose();
             _va.Dispose();
             _texture.Dispose();
-            _textureAtlas.Dispose();
+            _vancouverLabel.Texture.Dispose();
             _vancouverLabel.Dispose();
         }
 
@@ -268,7 +269,6 @@ namespace MiniGlobe.Examples.Chapter3
         private readonly Uniform<Vector2S> _gridWidth;
         private readonly Uniform<Vector2S> _gridResolution;
         private readonly IList<GridResolution> _gridResolutions;
-        private readonly Texture2D _textureAtlas;
         private readonly BillboardGroup _vancouverLabel;
     }
 }

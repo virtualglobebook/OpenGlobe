@@ -116,15 +116,14 @@ namespace MiniGlobe.Examples.Chapter3.NumberPrecision
             _renderState.ProgramPointSize = ProgramPointSize.Enabled;
 
             Font font = new Font("Arial", 24);
-            _bgTexture = Device.CreateTexture2D(Device.CreateBitmapFromText("131072.00f", font), 
-                TextureFormat.RedGreenBlueAlpha8, false);
             _bg = new BillboardGroup(_window.Context);
+            _bg.Texture = Device.CreateTexture2D(Device.CreateBitmapFromText("131072.00f", font),
+                TextureFormat.RedGreenBlueAlpha8, false);
             _bg.Add(new Billboard()
                 {
                     Position = new Vector3D(_viewCenterX, 0.0, 0.0),
                     Color = Color.Black
                 });
-            _bg.Texture = _bgTexture;
             font.Dispose();
         }
 
@@ -178,7 +177,7 @@ namespace MiniGlobe.Examples.Chapter3.NumberPrecision
             _camera.Dispose();
             _sp.Dispose();
             _va.Dispose();
-            _bgTexture.Dispose();
+            _bg.Texture.Dispose();
             _bg.Dispose();
             _positionVertexBuffer.Dispose();
         }
@@ -203,7 +202,6 @@ namespace MiniGlobe.Examples.Chapter3.NumberPrecision
         private readonly CameraLookAtPoint _camera;
         private ShaderProgram _sp;
         private VertexArray _va;
-        private readonly Texture2D _bgTexture;
         private readonly BillboardGroup _bg;
         private VertexBuffer _positionVertexBuffer;
         private readonly RenderState _renderState;

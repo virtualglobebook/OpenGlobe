@@ -15,7 +15,7 @@ using MiniGlobe.Core;
 
 namespace MiniGlobe.Renderer
 {
-    public class TextureAtlas
+    public class TextureAtlas : IDisposable
     {
         public TextureAtlas(IEnumerable<Bitmap> bitmaps)
             : this(bitmaps, 1)
@@ -170,6 +170,15 @@ namespace MiniGlobe.Renderer
 
             return Math.Max((int)Math.Sqrt((double)area), maxWidth + borderWidthInPixels);
         }
+
+        #region IDisposable Members
+
+        public void Dispose()
+        {
+            _bitmap.Dispose();
+        }
+
+        #endregion
 
         private readonly Bitmap _bitmap;
         private readonly TextureCoordinateCollection _textureCoordinates;

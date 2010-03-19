@@ -209,9 +209,9 @@ namespace MiniGlobe.Examples.Chapter2
             font.Dispose();
 
             TextureAtlas atlas = new TextureAtlas(labelBitmaps);
-            _textureAtlas = Device.CreateTexture2D(atlas.Bitmap, TextureFormat.RedGreenBlueAlpha8, false);
 
             _labels = new BillboardGroup(_window.Context, 2);
+            _labels.Texture = Device.CreateTexture2D(atlas.Bitmap, TextureFormat.RedGreenBlueAlpha8, false);
             _labels.Add(new Billboard()
                 {
                     Position = pDetic,
@@ -228,7 +228,8 @@ namespace MiniGlobe.Examples.Chapter2
                     HorizontalOrigin = HorizontalOrigin.Right,
                     VerticalOrigin = VerticalOrigin.Bottom
                 });
-            _labels.Texture = _textureAtlas;
+
+            atlas.Dispose();
 
             ///////////////////////////////////////////////////////////////////
             Vector3D east = Vector3D.UnitZ.Cross(deticNormal);
@@ -260,13 +261,9 @@ namespace MiniGlobe.Examples.Chapter2
                 _axes.Dispose();
             }
 
-            if (_textureAtlas != null)
-            {
-                _textureAtlas.Dispose();
-            }
-
             if (_labels != null)
             {
+                _labels.Texture.Dispose();
                 _labels.Dispose();
             }
 
@@ -316,7 +313,6 @@ namespace MiniGlobe.Examples.Chapter2
 
         private Wireframe _wireframe;
         private Axes _axes;
-        private Texture2D _textureAtlas;
         private BillboardGroup _labels;
         private Polyline _normals;
         private Plane _tangentPlane;
