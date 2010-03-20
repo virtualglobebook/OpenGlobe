@@ -12,59 +12,8 @@ using System.Drawing;
 using System.Globalization;
 using System.Runtime.InteropServices;
 
-namespace MiniGlobe.Core
+namespace MiniGlobe.Renderer
 {
-    public enum ImageFormat
-    {
-        StencilIndex,
-        DepthComponent,
-        Red,
-        Green,
-        Blue,
-        RedGreenBlue,
-        RedGreenBlueAlpha,
-        BlueGreenRed,
-        BlueGreenRedAlpha,
-        RedGreen,
-        RedGreenInteger,
-        DepthStencil,
-        RedInteger,
-        GreenInteger,
-        BlueInteger,
-        RedGreenBlueInteger,
-        RedGreenBlueAlphaInteger,
-        BlueGreenRedInteger,
-        BlueGreenRedAlphaInteger
-    }
-
-    public enum ImageDataType
-    {
-        Byte,
-        UnsignedByte,
-        Short,
-        UnsignedShort,
-        Int,
-        UnsignedInt,
-        Float,
-        HalfFloat,
-        UnsignedByte332,
-        UnsignedShort4444,
-        UnsignedShort5551,
-        UnsignedInt8888,
-        UnsignedInt1010102,
-        UnsignedByte233Reversed,
-        UnsignedShort565,
-        UnsignedShort565Reversed,
-        UnsignedShort4444Reversed,
-        UnsignedShort1555Reversed,
-        UnsignedInt8888Reversed,
-        UnsignedInt2101010Reversed,
-        UnsignedInt248,
-        UnsignedInt10F11F11FReversed,
-        UnsignedInt5999Reversed,
-        Float32UnsignedInt248Reversed
-    }
-
     [Serializable]
     [StructLayout(LayoutKind.Sequential)]
     public struct BlittableRGBA : IEquatable<BlittableRGBA>

@@ -42,6 +42,8 @@
     <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BlittableBGRA.cs" />
+    <Compile Include="BlittableRGBA.cs" />
     <Compile Include="Conversion.cs" />
     <Compile Include="Extensions.cs">
       <SubType>Code</SubType>
