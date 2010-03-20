@@ -18,6 +18,10 @@ namespace MiniGlobe.Renderer
         FloatMatrix22,
         FloatMatrix33,
         FloatMatrix44,
+        Int,
+        IntVector2,
+        IntVector3,
+        IntVector4
     }
 
     public class ShaderVertexAttribute

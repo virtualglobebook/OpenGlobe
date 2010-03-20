@@ -64,9 +64,25 @@ namespace MiniGlobe.Renderer.GL32
             {
                 return ShaderVertexAttributeType.FloatMatrix33;
             }
+            else if (type == ActiveAttribType.FloatMat4)
+            {
+                return ShaderVertexAttributeType.FloatMatrix44;
+            }
+            else if (type == (ActiveAttribType)All.Int)
+            {
+                return ShaderVertexAttributeType.Int;
+            }
+            else if (type == (ActiveAttribType)All.IntVec2)
+            {
+                return ShaderVertexAttributeType.IntVector2;
+            }
+            else if (type == (ActiveAttribType)All.IntVec3)
+            {
+                return ShaderVertexAttributeType.IntVector3;
+            }
 
-            Debug.Assert(type == ActiveAttribType.FloatMat4);
-            return ShaderVertexAttributeType.FloatMatrix44;
+            Debug.Assert(type == (ActiveAttribType)All.IntVec4);
+            return ShaderVertexAttributeType.IntVector4;
         }
 
         public static UniformType To(ActiveUniformType type)
