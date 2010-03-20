@@ -7,12 +7,6 @@
 //
 #endregion
 
-//
-// Keyboards Controls
-//   Up - Increase semi-minor axis
-//   Down - Decrease semi-minor axis
-//
-
 using System;
 using System.Drawing;
 using System.Collections.Generic;
@@ -191,23 +185,24 @@ namespace MiniGlobe.Examples.Chapter2
             Vector3D pDetic = p + (normalLength * deticNormal);
             Vector3D pCentric = p + (normalLength * centricNormal);
 
-            Vector3S[] normalPositions = new Vector3S[] 
-            { 
-                p.ToVector3S(),
-                pDetic.ToVector3S(),
-                p.ToVector3S(),
-                pCentric.ToVector3S()
-            };
+            VertexAttributeDoubleVector3 positionAttribute = new VertexAttributeDoubleVector3("position", 4);
+            positionAttribute.Values.Add(p);
+            positionAttribute.Values.Add(pDetic);
+            positionAttribute.Values.Add(p);
+            positionAttribute.Values.Add(pCentric);
 
-            BlittableRGBA[] normalColors = new BlittableRGBA[] 
-            { 
-                new BlittableRGBA(Color.DarkGreen),
-                new BlittableRGBA(Color.DarkGreen),
-                new BlittableRGBA(Color.DarkCyan),
-                new BlittableRGBA(Color.DarkCyan),
-            };
+            VertexAttributeRGBA colorAttribute = new VertexAttributeRGBA("color", 4);
+            colorAttribute.AddColor(Color.DarkGreen);
+            colorAttribute.AddColor(Color.DarkGreen);
+            colorAttribute.AddColor(Color.DarkCyan);
+            colorAttribute.AddColor(Color.DarkCyan);
 
-            _normals = new Polyline(_window.Context, normalPositions, normalColors);
+            Mesh polyline = new Mesh();
+            polyline.PrimitiveType = PrimitiveType.Lines;
+            polyline.Attributes.Add(positionAttribute);
+            polyline.Attributes.Add(colorAttribute);
+
+            _normals = new Polyline(_window.Context, polyline);
             _normals.Width = 3;
 
             ///////////////////////////////////////////////////////////////////

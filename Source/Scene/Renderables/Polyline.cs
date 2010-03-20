@@ -16,11 +16,18 @@ namespace MiniGlobe.Scene
 {
     public sealed class Polyline : IDisposable
     {
-        public Polyline(Context context, Vector3S[] positions, BlittableRGBA[] colors)
+        public Polyline(Context context, Mesh mesh)
         {
-            if (positions.Length != colors.Length)
+            if (mesh == null)
             {
-                throw new ArgumentException("positions.Length != colors.Length");
+                throw new ArgumentNullException("mesh");
+            }
+
+            if (mesh.PrimitiveType != PrimitiveType.Lines &&
+                mesh.PrimitiveType != PrimitiveType.LineLoop &&
+                mesh.PrimitiveType != PrimitiveType.LineStrip)
+            {
+                throw new ArgumentException("mesh.PrimitiveType must be Lines, LineLoop, or LineStrip.");
             }
 
             _context = context;
@@ -114,19 +121,7 @@ namespace MiniGlobe.Scene
             _lineLength = _sp.Uniforms["u_lineLength"] as Uniform<float>;
             Length = 1;
 
-            VertexBuffer positionBuffer = Device.CreateVertexBuffer(BufferHint.StaticDraw, positions.Length * Vector3S.SizeInBytes);
-            positionBuffer.CopyFromSystemMemory(positions);
-
-            VertexBuffer colorBuffer = Device.CreateVertexBuffer(BufferHint.StaticDraw, colors.Length * BlittableRGBA.SizeInBytes);
-            colorBuffer.CopyFromSystemMemory(colors);
-
-            AttachedVertexBuffer attachedPositionBuffer = new AttachedVertexBuffer(
-                positionBuffer, VertexAttributeComponentType.Float, 3);
-            AttachedVertexBuffer attachedColorBuffer = new AttachedVertexBuffer(
-                colorBuffer, VertexAttributeComponentType.UnsignedByte, 4, true);
-            _va = context.CreateVertexArray();
-            _va.VertexBuffers[_sp.VertexAttributes["position"].Location] = attachedPositionBuffer;
-            _va.VertexBuffers[_sp.VertexAttributes["color"].Location] = attachedColorBuffer;
+            _va = _context.CreateVertexArray(mesh, _sp.VertexAttributes, BufferHint.StaticDraw);
         }
 
         public void Render(SceneState sceneState)

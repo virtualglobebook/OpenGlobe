@@ -7,8 +7,8 @@
 //
 #endregion
 
+using System.Drawing;
 using NUnit.Framework;
-using OpenTK;
 
 namespace MiniGlobe.Core.Geometry
 {
@@ -98,6 +98,24 @@ namespace MiniGlobe.Core.Geometry
             mesh.Attributes.Add(doubleAttribute4);
             Assert.AreEqual("doubleAttribute4", mesh.Attributes["doubleAttribute4"].Name);
             Assert.AreEqual(VertexAttributeType.DoubleVector4, mesh.Attributes["doubleAttribute4"].DataType);
+
+            ///////////////////////////////////////////////////////////////////
+
+            VertexAttributeByte byteAttribute = new VertexAttributeByte("byteAttribute");
+            mesh.Attributes.Add(byteAttribute);
+            Assert.AreEqual("byteAttribute", mesh.Attributes["byteAttribute"].Name);
+            Assert.AreEqual(VertexAttributeType.UnsignedByte, mesh.Attributes["byteAttribute"].DataType);
+
+            VertexAttributeRGBA colorAttribute = new VertexAttributeRGBA("colorAttribute");
+            mesh.Attributes.Add(colorAttribute);
+            Assert.AreEqual("colorAttribute", mesh.Attributes["colorAttribute"].Name);
+            Assert.AreEqual(VertexAttributeType.UnsignedByte, mesh.Attributes["colorAttribute"].DataType);
+
+            colorAttribute.AddColor(Color.FromArgb(3, 0, 1, 2));
+            Assert.AreEqual(0, colorAttribute.Values[0]);
+            Assert.AreEqual(1, colorAttribute.Values[1]);
+            Assert.AreEqual(2, colorAttribute.Values[2]);
+            Assert.AreEqual(3, colorAttribute.Values[3]);
         }
 
         [Test]

@@ -204,6 +204,23 @@ namespace MiniGlobe.Renderer
                     va.VertexBuffers[shaderAttribute.Location] =
                         new AttachedVertexBuffer(vertexBuffer, VertexAttributeComponentType.Float, 4);
                 }
+                else if (attribute.DataType == VertexAttributeType.UnsignedByte)
+                {
+                    if (attribute is VertexAttributeRGBA)
+                    {
+                        VertexBuffer vertexBuffer = CreateVertexBuffer((attribute as VertexAttribute<byte>).Values, sizeof(byte), usageHint);
+
+                        va.VertexBuffers[shaderAttribute.Location] =
+                            new AttachedVertexBuffer(vertexBuffer, VertexAttributeComponentType.UnsignedByte, 4, true);
+                    }
+                    else
+                    {
+                        VertexBuffer vertexBuffer = CreateVertexBuffer((attribute as VertexAttribute<byte>).Values, sizeof(byte), usageHint);
+
+                        va.VertexBuffers[shaderAttribute.Location] =
+                            new AttachedVertexBuffer(vertexBuffer, VertexAttributeComponentType.UnsignedByte, 1);
+                    }
+                }
                 else
                 {
                     Debug.Fail("attribute.DataType");

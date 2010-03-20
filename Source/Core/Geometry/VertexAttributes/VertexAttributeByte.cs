@@ -12,12 +12,12 @@ namespace MiniGlobe.Core.Geometry
     public class VertexAttributeByte : VertexAttribute<byte>
     {
         public VertexAttributeByte(string name)
-            : base(name, VertexAttributeType.Byte)
+            : base(name, VertexAttributeType.UnsignedByte)
         {
         }
 
         public VertexAttributeByte(string name, int capacity)
-            : base(name, VertexAttributeType.Byte, capacity)
+            : base(name, VertexAttributeType.UnsignedByte, capacity)
         {
         }
     }
