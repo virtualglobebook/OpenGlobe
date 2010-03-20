@@ -58,12 +58,12 @@ namespace MiniGlobe.Scene
                   in vec4 position;
                   in vec4 textureCoordinates;
                   in vec4 color;
-                  in vec2 origin;
+                  in float origin;                  // TODO:  Why does this not work when float is int?
                   in vec2 pixelOffset;
 
                   out vec4 gsTextureCoordinates;
                   out vec4 gsColor;
-                  out vec2 gsOrigin;
+                  out float gsOrigin;
                   out vec2 gsPixelOffset;
 
                   uniform mat4 mg_modelViewPerspectiveProjectionMatrix;
@@ -97,7 +97,7 @@ namespace MiniGlobe.Scene
 
                   in vec4 gsTextureCoordinates[];
                   in vec4 gsColor[];
-                  in vec2 gsOrigin[];
+                  in float gsOrigin[];
                   in vec2 gsPixelOffset[];
 
                   out vec2 fsTextureCoordinates;
@@ -110,6 +110,8 @@ namespace MiniGlobe.Scene
 
                   void main()
                   {
+                      float originScales[3] = float[](0.0, 1.0, -1.0);
+
                       vec4 textureCoordinate = gsTextureCoordinates[0];
                       vec2 atlasSize = vec2(textureSize(mg_texture0, 0));
                       vec2 subTextureSize = vec2(
@@ -118,7 +120,10 @@ namespace MiniGlobe.Scene
                       vec2 halfSize = subTextureSize * 0.5 * mg_highResolutionSnapScale;
 
                       vec4 center = gl_in[0].gl_Position;
-                      center.xy += (gsOrigin[0] * halfSize);
+                      int horizontalOrigin = int(gsOrigin[0]) & 3;         // bits 0-1
+                      int verticalOrigin = (int(gsOrigin[0]) & 12) >> 2;   // bits 2-3
+                      center.xy += (vec2(originScales[horizontalOrigin], originScales[verticalOrigin]) * halfSize);
+
                       center.xy += (gsPixelOffset[0] * mg_highResolutionSnapScale);
 
                       vec4 v0 = vec4(center.xy - halfSize, center.z, 1.0);
@@ -186,7 +191,7 @@ namespace MiniGlobe.Scene
             // TODO:  Hint per buffer?  One hint?
             _positionBuffer = Device.CreateVertexBuffer(BufferHint.StaticDraw, _billboards.Count * Vector3S.SizeInBytes);
             _colorBuffer = Device.CreateVertexBuffer(BufferHint.StaticDraw, _billboards.Count * BlittableRGBA.SizeInBytes);
-            _originBuffer = Device.CreateVertexBuffer(BufferHint.StaticDraw, _billboards.Count * Vector2H.SizeInBytes);
+            _originBuffer = Device.CreateVertexBuffer(BufferHint.StaticDraw, _billboards.Count);
             _pixelOffsetBuffer = Device.CreateVertexBuffer(BufferHint.StaticDraw, _billboards.Count * Vector2H.SizeInBytes);
             _textureCoordinatesBuffer = Device.CreateVertexBuffer(BufferHint.StaticDraw, _billboards.Count * Vector4H.SizeInBytes);
 
@@ -195,7 +200,7 @@ namespace MiniGlobe.Scene
             AttachedVertexBuffer attachedColorBuffer = new AttachedVertexBuffer(
                 _colorBuffer, VertexAttributeComponentType.UnsignedByte, 4, true);
             AttachedVertexBuffer attachedOriginBuffer = new AttachedVertexBuffer(
-                _originBuffer, VertexAttributeComponentType.HalfFloat, 2);
+                _originBuffer, VertexAttributeComponentType.UnsignedByte, 1);
             AttachedVertexBuffer attachedPixelOffsetBuffer = new AttachedVertexBuffer(
                 _pixelOffsetBuffer, VertexAttributeComponentType.HalfFloat, 2);
             AttachedVertexBuffer attachedTextureCoordinatesBuffer = new AttachedVertexBuffer(
@@ -244,7 +249,7 @@ namespace MiniGlobe.Scene
                 Vector3S[] positions = new Vector3S[_billboards.Count];
                 Vector4H[] textureCoordinates = new Vector4H[_billboards.Count];
                 BlittableRGBA[] colors = new BlittableRGBA[_billboards.Count];
-                Vector2H[] origins = new Vector2H[_billboards.Count];
+                byte[] origins = new byte[_billboards.Count];
                 Vector2H[] pixelOffets = new Vector2H[_billboards.Count];
 
                 for (int i = 0; i < _billboards.Count; ++i)
@@ -277,7 +282,7 @@ namespace MiniGlobe.Scene
             Vector3S[] positions = new Vector3S[_dirtyBillboards.Count];
             Vector4H[] textureCoordinates = new Vector4H[_dirtyBillboards.Count];
             BlittableRGBA[] colors = new BlittableRGBA[_dirtyBillboards.Count];
-            Vector2H[] origins = new Vector2H[_dirtyBillboards.Count];
+            byte[] origins = new byte[_dirtyBillboards.Count];
             Vector2H[] pixelOffets = new Vector2H[_dirtyBillboards.Count];
 
             int bufferOffset = _dirtyBillboards[0].VertexBufferOffset;
@@ -317,7 +322,7 @@ namespace MiniGlobe.Scene
             Vector3S[] positions,
             Vector4H[] textureCoordinates,
             BlittableRGBA[] colors,
-            Vector2H[] origins,
+            byte[] origins,
             Vector2H[] pixelOffsets,
             int bufferOffset, 
             int length)
@@ -331,19 +336,17 @@ namespace MiniGlobe.Scene
             _colorBuffer.CopyFromSystemMemory(colors,
                 bufferOffset * BlittableRGBA.SizeInBytes,
                 length * BlittableRGBA.SizeInBytes);
-            _originBuffer.CopyFromSystemMemory(origins, 
-                bufferOffset * Vector2H.SizeInBytes, 
-                length * Vector2H.SizeInBytes);
+            _originBuffer.CopyFromSystemMemory(origins,
+                bufferOffset,
+                length);
             _pixelOffsetBuffer.CopyFromSystemMemory(pixelOffsets, 
                 bufferOffset * Vector2H.SizeInBytes, 
                 length * Vector2H.SizeInBytes);
         }
 
-        private static Vector2H BillboardOrigin(Billboard b)
+        private static byte BillboardOrigin(Billboard b)
         {
-            return new Vector2H(
-                _originScale[(int)b.HorizontalOrigin],
-                _originScale[(int)b.VerticalOrigin]);
+            return (byte)((byte)b.HorizontalOrigin | ((byte)b.VerticalOrigin << 2));
         }
 
         public void Render(SceneState sceneState)
@@ -612,7 +615,5 @@ namespace MiniGlobe.Scene
         private VertexBuffer _originBuffer;
         private VertexBuffer _pixelOffsetBuffer;
         private VertexArray _va;
-
-        private static readonly Half[] _originScale = new Half[] { new Half(0.0), new Half(1.0), new Half(-1.0) };
     }
 }
