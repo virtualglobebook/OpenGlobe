@@ -9,7 +9,6 @@
 
 using NUnit.Framework;
 using MiniGlobe.Core.Geometry;
-using OpenTK;
 
 namespace MiniGlobe.Core.Tessellation
 {

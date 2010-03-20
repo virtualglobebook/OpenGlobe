@@ -7,12 +7,9 @@
 //
 #endregion
 
-using System;
 using System.Threading;
 using System.Drawing;
 using NUnit.Framework;
-using OpenTK;
-using OpenTK.Graphics;
 using MiniGlobe.Core;
 using MiniGlobe.Core.Geometry;
 

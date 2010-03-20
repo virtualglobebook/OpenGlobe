@@ -10,7 +10,6 @@
 using System.Drawing;
 using System.Drawing.Imaging;
 using NUnit.Framework;
-using OpenTK;
 using MiniGlobe.Core;
 
 namespace MiniGlobe.Renderer

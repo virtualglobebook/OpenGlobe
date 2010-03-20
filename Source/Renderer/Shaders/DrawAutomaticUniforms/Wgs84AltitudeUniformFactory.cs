@@ -7,8 +7,6 @@
 //
 #endregion
 
-using OpenTK;
-
 namespace MiniGlobe.Renderer
 {
     internal class Wgs84AltitudeUniformFactory : DrawAutomaticUniformFactory

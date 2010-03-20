@@ -8,7 +8,6 @@
 #endregion
 
 using NUnit.Framework;
-using OpenTK;
 
 namespace MiniGlobe.Core.Geometry
 {

@@ -9,7 +9,6 @@
 
 using System.IO;
 using NUnit.Framework;
-using OpenTK;
 using MiniGlobe.Core;
 
 namespace MiniGlobe.Renderer

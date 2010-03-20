@@ -7,7 +7,6 @@
 //
 #endregion
 
-using OpenTK;
 using MiniGlobe.Core;
 
 namespace MiniGlobe.Renderer

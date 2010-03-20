@@ -11,7 +11,6 @@ using NUnit.Framework;
 using MiniGlobe.Renderer;
 using MiniGlobe.Core.Geometry;
 using MiniGlobe.Core.Tessellation;
-using OpenTK;
 
 namespace MiniGlobe.Core
 {
