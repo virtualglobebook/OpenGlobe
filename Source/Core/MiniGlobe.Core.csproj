@@ -31,6 +31,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="BlittableBGRA.cs" />
+    <Compile Include="BlittableRGBA.cs" />
     <Compile Include="CollectionAlgorithms.cs" />
     <Compile Include="Geodetic3D.cs" />
     <Compile Include="Disposable.cs" />
@@ -42,6 +44,7 @@
     <Compile Include="Geometry\Indices\IndicesShort.cs" />
     <Compile Include="Geometry\Mesh.cs" />
     <Compile Include="Geometry\VertexAttributes\VertexAttribute.cs" />
+    <Compile Include="Geometry\VertexAttributes\VertexAttributeByte.cs" />
     <Compile Include="Geometry\VertexAttributes\VertexAttributeCollection.cs" />
     <Compile Include="Geometry\VertexAttributes\VertexAttributeDouble.cs" />
     <Compile Include="Geometry\VertexAttributes\VertexAttributeDoubleVector2.cs" />
@@ -55,6 +58,7 @@
     <Compile Include="Geometry\VertexAttributes\VertexAttributeHalfFloatVector2.cs" />
     <Compile Include="Geometry\VertexAttributes\VertexAttributeHalfFloatVector3.cs" />
     <Compile Include="Geometry\VertexAttributes\VertexAttributeHalfFloatVector4.cs" />
+    <Compile Include="Geometry\VertexAttributes\VertexAttributeRGBA.cs" />
     <Compile Include="Half.cs" />
     <Compile Include="Interval.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -77,6 +81,9 @@
     <Compile Include="Vector4D.cs" />
     <Compile Include="Vector4H.cs" />
     <Compile Include="Vector4S.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System.Drawing" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

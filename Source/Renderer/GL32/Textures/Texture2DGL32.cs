@@ -9,6 +9,7 @@
 
 using System;
 using System.Diagnostics;
+using MiniGlobe.Core;
 using MiniGlobe.Renderer;
 using OpenTK.Graphics.OpenGL;
 

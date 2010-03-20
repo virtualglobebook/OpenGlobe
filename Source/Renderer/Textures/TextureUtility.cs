@@ -8,6 +8,7 @@
 #endregion
 
 using System.Diagnostics;
+using MiniGlobe.Core;
 
 using ImagingPixelFormat = System.Drawing.Imaging.PixelFormat;
 

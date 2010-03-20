@@ -14,6 +14,7 @@ namespace MiniGlobe.Core.Geometry
     // TODO:  These are the common types but we may need to add more.
     public enum VertexAttributeType
     {
+        Byte,
         HalfFloat,
         HalfFloatVector2,
         HalfFloatVector3,

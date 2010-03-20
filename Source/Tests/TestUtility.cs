@@ -9,6 +9,7 @@
 
 using System.Drawing;
 using NUnit.Framework;
+using MiniGlobe.Core;
 using MiniGlobe.Renderer;
 
 namespace MiniGlobe
