@@ -32,7 +32,7 @@ namespace MiniGlobe.Renderer
             //
             // Verify creating vertex buffer
             //
-            int sizeInBytes = positions.Length * Vector3S.SizeInBytes;
+            int sizeInBytes = positions.Length * SizeInBytes<Vector3S>.Value;
             VertexBuffer vertexBuffer = Device.CreateVertexBuffer(BufferHint.StaticDraw, sizeInBytes);
             Assert.IsNotNull(vertexBuffer);
             Assert.AreEqual(BufferHint.StaticDraw, vertexBuffer.UsageHint);
@@ -56,7 +56,7 @@ namespace MiniGlobe.Renderer
                 new Vector3S(0, 1, 0),
                 Vector3S.Zero
             };
-            vertexBuffer.CopyFromSystemMemory(modifiedPositions, Vector3S.SizeInBytes, Vector3S.SizeInBytes);
+            vertexBuffer.CopyFromSystemMemory(modifiedPositions, SizeInBytes<Vector3S>.Value, SizeInBytes<Vector3S>.Value);
 
             Vector3S[] positions3 = vertexBuffer.CopyToSystemMemory<Vector3S>(0, vertexBuffer.SizeInBytes);
             Assert.AreEqual(positions[0], positions3[0]);
@@ -162,7 +162,7 @@ namespace MiniGlobe.Renderer
             //
             // Verify creating pixel buffer
             //
-            int sizeInBytes = pixels.Length * BlittableRGBA.SizeInBytes;
+            int sizeInBytes = pixels.Length * SizeInBytes<BlittableRGBA>.Value;
             WritePixelBuffer pixelBuffer = Device.CreateWritePixelBuffer(WritePixelBufferHint.StreamDraw, sizeInBytes);
             Assert.IsNotNull(pixelBuffer);
             Assert.AreEqual(WritePixelBufferHint.StreamDraw, pixelBuffer.UsageHint);
@@ -182,7 +182,7 @@ namespace MiniGlobe.Renderer
             // Verify modiying a subset of the vertex buffer
             //
             BlittableRGBA modifiedPixel = new BlittableRGBA(Color.Black);
-            pixelBuffer.CopyFromSystemMemory(new[] { modifiedPixel }, BlittableRGBA.SizeInBytes);
+            pixelBuffer.CopyFromSystemMemory(new[] { modifiedPixel }, SizeInBytes<BlittableRGBA>.Value);
 
             BlittableRGBA[] pixels3 = pixelBuffer.CopyToSystemMemory<BlittableRGBA>(0, pixelBuffer.SizeInBytes);
             Assert.AreEqual(pixels[0], pixels3[0]);

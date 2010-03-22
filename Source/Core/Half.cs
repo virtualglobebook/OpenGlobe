@@ -346,11 +346,6 @@ namespace MiniGlobe.Core
         }
 
         /// <summary>
-        /// The size, in bytes, of an instance of the <see cref="Half"/> type.
-        /// </summary>
-        public static readonly int SizeInBytes = 2;
-
-        /// <summary>
         /// The smallest positive <see cref="Half"/>.
         /// </summary>
         public static readonly float MinValue = 5.96046448e-08f;

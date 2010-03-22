@@ -111,7 +111,7 @@ namespace MiniGlobe.Scene
                 (centerOrigin - x + y).ToVector3S()
             };
 
-            VertexBuffer positionBuffer = Device.CreateVertexBuffer(BufferHint.StaticDraw, positions.Length * Vector3S.SizeInBytes);
+            VertexBuffer positionBuffer = Device.CreateVertexBuffer(BufferHint.StaticDraw, positions.Length * SizeInBytes<Vector3S>.Value);
             positionBuffer.CopyFromSystemMemory(positions);
 
             ///////////////////////////////////////////////////////////////////

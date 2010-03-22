@@ -24,8 +24,6 @@ namespace MiniGlobe.Core
     [StructLayout(LayoutKind.Sequential)]
     public struct Vector2D : IEquatable<Vector2D>
     {
-        public static readonly int SizeInBytes = Marshal.SizeOf(typeof(Vector2D));
-
         public static Vector2D Zero
         {
             get { return new Vector2D(0.0, 0.0); }

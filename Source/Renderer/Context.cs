@@ -113,7 +113,7 @@ namespace MiniGlobe.Renderer
                         valuesArray[i] = values[i].ToVector2S();
                     }
 
-                    VertexBuffer vertexBuffer = Device.CreateVertexBuffer(usageHint, valuesArray.Length * Vector2S.SizeInBytes);
+                    VertexBuffer vertexBuffer = Device.CreateVertexBuffer(usageHint, valuesArray.Length * SizeInBytes<Vector2S>.Value);
                     vertexBuffer.CopyFromSystemMemory(valuesArray);
                     va.VertexBuffers[shaderAttribute.Location] =
                         new AttachedVertexBuffer(vertexBuffer, VertexAttributeComponentType.Float, 2);
@@ -128,7 +128,7 @@ namespace MiniGlobe.Renderer
                         valuesArray[i] = values[i].ToVector3S();
                     }
 
-                    VertexBuffer vertexBuffer = Device.CreateVertexBuffer(usageHint, valuesArray.Length * Vector3S.SizeInBytes);
+                    VertexBuffer vertexBuffer = Device.CreateVertexBuffer(usageHint, valuesArray.Length * SizeInBytes<Vector3S>.Value);
                     vertexBuffer.CopyFromSystemMemory(valuesArray);
                     va.VertexBuffers[shaderAttribute.Location] =
                         new AttachedVertexBuffer(vertexBuffer, VertexAttributeComponentType.Float, 3);
@@ -143,35 +143,35 @@ namespace MiniGlobe.Renderer
                         valuesArray[i] = values[i].ToVector4S();
                     }
 
-                    VertexBuffer vertexBuffer = Device.CreateVertexBuffer(usageHint, valuesArray.Length * Vector4S.SizeInBytes);
+                    VertexBuffer vertexBuffer = Device.CreateVertexBuffer(usageHint, valuesArray.Length * SizeInBytes<Vector4S>.Value);
                     vertexBuffer.CopyFromSystemMemory(valuesArray);
                     va.VertexBuffers[shaderAttribute.Location] =
                         new AttachedVertexBuffer(vertexBuffer, VertexAttributeComponentType.Float, 4);
                 }
                 else if (attribute.DataType == VertexAttributeType.HalfFloat)
                 {
-                    VertexBuffer vertexBuffer = CreateVertexBuffer((attribute as VertexAttribute<Half>).Values, Half.SizeInBytes, usageHint);
+                    VertexBuffer vertexBuffer = CreateVertexBuffer((attribute as VertexAttribute<Half>).Values, SizeInBytes<Half>.Value, usageHint);
 
                     va.VertexBuffers[shaderAttribute.Location] =
                         new AttachedVertexBuffer(vertexBuffer, VertexAttributeComponentType.HalfFloat, 1);
                 }
                 else if (attribute.DataType == VertexAttributeType.HalfFloatVector2)
                 {
-                    VertexBuffer vertexBuffer = CreateVertexBuffer((attribute as VertexAttribute<Vector2H>).Values, Vector2H.SizeInBytes, usageHint);
+                    VertexBuffer vertexBuffer = CreateVertexBuffer((attribute as VertexAttribute<Vector2H>).Values, SizeInBytes<Vector2H>.Value, usageHint);
 
                     va.VertexBuffers[shaderAttribute.Location] =
                         new AttachedVertexBuffer(vertexBuffer, VertexAttributeComponentType.HalfFloat, 2);
                 }
                 else if (attribute.DataType == VertexAttributeType.HalfFloatVector3)
                 {
-                    VertexBuffer vertexBuffer = CreateVertexBuffer((attribute as VertexAttribute<Vector3H>).Values, Vector3H.SizeInBytes, usageHint);
+                    VertexBuffer vertexBuffer = CreateVertexBuffer((attribute as VertexAttribute<Vector3H>).Values, SizeInBytes<Vector3H>.Value, usageHint);
 
                     va.VertexBuffers[shaderAttribute.Location] =
                         new AttachedVertexBuffer(vertexBuffer, VertexAttributeComponentType.HalfFloat, 3);
                 }
                 else if (attribute.DataType == VertexAttributeType.HalfFloatVector4)
                 {
-                    VertexBuffer vertexBuffer = CreateVertexBuffer((attribute as VertexAttribute<Vector4H>).Values, Vector4H.SizeInBytes, usageHint);
+                    VertexBuffer vertexBuffer = CreateVertexBuffer((attribute as VertexAttribute<Vector4H>).Values, SizeInBytes<Vector4H>.Value, usageHint);
 
                     va.VertexBuffers[shaderAttribute.Location] =
                         new AttachedVertexBuffer(vertexBuffer, VertexAttributeComponentType.HalfFloat, 4);
@@ -185,21 +185,21 @@ namespace MiniGlobe.Renderer
                 }
                 else if (attribute.DataType == VertexAttributeType.FloatVector2)
                 {
-                    VertexBuffer vertexBuffer = CreateVertexBuffer((attribute as VertexAttribute<Vector2S>).Values, Vector2S.SizeInBytes, usageHint);
+                    VertexBuffer vertexBuffer = CreateVertexBuffer((attribute as VertexAttribute<Vector2S>).Values, SizeInBytes<Vector2S>.Value, usageHint);
 
                     va.VertexBuffers[shaderAttribute.Location] =
                         new AttachedVertexBuffer(vertexBuffer, VertexAttributeComponentType.Float, 2);
                 }
                 else if (attribute.DataType == VertexAttributeType.FloatVector3)
                 {
-                    VertexBuffer vertexBuffer = CreateVertexBuffer((attribute as VertexAttribute<Vector3S>).Values, Vector3S.SizeInBytes, usageHint);
+                    VertexBuffer vertexBuffer = CreateVertexBuffer((attribute as VertexAttribute<Vector3S>).Values, SizeInBytes<Vector3S>.Value, usageHint);
 
                     va.VertexBuffers[shaderAttribute.Location] =
                         new AttachedVertexBuffer(vertexBuffer, VertexAttributeComponentType.Float, 3);
                 }
                 else if (attribute.DataType == VertexAttributeType.FloatVector4)
                 {
-                    VertexBuffer vertexBuffer = CreateVertexBuffer((attribute as VertexAttribute<Vector4S>).Values, Vector4S.SizeInBytes, usageHint);
+                    VertexBuffer vertexBuffer = CreateVertexBuffer((attribute as VertexAttribute<Vector4S>).Values, SizeInBytes<Vector4S>.Value, usageHint);
 
                     va.VertexBuffers[shaderAttribute.Location] =
                         new AttachedVertexBuffer(vertexBuffer, VertexAttributeComponentType.Float, 4);

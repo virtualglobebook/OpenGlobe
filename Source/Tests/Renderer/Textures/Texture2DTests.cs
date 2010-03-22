@@ -8,6 +8,7 @@
 #endregion
 
 using System.Drawing;
+using MiniGlobe.Core;
 using NUnit.Framework;
 
 namespace MiniGlobe.Renderer
@@ -68,7 +69,7 @@ namespace MiniGlobe.Renderer
                 new BlittableRGBA(Color.Green)
             };
 
-            int sizeInBytes = pixels.Length * BlittableRGBA.SizeInBytes;
+            int sizeInBytes = pixels.Length * SizeInBytes<BlittableRGBA>.Value;
             WritePixelBuffer writePixelBuffer = Device.CreateWritePixelBuffer(WritePixelBufferHint.StreamDraw, sizeInBytes);
             writePixelBuffer.CopyFromSystemMemory(pixels);
 

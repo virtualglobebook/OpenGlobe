@@ -121,7 +121,7 @@ namespace MiniGlobe.Scene
         private void CreateVertexArray()
         {
             // TODO:  Hint per buffer?  One hint?
-            _positionBuffer = Device.CreateVertexBuffer(BufferHint.StaticDraw, Vector2S.SizeInBytes);
+            _positionBuffer = Device.CreateVertexBuffer(BufferHint.StaticDraw, SizeInBytes<Vector2S>.Value);
 
             AttachedVertexBuffer attachedPositionBuffer = new AttachedVertexBuffer(
                 _positionBuffer, VertexAttributeComponentType.Float, 2);
@@ -138,7 +138,7 @@ namespace MiniGlobe.Scene
                 CreateVertexArray();
 
                 Vector2S[] positions = new Vector2S[] { _position.ToVector2S() };
-                _positionBuffer.CopyFromSystemMemory(positions, 0, Vector2S.SizeInBytes);
+                _positionBuffer.CopyFromSystemMemory(positions, 0, SizeInBytes<Vector2S>.Value);
 
                 _positionDirty = false;
             }

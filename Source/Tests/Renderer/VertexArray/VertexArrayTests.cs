@@ -29,7 +29,7 @@ namespace MiniGlobe.Renderer
                 new Vector3S(1, 0, 0),
                 new Vector3S(0, 1, 0)
             };
-            int vbSizeInBytes = positions.Length * Vector3S.SizeInBytes;
+            int vbSizeInBytes = positions.Length * SizeInBytes<Vector3S>.Value;
             VertexBuffer vertexBuffer = Device.CreateVertexBuffer(BufferHint.StaticDraw, vbSizeInBytes);
             vertexBuffer.CopyFromSystemMemory(positions);
 

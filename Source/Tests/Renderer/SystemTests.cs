@@ -91,7 +91,7 @@ namespace MiniGlobe.Renderer
                 new Vector4S(0.5f, -0.5f, 0, 1),
                 new Vector4S(0.5f, 0.5f, 0, 1) 
             };
-            VertexBuffer positionsBuffer = Device.CreateVertexBuffer(BufferHint.StaticDraw, positions.Length * Vector4S.SizeInBytes);
+            VertexBuffer positionsBuffer = Device.CreateVertexBuffer(BufferHint.StaticDraw, positions.Length * SizeInBytes<Vector4S>.Value);
             positionsBuffer.CopyFromSystemMemory(positions);
 
             ushort[] indices = new ushort[] 
@@ -394,7 +394,7 @@ namespace MiniGlobe.Renderer
 
             BlittableRGBA[] pixels = new BlittableRGBA[] { rgba };
 
-            int sizeInBytes = pixels.Length * BlittableRGBA.SizeInBytes;
+            int sizeInBytes = pixels.Length * SizeInBytes<BlittableRGBA>.Value;
             using (WritePixelBuffer writePixelBuffer = Device.CreateWritePixelBuffer(WritePixelBufferHint.StreamDraw, sizeInBytes))
             {
                 writePixelBuffer.CopyFromSystemMemory(pixels);
@@ -408,7 +408,7 @@ namespace MiniGlobe.Renderer
         private static VertexArray CreateVertexArray(Context context, int positionLocation)
         {
             Vector4S[] positions = new[] { new Vector4S(0, 0, 0, 1) };
-            VertexBuffer positionsBuffer = Device.CreateVertexBuffer(BufferHint.StaticDraw, positions.Length * Vector4S.SizeInBytes);
+            VertexBuffer positionsBuffer = Device.CreateVertexBuffer(BufferHint.StaticDraw, positions.Length * SizeInBytes<Vector4S>.Value);
             positionsBuffer.CopyFromSystemMemory(positions);
 
             VertexArray va = context.CreateVertexArray();

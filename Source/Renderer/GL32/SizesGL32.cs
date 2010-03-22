@@ -65,7 +65,7 @@ namespace MiniGlobe.Renderer.GL32
 
             
             Debug.Assert(type == VertexAttributeComponentType.HalfFloat);
-            return MiniGlobe.Core.Half.SizeInBytes;
+            return MiniGlobe.Core.SizeInBytes<Half>.Value;
         }
     }
 }

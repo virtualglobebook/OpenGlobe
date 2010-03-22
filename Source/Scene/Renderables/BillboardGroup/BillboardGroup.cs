@@ -189,11 +189,11 @@ namespace MiniGlobe.Scene
         private void CreateVertexArray()
         {
             // TODO:  Hint per buffer?  One hint?
-            _positionBuffer = Device.CreateVertexBuffer(BufferHint.StaticDraw, _billboards.Count * Vector3S.SizeInBytes);
-            _colorBuffer = Device.CreateVertexBuffer(BufferHint.StaticDraw, _billboards.Count * BlittableRGBA.SizeInBytes);
+            _positionBuffer = Device.CreateVertexBuffer(BufferHint.StaticDraw, _billboards.Count * SizeInBytes<Vector3S>.Value);
+            _colorBuffer = Device.CreateVertexBuffer(BufferHint.StaticDraw, _billboards.Count * SizeInBytes<BlittableRGBA>.Value);
             _originBuffer = Device.CreateVertexBuffer(BufferHint.StaticDraw, _billboards.Count);
-            _pixelOffsetBuffer = Device.CreateVertexBuffer(BufferHint.StaticDraw, _billboards.Count * Vector2H.SizeInBytes);
-            _textureCoordinatesBuffer = Device.CreateVertexBuffer(BufferHint.StaticDraw, _billboards.Count * Vector4H.SizeInBytes);
+            _pixelOffsetBuffer = Device.CreateVertexBuffer(BufferHint.StaticDraw, _billboards.Count * SizeInBytes<Vector2H>.Value);
+            _textureCoordinatesBuffer = Device.CreateVertexBuffer(BufferHint.StaticDraw, _billboards.Count * SizeInBytes<Vector4H>.Value);
 
             AttachedVertexBuffer attachedPositionBuffer = new AttachedVertexBuffer(
                 _positionBuffer, VertexAttributeComponentType.Float, 3);
@@ -328,20 +328,20 @@ namespace MiniGlobe.Scene
             int length)
         {
             _positionBuffer.CopyFromSystemMemory(positions, 
-                bufferOffset * Vector3S.SizeInBytes, 
-                length * Vector3S.SizeInBytes);
+                bufferOffset * SizeInBytes<Vector3S>.Value, 
+                length * SizeInBytes<Vector3S>.Value);
             _textureCoordinatesBuffer.CopyFromSystemMemory(textureCoordinates, 
-                bufferOffset * Vector4H.SizeInBytes, 
-                length * Vector4H.SizeInBytes);
+                bufferOffset * SizeInBytes<Vector4H>.Value, 
+                length * SizeInBytes<Vector4H>.Value);
             _colorBuffer.CopyFromSystemMemory(colors,
-                bufferOffset * BlittableRGBA.SizeInBytes,
-                length * BlittableRGBA.SizeInBytes);
+                bufferOffset * SizeInBytes<BlittableRGBA>.Value,
+                length * SizeInBytes<BlittableRGBA>.Value);
             _originBuffer.CopyFromSystemMemory(origins,
                 bufferOffset,
                 length);
             _pixelOffsetBuffer.CopyFromSystemMemory(pixelOffsets, 
-                bufferOffset * Vector2H.SizeInBytes, 
-                length * Vector2H.SizeInBytes);
+                bufferOffset * SizeInBytes<Vector2H>.Value, 
+                length * SizeInBytes<Vector2H>.Value);
         }
 
         private static byte BillboardOrigin(Billboard b)
