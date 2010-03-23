@@ -46,7 +46,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core\CollectionAlgorithmsTests.cs" />
+    <Compile Include="Core\Geodetic2DTests.cs" />
     <Compile Include="Core\Geodetic3DTests.cs" />
+    <Compile Include="Core\GeodeticExtentTests.cs" />
     <Compile Include="Core\Geometry\EllipsoidTests.cs" />
     <Compile Include="Core\Geometry\GeometryTests.cs" />
     <Compile Include="Core\HalfTests.cs" />

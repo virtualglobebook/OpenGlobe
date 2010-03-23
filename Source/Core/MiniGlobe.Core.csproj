@@ -32,8 +32,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="CollectionAlgorithms.cs" />
+    <Compile Include="Geodetic2D.cs" />
     <Compile Include="Geodetic3D.cs" />
     <Compile Include="Disposable.cs" />
+    <Compile Include="GeodeticExtent.cs" />
     <Compile Include="Geometry\Ellipsoid.cs" />
     <Compile Include="Geometry\Indices\Indices.cs" />
     <Compile Include="Geometry\Indices\IndicesBase.cs" />
@@ -62,6 +64,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RectangleH.cs" />
     <Compile Include="SizeInBytes.cs" />
+    <Compile Include="Terrain\TerrainTile.cs" />
     <Compile Include="Tessellation\BoxTessellator.cs" />
     <Compile Include="Tessellation\CubeMapEllipsoidTessellator.cs" />
     <Compile Include="Tessellation\GeographicGridEllipsoidTessellator.cs" />

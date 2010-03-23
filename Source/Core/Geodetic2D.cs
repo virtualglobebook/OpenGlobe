@@ -11,20 +11,18 @@ using System;
 
 namespace MiniGlobe.Core
 {
-    public struct Geodetic3D : IEquatable<Geodetic3D>
+    public struct Geodetic2D : IEquatable<Geodetic2D>
     {
-        public Geodetic3D(double longitude, double latitude, double height)
+        public Geodetic2D(double longitude, double latitude)
         {
             _longitude = longitude;
             _latitude = latitude;
-            _height = height;
         }
 
-        public Geodetic3D(Geodetic2D geodetic2D)
+        public Geodetic2D(Geodetic3D geodetic3D)
         {
-            _longitude = geodetic2D.Longitude;
-            _latitude = geodetic2D.Latitude;
-            _height = 0;
+            _longitude = geodetic3D.Longitude;
+            _latitude = geodetic3D.Longitude;
         }
 
         public double Longitude
@@ -37,42 +35,36 @@ namespace MiniGlobe.Core
             get { return _latitude; }
         }
 
-        public double Height
+        public bool Equals(Geodetic2D other)
         {
-            get { return _height; }
+            return _longitude == other._longitude && _latitude == other._latitude;
         }
 
-        public bool Equals(Geodetic3D other)
-        {
-            return _longitude == other._longitude && _latitude == other._latitude && _height == other._height;
-        }
-
-        public static bool operator ==(Geodetic3D left, Geodetic3D right)
+        public static bool operator ==(Geodetic2D left, Geodetic2D right)
         {
             return left.Equals(right);
         }
 
-        public static bool operator !=(Geodetic3D left, Geodetic3D right)
+        public static bool operator !=(Geodetic2D left, Geodetic2D right)
         {
             return !left.Equals(right);
         }
 
         public override bool Equals(object obj)
         {
-            if (obj is Geodetic3D)
+            if (obj is Geodetic2D)
             {
-                return Equals((Geodetic3D)obj);
+                return Equals((Geodetic2D)obj);
             }
             return false;
         }
 
         public override int GetHashCode()
         {
-            return _longitude.GetHashCode() ^ _latitude.GetHashCode() ^ _height.GetHashCode();
+            return _longitude.GetHashCode() ^ _latitude.GetHashCode();
         }
 
         private readonly double _longitude;
         private readonly double _latitude;
-        private readonly double _height;
     }
 }
