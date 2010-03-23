@@ -171,9 +171,8 @@ namespace MiniGlobe.Examples.Chapter2
 
             ///////////////////////////////////////////////////////////////////
 
-            _axes = new Axes(_window.Context);
+            _axes = new Axes(_window.Context, 1.5);
             _axes.Width = 3;
-            _axes.Length = 1.5;
 
             ///////////////////////////////////////////////////////////////////
 

@@ -31,6 +31,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chapter2EllipsoidSurfaceNor
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chapter4NumberPrecision", "Examples\Chapter4\NumberPrecision\Chapter4NumberPrecision.csproj", "{F5438C0E-87EB-41C3-8403-220164D58E4A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chapter5RayCasting", "Examples\Chapter5\RayCasting\Chapter5RayCasting.csproj", "{D51BA9B4-A2D5-41E5-BACC-3869C35F9C68}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -85,6 +87,10 @@ Global
 		{F5438C0E-87EB-41C3-8403-220164D58E4A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F5438C0E-87EB-41C3-8403-220164D58E4A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F5438C0E-87EB-41C3-8403-220164D58E4A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D51BA9B4-A2D5-41E5-BACC-3869C35F9C68}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D51BA9B4-A2D5-41E5-BACC-3869C35F9C68}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D51BA9B4-A2D5-41E5-BACC-3869C35F9C68}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D51BA9B4-A2D5-41E5-BACC-3869C35F9C68}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
