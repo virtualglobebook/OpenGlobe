@@ -17,23 +17,18 @@ using System.Collections;
 
 namespace MiniGlobe.Scene
 {
-    public sealed class BillboardGroup2 : IList<Billboard>, IDisposable
+    public sealed class BillboardCollection : IList<Billboard>, IDisposable
     {
-        public BillboardGroup2(Context context, Bitmap bitmap)
-            : this(context, bitmap, 0)
+        public BillboardCollection(Context context)
+            : this(context, 0)
         {
         }
 
-        public BillboardGroup2(Context context, Bitmap bitmap, int capacity)
+        public BillboardCollection(Context context, int capacity)
         {
             if (context == null)
             {
                 throw new ArgumentNullException("context");
-            }
-
-            if (bitmap == null)
-            {
-                throw new ArgumentNullException("bitmap");
             }
 
             if (capacity < 0)
@@ -63,9 +58,13 @@ namespace MiniGlobe.Scene
                   in vec4 position;
                   in vec4 textureCoordinates;
                   in vec4 color;
+                  in float origin;                  // TODO:  Why does this not work when float is int?
+                  in vec2 pixelOffset;
 
                   out vec4 gsTextureCoordinates;
                   out vec4 gsColor;
+                  out float gsOrigin;
+                  out vec2 gsPixelOffset;
 
                   uniform mat4 mg_modelViewPerspectiveProjectionMatrix;
                   uniform mat4 mg_viewportTransformationMatrix;
@@ -76,10 +75,6 @@ namespace MiniGlobe.Scene
                       mat4 viewportTransformationMatrix)
                   {
                       v = modelViewPerspectiveProjectionMatrix * v;                        // clip coordinates
-
-                      // TODO:  Just to avoid z fighting with Earth for now.
-                     // v.z -= 0.001;
-
                       v.xyz /= v.w;                                                           // normalized device coordinates
                       v.xyz = (viewportTransformationMatrix * vec4(v.xyz + 1.0, 1.0)).xyz; // windows coordinates
                       return v;
@@ -91,6 +86,8 @@ namespace MiniGlobe.Scene
                           mg_modelViewPerspectiveProjectionMatrix, mg_viewportTransformationMatrix);
                       gsTextureCoordinates = textureCoordinates;
                       gsColor = color;
+                      gsOrigin = origin;
+                      gsPixelOffset = pixelOffset;
                   }";
             string gs =
                 @"#version 150 
@@ -100,6 +97,8 @@ namespace MiniGlobe.Scene
 
                   in vec4 gsTextureCoordinates[];
                   in vec4 gsColor[];
+                  in float gsOrigin[];
+                  in vec2 gsPixelOffset[];
 
                   out vec2 fsTextureCoordinates;
                   out vec4 fsColor;
@@ -111,6 +110,8 @@ namespace MiniGlobe.Scene
 
                   void main()
                   {
+                      float originScales[3] = float[](0.0, 1.0, -1.0);
+
                       vec4 textureCoordinate = gsTextureCoordinates[0];
                       vec2 atlasSize = vec2(textureSize(mg_texture0, 0));
                       vec2 subTextureSize = vec2(
@@ -119,8 +120,11 @@ namespace MiniGlobe.Scene
                       vec2 halfSize = subTextureSize * 0.5 * mg_highResolutionSnapScale;
 
                       vec4 center = gl_in[0].gl_Position;
+                      int horizontalOrigin = int(gsOrigin[0]) & 3;         // bits 0-1
+                      int verticalOrigin = (int(gsOrigin[0]) & 12) >> 2;   // bits 2-3
+                      center.xy += (vec2(originScales[horizontalOrigin], originScales[verticalOrigin]) * halfSize);
 
-//center.x -= halfSize.x;
+                      center.xy += (gsPixelOffset[0] * mg_highResolutionSnapScale);
 
                       vec4 v0 = vec4(center.xy - halfSize, center.z, 1.0);
                       vec4 v1 = vec4(center.xy + vec2(halfSize.x, -halfSize.y), center.z, 1.0);
@@ -163,7 +167,9 @@ namespace MiniGlobe.Scene
                   in vec4 fsColor;
 
                   out vec4 fragmentColor;
+
                   uniform sampler2D mg_texture0;
+                  uniform float u_zOffset;
 
                   void main()
                   {
@@ -174,23 +180,29 @@ namespace MiniGlobe.Scene
                           discard;
                       }
                       fragmentColor = vec4(color.rgb * fsColor.rgb, color.a);
+                      gl_FragDepth = gl_FragCoord.z + u_zOffset;
                   }";
             _sp = Device.CreateShaderProgram(vs, gs, fs);
-
-            _texture = Device.CreateTexture2D(bitmap, TextureFormat.RedGreenBlueAlpha8, false);
+            _zOffsetUniform = _sp.Uniforms["u_zOffset"] as Uniform<float>;
         }
 
         private void CreateVertexArray()
         {
             // TODO:  Hint per buffer?  One hint?
-            _positionBuffer = Device.CreateVertexBuffer(BufferHint.StaticDraw, _billboards.Count * Vector3S.SizeInBytes);
-            _colorBuffer = Device.CreateVertexBuffer(BufferHint.StaticDraw, _billboards.Count * BlittableRGBA.SizeInBytes);
-            _textureCoordinatesBuffer = Device.CreateVertexBuffer(BufferHint.StaticDraw, _billboards.Count * Vector4H.SizeInBytes);
+            _positionBuffer = Device.CreateVertexBuffer(BufferHint.StaticDraw, _billboards.Count * SizeInBytes<Vector3S>.Value);
+            _colorBuffer = Device.CreateVertexBuffer(BufferHint.StaticDraw, _billboards.Count * SizeInBytes<BlittableRGBA>.Value);
+            _originBuffer = Device.CreateVertexBuffer(BufferHint.StaticDraw, _billboards.Count);
+            _pixelOffsetBuffer = Device.CreateVertexBuffer(BufferHint.StaticDraw, _billboards.Count * SizeInBytes<Vector2H>.Value);
+            _textureCoordinatesBuffer = Device.CreateVertexBuffer(BufferHint.StaticDraw, _billboards.Count * SizeInBytes<Vector4H>.Value);
 
             AttachedVertexBuffer attachedPositionBuffer = new AttachedVertexBuffer(
                 _positionBuffer, VertexAttributeComponentType.Float, 3);
             AttachedVertexBuffer attachedColorBuffer = new AttachedVertexBuffer(
-                _colorBuffer, VertexAttributeComponentType.UnsignedByte, 4);
+                _colorBuffer, VertexAttributeComponentType.UnsignedByte, 4, true);
+            AttachedVertexBuffer attachedOriginBuffer = new AttachedVertexBuffer(
+                _originBuffer, VertexAttributeComponentType.UnsignedByte, 1);
+            AttachedVertexBuffer attachedPixelOffsetBuffer = new AttachedVertexBuffer(
+                _pixelOffsetBuffer, VertexAttributeComponentType.HalfFloat, 2);
             AttachedVertexBuffer attachedTextureCoordinatesBuffer = new AttachedVertexBuffer(
                 _textureCoordinatesBuffer, VertexAttributeComponentType.HalfFloat, 4);
 
@@ -198,6 +210,8 @@ namespace MiniGlobe.Scene
             _va.VertexBuffers[_sp.VertexAttributes["position"].Location] = attachedPositionBuffer;
             _va.VertexBuffers[_sp.VertexAttributes["textureCoordinates"].Location] = attachedTextureCoordinatesBuffer;
             _va.VertexBuffers[_sp.VertexAttributes["color"].Location] = attachedColorBuffer;
+            _va.VertexBuffers[_sp.VertexAttributes["origin"].Location] = attachedOriginBuffer;
+            _va.VertexBuffers[_sp.VertexAttributes["pixelOffset"].Location] = attachedPixelOffsetBuffer;
         }
 
         private void Update()
@@ -235,6 +249,9 @@ namespace MiniGlobe.Scene
                 Vector3S[] positions = new Vector3S[_billboards.Count];
                 Vector4H[] textureCoordinates = new Vector4H[_billboards.Count];
                 BlittableRGBA[] colors = new BlittableRGBA[_billboards.Count];
+                byte[] origins = new byte[_billboards.Count];
+                Vector2H[] pixelOffets = new Vector2H[_billboards.Count];
+
                 for (int i = 0; i < _billboards.Count; ++i)
                 {
                     Billboard b = _billboards[i];
@@ -244,11 +261,13 @@ namespace MiniGlobe.Scene
                         b.TextureCoordinates.LowerLeft.X, b.TextureCoordinates.LowerLeft.Y,
                         b.TextureCoordinates.UpperRight.X, b.TextureCoordinates.UpperRight.Y);
                     colors[i] = new BlittableRGBA(b.Color);
+                    origins[i] = BillboardOrigin(b);
+                    pixelOffets[i] = b.PixelOffset;
 
                     b.VertexBufferOffset = i;
                     b.Dirty = false;
                 }
-                CopyBillboardsFromSystemMemory(positions, textureCoordinates, colors, 0, _billboards.Count);
+                CopyBillboardsFromSystemMemory(positions, textureCoordinates, colors, origins, pixelOffets, 0, _billboards.Count);
 
                 _rewriteBillboards = false;
             }
@@ -263,6 +282,8 @@ namespace MiniGlobe.Scene
             Vector3S[] positions = new Vector3S[_dirtyBillboards.Count];
             Vector4H[] textureCoordinates = new Vector4H[_dirtyBillboards.Count];
             BlittableRGBA[] colors = new BlittableRGBA[_dirtyBillboards.Count];
+            byte[] origins = new byte[_dirtyBillboards.Count];
+            Vector2H[] pixelOffets = new Vector2H[_dirtyBillboards.Count];
 
             int bufferOffset = _dirtyBillboards[0].VertexBufferOffset;
             int previousBufferOffset = bufferOffset - 1;
@@ -274,7 +295,7 @@ namespace MiniGlobe.Scene
 
                 if (previousBufferOffset != b.VertexBufferOffset - 1)
                 {
-                    CopyBillboardsFromSystemMemory(positions, textureCoordinates, colors, bufferOffset, length);
+                    CopyBillboardsFromSystemMemory(positions, textureCoordinates, colors, origins, pixelOffets, bufferOffset, length);
 
                     bufferOffset = b.VertexBufferOffset;
                     length = 0;
@@ -285,12 +306,14 @@ namespace MiniGlobe.Scene
                     b.TextureCoordinates.LowerLeft.X, b.TextureCoordinates.LowerLeft.Y,
                     b.TextureCoordinates.UpperRight.X, b.TextureCoordinates.UpperRight.Y);
                 colors[length] = new BlittableRGBA(b.Color);
+                origins[length] = BillboardOrigin(b);
+                pixelOffets[length] = b.PixelOffset;
                 ++length;
 
                 previousBufferOffset = b.VertexBufferOffset;
                 b.Dirty = false;
             }
-            CopyBillboardsFromSystemMemory(positions, textureCoordinates, colors, bufferOffset, length);
+            CopyBillboardsFromSystemMemory(positions, textureCoordinates, colors, origins, pixelOffets, bufferOffset, length);
 
             _dirtyBillboards.Clear();
         }
@@ -299,27 +322,46 @@ namespace MiniGlobe.Scene
             Vector3S[] positions,
             Vector4H[] textureCoordinates,
             BlittableRGBA[] colors,
-            int bufferOffset, 
+            byte[] origins,
+            Vector2H[] pixelOffsets,
+            int bufferOffset,
             int length)
         {
-            _positionBuffer.CopyFromSystemMemory(positions, 
-                bufferOffset * Vector3S.SizeInBytes, 
-                length * Vector3S.SizeInBytes);
-            _textureCoordinatesBuffer.CopyFromSystemMemory(textureCoordinates, 
-                bufferOffset * Vector4H.SizeInBytes, 
-                length * Vector4H.SizeInBytes);
+            _positionBuffer.CopyFromSystemMemory(positions,
+                bufferOffset * SizeInBytes<Vector3S>.Value,
+                length * SizeInBytes<Vector3S>.Value);
+            _textureCoordinatesBuffer.CopyFromSystemMemory(textureCoordinates,
+                bufferOffset * SizeInBytes<Vector4H>.Value,
+                length * SizeInBytes<Vector4H>.Value);
             _colorBuffer.CopyFromSystemMemory(colors,
-                bufferOffset * BlittableRGBA.SizeInBytes,
-                length * BlittableRGBA.SizeInBytes);
+                bufferOffset * SizeInBytes<BlittableRGBA>.Value,
+                length * SizeInBytes<BlittableRGBA>.Value);
+            _originBuffer.CopyFromSystemMemory(origins,
+                bufferOffset,
+                length);
+            _pixelOffsetBuffer.CopyFromSystemMemory(pixelOffsets,
+                bufferOffset * SizeInBytes<Vector2H>.Value,
+                length * SizeInBytes<Vector2H>.Value);
+        }
+
+        private static byte BillboardOrigin(Billboard b)
+        {
+            return (byte)((byte)b.HorizontalOrigin | ((byte)b.VerticalOrigin << 2));
         }
 
         public void Render(SceneState sceneState)
         {
             Update();
 
+            if (Texture == null)
+            {
+                throw new InvalidOperationException("Texture");
+            }
+
             if (_va != null)
             {
-                _context.TextureUnits[0].Texture2D = _texture;
+                _zOffsetUniform.Value = (float)ZOffset;
+                _context.TextureUnits[0].Texture2D = Texture;
                 _context.Bind(_renderState);
                 _context.Bind(_sp);
                 _context.Bind(_va);
@@ -331,6 +373,8 @@ namespace MiniGlobe.Scene
         {
             get { return _context; }
         }
+
+        public Texture2D Texture { get; set; }
 
         public bool Wireframe
         {
@@ -344,40 +388,43 @@ namespace MiniGlobe.Scene
             set { _renderState.DepthTest.Enabled = value; }
         }
 
+        // TODO:  Better way to avoid z fighting
+        public double ZOffset { get; set; }
+
         #region IList<Billboard> Members
 
-        public Billboard this[int index] 
+        public Billboard this[int index]
         {
             get { return _billboards[index]; }
-            set 
+            set
             {
                 Billboard b = _billboards[index];
 
                 AddBillboad(value);
                 RemoveBillboad(b);
-                _billboards[index] = value; 
+                _billboards[index] = value;
             }
         }
 
-        public int IndexOf(Billboard billboard)
+        public int IndexOf(Billboard item)
         {
-            return _billboards.IndexOf(billboard);
+            return _billboards.IndexOf(item);
         }
 
-        public void Insert(int index, Billboard billboard)
+        public void Insert(int index, Billboard item)
         {
             if (index < Count)
             {
                 Billboard b = _billboards[index];
-                AddBillboad(billboard);
+                AddBillboad(item);
                 RemoveBillboad(b);
             }
             else
             {
-                AddBillboad(billboard);
+                AddBillboad(item);
             }
 
-            _billboards.Insert(index, billboard);
+            _billboards.Insert(index, item);
         }
 
         public void RemoveAt(int index)
@@ -391,19 +438,19 @@ namespace MiniGlobe.Scene
 
         #region ICollection<Billboard> Members
 
-        public void Add(Billboard billboard)
+        public void Add(Billboard item)
         {
-            AddBillboad(billboard);
-            _billboards.Add(billboard);
+            AddBillboad(item);
+            _billboards.Add(item);
         }
 
-        public bool Remove(Billboard billboard)
+        public bool Remove(Billboard item)
         {
-            bool b = _billboards.Remove(billboard);
+            bool b = _billboards.Remove(item);
 
             if (b)
             {
-                RemoveBillboad(billboard);
+                RemoveBillboad(item);
             }
 
             return b;
@@ -421,9 +468,9 @@ namespace MiniGlobe.Scene
             _rewriteBillboards = true;
         }
 
-        public bool Contains(Billboard billboard)
+        public bool Contains(Billboard item)
         {
-            return _billboards.Contains(billboard);
+            return _billboards.Contains(item);
         }
 
         public void CopyTo(Billboard[] array, int arrayIndex)
@@ -463,11 +510,11 @@ namespace MiniGlobe.Scene
             {
                 if (billboard.Group != this)
                 {
-                    throw new ArgumentException("billboard is already in another BillboardGroup.");
+                    throw new ArgumentException("billboard is already in another BillboardCollection.");
                 }
                 else
                 {
-                    throw new ArgumentException("billboard was already added to this BillboardGroup.");
+                    throw new ArgumentException("billboard was already added to this BillboardCollection.");
                 }
             }
 
@@ -501,7 +548,6 @@ namespace MiniGlobe.Scene
             }
 
             _sp.Dispose();
-            _texture.Dispose();
             DisposeVertexArray();
         }
 
@@ -527,37 +573,31 @@ namespace MiniGlobe.Scene
                 _colorBuffer = null;
             }
 
+            if (_originBuffer != null)
+            {
+                _originBuffer.Dispose();
+                _originBuffer = null;
+            }
+
+            if (_pixelOffsetBuffer != null)
+            {
+                _pixelOffsetBuffer.Dispose();
+                _pixelOffsetBuffer = null;
+            }
+
             if (_va != null)
             {
                 _va.Dispose();
                 _va = null;
             }
         }
-        
+
         private static void ReleaseBillboard(Billboard billboard)
         {
             billboard.Dirty = false;
             billboard.Group = null;
             billboard.VertexBufferOffset = 0;
         }
-
-        //private static int EnumerableCount<T>(IEnumerable<T> enumerable)
-        //{
-        //    IList<T> list = enumerable as IList<T>;
-
-        //    if (list != null)
-        //    {
-        //        return list.Count;
-        //    }
-
-        //    int count = 0;
-        //    foreach (T t in enumerable)
-        //    {
-        //        ++count;
-        //    }
-
-        //    return count;
-        //}
 
         private readonly IList<Billboard> _billboards;
         private readonly IList<Billboard> _dirtyBillboards;
@@ -567,11 +607,13 @@ namespace MiniGlobe.Scene
         private readonly Context _context;
         private readonly RenderState _renderState;
         private readonly ShaderProgram _sp;
-        private readonly Texture2D _texture;
+        private readonly Uniform<float> _zOffsetUniform;
 
         private VertexBuffer _positionBuffer;
         private VertexBuffer _textureCoordinatesBuffer;
         private VertexBuffer _colorBuffer;
+        private VertexBuffer _originBuffer;
+        private VertexBuffer _pixelOffsetBuffer;
         private VertexArray _va;
     }
 }

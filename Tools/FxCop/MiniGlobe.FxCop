@@ -4401,16 +4401,6 @@
       <Namespaces>
        <Namespace Name="MiniGlobe.Scene">
         <Types>
-         <Type Name="BillboardGroup">
-          <Messages>
-           <Message TypeName="IdentifiersShouldHaveCorrectSuffix" Category="Microsoft.Naming" CheckId="CA1710" Created="2010-03-23 08:41:26Z">
-            <Issue>
-             <Item>'BillboardGroup'</Item>
-             <Item>Collection</Item>
-            </Issue>
-           </Message>
-          </Messages>
-         </Type>
          <Type Name="CameraLookAtPoint">
           <Members>
            <Member Name="#MouseUp(MiniGlobe.Renderer.MouseButton,System.Drawing.Point)">
@@ -8356,17 +8346,17 @@
        </Namespace>
        <Namespace Name="MiniGlobe.Scene">
         <Types>
-         <Type Name="BillboardGroupTests">
+         <Type Name="BillboardCollectionTests">
           <Members>
            <Member Name="#AddDuplicate()">
             <Messages>
-             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-03-23 08:41:26Z" FixCategory="DependsOnFix">
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-03-23 09:41:33Z" FixCategory="DependsOnFix">
               <Issue>
-               <Item>'BillboardGroupTests.AddDuplicate()'</Item>
+               <Item>'BillboardCollectionTests.AddDuplicate()'</Item>
               </Issue>
               <Notes>
                <User Name="pjcozzi">
-                <Note Id="50" />
+                <Note Id="9" />
                </User>
               </Notes>
              </Message>
@@ -8374,13 +8364,13 @@
            </Member>
            <Member Name="#AddNull()">
             <Messages>
-             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-03-23 08:41:26Z" FixCategory="DependsOnFix">
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-03-23 09:41:33Z" FixCategory="DependsOnFix">
               <Issue>
-               <Item>'BillboardGroupTests.AddNull()'</Item>
+               <Item>'BillboardCollectionTests.AddNull()'</Item>
               </Issue>
               <Notes>
                <User Name="pjcozzi">
-                <Note Id="50" />
+                <Note Id="9" />
                </User>
               </Notes>
              </Message>
@@ -8388,13 +8378,13 @@
            </Member>
            <Member Name="#Construct()">
             <Messages>
-             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-03-23 08:41:26Z" FixCategory="DependsOnFix">
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-03-23 09:41:33Z" FixCategory="DependsOnFix">
               <Issue>
-               <Item>'BillboardGroupTests.Construct()'</Item>
+               <Item>'BillboardCollectionTests.Construct()'</Item>
               </Issue>
               <Notes>
                <User Name="pjcozzi">
-                <Note Id="50" />
+                <Note Id="9" />
                </User>
               </Notes>
              </Message>
@@ -8402,13 +8392,13 @@
            </Member>
            <Member Name="#List()">
             <Messages>
-             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-03-23 08:41:26Z" FixCategory="DependsOnFix">
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-03-23 09:41:33Z" FixCategory="DependsOnFix">
               <Issue>
-               <Item>'BillboardGroupTests.List()'</Item>
+               <Item>'BillboardCollectionTests.List()'</Item>
               </Issue>
               <Notes>
                <User Name="pjcozzi">
-                <Note Id="50" />
+                <Note Id="9" />
                </User>
               </Notes>
              </Message>
@@ -8416,13 +8406,13 @@
            </Member>
            <Member Name="#Remove()">
             <Messages>
-             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-03-23 08:41:26Z" FixCategory="DependsOnFix">
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-03-23 09:41:33Z" FixCategory="DependsOnFix">
               <Issue>
-               <Item>'BillboardGroupTests.Remove()'</Item>
+               <Item>'BillboardCollectionTests.Remove()'</Item>
               </Issue>
               <Notes>
                <User Name="pjcozzi">
-                <Note Id="50" />
+                <Note Id="9" />
                </User>
               </Notes>
              </Message>
@@ -8549,6 +8539,7 @@
     <Note Id="6" Modified="2009-12-14 19:31:48Z">R, G, B, and A are the same as System.Color.</Note>
     <Note Id="7" Modified="2009-12-14 19:32:21Z">Matrix constructor parameter names are ok.</Note>
     <Note Id="8" Modified="2009-12-14 19:32:34Z">X and Y are ok.</Note>
+    <Note Id="9" Modified="2010-03-23 09:41:55Z">Ok</Note>
     <Note Id="10" Modified="2009-12-14 19:35:49Z">No thank you.  For now, at least.</Note>
     <Note Id="11" Modified="2009-12-14 19:36:40Z">This is a vertex attribute.  Sorry.</Note>
     <Note Id="12" Modified="2009-12-14 19:51:15Z">No thank you.</Note>
