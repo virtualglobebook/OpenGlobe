@@ -1784,17 +1784,6 @@
          </Type>
          <Type Name="IndexBuffer">
           <Members>
-           <Member Name="#CopyFromSystemMemory`1(!!0[],System.Int32)">
-            <Messages>
-             <Message TypeName="DoNotIndirectlyExposeMethodsWithLinkDemands" Category="Microsoft.Security" CheckId="CA2122" Created="2010-03-23 08:41:26Z">
-              <Issue>
-               <Item>'IndexBuffer.CopyFromSystemMemory&lt;T&gt;(T[], int)'</Item>
-               <Item>'Marshal.SizeOf(Type)'</Item>
-               <Item>&#xD;&#xA;   -&gt;'IndexBuffer.CopyFromSystemMemory&lt;T&gt;(T[], int)'&#xD;&#xA;   -&gt;'IndexBuffer.CopyFromSystemMemory&lt;T&gt;(T[], int)'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
            <Member Name="#CopyToSystemMemory`1()">
             <Messages>
              <Message TypeName="GenericMethodsShouldProvideTypeParameter" Category="Microsoft.Design" CheckId="CA1004" Created="2009-12-11 23:38:35Z">
@@ -2973,17 +2962,6 @@
          </Type>
          <Type Name="ReadPixelBuffer">
           <Members>
-           <Member Name="#CopyFromSystemMemory`1(!!0[],System.Int32)">
-            <Messages>
-             <Message TypeName="DoNotIndirectlyExposeMethodsWithLinkDemands" Category="Microsoft.Security" CheckId="CA2122" Created="2010-03-23 08:41:26Z">
-              <Issue>
-               <Item>'ReadPixelBuffer.CopyFromSystemMemory&lt;T&gt;(T[], int)'</Item>
-               <Item>'Marshal.SizeOf(Type)'</Item>
-               <Item>&#xD;&#xA;   -&gt;'ReadPixelBuffer.CopyFromSystemMemory&lt;T&gt;(T[], int)'&#xD;&#xA;   -&gt;'ReadPixelBuffer.CopyFromSystemMemory&lt;T&gt;(T[], int)'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
            <Member Name="#CopyToSystemMemory`1()">
             <Messages>
              <Message TypeName="GenericMethodsShouldProvideTypeParameter" Category="Microsoft.Design" CheckId="CA1004" Created="2009-12-11 23:38:35Z">
@@ -3697,17 +3675,6 @@
          </Type>
          <Type Name="UniformBuffer">
           <Members>
-           <Member Name="#CopyFromSystemMemory`1(!!0[],System.Int32)">
-            <Messages>
-             <Message TypeName="DoNotIndirectlyExposeMethodsWithLinkDemands" Category="Microsoft.Security" CheckId="CA2122" Created="2010-03-23 08:41:26Z">
-              <Issue>
-               <Item>'UniformBuffer.CopyFromSystemMemory&lt;T&gt;(T[], int)'</Item>
-               <Item>'Marshal.SizeOf(Type)'</Item>
-               <Item>&#xD;&#xA;   -&gt;'UniformBuffer.CopyFromSystemMemory&lt;T&gt;(T[], int)'&#xD;&#xA;   -&gt;'UniformBuffer.CopyFromSystemMemory&lt;T&gt;(T[], int)'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
            <Member Name="#CopyToSystemMemory`1()">
             <Messages>
              <Message TypeName="GenericMethodsShouldProvideTypeParameter" Category="Microsoft.Design" CheckId="CA1004" Created="2009-12-11 23:38:35Z">
@@ -4314,17 +4281,6 @@
          </Type>
          <Type Name="VertexBuffer">
           <Members>
-           <Member Name="#CopyFromSystemMemory`1(!!0[],System.Int32)">
-            <Messages>
-             <Message TypeName="DoNotIndirectlyExposeMethodsWithLinkDemands" Category="Microsoft.Security" CheckId="CA2122" Created="2010-03-23 08:41:26Z">
-              <Issue>
-               <Item>'VertexBuffer.CopyFromSystemMemory&lt;T&gt;(T[], int)'</Item>
-               <Item>'Marshal.SizeOf(Type)'</Item>
-               <Item>&#xD;&#xA;   -&gt;'VertexBuffer.CopyFromSystemMemory&lt;T&gt;(T[], int)'&#xD;&#xA;   -&gt;'VertexBuffer.CopyFromSystemMemory&lt;T&gt;(T[], int)'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
            <Member Name="#CopyToSystemMemory`1()">
             <Messages>
              <Message TypeName="GenericMethodsShouldProvideTypeParameter" Category="Microsoft.Design" CheckId="CA1004" Created="2009-12-11 23:38:35Z">
@@ -4349,17 +4305,6 @@
          </Type>
          <Type Name="WritePixelBuffer">
           <Members>
-           <Member Name="#CopyFromSystemMemory`1(!!0[],System.Int32)">
-            <Messages>
-             <Message TypeName="DoNotIndirectlyExposeMethodsWithLinkDemands" Category="Microsoft.Security" CheckId="CA2122" Created="2010-03-23 08:41:26Z">
-              <Issue>
-               <Item>'WritePixelBuffer.CopyFromSystemMemory&lt;T&gt;(T[], int)'</Item>
-               <Item>'Marshal.SizeOf(Type)'</Item>
-               <Item>&#xD;&#xA;   -&gt;'WritePixelBuffer.CopyFromSystemMemory&lt;T&gt;(T[], int)'&#xD;&#xA;   -&gt;'WritePixelBuffer.CopyFromSystemMemory&lt;T&gt;(T[], int)'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
            <Member Name="#CopyToSystemMemory`1()">
             <Messages>
              <Message TypeName="GenericMethodsShouldProvideTypeParameter" Category="Microsoft.Design" CheckId="CA1004" Created="2009-12-11 23:38:35Z">
@@ -8614,9 +8559,6 @@
    </Rule>
    <Rule TypeName="DoNotDeclareStaticMembersOnGenericTypes" Category="Microsoft.Design" CheckId="CA1000">
     <Resolution Name="Default">Remove {0} from {1} or make it an instance member.</Resolution>
-   </Rule>
-   <Rule TypeName="DoNotIndirectlyExposeMethodsWithLinkDemands" Category="Microsoft.Security" CheckId="CA2122">
-    <Resolution Name="Default">{0} calls into {1} which has a LinkDemand. By making this call, {1} is indirectly exposed to user code. Review the following call stack that might expose a way to circumvent security protection: {2}</Resolution>
    </Rule>
    <Rule TypeName="GenericMethodsShouldProvideTypeParameter" Category="Microsoft.Design" CheckId="CA1004">
     <Resolution Name="Default">Consider a design where {0} doesn't require explicit type parameter {1} in any call to it.</Resolution>

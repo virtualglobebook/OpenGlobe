@@ -8,6 +8,7 @@
 #endregion
 
 using System.Diagnostics;
+using MiniGlobe.Core;
 using MiniGlobe.Renderer;
 using OpenTK.Graphics.OpenGL;
 using System.Runtime.InteropServices;
@@ -56,7 +57,7 @@ namespace MiniGlobe.Renderer.GL32
                 Debug.Assert(typeof(T) == typeof(uint));
                 _dataType = IndexBufferDataType.UnsignedInt;
             }
-            _count = _bufferObject.SizeInBytes / Marshal.SizeOf(typeof(T));
+            _count = _bufferObject.SizeInBytes / SizeInBytes<T>.Value;
             _bufferObject.CopyFromSystemMemory(bufferInSystemMemory, destinationOffsetInBytes, lengthInBytes);
         }
 

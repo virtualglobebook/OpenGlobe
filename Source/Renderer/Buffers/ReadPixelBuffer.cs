@@ -23,8 +23,7 @@ namespace MiniGlobe.Renderer
 
         public virtual void CopyFromSystemMemory<T>(T[] bufferInSystemMemory, int destinationOffsetInBytes) where T : struct
         {
-            int sizeOfT = Marshal.SizeOf(typeof(T));
-            int lengthInBytes = bufferInSystemMemory.Length * sizeOfT;
+            int lengthInBytes = bufferInSystemMemory.Length * SizeInBytes<T>.Value;
 
             CopyFromSystemMemory<T>(bufferInSystemMemory, destinationOffsetInBytes, lengthInBytes);
         }

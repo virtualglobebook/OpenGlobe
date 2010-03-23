@@ -13,7 +13,7 @@ using System.Drawing.Imaging;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using OpenTK.Graphics.OpenGL;
-using MiniGlobe.Renderer;
+using MiniGlobe.Core;
 using ImagingPixelFormat = System.Drawing.Imaging.PixelFormat;
 
 namespace MiniGlobe.Renderer.GL32
@@ -54,7 +54,7 @@ namespace MiniGlobe.Renderer.GL32
             Debug.Assert(destinationOffsetInBytes + lengthInBytes <= _sizeInBytes);
 
             Debug.Assert(lengthInBytes >= 0);
-            Debug.Assert(lengthInBytes <= bufferInSystemMemory.Length * Marshal.SizeOf(typeof(T)));
+            Debug.Assert(lengthInBytes <= bufferInSystemMemory.Length * SizeInBytes<T>.Value);
 
             Bind();
             GL.BufferSubData<T>(_type,
@@ -89,13 +89,11 @@ namespace MiniGlobe.Renderer.GL32
 
         public T[] CopyToSystemMemory<T>(int offsetInBytes, int lengthInBytes) where T : struct
         {
-            int sizeOfT = Marshal.SizeOf(typeof(T));
-
             Debug.Assert(offsetInBytes >= 0);
             Debug.Assert(lengthInBytes > 0);
             Debug.Assert(offsetInBytes + lengthInBytes <= _sizeInBytes);
 
-            T[] bufferInSystemMemory = new T[lengthInBytes / sizeOfT];
+            T[] bufferInSystemMemory = new T[lengthInBytes / SizeInBytes<T>.Value];
 
             Bind();
             GL.GetBufferSubData(_type, new IntPtr(offsetInBytes), new IntPtr(lengthInBytes), bufferInSystemMemory);
