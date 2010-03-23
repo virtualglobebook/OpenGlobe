@@ -15,7 +15,7 @@ using MiniGlobe.Core;
 
 namespace MiniGlobe.Renderer
 {
-    public class TextureAtlas : IDisposable
+    public sealed class TextureAtlas : IDisposable
     {
         public TextureAtlas(IEnumerable<Bitmap> bitmaps)
             : this(bitmaps, 1)
@@ -33,7 +33,7 @@ namespace MiniGlobe.Renderer
 
             if (numberOfBitmaps == 0)
             {
-                throw new ArgumentException("bitmaps does not contain any items.");
+                throw new ArgumentException("bitmaps", "bitmaps does not contain any items.");
             }
 
             List<AnnotatedBitmap> annotatedBitmaps = new List<AnnotatedBitmap>(numberOfBitmaps);
@@ -45,7 +45,7 @@ namespace MiniGlobe.Renderer
             {
                 if (b == null)
                 {
-                    throw new ArgumentNullException("An item in bitmaps is null.");
+                    throw new ArgumentNullException("bitmaps", "An item in bitmaps is null.");
                 }
 
                 if (pixelFormat == PixelFormat.Undefined)
@@ -54,7 +54,7 @@ namespace MiniGlobe.Renderer
                 }
                 else if (b.PixelFormat != pixelFormat)
                 {
-                    throw new ArgumentException("All bitmaps must have the same PixelFormat.");
+                    throw new ArgumentException("bitmaps", "All bitmaps must have the same PixelFormat.");
                 }
 
                 annotatedBitmaps.Add(new AnnotatedBitmap(b, j++));
@@ -62,7 +62,7 @@ namespace MiniGlobe.Renderer
 
             if (pixelFormat == PixelFormat.Undefined)
             {
-                throw new ArgumentException("All bitmaps have PixelFormat.Undefined.");
+                throw new ArgumentException("bitmaps", "All bitmaps have PixelFormat.Undefined.");
             }
 
             if (borderWidthInPixels < 0)

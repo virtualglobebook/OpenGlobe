@@ -406,25 +406,25 @@ namespace MiniGlobe.Scene
             }
         }
 
-        public int IndexOf(Billboard billboard)
+        public int IndexOf(Billboard item)
         {
-            return _billboards.IndexOf(billboard);
+            return _billboards.IndexOf(item);
         }
 
-        public void Insert(int index, Billboard billboard)
+        public void Insert(int index, Billboard item)
         {
             if (index < Count)
             {
                 Billboard b = _billboards[index];
-                AddBillboad(billboard);
+                AddBillboad(item);
                 RemoveBillboad(b);
             }
             else
             {
-                AddBillboad(billboard);
+                AddBillboad(item);
             }
 
-            _billboards.Insert(index, billboard);
+            _billboards.Insert(index, item);
         }
 
         public void RemoveAt(int index)
@@ -438,19 +438,19 @@ namespace MiniGlobe.Scene
 
         #region ICollection<Billboard> Members
 
-        public void Add(Billboard billboard)
+        public void Add(Billboard item)
         {
-            AddBillboad(billboard);
-            _billboards.Add(billboard);
+            AddBillboad(item);
+            _billboards.Add(item);
         }
 
-        public bool Remove(Billboard billboard)
+        public bool Remove(Billboard item)
         {
-            bool b = _billboards.Remove(billboard);
+            bool b = _billboards.Remove(item);
 
             if (b)
             {
-                RemoveBillboad(billboard);
+                RemoveBillboad(item);
             }
 
             return b;
@@ -468,9 +468,9 @@ namespace MiniGlobe.Scene
             _rewriteBillboards = true;
         }
 
-        public bool Contains(Billboard billboard)
+        public bool Contains(Billboard item)
         {
-            return _billboards.Contains(billboard);
+            return _billboards.Contains(item);
         }
 
         public void CopyTo(Billboard[] array, int arrayIndex)

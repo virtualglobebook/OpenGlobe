@@ -7,6 +7,7 @@
 //
 #endregion
 
+using System;
 using System.Drawing;
 
 namespace MiniGlobe.Core.Geometry
@@ -21,6 +22,10 @@ namespace MiniGlobe.Core.Geometry
         public VertexAttributeRGBA(string name, int capacity)
             : base(name, VertexAttributeType.UnsignedByte, capacity * 4)
         {
+            if (capacity > int.MaxValue / 4)
+            {
+                throw new ArgumentOutOfRangeException("capacity", "capacity causes int overflow.");
+            }
         }
 
         public void AddColor(Color color)

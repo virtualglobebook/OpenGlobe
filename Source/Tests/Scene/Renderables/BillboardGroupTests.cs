@@ -106,7 +106,7 @@ namespace MiniGlobe.Scene
             }
         }
 
-        class BillboardGroupTest : IDisposable
+        private sealed class BillboardGroupTest : IDisposable
         {
             public BillboardGroupTest()
             {
