@@ -88,6 +88,8 @@
     <Compile Include="Shaders\DrawAutomaticUniforms\ModelZToClipCoordinatesUniform.cs" />
     <Compile Include="Shaders\DrawAutomaticUniforms\OrthographicProjectionMatrixUniform.cs" />
     <Compile Include="Shaders\DrawAutomaticUniforms\OrthographicProjectionMatrixUniformFactory.cs" />
+    <Compile Include="Shaders\DrawAutomaticUniforms\PerspectiveNearPlaneDistanceUniform.cs" />
+    <Compile Include="Shaders\DrawAutomaticUniforms\PerspectiveNearPlaneDistanceUniformFactory.cs" />
     <Compile Include="Shaders\DrawAutomaticUniforms\PerspectiveProjectionMatrixUniform.cs" />
     <Compile Include="Shaders\DrawAutomaticUniforms\PerspectiveProjectionMatrixUniformFactory.cs" />
     <Compile Include="Shaders\DrawAutomaticUniforms\SunPositionUniform.cs" />

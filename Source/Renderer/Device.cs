@@ -197,6 +197,7 @@ namespace MiniGlobe.Renderer
             drawAutomaticUniformFactories.Add(new ModelZToClipCoordinatesUniformFactory());
             drawAutomaticUniformFactories.Add(new WindowToWorldNearPlaneUniformFactory());
             drawAutomaticUniformFactories.Add(new Wgs84AltitudeUniformFactory());
+            drawAutomaticUniformFactories.Add(new PerspectiveNearPlaneDistanceUniformFactory());
             drawAutomaticUniformFactories.Add(new HighResolutionSnapScaleUniformFactory());
                                     
             return drawAutomaticUniformFactories;

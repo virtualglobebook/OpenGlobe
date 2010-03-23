@@ -17,15 +17,20 @@ namespace MiniGlobe.Scene
 {
     public sealed class Axes : IDisposable
     {
-        public Axes(Context context)
+        public Axes(Context context, double length)
         {
+            if (length <= 0)
+            {
+                throw new ArgumentException("length");
+            }
+
             VertexAttributeDoubleVector3 positionAttribute = new VertexAttributeDoubleVector3("position", 4);
             positionAttribute.Values.Add(new Vector3D(0, 0, 0));
-            positionAttribute.Values.Add(new Vector3D(1, 0, 0));
+            positionAttribute.Values.Add(new Vector3D(length, 0, 0));
             positionAttribute.Values.Add(new Vector3D(0, 0, 0));
-            positionAttribute.Values.Add(new Vector3D(0, 1, 0));
+            positionAttribute.Values.Add(new Vector3D(0, length, 0));
             positionAttribute.Values.Add(new Vector3D(0, 0, 0));
-            positionAttribute.Values.Add(new Vector3D(0, 0, 1));
+            positionAttribute.Values.Add(new Vector3D(0, 0, length));
 
             VertexAttributeRGBA colorAttribute = new VertexAttributeRGBA("color", 4);
             colorAttribute.AddColor(Color.Red);
@@ -59,12 +64,6 @@ namespace MiniGlobe.Scene
             set { _polyline.Width = value; }
         }
         
-        public double Length
-        {
-            get { return _polyline.Length; }
-            set { _polyline.Length = value; }
-        }
-
         #region IDisposable Members
 
         public void Dispose()
