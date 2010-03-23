@@ -17,13 +17,13 @@ using MiniGlobe.Renderer;
 namespace MiniGlobe.Scene
 {
     [TestFixture]
-    public class BillboardGroupTests
+    public class BillboardCollectionTests
     {
         [Test]
         public void Construct()
         {
-            BillboardGroupTest billboardGroup = new BillboardGroupTest();
-            BillboardGroup group = billboardGroup.Group;
+            BillboardCollectionTest billboardGroup = new BillboardCollectionTest();
+            BillboardCollection group = billboardGroup.Group;
 
             Assert.AreEqual(billboardGroup.Context, group.Context);
             Assert.IsTrue(group.DepthTestEnabled);
@@ -35,7 +35,7 @@ namespace MiniGlobe.Scene
         [Test]
         public void List()
         {
-            BillboardGroupTest billboardGroup = new BillboardGroupTest();
+            BillboardCollectionTest billboardGroup = new BillboardCollectionTest();
             IList<Billboard> group = billboardGroup.Group;
 
             Assert.AreEqual(0, group.Count);
@@ -72,7 +72,7 @@ namespace MiniGlobe.Scene
         [ExpectedException(typeof(ArgumentNullException))]
         public void AddNull()
         {
-            using (BillboardGroupTest billboardGroup = new BillboardGroupTest())
+            using (BillboardCollectionTest billboardGroup = new BillboardCollectionTest())
             {
                 billboardGroup.Group.Add(null);
             }
@@ -82,7 +82,7 @@ namespace MiniGlobe.Scene
         [ExpectedException(typeof(ArgumentException))]
         public void AddDuplicate()
         {
-            using (BillboardGroupTest billboardGroup = new BillboardGroupTest())
+            using (BillboardCollectionTest billboardGroup = new BillboardCollectionTest())
             {
                 Billboard b = new Billboard() { Position = Vector3D.Zero };
                 billboardGroup.Group.Add(b);
@@ -93,9 +93,9 @@ namespace MiniGlobe.Scene
         [Test]
         public void Remove()
         {
-            using (BillboardGroupTest billboardGroup = new BillboardGroupTest())
+            using (BillboardCollectionTest billboardGroup = new BillboardCollectionTest())
             {
-                BillboardGroup group = billboardGroup.Group;
+                BillboardCollection group = billboardGroup.Group;
                 Billboard b = new Billboard() { Position = Vector3D.Zero };
 
                 group.Add(b);
@@ -106,12 +106,12 @@ namespace MiniGlobe.Scene
             }
         }
 
-        private sealed class BillboardGroupTest : IDisposable
+        private sealed class BillboardCollectionTest : IDisposable
         {
-            public BillboardGroupTest()
+            public BillboardCollectionTest()
             {
                 _window = Device.CreateWindow(1, 1);
-                _group = new BillboardGroup(_window.Context);
+                _group = new BillboardCollection(_window.Context);
             }
 
             public Context Context
@@ -119,7 +119,7 @@ namespace MiniGlobe.Scene
                 get { return _window.Context; }
             }
 
-            public BillboardGroup Group
+            public BillboardCollection Group
             {
                 get { return _group; }
             }
@@ -135,7 +135,7 @@ namespace MiniGlobe.Scene
             #endregion
 
             private MiniGlobeWindow _window;
-            private BillboardGroup _group;
+            private BillboardCollection _group;
         }
     }
 }

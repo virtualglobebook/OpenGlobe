@@ -129,7 +129,7 @@ namespace MiniGlobe.Scene
         }
 
         internal bool Dirty { get; set; }
-        public BillboardGroup Group 
+        public BillboardCollection Group 
         { 
             get; 
             internal set; 

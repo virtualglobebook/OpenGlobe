@@ -214,7 +214,7 @@ namespace MiniGlobe.Examples.Chapter2
 
             TextureAtlas atlas = new TextureAtlas(labelBitmaps);
 
-            _labels = new BillboardGroup(_window.Context, 2);
+            _labels = new BillboardCollection(_window.Context, 2);
             _labels.Texture = Device.CreateTexture2D(atlas.Bitmap, TextureFormat.RedGreenBlueAlpha8, false);
             _labels.Add(new Billboard()
                 {
@@ -319,7 +319,7 @@ namespace MiniGlobe.Examples.Chapter2
 
         private Wireframe _wireframe;
         private Axes _axes;
-        private BillboardGroup _labels;
+        private BillboardCollection _labels;
         private Polyline _normals;
         private Plane _tangentPlane;
 

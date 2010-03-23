@@ -176,7 +176,7 @@ namespace MiniGlobe.Examples.Chapter3
                 Device.CreateBitmapFromText("Vancouver", new Font("Arial", 24))
             });
 
-            _vancouverLabel = new BillboardGroup(_window.Context);
+            _vancouverLabel = new BillboardCollection(_window.Context);
             _vancouverLabel.Texture = Device.CreateTexture2D(atlas.Bitmap, TextureFormat.RedGreenBlueAlpha8, false);
             _vancouverLabel.DepthTestEnabled = false;
             _vancouverLabel.Add(new Billboard()
@@ -269,6 +269,6 @@ namespace MiniGlobe.Examples.Chapter3
         private readonly Uniform<Vector2S> _gridWidth;
         private readonly Uniform<Vector2S> _gridResolution;
         private readonly IList<GridResolution> _gridResolutions;
-        private readonly BillboardGroup _vancouverLabel;
+        private readonly BillboardCollection _vancouverLabel;
     }
 }

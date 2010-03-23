@@ -17,14 +17,14 @@ using System.Collections;
 
 namespace MiniGlobe.Scene
 {
-    public sealed class BillboardGroup : IList<Billboard>, IDisposable
+    public sealed class BillboardCollection : IList<Billboard>, IDisposable
     {
-        public BillboardGroup(Context context)
+        public BillboardCollection(Context context)
             : this(context, 0)
         {
         }
 
-        public BillboardGroup(Context context, int capacity)
+        public BillboardCollection(Context context, int capacity)
         {
             if (context == null)
             {
@@ -510,11 +510,11 @@ namespace MiniGlobe.Scene
             {
                 if (billboard.Group != this)
                 {
-                    throw new ArgumentException("billboard is already in another BillboardGroup.");
+                    throw new ArgumentException("billboard is already in another BillboardCollection.");
                 }
                 else
                 {
-                    throw new ArgumentException("billboard was already added to this BillboardGroup.");
+                    throw new ArgumentException("billboard was already added to this BillboardCollection.");
                 }
             }
 

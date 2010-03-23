@@ -36,7 +36,7 @@ namespace MiniGlobe.Examples.Chapter7
             _globe.Shape = globeShape;
             _globe.Texture = _texture;
 
-            _billboards = new BillboardGroup(_window.Context);
+            _billboards = new BillboardCollection(_window.Context);
             _billboards.Texture = Device.CreateTexture2D(new Bitmap(@"032.png"), TextureFormat.RedGreenBlueAlpha8, false);
             _billboards.ZOffset = -0.0001;
             Vector3D[] positions = Cities.World(globeShape);
@@ -98,6 +98,6 @@ namespace MiniGlobe.Examples.Chapter7
         private readonly CameraLookAtPoint _camera;
         private readonly RayCastedGlobe _globe;
         private readonly Texture2D _texture;
-        private readonly BillboardGroup _billboards;
+        private readonly BillboardCollection _billboards;
     }
 }
