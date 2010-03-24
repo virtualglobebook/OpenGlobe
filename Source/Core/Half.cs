@@ -210,7 +210,7 @@ namespace MiniGlobe.Core
 
             int sign = (int)((bits >> 48) & 0x00008000);
             int exponent = (int)(((bits >> 52) & 0x7FF) - (1023 - 15));
-            long mantissa = bits & 0x1FFFFFFFFFFFFF;
+            long mantissa = bits & 0xFFFFFFFFFFFFF;
 
             // Now reassemble S, E and M into a half:
 
@@ -232,15 +232,15 @@ namespace MiniGlobe.Core
 
                 // Add an explicit leading 1 to the significand.
 
-                mantissa = mantissa | 0x80000000000000;
+                mantissa = mantissa | 0x10000000000000;
 
                 // Round to M to the nearest (10+E)-bit value (with E between -10 and 0); in case of a tie, round to the nearest even value.
                 //
                 // Rounding may cause the significand to overflow and make our number normalized. Because of the way a half's bits
                 // are laid out, we don't have to treat this case separately; the code below will handle it correctly.
 
-                int t = 14 - exponent;
-                int a = (1 << (t - 1)) - 1;
+                int t = 43 - exponent;
+                long a = (1L << (t - 1)) - 1;
                 long b = (mantissa >> t) & 1;
 
                 mantissa = (mantissa + a + b) >> t;
@@ -275,7 +275,7 @@ namespace MiniGlobe.Core
 
                 mantissa = mantissa + 0x1FFFFFFFFFF + ((mantissa >> 42) & 1);
 
-                if ((mantissa & 0x80000000000000) == 1)
+                if ((mantissa & 0x10000000000000) != 0)
                 {
                     mantissa = 0;        // overflow in significand,
                     exponent += 1;        // adjust exponent
