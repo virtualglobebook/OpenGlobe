@@ -17,62 +17,91 @@ namespace MiniGlobe.Scene
 {
     public sealed class Axes : IDisposable
     {
-        public Axes(Context context, double length)
+        public Axes(Context context)
         {
-            if (length <= 0)
+            _context = context;
+            Length = 1;
+            Width = 1;
+        }
+
+        private void Update()
+        {
+            if (_dirtyLength)
             {
-                throw new ArgumentException("length");
+                VertexAttributeDoubleVector3 positionAttribute = new VertexAttributeDoubleVector3("position", 4);
+                positionAttribute.Values.Add(new Vector3D(0, 0, 0));
+                positionAttribute.Values.Add(new Vector3D(_length, 0, 0));
+                positionAttribute.Values.Add(new Vector3D(0, 0, 0));
+                positionAttribute.Values.Add(new Vector3D(0, _length, 0));
+                positionAttribute.Values.Add(new Vector3D(0, 0, 0));
+                positionAttribute.Values.Add(new Vector3D(0, 0, _length));
+
+                VertexAttributeRGBA colorAttribute = new VertexAttributeRGBA("color", 4);
+                colorAttribute.AddColor(Color.Red);
+                colorAttribute.AddColor(Color.Red);
+                colorAttribute.AddColor(Color.Green);
+                colorAttribute.AddColor(Color.Green);
+                colorAttribute.AddColor(Color.Blue);
+                colorAttribute.AddColor(Color.Blue);
+
+                Mesh mesh = new Mesh();
+                mesh.PrimitiveType = PrimitiveType.Lines;
+                mesh.Attributes.Add(positionAttribute);
+                mesh.Attributes.Add(colorAttribute);
+
+                if (_polyline != null)
+                {
+                    _polyline.Dispose();
+                }
+                _polyline = new Polyline(_context, mesh);
+
+                _dirtyLength = false;
             }
 
-            VertexAttributeDoubleVector3 positionAttribute = new VertexAttributeDoubleVector3("position", 4);
-            positionAttribute.Values.Add(new Vector3D(0, 0, 0));
-            positionAttribute.Values.Add(new Vector3D(length, 0, 0));
-            positionAttribute.Values.Add(new Vector3D(0, 0, 0));
-            positionAttribute.Values.Add(new Vector3D(0, length, 0));
-            positionAttribute.Values.Add(new Vector3D(0, 0, 0));
-            positionAttribute.Values.Add(new Vector3D(0, 0, length));
-
-            VertexAttributeRGBA colorAttribute = new VertexAttributeRGBA("color", 4);
-            colorAttribute.AddColor(Color.Red);
-            colorAttribute.AddColor(Color.Red);
-            colorAttribute.AddColor(Color.Green);
-            colorAttribute.AddColor(Color.Green);
-            colorAttribute.AddColor(Color.Blue);
-            colorAttribute.AddColor(Color.Blue);
-
-            Mesh mesh = new Mesh();
-            mesh.PrimitiveType = PrimitiveType.Lines;
-            mesh.Attributes.Add(positionAttribute);
-            mesh.Attributes.Add(colorAttribute);
-
-            _polyline = new Polyline(context, mesh);
+            _polyline.Width = Width;
         }
 
         public void Render(SceneState sceneState)
         {
+            Update();
             _polyline.Render(sceneState);
         }
 
         public Context Context
         {
-            get { return _polyline.Context; }
+            get { return _context; }
         }
 
-        public double Width
+        public double Length
         {
-            get { return _polyline.Width; }
-            set { _polyline.Width = value; }
+            get { return _length; }
+            set 
+            {
+                if (_length != value)
+                {
+                    _length = value;
+                    _dirtyLength = true;
+                }
+            }
         }
         
+        public double Width { get; set; }
+
         #region IDisposable Members
 
         public void Dispose()
         {
-            _polyline.Dispose();
+            if (_polyline != null)
+            {
+                _polyline.Dispose();
+            }
         }
 
         #endregion
 
-        private readonly Polyline _polyline;
+        private readonly Context _context;
+        private Polyline _polyline;
+        private double _length;
+        private bool _dirtyLength;
     }
 }

@@ -47,7 +47,8 @@ namespace MiniGlobe.Examples.Chapter5
 
             ///////////////////////////////////////////////////////////////////
 
-            _axes = new Axes(_window.Context, 25);
+            _axes = new Axes(_window.Context);
+            _axes.Length = 25;
             _axes.Width = 3;
             _sceneState.Camera.ZoomToTarget(15);
 
