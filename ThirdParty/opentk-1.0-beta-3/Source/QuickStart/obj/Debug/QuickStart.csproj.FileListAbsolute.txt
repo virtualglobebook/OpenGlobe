@@ -1,6 +1,0 @@
-C:\Users\stapostol\Desktop\opentk-1.0-beta3\Binaries\QuickStart\Debug\OpenTK.dll.config
-C:\Users\stapostol\Desktop\opentk-1.0-beta3\Binaries\QuickStart\Debug\QuickStart.exe
-C:\Users\stapostol\Desktop\opentk-1.0-beta3\Binaries\QuickStart\Debug\QuickStart.pdb
-C:\Users\stapostol\Desktop\opentk-1.0-beta3\Source\QuickStart\obj\Debug\ResolveAssemblyReference.cache
-C:\Users\stapostol\Desktop\opentk-1.0-beta3\Source\QuickStart\obj\Debug\QuickStart.exe
-C:\Users\stapostol\Desktop\opentk-1.0-beta3\Source\QuickStart\obj\Debug\QuickStart.pdb
