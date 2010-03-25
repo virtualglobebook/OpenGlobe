@@ -68,6 +68,11 @@ namespace MiniGlobe.Renderer
 
     public struct Texture2DDescription : IEquatable<Texture2DDescription>
     {
+        public Texture2DDescription(int width, int height, TextureFormat format)
+            : this(width, height, format, false)
+        {
+        }
+
         public Texture2DDescription(
             int width, 
             int height, 

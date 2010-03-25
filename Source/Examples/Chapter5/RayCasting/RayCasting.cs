@@ -28,11 +28,28 @@ namespace MiniGlobe.Examples.Chapter5
             _window.Resize += OnResize;
             _window.RenderFrame += OnRenderFrame;
             _sceneState = new SceneState();
+            _sceneState.Camera.PerspectiveFarPlaneDistance = 128;
             _camera = new CameraLookAtPoint(_sceneState.Camera, _window, Ellipsoid.UnitSphere);
-            _sceneState.Camera.ZoomToTarget(1);
+
+            ///////////////////////////////////////////////////////////////////
+            GeodeticExtent extent = new GeodeticExtent(0, 0, 15, 15);
+            Size size = new Size(4, 4);     // TODO:  Must match texel dimensions for now
+            float[] heights = new float[]
+            {
+                0, 1, 2, 3,
+                4, 5, 6, 7,
+                8, 9, 10, 11,
+                12, 13, 14, 15
+            };
 
             _tile = new RayCastedTerrainTile(_window.Context,
-                new TerrainTile(new GeodeticExtent(0, 0, 1, 1), 0, 1));
+                new TerrainTile(extent, size, heights, 0, 15));
+
+            ///////////////////////////////////////////////////////////////////
+
+            _axes = new Axes(_window.Context, 25);
+            _axes.Width = 3;
+            _sceneState.Camera.ZoomToTarget(15);
 
             HighResolutionSnap snap = new HighResolutionSnap(_window, _sceneState);
             snap.ColorFilename = @"E:\Dropbox\My Dropbox\Book\Manuscript\TerrainRendering\Figures\GPURayCasting.png";
@@ -49,7 +66,9 @@ namespace MiniGlobe.Examples.Chapter5
         private void OnRenderFrame()
         {
             _window.Context.Clear(ClearBuffers.ColorAndDepthBuffer, Color.White, 1, 0);
+
             _tile.Render(_sceneState);
+            _axes.Render(_sceneState);
         }
 
         #region IDisposable Members
@@ -59,6 +78,7 @@ namespace MiniGlobe.Examples.Chapter5
             _window.Dispose();
             _camera.Dispose();
             _tile.Dispose();
+            _axes.Dispose();
         }
 
         #endregion
@@ -80,5 +100,6 @@ namespace MiniGlobe.Examples.Chapter5
         private readonly SceneState _sceneState;
         private readonly CameraLookAtPoint _camera;
         private readonly RayCastedTerrainTile _tile;
+        private readonly Axes _axes;
     }
 }

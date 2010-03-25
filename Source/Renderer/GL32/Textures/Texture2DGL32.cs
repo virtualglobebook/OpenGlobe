@@ -16,15 +16,21 @@ namespace MiniGlobe.Renderer.GL32
 {
     internal class Texture2DGL32 : Texture2D
     {
-        public Texture2DGL32(Texture2DDescription description)
+        public Texture2DGL32(Texture2DDescription description, TextureTarget textureTarget)
         {
             Debug.Assert(description.Width > 0);
             Debug.Assert(description.Height > 0);
+
+            if (description.GenerateMipmaps && (textureTarget == TextureTarget.TextureRectangle))
+            {
+                throw new ArgumentException("description", "description.GenerateMipmaps cannot be true for texture rectangles.");
+            }
 
             int textureUnits;
             GL.GetInteger(GetPName.MaxCombinedTextureImageUnits, out textureUnits);
 
             _handle = GL.GenTexture();
+            _target = textureTarget;
             _description = description;
             _lastTextureUnit = OpenTK.Graphics.OpenGL.TextureUnit.Texture0 + (textureUnits - 1);
 
@@ -33,7 +39,7 @@ namespace MiniGlobe.Renderer.GL32
             //
             WritePixelBufferGL32.UnBind();
             BindToLastTextureUnit();
-            GL.TexImage2D(TextureTarget.Texture2D, 0,
+            GL.TexImage2D(_target, 0,
                 TypeConverterGL32.To(description.Format),
                 description.Width,
                 description.Height,
@@ -56,10 +62,15 @@ namespace MiniGlobe.Renderer.GL32
             get { return _handle; }
         }
 
+        internal TextureTarget Target
+        {
+            get { return _target; }
+        }
+
         internal void Bind()
         {
             // TODO: avoid duplicate binds
-            GL.BindTexture(TextureTarget.Texture2D, _handle);
+            GL.BindTexture(_target, _handle);
         }
 
         private void BindToLastTextureUnit()
@@ -68,9 +79,9 @@ namespace MiniGlobe.Renderer.GL32
             Bind();
         }
 
-        internal static void UnBind()
+        internal static void UnBind(TextureTarget textureTarget)
         {
-            GL.BindTexture(TextureTarget.Texture2D, 0);
+            GL.BindTexture(textureTarget, 0);
         }
 
         #region Texture2D Members
@@ -95,7 +106,7 @@ namespace MiniGlobe.Renderer.GL32
             bufferObjectGL.Bind();
             BindToLastTextureUnit();
             GL.PixelStore(PixelStoreParameter.UnpackAlignment, 1);
-            GL.TexSubImage2D(TextureTarget.Texture2D, 0,
+            GL.TexSubImage2D(_target, 0,
                 xOffset,
                 xOffset,
                 width,
@@ -114,7 +125,7 @@ namespace MiniGlobe.Renderer.GL32
             pixelBuffer.Bind();
             BindToLastTextureUnit();
             GL.PixelStore(PixelStoreParameter.PackAlignment, 1);
-            GL.GetTexImage(TextureTarget.Texture2D, 0,
+            GL.GetTexImage(_target, 0,
                 TypeConverterGL32.To(format),
                 TypeConverterGL32.To(dataType),
                 new IntPtr());
@@ -154,16 +165,33 @@ namespace MiniGlobe.Renderer.GL32
 
         private void ApplyFilter()
         {
+            if (_target == TextureTarget.TextureRectangle)
+            {
+                if (_filter.MinificationFilter != TextureMinificationFilter.Linear &&
+                    _filter.MinificationFilter != TextureMinificationFilter.Nearest)
+                {
+                    throw new ArgumentException("filter", "Rectangle textures only support linear and nearest minification filters.");
+                }
+
+                if (_filter.WrapS == TextureWrap.Repeat ||
+                    _filter.WrapS == TextureWrap.MirroredRepeat ||
+                    _filter.WrapT == TextureWrap.Repeat ||
+                    _filter.WrapT == TextureWrap.MirroredRepeat)
+                {
+                    throw new ArgumentException("filter", "Rectangle textures do not support repeat and mirrored repeat wrap modes.");
+                }
+            }
+
             TextureMinFilter minFilter = TypeConverterGL32.To(_filter.MinificationFilter);
             TextureMagFilter magFilter = TypeConverterGL32.To(_filter.MagnificationFilter);
             TextureWrapMode wrapS = TypeConverterGL32.To(_filter.WrapS);
             TextureWrapMode wrapT = TypeConverterGL32.To(_filter.WrapT);
 
             BindToLastTextureUnit();
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)minFilter);
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)magFilter);
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)wrapS);
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)wrapT);
+            GL.TexParameter(_target, TextureParameterName.TextureMinFilter, (int)minFilter);
+            GL.TexParameter(_target, TextureParameterName.TextureMagFilter, (int)magFilter);
+            GL.TexParameter(_target, TextureParameterName.TextureWrapS, (int)wrapS);
+            GL.TexParameter(_target, TextureParameterName.TextureWrapT, (int)wrapT);
             ApplyAnisotropicFilter();
         }
 
@@ -171,7 +199,7 @@ namespace MiniGlobe.Renderer.GL32
         {
             if (Device.Extensions.AnisotropicFiltering)
             {
-                GL.TexParameter(TextureTarget.Texture2D,
+                GL.TexParameter(_target,
                     (TextureParameterName)ExtTextureFilterAnisotropic.TextureMaxAnisotropyExt,
                     _filter.MaximumAnisotropic);
             }
@@ -198,6 +226,7 @@ namespace MiniGlobe.Renderer.GL32
         #endregion
 
         private readonly int _handle;
+        private readonly TextureTarget _target;
         private readonly Texture2DDescription _description;
         private readonly OpenTK.Graphics.OpenGL.TextureUnit _lastTextureUnit;
         private Texture2DFilter _filter;

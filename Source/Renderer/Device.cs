@@ -76,10 +76,25 @@ namespace MiniGlobe.Renderer
 
         public static Texture2D CreateTexture2D(Texture2DDescription description)
         {
-            return new Texture2DGL32(description);
+            return new Texture2DGL32(description, TextureTarget.Texture2D);
         }
 
         public static Texture2D CreateTexture2D(Bitmap bitmap, TextureFormat format, bool generateMipmaps)
+        {
+            return CreateTexture2DFromBitmap(bitmap, format, generateMipmaps, TextureTarget.Texture2D);
+        }
+
+        public static Texture2D CreateTexture2DRectangle(Texture2DDescription description)
+        {
+            return new Texture2DGL32(description, TextureTarget.TextureRectangle);
+        }
+
+        public static Texture2D CreateTexture2DRectangle(Bitmap bitmap, TextureFormat format)
+        {
+            return CreateTexture2DFromBitmap(bitmap, format, false, TextureTarget.TextureRectangle);
+        }
+
+        private static Texture2D CreateTexture2DFromBitmap(Bitmap bitmap, TextureFormat format, bool generateMipmaps, TextureTarget textureTarget)
         {
             const int bitsPerByte = 8;
             int sizeInBytes = bitmap.Width * bitmap.Height * (Bitmap.GetPixelFormatSize(bitmap.PixelFormat) / bitsPerByte);
@@ -87,7 +102,7 @@ namespace MiniGlobe.Renderer
             pixelBuffer.CopyFromBitmap(bitmap);
 
             Texture2DDescription description = new Texture2DDescription(bitmap.Width, bitmap.Height, format, generateMipmaps);
-            Texture2D texture = Device.CreateTexture2D(description);
+            Texture2D texture = new Texture2DGL32(description, textureTarget);
             texture.CopyFromBuffer(pixelBuffer,
                 TextureUtility.ImagingPixelFormatToImageFormat(bitmap.PixelFormat),
                 TextureUtility.ImagingPixelFormatToDataType(bitmap.PixelFormat));

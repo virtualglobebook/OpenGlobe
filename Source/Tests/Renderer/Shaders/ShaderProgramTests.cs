@@ -106,6 +106,7 @@ namespace MiniGlobe.Renderer
                   uniform mat4x3 exampleMat43;
 
                   uniform sampler2D exampleSampler2D;
+                  uniform sampler2DRect exampleSampler2DRect;
                   uniform sampler1DArray exampleSampler1DArray;
 
                   out vec4 FragColor;
@@ -136,6 +137,7 @@ namespace MiniGlobe.Renderer
                       red += exampleMat42[0].x;
                       red += exampleMat43[0].x;
                       red += texture(exampleSampler2D, vec2(0, 0)).r;
+                      red += texture(exampleSampler2DRect, vec2(0, 0)).r;
                       red += texture1DArray(exampleSampler1DArray, vec2(0, 0)).r;
 
                       FragColor = vec4(red, 0, 0, 1);
@@ -144,7 +146,7 @@ namespace MiniGlobe.Renderer
             ShaderProgram sp = Device.CreateShaderProgram(ShaderSources.PassThroughVertexShader(), fs);
             Assert.IsFalse(sp.LinkLog.Contains("warning"));
             Assert.IsEmpty(sp.UniformBlocks);
-            Assert.AreEqual(23, sp.Uniforms.Count);
+            Assert.AreEqual(24, sp.Uniforms.Count);
 
             Uniform<float> exampleFloat = sp.Uniforms["exampleFloat"] as Uniform<float>;
             Assert.AreEqual("exampleFloat", exampleFloat.Name);
@@ -242,6 +244,13 @@ namespace MiniGlobe.Renderer
             Assert.AreEqual(0, exampleSampler2D.Value);
             exampleSampler2D.Value = 1;
             Assert.AreEqual(1, exampleSampler2D.Value);
+
+            Uniform<int> exampleSampler2DRect = sp.Uniforms["exampleSampler2DRect"] as Uniform<int>;
+            Assert.AreEqual("exampleSampler2DRect", exampleSampler2DRect.Name);
+            Assert.AreEqual(UniformType.Sampler2DRectangle, exampleSampler2DRect.DataType);
+            Assert.AreEqual(0, exampleSampler2DRect.Value);
+            exampleSampler2DRect.Value = 1;
+            Assert.AreEqual(1, exampleSampler2DRect.Value);
 
             Uniform<int> exampleSampler1DArray = sp.Uniforms["exampleSampler1DArray"] as Uniform<int>;
             Assert.AreEqual("exampleSampler1DArray", exampleSampler1DArray.Name);

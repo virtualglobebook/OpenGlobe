@@ -7,6 +7,8 @@
 //
 #endregion
 
+using System;
+using System.Drawing;
 using MiniGlobe.Core;
 
 namespace MiniGlobe.Terrain
@@ -15,10 +17,34 @@ namespace MiniGlobe.Terrain
     {
         public TerrainTile(
             GeodeticExtent extent,
-            double minimumHeight, 
-            double maximumHeight)
+            Size size,
+            float[] heights,
+            float minimumHeight,
+            float maximumHeight)
         {
+            if (size.Width < 0 || size.Height < 0)
+            {
+                throw new ArgumentOutOfRangeException("size");
+            }
+
+            if (heights == null)
+            {
+                throw new ArgumentNullException("heights");
+            }
+
+            if (heights.Length != size.Width * size.Height)
+            {
+                throw new ArgumentException("heights", "heights.Length != size.Width * size.Height");
+            }
+
+            if (minimumHeight > maximumHeight)
+            {
+                throw new ArgumentOutOfRangeException("minimumHeight", "minimumHeight > maximumHeight");
+            }
+
             _extent = extent;
+            _size = size;
+            _heights = heights;
             _minimumHeight = minimumHeight;
             _maximumHeight = maximumHeight;
         }
@@ -28,18 +54,30 @@ namespace MiniGlobe.Terrain
             get { return _extent; }
         }
 
-        public double MinimumHeight
+        public Size Size        // TODO Size is mutable, should be Vector2I
+        {
+            get { return _size; }
+        }
+
+        public float[] Heights
+        {
+            get { return _heights; }
+        }
+
+        public float MinimumHeight
         {
             get { return _minimumHeight; }
         }
 
-        public double MaximumHeight
+        public float MaximumHeight
         {
             get { return _maximumHeight; }
         }
 
-        private GeodeticExtent _extent;
-        private double _minimumHeight;
-        private double _maximumHeight;
+        private readonly GeodeticExtent _extent;
+        private readonly Size _size;
+        private readonly float[] _heights;
+        private readonly float _minimumHeight;
+        private readonly float _maximumHeight;
     }
 }

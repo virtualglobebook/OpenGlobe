@@ -241,6 +241,8 @@ namespace MiniGlobe.Renderer.GL32
             }
             else if ((type == ActiveUniformType.Sampler1D) ||
                      (type == ActiveUniformType.Sampler2D) ||
+                     (type == ActiveUniformType.Sampler2DRect) ||
+                     (type == ActiveUniformType.Sampler2DRectShadow) ||
                      (type == ActiveUniformType.Sampler3D) ||
                      (type == ActiveUniformType.SamplerCube) ||
                      (type == ActiveUniformType.Sampler1DShadow) ||
@@ -252,12 +254,14 @@ namespace MiniGlobe.Renderer.GL32
                      (type == ActiveUniformType.SamplerCubeShadow) ||
                      (type == ActiveUniformType.IntSampler1D) ||
                      (type == ActiveUniformType.IntSampler2D) ||
+                     (type == ActiveUniformType.IntSampler2DRect) ||
                      (type == ActiveUniformType.IntSampler3D) ||
                      (type == ActiveUniformType.IntSamplerCube) ||
                      (type == ActiveUniformType.IntSampler1DArray) ||
                      (type == ActiveUniformType.IntSampler2DArray) ||
                      (type == ActiveUniformType.UnsignedIntSampler1D) ||
                      (type == ActiveUniformType.UnsignedIntSampler2D) ||
+                     (type == ActiveUniformType.UnsignedIntSampler2DRect) ||
                      (type == ActiveUniformType.UnsignedIntSampler3D) ||
                      (type == ActiveUniformType.UnsignedIntSamplerCube) ||
                      (type == ActiveUniformType.UnsignedIntSampler1DArray) ||

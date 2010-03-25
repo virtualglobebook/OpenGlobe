@@ -155,6 +155,14 @@ namespace MiniGlobe.Renderer.GL32
             {
                 return UniformType.Sampler2D;
             }
+            else if (type == ActiveUniformType.Sampler2DRect)
+            {
+                return UniformType.Sampler2DRectangle;
+            }
+            else if (type == ActiveUniformType.Sampler2DRectShadow)
+            {
+                return UniformType.Sampler2DRectangleShadow;
+            }
             else if (type == ActiveUniformType.Sampler3D)
             {
                 return UniformType.Sampler3D;
@@ -235,6 +243,10 @@ namespace MiniGlobe.Renderer.GL32
             {
                 return UniformType.IntSampler2D;
             }
+            else if (type == ActiveUniformType.IntSampler2DRect)
+            {
+                return UniformType.IntSampler2DRectangle;
+            }
             else if (type == ActiveUniformType.IntSampler3D)
             {
                 return UniformType.IntSampler3D;
@@ -258,6 +270,10 @@ namespace MiniGlobe.Renderer.GL32
             else if (type == ActiveUniformType.UnsignedIntSampler2D)
             {
                 return UniformType.UnsignedIntSampler2D;
+            }
+            else if (type == ActiveUniformType.UnsignedIntSampler2DRect)
+            {
+                return UniformType.UnsignedIntSampler2DRectangle;
             }
             else if (type == ActiveUniformType.UnsignedIntSampler3D)
             {

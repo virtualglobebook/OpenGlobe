@@ -12,5 +12,6 @@ namespace MiniGlobe.Renderer
     public abstract class TextureUnit
     {
         public abstract Texture2D Texture2D { get; set; }
+        public abstract Texture2D Texture2DRectangle { get; set; }
     }
 }
