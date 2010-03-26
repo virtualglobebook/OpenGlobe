@@ -44,6 +44,7 @@
     <Compile Include="Renderables\Plane.cs" />
     <Compile Include="Renderables\Polyline.cs" />
     <Compile Include="Renderables\Polyline\OutlinedPolylineGeometryShader.cs" />
+    <Compile Include="Renderables\Polyline\OutlinedPolylineTexture.cs" />
     <Compile Include="Renderables\RayCastedGlobe.cs" />
     <Compile Include="Renderables\TessellatedGlobe.cs" />
     <Compile Include="Renderables\Wireframe.cs" />
