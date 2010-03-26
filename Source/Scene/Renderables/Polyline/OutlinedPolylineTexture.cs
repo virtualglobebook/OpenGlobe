@@ -21,9 +21,14 @@ namespace MiniGlobe.Scene
             _context = context;
             _renderState = new RenderState();
             _renderState.FacetCulling.Enabled = false;
-
-            Width = 1;
-            OutlineWidth = 3;       // TODO
+            _renderState.Blending.Enabled = true;
+            _renderState.Blending.SourceRGBFactor = SourceBlendingFactor.SourceAlpha;
+            _renderState.Blending.SourceAlphaFactor = SourceBlendingFactor.SourceAlpha;
+            _renderState.Blending.DestinationRGBFactor = DestinationBlendingFactor.OneMinusSourceAlpha;
+            _renderState.Blending.DestinationAlphaFactor = DestinationBlendingFactor.OneMinusSourceAlpha;
+            
+            Width = 3;
+            OutlineWidth = 2;
         }
 
         public void Set(Mesh mesh)
@@ -178,9 +183,12 @@ namespace MiniGlobe.Scene
 
                     void main()
                     {
-                      float fill = texture(mg_texture0, fsTextureCoordinate).r;
+                      vec2 texel = texture(mg_texture0, fsTextureCoordinate).rg;
+                      float fill = texel.r;
+                      float alpha = texel.g;
 
-                      fragmentColor = mix(fsOutlineColor, fsColor, fill);
+                      vec4 color = mix(fsOutlineColor, fsColor, fill);
+                      fragmentColor = vec4(color.rgb, color.a * alpha);
                     }";
                 _sp = Device.CreateShaderProgram(vs, gs, fs);
                 _distance = _sp.Uniforms["u_distance"] as Uniform<float>;
@@ -196,27 +204,38 @@ namespace MiniGlobe.Scene
             int width = (int)Math.Ceiling(Width * sceneState.HighResolutionSnapScale);
             int outlineWidth = (int)Math.Ceiling(OutlineWidth * sceneState.HighResolutionSnapScale);
 
-            int textureWidth = width + outlineWidth + outlineWidth;
+            int textureWidth = width + outlineWidth + outlineWidth + 2;
 
             if ((_texture == null) || (_texture.Description.Width != textureWidth))
             {
-                float[] texels = new float[textureWidth];
+                int textureSize = textureWidth * 2;
 
+                float[] texels = new float[textureSize];
+
+                int k = 3;
+                for (int i = 1; i < textureWidth - 1; ++i)
+                {
+                    texels[k] = 1;                  // Alpha (stored in Green channel)
+                    k += 2;
+                }
+
+                int j = (outlineWidth + 1) * 2;
                 for (int i = 0; i < width; ++i)
                 {
-                    texels[outlineWidth + i] = 1;
+                    texels[j] = 1;                  // Fill/Outline (stored in Red channel)
+                    j += 2;
                 }
 
                 WritePixelBuffer pixelBuffer = Device.CreateWritePixelBuffer(WritePixelBufferHint.StreamDraw,
-                    sizeof(float) * textureWidth);
+                    sizeof(float) * textureSize);
                 pixelBuffer.CopyFromSystemMemory(texels);
 
                 if (_texture != null)
                 {
                     _texture.Dispose();
                 }
-                _texture = Device.CreateTexture2D(new Texture2DDescription(textureWidth, 1, TextureFormat.Red8));
-                _texture.CopyFromBuffer(pixelBuffer, ImageFormat.Red, ImageDataType.Float);
+                _texture = Device.CreateTexture2D(new Texture2DDescription(textureWidth, 1, TextureFormat.RedGreen8));
+                _texture.CopyFromBuffer(pixelBuffer, ImageFormat.RedGreen, ImageDataType.Float);
                 _texture.Filter = Texture2DFilter.LinearClampToEdge;
             }
         }
@@ -227,7 +246,7 @@ namespace MiniGlobe.Scene
             {
                 Update(sceneState);
 
-                _distance.Value = (float)((Width + OutlineWidth) * 0.5 * sceneState.HighResolutionSnapScale);
+                _distance.Value = (float)(((Width * 0.5) + OutlineWidth + 1) * sceneState.HighResolutionSnapScale);
 
                 _context.TextureUnits[0].Texture2D = _texture;
                 _context.Bind(_renderState);

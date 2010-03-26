@@ -202,7 +202,7 @@ namespace MiniGlobe.Scene
             {
                 double fillDistance = Width * 0.5 * sceneState.HighResolutionSnapScale;
                 _fillDistance.Value = (float)(fillDistance);
-                _outlineDistance.Value = (float)(fillDistance + (OutlineWidth * 0.5 * sceneState.HighResolutionSnapScale));
+                _outlineDistance.Value = (float)(fillDistance + (OutlineWidth * sceneState.HighResolutionSnapScale));
 
                 _context.Bind(_renderState);
                 _context.Bind(_sp);
