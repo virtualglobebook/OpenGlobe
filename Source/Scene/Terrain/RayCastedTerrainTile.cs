@@ -26,24 +26,18 @@ namespace MiniGlobe.Terrain
                 @"#version 150
 
                   in vec4 position;
-                  in vec2 textureCoordinate;
-
                   out vec3 boxExit;
-                  out vec2 fsTextureCoordinate;
-
                   uniform mat4 mg_modelViewPerspectiveProjectionMatrix;
 
                   void main()
                   {
                       gl_Position = mg_modelViewPerspectiveProjectionMatrix * position;
                       boxExit = position.xyz;
-                      fsTextureCoordinate = textureCoordinate;
                   }";
             string fs =
                 @"#version 150
                  
                   in vec3 boxExit;
-                  in vec2 fsTextureCoordinate;
 
                   out vec3 fragmentColor;
 
@@ -153,7 +147,7 @@ namespace MiniGlobe.Terrain
 
                   void main()
                   {
-                      vec3 rayDirection = boxExit - mg_cameraEye;
+                      vec3 direction = boxExit - mg_cameraEye;
 
                       vec3 boxEntry;
                       if (PointInsideAxisAlignedBoundingBox(mg_cameraEye, u_aabbLowerLeft, u_aabbUpperRight))
@@ -162,12 +156,71 @@ namespace MiniGlobe.Terrain
                       }
                       else
                       {
-                          Intersection i = RayIntersectsAABB(mg_cameraEye, rayDirection, u_aabbLowerLeft, u_aabbUpperRight);
+                          Intersection i = RayIntersectsAABB(mg_cameraEye, direction, u_aabbLowerLeft, u_aabbUpperRight);
                           boxEntry = i.IntersectionPoint;
                       }
 
-                      fragmentColor = boxEntry + vec3(0.5);
-                      //fragmentColor = vec3(texture(mg_texture0, fsTextureCoordinate).r / 15.0, 0.0, 0.0);
+                      vec3 texEntry = boxEntry;
+
+int i = 0;
+                      vec3 intersectionPoint;
+                      bool foundIntersection = false;
+
+                      while (!foundIntersection && all(lessThan(texEntry.xy, boxExit.xy)))
+                      {
+                          vec2 floorTexEntry = floor(texEntry.xy);
+                          float height = texture(mg_texture0, floorTexEntry).r;
+
+                          vec2 delta = ((floorTexEntry + 1.0) - texEntry.xy) / direction.xy;   // TODO: mult by one over
+                          vec3 texExit = texEntry + (min(delta.x, delta.y) * direction);
+//                          if (delta.x > delta.y)
+//                          {
+//                              texExit.x = floorTexEntry.x + 1.0;
+//                          }
+//                          else
+//                          {
+//                              texExit.y = floorTexEntry.y + 1.0;
+//                          }
+
+                          //
+                          // Check for intersection
+                          //
+                          if (direction.z >= 0.0)
+                          {
+                              if (texEntry.z <= height)
+                              {
+                                  foundIntersection = true;
+                                  intersectionPoint = texEntry;
+                              }
+                          }
+                          else
+                          {
+                              if (texExit.z <= height)
+                              {
+                                  foundIntersection = true;
+                                  intersectionPoint = texEntry + (max((height - texEntry.z) / direction.z, 0.0) * direction);
+                              }
+                          }
+
+                          texEntry = texExit;
+
+if (i++ == 100)
+{
+fragmentColor = vec3(1.0, 1.0, 1.0);
+return;
+}
+                      }
+
+
+                      if (foundIntersection)
+                      {
+                          fragmentColor = vec3(intersectionPoint.z / 0.5, 0.0, 0.0);
+                          // TODO:  set z
+                      }
+                      else
+                      {
+                          discard;
+                      }
                   }";
             _sp = Device.CreateShaderProgram(vs, fs);
 
@@ -177,22 +230,22 @@ namespace MiniGlobe.Terrain
                 tile.MaximumHeight - tile.MinimumHeight);
             Vector3D halfRadii = 0.5 * radii;
 
-            (_sp.Uniforms["u_aabbLowerLeft"] as Uniform<Vector3S>).Value = (-halfRadii).ToVector3S();
-            (_sp.Uniforms["u_aabbUpperRight"] as Uniform<Vector3S>).Value = halfRadii.ToVector3S();
+            (_sp.Uniforms["u_aabbLowerLeft"] as Uniform<Vector3S>).Value = Vector3S.Zero;
+            (_sp.Uniforms["u_aabbUpperRight"] as Uniform<Vector3S>).Value = radii.ToVector3S();
 
             ///////////////////////////////////////////////////////////////////
 
             Mesh mesh = BoxTessellator.Compute(radii);
 
-            VertexAttributeFloatVector2 textureCoordinatesAttribute = new VertexAttributeFloatVector2("textureCoordinate", 8);
-            mesh.Attributes.Add(textureCoordinatesAttribute);
-            IList<Vector2S> textureCoordinates = textureCoordinatesAttribute.Values;
-            for (int i = 0; i < 2; ++i)
+            //
+            // Translate box so it is not centered at the origin -
+            // world space and texel space will match up.
+            // TODO:  We don't always want this!
+            //
+            IList<Vector3D> positions = (mesh.Attributes["position"] as VertexAttributeDoubleVector3).Values;
+            for (int i = 0; i < positions.Count; ++i)
             {
-                textureCoordinates.Add(new Vector2S(0, 0));
-                textureCoordinates.Add(new Vector2S(tile.Size.Width, 0));
-                textureCoordinates.Add(new Vector2S(tile.Size.Width, tile.Size.Height));
-                textureCoordinates.Add(new Vector2S(0, tile.Size.Height));
+                positions[i] = positions[i] + halfRadii;
             }
 
             _va = context.CreateVertexArray(mesh, _sp.VertexAttributes, BufferHint.StaticDraw);
@@ -201,10 +254,10 @@ namespace MiniGlobe.Terrain
             _renderState = new RenderState();
             _renderState.FacetCulling.Face = CullFace.Front;
             _renderState.FacetCulling.FrontFaceWindingOrder = mesh.FrontFaceWindingOrder;
-            //_renderState.RasterizationMode = RasterizationMode.Line;
 
-            ///////////////////////////////////////////////////////////////////
-
+            //
+            // Upload height map as a one channel floating point texture
+            //
             WritePixelBuffer pixelBuffer = Device.CreateWritePixelBuffer(WritePixelBufferHint.StreamDraw,
                 sizeof(float) * tile.Heights.Length);
             pixelBuffer.CopyFromSystemMemory(tile.Heights);

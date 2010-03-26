@@ -32,20 +32,20 @@ namespace MiniGlobe.Examples.Chapter5
             _camera = new CameraLookAtPoint(_sceneState.Camera, _window, Ellipsoid.UnitSphere);
 
             ///////////////////////////////////////////////////////////////////
-            //GeodeticExtent extent = new GeodeticExtent(0, 0, 15, 15);
-            GeodeticExtent extent = new GeodeticExtent(0, 0, 1, 1);
-            Size size = new Size(4, 4);     // TODO:  Must match texel dimensions for now
+            GeodeticExtent extent = new GeodeticExtent(0, 0, 6, 6); // TODO:  Must match texture dimensions for now
+            Size size = new Size(6, 6);
             float[] heights = new float[]
             {
-                0, 1, 2, 3,
-                4, 5, 6, 7,
-                8, 9, 10, 11,
-                12, 13, 14, 15
+                0f,    0.25f, 0.35f, 0.4f,  0.2f,  0.1f,
+                0.25f, 0.35f, 0.35f, 0.45f, 0.35f, 0.2f,
+                0.35f, 0.35f, 0.35f, 0.45f, 0.5f,  0.4f,
+                0.45f, 0.5f,  0.5f,  0.5f,  0.5f,  0.4f,
+                0.25f, 0.4f,  0.3f,  0.5f,  0.4f,  0.2f,
+                0.15f, 0.3f,  0.2f,  0.1f,  0f,    0f
             };
 
             _tile = new RayCastedTerrainTile(_window.Context,
-                new TerrainTile(extent, size, heights, 0, 1));
-//                new TerrainTile(extent, size, heights, 0, 15));
+                new TerrainTile(extent, size, heights, 0, 0.5f));
 
             ///////////////////////////////////////////////////////////////////
 
