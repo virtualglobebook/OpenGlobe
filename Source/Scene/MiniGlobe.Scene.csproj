@@ -42,7 +42,7 @@
     <Compile Include="Renderables\BillboardCollection\BillboardCollection.cs" />
     <Compile Include="Renderables\HeadsUpDisplay.cs" />
     <Compile Include="Renderables\Plane.cs" />
-    <Compile Include="Renderables\Polyline.cs" />
+    <Compile Include="Renderables\Polyline\Polyline.cs" />
     <Compile Include="Renderables\Polyline\OutlinedPolylineGeometryShader.cs" />
     <Compile Include="Renderables\Polyline\OutlinedPolylineTexture.cs" />
     <Compile Include="Renderables\RayCastedGlobe.cs" />
