@@ -201,8 +201,9 @@ namespace MiniGlobe.Examples.Chapter2
             polyline.PrimitiveType = PrimitiveType.Lines;
             polyline.Attributes.Add(positionAttribute);
             polyline.Attributes.Add(colorAttribute);
-
-            _normals = new Polyline(_window.Context, polyline);
+ 
+            _normals = new Polyline(_window.Context);
+            _normals.Set(polyline);
             _normals.Width = 3;
 
             ///////////////////////////////////////////////////////////////////

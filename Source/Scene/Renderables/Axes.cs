@@ -20,6 +20,7 @@ namespace MiniGlobe.Scene
         public Axes(Context context)
         {
             _context = context;
+            _polyline = new Polyline(_context);
             Length = 1;
             Width = 1;
         }
@@ -28,7 +29,7 @@ namespace MiniGlobe.Scene
         {
             if (_dirtyLength)
             {
-                VertexAttributeDoubleVector3 positionAttribute = new VertexAttributeDoubleVector3("position", 4);
+                VertexAttributeDoubleVector3 positionAttribute = new VertexAttributeDoubleVector3("position", 6);
                 positionAttribute.Values.Add(new Vector3D(0, 0, 0));
                 positionAttribute.Values.Add(new Vector3D(_length, 0, 0));
                 positionAttribute.Values.Add(new Vector3D(0, 0, 0));
@@ -36,7 +37,7 @@ namespace MiniGlobe.Scene
                 positionAttribute.Values.Add(new Vector3D(0, 0, 0));
                 positionAttribute.Values.Add(new Vector3D(0, 0, _length));
 
-                VertexAttributeRGBA colorAttribute = new VertexAttributeRGBA("color", 4);
+                VertexAttributeRGBA colorAttribute = new VertexAttributeRGBA("color", 6);
                 colorAttribute.AddColor(Color.Red);
                 colorAttribute.AddColor(Color.Red);
                 colorAttribute.AddColor(Color.Green);
@@ -49,11 +50,7 @@ namespace MiniGlobe.Scene
                 mesh.Attributes.Add(positionAttribute);
                 mesh.Attributes.Add(colorAttribute);
 
-                if (_polyline != null)
-                {
-                    _polyline.Dispose();
-                }
-                _polyline = new Polyline(_context, mesh);
+                _polyline.Set(mesh);
 
                 _dirtyLength = false;
             }
@@ -91,10 +88,7 @@ namespace MiniGlobe.Scene
 
         public void Dispose()
         {
-            if (_polyline != null)
-            {
-                _polyline.Dispose();
-            }
+            _polyline.Dispose();
         }
 
         #endregion

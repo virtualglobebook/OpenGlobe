@@ -14,15 +14,16 @@ using MiniGlobe.Renderer;
 
 namespace MiniGlobe.Scene
 {
-    public sealed class Polyline : IDisposable
+    public sealed class OutlinedPolylineGeometryShader : IDisposable
     {
-        public Polyline(Context context)
+        public OutlinedPolylineGeometryShader(Context context)
         {
             _context = context;
             _renderState = new RenderState();
             _renderState.FacetCulling.Enabled = false;
 
             Width = 1;
+            OutlineWidth = 1;
         }
 
         public void Set(Mesh mesh)
@@ -40,9 +41,10 @@ namespace MiniGlobe.Scene
             }
 
             if (!mesh.Attributes.Contains("position") &&
-                !mesh.Attributes.Contains("color"))
+                !mesh.Attributes.Contains("color") &&
+                !mesh.Attributes.Contains("outlineColor"))
             {
-                throw new ArgumentException("mesh", "mesh.Attributes should contain attributes named \"position\" and \"color\".");
+                throw new ArgumentException("mesh", "mesh.Attributes should contain attributes named \"position\", \"color\", and \"outlineColor\".");
             }
 
             if (_sp == null)
@@ -52,12 +54,16 @@ namespace MiniGlobe.Scene
 
                       in vec4 position;
                       in vec4 color;
+                      in vec4 outlineColor;
+
                       out vec4 gsColor;
+                      out vec4 gsOutlineColor;
 
                       void main()                     
                       {
                         gl_Position = position;
                         gsColor = color;
+                        gsOutlineColor = outlineColor;
                       }";
                 string gs =
                     @"#version 150 
@@ -66,6 +72,8 @@ namespace MiniGlobe.Scene
                     layout(triangle_strip, max_vertices = 8) out;
 
                     in vec4 gsColor[];
+                    in vec4 gsOutlineColor[];
+
                     flat out vec4 fsColor;
 
                     uniform mat4 mg_modelViewPerspectiveProjectionMatrix;
@@ -73,6 +81,7 @@ namespace MiniGlobe.Scene
                     uniform mat4 mg_viewportOrthographicProjectionMatrix;
                     uniform float mg_perspectiveNearPlaneDistance;
                     uniform float u_fillDistance;
+                    uniform float u_outlineDistance;
 
                     vec4 ClipToWindowCoordinates(vec4 v, mat4 viewportTransformationMatrix)
                     {
@@ -126,25 +135,45 @@ namespace MiniGlobe.Scene
                       vec2 direction = windowP1.xy - windowP0.xy;
                       vec2 normal = normalize(vec2(direction.y, -direction.x));
 
-                      vec4 v0 = vec4(windowP0.xy - (normal * u_fillDistance), windowP0.z, 1.0);
-                      vec4 v1 = vec4(windowP1.xy - (normal * u_fillDistance), windowP1.z, 1.0);
-                      vec4 v2 = vec4(windowP0.xy + (normal * u_fillDistance), windowP0.z, 1.0);
-                      vec4 v3 = vec4(windowP1.xy + (normal * u_fillDistance), windowP1.z, 1.0);
+                      vec4 v0 = vec4(windowP0.xy - (normal * u_outlineDistance), windowP0.z, 1.0);
+                      vec4 v1 = vec4(windowP1.xy - (normal * u_outlineDistance), windowP1.z, 1.0);
+                      vec4 v2 = vec4(windowP0.xy - (normal * u_fillDistance), windowP0.z, 1.0);
+                      vec4 v3 = vec4(windowP1.xy - (normal * u_fillDistance), windowP1.z, 1.0);
+                      vec4 v4 = vec4(windowP0.xy + (normal * u_fillDistance), windowP0.z, 1.0);
+                      vec4 v5 = vec4(windowP1.xy + (normal * u_fillDistance), windowP1.z, 1.0);
+                      vec4 v6 = vec4(windowP0.xy + (normal * u_outlineDistance), windowP0.z, 1.0);
+                      vec4 v7 = vec4(windowP1.xy + (normal * u_outlineDistance), windowP1.z, 1.0);
 
                       gl_Position = mg_viewportOrthographicProjectionMatrix * v0;
-                      fsColor = gsColor[0];
+                      fsColor = gsOutlineColor[0];
                       EmitVertex();
 
                       gl_Position = mg_viewportOrthographicProjectionMatrix * v1;
-                      fsColor = gsColor[0];
+                      fsColor = gsOutlineColor[0];
                       EmitVertex();
 
                       gl_Position = mg_viewportOrthographicProjectionMatrix * v2;
-                      fsColor = gsColor[0];
+                      fsColor = gsOutlineColor[0];
                       EmitVertex();
 
                       gl_Position = mg_viewportOrthographicProjectionMatrix * v3;
+                      fsColor = gsOutlineColor[0];
+                      EmitVertex();
+
+                      gl_Position = mg_viewportOrthographicProjectionMatrix * v4;
                       fsColor = gsColor[0];
+                      EmitVertex();
+
+                      gl_Position = mg_viewportOrthographicProjectionMatrix * v5;
+                      fsColor = gsColor[0];
+                      EmitVertex();
+
+                      gl_Position = mg_viewportOrthographicProjectionMatrix * v6;
+                      fsColor = gsOutlineColor[0];
+                      EmitVertex();
+
+                      gl_Position = mg_viewportOrthographicProjectionMatrix * v7;
+                      fsColor = gsOutlineColor[0];
                       EmitVertex();
                     }";
                 string fs =
@@ -159,6 +188,7 @@ namespace MiniGlobe.Scene
                     }";
                 _sp = Device.CreateShaderProgram(vs, gs, fs);
                 _fillDistance = _sp.Uniforms["u_fillDistance"] as Uniform<float>;
+                _outlineDistance = _sp.Uniforms["u_outlineDistance"] as Uniform<float>;
             }
 
             ///////////////////////////////////////////////////////////////////
@@ -170,7 +200,9 @@ namespace MiniGlobe.Scene
         {
             if (_sp != null)
             {
-                _fillDistance.Value = (float)(Width * 0.5 * sceneState.HighResolutionSnapScale);
+                double fillDistance = Width * 0.5 * sceneState.HighResolutionSnapScale;
+                _fillDistance.Value = (float)(fillDistance);
+                _outlineDistance.Value = (float)(fillDistance + (OutlineWidth * 0.5 * sceneState.HighResolutionSnapScale));
 
                 _context.Bind(_renderState);
                 _context.Bind(_sp);
@@ -185,6 +217,8 @@ namespace MiniGlobe.Scene
         }
 
         public double Width { get; set; }
+
+        public double OutlineWidth { get; set; }
 
         public bool Wireframe
         {
@@ -213,6 +247,7 @@ namespace MiniGlobe.Scene
         private readonly RenderState _renderState;
         private ShaderProgram _sp;
         private Uniform<float> _fillDistance;
+        private Uniform<float> _outlineDistance;
         private VertexArray _va;
         private PrimitiveType _primitiveType;
     }
