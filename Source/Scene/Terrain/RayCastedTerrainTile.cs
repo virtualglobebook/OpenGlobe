@@ -58,7 +58,7 @@ namespace MiniGlobe.Terrain
                       return all(greaterThanEqual(point, lowerLeft)) && all(lessThanEqual(point, upperRight));
                   }
 
-                  void swap(inout float left, inout float right)
+                  void Swap(inout float left, inout float right)
                   {
                       float temp = left;
                       left = right;
@@ -97,7 +97,7 @@ namespace MiniGlobe.Terrain
                           //
                           if (t1 > t2)
                           {
-                              swap(t1, t2);
+                              Swap(t1, t2);
                           }
 
                           //
@@ -148,6 +148,7 @@ namespace MiniGlobe.Terrain
                   void main()
                   {
                       vec3 direction = boxExit - mg_cameraEye;
+                      vec2 oneOverDirectionXY = vec2(1.0) / direction.xy;
 
                       vec3 boxEntry;
                       if (PointInsideAxisAlignedBoundingBox(mg_cameraEye, u_aabbLowerLeft, u_aabbUpperRight))
@@ -166,21 +167,26 @@ int i = 0;
                       vec3 intersectionPoint;
                       bool foundIntersection = false;
 
-                      while (!foundIntersection && all(lessThan(texEntry.xy, boxExit.xy)))
+                      //while (!foundIntersection && all(lessThan(texEntry.xy, boxExit.xy)))
+                      while (!foundIntersection && all(lessThan(texEntry.xy, boxExit.xy - vec2(0.0001))))   // TODO: need delta?
                       {
                           vec2 floorTexEntry = floor(texEntry.xy);
                           float height = texture(mg_texture0, floorTexEntry).r;
 
-                          vec2 delta = ((floorTexEntry + 1.0) - texEntry.xy) / direction.xy;   // TODO: mult by one over
+                          vec2 delta = ((floorTexEntry + vec2(1.0)) - texEntry.xy) * oneOverDirectionXY;
                           vec3 texExit = texEntry + (min(delta.x, delta.y) * direction);
-//                          if (delta.x > delta.y)
-//                          {
-//                              texExit.x = floorTexEntry.x + 1.0;
-//                          }
-//                          else
-//                          {
-//                              texExit.y = floorTexEntry.y + 1.0;
-//                          }
+
+                          //
+                          // Explicitly set to avoid roundoff error
+                          //
+                          if (delta.x < delta.y)
+                          {
+                              texExit.x = floorTexEntry.x + 1.0;
+                          }
+                          else
+                          {
+                              texExit.y = floorTexEntry.y + 1.0;
+                          }
 
                           //
                           // Check for intersection
