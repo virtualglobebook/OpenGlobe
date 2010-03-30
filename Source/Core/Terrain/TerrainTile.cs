@@ -16,7 +16,6 @@ namespace MiniGlobe.Terrain
     public class TerrainTile
     {
         public TerrainTile(
-            GeodeticExtent extent,
             Size size,
             float[] heights,
             float minimumHeight,
@@ -42,16 +41,10 @@ namespace MiniGlobe.Terrain
                 throw new ArgumentOutOfRangeException("minimumHeight", "minimumHeight > maximumHeight");
             }
 
-            _extent = extent;
             _size = size;
             _heights = heights;
             _minimumHeight = minimumHeight;
             _maximumHeight = maximumHeight;
-        }
-
-        public GeodeticExtent Extent
-        {
-            get { return _extent; }
         }
 
         public Size Size        // TODO Size is mutable, should be Vector2I
@@ -74,7 +67,6 @@ namespace MiniGlobe.Terrain
             get { return _maximumHeight; }
         }
 
-        private readonly GeodeticExtent _extent;
         private readonly Size _size;
         private readonly float[] _heights;
         private readonly float _minimumHeight;

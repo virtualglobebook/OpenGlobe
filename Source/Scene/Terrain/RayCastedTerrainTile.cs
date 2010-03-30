@@ -8,6 +8,7 @@
 #endregion
 
 using System;
+using System.Drawing;
 using MiniGlobe.Core;
 using MiniGlobe.Core.Geometry;
 using MiniGlobe.Core.Tessellation;
@@ -21,7 +22,7 @@ namespace MiniGlobe.Terrain
         public RayCastedTerrainTile(Context context, TerrainTile tile)
         {
             _context = context;
-
+            
             string vs =
                 @"#version 150
 
@@ -47,6 +48,9 @@ namespace MiniGlobe.Terrain
 
                   uniform vec3 u_aabbLowerLeft;
                   uniform vec3 u_aabbUpperRight;
+                  uniform float u_minimumHeight;
+                  uniform float u_maximumHeight;
+                  uniform float u_heightExaggeration;
 
                   struct Intersection
                   {
@@ -181,6 +185,7 @@ namespace MiniGlobe.Terrain
                   {
                       vec2 floorTexEntry = floor(texEntry.xy);
                       float height = texture(mg_texture0, MirrorRepeat(floorTexEntry, mirrorTextureCoordinates)).r;
+                      height *= u_heightExaggeration;
 
                       vec2 delta = ((floorTexEntry + vec2(1.0)) - texEntry.xy) * oneOverDirectionXY;
                       vec3 texExit = texEntry + (min(delta.x, delta.y) * direction);
@@ -281,7 +286,7 @@ namespace MiniGlobe.Terrain
                       {
                           UnMirrorIntersectionPoint(mirror, heightMapSize, intersectionPoint);
 
-                          fragmentColor = vec3(intersectionPoint.z / 0.5, 0.0, 0.0);
+                          fragmentColor = vec3((intersectionPoint.z - u_minimumHeight) / (u_maximumHeight - u_minimumHeight), 0.0, 0.0);
                           gl_FragDepth = ComputeWorldPositionDepth(intersectionPoint, mg_modelZToClipCoordinates);
                       }
                       else
@@ -291,36 +296,24 @@ namespace MiniGlobe.Terrain
                   }";
             _sp = Device.CreateShaderProgram(vs, fs);
 
-            Vector3D radii = new Vector3D(
-                tile.Extent.East - tile.Extent.West,
-                tile.Extent.North - tile.Extent.South,
+            _tileSize = tile.Size;
+            _tileMinimumHeight = tile.MinimumHeight;
+            _tileMaximumHeight = tile.MaximumHeight;
+            _tileAABBLowerLeft = Vector3D.Zero;             // TEXEL_SPACE_TODO
+            _tileAABBUpperRight = new Vector3D(tile.Size.Width, tile.Size.Height,
                 tile.MaximumHeight - tile.MinimumHeight);
-            Vector3D halfRadii = 0.5 * radii;
 
-            (_sp.Uniforms["u_aabbLowerLeft"] as Uniform<Vector3S>).Value = Vector3S.Zero;
-            (_sp.Uniforms["u_aabbUpperRight"] as Uniform<Vector3S>).Value = radii.ToVector3S();
+            _heightExaggeration = _sp.Uniforms["u_heightExaggeration"] as Uniform<float>;
+            _minimumHeight = _sp.Uniforms["u_minimumHeight"] as Uniform<float>;
+            _maximumHeight = _sp.Uniforms["u_maximumHeight"] as Uniform<float>;
+            _aabbLowerLeft = _sp.Uniforms["u_aabbLowerLeft"] as Uniform<Vector3S>;
+            _aabbUpperRight = _sp.Uniforms["u_aabbUpperRight"] as Uniform<Vector3S>;
+            HeightExaggeration = 1;
 
             ///////////////////////////////////////////////////////////////////
 
-            Mesh mesh = BoxTessellator.Compute(radii);
-
-            //
-            // Translate box so it is not centered at the origin -
-            // world space and texel space will match up.
-            // TODO:  We don't always want this!
-            //
-            IList<Vector3D> positions = (mesh.Attributes["position"] as VertexAttributeDoubleVector3).Values;
-            for (int i = 0; i < positions.Count; ++i)
-            {
-                positions[i] = positions[i] + halfRadii;
-            }
-
-            _va = context.CreateVertexArray(mesh, _sp.VertexAttributes, BufferHint.StaticDraw);
-            _primitiveType = mesh.PrimitiveType;
-
             _renderState = new RenderState();
             _renderState.FacetCulling.Face = CullFace.Front;
-            _renderState.FacetCulling.FrontFaceWindingOrder = mesh.FrontFaceWindingOrder;
 
             //
             // Upload height map as a one channel floating point texture
@@ -335,13 +328,74 @@ namespace MiniGlobe.Terrain
             _texture.Filter = Texture2DFilter.NearestClampToEdge;
         }
 
+        private void Update()
+        {
+            if (_dirtyVA)
+            {
+                Vector3D radii = new Vector3D(_tileSize.Width, _tileSize.Height,
+                    (_tileMaximumHeight - _tileMinimumHeight) * _heightExaggeration.Value);
+                Vector3D halfRadii = 0.5 * radii;
+
+                Mesh mesh = BoxTessellator.Compute(radii);
+
+                //
+                // TEXEL_SPACE_TODO:  Translate box so it is not centered at 
+                // the origin - world space and texel space will match up.
+                //
+                IList<Vector3D> positions = (mesh.Attributes["position"] as VertexAttributeDoubleVector3).Values;
+                for (int i = 0; i < positions.Count; ++i)
+                {
+                    positions[i] = positions[i] + halfRadii;
+                }
+
+                if (_va != null)
+                {
+                    _va.Dispose();
+                }
+                _va = _context.CreateVertexArray(mesh, _sp.VertexAttributes, BufferHint.StaticDraw);
+                _primitiveType = mesh.PrimitiveType;
+                _renderState.FacetCulling.FrontFaceWindingOrder = mesh.FrontFaceWindingOrder;
+
+                _dirtyVA = false;
+            }
+        }
+
         public void Render(SceneState sceneState)
         {
+            Update();
+
             _context.TextureUnits[0].Texture2DRectangle = _texture;
             _context.Bind(_sp);
             _context.Bind(_va);
             _context.Bind(_renderState);
             _context.Draw(_primitiveType, sceneState);
+        }
+
+        public float HeightExaggeration
+        {
+            get { return _heightExaggeration.Value; }
+            set 
+            {
+                if (value <= 0)
+                {
+                    throw new ArgumentOutOfRangeException("HeightExaggeration", "HeightExaggeration must be greater than zero.");
+                }
+
+                if (_heightExaggeration.Value != value)
+                {
+                    //
+                    // TEXEL_SPACE_TODO:  If one of the AABB z planes is not 0, the
+                    // scale will incorrectly move the entire tile.
+                    //
+                    _heightExaggeration.Value = value;
+                    _minimumHeight.Value = _tileMinimumHeight * value;
+                    _maximumHeight.Value = _tileMaximumHeight * value;
+                    _aabbLowerLeft.Value = new Vector3S((float)_tileAABBLowerLeft.X, (float)_tileAABBLowerLeft.Y, (float)(_tileAABBLowerLeft.Z * value));
+                    _aabbUpperRight.Value = new Vector3S((float)_tileAABBUpperRight.X, (float)_tileAABBUpperRight.Y, (float)(_tileAABBUpperRight.Z * value));
+
+                    _dirtyVA = true;
+                }
+            }
         }
 
         #region IDisposable Members
@@ -357,9 +411,24 @@ namespace MiniGlobe.Terrain
 
         private readonly Context _context;
         private readonly ShaderProgram _sp;
-        private readonly VertexArray _va;
+
+        private readonly Uniform<float> _heightExaggeration;
+        private readonly Uniform<float> _minimumHeight;
+        private readonly Uniform<float> _maximumHeight;
+        private readonly Uniform<Vector3S> _aabbLowerLeft;
+        private readonly Uniform<Vector3S> _aabbUpperRight;
+
+        private readonly Size _tileSize;
+        private readonly float _tileMinimumHeight;
+        private readonly float _tileMaximumHeight;
+        private readonly Vector3D _tileAABBLowerLeft;
+        private readonly Vector3D _tileAABBUpperRight;
+
         private readonly Texture2D _texture;
-        private readonly PrimitiveType _primitiveType;
         private readonly RenderState _renderState;
+
+        private VertexArray _va;
+        private PrimitiveType _primitiveType;
+        private bool _dirtyVA;
     }
 }
