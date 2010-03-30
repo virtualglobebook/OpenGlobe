@@ -23,12 +23,14 @@ namespace MiniGlobe.Examples.Chapter2
     {
         public EllipsoidSurfaceNormals()
         {
+            _globeShape = new Ellipsoid(1, 1, _semiMinorAxis);
+
             _window = Device.CreateWindow(800, 600, "Chapter 2:  Ellipsoid Surface Normals");
             _window.Resize += OnResize;
             _window.RenderFrame += OnRenderFrame;
             _window.Keyboard.KeyDown += OnKeyDown;
             _sceneState = new SceneState();
-            _camera = new CameraLookAtPoint(_sceneState.Camera, _window, Ellipsoid.UnitSphere);
+            _camera = new CameraLookAtPoint(_sceneState.Camera, _window, _globeShape);
 
             _instructions = new HeadsUpDisplay(_window.Context);
             _instructions.Texture = Device.CreateTexture2D(
@@ -38,11 +40,11 @@ namespace MiniGlobe.Examples.Chapter2
             _instructions.Color = Color.Black;
 
             CreateScene();
-
+            
             ///////////////////////////////////////////////////////////////////
 
             _sceneState.Camera.Eye = Vector3D.UnitY;
-            _sceneState.Camera.ZoomToTarget(2);
+            _sceneState.Camera.ZoomToTarget(2 * _globeShape.MaximumRadius);
             PersistentView.Execute(@"E:\Dropbox\My Dropbox\Book\Manuscript\VirtualGlobeFoundations\Figures\EllipsoidSurfaceNormals.xml", _window, _sceneState.Camera);
 
             HighResolutionSnap snap = new HighResolutionSnap(_window, _sceneState);
@@ -51,52 +53,9 @@ namespace MiniGlobe.Examples.Chapter2
             snap.DotsPerInch = 1200;
         }
 
-        private void OnResize()
-        {
-            _window.Context.Viewport = new Rectangle(0, 0, _window.Width, _window.Height);
-            _sceneState.Camera.AspectRatio = _window.Width / (double)_window.Height;
-        }
-
-        private void OnRenderFrame()
-        {
-            Context context = _window.Context;
-            context.Clear(ClearBuffers.ColorAndDepthBuffer, Color.White, 1, 0);
-            context.Bind(_renderState);
-            context.Bind(_sp);
-            context.Bind(_va);
-            context.Draw(_primitiveType, _sceneState);
-
-            _wireframe.Render(_sceneState);
-            _axes.Render(_sceneState);
-            _normals.Render(_sceneState);
-            _labels.Render(_sceneState);
-            _tangentPlane.Render(_sceneState);
-
-            _instructions.Render(_sceneState);
-        }
-
-        private void OnKeyDown(object sender, KeyboardKeyEventArgs e)
-        {
-            if ((e.Key == KeyboardKey.Up) || (e.Key == KeyboardKey.Down))
-            {
-                if (e.Key == KeyboardKey.Up)
-                {
-                    _semiMinorAxis = Math.Min(_semiMinorAxis + _semiMinorAxisDelta, 1.0);
-                }
-                else
-                {
-                    _semiMinorAxis = Math.Max(_semiMinorAxis - _semiMinorAxisDelta, 0.1);
-                }
-
-                CreateScene();
-            }
-        }
-
         private void CreateScene()
         {
             DisposeScene();
-
-            Ellipsoid globeShape = new Ellipsoid(1, 1, _semiMinorAxis);
 
             string vs =
                 @"#version 150
@@ -155,9 +114,9 @@ namespace MiniGlobe.Examples.Chapter2
                       fragmentColor = vec3(intensity, 0, intensity);
                   }";
             _sp = Device.CreateShaderProgram(vs, fs);
-            (_sp.Uniforms["u_globeOneOverRadiiSquared"] as Uniform<Vector3S>).Value = globeShape.OneOverRadiiSquared.ToVector3S();
+            (_sp.Uniforms["u_globeOneOverRadiiSquared"] as Uniform<Vector3S>).Value = _globeShape.OneOverRadiiSquared.ToVector3S();
 
-            Mesh mesh = GeographicGridEllipsoidTessellator.Compute(globeShape, 64, 32, GeographicGridEllipsoidVertexAttributes.Position);
+            Mesh mesh = GeographicGridEllipsoidTessellator.Compute(_globeShape, 64, 32, GeographicGridEllipsoidVertexAttributes.Position);
             _va = _window.Context.CreateVertexArray(mesh, _sp.VertexAttributes, BufferHint.StaticDraw);
             _primitiveType = mesh.PrimitiveType;
 
@@ -177,11 +136,11 @@ namespace MiniGlobe.Examples.Chapter2
 
             ///////////////////////////////////////////////////////////////////
 
-            Vector3D p = globeShape.ToVector3D(new Geodetic3D(0, Trig.ToRadians(45), 0));
-            Vector3D deticNormal = globeShape.DeticSurfaceNormal(p);
+            Vector3D p = _globeShape.ToVector3D(new Geodetic3D(0, Trig.ToRadians(45), 0));
+            Vector3D deticNormal = _globeShape.DeticSurfaceNormal(p);
             Vector3D centricNormal = Ellipsoid.CentricSurfaceNormal(p);
 
-            double normalLength = globeShape.MaximumRadius;
+            double normalLength = _globeShape.MaximumRadius;
             Vector3D pDetic = p + (normalLength * deticNormal);
             Vector3D pCentric = p + (normalLength * centricNormal);
 
@@ -201,7 +160,7 @@ namespace MiniGlobe.Examples.Chapter2
             polyline.PrimitiveType = PrimitiveType.Lines;
             polyline.Attributes.Add(positionAttribute);
             polyline.Attributes.Add(colorAttribute);
- 
+
             _normals = new Polyline(_window.Context);
             _normals.Set(polyline);
             _normals.Width = 3;
@@ -218,21 +177,21 @@ namespace MiniGlobe.Examples.Chapter2
             _labels = new BillboardCollection(_window.Context, 2);
             _labels.Texture = Device.CreateTexture2D(atlas.Bitmap, TextureFormat.RedGreenBlueAlpha8, false);
             _labels.Add(new Billboard()
-                {
-                    Position = pDetic,
-                    TextureCoordinates = atlas.TextureCoordinates[0],
-                    Color = Color.DarkGreen,
-                    HorizontalOrigin = HorizontalOrigin.Right,
-                    VerticalOrigin = VerticalOrigin.Bottom
-                });
+            {
+                Position = pDetic,
+                TextureCoordinates = atlas.TextureCoordinates[0],
+                Color = Color.DarkGreen,
+                HorizontalOrigin = HorizontalOrigin.Right,
+                VerticalOrigin = VerticalOrigin.Bottom
+            });
             _labels.Add(new Billboard()
-                {
-                    Position = pCentric,
-                    TextureCoordinates = atlas.TextureCoordinates[1],
-                    Color = Color.DarkCyan,
-                    HorizontalOrigin = HorizontalOrigin.Right,
-                    VerticalOrigin = VerticalOrigin.Bottom
-                });
+            {
+                Position = pCentric,
+                TextureCoordinates = atlas.TextureCoordinates[1],
+                Color = Color.DarkCyan,
+                HorizontalOrigin = HorizontalOrigin.Right,
+                VerticalOrigin = VerticalOrigin.Bottom
+            });
 
             atlas.Dispose();
 
@@ -242,6 +201,48 @@ namespace MiniGlobe.Examples.Chapter2
 
             _tangentPlane = new Plane(_window.Context, p, east, north);
             _tangentPlane.OutlineWidth = 3;
+        }
+
+        private void OnResize()
+        {
+            _window.Context.Viewport = new Rectangle(0, 0, _window.Width, _window.Height);
+            _sceneState.Camera.AspectRatio = _window.Width / (double)_window.Height;
+        }
+
+        private void OnRenderFrame()
+        {
+            Context context = _window.Context;
+            context.Clear(ClearBuffers.ColorAndDepthBuffer, Color.White, 1, 0);
+            context.Bind(_renderState);
+            context.Bind(_sp);
+            context.Bind(_va);
+            context.Draw(_primitiveType, _sceneState);
+
+            _wireframe.Render(_sceneState);
+            _axes.Render(_sceneState);
+            _normals.Render(_sceneState);
+            _labels.Render(_sceneState);
+            _tangentPlane.Render(_sceneState);
+
+            _instructions.Render(_sceneState);
+        }
+
+        private void OnKeyDown(object sender, KeyboardKeyEventArgs e)
+        {
+            if ((e.Key == KeyboardKey.Up) || (e.Key == KeyboardKey.Down))
+            {
+                if (e.Key == KeyboardKey.Up)
+                {
+                    _semiMinorAxis = Math.Min(_semiMinorAxis + _semiMinorAxisDelta, 1.0);
+                }
+                else
+                {
+                    _semiMinorAxis = Math.Max(_semiMinorAxis - _semiMinorAxisDelta, 0.1);
+                }
+                _globeShape = new Ellipsoid(1, 1, _semiMinorAxis);
+
+                CreateScene();
+            }
         }
 
         private void DisposeScene()
@@ -324,6 +325,7 @@ namespace MiniGlobe.Examples.Chapter2
         private Polyline _normals;
         private Plane _tangentPlane;
 
+        private Ellipsoid _globeShape;
         private double _semiMinorAxis = 0.7;
         private const double _semiMinorAxisDelta = 0.025;
     }
