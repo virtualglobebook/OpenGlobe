@@ -43,6 +43,7 @@ namespace MiniGlobe.Terrain
 
                   uniform sampler2DRect mg_texture0;    // Height field
                   uniform vec3 mg_cameraEye;
+                  uniform mat4x2 mg_modelZToClipCoordinates;
 
                   uniform vec3 u_aabbLowerLeft;
                   uniform vec3 u_aabbUpperRight;
@@ -146,12 +147,13 @@ namespace MiniGlobe.Terrain
                   }
 
                   void Mirror(
+                      bool mirror,
                       float heightMapSize,
                       inout float boxEntry,
                       inout float direction,
                       inout float mirrorTextureCoordinates)
                   {
-                      if (direction < 0.0)
+                      if (mirror)
                       {
                           direction = -direction;
                           boxEntry = heightMapSize - boxEntry;
@@ -221,6 +223,27 @@ namespace MiniGlobe.Terrain
                       return foundIntersection;
                   }
 
+                  void UnMirrorIntersectionPoint(bvec2 mirror, vec2 heightMapSize, inout vec3 intersectionPoint)
+                  {
+                      if (mirror.x)
+                      {
+                          intersectionPoint.x = heightMapSize.x - intersectionPoint.x;
+                      }
+
+                      if (mirror.y)
+                      {
+                          intersectionPoint.y = heightMapSize.y - intersectionPoint.y;
+                      }
+                  }
+
+                  float ComputeWorldPositionDepth(vec3 position, mat4x2 modelZToClipCoordinates)
+                  { 
+                      vec2 v = modelZToClipCoordinates * vec4(position, 1);   // clip coordinates
+                      v.x /= v.y;                                             // normalized device coordinates
+                      v.x = (v.x + 1.0) * 0.5;
+                      return v.x;
+                  }
+
                   void main()
                   {
                       vec3 direction = boxExit - mg_cameraEye;
@@ -238,9 +261,10 @@ namespace MiniGlobe.Terrain
 
                       vec2 heightMapSize = vec2(textureSize(mg_texture0, 0));
 
+                      bvec2 mirror = lessThan(direction.xy, vec2(0.0));
                       vec2 mirrorTextureCoordinates;
-                      Mirror(heightMapSize.x, boxEntry.x, direction.x, mirrorTextureCoordinates.x);
-                      Mirror(heightMapSize.y, boxEntry.y, direction.y, mirrorTextureCoordinates.y);
+                      Mirror(mirror.x, heightMapSize.x, boxEntry.x, direction.x, mirrorTextureCoordinates.x);
+                      Mirror(mirror.y, heightMapSize.y, boxEntry.y, direction.y, mirrorTextureCoordinates.y);
 
                       vec2 oneOverDirectionXY = vec2(1.0) / direction.xy;
                       vec3 texEntry = boxEntry;
@@ -255,8 +279,10 @@ namespace MiniGlobe.Terrain
 
                       if (foundIntersection)
                       {
+                          UnMirrorIntersectionPoint(mirror, heightMapSize, intersectionPoint);
+
                           fragmentColor = vec3(intersectionPoint.z / 0.5, 0.0, 0.0);
-                          // TODO:  set z
+                          gl_FragDepth = ComputeWorldPositionDepth(intersectionPoint, mg_modelZToClipCoordinates);
                       }
                       else
                       {
