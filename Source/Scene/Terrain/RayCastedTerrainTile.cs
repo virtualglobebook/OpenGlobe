@@ -73,7 +73,7 @@ namespace MiniGlobe.Terrain
                       inout float tNear,
                       inout float tFar)
                   {
-                      if (direction == 0)
+                      if (direction == 0.0)
                       {
                           //
                           // Ray is parallel to planes
@@ -117,7 +117,7 @@ namespace MiniGlobe.Terrain
                           //
                           // Box is behind ray
                           //
-                          if (tFar < 0)
+                          if (tFar < 0.0)
                           {
                               return false;
                           }
@@ -145,14 +145,40 @@ namespace MiniGlobe.Terrain
                       return Intersection(false, vec3(0.0));
                   }
 
+                  void Mirror(
+                      float heightMapSize,
+                      inout float boxEntry,
+                      inout float direction,
+                      inout float mirrorTextureCoordinates)
+                  {
+                      if (direction < 0.0)
+                      {
+                          direction = -direction;
+                          boxEntry = heightMapSize - boxEntry;
+                          mirrorTextureCoordinates = heightMapSize - 1.0;
+                      }
+                      else
+                      {
+                          mirrorTextureCoordinates = 0.0;
+                      }
+                  }
+
+                  vec2 MirrorRepeat(vec2 textureCoordinate, vec2 mirrorTextureCoordinates)
+                  {
+                      return vec2(
+                          mirrorTextureCoordinates.x == 0.0 ? textureCoordinate.x : mirrorTextureCoordinates.x - textureCoordinate.x, 
+                          mirrorTextureCoordinates.y == 0.0 ? textureCoordinate.y : mirrorTextureCoordinates.y - textureCoordinate.y);
+                  }
+
                   bool StepRay(
                       vec3 direction, 
                       vec2 oneOverDirectionXY,
+                      vec2 mirrorTextureCoordinates,
                       inout vec3 texEntry,
                       out vec3 intersectionPoint)
                   {
                       vec2 floorTexEntry = floor(texEntry.xy);
-                      float height = texture(mg_texture0, floorTexEntry).r;
+                      float height = texture(mg_texture0, MirrorRepeat(floorTexEntry, mirrorTextureCoordinates)).r;
 
                       vec2 delta = ((floorTexEntry + vec2(1.0)) - texEntry.xy) * oneOverDirectionXY;
                       vec3 texExit = texEntry + (min(delta.x, delta.y) * direction);
@@ -198,7 +224,6 @@ namespace MiniGlobe.Terrain
                   void main()
                   {
                       vec3 direction = boxExit - mg_cameraEye;
-                      vec2 oneOverDirectionXY = vec2(1.0) / direction.xy;
 
                       vec3 boxEntry;
                       if (PointInsideAxisAlignedBoundingBox(mg_cameraEye, u_aabbLowerLeft, u_aabbUpperRight))
@@ -211,22 +236,22 @@ namespace MiniGlobe.Terrain
                           boxEntry = i.IntersectionPoint;
                       }
 
+                      vec2 heightMapSize = vec2(textureSize(mg_texture0, 0));
+
+                      vec2 mirrorTextureCoordinates;
+                      Mirror(heightMapSize.x, boxEntry.x, direction.x, mirrorTextureCoordinates.x);
+                      Mirror(heightMapSize.y, boxEntry.y, direction.y, mirrorTextureCoordinates.y);
+
+                      vec2 oneOverDirectionXY = vec2(1.0) / direction.xy;
                       vec3 texEntry = boxEntry;
                       vec3 intersectionPoint;
                       bool foundIntersection = false;
-                      int i = 0;
 
-                      //while (!foundIntersection && all(lessThan(texEntry.xy, boxExit.xy)))
-                      while (!foundIntersection && all(lessThan(texEntry.xy, boxExit.xy - vec2(0.0001))))   // TODO: need delta?
+                      while (!foundIntersection && all(lessThan(texEntry.xy, heightMapSize)))
                       {
-                          foundIntersection = StepRay(direction, oneOverDirectionXY, texEntry, intersectionPoint);
-
-                          if (i++ == 100)
-                          {
-                              discard;
-                          }
+                          foundIntersection = StepRay(direction, oneOverDirectionXY, 
+                              mirrorTextureCoordinates, texEntry, intersectionPoint);
                       }
-
 
                       if (foundIntersection)
                       {
