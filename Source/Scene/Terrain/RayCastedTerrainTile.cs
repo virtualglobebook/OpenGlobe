@@ -145,6 +145,56 @@ namespace MiniGlobe.Terrain
                       return Intersection(false, vec3(0.0));
                   }
 
+                  bool StepRay(
+                      vec3 direction, 
+                      vec2 oneOverDirectionXY,
+                      inout vec3 texEntry,
+                      out vec3 intersectionPoint)
+                  {
+                      vec2 floorTexEntry = floor(texEntry.xy);
+                      float height = texture(mg_texture0, floorTexEntry).r;
+
+                      vec2 delta = ((floorTexEntry + vec2(1.0)) - texEntry.xy) * oneOverDirectionXY;
+                      vec3 texExit = texEntry + (min(delta.x, delta.y) * direction);
+
+                      //
+                      // Explicitly set to avoid roundoff error
+                      //
+                      if (delta.x < delta.y)
+                      {
+                          texExit.x = floorTexEntry.x + 1.0;
+                      }
+                      else
+                      {
+                          texExit.y = floorTexEntry.y + 1.0;
+                      }
+
+                      //
+                      // Check for intersection
+                      //
+                      bool foundIntersection = false;
+
+                      if (direction.z >= 0.0)
+                      {
+                          if (texEntry.z <= height)
+                          {
+                              foundIntersection = true;
+                              intersectionPoint = texEntry;
+                          }
+                      }
+                      else
+                      {
+                          if (texExit.z <= height)
+                          {
+                              foundIntersection = true;
+                              intersectionPoint = texEntry + (max((height - texEntry.z) / direction.z, 0.0) * direction);
+                          }
+                      }
+
+                      texEntry = texExit;
+                      return foundIntersection;
+                  }
+
                   void main()
                   {
                       vec3 direction = boxExit - mg_cameraEye;
@@ -162,59 +212,19 @@ namespace MiniGlobe.Terrain
                       }
 
                       vec3 texEntry = boxEntry;
-
-int i = 0;
                       vec3 intersectionPoint;
                       bool foundIntersection = false;
+                      int i = 0;
 
                       //while (!foundIntersection && all(lessThan(texEntry.xy, boxExit.xy)))
                       while (!foundIntersection && all(lessThan(texEntry.xy, boxExit.xy - vec2(0.0001))))   // TODO: need delta?
                       {
-                          vec2 floorTexEntry = floor(texEntry.xy);
-                          float height = texture(mg_texture0, floorTexEntry).r;
+                          foundIntersection = StepRay(direction, oneOverDirectionXY, texEntry, intersectionPoint);
 
-                          vec2 delta = ((floorTexEntry + vec2(1.0)) - texEntry.xy) * oneOverDirectionXY;
-                          vec3 texExit = texEntry + (min(delta.x, delta.y) * direction);
-
-                          //
-                          // Explicitly set to avoid roundoff error
-                          //
-                          if (delta.x < delta.y)
+                          if (i++ == 100)
                           {
-                              texExit.x = floorTexEntry.x + 1.0;
+                              discard;
                           }
-                          else
-                          {
-                              texExit.y = floorTexEntry.y + 1.0;
-                          }
-
-                          //
-                          // Check for intersection
-                          //
-                          if (direction.z >= 0.0)
-                          {
-                              if (texEntry.z <= height)
-                              {
-                                  foundIntersection = true;
-                                  intersectionPoint = texEntry;
-                              }
-                          }
-                          else
-                          {
-                              if (texExit.z <= height)
-                              {
-                                  foundIntersection = true;
-                                  intersectionPoint = texEntry + (max((height - texEntry.z) / direction.z, 0.0) * direction);
-                              }
-                          }
-
-                          texEntry = texExit;
-
-if (i++ == 100)
-{
-fragmentColor = vec3(1.0, 1.0, 1.0);
-return;
-}
                       }
 
 
