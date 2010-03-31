@@ -54,10 +54,7 @@ namespace MiniGlobe.Scene
 
             _range = ellipsoid.MaximumRadius * 2.0;
 
-            _mouseEnabled = true;
-            _window.Mouse.ButtonDown += MouseDown;
-            _window.Mouse.ButtonUp += MouseUp;
-            _window.Mouse.Move += MouseMove;
+            MouseEnabled = true;
         }
         
         /// <summary>

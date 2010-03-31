@@ -163,7 +163,7 @@ namespace MiniGlobe.Core
             }
         }
 
-        public Vector3D Invert()
+        public Vector3D Negate()
         {
             return -this;
         }

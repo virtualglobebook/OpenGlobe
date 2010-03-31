@@ -78,6 +78,28 @@ namespace MiniGlobe.Core
         {
             new Half(1e30);
         }
+
+        [Test]
+        public void TestComparisonOperators()
+        {
+            Assert.IsTrue(new Half(1.23) == new Half(1.23));
+            Assert.IsFalse(new Half(1.23) == new Half(1.24));
+            Assert.IsFalse(new Half(1.23) != new Half(1.23));
+            Assert.IsTrue(new Half(1.23) != new Half(1.24));
+
+            Assert.IsTrue(new Half(1.23) < new Half(1.24));
+            Assert.IsTrue(new Half(1.23) <= new Half(1.24));
+            Assert.IsFalse(new Half(1.23) > new Half(1.24));
+            Assert.IsFalse(new Half(1.23) >= new Half(1.24));
+
+            Assert.IsFalse(new Half(1.24) < new Half(1.23));
+            Assert.IsFalse(new Half(1.24) <= new Half(1.23));
+            Assert.IsTrue(new Half(1.24) > new Half(1.23));
+            Assert.IsTrue(new Half(1.24) >= new Half(1.23));
+
+            Assert.IsTrue(new Half(1.23) >= new Half(1.23));
+            Assert.IsTrue(new Half(1.23) <= new Half(1.23));
+        }
     }
 }
 

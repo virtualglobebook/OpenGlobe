@@ -112,7 +112,7 @@ namespace MiniGlobe.Core
             return this / scalar;
         }
 
-        public Vector2S Invert()
+        public Vector2S Negate()
         {
             return -this;
         }

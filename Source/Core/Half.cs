@@ -64,6 +64,7 @@
 #endregion
 
 using System;
+using System.Globalization;
 
 namespace MiniGlobe.Core
 {
@@ -291,7 +292,7 @@ namespace MiniGlobe.Core
         }
 
         /// <summary>Ported from OpenEXR's IlmBase 1.0.1</summary>
-        private int HalfToFloat(ushort ui16)
+        private static int HalfToFloat(ushort ui16)
         {
             int sign = (ui16 >> 15) & 0x00000001;
             int exponent = (ui16 >> 10) & 0x0000001f;
@@ -394,6 +395,36 @@ namespace MiniGlobe.Core
             return _bits.GetHashCode();
         }
 
+        public static bool operator ==(Half left, Half right)
+        {
+            return left.Equals(right);
+        }
+
+        public static bool operator !=(Half left, Half right)
+        {
+            return !left.Equals(right);
+        }
+
+        public static bool operator <(Half left, Half right)
+        {
+            return left.CompareTo(right) < 0;
+        }
+
+        public static bool operator <=(Half left, Half right)
+        {
+            return left.CompareTo(right) <= 0;
+        }
+
+        public static bool operator >(Half left, Half right)
+        {
+            return left.CompareTo(right) > 0;
+        }
+
+        public static bool operator >=(Half left, Half right)
+        {
+            return left.CompareTo(right) >= 0;
+        }
+
         /// <summary>
         /// Compares this instance to a specified half-precision floating-point number
         /// and returns an integer that indicates whether the value of this instance
@@ -451,7 +482,7 @@ namespace MiniGlobe.Core
         /// <param name="style">Specifies the format of <paramref name="s"/>.</param>
         /// <param name="provider">Culture-specific formatting information.</param>
         /// <returns>A new <see cref="Half"/> instance.</returns>
-        public static Half Parse(string s, System.Globalization.NumberStyles style, IFormatProvider provider)
+        public static Half Parse(string s, NumberStyles style, IFormatProvider provider)
         {
             return new Half(Double.Parse(s, style, provider));
         }

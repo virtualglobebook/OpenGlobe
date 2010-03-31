@@ -326,31 +326,31 @@ namespace MiniGlobe.Core
         }
 
         [Test]
-        public void Invert()
+        public void Negate()
         {
             Vector4D a = new Vector4D(1.0, 2.0, 3.0, 4.0);
-            Vector4D invertedA1 = a.Invert();
-            Assert.AreEqual(-1.0, invertedA1.X, 1e-14);
-            Assert.AreEqual(-2.0, invertedA1.Y, 1e-14);
-            Assert.AreEqual(-3.0, invertedA1.Z, 1e-14);
-            Assert.AreEqual(-4.0, invertedA1.W, 1e-14);
-            Vector4D invertedA2 = -a;
-            Assert.AreEqual(-1.0, invertedA2.X, 1e-14);
-            Assert.AreEqual(-2.0, invertedA2.Y, 1e-14);
-            Assert.AreEqual(-3.0, invertedA2.Z, 1e-14);
-            Assert.AreEqual(-4.0, invertedA2.W, 1e-14);
+            Vector4D negatedA1 = a.Negate();
+            Assert.AreEqual(-1.0, negatedA1.X, 1e-14);
+            Assert.AreEqual(-2.0, negatedA1.Y, 1e-14);
+            Assert.AreEqual(-3.0, negatedA1.Z, 1e-14);
+            Assert.AreEqual(-4.0, negatedA1.W, 1e-14);
+            Vector4D negatedA2 = -a;
+            Assert.AreEqual(-1.0, negatedA2.X, 1e-14);
+            Assert.AreEqual(-2.0, negatedA2.Y, 1e-14);
+            Assert.AreEqual(-3.0, negatedA2.Z, 1e-14);
+            Assert.AreEqual(-4.0, negatedA2.W, 1e-14);
 
             Vector4D b = new Vector4D(-1.0, -2.0, -3.0, -4.0);
-            Vector4D invertedB1 = b.Invert();
-            Assert.AreEqual(1.0, invertedB1.X, 1e-14);
-            Assert.AreEqual(2.0, invertedB1.Y, 1e-14);
-            Assert.AreEqual(3.0, invertedB1.Z, 1e-14);
-            Assert.AreEqual(4.0, invertedB1.W, 1e-14);
-            Vector4D invertedB2 = -b;
-            Assert.AreEqual(1.0, invertedB2.X, 1e-14);
-            Assert.AreEqual(2.0, invertedB2.Y, 1e-14);
-            Assert.AreEqual(3.0, invertedB2.Z, 1e-14);
-            Assert.AreEqual(4.0, invertedB2.W, 1e-14);
+            Vector4D negatedB1 = b.Negate();
+            Assert.AreEqual(1.0, negatedB1.X, 1e-14);
+            Assert.AreEqual(2.0, negatedB1.Y, 1e-14);
+            Assert.AreEqual(3.0, negatedB1.Z, 1e-14);
+            Assert.AreEqual(4.0, negatedB1.W, 1e-14);
+            Vector4D negatedB2 = -b;
+            Assert.AreEqual(1.0, negatedB2.X, 1e-14);
+            Assert.AreEqual(2.0, negatedB2.Y, 1e-14);
+            Assert.AreEqual(3.0, negatedB2.Z, 1e-14);
+            Assert.AreEqual(4.0, negatedB2.W, 1e-14);
         }
 
         [Test]

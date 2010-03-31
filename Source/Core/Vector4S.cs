@@ -177,7 +177,7 @@ namespace MiniGlobe.Core
             }
         }
 
-        public Vector4S Invert()
+        public Vector4S Negate()
         {
             return -this;
         }

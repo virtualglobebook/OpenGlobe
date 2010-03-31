@@ -126,13 +126,22 @@
      </Message>
     </Messages>
    </Namespace>
+   <Namespace Name="MiniGlobe.Terrain">
+    <Messages>
+     <Message TypeName="AvoidNamespacesWithFewTypes" Category="Microsoft.Design" CheckId="CA1020" Created="2010-03-31 02:11:39Z">
+      <Issue>
+       <Item>MiniGlobe.Terrain</Item>
+      </Issue>
+     </Message>
+    </Messages>
+   </Namespace>
   </Namespaces>
   <Targets>
    <Target Name="$(ProjectDir)/../../Source/Examples/Chapter2/EllipsoidSurfaceNormals/bin/Release/Chapter2EllipsoidSurfaceNormals.exe">
     <Modules>
      <Module Name="chapter2ellipsoidsurfacenormals.exe">
       <Messages>
-       <Message TypeName="AssembliesShouldHaveValidStrongNames" Category="Microsoft.Design" CheckId="CA2210" Created="2010-03-03 23:33:07Z">
+       <Message TypeName="AssembliesShouldHaveValidStrongNames" Category="Microsoft.Design" CheckId="CA2210" Created="2010-03-31 02:44:15Z">
         <Issue Name="NoStrongName">
          <Item>'Chapter2EllipsoidSurfaceNormals.exe'</Item>
         </Issue>
@@ -145,7 +154,7 @@
     <Modules>
      <Module Name="chapter3latitudelongitudegrid.exe">
       <Messages>
-       <Message TypeName="AssembliesShouldHaveValidStrongNames" Category="Microsoft.Design" CheckId="CA2210" Created="2010-02-03 04:06:56Z">
+       <Message TypeName="AssembliesShouldHaveValidStrongNames" Category="Microsoft.Design" CheckId="CA2210" Created="2010-03-31 02:44:15Z">
         <Issue Name="NoStrongName">
          <Item>'Chapter3LatitudeLongitudeGrid.exe'</Item>
         </Issue>
@@ -158,7 +167,7 @@
     <Modules>
      <Module Name="chapter3nightlights.exe">
       <Messages>
-       <Message TypeName="AssembliesShouldHaveValidStrongNames" Category="Microsoft.Design" CheckId="CA2210" Created="2010-02-03 23:51:44Z">
+       <Message TypeName="AssembliesShouldHaveValidStrongNames" Category="Microsoft.Design" CheckId="CA2210" Created="2010-03-31 02:44:15Z">
         <Issue Name="NoStrongName">
          <Item>'Chapter3NightLights.exe'</Item>
         </Issue>
@@ -171,7 +180,7 @@
     <Modules>
      <Module Name="chapter3raycasting.exe">
       <Messages>
-       <Message TypeName="AssembliesShouldHaveValidStrongNames" Category="Microsoft.Design" CheckId="CA2210" Created="2010-02-02 18:33:41Z">
+       <Message TypeName="AssembliesShouldHaveValidStrongNames" Category="Microsoft.Design" CheckId="CA2210" Created="2010-03-31 02:44:15Z">
         <Issue Name="NoStrongName">
          <Item>'Chapter3RayCasting.exe'</Item>
         </Issue>
@@ -184,7 +193,7 @@
     <Modules>
      <Module Name="chapter3subdivisionsphere1.exe">
       <Messages>
-       <Message TypeName="AssembliesShouldHaveValidStrongNames" Category="Microsoft.Design" CheckId="CA2210" Created="2009-12-29 14:04:17Z">
+       <Message TypeName="AssembliesShouldHaveValidStrongNames" Category="Microsoft.Design" CheckId="CA2210" Created="2010-03-31 02:44:15Z">
         <Issue Name="NoStrongName">
          <Item>'Chapter3SubdivisionSphere1.exe'</Item>
         </Issue>
@@ -197,7 +206,7 @@
     <Modules>
      <Module Name="chapter3subdivisionsphere2.exe">
       <Messages>
-       <Message TypeName="AssembliesShouldHaveValidStrongNames" Category="Microsoft.Design" CheckId="CA2210" Created="2009-12-29 14:04:17Z">
+       <Message TypeName="AssembliesShouldHaveValidStrongNames" Category="Microsoft.Design" CheckId="CA2210" Created="2010-03-31 02:44:15Z">
         <Issue Name="NoStrongName">
          <Item>'Chapter3SubdivisionSphere2.exe'</Item>
         </Issue>
@@ -210,7 +219,7 @@
     <Modules>
      <Module Name="chapter4numberprecision.exe">
       <Messages>
-       <Message TypeName="AssembliesShouldHaveValidStrongNames" Category="Microsoft.Design" CheckId="CA2210" Created="2010-03-10 21:45:43Z">
+       <Message TypeName="AssembliesShouldHaveValidStrongNames" Category="Microsoft.Design" CheckId="CA2210" Created="2010-03-31 02:44:15Z">
         <Issue Name="NoStrongName">
          <Item>'Chapter4NumberPrecision.exe'</Item>
         </Issue>
@@ -219,11 +228,44 @@
      </Module>
     </Modules>
    </Target>
+   <Target Name="$(ProjectDir)/../../Source/Examples/Chapter5/RayCasting/bin/Release/Chapter5RayCasting.exe">
+    <Modules>
+     <Module Name="chapter5raycasting.exe">
+      <Messages>
+       <Message TypeName="AssembliesShouldHaveValidStrongNames" Category="Microsoft.Design" CheckId="CA2210" Created="2010-03-31 02:44:15Z">
+        <Issue Name="NoStrongName">
+         <Item>'Chapter5RayCasting.exe'</Item>
+        </Issue>
+       </Message>
+      </Messages>
+      <Namespaces>
+       <Namespace Name="MiniGlobe.Examples.Chapter5">
+        <Types>
+         <Type Name="RayCasting">
+          <Members>
+           <Member Name="#.ctor()">
+            <Messages>
+             <Message Id="System.Drawing.Size" TypeName="DoNotIgnoreMethodResults" Category="Microsoft.Usage" CheckId="CA1806" Created="2010-03-31 02:44:15Z">
+              <Issue Name="ObjectCreation">
+               <Item>'RayCasting.RayCasting()'</Item>
+               <Item>'Size'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+        </Types>
+       </Namespace>
+      </Namespaces>
+     </Module>
+    </Modules>
+   </Target>
    <Target Name="$(ProjectDir)/../../Source/Examples/Chapter7/Billboards/bin/Release/Chapter7Billboards.exe">
     <Modules>
      <Module Name="chapter7billboards.exe">
       <Messages>
-       <Message TypeName="AssembliesShouldHaveValidStrongNames" Category="Microsoft.Design" CheckId="CA2210" Created="2010-02-07 19:07:23Z">
+       <Message TypeName="AssembliesShouldHaveValidStrongNames" Category="Microsoft.Design" CheckId="CA2210" Created="2010-03-31 02:44:15Z">
         <Issue Name="NoStrongName">
          <Item>'Chapter7Billboards.exe'</Item>
         </Issue>
@@ -246,105 +288,92 @@
        <Namespace Name="MiniGlobe.Core">
         <Types>
          <Type Name="Half">
-          <Messages>
-           <Message TypeName="OverrideEqualsAndOperatorEqualsOnValueTypes" Category="Microsoft.Performance" CheckId="CA1815" Created="2010-03-23 08:41:26Z">
-            <Issue Name="op_Equality">
-             <Item>'Half'</Item>
-            </Issue>
-           </Message>
-           <Message TypeName="OverrideMethodsOnComparableTypes" Category="Microsoft.Design" CheckId="CA1036" Created="2010-03-23 08:41:26Z">
-            <Issue Name="Operator">
-             <Item>'Half'</Item>
-             <Item>!=</Item>
-            </Issue>
-            <Issue Name="Operator">
-             <Item>'Half'</Item>
-             <Item>&lt;</Item>
-            </Issue>
-            <Issue Name="Operator">
-             <Item>'Half'</Item>
-             <Item>==</Item>
-            </Issue>
-            <Issue Name="Operator">
-             <Item>'Half'</Item>
-             <Item>&gt;</Item>
-            </Issue>
-           </Message>
-          </Messages>
           <Members>
-           <Member Name="#Equals(System.Object)">
-            <Messages>
-             <Message TypeName="OverloadOperatorEqualsOnOverridingValueTypeEquals" Category="Microsoft.Usage" CheckId="CA2231" Created="2010-03-23 08:41:26Z">
-              <Issue>
-               <Item>'Half'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-           <Member Name="#HalfToFloat(System.UInt16)">
-            <Messages>
-             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Created="2010-03-23 08:41:26Z" FixCategory="NonBreaking">
-              <Issue>
-               <Item>'Half.HalfToFloat(ushort)'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
            <Member Name="#Parse(System.String)">
             <Messages>
-             <Message Id="s" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-03-23 08:41:26Z">
+             <Message Id="s" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-03-23 08:41:26Z">
               <Issue Name="MemberParameterMoreMeaningfulName">
                <Item>'Half.Parse(string)'</Item>
                <Item>'s'</Item>
               </Issue>
+              <Notes>
+               <User Name="Kevin Ring">
+                <Note Id="32" />
+               </User>
+              </Notes>
              </Message>
-             <Message Id="System.Double.Parse(System.String)" TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305" Created="2010-03-23 08:41:26Z">
+             <Message Id="System.Double.Parse(System.String)" TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305" Status="Excluded" Created="2010-03-23 08:41:26Z">
               <Issue>
                <Item>'double.Parse(string)'</Item>
                <Item>'Half.Parse(string)'</Item>
                <Item>'double.Parse(string, IFormatProvider)'</Item>
               </Issue>
+              <Notes>
+               <User Name="Kevin Ring">
+                <Note Id="30" />
+               </User>
+              </Notes>
              </Message>
             </Messages>
            </Member>
            <Member Name="#Parse(System.String,System.Globalization.NumberStyles,System.IFormatProvider)">
             <Messages>
-             <Message Id="s" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-03-23 08:41:26Z">
+             <Message Id="s" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-03-23 08:41:26Z">
               <Issue Name="MemberParameterMoreMeaningfulName">
                <Item>'Half.Parse(string, NumberStyles, IFormatProvider)'</Item>
                <Item>'s'</Item>
               </Issue>
+              <Notes>
+               <User Name="Kevin Ring">
+                <Note Id="29" />
+               </User>
+              </Notes>
              </Message>
             </Messages>
            </Member>
            <Member Name="#ToString()">
             <Messages>
-             <Message Id="System.Single.ToString" TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305" Created="2010-03-23 08:41:26Z">
+             <Message Id="System.Single.ToString" TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305" Status="Excluded" Created="2010-03-23 08:41:26Z">
               <Issue>
                <Item>'float.ToString()'</Item>
                <Item>'Half.ToString()'</Item>
                <Item>'float.ToString(IFormatProvider)'</Item>
               </Issue>
+              <Notes>
+               <User Name="Kevin Ring">
+                <Note Id="31" />
+               </User>
+              </Notes>
              </Message>
             </Messages>
            </Member>
            <Member Name="#TryParse(System.String,MiniGlobe.Core.Half&amp;)">
             <Messages>
-             <Message Id="s" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-03-23 08:41:26Z">
+             <Message Id="s" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-03-23 08:41:26Z">
               <Issue Name="MemberParameterMoreMeaningfulName">
                <Item>'Half.TryParse(string, out Half)'</Item>
                <Item>'s'</Item>
               </Issue>
+              <Notes>
+               <User Name="Kevin Ring">
+                <Note Id="27" />
+               </User>
+              </Notes>
              </Message>
             </Messages>
            </Member>
            <Member Name="#TryParse(System.String,System.Globalization.NumberStyles,System.IFormatProvider,MiniGlobe.Core.Half&amp;)">
             <Messages>
-             <Message Id="s" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-03-23 08:41:26Z">
+             <Message Id="s" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-03-23 08:41:26Z">
               <Issue Name="MemberParameterMoreMeaningfulName">
                <Item>'Half.TryParse(string, NumberStyles, IFormatProvider, out Half)'</Item>
                <Item>'s'</Item>
               </Issue>
+              <Notes>
+               <User Name="Kevin Ring">
+                <Note Id="28" />
+               </User>
+              </Notes>
              </Message>
             </Messages>
            </Member>
@@ -354,11 +383,16 @@
           <Members>
            <Member Name="#Value">
             <Messages>
-             <Message TypeName="DoNotDeclareStaticMembersOnGenericTypes" Category="Microsoft.Design" CheckId="CA1000" Created="2010-03-23 08:41:26Z">
+             <Message TypeName="DoNotDeclareStaticMembersOnGenericTypes" Category="Microsoft.Design" CheckId="CA1000" Status="Excluded" Created="2010-03-23 08:41:26Z">
               <Issue>
                <Item>'SizeInBytes&lt;T&gt;.Value'</Item>
                <Item>'SizeInBytes&lt;T&gt;'</Item>
               </Issue>
+              <Notes>
+               <User Name="Kevin Ring">
+                <Note Id="22" />
+               </User>
+              </Notes>
              </Message>
             </Messages>
            </Member>
@@ -368,54 +402,69 @@
           <Members>
            <Member Name="#.ctor(System.Double,System.Double)">
             <Messages>
-             <Message Id="x" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-03-03 23:33:07Z">
+             <Message Id="x" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-03-03 23:33:07Z">
               <Issue Name="MemberParameterMoreMeaningfulName">
                <Item>'Vector2D.Vector2D(double, double)'</Item>
                <Item>'x'</Item>
               </Issue>
+              <Notes>
+               <User Name="Kevin Ring">
+                <Note Id="14" />
+               </User>
+              </Notes>
              </Message>
-             <Message Id="y" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-03-03 23:33:07Z">
+             <Message Id="y" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-03-03 23:33:07Z">
               <Issue Name="MemberParameterMoreMeaningfulName">
                <Item>'Vector2D.Vector2D(double, double)'</Item>
                <Item>'y'</Item>
               </Issue>
+              <Notes>
+               <User Name="Kevin Ring">
+                <Note Id="14" />
+               </User>
+              </Notes>
              </Message>
             </Messages>
            </Member>
            <Member Name="#Normalize(System.Double&amp;)">
             <Messages>
-             <Message Id="0#" TypeName="AvoidOutParameters" Category="Microsoft.Design" CheckId="CA1021" Created="2010-03-03 23:33:07Z">
+             <Message Id="0#" TypeName="AvoidOutParameters" Category="Microsoft.Design" CheckId="CA1021" Status="Excluded" Created="2010-03-03 23:33:07Z">
               <Issue>
                <Item>'magnitude'</Item>
               </Issue>
-             </Message>
-            </Messages>
-           </Member>
-           <Member Name="#op_UnaryNegation(MiniGlobe.Core.Vector2D)">
-            <Messages>
-             <Message TypeName="OperatorOverloadsHaveNamedAlternates" Category="Microsoft.Usage" CheckId="CA2225" Created="2010-03-03 23:33:07Z">
-              <Issue>
-               <Item>Negate</Item>
-               <Item>'Vector2D.operator -(Vector2D)'</Item>
-              </Issue>
+              <Notes>
+               <User Name="Kevin Ring">
+                <Note Id="26" />
+               </User>
+              </Notes>
              </Message>
             </Messages>
            </Member>
            <Member Name="#X">
             <Messages>
-             <Message Id="X" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-03-03 23:33:07Z">
+             <Message Id="X" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-03-03 23:33:07Z">
               <Issue Name="MemberMoreMeaningfulName">
                <Item>'Vector2D.X'</Item>
               </Issue>
+              <Notes>
+               <User Name="Kevin Ring">
+                <Note Id="14" />
+               </User>
+              </Notes>
              </Message>
             </Messages>
            </Member>
            <Member Name="#Y">
             <Messages>
-             <Message Id="Y" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-03-03 23:33:07Z">
+             <Message Id="Y" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-03-03 23:33:07Z">
               <Issue Name="MemberMoreMeaningfulName">
                <Item>'Vector2D.Y'</Item>
               </Issue>
+              <Notes>
+               <User Name="Kevin Ring">
+                <Note Id="14" />
+               </User>
+              </Notes>
              </Message>
             </Messages>
            </Member>
@@ -425,67 +474,107 @@
           <Members>
            <Member Name="#.ctor(MiniGlobe.Core.Half,MiniGlobe.Core.Half)">
             <Messages>
-             <Message Id="x" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-03-23 08:41:26Z">
+             <Message Id="x" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-03-23 08:41:26Z">
               <Issue Name="MemberParameterMoreMeaningfulName">
                <Item>'Vector2H.Vector2H(Half, Half)'</Item>
                <Item>'x'</Item>
               </Issue>
+              <Notes>
+               <User Name="Kevin Ring">
+                <Note Id="9" />
+               </User>
+              </Notes>
              </Message>
-             <Message Id="y" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-03-23 08:41:26Z">
+             <Message Id="y" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-03-23 08:41:26Z">
               <Issue Name="MemberParameterMoreMeaningfulName">
                <Item>'Vector2H.Vector2H(Half, Half)'</Item>
                <Item>'y'</Item>
               </Issue>
+              <Notes>
+               <User Name="Kevin Ring">
+                <Note Id="9" />
+               </User>
+              </Notes>
              </Message>
             </Messages>
            </Member>
            <Member Name="#.ctor(System.Double,System.Double)">
             <Messages>
-             <Message Id="x" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-03-23 08:41:26Z">
+             <Message Id="x" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-03-23 08:41:26Z">
               <Issue Name="MemberParameterMoreMeaningfulName">
                <Item>'Vector2H.Vector2H(double, double)'</Item>
                <Item>'x'</Item>
               </Issue>
+              <Notes>
+               <User Name="Kevin Ring">
+                <Note Id="9" />
+               </User>
+              </Notes>
              </Message>
-             <Message Id="y" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-03-23 08:41:26Z">
+             <Message Id="y" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-03-23 08:41:26Z">
               <Issue Name="MemberParameterMoreMeaningfulName">
                <Item>'Vector2H.Vector2H(double, double)'</Item>
                <Item>'y'</Item>
               </Issue>
+              <Notes>
+               <User Name="Kevin Ring">
+                <Note Id="9" />
+               </User>
+              </Notes>
              </Message>
             </Messages>
            </Member>
            <Member Name="#.ctor(System.Single,System.Single)">
             <Messages>
-             <Message Id="x" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-03-23 08:41:26Z">
+             <Message Id="x" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-03-23 08:41:26Z">
               <Issue Name="MemberParameterMoreMeaningfulName">
                <Item>'Vector2H.Vector2H(float, float)'</Item>
                <Item>'x'</Item>
               </Issue>
+              <Notes>
+               <User Name="Kevin Ring">
+                <Note Id="9" />
+               </User>
+              </Notes>
              </Message>
-             <Message Id="y" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-03-23 08:41:26Z">
+             <Message Id="y" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-03-23 08:41:26Z">
               <Issue Name="MemberParameterMoreMeaningfulName">
                <Item>'Vector2H.Vector2H(float, float)'</Item>
                <Item>'y'</Item>
               </Issue>
+              <Notes>
+               <User Name="Kevin Ring">
+                <Note Id="9" />
+               </User>
+              </Notes>
              </Message>
             </Messages>
            </Member>
            <Member Name="#X">
             <Messages>
-             <Message Id="X" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-03-23 08:41:26Z">
+             <Message Id="X" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-03-23 08:41:26Z">
               <Issue Name="MemberMoreMeaningfulName">
                <Item>'Vector2H.X'</Item>
               </Issue>
+              <Notes>
+               <User Name="Kevin Ring">
+                <Note Id="9" />
+               </User>
+              </Notes>
              </Message>
             </Messages>
            </Member>
            <Member Name="#Y">
             <Messages>
-             <Message Id="Y" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-03-23 08:41:26Z">
+             <Message Id="Y" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-03-23 08:41:26Z">
               <Issue Name="MemberMoreMeaningfulName">
                <Item>'Vector2H.Y'</Item>
               </Issue>
+              <Notes>
+               <User Name="Kevin Ring">
+                <Note Id="9" />
+               </User>
+              </Notes>
              </Message>
             </Messages>
            </Member>
@@ -495,54 +584,69 @@
           <Members>
            <Member Name="#.ctor(System.Single,System.Single)">
             <Messages>
-             <Message Id="x" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-03-23 08:41:26Z">
+             <Message Id="x" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-03-23 08:41:26Z">
               <Issue Name="MemberParameterMoreMeaningfulName">
                <Item>'Vector2S.Vector2S(float, float)'</Item>
                <Item>'x'</Item>
               </Issue>
+              <Notes>
+               <User Name="Kevin Ring">
+                <Note Id="12" />
+               </User>
+              </Notes>
              </Message>
-             <Message Id="y" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-03-23 08:41:26Z">
+             <Message Id="y" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-03-23 08:41:26Z">
               <Issue Name="MemberParameterMoreMeaningfulName">
                <Item>'Vector2S.Vector2S(float, float)'</Item>
                <Item>'y'</Item>
               </Issue>
+              <Notes>
+               <User Name="Kevin Ring">
+                <Note Id="12" />
+               </User>
+              </Notes>
              </Message>
             </Messages>
            </Member>
            <Member Name="#Normalize(System.Single&amp;)">
             <Messages>
-             <Message Id="0#" TypeName="AvoidOutParameters" Category="Microsoft.Design" CheckId="CA1021" Created="2010-03-23 08:41:26Z">
+             <Message Id="0#" TypeName="AvoidOutParameters" Category="Microsoft.Design" CheckId="CA1021" Status="Excluded" Created="2010-03-23 08:41:26Z">
               <Issue>
                <Item>'magnitude'</Item>
               </Issue>
-             </Message>
-            </Messages>
-           </Member>
-           <Member Name="#op_UnaryNegation(MiniGlobe.Core.Vector2S)">
-            <Messages>
-             <Message TypeName="OperatorOverloadsHaveNamedAlternates" Category="Microsoft.Usage" CheckId="CA2225" Created="2010-03-23 08:41:26Z">
-              <Issue>
-               <Item>Negate</Item>
-               <Item>'Vector2S.operator -(Vector2S)'</Item>
-              </Issue>
+              <Notes>
+               <User Name="Kevin Ring">
+                <Note Id="19" />
+               </User>
+              </Notes>
              </Message>
             </Messages>
            </Member>
            <Member Name="#X">
             <Messages>
-             <Message Id="X" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-03-23 08:41:26Z">
+             <Message Id="X" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-03-23 08:41:26Z">
               <Issue Name="MemberMoreMeaningfulName">
                <Item>'Vector2S.X'</Item>
               </Issue>
+              <Notes>
+               <User Name="Kevin Ring">
+                <Note Id="12" />
+               </User>
+              </Notes>
              </Message>
             </Messages>
            </Member>
            <Member Name="#Y">
             <Messages>
-             <Message Id="Y" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-03-23 08:41:26Z">
+             <Message Id="Y" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-03-23 08:41:26Z">
               <Issue Name="MemberMoreMeaningfulName">
                <Item>'Vector2S.Y'</Item>
               </Issue>
+              <Notes>
+               <User Name="Kevin Ring">
+                <Note Id="12" />
+               </User>
+              </Notes>
              </Message>
             </Messages>
            </Member>
@@ -601,16 +705,6 @@
              </Message>
             </Messages>
            </Member>
-           <Member Name="#op_UnaryNegation(MiniGlobe.Core.Vector3D)">
-            <Messages>
-             <Message TypeName="OperatorOverloadsHaveNamedAlternates" Category="Microsoft.Usage" CheckId="CA2225" Created="2010-03-03 23:33:07Z">
-              <Issue>
-               <Item>Negate</Item>
-               <Item>'Vector3D.operator -(Vector3D)'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
            <Member Name="#X">
             <Messages>
              <Message Id="X" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-03-01 00:35:48Z">
@@ -659,94 +753,154 @@
           <Members>
            <Member Name="#.ctor(MiniGlobe.Core.Half,MiniGlobe.Core.Half,MiniGlobe.Core.Half)">
             <Messages>
-             <Message Id="x" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-03-23 08:41:26Z">
+             <Message Id="x" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-03-23 08:41:26Z">
               <Issue Name="MemberParameterMoreMeaningfulName">
                <Item>'Vector3H.Vector3H(Half, Half, Half)'</Item>
                <Item>'x'</Item>
               </Issue>
+              <Notes>
+               <User Name="Kevin Ring">
+                <Note Id="13" />
+               </User>
+              </Notes>
              </Message>
-             <Message Id="y" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-03-23 08:41:26Z">
+             <Message Id="y" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-03-23 08:41:26Z">
               <Issue Name="MemberParameterMoreMeaningfulName">
                <Item>'Vector3H.Vector3H(Half, Half, Half)'</Item>
                <Item>'y'</Item>
               </Issue>
+              <Notes>
+               <User Name="Kevin Ring">
+                <Note Id="13" />
+               </User>
+              </Notes>
              </Message>
-             <Message Id="z" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-03-23 08:41:26Z">
+             <Message Id="z" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-03-23 08:41:26Z">
               <Issue Name="MemberParameterMoreMeaningfulName">
                <Item>'Vector3H.Vector3H(Half, Half, Half)'</Item>
                <Item>'z'</Item>
               </Issue>
+              <Notes>
+               <User Name="Kevin Ring">
+                <Note Id="13" />
+               </User>
+              </Notes>
              </Message>
             </Messages>
            </Member>
            <Member Name="#.ctor(System.Double,System.Double,System.Double)">
             <Messages>
-             <Message Id="x" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-03-23 08:41:26Z">
+             <Message Id="x" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-03-23 08:41:26Z">
               <Issue Name="MemberParameterMoreMeaningfulName">
                <Item>'Vector3H.Vector3H(double, double, double)'</Item>
                <Item>'x'</Item>
               </Issue>
+              <Notes>
+               <User Name="Kevin Ring">
+                <Note Id="13" />
+               </User>
+              </Notes>
              </Message>
-             <Message Id="y" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-03-23 08:41:26Z">
+             <Message Id="y" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-03-23 08:41:26Z">
               <Issue Name="MemberParameterMoreMeaningfulName">
                <Item>'Vector3H.Vector3H(double, double, double)'</Item>
                <Item>'y'</Item>
               </Issue>
+              <Notes>
+               <User Name="Kevin Ring">
+                <Note Id="13" />
+               </User>
+              </Notes>
              </Message>
-             <Message Id="z" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-03-23 08:41:26Z">
+             <Message Id="z" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-03-23 08:41:26Z">
               <Issue Name="MemberParameterMoreMeaningfulName">
                <Item>'Vector3H.Vector3H(double, double, double)'</Item>
                <Item>'z'</Item>
               </Issue>
+              <Notes>
+               <User Name="Kevin Ring">
+                <Note Id="13" />
+               </User>
+              </Notes>
              </Message>
             </Messages>
            </Member>
            <Member Name="#.ctor(System.Single,System.Single,System.Single)">
             <Messages>
-             <Message Id="x" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-03-23 08:41:26Z">
+             <Message Id="x" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-03-23 08:41:26Z">
               <Issue Name="MemberParameterMoreMeaningfulName">
                <Item>'Vector3H.Vector3H(float, float, float)'</Item>
                <Item>'x'</Item>
               </Issue>
+              <Notes>
+               <User Name="Kevin Ring">
+                <Note Id="13" />
+               </User>
+              </Notes>
              </Message>
-             <Message Id="y" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-03-23 08:41:26Z">
+             <Message Id="y" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-03-23 08:41:26Z">
               <Issue Name="MemberParameterMoreMeaningfulName">
                <Item>'Vector3H.Vector3H(float, float, float)'</Item>
                <Item>'y'</Item>
               </Issue>
+              <Notes>
+               <User Name="Kevin Ring">
+                <Note Id="13" />
+               </User>
+              </Notes>
              </Message>
-             <Message Id="z" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-03-23 08:41:26Z">
+             <Message Id="z" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-03-23 08:41:26Z">
               <Issue Name="MemberParameterMoreMeaningfulName">
                <Item>'Vector3H.Vector3H(float, float, float)'</Item>
                <Item>'z'</Item>
               </Issue>
+              <Notes>
+               <User Name="Kevin Ring">
+                <Note Id="13" />
+               </User>
+              </Notes>
              </Message>
             </Messages>
            </Member>
            <Member Name="#X">
             <Messages>
-             <Message Id="X" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-03-23 08:41:26Z">
+             <Message Id="X" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-03-23 08:41:26Z">
               <Issue Name="MemberMoreMeaningfulName">
                <Item>'Vector3H.X'</Item>
               </Issue>
+              <Notes>
+               <User Name="Kevin Ring">
+                <Note Id="13" />
+               </User>
+              </Notes>
              </Message>
             </Messages>
            </Member>
            <Member Name="#Y">
             <Messages>
-             <Message Id="Y" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-03-23 08:41:26Z">
+             <Message Id="Y" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-03-23 08:41:26Z">
               <Issue Name="MemberMoreMeaningfulName">
                <Item>'Vector3H.Y'</Item>
               </Issue>
+              <Notes>
+               <User Name="Kevin Ring">
+                <Note Id="13" />
+               </User>
+              </Notes>
              </Message>
             </Messages>
            </Member>
            <Member Name="#Z">
             <Messages>
-             <Message Id="Z" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-03-23 08:41:26Z">
+             <Message Id="Z" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-03-23 08:41:26Z">
               <Issue Name="MemberMoreMeaningfulName">
                <Item>'Vector3H.Z'</Item>
               </Issue>
+              <Notes>
+               <User Name="Kevin Ring">
+                <Note Id="13" />
+               </User>
+              </Notes>
              </Message>
             </Messages>
            </Member>
@@ -756,69 +910,94 @@
           <Members>
            <Member Name="#.ctor(System.Single,System.Single,System.Single)">
             <Messages>
-             <Message Id="x" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-03-23 08:41:26Z">
+             <Message Id="x" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-03-23 08:41:26Z">
               <Issue Name="MemberParameterMoreMeaningfulName">
                <Item>'Vector3S.Vector3S(float, float, float)'</Item>
                <Item>'x'</Item>
               </Issue>
+              <Notes>
+               <User Name="Kevin Ring">
+                <Note Id="7" />
+               </User>
+              </Notes>
              </Message>
-             <Message Id="y" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-03-23 08:41:26Z">
+             <Message Id="y" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-03-23 08:41:26Z">
               <Issue Name="MemberParameterMoreMeaningfulName">
                <Item>'Vector3S.Vector3S(float, float, float)'</Item>
                <Item>'y'</Item>
               </Issue>
+              <Notes>
+               <User Name="Kevin Ring">
+                <Note Id="7" />
+               </User>
+              </Notes>
              </Message>
-             <Message Id="z" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-03-23 08:41:26Z">
+             <Message Id="z" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-03-23 08:41:26Z">
               <Issue Name="MemberParameterMoreMeaningfulName">
                <Item>'Vector3S.Vector3S(float, float, float)'</Item>
                <Item>'z'</Item>
               </Issue>
+              <Notes>
+               <User Name="Kevin Ring">
+                <Note Id="7" />
+               </User>
+              </Notes>
              </Message>
             </Messages>
            </Member>
            <Member Name="#Normalize(System.Single&amp;)">
             <Messages>
-             <Message Id="0#" TypeName="AvoidOutParameters" Category="Microsoft.Design" CheckId="CA1021" Created="2010-03-23 08:41:26Z">
+             <Message Id="0#" TypeName="AvoidOutParameters" Category="Microsoft.Design" CheckId="CA1021" Status="Excluded" Created="2010-03-23 08:41:26Z">
               <Issue>
                <Item>'magnitude'</Item>
               </Issue>
-             </Message>
-            </Messages>
-           </Member>
-           <Member Name="#op_UnaryNegation(MiniGlobe.Core.Vector3S)">
-            <Messages>
-             <Message TypeName="OperatorOverloadsHaveNamedAlternates" Category="Microsoft.Usage" CheckId="CA2225" Created="2010-03-23 08:41:26Z">
-              <Issue>
-               <Item>Negate</Item>
-               <Item>'Vector3S.operator -(Vector3S)'</Item>
-              </Issue>
+              <Notes>
+               <User Name="Kevin Ring">
+                <Note Id="18" />
+               </User>
+              </Notes>
              </Message>
             </Messages>
            </Member>
            <Member Name="#X">
             <Messages>
-             <Message Id="X" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-03-23 08:41:26Z">
+             <Message Id="X" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-03-23 08:41:26Z">
               <Issue Name="MemberMoreMeaningfulName">
                <Item>'Vector3S.X'</Item>
               </Issue>
+              <Notes>
+               <User Name="Kevin Ring">
+                <Note Id="8" />
+               </User>
+              </Notes>
              </Message>
             </Messages>
            </Member>
            <Member Name="#Y">
             <Messages>
-             <Message Id="Y" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-03-23 08:41:26Z">
+             <Message Id="Y" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-03-23 08:41:26Z">
               <Issue Name="MemberMoreMeaningfulName">
                <Item>'Vector3S.Y'</Item>
               </Issue>
+              <Notes>
+               <User Name="Kevin Ring">
+                <Note Id="8" />
+               </User>
+              </Notes>
              </Message>
             </Messages>
            </Member>
            <Member Name="#Z">
             <Messages>
-             <Message Id="Z" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-03-23 08:41:26Z">
+             <Message Id="Z" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-03-23 08:41:26Z">
               <Issue Name="MemberMoreMeaningfulName">
                <Item>'Vector3S.Z'</Item>
               </Issue>
+              <Notes>
+               <User Name="Kevin Ring">
+                <Note Id="7" />
+               </User>
+              </Notes>
              </Message>
             </Messages>
            </Member>
@@ -828,95 +1007,135 @@
           <Members>
            <Member Name="#.ctor(System.Double,System.Double,System.Double,System.Double)">
             <Messages>
-             <Message Id="w" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-03-23 08:41:26Z">
+             <Message Id="w" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-03-23 08:41:26Z">
               <Issue Name="MemberParameterMoreMeaningfulName">
                <Item>'Vector4D.Vector4D(double, double, double, double)'</Item>
                <Item>'w'</Item>
               </Issue>
+              <Notes>
+               <User Name="Kevin Ring">
+                <Note Id="17" />
+               </User>
+              </Notes>
              </Message>
-             <Message Id="x" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-03-23 08:41:26Z">
+             <Message Id="x" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-03-23 08:41:26Z">
               <Issue Name="MemberParameterMoreMeaningfulName">
                <Item>'Vector4D.Vector4D(double, double, double, double)'</Item>
                <Item>'x'</Item>
               </Issue>
+              <Notes>
+               <User Name="Kevin Ring">
+                <Note Id="17" />
+               </User>
+              </Notes>
              </Message>
-             <Message Id="y" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-03-23 08:41:26Z">
+             <Message Id="y" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-03-23 08:41:26Z">
               <Issue Name="MemberParameterMoreMeaningfulName">
                <Item>'Vector4D.Vector4D(double, double, double, double)'</Item>
                <Item>'y'</Item>
               </Issue>
+              <Notes>
+               <User Name="Kevin Ring">
+                <Note Id="17" />
+               </User>
+              </Notes>
              </Message>
-             <Message Id="z" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-03-23 08:41:26Z">
+             <Message Id="z" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-03-23 08:41:26Z">
               <Issue Name="MemberParameterMoreMeaningfulName">
                <Item>'Vector4D.Vector4D(double, double, double, double)'</Item>
                <Item>'z'</Item>
               </Issue>
+              <Notes>
+               <User Name="Kevin Ring">
+                <Note Id="17" />
+               </User>
+              </Notes>
              </Message>
             </Messages>
            </Member>
            <Member Name="#Normalize(System.Double&amp;)">
             <Messages>
-             <Message Id="0#" TypeName="AvoidOutParameters" Category="Microsoft.Design" CheckId="CA1021" Created="2010-03-23 08:41:26Z">
+             <Message Id="0#" TypeName="AvoidOutParameters" Category="Microsoft.Design" CheckId="CA1021" Status="Excluded" Created="2010-03-23 08:41:26Z">
               <Issue>
                <Item>'magnitude'</Item>
               </Issue>
-             </Message>
-            </Messages>
-           </Member>
-           <Member Name="#op_UnaryNegation(MiniGlobe.Core.Vector4D)">
-            <Messages>
-             <Message TypeName="OperatorOverloadsHaveNamedAlternates" Category="Microsoft.Usage" CheckId="CA2225" Created="2010-03-23 08:41:26Z">
-              <Issue>
-               <Item>Negate</Item>
-               <Item>'Vector4D.operator -(Vector4D)'</Item>
-              </Issue>
+              <Notes>
+               <User Name="Kevin Ring">
+                <Note Id="21" />
+               </User>
+              </Notes>
              </Message>
             </Messages>
            </Member>
            <Member Name="#W">
             <Messages>
-             <Message Id="W" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-03-23 08:41:26Z">
+             <Message Id="W" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-03-23 08:41:26Z">
               <Issue Name="MemberMoreMeaningfulName">
                <Item>'Vector4D.W'</Item>
               </Issue>
+              <Notes>
+               <User Name="Kevin Ring">
+                <Note Id="17" />
+               </User>
+              </Notes>
              </Message>
             </Messages>
            </Member>
            <Member Name="#X">
             <Messages>
-             <Message Id="X" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-03-23 08:41:26Z">
+             <Message Id="X" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-03-23 08:41:26Z">
               <Issue Name="MemberMoreMeaningfulName">
                <Item>'Vector4D.X'</Item>
               </Issue>
+              <Notes>
+               <User Name="Kevin Ring">
+                <Note Id="17" />
+               </User>
+              </Notes>
              </Message>
             </Messages>
            </Member>
            <Member Name="#XYZ">
             <Messages>
-             <Message Id="XYZ" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Created="2010-03-23 08:41:26Z">
+             <Message Id="XYZ" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Excluded" Created="2010-03-23 08:41:26Z">
               <Issue Name="Member">
                <Item>XYZ</Item>
                <Item>'Vector4D.XYZ'</Item>
                <Item>Xyz</Item>
               </Issue>
+              <Notes>
+               <User Name="Kevin Ring">
+                <Note Id="25" />
+               </User>
+              </Notes>
              </Message>
             </Messages>
            </Member>
            <Member Name="#Y">
             <Messages>
-             <Message Id="Y" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-03-23 08:41:26Z">
+             <Message Id="Y" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-03-23 08:41:26Z">
               <Issue Name="MemberMoreMeaningfulName">
                <Item>'Vector4D.Y'</Item>
               </Issue>
+              <Notes>
+               <User Name="Kevin Ring">
+                <Note Id="17" />
+               </User>
+              </Notes>
              </Message>
             </Messages>
            </Member>
            <Member Name="#Z">
             <Messages>
-             <Message Id="Z" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-03-23 08:41:26Z">
+             <Message Id="Z" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-03-23 08:41:26Z">
               <Issue Name="MemberMoreMeaningfulName">
                <Item>'Vector4D.Z'</Item>
               </Issue>
+              <Notes>
+               <User Name="Kevin Ring">
+                <Note Id="17" />
+               </User>
+              </Notes>
              </Message>
             </Messages>
            </Member>
@@ -926,132 +1145,217 @@
           <Members>
            <Member Name="#.ctor(MiniGlobe.Core.Half,MiniGlobe.Core.Half,MiniGlobe.Core.Half,MiniGlobe.Core.Half)">
             <Messages>
-             <Message Id="w" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-03-23 08:41:26Z">
+             <Message Id="w" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-03-23 08:41:26Z">
               <Issue Name="MemberParameterMoreMeaningfulName">
                <Item>'Vector4H.Vector4H(Half, Half, Half, Half)'</Item>
                <Item>'w'</Item>
               </Issue>
+              <Notes>
+               <User Name="Kevin Ring">
+                <Note Id="10" />
+               </User>
+              </Notes>
              </Message>
-             <Message Id="x" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-03-23 08:41:26Z">
+             <Message Id="x" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-03-23 08:41:26Z">
               <Issue Name="MemberParameterMoreMeaningfulName">
                <Item>'Vector4H.Vector4H(Half, Half, Half, Half)'</Item>
                <Item>'x'</Item>
               </Issue>
+              <Notes>
+               <User Name="Kevin Ring">
+                <Note Id="10" />
+               </User>
+              </Notes>
              </Message>
-             <Message Id="y" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-03-23 08:41:26Z">
+             <Message Id="y" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-03-23 08:41:26Z">
               <Issue Name="MemberParameterMoreMeaningfulName">
                <Item>'Vector4H.Vector4H(Half, Half, Half, Half)'</Item>
                <Item>'y'</Item>
               </Issue>
+              <Notes>
+               <User Name="Kevin Ring">
+                <Note Id="10" />
+               </User>
+              </Notes>
              </Message>
-             <Message Id="z" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-03-23 08:41:26Z">
+             <Message Id="z" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-03-23 08:41:26Z">
               <Issue Name="MemberParameterMoreMeaningfulName">
                <Item>'Vector4H.Vector4H(Half, Half, Half, Half)'</Item>
                <Item>'z'</Item>
               </Issue>
+              <Notes>
+               <User Name="Kevin Ring">
+                <Note Id="10" />
+               </User>
+              </Notes>
              </Message>
             </Messages>
            </Member>
            <Member Name="#.ctor(System.Double,System.Double,System.Double,System.Double)">
             <Messages>
-             <Message Id="w" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-03-23 08:41:26Z">
+             <Message Id="w" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-03-23 08:41:26Z">
               <Issue Name="MemberParameterMoreMeaningfulName">
                <Item>'Vector4H.Vector4H(double, double, double, double)'</Item>
                <Item>'w'</Item>
               </Issue>
+              <Notes>
+               <User Name="Kevin Ring">
+                <Note Id="11" />
+               </User>
+              </Notes>
              </Message>
-             <Message Id="x" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-03-23 08:41:26Z">
+             <Message Id="x" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-03-23 08:41:26Z">
               <Issue Name="MemberParameterMoreMeaningfulName">
                <Item>'Vector4H.Vector4H(double, double, double, double)'</Item>
                <Item>'x'</Item>
               </Issue>
+              <Notes>
+               <User Name="Kevin Ring">
+                <Note Id="11" />
+               </User>
+              </Notes>
              </Message>
-             <Message Id="y" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-03-23 08:41:26Z">
+             <Message Id="y" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-03-23 08:41:26Z">
               <Issue Name="MemberParameterMoreMeaningfulName">
                <Item>'Vector4H.Vector4H(double, double, double, double)'</Item>
                <Item>'y'</Item>
               </Issue>
+              <Notes>
+               <User Name="Kevin Ring">
+                <Note Id="11" />
+               </User>
+              </Notes>
              </Message>
-             <Message Id="z" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-03-23 08:41:26Z">
+             <Message Id="z" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-03-23 08:41:26Z">
               <Issue Name="MemberParameterMoreMeaningfulName">
                <Item>'Vector4H.Vector4H(double, double, double, double)'</Item>
                <Item>'z'</Item>
               </Issue>
+              <Notes>
+               <User Name="Kevin Ring">
+                <Note Id="11" />
+               </User>
+              </Notes>
              </Message>
             </Messages>
            </Member>
            <Member Name="#.ctor(System.Single,System.Single,System.Single,System.Single)">
             <Messages>
-             <Message Id="w" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-03-23 08:41:26Z">
+             <Message Id="w" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-03-23 08:41:26Z">
               <Issue Name="MemberParameterMoreMeaningfulName">
                <Item>'Vector4H.Vector4H(float, float, float, float)'</Item>
                <Item>'w'</Item>
               </Issue>
+              <Notes>
+               <User Name="Kevin Ring">
+                <Note Id="10" />
+               </User>
+              </Notes>
              </Message>
-             <Message Id="x" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-03-23 08:41:26Z">
+             <Message Id="x" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-03-23 08:41:26Z">
               <Issue Name="MemberParameterMoreMeaningfulName">
                <Item>'Vector4H.Vector4H(float, float, float, float)'</Item>
                <Item>'x'</Item>
               </Issue>
+              <Notes>
+               <User Name="Kevin Ring">
+                <Note Id="10" />
+               </User>
+              </Notes>
              </Message>
-             <Message Id="y" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-03-23 08:41:26Z">
+             <Message Id="y" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-03-23 08:41:26Z">
               <Issue Name="MemberParameterMoreMeaningfulName">
                <Item>'Vector4H.Vector4H(float, float, float, float)'</Item>
                <Item>'y'</Item>
               </Issue>
+              <Notes>
+               <User Name="Kevin Ring">
+                <Note Id="10" />
+               </User>
+              </Notes>
              </Message>
-             <Message Id="z" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-03-23 08:41:26Z">
+             <Message Id="z" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-03-23 08:41:26Z">
               <Issue Name="MemberParameterMoreMeaningfulName">
                <Item>'Vector4H.Vector4H(float, float, float, float)'</Item>
                <Item>'z'</Item>
               </Issue>
+              <Notes>
+               <User Name="Kevin Ring">
+                <Note Id="10" />
+               </User>
+              </Notes>
              </Message>
             </Messages>
            </Member>
            <Member Name="#W">
             <Messages>
-             <Message Id="W" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-03-23 08:41:26Z">
+             <Message Id="W" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-03-23 08:41:26Z">
               <Issue Name="MemberMoreMeaningfulName">
                <Item>'Vector4H.W'</Item>
               </Issue>
+              <Notes>
+               <User Name="Kevin Ring">
+                <Note Id="11" />
+               </User>
+              </Notes>
              </Message>
             </Messages>
            </Member>
            <Member Name="#X">
             <Messages>
-             <Message Id="X" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-03-23 08:41:26Z">
+             <Message Id="X" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-03-23 08:41:26Z">
               <Issue Name="MemberMoreMeaningfulName">
                <Item>'Vector4H.X'</Item>
               </Issue>
+              <Notes>
+               <User Name="Kevin Ring">
+                <Note Id="10" />
+               </User>
+              </Notes>
              </Message>
             </Messages>
            </Member>
            <Member Name="#XYZ">
             <Messages>
-             <Message Id="XYZ" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Created="2010-03-23 08:41:26Z">
+             <Message Id="XYZ" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Excluded" Created="2010-03-23 08:41:26Z">
               <Issue Name="Member">
                <Item>XYZ</Item>
                <Item>'Vector4H.XYZ'</Item>
                <Item>Xyz</Item>
               </Issue>
+              <Notes>
+               <User Name="Kevin Ring">
+                <Note Id="23" />
+               </User>
+              </Notes>
              </Message>
             </Messages>
            </Member>
            <Member Name="#Y">
             <Messages>
-             <Message Id="Y" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-03-23 08:41:26Z">
+             <Message Id="Y" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-03-23 08:41:26Z">
               <Issue Name="MemberMoreMeaningfulName">
                <Item>'Vector4H.Y'</Item>
               </Issue>
+              <Notes>
+               <User Name="Kevin Ring">
+                <Note Id="10" />
+               </User>
+              </Notes>
              </Message>
             </Messages>
            </Member>
            <Member Name="#Z">
             <Messages>
-             <Message Id="Z" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-03-23 08:41:26Z">
+             <Message Id="Z" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-03-23 08:41:26Z">
               <Issue Name="MemberMoreMeaningfulName">
                <Item>'Vector4H.Z'</Item>
               </Issue>
+              <Notes>
+               <User Name="Kevin Ring">
+                <Note Id="11" />
+               </User>
+              </Notes>
              </Message>
             </Messages>
            </Member>
@@ -1061,95 +1365,135 @@
           <Members>
            <Member Name="#.ctor(System.Single,System.Single,System.Single,System.Single)">
             <Messages>
-             <Message Id="w" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-03-23 08:41:26Z">
+             <Message Id="w" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-03-23 08:41:26Z">
               <Issue Name="MemberParameterMoreMeaningfulName">
                <Item>'Vector4S.Vector4S(float, float, float, float)'</Item>
                <Item>'w'</Item>
               </Issue>
+              <Notes>
+               <User Name="Kevin Ring">
+                <Note Id="15" />
+               </User>
+              </Notes>
              </Message>
-             <Message Id="x" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-03-23 08:41:26Z">
+             <Message Id="x" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-03-23 08:41:26Z">
               <Issue Name="MemberParameterMoreMeaningfulName">
                <Item>'Vector4S.Vector4S(float, float, float, float)'</Item>
                <Item>'x'</Item>
               </Issue>
+              <Notes>
+               <User Name="Kevin Ring">
+                <Note Id="15" />
+               </User>
+              </Notes>
              </Message>
-             <Message Id="y" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-03-23 08:41:26Z">
+             <Message Id="y" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-03-23 08:41:26Z">
               <Issue Name="MemberParameterMoreMeaningfulName">
                <Item>'Vector4S.Vector4S(float, float, float, float)'</Item>
                <Item>'y'</Item>
               </Issue>
+              <Notes>
+               <User Name="Kevin Ring">
+                <Note Id="15" />
+               </User>
+              </Notes>
              </Message>
-             <Message Id="z" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-03-23 08:41:26Z">
+             <Message Id="z" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-03-23 08:41:26Z">
               <Issue Name="MemberParameterMoreMeaningfulName">
                <Item>'Vector4S.Vector4S(float, float, float, float)'</Item>
                <Item>'z'</Item>
               </Issue>
+              <Notes>
+               <User Name="Kevin Ring">
+                <Note Id="15" />
+               </User>
+              </Notes>
              </Message>
             </Messages>
            </Member>
            <Member Name="#Normalize(System.Single&amp;)">
             <Messages>
-             <Message Id="0#" TypeName="AvoidOutParameters" Category="Microsoft.Design" CheckId="CA1021" Created="2010-03-23 08:41:26Z">
+             <Message Id="0#" TypeName="AvoidOutParameters" Category="Microsoft.Design" CheckId="CA1021" Status="Excluded" Created="2010-03-23 08:41:26Z">
               <Issue>
                <Item>'magnitude'</Item>
               </Issue>
-             </Message>
-            </Messages>
-           </Member>
-           <Member Name="#op_UnaryNegation(MiniGlobe.Core.Vector4S)">
-            <Messages>
-             <Message TypeName="OperatorOverloadsHaveNamedAlternates" Category="Microsoft.Usage" CheckId="CA2225" Created="2010-03-23 08:41:26Z">
-              <Issue>
-               <Item>Negate</Item>
-               <Item>'Vector4S.operator -(Vector4S)'</Item>
-              </Issue>
+              <Notes>
+               <User Name="Kevin Ring">
+                <Note Id="20" />
+               </User>
+              </Notes>
              </Message>
             </Messages>
            </Member>
            <Member Name="#W">
             <Messages>
-             <Message Id="W" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-03-23 08:41:26Z">
+             <Message Id="W" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-03-23 08:41:26Z">
               <Issue Name="MemberMoreMeaningfulName">
                <Item>'Vector4S.W'</Item>
               </Issue>
+              <Notes>
+               <User Name="Kevin Ring">
+                <Note Id="16" />
+               </User>
+              </Notes>
              </Message>
             </Messages>
            </Member>
            <Member Name="#X">
             <Messages>
-             <Message Id="X" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-03-23 08:41:26Z">
+             <Message Id="X" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-03-23 08:41:26Z">
               <Issue Name="MemberMoreMeaningfulName">
                <Item>'Vector4S.X'</Item>
               </Issue>
+              <Notes>
+               <User Name="Kevin Ring">
+                <Note Id="16" />
+               </User>
+              </Notes>
              </Message>
             </Messages>
            </Member>
            <Member Name="#XYZ">
             <Messages>
-             <Message Id="XYZ" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Created="2010-03-23 08:41:26Z">
+             <Message Id="XYZ" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Excluded" Created="2010-03-23 08:41:26Z">
               <Issue Name="Member">
                <Item>XYZ</Item>
                <Item>'Vector4S.XYZ'</Item>
                <Item>Xyz</Item>
               </Issue>
+              <Notes>
+               <User Name="Kevin Ring">
+                <Note Id="24" />
+               </User>
+              </Notes>
              </Message>
             </Messages>
            </Member>
            <Member Name="#Y">
             <Messages>
-             <Message Id="Y" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-03-23 08:41:26Z">
+             <Message Id="Y" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-03-23 08:41:26Z">
               <Issue Name="MemberMoreMeaningfulName">
                <Item>'Vector4S.Y'</Item>
               </Issue>
+              <Notes>
+               <User Name="Kevin Ring">
+                <Note Id="16" />
+               </User>
+              </Notes>
              </Message>
             </Messages>
            </Member>
            <Member Name="#Z">
             <Messages>
-             <Message Id="Z" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-03-23 08:41:26Z">
+             <Message Id="Z" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-03-23 08:41:26Z">
               <Issue Name="MemberMoreMeaningfulName">
                <Item>'Vector4S.Z'</Item>
               </Issue>
+              <Notes>
+               <User Name="Kevin Ring">
+                <Note Id="16" />
+               </User>
+              </Notes>
              </Message>
             </Messages>
            </Member>
@@ -1433,6 +1777,41 @@
          </Type>
         </Types>
        </Namespace>
+       <Namespace Name="MiniGlobe.Terrain">
+        <Types>
+         <Type Name="TerrainTile">
+          <Members>
+           <Member Name="#.ctor(System.Drawing.Size,System.Single[],System.Single,System.Single)">
+            <Messages>
+             <Message TypeName="InstantiateArgumentExceptionsCorrectly" Category="Microsoft.Usage" CheckId="CA2208" Created="2010-03-31 02:11:39Z">
+              <Issue Name="IncorrectMessage">
+               <Item>'TerrainTile.TerrainTile(Size, float[], float, float)'</Item>
+               <Item>heights</Item>
+               <Item>'message'</Item>
+               <Item>'ArgumentException'</Item>
+              </Issue>
+              <Issue Name="IncorrectParameterName">
+               <Item>'TerrainTile.TerrainTile(Size, float[], float, float)'</Item>
+               <Item>heights.Length != size.Width * size.Height</Item>
+               <Item>'paramName'</Item>
+               <Item>'ArgumentException'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Heights">
+            <Messages>
+             <Message TypeName="PropertiesShouldNotReturnArrays" Category="Microsoft.Performance" CheckId="CA1819" Created="2010-03-31 02:11:39Z">
+              <Issue>
+               <Item>'TerrainTile.Heights'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+        </Types>
+       </Namespace>
       </Namespaces>
      </Module>
     </Modules>
@@ -1441,7 +1820,7 @@
     <Modules>
      <Module Name="miniglobe.renderer.dll">
       <Messages>
-       <Message TypeName="AssembliesShouldHaveValidStrongNames" Category="Microsoft.Design" CheckId="CA2210" Created="2009-12-11 23:38:35Z">
+       <Message TypeName="AssembliesShouldHaveValidStrongNames" Category="Microsoft.Design" CheckId="CA2210" Created="2010-03-31 02:44:15Z">
         <Issue Name="NoStrongName">
          <Item>'MiniGlobe.Renderer.dll'</Item>
         </Issue>
@@ -1787,7 +2166,7 @@
           <Members>
            <Member Name="#CopyToSystemMemory`1()">
             <Messages>
-             <Message TypeName="GenericMethodsShouldProvideTypeParameter" Category="Microsoft.Design" CheckId="CA1004" Created="2009-12-11 23:38:35Z">
+             <Message TypeName="GenericMethodsShouldProvideTypeParameter" Category="Microsoft.Design" CheckId="CA1004" Created="2010-03-31 02:44:15Z">
               <Issue>
                <Item>'IndexBuffer.CopyToSystemMemory&lt;T&gt;()'</Item>
                <Item>'T'</Item>
@@ -1797,7 +2176,7 @@
            </Member>
            <Member Name="#CopyToSystemMemory`1(System.Int32,System.Int32)">
             <Messages>
-             <Message TypeName="GenericMethodsShouldProvideTypeParameter" Category="Microsoft.Design" CheckId="CA1004" Created="2009-12-11 23:38:35Z">
+             <Message TypeName="GenericMethodsShouldProvideTypeParameter" Category="Microsoft.Design" CheckId="CA1004" Created="2010-03-31 02:44:15Z">
               <Issue>
                <Item>'IndexBuffer.CopyToSystemMemory&lt;T&gt;(int, int)'</Item>
                <Item>'T'</Item>
@@ -2677,7 +3056,7 @@
            </Member>
            <Member Name="#op_Multiply(MiniGlobe.Renderer.Matrix3d,MiniGlobe.Core.Vector3D)">
             <Messages>
-             <Message TypeName="OperatorOverloadsHaveNamedAlternates" Category="Microsoft.Usage" CheckId="CA2225" Created="2010-03-03 23:33:07Z">
+             <Message TypeName="OperatorOverloadsHaveNamedAlternates" Category="Microsoft.Usage" CheckId="CA2225" Created="2010-03-31 02:44:15Z">
               <Issue>
                <Item>Multiply</Item>
                <Item>'Matrix3d.operator *(Matrix3d, Vector3D)'</Item>
@@ -2841,7 +3220,7 @@
           <Members>
            <Member Name="#PostRenderFrame" Kind="Event">
             <Messages>
-             <Message TypeName="DeclareEventHandlersCorrectly" Category="Microsoft.Design" CheckId="CA1009" Created="2010-02-24 12:09:42Z">
+             <Message TypeName="DeclareEventHandlersCorrectly" Category="Microsoft.Design" CheckId="CA1009" Created="2010-03-31 02:44:15Z">
               <Issue Name="First">
                <Item>'MiniGlobeWindow.MiniGlobeHandler'</Item>
               </Issue>
@@ -2849,7 +3228,7 @@
                <Item>'MiniGlobeWindow.MiniGlobeHandler'</Item>
               </Issue>
              </Message>
-             <Message TypeName="IdentifiersShouldHaveCorrectSuffix" Category="Microsoft.Naming" CheckId="CA1710" Created="2010-02-24 12:09:42Z">
+             <Message TypeName="IdentifiersShouldHaveCorrectSuffix" Category="Microsoft.Naming" CheckId="CA1710" Created="2010-03-31 02:44:15Z">
               <Issue>
                <Item>'MiniGlobeWindow.MiniGlobeHandler'</Item>
                <Item>EventHandler</Item>
@@ -2859,7 +3238,7 @@
            </Member>
            <Member Name="#PreRenderFrame" Kind="Event">
             <Messages>
-             <Message TypeName="DeclareEventHandlersCorrectly" Category="Microsoft.Design" CheckId="CA1009" Created="2010-02-24 12:09:42Z">
+             <Message TypeName="DeclareEventHandlersCorrectly" Category="Microsoft.Design" CheckId="CA1009" Created="2010-03-31 02:44:15Z">
               <Issue Name="First">
                <Item>'MiniGlobeWindow.MiniGlobeHandler'</Item>
               </Issue>
@@ -2867,7 +3246,7 @@
                <Item>'MiniGlobeWindow.MiniGlobeHandler'</Item>
               </Issue>
              </Message>
-             <Message TypeName="IdentifiersShouldHaveCorrectSuffix" Category="Microsoft.Naming" CheckId="CA1710" Created="2010-02-24 12:09:42Z">
+             <Message TypeName="IdentifiersShouldHaveCorrectSuffix" Category="Microsoft.Naming" CheckId="CA1710" Created="2010-03-31 02:44:15Z">
               <Issue>
                <Item>'MiniGlobeWindow.MiniGlobeHandler'</Item>
                <Item>EventHandler</Item>
@@ -2877,7 +3256,7 @@
            </Member>
            <Member Name="#RenderFrame" Kind="Event">
             <Messages>
-             <Message TypeName="DeclareEventHandlersCorrectly" Category="Microsoft.Design" CheckId="CA1009" Created="2009-12-11 23:38:35Z">
+             <Message TypeName="DeclareEventHandlersCorrectly" Category="Microsoft.Design" CheckId="CA1009" Created="2010-03-31 02:44:15Z">
               <Issue Name="First">
                <Item>'MiniGlobeWindow.MiniGlobeHandler'</Item>
               </Issue>
@@ -2885,7 +3264,7 @@
                <Item>'MiniGlobeWindow.MiniGlobeHandler'</Item>
               </Issue>
              </Message>
-             <Message TypeName="IdentifiersShouldHaveCorrectSuffix" Category="Microsoft.Naming" CheckId="CA1710" Created="2009-12-11 23:38:35Z">
+             <Message TypeName="IdentifiersShouldHaveCorrectSuffix" Category="Microsoft.Naming" CheckId="CA1710" Created="2010-03-31 02:44:15Z">
               <Issue>
                <Item>'MiniGlobeWindow.MiniGlobeHandler'</Item>
                <Item>EventHandler</Item>
@@ -2895,7 +3274,7 @@
            </Member>
            <Member Name="#Resize" Kind="Event">
             <Messages>
-             <Message TypeName="DeclareEventHandlersCorrectly" Category="Microsoft.Design" CheckId="CA1009" Created="2009-12-11 23:38:35Z">
+             <Message TypeName="DeclareEventHandlersCorrectly" Category="Microsoft.Design" CheckId="CA1009" Created="2010-03-31 02:44:15Z">
               <Issue Name="First">
                <Item>'MiniGlobeWindow.MiniGlobeHandler'</Item>
               </Issue>
@@ -2903,7 +3282,7 @@
                <Item>'MiniGlobeWindow.MiniGlobeHandler'</Item>
               </Issue>
              </Message>
-             <Message TypeName="IdentifiersShouldHaveCorrectSuffix" Category="Microsoft.Naming" CheckId="CA1710" Created="2009-12-11 23:38:35Z">
+             <Message TypeName="IdentifiersShouldHaveCorrectSuffix" Category="Microsoft.Naming" CheckId="CA1710" Created="2010-03-31 02:44:15Z">
               <Issue>
                <Item>'MiniGlobeWindow.MiniGlobeHandler'</Item>
                <Item>EventHandler</Item>
@@ -2913,7 +3292,7 @@
            </Member>
            <Member Name="#UpdateFrame" Kind="Event">
             <Messages>
-             <Message TypeName="DeclareEventHandlersCorrectly" Category="Microsoft.Design" CheckId="CA1009" Created="2009-12-11 23:38:35Z">
+             <Message TypeName="DeclareEventHandlersCorrectly" Category="Microsoft.Design" CheckId="CA1009" Created="2010-03-31 02:44:15Z">
               <Issue Name="First">
                <Item>'MiniGlobeWindow.MiniGlobeHandler'</Item>
               </Issue>
@@ -2921,7 +3300,7 @@
                <Item>'MiniGlobeWindow.MiniGlobeHandler'</Item>
               </Issue>
              </Message>
-             <Message TypeName="IdentifiersShouldHaveCorrectSuffix" Category="Microsoft.Naming" CheckId="CA1710" Created="2009-12-11 23:38:35Z">
+             <Message TypeName="IdentifiersShouldHaveCorrectSuffix" Category="Microsoft.Naming" CheckId="CA1710" Created="2010-03-31 02:44:15Z">
               <Issue>
                <Item>'MiniGlobeWindow.MiniGlobeHandler'</Item>
                <Item>EventHandler</Item>
@@ -2933,7 +3312,7 @@
          </Type>
          <Type Name="MiniGlobeWindow+MiniGlobeHandler">
           <Messages>
-           <Message TypeName="NestedTypesShouldNotBeVisible" Category="Microsoft.Design" CheckId="CA1034" Created="2009-12-11 23:38:35Z">
+           <Message TypeName="NestedTypesShouldNotBeVisible" Category="Microsoft.Design" CheckId="CA1034" Created="2010-03-31 02:44:15Z">
             <Issue>
              <Item>'MiniGlobeWindow.MiniGlobeHandler'</Item>
             </Issue>
@@ -2965,7 +3344,7 @@
           <Members>
            <Member Name="#CopyToSystemMemory`1()">
             <Messages>
-             <Message TypeName="GenericMethodsShouldProvideTypeParameter" Category="Microsoft.Design" CheckId="CA1004" Created="2009-12-11 23:38:35Z">
+             <Message TypeName="GenericMethodsShouldProvideTypeParameter" Category="Microsoft.Design" CheckId="CA1004" Created="2010-03-31 02:44:15Z">
               <Issue>
                <Item>'ReadPixelBuffer.CopyToSystemMemory&lt;T&gt;()'</Item>
                <Item>'T'</Item>
@@ -2975,7 +3354,7 @@
            </Member>
            <Member Name="#CopyToSystemMemory`1(System.Int32,System.Int32)">
             <Messages>
-             <Message TypeName="GenericMethodsShouldProvideTypeParameter" Category="Microsoft.Design" CheckId="CA1004" Created="2009-12-11 23:38:35Z">
+             <Message TypeName="GenericMethodsShouldProvideTypeParameter" Category="Microsoft.Design" CheckId="CA1004" Created="2010-03-31 02:44:15Z">
               <Issue>
                <Item>'ReadPixelBuffer.CopyToSystemMemory&lt;T&gt;(int, int)'</Item>
                <Item>'T'</Item>
@@ -3678,7 +4057,7 @@
           <Members>
            <Member Name="#CopyToSystemMemory`1()">
             <Messages>
-             <Message TypeName="GenericMethodsShouldProvideTypeParameter" Category="Microsoft.Design" CheckId="CA1004" Created="2009-12-11 23:38:35Z">
+             <Message TypeName="GenericMethodsShouldProvideTypeParameter" Category="Microsoft.Design" CheckId="CA1004" Created="2010-03-31 02:44:15Z">
               <Issue>
                <Item>'UniformBuffer.CopyToSystemMemory&lt;T&gt;()'</Item>
                <Item>'T'</Item>
@@ -3688,7 +4067,7 @@
            </Member>
            <Member Name="#CopyToSystemMemory`1(System.Int32,System.Int32)">
             <Messages>
-             <Message TypeName="GenericMethodsShouldProvideTypeParameter" Category="Microsoft.Design" CheckId="CA1004" Created="2009-12-11 23:38:35Z">
+             <Message TypeName="GenericMethodsShouldProvideTypeParameter" Category="Microsoft.Design" CheckId="CA1004" Created="2010-03-31 02:44:15Z">
               <Issue>
                <Item>'UniformBuffer.CopyToSystemMemory&lt;T&gt;(int, int)'</Item>
                <Item>'T'</Item>
@@ -4284,7 +4663,7 @@
           <Members>
            <Member Name="#CopyToSystemMemory`1()">
             <Messages>
-             <Message TypeName="GenericMethodsShouldProvideTypeParameter" Category="Microsoft.Design" CheckId="CA1004" Created="2009-12-11 23:38:35Z">
+             <Message TypeName="GenericMethodsShouldProvideTypeParameter" Category="Microsoft.Design" CheckId="CA1004" Created="2010-03-31 02:44:15Z">
               <Issue>
                <Item>'VertexBuffer.CopyToSystemMemory&lt;T&gt;()'</Item>
                <Item>'T'</Item>
@@ -4294,7 +4673,7 @@
            </Member>
            <Member Name="#CopyToSystemMemory`1(System.Int32,System.Int32)">
             <Messages>
-             <Message TypeName="GenericMethodsShouldProvideTypeParameter" Category="Microsoft.Design" CheckId="CA1004" Created="2009-12-11 23:38:35Z">
+             <Message TypeName="GenericMethodsShouldProvideTypeParameter" Category="Microsoft.Design" CheckId="CA1004" Created="2010-03-31 02:44:15Z">
               <Issue>
                <Item>'VertexBuffer.CopyToSystemMemory&lt;T&gt;(int, int)'</Item>
                <Item>'T'</Item>
@@ -4308,7 +4687,7 @@
           <Members>
            <Member Name="#CopyToSystemMemory`1()">
             <Messages>
-             <Message TypeName="GenericMethodsShouldProvideTypeParameter" Category="Microsoft.Design" CheckId="CA1004" Created="2009-12-11 23:38:35Z">
+             <Message TypeName="GenericMethodsShouldProvideTypeParameter" Category="Microsoft.Design" CheckId="CA1004" Created="2010-03-31 02:44:15Z">
               <Issue>
                <Item>'WritePixelBuffer.CopyToSystemMemory&lt;T&gt;()'</Item>
                <Item>'T'</Item>
@@ -4318,13 +4697,93 @@
            </Member>
            <Member Name="#CopyToSystemMemory`1(System.Int32,System.Int32)">
             <Messages>
-             <Message TypeName="GenericMethodsShouldProvideTypeParameter" Category="Microsoft.Design" CheckId="CA1004" Created="2009-12-11 23:38:35Z">
+             <Message TypeName="GenericMethodsShouldProvideTypeParameter" Category="Microsoft.Design" CheckId="CA1004" Created="2010-03-31 02:44:15Z">
               <Issue>
                <Item>'WritePixelBuffer.CopyToSystemMemory&lt;T&gt;(int, int)'</Item>
                <Item>'T'</Item>
               </Issue>
              </Message>
             </Messages>
+           </Member>
+          </Members>
+         </Type>
+        </Types>
+       </Namespace>
+       <Namespace Name="MiniGlobe.Renderer.GL32">
+        <Types>
+         <Type Name="Texture2DGL32">
+          <Members>
+           <Member Name="#.ctor(MiniGlobe.Renderer.Texture2DDescription,OpenTK.Graphics.OpenGL.TextureTarget)">
+            <Messages>
+             <Message TypeName="InstantiateArgumentExceptionsCorrectly" Category="Microsoft.Usage" CheckId="CA2208" Created="2010-03-31 02:44:15Z">
+              <Issue Name="IncorrectMessage">
+               <Item>'Texture2DGL32.Texture2DGL32(Texture2DDescription, TextureTarget)'</Item>
+               <Item>description</Item>
+               <Item>'message'</Item>
+               <Item>'ArgumentException'</Item>
+              </Issue>
+              <Issue Name="IncorrectParameterName">
+               <Item>'Texture2DGL32.Texture2DGL32(Texture2DDescription, TextureTarget)'</Item>
+               <Item>description.GenerateMipmaps cannot be true for texture rectangles.</Item>
+               <Item>'paramName'</Item>
+               <Item>'ArgumentException'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#ApplyFilter()">
+            <Messages>
+             <Message TypeName="InstantiateArgumentExceptionsCorrectly" Category="Microsoft.Usage" CheckId="CA2208" Created="2010-03-31 02:44:15Z">
+              <Issue Name="IncorrectParameterName">
+               <Item>'Texture2DGL32.ApplyFilter()'</Item>
+               <Item>Rectangle textures do not support repeat and mirrored repeat wrap modes.</Item>
+               <Item>'paramName'</Item>
+               <Item>'ArgumentException'</Item>
+              </Issue>
+              <Issue Name="IncorrectParameterName">
+               <Item>'Texture2DGL32.ApplyFilter()'</Item>
+               <Item>Rectangle textures only support linear and nearest minification filters.</Item>
+               <Item>'paramName'</Item>
+               <Item>'ArgumentException'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="TextureUnitGL32">
+          <Members>
+           <Member Name="#Texture2D">
+            <Accessors>
+             <Accessor Name="#set_Texture2D(MiniGlobe.Renderer.Texture2D)">
+              <Messages>
+               <Message TypeName="InstantiateArgumentExceptionsCorrectly" Category="Microsoft.Usage" CheckId="CA2208" Created="2010-03-31 02:44:15Z">
+                <Issue Name="IncorrectParameterName">
+                 <Item>'TextureUnitGL32.Texture2D.set(Texture2D)'</Item>
+                 <Item>Incompatible texture.  Did you create the texture with Device.CreateTexture2D?</Item>
+                 <Item>'paramName'</Item>
+                 <Item>'ArgumentException'</Item>
+                </Issue>
+               </Message>
+              </Messages>
+             </Accessor>
+            </Accessors>
+           </Member>
+           <Member Name="#Texture2DRectangle">
+            <Accessors>
+             <Accessor Name="#set_Texture2DRectangle(MiniGlobe.Renderer.Texture2D)">
+              <Messages>
+               <Message TypeName="InstantiateArgumentExceptionsCorrectly" Category="Microsoft.Usage" CheckId="CA2208" Created="2010-03-31 02:44:15Z">
+                <Issue Name="IncorrectParameterName">
+                 <Item>'TextureUnitGL32.Texture2DRectangle.set(Texture2D)'</Item>
+                 <Item>Incompatible texture.  Did you create the texture with Device.CreateTexture2DRectangle?</Item>
+                 <Item>'paramName'</Item>
+                 <Item>'ArgumentException'</Item>
+                </Issue>
+               </Message>
+              </Messages>
+             </Accessor>
+            </Accessors>
            </Member>
           </Members>
          </Type>
@@ -4338,7 +4797,7 @@
     <Modules>
      <Module Name="miniglobe.scene.dll">
       <Messages>
-       <Message TypeName="AssembliesShouldHaveValidStrongNames" Category="Microsoft.Design" CheckId="CA2210" Created="2010-01-05 17:55:49Z">
+       <Message TypeName="AssembliesShouldHaveValidStrongNames" Category="Microsoft.Design" CheckId="CA2210" Created="2010-03-31 02:44:15Z">
         <Issue Name="NoStrongName">
          <Item>'MiniGlobe.Scene.dll'</Item>
         </Issue>
@@ -4364,19 +4823,87 @@
              </Message>
             </Messages>
            </Member>
-           <Member Name="#ViewPoint(MiniGlobe.Core.Geodetic3D)">
+           <Member Name="#ViewPoint(MiniGlobe.Core.Geometry.Ellipsoid,MiniGlobe.Core.Geodetic3D)">
             <Messages>
-             <Message Id="ViewPoint" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Status="Excluded" Created="2010-03-23 08:41:26Z">
+             <Message Id="ViewPoint" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Status="Excluded" Created="2010-03-31 02:44:15Z">
               <Issue Name="MemberShouldBeDiscreteTerm">
                <Item>ViewPoint</Item>
-               <Item>'CameraLookAtPoint.ViewPoint(Geodetic3D)'</Item>
+               <Item>'CameraLookAtPoint.ViewPoint(Ellipsoid, Geodetic3D)'</Item>
                <Item>Viewpoint</Item>
               </Issue>
               <Notes>
-               <User Name="pjcozzi">
-                <Note Id="52" />
+               <User Name="Kevin Ring">
+                <Note Id="33" />
                </User>
               </Notes>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="OutlinedPolylineGeometryShader">
+          <Members>
+           <Member Name="#Set(MiniGlobe.Core.Geometry.Mesh)">
+            <Messages>
+             <Message TypeName="InstantiateArgumentExceptionsCorrectly" Category="Microsoft.Usage" CheckId="CA2208" Created="2010-03-31 02:44:15Z">
+              <Issue Name="IncorrectMessage">
+               <Item>'OutlinedPolylineGeometryShader.Set(Mesh)'</Item>
+               <Item>mesh</Item>
+               <Item>'message'</Item>
+               <Item>'ArgumentException'</Item>
+              </Issue>
+              <Issue Name="IncorrectMessage">
+               <Item>'OutlinedPolylineGeometryShader.Set(Mesh)'</Item>
+               <Item>mesh</Item>
+               <Item>'message'</Item>
+               <Item>'ArgumentException'</Item>
+              </Issue>
+              <Issue Name="IncorrectParameterName">
+               <Item>'OutlinedPolylineGeometryShader.Set(Mesh)'</Item>
+               <Item>mesh.Attributes should contain attributes named "position", "color", and "outlineColor".</Item>
+               <Item>'paramName'</Item>
+               <Item>'ArgumentException'</Item>
+              </Issue>
+              <Issue Name="IncorrectParameterName">
+               <Item>'OutlinedPolylineGeometryShader.Set(Mesh)'</Item>
+               <Item>mesh.PrimitiveType must be Lines, LineLoop, or LineStrip.</Item>
+               <Item>'paramName'</Item>
+               <Item>'ArgumentException'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="OutlinedPolylineTexture">
+          <Members>
+           <Member Name="#Set(MiniGlobe.Core.Geometry.Mesh)">
+            <Messages>
+             <Message TypeName="InstantiateArgumentExceptionsCorrectly" Category="Microsoft.Usage" CheckId="CA2208" Created="2010-03-31 02:44:15Z">
+              <Issue Name="IncorrectMessage">
+               <Item>'OutlinedPolylineTexture.Set(Mesh)'</Item>
+               <Item>mesh</Item>
+               <Item>'message'</Item>
+               <Item>'ArgumentException'</Item>
+              </Issue>
+              <Issue Name="IncorrectMessage">
+               <Item>'OutlinedPolylineTexture.Set(Mesh)'</Item>
+               <Item>mesh</Item>
+               <Item>'message'</Item>
+               <Item>'ArgumentException'</Item>
+              </Issue>
+              <Issue Name="IncorrectParameterName">
+               <Item>'OutlinedPolylineTexture.Set(Mesh)'</Item>
+               <Item>mesh.Attributes should contain attributes named "position", "color", and "outlineColor".</Item>
+               <Item>'paramName'</Item>
+               <Item>'ArgumentException'</Item>
+              </Issue>
+              <Issue Name="IncorrectParameterName">
+               <Item>'OutlinedPolylineTexture.Set(Mesh)'</Item>
+               <Item>mesh.PrimitiveType must be Lines, LineLoop, or LineStrip.</Item>
+               <Item>'paramName'</Item>
+               <Item>'ArgumentException'</Item>
+              </Issue>
              </Message>
             </Messages>
            </Member>
@@ -4426,6 +4953,62 @@
             </Notes>
            </Message>
           </Messages>
+          <Members>
+           <Member Name="#Set(MiniGlobe.Core.Geometry.Mesh)">
+            <Messages>
+             <Message TypeName="InstantiateArgumentExceptionsCorrectly" Category="Microsoft.Usage" CheckId="CA2208" Created="2010-03-31 02:44:15Z">
+              <Issue Name="IncorrectMessage">
+               <Item>'Polyline.Set(Mesh)'</Item>
+               <Item>mesh</Item>
+               <Item>'message'</Item>
+               <Item>'ArgumentException'</Item>
+              </Issue>
+              <Issue Name="IncorrectMessage">
+               <Item>'Polyline.Set(Mesh)'</Item>
+               <Item>mesh</Item>
+               <Item>'message'</Item>
+               <Item>'ArgumentException'</Item>
+              </Issue>
+              <Issue Name="IncorrectParameterName">
+               <Item>'Polyline.Set(Mesh)'</Item>
+               <Item>mesh.Attributes should contain attributes named "position" and "color".</Item>
+               <Item>'paramName'</Item>
+               <Item>'ArgumentException'</Item>
+              </Issue>
+              <Issue Name="IncorrectParameterName">
+               <Item>'Polyline.Set(Mesh)'</Item>
+               <Item>mesh.PrimitiveType must be Lines, LineLoop, or LineStrip.</Item>
+               <Item>'paramName'</Item>
+               <Item>'ArgumentException'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+        </Types>
+       </Namespace>
+       <Namespace Name="MiniGlobe.Terrain">
+        <Types>
+         <Type Name="RayCastedTerrainTile">
+          <Members>
+           <Member Name="#HeightExaggeration">
+            <Accessors>
+             <Accessor Name="#set_HeightExaggeration(System.Single)">
+              <Messages>
+               <Message TypeName="InstantiateArgumentExceptionsCorrectly" Category="Microsoft.Usage" CheckId="CA2208" Created="2010-03-31 02:44:15Z">
+                <Issue Name="IncorrectParameterName">
+                 <Item>'RayCastedTerrainTile.HeightExaggeration.set(float)'</Item>
+                 <Item>HeightExaggeration</Item>
+                 <Item>'paramName'</Item>
+                 <Item>'ArgumentOutOfRangeException'</Item>
+                </Issue>
+               </Message>
+              </Messages>
+             </Accessor>
+            </Accessors>
+           </Member>
+          </Members>
          </Type>
         </Types>
        </Namespace>
@@ -4437,7 +5020,7 @@
     <Modules>
      <Module Name="miniglobe.tests.dll">
       <Messages>
-       <Message TypeName="AssembliesShouldHaveValidStrongNames" Category="Microsoft.Design" CheckId="CA2210" Created="2009-12-11 23:38:35Z">
+       <Message TypeName="AssembliesShouldHaveValidStrongNames" Category="Microsoft.Design" CheckId="CA2210" Created="2010-03-31 02:44:15Z">
         <Issue Name="NoStrongName">
          <Item>'MiniGlobe.Tests.dll'</Item>
         </Issue>
@@ -4473,6 +5056,37 @@
                 <Note Id="49" />
                </User>
               </Notes>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="Geodetic2DTests">
+          <Members>
+           <Member Name="#Construct()">
+            <Messages>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Created="2010-03-31 02:44:15Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'Geodetic2DTests.Construct()'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#TestEquals()">
+            <Messages>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Created="2010-03-31 02:44:15Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'Geodetic2DTests.TestEquals()'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#TestGetHashCode()">
+            <Messages>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Created="2010-03-31 02:44:15Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'Geodetic2DTests.TestGetHashCode()'</Item>
+              </Issue>
              </Message>
             </Messages>
            </Member>
@@ -4524,8 +5138,64 @@
            </Member>
           </Members>
          </Type>
+         <Type Name="GeodeticExtentTests">
+          <Members>
+           <Member Name="#Construct()">
+            <Messages>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Created="2010-03-31 02:44:15Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'GeodeticExtentTests.Construct()'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Equals()">
+            <Messages>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Created="2010-03-31 02:44:15Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'GeodeticExtentTests.Equals()'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
          <Type Name="HalfTests">
           <Members>
+           <Member Name="#TestComparisonOperators()">
+            <Messages>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Created="2010-03-31 02:44:15Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'HalfTests.TestComparisonOperators()'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#TestDoubleRoundTrip()">
+            <Messages>
+             <Message Id="RoundTrip" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Created="2010-03-31 02:44:15Z">
+              <Issue Name="MemberShouldBeDiscreteTerm">
+               <Item>RoundTrip</Item>
+               <Item>'HalfTests.TestDoubleRoundTrip()'</Item>
+               <Item>Roundtrip</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Created="2010-03-31 02:44:15Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'HalfTests.TestDoubleRoundTrip()'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#TestEquals()">
+            <Messages>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Created="2010-03-31 02:44:15Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'HalfTests.TestEquals()'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
            <Member Name="#TestNaN()">
             <Messages>
              <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-03-23 08:41:26Z" FixCategory="DependsOnFix">
@@ -4551,6 +5221,21 @@
                 <Note Id="48" />
                </User>
               </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#TestOverflow()">
+            <Messages>
+             <Message Id="MiniGlobe.Core.Half" TypeName="DoNotIgnoreMethodResults" Category="Microsoft.Usage" CheckId="CA1806" Created="2010-03-31 02:44:15Z">
+              <Issue Name="ObjectCreation">
+               <Item>'HalfTests.TestOverflow()'</Item>
+               <Item>'Half'</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Created="2010-03-31 02:44:15Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'HalfTests.TestOverflow()'</Item>
+              </Issue>
              </Message>
             </Messages>
            </Member>
@@ -4734,20 +5419,6 @@
              </Message>
             </Messages>
            </Member>
-           <Member Name="#Invert()">
-            <Messages>
-             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-03-23 08:41:26Z" FixCategory="DependsOnFix">
-              <Issue>
-               <Item>'Vector2DTests.Invert()'</Item>
-              </Issue>
-              <Notes>
-               <User Name="pjcozzi">
-                <Note Id="47" />
-               </User>
-              </Notes>
-             </Message>
-            </Messages>
-           </Member>
            <Member Name="#IsUndefined()">
             <Messages>
              <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-03-03 23:33:07Z" FixCategory="DependsOnFix">
@@ -4787,6 +5458,15 @@
                 <Note Id="33" />
                </User>
               </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Negate()">
+            <Messages>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Created="2010-03-31 02:44:15Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'Vector2DTests.Negate()'</Item>
+              </Issue>
              </Message>
             </Messages>
            </Member>
@@ -5190,20 +5870,6 @@
              </Message>
             </Messages>
            </Member>
-           <Member Name="#Invert()">
-            <Messages>
-             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-03-23 08:41:26Z" FixCategory="DependsOnFix">
-              <Issue>
-               <Item>'Vector2STests.Invert()'</Item>
-              </Issue>
-              <Notes>
-               <User Name="pjcozzi">
-                <Note Id="49" />
-               </User>
-              </Notes>
-             </Message>
-            </Messages>
-           </Member>
            <Member Name="#IsUndefined()">
             <Messages>
              <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-03-23 08:41:26Z" FixCategory="DependsOnFix">
@@ -5243,6 +5909,15 @@
                 <Note Id="49" />
                </User>
               </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Negate()">
+            <Messages>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Created="2010-03-31 02:44:15Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'Vector2STests.Negate()'</Item>
+              </Issue>
              </Message>
             </Messages>
            </Member>
@@ -5502,20 +6177,6 @@
              </Message>
             </Messages>
            </Member>
-           <Member Name="#Invert()">
-            <Messages>
-             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-03-23 08:41:26Z" FixCategory="DependsOnFix">
-              <Issue>
-               <Item>'Vector3DTests.Invert()'</Item>
-              </Issue>
-              <Notes>
-               <User Name="pjcozzi">
-                <Note Id="48" />
-               </User>
-              </Notes>
-             </Message>
-            </Messages>
-           </Member>
            <Member Name="#IsUndefined()">
             <Messages>
              <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-03-03 23:33:07Z" FixCategory="DependsOnFix">
@@ -5583,6 +6244,15 @@
                 <Note Id="33" />
                </User>
               </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Negate()">
+            <Messages>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Created="2010-03-31 02:44:15Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'Vector3DTests.Negate()'</Item>
+              </Issue>
              </Message>
             </Messages>
            </Member>
@@ -6056,20 +6726,6 @@
              </Message>
             </Messages>
            </Member>
-           <Member Name="#Invert()">
-            <Messages>
-             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-03-23 08:41:26Z" FixCategory="DependsOnFix">
-              <Issue>
-               <Item>'Vector3STests.Invert()'</Item>
-              </Issue>
-              <Notes>
-               <User Name="pjcozzi">
-                <Note Id="47" />
-               </User>
-              </Notes>
-             </Message>
-            </Messages>
-           </Member>
            <Member Name="#IsUndefined()">
             <Messages>
              <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-03-23 08:41:26Z" FixCategory="DependsOnFix">
@@ -6137,6 +6793,15 @@
                 <Note Id="47" />
                </User>
               </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Negate()">
+            <Messages>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Created="2010-03-31 02:44:15Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'Vector3STests.Negate()'</Item>
+              </Issue>
              </Message>
             </Messages>
            </Member>
@@ -6410,20 +7075,6 @@
              </Message>
             </Messages>
            </Member>
-           <Member Name="#Invert()">
-            <Messages>
-             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-03-23 08:41:26Z" FixCategory="DependsOnFix">
-              <Issue>
-               <Item>'Vector4DTests.Invert()'</Item>
-              </Issue>
-              <Notes>
-               <User Name="pjcozzi">
-                <Note Id="48" />
-               </User>
-              </Notes>
-             </Message>
-            </Messages>
-           </Member>
            <Member Name="#IsUndefined()">
             <Messages>
              <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-03-23 08:41:26Z" FixCategory="DependsOnFix">
@@ -6491,6 +7142,15 @@
                 <Note Id="48" />
                </User>
               </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Negate()">
+            <Messages>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Created="2010-03-31 02:44:15Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'Vector4DTests.Negate()'</Item>
+              </Issue>
              </Message>
             </Messages>
            </Member>
@@ -7030,20 +7690,6 @@
              </Message>
             </Messages>
            </Member>
-           <Member Name="#Invert()">
-            <Messages>
-             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-03-23 08:41:26Z" FixCategory="DependsOnFix">
-              <Issue>
-               <Item>'Vector4STests.Invert()'</Item>
-              </Issue>
-              <Notes>
-               <User Name="pjcozzi">
-                <Note Id="47" />
-               </User>
-              </Notes>
-             </Message>
-            </Messages>
-           </Member>
            <Member Name="#IsUndefined()">
             <Messages>
              <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-03-23 08:41:26Z" FixCategory="DependsOnFix">
@@ -7111,6 +7757,15 @@
                 <Note Id="47" />
                </User>
               </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Negate()">
+            <Messages>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Created="2010-03-31 02:44:15Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'Vector4STests.Negate()'</Item>
+              </Issue>
              </Message>
             </Messages>
            </Member>
@@ -8474,6 +9129,33 @@
     <Note Id="4" Modified="2010-03-01 00:36:42Z">It's a perfect name, trust me.</Note>
     <Note Id="5" Modified="2010-03-01 00:36:45Z">It's a perfect name, trust me.</Note>
     <Note Id="6" Modified="2010-03-01 00:36:47Z">It's a perfect name, trust me.</Note>
+    <Note Id="7" Modified="2010-03-31 02:11:59Z">X, Y, and Z are good names.</Note>
+    <Note Id="8" Modified="2010-03-31 02:12:09Z">X, Y, and Z are good names.</Note>
+    <Note Id="9" Modified="2010-03-31 02:12:31Z">X and Y are good names.</Note>
+    <Note Id="10" Modified="2010-03-31 02:12:51Z">X, Y, Z, and W are good names.</Note>
+    <Note Id="11" Modified="2010-03-31 02:13:07Z">X, Y, Z, and W are good names.</Note>
+    <Note Id="12" Modified="2010-03-31 02:13:20Z">X and Y are good names.</Note>
+    <Note Id="13" Modified="2010-03-31 02:13:33Z">X, Y, and Z are good names.</Note>
+    <Note Id="14" Modified="2010-03-31 02:13:51Z">X and Y are good names.</Note>
+    <Note Id="15" Modified="2010-03-31 02:13:58Z">X, Y, Z, and W are good names.</Note>
+    <Note Id="16" Modified="2010-03-31 02:14:05Z">X, Y, Z, and W are good names.</Note>
+    <Note Id="17" Modified="2010-03-31 02:14:19Z">X, Y, Z, and W are good names.</Note>
+    <Note Id="18" Modified="2010-03-31 02:21:28Z">Alternatives to using the out parameter are provided.</Note>
+    <Note Id="19" Modified="2010-03-31 02:21:31Z">Alternatives to using the out parameter are provided.</Note>
+    <Note Id="20" Modified="2010-03-31 02:21:41Z">Alternatives to using the out parameter are provided.</Note>
+    <Note Id="21" Modified="2010-03-31 02:21:43Z">Alternatives to using the out parameter are provided.</Note>
+    <Note Id="22" Modified="2010-03-31 02:22:23Z">No reasonable alternative, advanced feature.</Note>
+    <Note Id="23" Modified="2010-03-31 02:28:45Z">XYZ isn't an acronym, it's a full phrase composed of three words where each word is a single letter.  So let's stick with XYZ.</Note>
+    <Note Id="24" Modified="2010-03-31 02:28:50Z">XYZ isn't an acronym, it's a full phrase composed of three words where each word is a single letter.  So let's stick with XYZ.</Note>
+    <Note Id="25" Modified="2010-03-31 02:28:52Z">XYZ isn't an acronym, it's a full phrase composed of three words where each word is a single letter.  So let's stick with XYZ.</Note>
+    <Note Id="26" Modified="2010-03-31 02:30:23Z">Alternatives to using the out parameter are provided.</Note>
+    <Note Id="27" Modified="2010-03-31 02:30:52Z">The meaning is clear here.</Note>
+    <Note Id="28" Modified="2010-03-31 02:31:02Z">The meaning is clear here.</Note>
+    <Note Id="29" Modified="2010-03-31 02:31:08Z">The meaning is clear here.</Note>
+    <Note Id="30" Modified="2010-03-31 02:32:01Z">An overload taking an IFormatProvider are provided.</Note>
+    <Note Id="31" Modified="2010-03-31 02:32:16Z">Overloads taking an IFormatProvider are provided.</Note>
+    <Note Id="32" Modified="2010-03-31 02:36:06Z">The meaning is clear here.</Note>
+    <Note Id="33" Modified="2010-03-31 02:44:59Z">View Point is intended here, not Viewpoint.</Note>
    </User>
    <User Name="pjcozzi">
     <Note Id="0" Modified="2009-12-14 17:38:53Z">[Test] cannot be static</Note>
@@ -8527,7 +9209,6 @@
     <Note Id="49" Modified="2010-03-23 08:42:30Z">Ok</Note>
     <Note Id="50" Modified="2010-03-23 08:42:38Z">Ok</Note>
     <Note Id="51" Modified="2010-03-23 08:42:48Z">Ok</Note>
-    <Note Id="52" Modified="2010-03-23 08:44:57Z">Ok</Note>
     <Note Id="53" Modified="2010-03-23 08:48:07Z">Ok</Note>
     <Note Id="55" Modified="2010-03-23 08:53:49Z">There is an if so there is only one cast.</Note>
     <Note Id="56" Modified="2010-03-23 08:58:29Z">Ok</Note>
@@ -8560,6 +9241,9 @@
    </Rule>
    <Rule TypeName="DoNotDeclareStaticMembersOnGenericTypes" Category="Microsoft.Design" CheckId="CA1000">
     <Resolution Name="Default">Remove {0} from {1} or make it an instance member.</Resolution>
+   </Rule>
+   <Rule TypeName="DoNotIgnoreMethodResults" Category="Microsoft.Usage" CheckId="CA1806">
+    <Resolution Name="ObjectCreation">{0} creates a new instance of {1} which is never used. Pass the instance as an argument to another method, assign the instance to a variable, or remove the object creation if it is unnecessary.</Resolution>
    </Rule>
    <Rule TypeName="GenericMethodsShouldProvideTypeParameter" Category="Microsoft.Design" CheckId="CA1004">
     <Resolution Name="Default">Consider a design where {0} doesn't require explicit type parameter {1} in any call to it.</Resolution>
@@ -8594,14 +9278,8 @@
    <Rule TypeName="OperatorOverloadsHaveNamedAlternates" Category="Microsoft.Usage" CheckId="CA2225">
     <Resolution Name="Default">Provide a method named '{0}' as a friendly alternate for operator {1}.</Resolution>
    </Rule>
-   <Rule TypeName="OverloadOperatorEqualsOnOverridingValueTypeEquals" Category="Microsoft.Usage" CheckId="CA2231">
-    <Resolution Name="Default">Because {0} is a value type that overrides ValueType.Equals, it should also overload the equality and inequality operators (== and !=).</Resolution>
-   </Rule>
-   <Rule TypeName="OverrideEqualsAndOperatorEqualsOnValueTypes" Category="Microsoft.Performance" CheckId="CA1815">
-    <Resolution Name="op_Equality">{0} should override the equality (==) and inequality (!=) operators.</Resolution>
-   </Rule>
-   <Rule TypeName="OverrideMethodsOnComparableTypes" Category="Microsoft.Design" CheckId="CA1036">
-    <Resolution Name="Operator">{0} should define operator '{1}' since it implements IComparable.</Resolution>
+   <Rule TypeName="PropertiesShouldNotReturnArrays" Category="Microsoft.Performance" CheckId="CA1819">
+    <Resolution Name="Default">Change {0} to return a collection or make it a method.</Resolution>
    </Rule>
    <Rule TypeName="ReplaceRepetitiveArgumentsWithParamsArray" Category="Microsoft.Design" CheckId="CA1025">
     <Resolution Name="Default">Consider implementing a version of {0} that accepts a parameter array argument.</Resolution>

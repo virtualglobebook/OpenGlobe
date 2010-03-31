@@ -288,27 +288,27 @@ namespace MiniGlobe.Core
         }
 
         [Test]
-        public void Invert()
+        public void Negate()
         {
             Vector3D a = new Vector3D(1.0, 2.0, 3.0);
-            Vector3D invertedA1 = a.Invert();
-            Assert.AreEqual(-1.0, invertedA1.X, 1e-14);
-            Assert.AreEqual(-2.0, invertedA1.Y, 1e-14);
-            Assert.AreEqual(-3.0, invertedA1.Z, 1e-14);
-            Vector3D invertedA2 = -a;
-            Assert.AreEqual(-1.0, invertedA2.X, 1e-14);
-            Assert.AreEqual(-2.0, invertedA2.Y, 1e-14);
-            Assert.AreEqual(-3.0, invertedA2.Z, 1e-14);
+            Vector3D negatedA1 = a.Negate();
+            Assert.AreEqual(-1.0, negatedA1.X, 1e-14);
+            Assert.AreEqual(-2.0, negatedA1.Y, 1e-14);
+            Assert.AreEqual(-3.0, negatedA1.Z, 1e-14);
+            Vector3D negatedA2 = -a;
+            Assert.AreEqual(-1.0, negatedA2.X, 1e-14);
+            Assert.AreEqual(-2.0, negatedA2.Y, 1e-14);
+            Assert.AreEqual(-3.0, negatedA2.Z, 1e-14);
 
             Vector3D b = new Vector3D(-1.0, -2.0, -3.0);
-            Vector3D invertedB1 = b.Invert();
-            Assert.AreEqual(1.0, invertedB1.X, 1e-14);
-            Assert.AreEqual(2.0, invertedB1.Y, 1e-14);
-            Assert.AreEqual(3.0, invertedB1.Z, 1e-14);
-            Vector3D invertedB2 = -b;
-            Assert.AreEqual(1.0, invertedB2.X, 1e-14);
-            Assert.AreEqual(2.0, invertedB2.Y, 1e-14);
-            Assert.AreEqual(3.0, invertedB2.Z, 1e-14);
+            Vector3D negatedB1 = b.Negate();
+            Assert.AreEqual(1.0, negatedB1.X, 1e-14);
+            Assert.AreEqual(2.0, negatedB1.Y, 1e-14);
+            Assert.AreEqual(3.0, negatedB1.Z, 1e-14);
+            Vector3D negatedB2 = -b;
+            Assert.AreEqual(1.0, negatedB2.X, 1e-14);
+            Assert.AreEqual(2.0, negatedB2.Y, 1e-14);
+            Assert.AreEqual(3.0, negatedB2.Z, 1e-14);
         }
 
         [Test]
