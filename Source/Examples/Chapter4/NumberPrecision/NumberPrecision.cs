@@ -29,7 +29,7 @@ namespace MiniGlobe.Examples.Chapter3.NumberPrecision
             _sceneState = new SceneState();
             _camera = new CameraLookAtPoint(_sceneState.Camera, _window, new Ellipsoid(0.001, 0.001, 0.001),
                 new Vector3D(_viewCenterX, 0.0, 0.0));
-            _camera.EnableMouse = false;
+            _camera.MouseEnabled = false;
             CenterCameraOnPoint();
 
             //

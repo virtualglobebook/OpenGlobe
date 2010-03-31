@@ -30,8 +30,8 @@ namespace MiniGlobe.Scene
         /// <param name="camera">The renderer camera that is to be manipulated by the new instance.</param>
         /// <param name="window">The window in which the scene is drawn.</param>
         /// <param name="ellipsoid">The ellipsoid defining the shape of the globe.</param>
-        /// <param name="ellipsoidCenter">The position of the ellipsoid center.</param>
-        public CameraLookAtPoint(Camera camera, MiniGlobeWindow window, Ellipsoid ellipsoid, Vector3D ellipsoidCenter)
+        /// <param name="centerPoint">The position on which the camera is centered.</param>
+        public CameraLookAtPoint(Camera camera, MiniGlobeWindow window, Ellipsoid ellipsoid, Vector3D centerPoint)
         {
             if (camera == null)
             {
@@ -44,12 +44,17 @@ namespace MiniGlobe.Scene
 
             _camera = camera;
             _window = window;
-            _ellipsoid = ellipsoid;
-            _ellipsoidCenter = ellipsoidCenter;
+
+            _centerPoint = centerPoint;
+
+            _zoomFactor = 5.0;
+            _zoomRateRangeAdjustment = ellipsoid.MaximumRadius;
+            _maximumZoomRate = Double.MaxValue;
+            _minimumZoomRate = ellipsoid.MaximumRadius / 100.0;
 
             _range = ellipsoid.MaximumRadius * 2.0;
 
-            _enableMouse = true;
+            _mouseEnabled = true;
             _window.Mouse.ButtonDown += MouseDown;
             _window.Mouse.ButtonUp += MouseUp;
             _window.Mouse.Move += MouseMove;
@@ -67,16 +72,24 @@ namespace MiniGlobe.Scene
         }
 
         /// <summary>
-        /// Disposes the camera.  After it is disposed, the camera will not longer respond to
-        /// input events.
+        /// Initializes a new instance.
+        /// </summary>
+        /// <param name="camera">The renderer camera that is to be manipulated by the new instance.</param>
+        /// <param name="window">The window in which the scene is drawn.</param>
+        /// <param name="ellipsoid">The ellipsoid defining the shape of the globe.</param>
+        public CameraLookAtPoint(Camera camera, MiniGlobeWindow window) :
+            this(camera, window, Ellipsoid.UnitSphere, Vector3D.Zero)
+        {
+        }
+
+        /// <summary>
+        /// Disposes the camera.  After it is disposed, the camera should not be used.
         /// </summary>
         public void Dispose()
         {
             if (_window != null)
             {
-                _window.Mouse.ButtonDown -= MouseDown;
-                _window.Mouse.ButtonUp -= MouseUp;
-                _window.Mouse.Move -= MouseMove;
+                MouseEnabled = false;
                 _window = null;
             }
         }
@@ -98,19 +111,55 @@ namespace MiniGlobe.Scene
         }
 
         /// <summary>
-        /// Gets the ellipsoid defining the shape of the globe.
+        /// Gets or sets the factor used to compute the rate at which the camera zooms in response to mouse events.
+        /// The zoom rate is the distance by which the <see cref="Range"/> is adjusted when the mouse moves a distance equal to the
+        /// <see cref="MiniGlobeWindow.Height"/> of the <see cref="Window"/>.  It is computed as follows:
+        /// <code>ZoomRate = <see cref="ZoomFactor"/> * (<see cref="Range"/> - <see cref="ZoomRateRangeAdjustment"/>)</code>.
+        /// When the mouse is moved across a fraction of the window, the range is adjusted by the corresponding fraction of the
+        /// zoom rate.
         /// </summary>
-        public Ellipsoid Ellipsoid
+        public double ZoomFactor
         {
-            get { return _ellipsoid; }
+            get { return _zoomFactor; }
+            set { _zoomFactor = value; }
         }
 
         /// <summary>
-        /// Gets the ellipsoid center defining the shape of the globe.
+        /// Gets or sets the distance that is subtracted from the <see cref="Range"/> when computing the rate at which the camera zooms in
+        /// response to mouse events.  The zoom rate is the distance by which the <see cref="Range"/> is adjusted when the mouse moves a
+        /// distance equal to the <see cref="MiniGlobeWindow.Height"/> of the <see cref="Window"/>.  It is computed as follows:
+        /// <code>ZoomRate = <see cref="ZoomFactor"/> * (<see cref="Range"/> - <see cref="ZoomRateRangeAdjustment"/>)</code>.
+        /// When the mouse is moved a distance equal to a fraction of the height of the window, the range is adjusted by the
+        /// corresponding fraction of the zoom rate.  The <see cref="ZoomRateRangeAdjustment"/> is useful, for example, when the camera
+        /// is centered on the center of a globe. This property can be set to the radius of the globe so that the zoom rate corresponds to the
+        /// distance from the surface of the globe rather than the distance to the center of the globe.
         /// </summary>
-        public Vector3D EllipsoidCenter
+        public double ZoomRateRangeAdjustment
         {
-            get { return _ellipsoidCenter; }
+            get { return _zoomRateRangeAdjustment; }
+            set { _zoomRateRangeAdjustment = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the maximum rate at which the camera zooms in response to mouse events, regardless of the current
+        /// <see cref="Range"/>.  See <see cref="ZoomFactor"/> and <see cref="ZoomRateRangeAdjustment"/> for an explanation
+        /// of how the zoom rate is computed.
+        /// </summary>
+        public double MaximumZoomRate
+        {
+            get { return _maximumZoomRate; }
+            set { _maximumZoomRate = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the minimum rate at which the camera zooms in response to mouse events, regardless of the current
+        /// <see cref="Range"/>.  See <see cref="ZoomFactor"/> and <see cref="ZoomRateRangeAdjustment"/> for an explanation
+        /// of how the zoom rate is computed.
+        /// </summary>
+        public double MinimumZoomRate
+        {
+            get { return _minimumZoomRate; }
+            set { _minimumZoomRate = value; }
         }
 
         /// <summary>
@@ -122,33 +171,6 @@ namespace MiniGlobe.Scene
         {
             get { return _azimuth; }
             set { _azimuth = value; UpdateCameraFromParameters(); }
-        }
-
-        /// <summary>
-        /// Gets if the mouse is enabled. Sets enabling or disabling the mouse. 
-        /// </summary>
-        public bool EnableMouse
-        {
-            get { return _enableMouse; }
-            set
-            {
-                if (value != _enableMouse)
-                {
-                    _enableMouse = value;
-                    if (_enableMouse)
-                    {
-                        _window.Mouse.ButtonDown += MouseDown;
-                        _window.Mouse.ButtonUp += MouseUp;
-                        _window.Mouse.Move += MouseMove;
-                    }
-                    else
-                    {
-                        _window.Mouse.ButtonDown -= MouseDown;
-                        _window.Mouse.ButtonUp -= MouseUp;
-                        _window.Mouse.Move -= MouseMove;
-                    }
-                }
-            }
         }
 
         /// <summary>
@@ -192,6 +214,38 @@ namespace MiniGlobe.Scene
         }
 
         /// <summary>
+        /// Gets a value indicating if the mouse is enabled or disabled.  If the value of this property
+        /// is <see langword="true" />, the camera will respond to mouse events.  If it is <see langword="false" />,
+        /// mouse events will be ignored.
+        /// </summary>
+        public bool MouseEnabled
+        {
+            get { return _mouseEnabled; }
+            set
+            {
+                CheckDisposed();
+
+                if (value != _mouseEnabled)
+                {
+                    _mouseEnabled = value;
+                    if (_mouseEnabled)
+                    {
+                        _window.Mouse.ButtonDown += MouseDown;
+                        _window.Mouse.ButtonUp += MouseUp;
+                        _window.Mouse.Move += MouseMove;
+                    }
+                    else
+                    {
+                        _window.Mouse.ButtonDown -= MouseDown;
+                        _window.Mouse.ButtonUp -= MouseUp;
+                        _window.Mouse.Move -= MouseMove;
+                    }
+                }
+            }
+        }
+
+
+        /// <summary>
         /// Sets the <see cref="CenterPoint"/> and <see cref="FixedToLocalRotation"/> properties so that the
         /// camera is looking at a given longitude, latitude, and height and is oriented in that point's local
         /// East-North-Up frame.  This method does not change the <see cref="Azimuth"/>, <see cref="Elevation"/>,
@@ -201,9 +255,9 @@ namespace MiniGlobe.Scene
         /// <param name="longitude">The longitude of the point to look at, in radians.</param>
         /// <param name="latitude">The latitude of the point to look at, in radians.</param>
         /// <param name="height">The height of the point to look at, in meters above the <see cref="Ellipsoid"/> surface.</param>
-        public void ViewPoint(Geodetic3D geographic)
+        public void ViewPoint(Ellipsoid ellipsoid, Geodetic3D geographic)
         {
-            _centerPoint = _ellipsoid.ToVector3D(geographic);
+            _centerPoint = ellipsoid.ToVector3D(geographic);
             
             // Fixed to East-North-Up rotation, from Wikipedia's "Geodetic System" topic.
             double cosLon = Math.Cos(geographic.Longitude);
@@ -320,11 +374,6 @@ namespace MiniGlobe.Scene
                 return;
             }
 
-            if (_window == null)
-            {
-                throw new ObjectDisposedException("CameraGlobeCentered");
-            }
-
             UpdateParametersFromCamera();
 
             Size movement = new Size(point.X - _lastPoint.X, point.Y - _lastPoint.Y);
@@ -361,6 +410,8 @@ namespace MiniGlobe.Scene
 
         private void Rotate(Size movement)
         {
+            CheckDisposed();
+
             double azimuthWindowRatio = (double)movement.Width / (double)_window.Width;
             double elevationWindowRatio = (double)movement.Height / (double)_window.Height;
 
@@ -388,16 +439,36 @@ namespace MiniGlobe.Scene
 
         private void Zoom(Size movement)
         {
-            double approximateDistanceFromSurface = Math.Abs((_camera.Eye - _ellipsoidCenter).Magnitude - _ellipsoid.MinimumRadius);
-            approximateDistanceFromSurface = Math.Max(approximateDistanceFromSurface, _ellipsoid.MinimumRadius / 100.0);
+            CheckDisposed();
+
+            double zoomRate = _zoomFactor * (_range - _zoomRateRangeAdjustment);
             double rangeWindowRatio = (double)movement.Height / (double)_window.Height;
-            _range -= 5.0 * approximateDistanceFromSurface * rangeWindowRatio;
+            if (zoomRate > _maximumZoomRate)
+            {
+                zoomRate = _maximumZoomRate;
+            }
+            if (zoomRate < _minimumZoomRate)
+            {
+                zoomRate = _minimumZoomRate;
+            }
+            _range -= zoomRate * rangeWindowRatio;
+        }
+
+        private void CheckDisposed()
+        {
+            if (_window == null)
+            {
+                throw new ObjectDisposedException(typeof(CameraLookAtPoint).Name);
+            }
         }
 
         private Camera _camera;
         private MiniGlobeWindow _window;
-        private Ellipsoid _ellipsoid;
-        private Vector3D _ellipsoidCenter;
+
+        private double _zoomFactor;
+        private double _zoomRateRangeAdjustment;
+        private double _maximumZoomRate;
+        private double _minimumZoomRate;
 
         private bool _leftButtonDown;
         private bool _rightButtonDown;
@@ -407,7 +478,7 @@ namespace MiniGlobe.Scene
         private double _elevation;
         private double _range;
 
-        private bool _enableMouse;
+        private bool _mouseEnabled;
 
         private Vector3D _centerPoint = Vector3D.Zero;
         private Matrix3d _fixedToLocalRotation = Matrix3d.Identity;
