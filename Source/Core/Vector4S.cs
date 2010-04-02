@@ -51,7 +51,7 @@ namespace MiniGlobe.Core
 
         public static Vector4S Undefined
         {
-            get { return new Vector4S(Single.NaN, Single.NaN, Single.NaN, Single.NaN); }
+            get { return new Vector4S(float.NaN, float.NaN, float.NaN, float.NaN); }
         }
 
         public Vector4S(float x, float y, float z, float w)
@@ -104,7 +104,7 @@ namespace MiniGlobe.Core
 
         public bool IsUndefined
         {
-            get { return Single.IsNaN(_x); }
+            get { return float.IsNaN(_x); }
         }
 
         public Vector4S Normalize(out float magnitude)

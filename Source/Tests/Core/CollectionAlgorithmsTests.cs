@@ -32,7 +32,9 @@ namespace MiniGlobe.Core
             Dictionary<int, int> dictionary = new Dictionary<int, int>();
             dictionary.Add(0, 0);
             dictionary.Add(1, 1);
-            Assert.AreEqual(2, CollectionAlgorithms.EnumerableCount(dictionary));
+
+            IEnumerable<KeyValuePair<int, int>> enumerable = dictionary;
+            Assert.AreEqual(2, CollectionAlgorithms.EnumerableCount(enumerable));
         }
     }
 }

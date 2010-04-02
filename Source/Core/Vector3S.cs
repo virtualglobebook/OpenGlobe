@@ -46,7 +46,7 @@ namespace MiniGlobe.Core
 
         public static Vector3S Undefined
         {
-            get { return new Vector3S(Single.NaN, Single.NaN, Single.NaN); }
+            get { return new Vector3S(float.NaN, float.NaN, float.NaN); }
         }
 
         public Vector3S(float x, float y, float z)
