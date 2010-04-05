@@ -11,7 +11,6 @@ using System;
 using System.Drawing;
 
 using MiniGlobe.Core.Geometry;
-using MiniGlobe.Core.Tessellation;
 using MiniGlobe.Renderer;
 using MiniGlobe.Scene;
 
@@ -31,41 +30,8 @@ namespace MiniGlobe.Examples.Chapter5
             _sceneState.Camera.PerspectiveFarPlaneDistance = 4096;
 
             ///////////////////////////////////////////////////////////////////
-            Size size = new Size(6, 6);
-            float[] heights = new float[]
-            {
-                0f,    0.25f, 0.35f, 0.4f,  0.2f,  0.1f,    // Bottom row
-                0.25f, 0.35f, 0.35f, 0.45f, 0.35f, 0.2f,
-                0.35f, 0.35f, 0.35f, 0.45f, 0.5f,  0.4f,
-                0.45f, 0.5f,  0.5f,  0.5f,  0.5f,  0.4f,
-                0.25f, 0.4f,  0.3f,  0.5f,  0.4f,  0.2f,
-                0.15f, 0.3f,  0.2f,  0.1f,  0f,    0f       // Top row
-            };
-            TerrainTile terrainTile = new TerrainTile(new Size(6, 6), heights, 0, 0.5f);
 
-/*
-            Bitmap bitmap = new Bitmap(@"c:\aaa.jpg");
-
-            float[] heights = new float[bitmap.Width * bitmap.Height];
-            float minHeight = float.MaxValue;
-            float maxHeight = float.MinValue;
-
-            int k = 0;
-            for (int j = bitmap.Height - 1; j >= 0; --j)
-            {
-                for (int i = 0; i < bitmap.Width; ++i)
-                {
-                    float height = (float)(bitmap.GetPixel(i, j).R / 255.0);
-                    heights[k++] = height;
-                    minHeight = Math.Min(height, minHeight);
-                    maxHeight = Math.Max(height, maxHeight);
-                }
-            }
-
-            TerrainTile terrainTile = new TerrainTile(
-                new Size(bitmap.Width, bitmap.Height), 
-                heights, minHeight, maxHeight);
-*/
+            TerrainTile terrainTile = TerrainTile.FromBitmap(new Bitmap(@"ps-e.lg.jpg"));
             _tile = new RayCastedTerrainTile(_window.Context, terrainTile);
             _tile.HeightExaggeration = 30;
 

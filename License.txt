@@ -136,6 +136,20 @@ MiniGlobe uses data from Natural Earth:
    Terms of use:  http://www.naturalearthdata.com/about/terms-of-use/
 
 
+MiniGlobe uses data from USGS and The University of Washington:
+
+   Terrain\ps-e.lg.jpg
+      http://www.cc.gatech.edu/projects/large_models/ps.html
+
+   Acknowledgements from above website:
+
+      Data is obtained from The United States Geological Survey (USGS), 
+      made available by The University of Washington. The dataset provided 
+      here is a subset extracted by the paper authors from the original 
+      dataset, which can be found here:
+      http://duff.geology.washington.edu/data/raster/tenmeter/onebytwo10/
+
+
 MiniGlobe uses icons from Yusuke Kamiyamane
 
    http://pinvoke.com/

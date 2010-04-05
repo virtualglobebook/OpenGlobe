@@ -15,6 +15,34 @@ namespace MiniGlobe.Terrain
 {
     public class TerrainTile
     {
+        public static TerrainTile FromBitmap(Bitmap bitmap)
+        {
+            if (bitmap == null)
+            {
+                throw new ArgumentNullException("bitmap");
+            }
+
+            float[] heights = new float[bitmap.Width * bitmap.Height];
+            float minHeight = float.MaxValue;
+            float maxHeight = float.MinValue;
+
+            int k = 0;
+            for (int j = bitmap.Height - 1; j >= 0; --j)
+            {
+                for (int i = 0; i < bitmap.Width; ++i)
+                {
+                    float height = (float)(bitmap.GetPixel(i, j).R / 255.0);
+                    heights[k++] = height;
+                    minHeight = Math.Min(height, minHeight);
+                    maxHeight = Math.Max(height, maxHeight);
+                }
+            }
+
+            return new TerrainTile(
+                new Size(bitmap.Width, bitmap.Height),
+                heights, minHeight, maxHeight);
+        }
+
         public TerrainTile(
             Size size,
             float[] heights,

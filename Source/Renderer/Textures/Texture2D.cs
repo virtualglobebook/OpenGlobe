@@ -7,6 +7,7 @@
 //
 #endregion
 
+using System;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Diagnostics;
@@ -125,8 +126,8 @@ namespace MiniGlobe.Renderer
                 float maxValue = depths[0];
                 for (int i = 0; i < depths.Length; ++i)
                 {
-                    minValue = depths[i] < minValue ? depths[i] : minValue;
-                    maxValue = depths[i] > maxValue ? depths[i] : minValue;
+                    minValue = Math.Min(depths[i], minValue);
+                    maxValue = Math.Max(depths[i], maxValue);
                 }
                 float deltaValue = maxValue - minValue;
 
