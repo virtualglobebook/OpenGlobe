@@ -4789,7 +4789,7 @@
                <Message TypeName="InstantiateArgumentExceptionsCorrectly" Category="Microsoft.Usage" CheckId="CA2208" Status="Excluded" Created="2010-03-31 02:44:15Z">
                 <Issue Name="IncorrectParameterName">
                  <Item>'RayCastedTerrainTile.HeightExaggeration.set(float)'</Item>
-                 <Item>HeightExaggeration</Item>
+                 <Item>HeightExaggeration must be greater than zero.</Item>
                  <Item>'paramName'</Item>
                  <Item>'ArgumentOutOfRangeException'</Item>
                 </Issue>
@@ -9152,6 +9152,7 @@
     <Resolution Name="TypeNoAlternate">Rename type name {0} so that it does not end in '{1}'.</Resolution>
    </Rule>
    <Rule TypeName="InstantiateArgumentExceptionsCorrectly" Category="Microsoft.Usage" CheckId="CA2208">
+    <Resolution Name="IncorrectMessage" />
     <Resolution Name="IncorrectParameterName">Method {0} passes '{1}' as the {2} argument to a {3} constructor. Replace this argument with one of the method's parameter names. Note that the provided parameter name should have the exact casing as declared on the method.</Resolution>
    </Rule>
    <Rule TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822">

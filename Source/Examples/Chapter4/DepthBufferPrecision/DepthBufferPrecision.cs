@@ -16,7 +16,7 @@ using MiniGlobe.Core.Geometry;
 using MiniGlobe.Renderer;
 using MiniGlobe.Scene;
 
-namespace MiniGlobe.Examples.Chapter5
+namespace MiniGlobe.Examples.Chapter4
 {
     sealed class DepthBufferPrecision : IDisposable
     {
