@@ -29,6 +29,7 @@ namespace MiniGlobe.Examples.Chapter4
             _window = Device.CreateWindow(800, 600, "Chapter 4:  Depth Buffer Precision");
             _window.Resize += OnResize;
             _window.RenderFrame += OnRenderFrame;
+            _window.Keyboard.KeyUp += OnKeyUp;
             _window.Keyboard.KeyDown += OnKeyDown;
             _sceneState = new SceneState();
 
@@ -103,20 +104,38 @@ namespace MiniGlobe.Examples.Chapter4
             UpdateFrameBufferAttachments();
         }
 
+        private void OnKeyUp(object sender, KeyboardKeyEventArgs e)
+        {
+            if (e.Key == KeyboardKey.N)
+            {
+                _nKeyDown = false;
+            }
+            else if (e.Key == KeyboardKey.F)
+            {
+                _fKeyDown = false;
+            }
+        }
+
         private void OnKeyDown(object sender, KeyboardKeyEventArgs e)
         {
-            // TODO:  Use 'n' + up/down, and 'f' + up/down
-
-            if ((e.Key == KeyboardKey.Q) || (e.Key == KeyboardKey.A))
+            if (e.Key == KeyboardKey.N)
             {
-                _nearDistance += (e.Key == KeyboardKey.Q) ? 1 : -1;
+                _nKeyDown = true;
+            }
+            else if (e.Key == KeyboardKey.F)
+            {
+                _fKeyDown = true;
+            }
+            else if (_nKeyDown && ((e.Key == KeyboardKey.Up) || (e.Key == KeyboardKey.Down)))
+            {
+                _nearDistance += (e.Key == KeyboardKey.Up) ? 1 : -1;
 
                 UpdatePlanesAndDepthTests();
                 UpdateNearDistanceHUD();
             }
-            else if ((e.Key == KeyboardKey.W) || (e.Key == KeyboardKey.S))
+            else if (_fKeyDown && ((e.Key == KeyboardKey.Up) || (e.Key == KeyboardKey.Down)))
             {
-                _cubeRootFarDistance += (e.Key == KeyboardKey.W) ? 1 : -1;
+                _cubeRootFarDistance += (e.Key == KeyboardKey.Up) ? 1 : -1;
 
                 UpdatePlanesAndDepthTests();
                 UpdateFarDistanceHUD();
@@ -344,7 +363,10 @@ namespace MiniGlobe.Examples.Chapter4
         private readonly HeadsUpDisplay _planeHeightHUD;
         private readonly HeadsUpDisplay _depthFormatHUD;
         private readonly HeadsUpDisplay _depthTestHUD;
-        
+
+        private bool _nKeyDown;
+        private bool _fKeyDown;
+
         private readonly TextureFormat[] _depthFormats = new TextureFormat[]
         {
             TextureFormat.Depth16,
