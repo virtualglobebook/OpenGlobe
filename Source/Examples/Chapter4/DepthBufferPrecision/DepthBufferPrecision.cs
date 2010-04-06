@@ -37,6 +37,8 @@ namespace MiniGlobe.Examples.Chapter5
             _camera = new CameraLookAtPoint(_sceneState.Camera, _window, _globeShape);
             _sceneState.Camera.ZoomToTarget(_globeShape.MaximumRadius);
 
+            PersistentView.Execute(@"E:\Dropbox\My Dropbox\Book\Manuscript\DepthBufferPrecision\Figures\DepthBufferPrecisionNear.xml", _window, _sceneState.Camera);
+
             ///////////////////////////////////////////////////////////////////
 
             Context context = _window.Context;
@@ -91,13 +93,6 @@ namespace MiniGlobe.Examples.Chapter5
             _depthTestHUD = new HeadsUpDisplay(_window.Context);
             _depthTestHUD.Color = Color.Black;
             UpdateDepthTestHUD();
-
-            ///////////////////////////////////////////////////////////////////
-
-            HighResolutionSnap snap = new HighResolutionSnap(_window, _sceneState);
-            snap.ColorFilename = @"E:\Dropbox\My Dropbox\Book\Manuscript\DepthBufferPrecision\Figures\DepthBufferPrecision.png";
-            snap.WidthInInches = 3;
-            snap.DotsPerInch = 600;
         }
 
         private void OnResize()
