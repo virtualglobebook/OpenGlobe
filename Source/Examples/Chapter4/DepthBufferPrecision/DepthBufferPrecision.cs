@@ -39,7 +39,10 @@ namespace MiniGlobe.Examples.Chapter5
             _globe.Texture = Device.CreateTexture2D(new Bitmap("MapperWDB.jpg"), TextureFormat.RedGreenBlue8, false);
 
             _viewportQuad = new ViewportQuad(_window.Context);
-            _viewportQuad.Texture = Device.CreateTexture2D(new Bitmap("MapperWDB.jpg"), TextureFormat.RedGreenBlue8, false);
+
+            _frameBuffer = _window.Context.CreateFrameBuffer();
+
+            ///////////////////////////////////////////////////////////////////
 
             _camera = new CameraLookAtPoint(_sceneState.Camera, _window, globeShape);
             _sceneState.Camera.ZoomToTarget(globeShape.MaximumRadius);
@@ -54,14 +57,31 @@ namespace MiniGlobe.Examples.Chapter5
         {
             _window.Context.Viewport = new Rectangle(0, 0, _window.Width, _window.Height);
             _sceneState.Camera.AspectRatio = _window.Width / (double)_window.Height;
+
+            DisposeFrameBufferAttachments();
+            _colorTexture = Device.CreateTexture2D(new Texture2DDescription(_window.Width, _window.Height, TextureFormat.RedGreenBlue8, false));
+            _depthTexture = Device.CreateTexture2D(new Texture2DDescription(_window.Width, _window.Height, TextureFormat.Depth24, false));
+            _frameBuffer.ColorAttachments[0] = _colorTexture;
+            _frameBuffer.DepthAttachment = _depthTexture;
+            _viewportQuad.Texture = _colorTexture;
         }
 
         private void OnRenderFrame()
         {
-            _window.Context.Clear(ClearBuffers.ColorAndDepthBuffer, Color.White, 1, 0);
+            Context context = _window.Context;
 
-            _viewportQuad.Render(_sceneState);
+            //
+            // Render to frame buffer
+            //
+            context.Bind(_frameBuffer);
+            context.Clear(ClearBuffers.ColorAndDepthBuffer, Color.White, 1, 0);
             _globe.Render(_sceneState);
+
+            //
+            // Render viewport quad to show contents of frame buffer's color buffer
+            //
+            context.Bind(null as FrameBuffer);
+            _viewportQuad.Render(_sceneState);
         }
 
         #region IDisposable Members
@@ -72,11 +92,28 @@ namespace MiniGlobe.Examples.Chapter5
             _camera.Dispose();
             _globe.Texture.Dispose();
             _globe.Dispose();
-            _viewportQuad.Texture.Dispose();
             _viewportQuad.Dispose();
+
+            DisposeFrameBufferAttachments();
+            _frameBuffer.Dispose();
         }
 
         #endregion
+
+        private void DisposeFrameBufferAttachments()
+        {
+            if (_colorTexture != null)
+            {
+                _colorTexture.Dispose();
+                _colorTexture = null;
+            }
+
+            if (_depthTexture != null)
+            {
+                _depthTexture.Dispose();
+                _depthTexture = null;
+            }
+        }
 
         private void Run(double updateRate)
         {
@@ -96,5 +133,9 @@ namespace MiniGlobe.Examples.Chapter5
         private readonly CameraLookAtPoint _camera;
         private readonly TessellatedGlobe _globe;
         private readonly ViewportQuad _viewportQuad;
+
+        private Texture2D _colorTexture;
+        private Texture2D _depthTexture;
+        private readonly FrameBuffer _frameBuffer;
     }
 }

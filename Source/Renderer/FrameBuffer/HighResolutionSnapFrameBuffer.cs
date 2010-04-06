@@ -90,8 +90,8 @@ namespace MiniGlobe.Renderer
         private readonly int _dotsPerInch;
         private readonly double _aspectRatio;
 
-        Texture2D _colorTexture;
-        Texture2D _depthTexture;
-        FrameBuffer _frameBuffer;
+        private Texture2D _colorTexture;
+        private Texture2D _depthTexture;
+        private FrameBuffer _frameBuffer;
     }
 }
