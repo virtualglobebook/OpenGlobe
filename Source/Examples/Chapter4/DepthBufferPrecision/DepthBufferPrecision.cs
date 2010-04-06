@@ -38,6 +38,9 @@ namespace MiniGlobe.Examples.Chapter5
             _globe.Shape = globeShape;
             _globe.Texture = Device.CreateTexture2D(new Bitmap("MapperWDB.jpg"), TextureFormat.RedGreenBlue8, false);
 
+            _viewportQuad = new ViewportQuad(_window.Context);
+            _viewportQuad.Texture = Device.CreateTexture2D(new Bitmap("MapperWDB.jpg"), TextureFormat.RedGreenBlue8, false);
+
             _camera = new CameraLookAtPoint(_sceneState.Camera, _window, globeShape);
             _sceneState.Camera.ZoomToTarget(globeShape.MaximumRadius);
 
@@ -57,6 +60,7 @@ namespace MiniGlobe.Examples.Chapter5
         {
             _window.Context.Clear(ClearBuffers.ColorAndDepthBuffer, Color.White, 1, 0);
 
+            _viewportQuad.Render(_sceneState);
             _globe.Render(_sceneState);
         }
 
@@ -66,7 +70,10 @@ namespace MiniGlobe.Examples.Chapter5
         {
             _window.Dispose();
             _camera.Dispose();
+            _globe.Texture.Dispose();
             _globe.Dispose();
+            _viewportQuad.Texture.Dispose();
+            _viewportQuad.Dispose();
         }
 
         #endregion
@@ -88,5 +95,6 @@ namespace MiniGlobe.Examples.Chapter5
         private readonly SceneState _sceneState;
         private readonly CameraLookAtPoint _camera;
         private readonly TessellatedGlobe _globe;
+        private readonly ViewportQuad _viewportQuad;
     }
 }

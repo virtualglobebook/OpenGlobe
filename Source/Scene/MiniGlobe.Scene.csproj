@@ -40,6 +40,7 @@
     <Compile Include="Renderables\Axes.cs" />
     <Compile Include="Renderables\BillboardCollection\Billboard.cs" />
     <Compile Include="Renderables\BillboardCollection\BillboardCollection.cs" />
+    <Compile Include="Renderables\ViewportQuad.cs" />
     <Compile Include="Renderables\HeadsUpDisplay.cs" />
     <Compile Include="Renderables\Plane.cs" />
     <Compile Include="Renderables\Polyline\Polyline.cs" />

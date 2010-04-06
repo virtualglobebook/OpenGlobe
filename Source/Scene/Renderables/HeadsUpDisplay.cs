@@ -9,11 +9,9 @@
 
 using System;
 using System.Drawing;
-using System.Collections.Generic;
 using MiniGlobe.Core;
 using MiniGlobe.Core.Geometry;
 using MiniGlobe.Renderer;
-using System.Collections;
 
 namespace MiniGlobe.Scene
 {
