@@ -53,10 +53,10 @@ namespace MiniGlobe.Examples.Chapter3
             //CenterCameraOnPoint();
             //CenterCameraOnGlobeCenter();
 
-            PersistentView.Execute(@"E:\Dropbox\My Dropbox\Book\Manuscript\GlobeRendering\Figures\GPURayCasting.xml", _window, _sceneState.Camera);
+            PersistentView.Execute(@"E:\Manuscript\GlobeRendering\Figures\GPURayCasting.xml", _window, _sceneState.Camera);
 
             HighResolutionSnap snap = new HighResolutionSnap(_window, _sceneState);
-            snap.ColorFilename = @"E:\Dropbox\My Dropbox\Book\Manuscript\GlobeRendering\Figures\RayCasting.png";
+            snap.ColorFilename = @"E:\Manuscript\GlobeRendering\Figures\RayCasting.png";
             snap.WidthInInches = 3;
             snap.DotsPerInch = 600;
         }

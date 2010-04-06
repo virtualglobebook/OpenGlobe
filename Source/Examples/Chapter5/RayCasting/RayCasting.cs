@@ -57,7 +57,7 @@ namespace MiniGlobe.Examples.Chapter5
             _sceneState.Camera.ZoomToTarget(tileRadius);
 
             HighResolutionSnap snap = new HighResolutionSnap(_window, _sceneState);
-            snap.ColorFilename = @"E:\Dropbox\My Dropbox\Book\Manuscript\TerrainRendering\Figures\GPURayCasting.png";
+            snap.ColorFilename = @"E:\Manuscript\TerrainRendering\Figures\GPURayCasting.png";
             snap.WidthInInches = 3;
             snap.DotsPerInch = 600;
         }

@@ -146,10 +146,10 @@ namespace MiniGlobe.Examples.Chapter3
             _sceneState.Camera.PerspectiveNearPlaneDistance = 0.01 * _globeShape.MaximumRadius;
             _sceneState.Camera.PerspectiveFarPlaneDistance = 10.0 * _globeShape.MaximumRadius;
             _sceneState.Camera.ZoomToTarget(_globeShape.MaximumRadius);
-            PersistentView.Execute(@"E:\Dropbox\My Dropbox\Book\Manuscript\GlobeRendering\Figures\LatitudeLongitudeGridClosest.xml", _window, _sceneState.Camera);
+            PersistentView.Execute(@"E:\Manuscript\GlobeRendering\Figures\LatitudeLongitudeGridClosest.xml", _window, _sceneState.Camera);
 
             HighResolutionSnap snap = new HighResolutionSnap(_window, _sceneState);
-            snap.ColorFilename = @"E:\Dropbox\My Dropbox\Book\Manuscript\GlobeRendering\Figures\LatitudeLongitudeGridClosest.png";
+            snap.ColorFilename = @"E:\Manuscript\GlobeRendering\Figures\LatitudeLongitudeGridClosest.png";
             snap.WidthInInches = 1.5;
             snap.DotsPerInch = 600;
 

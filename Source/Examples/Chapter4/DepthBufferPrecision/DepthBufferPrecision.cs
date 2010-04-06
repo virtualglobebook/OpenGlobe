@@ -37,7 +37,7 @@ namespace MiniGlobe.Examples.Chapter5
             _camera = new CameraLookAtPoint(_sceneState.Camera, _window, _globeShape);
             _sceneState.Camera.ZoomToTarget(_globeShape.MaximumRadius);
 
-            PersistentView.Execute(@"E:\Dropbox\My Dropbox\Book\Manuscript\DepthBufferPrecision\Figures\DepthBufferPrecisionNear.xml", _window, _sceneState.Camera);
+            PersistentView.Execute(@"E:\Manuscript\DepthBufferPrecision\Figures\DepthBufferPrecisionNear.xml", _window, _sceneState.Camera);
 
             ///////////////////////////////////////////////////////////////////
 
