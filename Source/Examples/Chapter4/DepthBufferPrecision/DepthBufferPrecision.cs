@@ -26,6 +26,7 @@ namespace MiniGlobe.Examples.Chapter5
             _window = Device.CreateWindow(800, 600, "Chapter 4:  Depth Buffer Precision");
             _window.Resize += OnResize;
             _window.RenderFrame += OnRenderFrame;
+            _window.Keyboard.KeyDown += OnKeyDown;
             _sceneState = new SceneState();
 
             _sceneState.Camera.PerspectiveFarPlaneDistance = 1;
@@ -41,6 +42,11 @@ namespace MiniGlobe.Examples.Chapter5
             _viewportQuad = new ViewportQuad(_window.Context);
 
             _frameBuffer = _window.Context.CreateFrameBuffer();
+            _depthFormatIndex = 1;
+            _depthFormatHUD = new HeadsUpDisplay(_window.Context);
+            _depthFormatHUD.Color = Color.Black;
+            _hudFont = new Font("Arial", 16);
+            UpdateDepthFormatHUD();
 
             ///////////////////////////////////////////////////////////////////
 
@@ -58,12 +64,49 @@ namespace MiniGlobe.Examples.Chapter5
             _window.Context.Viewport = new Rectangle(0, 0, _window.Width, _window.Height);
             _sceneState.Camera.AspectRatio = _window.Width / (double)_window.Height;
 
+            UpdateFrameBufferAttachments();
+        }
+
+        private void OnKeyDown(object sender, KeyboardKeyEventArgs e)
+        {
+            if ((e.Key == KeyboardKey.Left) || (e.Key == KeyboardKey.Right))
+            {
+               _depthFormatIndex += (e.Key == KeyboardKey.Right) ? 1 : -1;
+                if (_depthFormatIndex < 0)
+                {
+                    _depthFormatIndex = 2;
+                }
+                else if (_depthFormatIndex > 2)
+                {
+                    _depthFormatIndex = 0;
+                }
+
+                UpdateFrameBufferAttachments();
+                UpdateDepthFormatHUD();
+            }
+        }
+
+        private void UpdateFrameBufferAttachments()
+        {
             DisposeFrameBufferAttachments();
             _colorTexture = Device.CreateTexture2D(new Texture2DDescription(_window.Width, _window.Height, TextureFormat.RedGreenBlue8, false));
-            _depthTexture = Device.CreateTexture2D(new Texture2DDescription(_window.Width, _window.Height, TextureFormat.Depth24, false));
+            _depthTexture = Device.CreateTexture2D(new Texture2DDescription(_window.Width, _window.Height, _depthFormats[_depthFormatIndex], false));
             _frameBuffer.ColorAttachments[0] = _colorTexture;
             _frameBuffer.DepthAttachment = _depthTexture;
             _viewportQuad.Texture = _colorTexture;
+        }
+
+        private void UpdateDepthFormatHUD()
+        {
+            if (_depthFormatHUD.Texture != null)
+            {
+                _depthFormatHUD.Texture.Dispose();
+                _depthFormatHUD.Texture = null;
+            }
+
+            _depthFormatHUD.Texture = Device.CreateTexture2D(
+                Device.CreateBitmapFromText("Depth Format: " + _depthFormatsStrings[_depthFormatIndex], _hudFont),
+                TextureFormat.RedGreenBlueAlpha8, false);
         }
 
         private void OnRenderFrame()
@@ -76,6 +119,7 @@ namespace MiniGlobe.Examples.Chapter5
             context.Bind(_frameBuffer);
             context.Clear(ClearBuffers.ColorAndDepthBuffer, Color.White, 1, 0);
             _globe.Render(_sceneState);
+            _depthFormatHUD.Render(_sceneState);
 
             //
             // Render viewport quad to show contents of frame buffer's color buffer
@@ -96,6 +140,9 @@ namespace MiniGlobe.Examples.Chapter5
 
             DisposeFrameBufferAttachments();
             _frameBuffer.Dispose();
+            _depthFormatHUD.Texture.Dispose();
+            _depthFormatHUD.Dispose();
+            _hudFont.Dispose();
         }
 
         #endregion
@@ -137,5 +184,22 @@ namespace MiniGlobe.Examples.Chapter5
         private Texture2D _colorTexture;
         private Texture2D _depthTexture;
         private readonly FrameBuffer _frameBuffer;
+        private int _depthFormatIndex;
+
+        private readonly HeadsUpDisplay _depthFormatHUD;
+        private readonly Font _hudFont;
+        
+        private readonly TextureFormat[] _depthFormats = new TextureFormat[]
+        {
+            TextureFormat.Depth16,
+            TextureFormat.Depth24,
+            TextureFormat.Depth32f
+        };
+        private readonly string[] _depthFormatsStrings = new string[]
+        {
+            "16-bit fixed point",
+            "24-bit fixed point",
+            "32-bit floating point",
+        };
     }
 }

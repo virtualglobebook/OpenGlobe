@@ -29,6 +29,7 @@ namespace MiniGlobe.Scene
             _context = context;
             _renderState = new RenderState();
             _renderState.FacetCulling.Enabled = false;
+            _renderState.DepthTest.Enabled = false;
             _renderState.Blending.Enabled = true;
             _renderState.Blending.SourceRGBFactor = SourceBlendingFactor.SourceAlpha;
             _renderState.Blending.SourceAlphaFactor = SourceBlendingFactor.SourceAlpha;
