@@ -15,7 +15,6 @@ using MiniGlobe.Renderer;
 using MiniGlobe.Scene;
 
 using MiniGlobe.Core;
-using MiniGlobe.Terrain;
 
 namespace MiniGlobe.Examples.Chapter5
 {
@@ -24,6 +23,8 @@ namespace MiniGlobe.Examples.Chapter5
         public DepthBufferPrecision()
         {
             _globeShape = Ellipsoid.Wgs84;
+            _nearDistance = 1;
+            _cubeRootFarDistance = 300;
 
             _window = Device.CreateWindow(800, 600, "Chapter 4:  Depth Buffer Precision");
             _window.Resize += OnResize;
@@ -35,8 +36,6 @@ namespace MiniGlobe.Examples.Chapter5
 
             _camera = new CameraLookAtPoint(_sceneState.Camera, _window, _globeShape);
             _sceneState.Camera.ZoomToTarget(_globeShape.MaximumRadius);
-            _sceneState.Camera.PerspectiveNearPlaneDistance = 1;
-            _sceneState.Camera.PerspectiveFarPlaneDistance = 50000000;
 
             ///////////////////////////////////////////////////////////////////
 
@@ -58,11 +57,22 @@ namespace MiniGlobe.Examples.Chapter5
             _frameBuffer = _window.Context.CreateFrameBuffer();
             _depthFormatIndex = 1;
             _depthTestLess = true;
-            
+            UpdatePlanesAndDepthTests();
+
             ///////////////////////////////////////////////////////////////////
 
             _hudFont = new Font("Arial", 16);
 
+            _nearDistanceHUD = new HeadsUpDisplay(_window.Context);
+            _nearDistanceHUD.Color = Color.Black;
+            _nearDistanceHUD.Position = new Vector2D(0, 120);
+            UpdateNearDistanceHUD();
+
+            _farDistanceHUD = new HeadsUpDisplay(_window.Context);
+            _farDistanceHUD.Color = Color.Black;
+            _farDistanceHUD.Position = new Vector2D(0, 96);
+            UpdateFarDistanceHUD();
+            
             _viewerHeightHUD = new HeadsUpDisplay(_window.Context);
             _viewerHeightHUD.Color = Color.Black;
             _viewerHeightHUD.Position = new Vector2D(0, 72);
@@ -81,7 +91,7 @@ namespace MiniGlobe.Examples.Chapter5
             _depthTestHUD = new HeadsUpDisplay(_window.Context);
             _depthTestHUD.Color = Color.Black;
             UpdateDepthTestHUD();
-            
+
             ///////////////////////////////////////////////////////////////////
 
             HighResolutionSnap snap = new HighResolutionSnap(_window, _sceneState);
@@ -100,7 +110,23 @@ namespace MiniGlobe.Examples.Chapter5
 
         private void OnKeyDown(object sender, KeyboardKeyEventArgs e)
         {
-            if ((e.Key == KeyboardKey.Plus) || (e.Key == KeyboardKey.KeypadPlus) ||
+            // TODO:  Use 'n' + up/down, and 'f' + up/down
+
+            if ((e.Key == KeyboardKey.Q) || (e.Key == KeyboardKey.A))
+            {
+                _nearDistance += (e.Key == KeyboardKey.Q) ? 1 : -1;
+
+                UpdatePlanesAndDepthTests();
+                UpdateNearDistanceHUD();
+            }
+            else if ((e.Key == KeyboardKey.W) || (e.Key == KeyboardKey.S))
+            {
+                _cubeRootFarDistance += (e.Key == KeyboardKey.W) ? 1 : -1;
+
+                UpdatePlanesAndDepthTests();
+                UpdateFarDistanceHUD();
+            }
+            else if ((e.Key == KeyboardKey.Plus) || (e.Key == KeyboardKey.KeypadPlus) ||
                 (e.Key == KeyboardKey.Minus) || (e.Key == KeyboardKey.KeypadMinus))
             {
                 _cubeRootPlaneHeight += ((e.Key == KeyboardKey.Plus) || (e.Key == KeyboardKey.KeypadPlus)) ? 1 : -1;
@@ -127,7 +153,7 @@ namespace MiniGlobe.Examples.Chapter5
             {
                 _depthTestLess = !_depthTestLess;
 
-                UpdateDepthTests();
+                UpdatePlanesAndDepthTests();
                 UpdateDepthTestHUD();
             }
         }
@@ -148,29 +174,26 @@ namespace MiniGlobe.Examples.Chapter5
             _viewportQuad.Texture = _colorTexture;
         }
 
-        private void UpdateDepthTests()
+        private void UpdatePlanesAndDepthTests()
         {
-            _sceneState.Camera.PerspectiveNearPlaneDistance = _depthTestLess ? 1 : 50000000;
-            _sceneState.Camera.PerspectiveFarPlaneDistance = _depthTestLess ? 50000000 : 1;
+            double farDistance = _cubeRootFarDistance * _cubeRootFarDistance * _cubeRootFarDistance;
+
+            _sceneState.Camera.PerspectiveNearPlaneDistance = _depthTestLess ? _nearDistance : farDistance;
+            _sceneState.Camera.PerspectiveFarPlaneDistance = _depthTestLess ? farDistance : _nearDistance;
 
             _globe.DepthTestFunction = _depthTestLess ? DepthTestFunction.Less : DepthTestFunction.Greater;
             _plane.DepthTestFunction = _depthTestLess ? DepthTestFunction.Less : DepthTestFunction.Greater;
         }
-
-        private void UpdateDepthTestHUD()
+        
+        private void UpdateNearDistanceHUD()
         {
-            UpdateHUDTexture(_depthTestHUD, "Depth Test: " + (_depthTestLess ? "less" : "greater") + " ('d')");
+            UpdateHUDTexture(_nearDistanceHUD, "Near Plane: " + String.Format("{0:N}" + " ('n' + up/down)", _nearDistance));
         }
 
-        private void UpdateDepthFormatHUD()
+        private void UpdateFarDistanceHUD()
         {
-            UpdateHUDTexture(_depthFormatHUD, "Depth Format: " + _depthFormatsStrings[_depthFormatIndex] + " (left/right)");
-        }
-
-        private void UpdatePlaneHeightHUD()
-        {
-            UpdateHUDTexture(_planeHeightHUD, "Plane Height: " +
-                String.Format("{0:N}", _cubeRootPlaneHeight * _cubeRootPlaneHeight * _cubeRootPlaneHeight) + " (-/+)");
+            UpdateHUDTexture(_farDistanceHUD, "Far Plane: " + String.Format("{0:N}" + " ('f' + up/down)",
+                _cubeRootFarDistance * _cubeRootFarDistance * _cubeRootFarDistance));
         }
 
         private void UpdateViewerHeightHUD()
@@ -181,6 +204,22 @@ namespace MiniGlobe.Examples.Chapter5
                 UpdateHUDTexture(_viewerHeightHUD, "Viewer Height: " + String.Format("{0:N}", height));
                 _viewerHeight = height;
             }
+        }
+
+        private void UpdatePlaneHeightHUD()
+        {
+            UpdateHUDTexture(_planeHeightHUD, "Plane Height: " +
+                String.Format("{0:N}", _cubeRootPlaneHeight * _cubeRootPlaneHeight * _cubeRootPlaneHeight) + " ('-'/'+')");
+        }
+
+        private void UpdateDepthTestHUD()
+        {
+            UpdateHUDTexture(_depthTestHUD, "Depth Test: " + (_depthTestLess ? "less" : "greater") + " ('d')");
+        }
+
+        private void UpdateDepthFormatHUD()
+        {
+            UpdateHUDTexture(_depthFormatHUD, "Depth Format: " + _depthFormatsStrings[_depthFormatIndex] + " (left/right)");
         }
 
         private void UpdateHUDTexture(HeadsUpDisplay hud, string text)
@@ -210,6 +249,8 @@ namespace MiniGlobe.Examples.Chapter5
             _globe.Render(_sceneState);
             _plane.Render(_sceneState);
 
+            _nearDistanceHUD.Render(_sceneState);
+            _farDistanceHUD.Render(_sceneState);
             _viewerHeightHUD.Render(_sceneState);
             _planeHeightHUD.Render(_sceneState);
             _depthFormatHUD.Render(_sceneState);
@@ -237,6 +278,10 @@ namespace MiniGlobe.Examples.Chapter5
             _frameBuffer.Dispose();
 
             _hudFont.Dispose();
+            _nearDistanceHUD.Texture.Dispose();
+            _nearDistanceHUD.Dispose();
+            _farDistanceHUD.Texture.Dispose();
+            _farDistanceHUD.Dispose();
             _viewerHeightHUD.Texture.Dispose();
             _viewerHeightHUD.Dispose();
             _planeHeightHUD.Texture.Dispose();
@@ -278,6 +323,8 @@ namespace MiniGlobe.Examples.Chapter5
         }
 
         private readonly Ellipsoid _globeShape;
+        private double _nearDistance;
+        private double _cubeRootFarDistance;
 
         private readonly MiniGlobeWindow _window;
         private readonly SceneState _sceneState;
@@ -295,6 +342,8 @@ namespace MiniGlobe.Examples.Chapter5
         private bool _depthTestLess;
 
         private readonly Font _hudFont;
+        private readonly HeadsUpDisplay _nearDistanceHUD;
+        private readonly HeadsUpDisplay _farDistanceHUD;
         private readonly HeadsUpDisplay _viewerHeightHUD;
         private readonly HeadsUpDisplay _planeHeightHUD;
         private readonly HeadsUpDisplay _depthFormatHUD;
