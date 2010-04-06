@@ -76,7 +76,7 @@ namespace MiniGlobe.Scene
             _va.VertexBuffers[_sp.VertexAttributes["textureCoordinates"].Location] = attachedTextureCoordinates;
         }
 
-        private void Update(SceneState sceneState)
+        private void Update()
         {
             if (_viewport != _context.Viewport)
             {
@@ -117,7 +117,7 @@ namespace MiniGlobe.Scene
                 throw new InvalidOperationException("Texture");
             }
 
-            Update(sceneState);
+            Update();
 
             _context.TextureUnits[0].Texture2D = Texture;
             _context.Bind(_renderState);

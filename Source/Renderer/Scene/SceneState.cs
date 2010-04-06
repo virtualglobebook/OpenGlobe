@@ -9,6 +9,7 @@
 
 using OpenTK;
 using System.Drawing;
+using System.Diagnostics;
 using MiniGlobe.Core;
 
 namespace MiniGlobe.Renderer
@@ -93,14 +94,10 @@ namespace MiniGlobe.Renderer
                 double zNear = Camera.PerspectiveNearPlaneDistance;
                 double zFar = Camera.PerspectiveFarPlaneDistance;
 
-                if (fovy <= 0 || fovy > System.Math.PI)
-                    throw new System.ArgumentOutOfRangeException("fovy");
-                if (aspect <= 0)
-                    throw new System.ArgumentOutOfRangeException("aspect");
-                if (zNear <= 0)
-                    throw new System.ArgumentOutOfRangeException("zNear");
-                if (zFar <= 0)
-                    throw new System.ArgumentOutOfRangeException("zFar");
+                Debug.Assert(fovy > 0 && fovy <= System.Math.PI);
+                Debug.Assert(aspect > 0);
+                Debug.Assert(zNear > 0);
+                Debug.Assert(zFar > 0);
 
                 double yMax = zNear * System.Math.Tan(0.5 * fovy);
                 double yMin = -yMax;

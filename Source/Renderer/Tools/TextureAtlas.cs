@@ -33,7 +33,7 @@ namespace MiniGlobe.Renderer
 
             if (numberOfBitmaps == 0)
             {
-                throw new ArgumentException("bitmaps", "bitmaps does not contain any items.");
+                throw new ArgumentException("bitmaps does not contain any items.", "bitmaps");
             }
 
             List<AnnotatedBitmap> annotatedBitmaps = new List<AnnotatedBitmap>(numberOfBitmaps);
@@ -54,7 +54,7 @@ namespace MiniGlobe.Renderer
                 }
                 else if (b.PixelFormat != pixelFormat)
                 {
-                    throw new ArgumentException("bitmaps", "All bitmaps must have the same PixelFormat.");
+                    throw new ArgumentException("All bitmaps must have the same PixelFormat.", "bitmaps");
                 }
 
                 annotatedBitmaps.Add(new AnnotatedBitmap(b, j++));
@@ -62,7 +62,7 @@ namespace MiniGlobe.Renderer
 
             if (pixelFormat == PixelFormat.Undefined)
             {
-                throw new ArgumentException("bitmaps", "All bitmaps have PixelFormat.Undefined.");
+                throw new ArgumentException("All bitmaps have PixelFormat.Undefined.", "bitmaps");
             }
 
             if (borderWidthInPixels < 0)

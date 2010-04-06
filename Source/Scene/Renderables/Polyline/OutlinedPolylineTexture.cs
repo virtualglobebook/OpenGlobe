@@ -42,14 +42,14 @@ namespace MiniGlobe.Scene
                 mesh.PrimitiveType != PrimitiveType.LineLoop &&
                 mesh.PrimitiveType != PrimitiveType.LineStrip)
             {
-                throw new ArgumentException("mesh", "mesh.PrimitiveType must be Lines, LineLoop, or LineStrip.");
+                throw new ArgumentException("mesh.PrimitiveType must be Lines, LineLoop, or LineStrip.", "mesh");
             }
 
             if (!mesh.Attributes.Contains("position") &&
                 !mesh.Attributes.Contains("color") &&
                 !mesh.Attributes.Contains("outlineColor"))
             {
-                throw new ArgumentException("mesh", "mesh.Attributes should contain attributes named \"position\", \"color\", and \"outlineColor\".");
+                throw new ArgumentException("mesh.Attributes should contain attributes named \"position\", \"color\", and \"outlineColor\".", "mesh");
             }
 
             if (_sp == null)

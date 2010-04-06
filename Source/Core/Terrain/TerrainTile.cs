@@ -61,7 +61,7 @@ namespace MiniGlobe.Terrain
 
             if (heights.Length != size.Width * size.Height)
             {
-                throw new ArgumentException("heights", "heights.Length != size.Width * size.Height");
+                throw new ArgumentException("heights.Length != size.Width * size.Height");
             }
 
             if (minimumHeight > maximumHeight)

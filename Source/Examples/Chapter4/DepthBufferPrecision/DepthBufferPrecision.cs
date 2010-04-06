@@ -9,12 +9,12 @@
 
 using System;
 using System.Drawing;
+using System.Globalization;
 
+using MiniGlobe.Core;
 using MiniGlobe.Core.Geometry;
 using MiniGlobe.Renderer;
 using MiniGlobe.Scene;
-
-using MiniGlobe.Core;
 
 namespace MiniGlobe.Examples.Chapter5
 {
@@ -182,12 +182,13 @@ namespace MiniGlobe.Examples.Chapter5
         
         private void UpdateNearDistanceHUD()
         {
-            UpdateHUDTexture(_nearDistanceHUD, "Near Plane: " + String.Format("{0:N}" + " ('n' + up/down)", _nearDistance));
+            UpdateHUDTexture(_nearDistanceHUD, "Near Plane: " + 
+                string.Format(CultureInfo.CurrentCulture, "{0:N}" + " ('n' + up/down)", _nearDistance));
         }
 
         private void UpdateFarDistanceHUD()
         {
-            UpdateHUDTexture(_farDistanceHUD, "Far Plane: " + String.Format("{0:N}" + " ('f' + up/down)",
+            UpdateHUDTexture(_farDistanceHUD, "Far Plane: " + string.Format(CultureInfo.CurrentCulture, "{0:N}" + " ('f' + up/down)",
                 _cubeRootFarDistance * _cubeRootFarDistance * _cubeRootFarDistance));
         }
 
@@ -196,7 +197,7 @@ namespace MiniGlobe.Examples.Chapter5
             double height = _sceneState.Camera.Altitude(_globeShape);
             if (_viewerHeight != height)
             {
-                UpdateHUDTexture(_viewerHeightHUD, "Viewer Height: " + String.Format("{0:N}", height));
+                UpdateHUDTexture(_viewerHeightHUD, "Viewer Height: " + string.Format(CultureInfo.CurrentCulture, "{0:N}", height));
                 _viewerHeight = height;
             }
         }
@@ -204,7 +205,7 @@ namespace MiniGlobe.Examples.Chapter5
         private void UpdatePlaneHeightHUD()
         {
             UpdateHUDTexture(_planeHeightHUD, "Plane Height: " +
-                String.Format("{0:N}", _cubeRootPlaneHeight * _cubeRootPlaneHeight * _cubeRootPlaneHeight) + " ('-'/'+')");
+                string.Format(CultureInfo.CurrentCulture, "{0:N}", _cubeRootPlaneHeight * _cubeRootPlaneHeight * _cubeRootPlaneHeight) + " ('-'/'+')");
         }
 
         private void UpdateDepthTestHUD()

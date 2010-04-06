@@ -23,7 +23,7 @@ namespace MiniGlobe.Renderer.GL32
 
             if (description.GenerateMipmaps && (textureTarget == TextureTarget.TextureRectangle))
             {
-                throw new ArgumentException("description", "description.GenerateMipmaps cannot be true for texture rectangles.");
+                throw new ArgumentException("description.GenerateMipmaps cannot be true for texture rectangles.", "description");
             }
 
             int textureUnits;
@@ -170,7 +170,7 @@ namespace MiniGlobe.Renderer.GL32
                 if (_filter.MinificationFilter != TextureMinificationFilter.Linear &&
                     _filter.MinificationFilter != TextureMinificationFilter.Nearest)
                 {
-                    throw new ArgumentException("filter", "Rectangle textures only support linear and nearest minification filters.");
+                    throw new ArgumentException("Rectangle textures only support linear and nearest minification filters.");
                 }
 
                 if (_filter.WrapS == TextureWrap.Repeat ||
@@ -178,7 +178,7 @@ namespace MiniGlobe.Renderer.GL32
                     _filter.WrapT == TextureWrap.Repeat ||
                     _filter.WrapT == TextureWrap.MirroredRepeat)
                 {
-                    throw new ArgumentException("filter", "Rectangle textures do not support repeat and mirrored repeat wrap modes.");
+                    throw new ArgumentException("Rectangle textures do not support repeat and mirrored repeat wrap modes.");
                 }
             }
 

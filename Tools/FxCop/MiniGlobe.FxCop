@@ -31,6 +31,7 @@
   <Target Name="$(ProjectDir)/../../Source/Examples/Chapter3/RayCasting/bin/Release/Chapter3RayCasting.exe" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/../../Source/Examples/Chapter3/SubdivisionSphere1/bin/Release/Chapter3SubdivisionSphere1.exe" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/../../Source/Examples/Chapter3/SubdivisionSphere2/bin/Release/Chapter3SubdivisionSphere2.exe" Analyze="True" AnalyzeAllChildren="True" />
+  <Target Name="$(ProjectDir)/../../Source/Examples/Chapter4/DepthBufferPrecision/bin/Release/Chapter4DepthBufferPrecision.exe" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/../../Source/Examples/Chapter4/NumberPrecision/bin/Release/Chapter4NumberPrecision.exe" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/../../Source/Examples/Chapter5/RayCasting/bin/Release/Chapter5RayCasting.exe" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/../../Source/Examples/Chapter7/Billboards/bin/Release/Chapter7Billboards.exe" Analyze="True" AnalyzeAllChildren="True" />
@@ -128,10 +129,15 @@
    </Namespace>
    <Namespace Name="MiniGlobe.Terrain">
     <Messages>
-     <Message TypeName="AvoidNamespacesWithFewTypes" Category="Microsoft.Design" CheckId="CA1020" Created="2010-03-31 02:11:39Z">
+     <Message TypeName="AvoidNamespacesWithFewTypes" Category="Microsoft.Design" CheckId="CA1020" Status="Excluded" Created="2010-03-31 02:11:39Z">
       <Issue>
        <Item>MiniGlobe.Terrain</Item>
       </Issue>
+      <Notes>
+       <User Name="pjcozzi">
+        <Note Id="52" />
+       </User>
+      </Notes>
      </Message>
     </Messages>
    </Namespace>
@@ -215,6 +221,19 @@
      </Module>
     </Modules>
    </Target>
+   <Target Name="$(ProjectDir)/../../Source/Examples/Chapter4/DepthBufferPrecision/bin/Release/Chapter4DepthBufferPrecision.exe">
+    <Modules>
+     <Module Name="chapter4depthbufferprecision.exe">
+      <Messages>
+       <Message TypeName="AssembliesShouldHaveValidStrongNames" Category="Microsoft.Design" CheckId="CA2210" Created="2010-04-06 19:32:12Z">
+        <Issue Name="NoStrongName">
+         <Item>'Chapter4DepthBufferPrecision.exe'</Item>
+        </Issue>
+       </Message>
+      </Messages>
+     </Module>
+    </Modules>
+   </Target>
    <Target Name="$(ProjectDir)/../../Source/Examples/Chapter4/NumberPrecision/bin/Release/Chapter4NumberPrecision.exe">
     <Modules>
      <Module Name="chapter4numberprecision.exe">
@@ -238,26 +257,6 @@
         </Issue>
        </Message>
       </Messages>
-      <Namespaces>
-       <Namespace Name="MiniGlobe.Examples.Chapter5">
-        <Types>
-         <Type Name="RayCasting">
-          <Members>
-           <Member Name="#.ctor()">
-            <Messages>
-             <Message Id="System.Drawing.Size" TypeName="DoNotIgnoreMethodResults" Category="Microsoft.Usage" CheckId="CA1806" Created="2010-03-31 02:44:15Z">
-              <Issue Name="ObjectCreation">
-               <Item>'RayCasting.RayCasting()'</Item>
-               <Item>'Size'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-          </Members>
-         </Type>
-        </Types>
-       </Namespace>
-      </Namespaces>
      </Module>
     </Modules>
    </Target>
@@ -1781,24 +1780,6 @@
         <Types>
          <Type Name="TerrainTile">
           <Members>
-           <Member Name="#.ctor(System.Drawing.Size,System.Single[],System.Single,System.Single)">
-            <Messages>
-             <Message TypeName="InstantiateArgumentExceptionsCorrectly" Category="Microsoft.Usage" CheckId="CA2208" Created="2010-03-31 02:11:39Z">
-              <Issue Name="IncorrectMessage">
-               <Item>'TerrainTile.TerrainTile(Size, float[], float, float)'</Item>
-               <Item>heights</Item>
-               <Item>'message'</Item>
-               <Item>'ArgumentException'</Item>
-              </Issue>
-              <Issue Name="IncorrectParameterName">
-               <Item>'TerrainTile.TerrainTile(Size, float[], float, float)'</Item>
-               <Item>heights.Length != size.Width * size.Height</Item>
-               <Item>'paramName'</Item>
-               <Item>'ArgumentException'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
            <Member Name="#Heights">
             <Messages>
              <Message TypeName="PropertiesShouldNotReturnArrays" Category="Microsoft.Performance" CheckId="CA1819" Created="2010-03-31 02:11:39Z">
@@ -4709,86 +4690,6 @@
          </Type>
         </Types>
        </Namespace>
-       <Namespace Name="MiniGlobe.Renderer.GL32">
-        <Types>
-         <Type Name="Texture2DGL32">
-          <Members>
-           <Member Name="#.ctor(MiniGlobe.Renderer.Texture2DDescription,OpenTK.Graphics.OpenGL.TextureTarget)">
-            <Messages>
-             <Message TypeName="InstantiateArgumentExceptionsCorrectly" Category="Microsoft.Usage" CheckId="CA2208" Created="2010-03-31 02:44:15Z">
-              <Issue Name="IncorrectMessage">
-               <Item>'Texture2DGL32.Texture2DGL32(Texture2DDescription, TextureTarget)'</Item>
-               <Item>description</Item>
-               <Item>'message'</Item>
-               <Item>'ArgumentException'</Item>
-              </Issue>
-              <Issue Name="IncorrectParameterName">
-               <Item>'Texture2DGL32.Texture2DGL32(Texture2DDescription, TextureTarget)'</Item>
-               <Item>description.GenerateMipmaps cannot be true for texture rectangles.</Item>
-               <Item>'paramName'</Item>
-               <Item>'ArgumentException'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-           <Member Name="#ApplyFilter()">
-            <Messages>
-             <Message TypeName="InstantiateArgumentExceptionsCorrectly" Category="Microsoft.Usage" CheckId="CA2208" Created="2010-03-31 02:44:15Z">
-              <Issue Name="IncorrectParameterName">
-               <Item>'Texture2DGL32.ApplyFilter()'</Item>
-               <Item>Rectangle textures do not support repeat and mirrored repeat wrap modes.</Item>
-               <Item>'paramName'</Item>
-               <Item>'ArgumentException'</Item>
-              </Issue>
-              <Issue Name="IncorrectParameterName">
-               <Item>'Texture2DGL32.ApplyFilter()'</Item>
-               <Item>Rectangle textures only support linear and nearest minification filters.</Item>
-               <Item>'paramName'</Item>
-               <Item>'ArgumentException'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-          </Members>
-         </Type>
-         <Type Name="TextureUnitGL32">
-          <Members>
-           <Member Name="#Texture2D">
-            <Accessors>
-             <Accessor Name="#set_Texture2D(MiniGlobe.Renderer.Texture2D)">
-              <Messages>
-               <Message TypeName="InstantiateArgumentExceptionsCorrectly" Category="Microsoft.Usage" CheckId="CA2208" Created="2010-03-31 02:44:15Z">
-                <Issue Name="IncorrectParameterName">
-                 <Item>'TextureUnitGL32.Texture2D.set(Texture2D)'</Item>
-                 <Item>Incompatible texture.  Did you create the texture with Device.CreateTexture2D?</Item>
-                 <Item>'paramName'</Item>
-                 <Item>'ArgumentException'</Item>
-                </Issue>
-               </Message>
-              </Messages>
-             </Accessor>
-            </Accessors>
-           </Member>
-           <Member Name="#Texture2DRectangle">
-            <Accessors>
-             <Accessor Name="#set_Texture2DRectangle(MiniGlobe.Renderer.Texture2D)">
-              <Messages>
-               <Message TypeName="InstantiateArgumentExceptionsCorrectly" Category="Microsoft.Usage" CheckId="CA2208" Created="2010-03-31 02:44:15Z">
-                <Issue Name="IncorrectParameterName">
-                 <Item>'TextureUnitGL32.Texture2DRectangle.set(Texture2D)'</Item>
-                 <Item>Incompatible texture.  Did you create the texture with Device.CreateTexture2DRectangle?</Item>
-                 <Item>'paramName'</Item>
-                 <Item>'ArgumentException'</Item>
-                </Issue>
-               </Message>
-              </Messages>
-             </Accessor>
-            </Accessors>
-           </Member>
-          </Members>
-         </Type>
-        </Types>
-       </Namespace>
       </Namespaces>
      </Module>
     </Modules>
@@ -4841,104 +4742,6 @@
            </Member>
           </Members>
          </Type>
-         <Type Name="OutlinedPolylineGeometryShader">
-          <Members>
-           <Member Name="#Set(MiniGlobe.Core.Geometry.Mesh)">
-            <Messages>
-             <Message TypeName="InstantiateArgumentExceptionsCorrectly" Category="Microsoft.Usage" CheckId="CA2208" Created="2010-03-31 02:44:15Z">
-              <Issue Name="IncorrectMessage">
-               <Item>'OutlinedPolylineGeometryShader.Set(Mesh)'</Item>
-               <Item>mesh</Item>
-               <Item>'message'</Item>
-               <Item>'ArgumentException'</Item>
-              </Issue>
-              <Issue Name="IncorrectMessage">
-               <Item>'OutlinedPolylineGeometryShader.Set(Mesh)'</Item>
-               <Item>mesh</Item>
-               <Item>'message'</Item>
-               <Item>'ArgumentException'</Item>
-              </Issue>
-              <Issue Name="IncorrectParameterName">
-               <Item>'OutlinedPolylineGeometryShader.Set(Mesh)'</Item>
-               <Item>mesh.Attributes should contain attributes named "position", "color", and "outlineColor".</Item>
-               <Item>'paramName'</Item>
-               <Item>'ArgumentException'</Item>
-              </Issue>
-              <Issue Name="IncorrectParameterName">
-               <Item>'OutlinedPolylineGeometryShader.Set(Mesh)'</Item>
-               <Item>mesh.PrimitiveType must be Lines, LineLoop, or LineStrip.</Item>
-               <Item>'paramName'</Item>
-               <Item>'ArgumentException'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-          </Members>
-         </Type>
-         <Type Name="OutlinedPolylineTexture">
-          <Members>
-           <Member Name="#Set(MiniGlobe.Core.Geometry.Mesh)">
-            <Messages>
-             <Message TypeName="InstantiateArgumentExceptionsCorrectly" Category="Microsoft.Usage" CheckId="CA2208" Created="2010-03-31 02:44:15Z">
-              <Issue Name="IncorrectMessage">
-               <Item>'OutlinedPolylineTexture.Set(Mesh)'</Item>
-               <Item>mesh</Item>
-               <Item>'message'</Item>
-               <Item>'ArgumentException'</Item>
-              </Issue>
-              <Issue Name="IncorrectMessage">
-               <Item>'OutlinedPolylineTexture.Set(Mesh)'</Item>
-               <Item>mesh</Item>
-               <Item>'message'</Item>
-               <Item>'ArgumentException'</Item>
-              </Issue>
-              <Issue Name="IncorrectParameterName">
-               <Item>'OutlinedPolylineTexture.Set(Mesh)'</Item>
-               <Item>mesh.Attributes should contain attributes named "position", "color", and "outlineColor".</Item>
-               <Item>'paramName'</Item>
-               <Item>'ArgumentException'</Item>
-              </Issue>
-              <Issue Name="IncorrectParameterName">
-               <Item>'OutlinedPolylineTexture.Set(Mesh)'</Item>
-               <Item>mesh.PrimitiveType must be Lines, LineLoop, or LineStrip.</Item>
-               <Item>'paramName'</Item>
-               <Item>'ArgumentException'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-          </Members>
-         </Type>
-         <Type Name="Plane">
-          <Members>
-           <Member Name="#.ctor(MiniGlobe.Renderer.Context,MiniGlobe.Core.Vector3D,MiniGlobe.Core.Vector3D,MiniGlobe.Core.Vector3D)">
-            <Messages>
-             <Message Id="x" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-03-03 23:33:07Z">
-              <Issue Name="MemberParameterMoreMeaningfulName">
-               <Item>'Plane.Plane(Context, Vector3D, Vector3D, Vector3D)'</Item>
-               <Item>'x'</Item>
-              </Issue>
-              <Notes>
-               <User Name="pjcozzi">
-                <Note Id="37" />
-               </User>
-              </Notes>
-             </Message>
-             <Message Id="y" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-03-03 23:33:07Z">
-              <Issue Name="MemberParameterMoreMeaningfulName">
-               <Item>'Plane.Plane(Context, Vector3D, Vector3D, Vector3D)'</Item>
-               <Item>'y'</Item>
-              </Issue>
-              <Notes>
-               <User Name="pjcozzi">
-                <Note Id="37" />
-               </User>
-              </Notes>
-             </Message>
-            </Messages>
-           </Member>
-          </Members>
-         </Type>
          <Type Name="Polyline">
           <Messages>
            <Message Id="Polyline" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-03-03 23:33:07Z">
@@ -4953,34 +4756,21 @@
             </Notes>
            </Message>
           </Messages>
+         </Type>
+         <Type Name="ViewportQuad">
           <Members>
-           <Member Name="#Set(MiniGlobe.Core.Geometry.Mesh)">
+           <Member Name="#.ctor(MiniGlobe.Renderer.Context)">
             <Messages>
-             <Message TypeName="InstantiateArgumentExceptionsCorrectly" Category="Microsoft.Usage" CheckId="CA2208" Created="2010-03-31 02:44:15Z">
-              <Issue Name="IncorrectMessage">
-               <Item>'Polyline.Set(Mesh)'</Item>
-               <Item>mesh</Item>
-               <Item>'message'</Item>
-               <Item>'ArgumentException'</Item>
+             <Message Id="MiniGlobe.Renderer.AttachedVertexBuffer" TypeName="DoNotIgnoreMethodResults" Category="Microsoft.Usage" CheckId="CA1806" Status="Excluded" Created="2010-04-06 19:32:12Z">
+              <Issue Name="ObjectCreation">
+               <Item>'ViewportQuad.ViewportQuad(Context)'</Item>
+               <Item>'AttachedVertexBuffer'</Item>
               </Issue>
-              <Issue Name="IncorrectMessage">
-               <Item>'Polyline.Set(Mesh)'</Item>
-               <Item>mesh</Item>
-               <Item>'message'</Item>
-               <Item>'ArgumentException'</Item>
-              </Issue>
-              <Issue Name="IncorrectParameterName">
-               <Item>'Polyline.Set(Mesh)'</Item>
-               <Item>mesh.Attributes should contain attributes named "position" and "color".</Item>
-               <Item>'paramName'</Item>
-               <Item>'ArgumentException'</Item>
-              </Issue>
-              <Issue Name="IncorrectParameterName">
-               <Item>'Polyline.Set(Mesh)'</Item>
-               <Item>mesh.PrimitiveType must be Lines, LineLoop, or LineStrip.</Item>
-               <Item>'paramName'</Item>
-               <Item>'ArgumentException'</Item>
-              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="46" />
+               </User>
+              </Notes>
              </Message>
             </Messages>
            </Member>
@@ -4996,13 +4786,18 @@
             <Accessors>
              <Accessor Name="#set_HeightExaggeration(System.Single)">
               <Messages>
-               <Message TypeName="InstantiateArgumentExceptionsCorrectly" Category="Microsoft.Usage" CheckId="CA2208" Created="2010-03-31 02:44:15Z">
+               <Message TypeName="InstantiateArgumentExceptionsCorrectly" Category="Microsoft.Usage" CheckId="CA2208" Status="Excluded" Created="2010-03-31 02:44:15Z">
                 <Issue Name="IncorrectParameterName">
                  <Item>'RayCastedTerrainTile.HeightExaggeration.set(float)'</Item>
                  <Item>HeightExaggeration</Item>
                  <Item>'paramName'</Item>
                  <Item>'ArgumentOutOfRangeException'</Item>
                 </Issue>
+                <Notes>
+                 <User Name="pjcozzi">
+                  <Note Id="37" />
+                 </User>
+                </Notes>
                </Message>
               </Messages>
              </Accessor>
@@ -5065,28 +4860,43 @@
           <Members>
            <Member Name="#Construct()">
             <Messages>
-             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Created="2010-03-31 02:44:15Z" FixCategory="DependsOnFix">
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-03-31 02:44:15Z" FixCategory="DependsOnFix">
               <Issue>
                <Item>'Geodetic2DTests.Construct()'</Item>
               </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="54" />
+               </User>
+              </Notes>
              </Message>
             </Messages>
            </Member>
            <Member Name="#TestEquals()">
             <Messages>
-             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Created="2010-03-31 02:44:15Z" FixCategory="DependsOnFix">
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-03-31 02:44:15Z" FixCategory="DependsOnFix">
               <Issue>
                <Item>'Geodetic2DTests.TestEquals()'</Item>
               </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="54" />
+               </User>
+              </Notes>
              </Message>
             </Messages>
            </Member>
            <Member Name="#TestGetHashCode()">
             <Messages>
-             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Created="2010-03-31 02:44:15Z" FixCategory="DependsOnFix">
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-03-31 02:44:15Z" FixCategory="DependsOnFix">
               <Issue>
                <Item>'Geodetic2DTests.TestGetHashCode()'</Item>
               </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="54" />
+               </User>
+              </Notes>
              </Message>
             </Messages>
            </Member>
@@ -5142,19 +4952,29 @@
           <Members>
            <Member Name="#Construct()">
             <Messages>
-             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Created="2010-03-31 02:44:15Z" FixCategory="DependsOnFix">
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-03-31 02:44:15Z" FixCategory="DependsOnFix">
               <Issue>
                <Item>'GeodeticExtentTests.Construct()'</Item>
               </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="54" />
+               </User>
+              </Notes>
              </Message>
             </Messages>
            </Member>
            <Member Name="#Equals()">
             <Messages>
-             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Created="2010-03-31 02:44:15Z" FixCategory="DependsOnFix">
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-03-31 02:44:15Z" FixCategory="DependsOnFix">
               <Issue>
                <Item>'GeodeticExtentTests.Equals()'</Item>
               </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="54" />
+               </User>
+              </Notes>
              </Message>
             </Messages>
            </Member>
@@ -5164,35 +4984,55 @@
           <Members>
            <Member Name="#TestComparisonOperators()">
             <Messages>
-             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Created="2010-03-31 02:44:15Z" FixCategory="DependsOnFix">
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-03-31 02:44:15Z" FixCategory="DependsOnFix">
               <Issue>
                <Item>'HalfTests.TestComparisonOperators()'</Item>
               </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="54" />
+               </User>
+              </Notes>
              </Message>
             </Messages>
            </Member>
            <Member Name="#TestDoubleRoundTrip()">
             <Messages>
-             <Message Id="RoundTrip" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Created="2010-03-31 02:44:15Z">
+             <Message Id="RoundTrip" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Status="Excluded" Created="2010-03-31 02:44:15Z">
               <Issue Name="MemberShouldBeDiscreteTerm">
                <Item>RoundTrip</Item>
                <Item>'HalfTests.TestDoubleRoundTrip()'</Item>
                <Item>Roundtrip</Item>
               </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="59" />
+               </User>
+              </Notes>
              </Message>
-             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Created="2010-03-31 02:44:15Z" FixCategory="DependsOnFix">
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-03-31 02:44:15Z" FixCategory="DependsOnFix">
               <Issue>
                <Item>'HalfTests.TestDoubleRoundTrip()'</Item>
               </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="54" />
+               </User>
+              </Notes>
              </Message>
             </Messages>
            </Member>
            <Member Name="#TestEquals()">
             <Messages>
-             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Created="2010-03-31 02:44:15Z" FixCategory="DependsOnFix">
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-03-31 02:44:15Z" FixCategory="DependsOnFix">
               <Issue>
                <Item>'HalfTests.TestEquals()'</Item>
               </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="54" />
+               </User>
+              </Notes>
              </Message>
             </Messages>
            </Member>
@@ -5226,16 +5066,26 @@
            </Member>
            <Member Name="#TestOverflow()">
             <Messages>
-             <Message Id="MiniGlobe.Core.Half" TypeName="DoNotIgnoreMethodResults" Category="Microsoft.Usage" CheckId="CA1806" Created="2010-03-31 02:44:15Z">
+             <Message Id="MiniGlobe.Core.Half" TypeName="DoNotIgnoreMethodResults" Category="Microsoft.Usage" CheckId="CA1806" Status="Excluded" Created="2010-03-31 02:44:15Z">
               <Issue Name="ObjectCreation">
                <Item>'HalfTests.TestOverflow()'</Item>
                <Item>'Half'</Item>
               </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="58" />
+               </User>
+              </Notes>
              </Message>
-             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Created="2010-03-31 02:44:15Z" FixCategory="DependsOnFix">
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-03-31 02:44:15Z" FixCategory="DependsOnFix">
               <Issue>
                <Item>'HalfTests.TestOverflow()'</Item>
               </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="57" />
+               </User>
+              </Notes>
              </Message>
             </Messages>
            </Member>
@@ -5463,10 +5313,15 @@
            </Member>
            <Member Name="#Negate()">
             <Messages>
-             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Created="2010-03-31 02:44:15Z" FixCategory="DependsOnFix">
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-03-31 02:44:15Z" FixCategory="DependsOnFix">
               <Issue>
                <Item>'Vector2DTests.Negate()'</Item>
               </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="54" />
+               </User>
+              </Notes>
              </Message>
             </Messages>
            </Member>
@@ -5914,10 +5769,15 @@
            </Member>
            <Member Name="#Negate()">
             <Messages>
-             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Created="2010-03-31 02:44:15Z" FixCategory="DependsOnFix">
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-03-31 02:44:15Z" FixCategory="DependsOnFix">
               <Issue>
                <Item>'Vector2STests.Negate()'</Item>
               </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="54" />
+               </User>
+              </Notes>
              </Message>
             </Messages>
            </Member>
@@ -6249,10 +6109,15 @@
            </Member>
            <Member Name="#Negate()">
             <Messages>
-             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Created="2010-03-31 02:44:15Z" FixCategory="DependsOnFix">
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-03-31 02:44:15Z" FixCategory="DependsOnFix">
               <Issue>
                <Item>'Vector3DTests.Negate()'</Item>
               </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="57" />
+               </User>
+              </Notes>
              </Message>
             </Messages>
            </Member>
@@ -6798,10 +6663,15 @@
            </Member>
            <Member Name="#Negate()">
             <Messages>
-             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Created="2010-03-31 02:44:15Z" FixCategory="DependsOnFix">
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-03-31 02:44:15Z" FixCategory="DependsOnFix">
               <Issue>
                <Item>'Vector3STests.Negate()'</Item>
               </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="54" />
+               </User>
+              </Notes>
              </Message>
             </Messages>
            </Member>
@@ -7147,10 +7017,15 @@
            </Member>
            <Member Name="#Negate()">
             <Messages>
-             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Created="2010-03-31 02:44:15Z" FixCategory="DependsOnFix">
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-03-31 02:44:15Z" FixCategory="DependsOnFix">
               <Issue>
                <Item>'Vector4DTests.Negate()'</Item>
               </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="54" />
+               </User>
+              </Notes>
              </Message>
             </Messages>
            </Member>
@@ -7762,10 +7637,15 @@
            </Member>
            <Member Name="#Negate()">
             <Messages>
-             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Created="2010-03-31 02:44:15Z" FixCategory="DependsOnFix">
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-03-31 02:44:15Z" FixCategory="DependsOnFix">
               <Issue>
                <Item>'Vector4STests.Negate()'</Item>
               </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="54" />
+               </User>
+              </Notes>
              </Message>
             </Messages>
            </Member>
@@ -9195,7 +9075,7 @@
     <Note Id="34" Modified="2010-02-02 14:22:43Z">[Test] can't be static.</Note>
     <Note Id="35" Modified="2010-02-02 14:24:45Z">filename is ok.</Note>
     <Note Id="36" Modified="2010-02-03 04:07:31Z">[Test] is ok.</Note>
-    <Note Id="37" Modified="2010-03-03 23:34:48Z">x and y are ok.</Note>
+    <Note Id="37" Modified="2010-04-06 19:56:38Z">Ok.</Note>
     <Note Id="38" Modified="2010-03-10 21:13:25Z">Polyline is ok (and is in the custom dictionary, what is going on?).</Note>
     <Note Id="39" Modified="2010-02-07 19:09:45Z">filename is ok.</Note>
     <Note Id="40" Modified="2010-02-07 19:15:51Z">Keyboard constants are ok.</Note>
@@ -9204,14 +9084,20 @@
     <Note Id="43" Modified="2010-03-10 21:47:35Z">[Test] cannot be static</Note>
     <Note Id="44" Modified="2010-02-24 12:13:27Z">This is a delegate.</Note>
     <Note Id="45" Modified="2010-02-24 12:13:59Z">Filename can be one word.</Note>
+    <Note Id="46" Modified="2010-04-06 19:36:55Z">False alarm, I believe.  This instance is used a few lines later.</Note>
     <Note Id="47" Modified="2010-03-23 08:42:16Z">Ok</Note>
     <Note Id="48" Modified="2010-03-23 08:42:24Z">Ok</Note>
     <Note Id="49" Modified="2010-03-23 08:42:30Z">Ok</Note>
     <Note Id="50" Modified="2010-03-23 08:42:38Z">Ok</Note>
     <Note Id="51" Modified="2010-03-23 08:42:48Z">Ok</Note>
+    <Note Id="52" Modified="2010-04-06 19:44:56Z">This namespace will grow.</Note>
     <Note Id="53" Modified="2010-03-23 08:48:07Z">Ok</Note>
+    <Note Id="54" Modified="2010-04-06 19:47:10Z">[Test] cannot be static.</Note>
     <Note Id="55" Modified="2010-03-23 08:53:49Z">There is an if so there is only one cast.</Note>
     <Note Id="56" Modified="2010-03-23 08:58:29Z">Ok</Note>
+    <Note Id="57" Modified="2010-04-06 19:47:23Z">[Test] cannot be static.</Note>
+    <Note Id="58" Modified="2010-04-06 19:50:27Z">Ok.</Note>
+    <Note Id="59" Modified="2010-04-06 19:51:10Z">Ok.</Note>
    </User>
   </Notes>
   <Rules>
@@ -9266,7 +9152,6 @@
     <Resolution Name="TypeNoAlternate">Rename type name {0} so that it does not end in '{1}'.</Resolution>
    </Rule>
    <Rule TypeName="InstantiateArgumentExceptionsCorrectly" Category="Microsoft.Usage" CheckId="CA2208">
-    <Resolution Name="IncorrectMessage">Method {0} passes parameter name '{1}' as the {2} argument to a {3} constructor. Replace this argument with a descriptive message and pass the parameter name in the correct position.</Resolution>
     <Resolution Name="IncorrectParameterName">Method {0} passes '{1}' as the {2} argument to a {3} constructor. Replace this argument with one of the method's parameter names. Note that the provided parameter name should have the exact casing as declared on the method.</Resolution>
    </Rule>
    <Rule TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822">

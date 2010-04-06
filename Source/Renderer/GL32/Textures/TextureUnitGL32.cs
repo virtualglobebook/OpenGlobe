@@ -33,7 +33,7 @@ namespace MiniGlobe.Renderer.GL32
 
                 if (texture.Target != TextureTarget.Texture2D)
                 {
-                    throw new ArgumentException("Texture2D", "Incompatible texture.  Did you create the texture with Device.CreateTexture2D?");
+                    throw new ArgumentException("Incompatible texture.  Did you create the texture with Device.CreateTexture2D?");
                 }
 
                 if (_texture2D != texture)
@@ -54,7 +54,7 @@ namespace MiniGlobe.Renderer.GL32
 
                 if (texture.Target != TextureTarget.TextureRectangle)
                 {
-                    throw new ArgumentException("Texture2D", "Incompatible texture.  Did you create the texture with Device.CreateTexture2DRectangle?");
+                    throw new ArgumentException("Incompatible texture.  Did you create the texture with Device.CreateTexture2DRectangle?");
                 }
 
                 if (_texture2DRectangle != texture)

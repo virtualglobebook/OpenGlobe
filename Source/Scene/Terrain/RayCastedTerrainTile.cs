@@ -378,7 +378,7 @@ namespace MiniGlobe.Terrain
             {
                 if (value <= 0)
                 {
-                    throw new ArgumentOutOfRangeException("HeightExaggeration", "HeightExaggeration must be greater than zero.");
+                    throw new ArgumentOutOfRangeException("HeightExaggeration must be greater than zero.");
                 }
 
                 if (_heightExaggeration.Value != value)
