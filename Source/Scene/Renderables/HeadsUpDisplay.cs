@@ -137,7 +137,7 @@ namespace MiniGlobe.Scene
                 CreateVertexArray();
 
                 Vector2S[] positions = new Vector2S[] { _position.ToVector2S() };
-                _positionBuffer.CopyFromSystemMemory(positions, 0, SizeInBytes<Vector2S>.Value);
+                _positionBuffer.CopyFromSystemMemory(positions);
 
                 _positionDirty = false;
             }

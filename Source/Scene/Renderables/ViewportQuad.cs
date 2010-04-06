@@ -95,7 +95,7 @@ namespace MiniGlobe.Scene
                     new Vector2S(left, top), 
                     new Vector2S(right, top)
                 };
-                _positionBuffer.CopyFromSystemMemory(positions, 0, 4 * SizeInBytes<Vector2S>.Value);
+                _positionBuffer.CopyFromSystemMemory(positions);
 
                 Vector2H[] textureCoordinates = new Vector2H[] 
                 { 
@@ -104,7 +104,7 @@ namespace MiniGlobe.Scene
                     new Vector2H(0, 1), 
                     new Vector2H(1, 1)
                 };
-                _textureCoordinatesBuffer.CopyFromSystemMemory(textureCoordinates, 0, 4 * SizeInBytes<Vector2H>.Value);
+                _textureCoordinatesBuffer.CopyFromSystemMemory(textureCoordinates);
 
                 _viewport = _context.Viewport;
             }

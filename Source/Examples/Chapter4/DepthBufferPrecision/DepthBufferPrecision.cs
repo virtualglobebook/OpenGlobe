@@ -23,35 +23,53 @@ namespace MiniGlobe.Examples.Chapter5
     {
         public DepthBufferPrecision()
         {
+            _globeShape = Ellipsoid.Wgs84;
+
             _window = Device.CreateWindow(800, 600, "Chapter 4:  Depth Buffer Precision");
             _window.Resize += OnResize;
             _window.RenderFrame += OnRenderFrame;
             _window.Keyboard.KeyDown += OnKeyDown;
             _sceneState = new SceneState();
 
-            _sceneState.Camera.PerspectiveFarPlaneDistance = 1;
-            _sceneState.Camera.PerspectiveFarPlaneDistance = 4096;
+            _sceneState.Camera.PerspectiveNearPlaneDistance = 1;
+            _sceneState.Camera.PerspectiveFarPlaneDistance = 10 * _globeShape.MaximumRadius;
 
             ///////////////////////////////////////////////////////////////////
+            Context context = _window.Context;
 
-            Ellipsoid globeShape = Ellipsoid.UnitSphere;
             _globe = new TessellatedGlobe(_window.Context);
-            _globe.Shape = globeShape;
+            _globe.Shape = _globeShape;
             _globe.Texture = Device.CreateTexture2D(new Bitmap("MapperWDB.jpg"), TextureFormat.RedGreenBlue8, false);
+
+            _plane = new Plane(_window.Context);
+            _plane.XAxis = 0.6 * _globeShape.MaximumRadius * Vector3D.UnitX;
+            _plane.YAxis = 0.6 * _globeShape.MinimumRadius * Vector3D.UnitZ;
+            _plane.OutlineWidth = 3;
+            _cubeRootPlaneAltitude = 100.0;
+            UpdatePlaneOrigin();
 
             _viewportQuad = new ViewportQuad(_window.Context);
 
             _frameBuffer = _window.Context.CreateFrameBuffer();
             _depthFormatIndex = 1;
+            
+            ///////////////////////////////////////////////////////////////////
+
+            _hudFont = new Font("Arial", 16);
+
             _depthFormatHUD = new HeadsUpDisplay(_window.Context);
             _depthFormatHUD.Color = Color.Black;
-            _hudFont = new Font("Arial", 16);
             UpdateDepthFormatHUD();
+
+            _planeAltitudeHUD = new HeadsUpDisplay(_window.Context);
+            _planeAltitudeHUD.Color = Color.Black;
+            _planeAltitudeHUD.Position = new Vector2D(0, 24);
+            UpdatePlaneFormatHUD();
 
             ///////////////////////////////////////////////////////////////////
 
-            _camera = new CameraLookAtPoint(_sceneState.Camera, _window, globeShape);
-            _sceneState.Camera.ZoomToTarget(globeShape.MaximumRadius);
+            _camera = new CameraLookAtPoint(_sceneState.Camera, _window, _globeShape);
+            _sceneState.Camera.ZoomToTarget(_globeShape.MaximumRadius);
 
             HighResolutionSnap snap = new HighResolutionSnap(_window, _sceneState);
             snap.ColorFilename = @"E:\Dropbox\My Dropbox\Book\Manuscript\DepthBufferPrecision\Figures\DepthBufferPrecision.png";
@@ -84,6 +102,14 @@ namespace MiniGlobe.Examples.Chapter5
                 UpdateFrameBufferAttachments();
                 UpdateDepthFormatHUD();
             }
+            else if ((e.Key == KeyboardKey.Plus) || (e.Key == KeyboardKey.KeypadPlus) ||
+                     (e.Key == KeyboardKey.Minus) || (e.Key == KeyboardKey.KeypadMinus))
+            {
+                _cubeRootPlaneAltitude += ((e.Key == KeyboardKey.Plus) || (e.Key == KeyboardKey.KeypadPlus)) ? 1 : -1;
+
+                UpdatePlaneOrigin();
+                UpdatePlaneFormatHUD();
+            }
         }
 
         private void UpdateFrameBufferAttachments()
@@ -98,14 +124,31 @@ namespace MiniGlobe.Examples.Chapter5
 
         private void UpdateDepthFormatHUD()
         {
-            if (_depthFormatHUD.Texture != null)
+            UpdateHUDTexture(_depthFormatHUD, "Depth Format: " + _depthFormatsStrings[_depthFormatIndex]);
+        }
+
+        private void UpdatePlaneOrigin()
+        {
+            _plane.Origin = -(_globeShape.MaximumRadius * Vector3D.UnitY +
+                (_cubeRootPlaneAltitude * _cubeRootPlaneAltitude * _cubeRootPlaneAltitude * Vector3D.UnitY));
+        }
+
+        private void UpdatePlaneFormatHUD()
+        {
+            UpdateHUDTexture(_planeAltitudeHUD, "Plane Altitude: " +
+                String.Format("{0:N}", _cubeRootPlaneAltitude * _cubeRootPlaneAltitude * _cubeRootPlaneAltitude));
+        }
+
+        private void UpdateHUDTexture(HeadsUpDisplay hud, string text)
+        {
+            if (hud.Texture != null)
             {
-                _depthFormatHUD.Texture.Dispose();
-                _depthFormatHUD.Texture = null;
+                hud.Texture.Dispose();
+                hud.Texture = null;
             }
 
-            _depthFormatHUD.Texture = Device.CreateTexture2D(
-                Device.CreateBitmapFromText("Depth Format: " + _depthFormatsStrings[_depthFormatIndex], _hudFont),
+            hud.Texture = Device.CreateTexture2D(
+                Device.CreateBitmapFromText(text, _hudFont),
                 TextureFormat.RedGreenBlueAlpha8, false);
         }
 
@@ -119,7 +162,10 @@ namespace MiniGlobe.Examples.Chapter5
             context.Bind(_frameBuffer);
             context.Clear(ClearBuffers.ColorAndDepthBuffer, Color.White, 1, 0);
             _globe.Render(_sceneState);
+            _plane.Render(_sceneState);
+
             _depthFormatHUD.Render(_sceneState);
+            _planeAltitudeHUD.Render(_sceneState);
 
             //
             // Render viewport quad to show contents of frame buffer's color buffer
@@ -136,13 +182,17 @@ namespace MiniGlobe.Examples.Chapter5
             _camera.Dispose();
             _globe.Texture.Dispose();
             _globe.Dispose();
+            _plane.Dispose();
             _viewportQuad.Dispose();
 
             DisposeFrameBufferAttachments();
             _frameBuffer.Dispose();
+
+            _hudFont.Dispose();
             _depthFormatHUD.Texture.Dispose();
             _depthFormatHUD.Dispose();
-            _hudFont.Dispose();
+            _planeAltitudeHUD.Texture.Dispose();
+            _planeAltitudeHUD.Dispose();
         }
 
         #endregion
@@ -175,10 +225,14 @@ namespace MiniGlobe.Examples.Chapter5
             }
         }
 
+        private readonly Ellipsoid _globeShape;
+
         private readonly MiniGlobeWindow _window;
         private readonly SceneState _sceneState;
         private readonly CameraLookAtPoint _camera;
         private readonly TessellatedGlobe _globe;
+        private readonly Plane _plane;
+        private double _cubeRootPlaneAltitude;
         private readonly ViewportQuad _viewportQuad;
 
         private Texture2D _colorTexture;
@@ -186,8 +240,9 @@ namespace MiniGlobe.Examples.Chapter5
         private readonly FrameBuffer _frameBuffer;
         private int _depthFormatIndex;
 
-        private readonly HeadsUpDisplay _depthFormatHUD;
         private readonly Font _hudFont;
+        private readonly HeadsUpDisplay _depthFormatHUD;
+        private readonly HeadsUpDisplay _planeAltitudeHUD;
         
         private readonly TextureFormat[] _depthFormats = new TextureFormat[]
         {

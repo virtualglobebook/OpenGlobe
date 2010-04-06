@@ -199,7 +199,10 @@ namespace MiniGlobe.Examples.Chapter2
             Vector3D east = Vector3D.UnitZ.Cross(deticNormal);
             Vector3D north = deticNormal.Cross(east);
 
-            _tangentPlane = new Plane(_window.Context, p, east, north);
+            _tangentPlane = new Plane(_window.Context);
+            _tangentPlane.Origin = p;
+            _tangentPlane.XAxis = east;
+            _tangentPlane.YAxis = north;
             _tangentPlane.OutlineWidth = 3;
         }
 
