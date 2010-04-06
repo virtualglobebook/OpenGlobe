@@ -57,24 +57,30 @@ namespace MiniGlobe.Examples.Chapter5
 
             _frameBuffer = _window.Context.CreateFrameBuffer();
             _depthFormatIndex = 1;
+            _depthTestLess = true;
             
             ///////////////////////////////////////////////////////////////////
 
             _hudFont = new Font("Arial", 16);
 
-            _depthFormatHUD = new HeadsUpDisplay(_window.Context);
-            _depthFormatHUD.Color = Color.Black;
-            UpdateDepthFormatHUD();
+            _viewerHeightHUD = new HeadsUpDisplay(_window.Context);
+            _viewerHeightHUD.Color = Color.Black;
+            _viewerHeightHUD.Position = new Vector2D(0, 72);
+            UpdateViewerHeightHUD();
 
             _planeHeightHUD = new HeadsUpDisplay(_window.Context);
             _planeHeightHUD.Color = Color.Black;
-            _planeHeightHUD.Position = new Vector2D(0, 24);
+            _planeHeightHUD.Position = new Vector2D(0, 48);
             UpdatePlaneHeightHUD();
 
-            _viewerHeightHUD = new HeadsUpDisplay(_window.Context);
-            _viewerHeightHUD.Color = Color.Black;
-            _viewerHeightHUD.Position = new Vector2D(0, 48);
-            UpdateViewerHeightHUD();
+            _depthFormatHUD = new HeadsUpDisplay(_window.Context);
+            _depthFormatHUD.Color = Color.Black;
+            _depthFormatHUD.Position = new Vector2D(0, 24);
+            UpdateDepthFormatHUD();
+
+            _depthTestHUD = new HeadsUpDisplay(_window.Context);
+            _depthTestHUD.Color = Color.Black;
+            UpdateDepthTestHUD();
             
             ///////////////////////////////////////////////////////////////////
 
@@ -94,9 +100,17 @@ namespace MiniGlobe.Examples.Chapter5
 
         private void OnKeyDown(object sender, KeyboardKeyEventArgs e)
         {
-            if ((e.Key == KeyboardKey.Left) || (e.Key == KeyboardKey.Right))
+            if ((e.Key == KeyboardKey.Plus) || (e.Key == KeyboardKey.KeypadPlus) ||
+                (e.Key == KeyboardKey.Minus) || (e.Key == KeyboardKey.KeypadMinus))
             {
-               _depthFormatIndex += (e.Key == KeyboardKey.Right) ? 1 : -1;
+                _cubeRootPlaneHeight += ((e.Key == KeyboardKey.Plus) || (e.Key == KeyboardKey.KeypadPlus)) ? 1 : -1;
+
+                UpdatePlaneOrigin();
+                UpdatePlaneHeightHUD();
+            }
+            else if ((e.Key == KeyboardKey.Left) || (e.Key == KeyboardKey.Right))
+            {
+                _depthFormatIndex += (e.Key == KeyboardKey.Right) ? 1 : -1;
                 if (_depthFormatIndex < 0)
                 {
                     _depthFormatIndex = 2;
@@ -109,14 +123,19 @@ namespace MiniGlobe.Examples.Chapter5
                 UpdateFrameBufferAttachments();
                 UpdateDepthFormatHUD();
             }
-            else if ((e.Key == KeyboardKey.Plus) || (e.Key == KeyboardKey.KeypadPlus) ||
-                     (e.Key == KeyboardKey.Minus) || (e.Key == KeyboardKey.KeypadMinus))
+            else if (e.Key == KeyboardKey.D)
             {
-                _cubeRootPlaneHeight += ((e.Key == KeyboardKey.Plus) || (e.Key == KeyboardKey.KeypadPlus)) ? 1 : -1;
+                _depthTestLess = !_depthTestLess;
 
-                UpdatePlaneOrigin();
-                UpdatePlaneHeightHUD();
+                UpdateDepthTests();
+                UpdateDepthTestHUD();
             }
+        }
+
+        private void UpdatePlaneOrigin()
+        {
+            _plane.Origin = -(_globeShape.MaximumRadius * Vector3D.UnitY +
+                (_cubeRootPlaneHeight * _cubeRootPlaneHeight * _cubeRootPlaneHeight * Vector3D.UnitY));
         }
 
         private void UpdateFrameBufferAttachments()
@@ -129,15 +148,23 @@ namespace MiniGlobe.Examples.Chapter5
             _viewportQuad.Texture = _colorTexture;
         }
 
+        private void UpdateDepthTests()
+        {
+            _sceneState.Camera.PerspectiveNearPlaneDistance = _depthTestLess ? 1 : 50000000;
+            _sceneState.Camera.PerspectiveFarPlaneDistance = _depthTestLess ? 50000000 : 1;
+
+            _globe.DepthTestFunction = _depthTestLess ? DepthTestFunction.Less : DepthTestFunction.Greater;
+            _plane.DepthTestFunction = _depthTestLess ? DepthTestFunction.Less : DepthTestFunction.Greater;
+        }
+
+        private void UpdateDepthTestHUD()
+        {
+            UpdateHUDTexture(_depthTestHUD, "Depth Test: " + (_depthTestLess ? "less" : "greater") + " ('d')");
+        }
+
         private void UpdateDepthFormatHUD()
         {
             UpdateHUDTexture(_depthFormatHUD, "Depth Format: " + _depthFormatsStrings[_depthFormatIndex] + " (left/right)");
-        }
-
-        private void UpdatePlaneOrigin()
-        {
-            _plane.Origin = -(_globeShape.MaximumRadius * Vector3D.UnitY +
-                (_cubeRootPlaneHeight * _cubeRootPlaneHeight * _cubeRootPlaneHeight * Vector3D.UnitY));
         }
 
         private void UpdatePlaneHeightHUD()
@@ -179,13 +206,14 @@ namespace MiniGlobe.Examples.Chapter5
             // Render to frame buffer
             //
             context.Bind(_frameBuffer);
-            context.Clear(ClearBuffers.ColorAndDepthBuffer, Color.White, 1, 0);
+            context.Clear(ClearBuffers.ColorAndDepthBuffer, Color.White, _depthTestLess ? 1 : 0, 0);
             _globe.Render(_sceneState);
             _plane.Render(_sceneState);
 
-            _depthFormatHUD.Render(_sceneState);
-            _planeHeightHUD.Render(_sceneState);
             _viewerHeightHUD.Render(_sceneState);
+            _planeHeightHUD.Render(_sceneState);
+            _depthFormatHUD.Render(_sceneState);
+            _depthTestHUD.Render(_sceneState);
 
             //
             // Render viewport quad to show contents of frame buffer's color buffer
@@ -209,12 +237,14 @@ namespace MiniGlobe.Examples.Chapter5
             _frameBuffer.Dispose();
 
             _hudFont.Dispose();
-            _depthFormatHUD.Texture.Dispose();
-            _depthFormatHUD.Dispose();
-            _planeHeightHUD.Texture.Dispose();
-            _planeHeightHUD.Dispose();
             _viewerHeightHUD.Texture.Dispose();
             _viewerHeightHUD.Dispose();
+            _planeHeightHUD.Texture.Dispose();
+            _planeHeightHUD.Dispose();
+            _depthFormatHUD.Texture.Dispose();
+            _depthFormatHUD.Dispose();
+            _depthTestHUD.Texture.Dispose();
+            _depthTestHUD.Dispose();
         }
 
         #endregion
@@ -262,11 +292,13 @@ namespace MiniGlobe.Examples.Chapter5
         private Texture2D _depthTexture;
         private readonly FrameBuffer _frameBuffer;
         private int _depthFormatIndex;
+        private bool _depthTestLess;
 
         private readonly Font _hudFont;
-        private readonly HeadsUpDisplay _depthFormatHUD;
-        private readonly HeadsUpDisplay _planeHeightHUD;
         private readonly HeadsUpDisplay _viewerHeightHUD;
+        private readonly HeadsUpDisplay _planeHeightHUD;
+        private readonly HeadsUpDisplay _depthFormatHUD;
+        private readonly HeadsUpDisplay _depthTestHUD;
         
         private readonly TextureFormat[] _depthFormats = new TextureFormat[]
         {

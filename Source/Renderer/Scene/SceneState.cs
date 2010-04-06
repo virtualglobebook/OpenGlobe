@@ -82,8 +82,47 @@ namespace MiniGlobe.Renderer
         {
             get
             {
-                return Matrix4d.CreatePerspectiveFieldOfView(Camera.FieldOfViewY, Camera.AspectRatio,
-                    Camera.PerspectiveNearPlaneDistance, Camera.PerspectiveFarPlaneDistance);
+                //
+                // Workaround because the following throws for zNear >= zFar
+                //
+                //return Matrix4d.CreatePerspectiveFieldOfView(Camera.FieldOfViewY, Camera.AspectRatio,
+                //    Camera.PerspectiveNearPlaneDistance, Camera.PerspectiveFarPlaneDistance);
+
+                double fovy = Camera.FieldOfViewY;
+                double aspect = Camera.AspectRatio;
+                double zNear = Camera.PerspectiveNearPlaneDistance;
+                double zFar = Camera.PerspectiveFarPlaneDistance;
+
+                if (fovy <= 0 || fovy > System.Math.PI)
+                    throw new System.ArgumentOutOfRangeException("fovy");
+                if (aspect <= 0)
+                    throw new System.ArgumentOutOfRangeException("aspect");
+                if (zNear <= 0)
+                    throw new System.ArgumentOutOfRangeException("zNear");
+                if (zFar <= 0)
+                    throw new System.ArgumentOutOfRangeException("zFar");
+
+                double yMax = zNear * System.Math.Tan(0.5 * fovy);
+                double yMin = -yMax;
+                double xMin = yMin * aspect;
+                double xMax = yMax * aspect;
+
+                double left = xMin;
+                double right = xMax;
+                double bottom = yMin;
+                double top = yMax;
+
+                double x = (2.0 * zNear) / (right - left);
+                double y = (2.0 * zNear) / (top - bottom);
+                double a = (right + left) / (right - left);
+                double b = (top + bottom) / (top - bottom);
+                double c = -(zFar + zNear) / (zFar - zNear);
+                double d = -(2.0 * zFar * zNear) / (zFar - zNear);
+
+                return new Matrix4d(x, 0, 0, 0,
+                                    0, y, 0, 0,
+                                    a, b, c, -1,
+                                    0, 0, d, 0);
             }
         }
 

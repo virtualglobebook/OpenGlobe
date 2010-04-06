@@ -219,6 +219,16 @@ namespace MiniGlobe.Scene
             get { return _context; }
         }
 
+        public DepthTestFunction DepthTestFunction
+        {
+            get { return _fillRS.DepthTest.Function; }
+            set 
+            {
+                _lineRS.DepthTest.Function = value;
+                _fillRS.DepthTest.Function = value; 
+            }
+        }
+
         public Vector3D Origin
         {
             get { return _origin; }

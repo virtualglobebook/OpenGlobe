@@ -129,6 +129,12 @@ namespace MiniGlobe.Scene
             get { return _context; }
         }
 
+        public DepthTestFunction DepthTestFunction
+        {
+            get { return _renderState.DepthTest.Function; }
+            set { _renderState.DepthTest.Function = value; }
+        }
+
         public bool Wireframe { get; set; }
         public Texture2D Texture { get; set; }
 
