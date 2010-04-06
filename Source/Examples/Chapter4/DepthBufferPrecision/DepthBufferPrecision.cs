@@ -31,10 +31,15 @@ namespace MiniGlobe.Examples.Chapter5
             _window.Keyboard.KeyDown += OnKeyDown;
             _sceneState = new SceneState();
 
+            ///////////////////////////////////////////////////////////////////
+
+            _camera = new CameraLookAtPoint(_sceneState.Camera, _window, _globeShape);
+            _sceneState.Camera.ZoomToTarget(_globeShape.MaximumRadius);
             _sceneState.Camera.PerspectiveNearPlaneDistance = 1;
-            _sceneState.Camera.PerspectiveFarPlaneDistance = 10 * _globeShape.MaximumRadius;
+            _sceneState.Camera.PerspectiveFarPlaneDistance = 50000000;
 
             ///////////////////////////////////////////////////////////////////
+
             Context context = _window.Context;
 
             _globe = new TessellatedGlobe(_window.Context);
@@ -45,7 +50,7 @@ namespace MiniGlobe.Examples.Chapter5
             _plane.XAxis = 0.6 * _globeShape.MaximumRadius * Vector3D.UnitX;
             _plane.YAxis = 0.6 * _globeShape.MinimumRadius * Vector3D.UnitZ;
             _plane.OutlineWidth = 3;
-            _cubeRootPlaneAltitude = 100.0;
+            _cubeRootPlaneHeight = 100.0;
             UpdatePlaneOrigin();
 
             _viewportQuad = new ViewportQuad(_window.Context);
@@ -61,15 +66,17 @@ namespace MiniGlobe.Examples.Chapter5
             _depthFormatHUD.Color = Color.Black;
             UpdateDepthFormatHUD();
 
-            _planeAltitudeHUD = new HeadsUpDisplay(_window.Context);
-            _planeAltitudeHUD.Color = Color.Black;
-            _planeAltitudeHUD.Position = new Vector2D(0, 24);
-            UpdatePlaneFormatHUD();
+            _planeHeightHUD = new HeadsUpDisplay(_window.Context);
+            _planeHeightHUD.Color = Color.Black;
+            _planeHeightHUD.Position = new Vector2D(0, 24);
+            UpdatePlaneHeightHUD();
 
+            _viewerHeightHUD = new HeadsUpDisplay(_window.Context);
+            _viewerHeightHUD.Color = Color.Black;
+            _viewerHeightHUD.Position = new Vector2D(0, 48);
+            UpdateViewerHeightHUD();
+            
             ///////////////////////////////////////////////////////////////////
-
-            _camera = new CameraLookAtPoint(_sceneState.Camera, _window, _globeShape);
-            _sceneState.Camera.ZoomToTarget(_globeShape.MaximumRadius);
 
             HighResolutionSnap snap = new HighResolutionSnap(_window, _sceneState);
             snap.ColorFilename = @"E:\Dropbox\My Dropbox\Book\Manuscript\DepthBufferPrecision\Figures\DepthBufferPrecision.png";
@@ -105,10 +112,10 @@ namespace MiniGlobe.Examples.Chapter5
             else if ((e.Key == KeyboardKey.Plus) || (e.Key == KeyboardKey.KeypadPlus) ||
                      (e.Key == KeyboardKey.Minus) || (e.Key == KeyboardKey.KeypadMinus))
             {
-                _cubeRootPlaneAltitude += ((e.Key == KeyboardKey.Plus) || (e.Key == KeyboardKey.KeypadPlus)) ? 1 : -1;
+                _cubeRootPlaneHeight += ((e.Key == KeyboardKey.Plus) || (e.Key == KeyboardKey.KeypadPlus)) ? 1 : -1;
 
                 UpdatePlaneOrigin();
-                UpdatePlaneFormatHUD();
+                UpdatePlaneHeightHUD();
             }
         }
 
@@ -124,19 +131,29 @@ namespace MiniGlobe.Examples.Chapter5
 
         private void UpdateDepthFormatHUD()
         {
-            UpdateHUDTexture(_depthFormatHUD, "Depth Format: " + _depthFormatsStrings[_depthFormatIndex]);
+            UpdateHUDTexture(_depthFormatHUD, "Depth Format: " + _depthFormatsStrings[_depthFormatIndex] + " (left/right)");
         }
 
         private void UpdatePlaneOrigin()
         {
             _plane.Origin = -(_globeShape.MaximumRadius * Vector3D.UnitY +
-                (_cubeRootPlaneAltitude * _cubeRootPlaneAltitude * _cubeRootPlaneAltitude * Vector3D.UnitY));
+                (_cubeRootPlaneHeight * _cubeRootPlaneHeight * _cubeRootPlaneHeight * Vector3D.UnitY));
         }
 
-        private void UpdatePlaneFormatHUD()
+        private void UpdatePlaneHeightHUD()
         {
-            UpdateHUDTexture(_planeAltitudeHUD, "Plane Altitude: " +
-                String.Format("{0:N}", _cubeRootPlaneAltitude * _cubeRootPlaneAltitude * _cubeRootPlaneAltitude));
+            UpdateHUDTexture(_planeHeightHUD, "Plane Height: " +
+                String.Format("{0:N}", _cubeRootPlaneHeight * _cubeRootPlaneHeight * _cubeRootPlaneHeight) + " (-/+)");
+        }
+
+        private void UpdateViewerHeightHUD()
+        {
+            double height = _sceneState.Camera.Altitude(_globeShape);
+            if (_viewerHeight != height)
+            {
+                UpdateHUDTexture(_viewerHeightHUD, "Viewer Height: " + String.Format("{0:N}", height));
+                _viewerHeight = height;
+            }
         }
 
         private void UpdateHUDTexture(HeadsUpDisplay hud, string text)
@@ -154,6 +171,8 @@ namespace MiniGlobe.Examples.Chapter5
 
         private void OnRenderFrame()
         {
+            UpdateViewerHeightHUD();
+
             Context context = _window.Context;
 
             //
@@ -165,7 +184,8 @@ namespace MiniGlobe.Examples.Chapter5
             _plane.Render(_sceneState);
 
             _depthFormatHUD.Render(_sceneState);
-            _planeAltitudeHUD.Render(_sceneState);
+            _planeHeightHUD.Render(_sceneState);
+            _viewerHeightHUD.Render(_sceneState);
 
             //
             // Render viewport quad to show contents of frame buffer's color buffer
@@ -191,8 +211,10 @@ namespace MiniGlobe.Examples.Chapter5
             _hudFont.Dispose();
             _depthFormatHUD.Texture.Dispose();
             _depthFormatHUD.Dispose();
-            _planeAltitudeHUD.Texture.Dispose();
-            _planeAltitudeHUD.Dispose();
+            _planeHeightHUD.Texture.Dispose();
+            _planeHeightHUD.Dispose();
+            _viewerHeightHUD.Texture.Dispose();
+            _viewerHeightHUD.Dispose();
         }
 
         #endregion
@@ -232,7 +254,8 @@ namespace MiniGlobe.Examples.Chapter5
         private readonly CameraLookAtPoint _camera;
         private readonly TessellatedGlobe _globe;
         private readonly Plane _plane;
-        private double _cubeRootPlaneAltitude;
+        private double _cubeRootPlaneHeight;
+        private double _viewerHeight;
         private readonly ViewportQuad _viewportQuad;
 
         private Texture2D _colorTexture;
@@ -242,7 +265,8 @@ namespace MiniGlobe.Examples.Chapter5
 
         private readonly Font _hudFont;
         private readonly HeadsUpDisplay _depthFormatHUD;
-        private readonly HeadsUpDisplay _planeAltitudeHUD;
+        private readonly HeadsUpDisplay _planeHeightHUD;
+        private readonly HeadsUpDisplay _viewerHeightHUD;
         
         private readonly TextureFormat[] _depthFormats = new TextureFormat[]
         {
