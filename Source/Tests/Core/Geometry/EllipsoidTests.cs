@@ -189,5 +189,23 @@ namespace MiniGlobe.Core.Geometry
             Assert.IsTrue(Vector3D.UnitY.EqualsEpsilon(ellipsoid.ToVector3D(new Geodetic3D(Trig.ToRadians(90), 0, 0)), 1e-10));
             Assert.IsTrue(new Vector3D(0, 0, 0.7).EqualsEpsilon(ellipsoid.ToVector3D(new Geodetic3D(0, Trig.ToRadians(90), 0)), 1e-10));
         }
+
+        [Test]
+        public void ToGeodetic3D()
+        {
+            //Ellipsoid ellipsoid = new Ellipsoid(6378137.0, 6378137.0, 6356752.314245);
+
+            //Vector3D v = ellipsoid.ToVector3D(new Geodetic3D(0, 0, 0));
+            //Geodetic3D g = ellipsoid.ToGeodetic3D(v);
+            //Assert.AreEqual(g.Latitude, 0, 1e-10);
+            //Assert.AreEqual(g.Longitude, 0, 1e-10);
+            //Assert.AreEqual(g.Height, 0, 1e-10);
+
+            //v = ellipsoid.ToVector3D(new Geodetic3D(Trig.ToRadians(45.0), Trig.ToRadians(-60.0), -123.4));
+            //g = ellipsoid.ToGeodetic3D(v);
+            //Assert.AreEqual(g.Latitude, Trig.ToDegrees(45.0), 1e-10);
+            //Assert.AreEqual(g.Longitude, Trig.ToDegrees(-60.0), 1e-10);
+            //Assert.AreEqual(g.Height, -123.4, 1e-10);
+        }
     }
 }
