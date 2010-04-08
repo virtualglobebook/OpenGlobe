@@ -144,6 +144,38 @@ namespace MiniGlobe.Core.Geometry
             return new Vector3D(x, y, z);
         }
 
+        public Geodetic3D ToGeodetic3D(Vector3D vector)
+        {
+            //
+            // Longitude
+            //
+            double longitude = Math.Atan2(vector.Y, vector.X);
+
+            //
+            // Normal
+            //
+            Vector2D inEquatorialPlaneVector = new Vector2D(vector.X, vector.Y);
+            Vector2D unnormal = new Vector2D(inEquatorialPlaneVector.Magnitude / (MaximumRadius * MaximumRadius),
+                vector.Z / (MinimumRadius * MinimumRadius));
+            Vector2D normal = unnormal.Normalize();
+            
+            //
+            // Latitude
+            //
+            double latitude = Math.Atan2(normal.Y, normal.X);
+
+            //
+            // Height
+            //
+            Vector3D baseVector = ToVector3D(new Geodetic3D(longitude, latitude, 0.0));
+            double height = (vector - baseVector).Magnitude;
+            if (baseVector.MagnitudeSquared > vector.MagnitudeSquared)
+            {
+                height = -height;
+            }
+            return new Geodetic3D(longitude, latitude, height);
+        }
+
         private readonly Vector3D _radii;
         private readonly Vector3D _oneOverRadii;
         private readonly Vector3D _oneOverRadiiSquared;

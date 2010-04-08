@@ -21,5 +21,10 @@ namespace MiniGlobe.Core
         {
             return degrees * RadiansPerDegree;
         }
+
+        public static double ToDegrees(double radians)
+        {
+            return radians / RadiansPerDegree;
+        }
     }
 }
