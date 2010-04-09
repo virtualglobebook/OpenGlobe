@@ -30,7 +30,7 @@ namespace MiniGlobe.Core.Tessellation
             public IList<Vector3D> Positions { get; set; }
             public IList<Vector3H> Normals { get; set; }
             public IList<Vector2H> TextureCoordinate { get; set; }
-            public IndicesInt Indices { get; set; }
+            public IndicesInt32 Indices { get; set; }
         }
 
         public static Mesh Compute(Ellipsoid ellipsoid, int numberOfSubdivisions, SubdivisionEllipsoidVertexAttributes vertexAttributes)
@@ -53,7 +53,7 @@ namespace MiniGlobe.Core.Tessellation
             VertexAttributeDoubleVector3 positionsAttribute = new VertexAttributeDoubleVector3("position", numberOfVertices);
             mesh.Attributes.Add(positionsAttribute);
 
-            IndicesInt indices = new IndicesInt(3 * SubdivisionUtility.NumberOfTriangles(numberOfSubdivisions));
+            IndicesInt32 indices = new IndicesInt32(3 * SubdivisionUtility.NumberOfTriangles(numberOfSubdivisions));
             mesh.Indices = indices;
 
             SubdivisionMesh subdivisionMesh = new SubdivisionMesh();
@@ -121,15 +121,15 @@ namespace MiniGlobe.Core.Tessellation
                 }
             }
 
-            Subdivide(subdivisionMesh, new TriangleIndices<int>(0, 1, 2), numberOfSubdivisions);
-            Subdivide(subdivisionMesh, new TriangleIndices<int>(0, 2, 3), numberOfSubdivisions);
-            Subdivide(subdivisionMesh, new TriangleIndices<int>(0, 3, 1), numberOfSubdivisions);
-            Subdivide(subdivisionMesh, new TriangleIndices<int>(1, 3, 2), numberOfSubdivisions);
+            Subdivide(subdivisionMesh, new TriangleIndicesInt32(0, 1, 2), numberOfSubdivisions);
+            Subdivide(subdivisionMesh, new TriangleIndicesInt32(0, 2, 3), numberOfSubdivisions);
+            Subdivide(subdivisionMesh, new TriangleIndicesInt32(0, 3, 1), numberOfSubdivisions);
+            Subdivide(subdivisionMesh, new TriangleIndicesInt32(1, 3, 2), numberOfSubdivisions);
 
             return mesh;
         }
 
-        private static void Subdivide(SubdivisionMesh subdivisionMesh, TriangleIndices<int> triangle, int level)
+        private static void Subdivide(SubdivisionMesh subdivisionMesh, TriangleIndicesInt32 triangle, int level)
         {
             if (level > 0)
             {
@@ -175,10 +175,10 @@ namespace MiniGlobe.Core.Tessellation
                 // Subdivide input triangle into four triangles
                 //
                 --level;
-                Subdivide(subdivisionMesh, new TriangleIndices<int>(triangle.I0, i01, i20), level);
-                Subdivide(subdivisionMesh, new TriangleIndices<int>(i01, triangle.I1, i12), level);
-                Subdivide(subdivisionMesh, new TriangleIndices<int>(i01, i12, i20), level);
-                Subdivide(subdivisionMesh, new TriangleIndices<int>(i20, i12, triangle.I2), level);
+                Subdivide(subdivisionMesh, new TriangleIndicesInt32(triangle.I0, i01, i20), level);
+                Subdivide(subdivisionMesh, new TriangleIndicesInt32(i01, triangle.I1, i12), level);
+                Subdivide(subdivisionMesh, new TriangleIndicesInt32(i01, i12, i20), level);
+                Subdivide(subdivisionMesh, new TriangleIndicesInt32(i20, i12, triangle.I2), level);
             }
             else
             {

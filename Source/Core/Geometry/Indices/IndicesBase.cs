@@ -12,8 +12,8 @@ namespace MiniGlobe.Core.Geometry
     public enum IndicesType
     {
         Byte,
-        Short,
-        Int
+        Int16,
+        Int32
     }
 
     public abstract class IndicesBase

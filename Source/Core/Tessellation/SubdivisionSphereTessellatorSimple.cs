@@ -30,7 +30,7 @@ namespace MiniGlobe.Core.Tessellation
                 "position", SubdivisionUtility.NumberOfVertices(numberOfSubdivisions));
             mesh.Attributes.Add(positionsAttribute);
 
-            IndicesInt indices = new IndicesInt(3 * SubdivisionUtility.NumberOfTriangles(numberOfSubdivisions));
+            IndicesInt32 indices = new IndicesInt32(3 * SubdivisionUtility.NumberOfTriangles(numberOfSubdivisions));
             mesh.Indices = indices;
 
             //
@@ -46,15 +46,15 @@ namespace MiniGlobe.Core.Tessellation
             positions.Add(new Vector3D(-rootSixOverThree, negativeRootTwoOverThree, negativeOneThird));
             positions.Add(new Vector3D(rootSixOverThree, negativeRootTwoOverThree, negativeOneThird));
 
-            Subdivide(positions, indices, new TriangleIndices<int>(0, 1, 2), numberOfSubdivisions);
-            Subdivide(positions, indices, new TriangleIndices<int>(0, 2, 3), numberOfSubdivisions);
-            Subdivide(positions, indices, new TriangleIndices<int>(0, 3, 1), numberOfSubdivisions);
-            Subdivide(positions, indices, new TriangleIndices<int>(1, 3, 2), numberOfSubdivisions);
+            Subdivide(positions, indices, new TriangleIndicesInt32(0, 1, 2), numberOfSubdivisions);
+            Subdivide(positions, indices, new TriangleIndicesInt32(0, 2, 3), numberOfSubdivisions);
+            Subdivide(positions, indices, new TriangleIndicesInt32(0, 3, 1), numberOfSubdivisions);
+            Subdivide(positions, indices, new TriangleIndicesInt32(1, 3, 2), numberOfSubdivisions);
 
             return mesh;
         }
 
-        private static void Subdivide(IList<Vector3D> positions, IndicesInt indices, TriangleIndices<int> triangle, int level)
+        private static void Subdivide(IList<Vector3D> positions, IndicesInt32 indices, TriangleIndicesInt32 triangle, int level)
         {
             if (level > 0)
             {
@@ -70,10 +70,10 @@ namespace MiniGlobe.Core.Tessellation
                 // Subdivide input triangle into four triangles
                 //
                 --level;
-                Subdivide(positions, indices, new TriangleIndices<int>(triangle.I0, i01, i20), level);
-                Subdivide(positions, indices, new TriangleIndices<int>(i01, triangle.I1, i12), level);
-                Subdivide(positions, indices, new TriangleIndices<int>(i01, i12, i20), level);
-                Subdivide(positions, indices, new TriangleIndices<int>(i20, i12, triangle.I2), level);
+                Subdivide(positions, indices, new TriangleIndicesInt32(triangle.I0, i01, i20), level);
+                Subdivide(positions, indices, new TriangleIndicesInt32(i01, triangle.I1, i12), level);
+                Subdivide(positions, indices, new TriangleIndicesInt32(i01, i12, i20), level);
+                Subdivide(positions, indices, new TriangleIndicesInt32(i20, i12, triangle.I2), level);
             }
             else
             {

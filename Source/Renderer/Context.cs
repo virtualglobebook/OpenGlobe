@@ -46,9 +46,9 @@ namespace MiniGlobe.Renderer
                     indexBuffer.CopyFromSystemMemory(indices);
                     va.IndexBuffer = indexBuffer;
                 }
-                else if (mesh.Indices.DataType == IndicesType.Short)
+                else if (mesh.Indices.DataType == IndicesType.Int16)
                 {
-                    IList<short> meshIndices = (mesh.Indices as IndicesShort).Values;
+                    IList<short> meshIndices = (mesh.Indices as IndicesInt16).Values;
 
                     ushort[] indices = new ushort[meshIndices.Count];
                     for (int j = 0; j < meshIndices.Count; ++j)
@@ -62,9 +62,9 @@ namespace MiniGlobe.Renderer
                 }
                 else
                 {
-                    Debug.Assert(mesh.Indices.DataType == IndicesType.Int);
+                    Debug.Assert(mesh.Indices.DataType == IndicesType.Int32);
 
-                    IList<int> meshIndices = (mesh.Indices as IndicesInt).Values;
+                    IList<int> meshIndices = (mesh.Indices as IndicesInt32).Values;
 
                     uint[] indices = new uint[meshIndices.Count];
                     for (int j = 0; j < meshIndices.Count; ++j)

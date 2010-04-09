@@ -31,7 +31,7 @@ namespace MiniGlobe.Core.Tessellation
             public IList<Vector3D> Positions { get; set; }
             public IList<Vector3H> Normals { get; set; }
             public IList<Vector2H> TextureCoordinate { get; set; }
-            public IndicesInt Indices { get; set; }
+            public IndicesInt32 Indices { get; set; }
         }
 
         public static Mesh Compute(Ellipsoid ellipsoid, int numberOfPartitions, CubeMapEllipsoidVertexAttributes vertexAttributes)
@@ -54,7 +54,7 @@ namespace MiniGlobe.Core.Tessellation
             VertexAttributeDoubleVector3 positionsAttribute = new VertexAttributeDoubleVector3("position", numberOfVertices);
             mesh.Attributes.Add(positionsAttribute);
 
-            IndicesInt indices = new IndicesInt(3 * NumberOfTriangles(numberOfPartitions));
+            IndicesInt32 indices = new IndicesInt32(3 * NumberOfTriangles(numberOfPartitions));
             mesh.Indices = indices;
 
             CubeMapMesh CubeMapMesh = new CubeMapMesh();
@@ -164,7 +164,7 @@ namespace MiniGlobe.Core.Tessellation
             CubeMapMesh CubeMapMesh)
         {
             IList<Vector3D> positions = CubeMapMesh.Positions;
-            IndicesInt indices = CubeMapMesh.Indices;
+            IndicesInt32 indices = CubeMapMesh.Indices;
             int numberOfPartitions = CubeMapMesh.NumberOfPartitions;
 
             Vector3D origin = positions[bottomLeftToRight[0]];
@@ -216,9 +216,9 @@ namespace MiniGlobe.Core.Tessellation
 
                 for (int i = 0; i < numberOfPartitions; ++i)
                 {
-                    indices.AddTriangle(new TriangleIndices<int>(
+                    indices.AddTriangle(new TriangleIndicesInt32(
                         bottomIndices[i], bottomIndices[i + 1], topIndices[i + 1]));
-                    indices.AddTriangle(new TriangleIndices<int>(
+                    indices.AddTriangle(new TriangleIndicesInt32(
                         bottomIndices[i], topIndices[i + 1], topIndices[i]));
                 }
             }
@@ -263,9 +263,9 @@ namespace MiniGlobe.Core.Tessellation
             return numberOfVertices;
         }
 
-        private static T[] ReversedArray<T>(T[] array)
+        private static int[] ReversedArray(int[] array)
         {
-            T[] reversed = new T[array.Length];
+            int[] reversed = new int[array.Length];
 
             int j = 0;
             int i = array.Length - 1;

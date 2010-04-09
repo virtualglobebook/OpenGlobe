@@ -8,14 +8,72 @@
 #endregion
 
 using System.Collections.ObjectModel;
+using System.Collections.Generic;
 
 namespace MiniGlobe.Core.Geometry
 {
-    public class VertexAttributeCollection : KeyedCollection<string, VertexAttribute>
+    public class VertexAttributeCollection : ICollection<VertexAttribute>
     {
-        protected override string GetKeyForItem(VertexAttribute item)
+        public void Add(VertexAttribute vertexAttribute)
         {
-            return item.Name;
+            m_collection.Add(vertexAttribute.Name, vertexAttribute);
         }
+
+        public void Clear()
+        {
+            m_collection.Clear();
+        }
+
+        public bool Contains(VertexAttribute vertexAttribute)
+        {
+            return Contains(vertexAttribute.Name);
+        }
+
+        public bool Contains(string vertexAttributeName)
+        {
+            return m_collection.ContainsKey(vertexAttributeName);
+        }
+
+        public void CopyTo(VertexAttribute[] array, int arrayIndex)
+        {
+            m_collection.Values.CopyTo(array, arrayIndex);
+        }
+
+        public int Count
+        {
+            get { return m_collection.Count; }
+        }
+
+        bool ICollection<VertexAttribute>.IsReadOnly
+        {
+            get { return false; }
+        }
+
+        public bool Remove(VertexAttribute item)
+        {
+            return Remove(item.Name);
+        }
+
+        public bool Remove(string vertexAttributeName)
+        {
+            return m_collection.Remove(vertexAttributeName);
+        }
+
+        public IEnumerator<VertexAttribute> GetEnumerator()
+        {
+            return m_collection.Values.GetEnumerator();
+        }
+
+        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+
+        public VertexAttribute this[string vertexAttributeName]
+        {
+            get { return m_collection[vertexAttributeName]; }
+        }
+
+        private Dictionary<string, VertexAttribute> m_collection = new Dictionary<string, VertexAttribute>();
     }
 }

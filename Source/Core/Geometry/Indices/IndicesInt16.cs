@@ -7,37 +7,36 @@
 //
 #endregion
 
-using System;
 using System.Collections.Generic;
 
 namespace MiniGlobe.Core.Geometry
 {
-    public class Indices<T> : IndicesBase where T : IEquatable<T>
+    public class IndicesInt16 : IndicesBase
     {
-        protected Indices(IndicesType type)
-            : base(type)
+        public IndicesInt16()
+            : base(IndicesType.Int16)
         {
-            _values = new List<T>();
+            _values = new List<short>();
         }
 
-        protected Indices(IndicesType type, int capacity)
-            : base(type)
+        public IndicesInt16(int capacity)
+            : base(IndicesType.Int16)
         {
-            _values = new List<T>(capacity);
+            _values = new List<short>(capacity);
         }
 
-        public IList<T> Values
+        public IList<short> Values
         {
             get { return _values; }
         }
 
-        public void AddTriangle(TriangleIndices<T> triangle)
+        public void AddTriangle(TriangleIndicesInt16 triangle)
         {
             _values.Add(triangle.I0);
             _values.Add(triangle.I1);
             _values.Add(triangle.I2);
         }
 
-        private List<T> _values;
+        private List<short> _values;
     }
 }

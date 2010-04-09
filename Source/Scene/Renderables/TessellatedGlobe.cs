@@ -98,7 +98,7 @@ namespace MiniGlobe.Scene
                     _numberOfSlicePartitions, _numberOfStackPartitions, GeographicGridEllipsoidVertexAttributes.Position);
                 _va = _context.CreateVertexArray(mesh, _sp.VertexAttributes, BufferHint.StaticDraw);
                 _primitiveType = mesh.PrimitiveType;
-                _numberOfTriangles = ((mesh.Indices as Indices<int>).Values.Count / 3);
+                _numberOfTriangles = ((mesh.Indices as IndicesInt32).Values.Count / 3);
 
                 _renderState.FacetCulling.FrontFaceWindingOrder = mesh.FrontFaceWindingOrder;
 

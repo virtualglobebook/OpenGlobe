@@ -19,20 +19,20 @@ namespace MiniGlobe.Core.Tessellation
         public void SubdivisionSphereTessellatorTest()
         {
             Mesh simpleSphere = SubdivisionSphereTessellatorSimple.Compute(1);
-            Assert.AreEqual(IndicesType.Int, simpleSphere.Indices.DataType);
+            Assert.AreEqual(IndicesType.Int32, simpleSphere.Indices.DataType);
             Assert.AreEqual(1, simpleSphere.Attributes.Count);
             Assert.IsNotNull(simpleSphere.Attributes["position"] as VertexAttributeDoubleVector3);
 
             Mesh sphere = SubdivisionSphereTessellator.Compute(1, SubdivisionSphereVertexAttributes.All);
-            Assert.AreEqual(IndicesType.Int, sphere.Indices.DataType);
+            Assert.AreEqual(IndicesType.Int32, sphere.Indices.DataType);
             Assert.AreEqual(3, sphere.Attributes.Count);
             Assert.IsNotNull(sphere.Attributes["position"] as VertexAttributeDoubleVector3);
             Assert.IsNotNull(sphere.Attributes["normal"] as VertexAttributeHalfFloatVector3);
             Assert.IsNotNull(sphere.Attributes["textureCoordinate"] as VertexAttributeHalfFloatVector2);
 
             MiniGlobeAssert.ListsAreEqual(
-                (simpleSphere.Indices as IndicesInt).Values, 
-                (sphere.Indices as IndicesInt).Values);
+                (simpleSphere.Indices as IndicesInt32).Values, 
+                (sphere.Indices as IndicesInt32).Values);
             MiniGlobeAssert.ListsAreEqual(
                 (simpleSphere.Attributes["position"] as VertexAttributeDoubleVector3).Values,
                 (sphere.Attributes["position"] as VertexAttributeDoubleVector3).Values);
@@ -45,8 +45,8 @@ namespace MiniGlobe.Core.Tessellation
             Mesh ellipsoid = SubdivisionEllipsoidTessellator.Compute(Ellipsoid.UnitSphere, 1, SubdivisionEllipsoidVertexAttributes.All);
 
             MiniGlobeAssert.ListsAreEqual(
-                (sphere.Indices as IndicesInt).Values,
-                (ellipsoid.Indices as IndicesInt).Values);
+                (sphere.Indices as IndicesInt32).Values,
+                (ellipsoid.Indices as IndicesInt32).Values);
             MiniGlobeAssert.ListsAreEqual(
                 (sphere.Attributes["position"] as VertexAttributeDoubleVector3).Values,
                 (ellipsoid.Attributes["position"] as VertexAttributeDoubleVector3).Values);

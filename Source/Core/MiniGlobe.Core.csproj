@@ -37,12 +37,14 @@
     <Compile Include="Disposable.cs" />
     <Compile Include="GeodeticExtent.cs" />
     <Compile Include="Geometry\Ellipsoid.cs" />
-    <Compile Include="Geometry\Indices\Indices.cs" />
     <Compile Include="Geometry\Indices\IndicesBase.cs" />
     <Compile Include="Geometry\Indices\IndicesByte.cs" />
-    <Compile Include="Geometry\Indices\IndicesInt.cs" />
-    <Compile Include="Geometry\Indices\IndicesShort.cs" />
+    <Compile Include="Geometry\Indices\IndicesInt32.cs" />
+    <Compile Include="Geometry\Indices\IndicesInt16.cs" />
     <Compile Include="Geometry\Mesh.cs" />
+    <Compile Include="Geometry\TriangleIndicesByte.cs" />
+    <Compile Include="Geometry\TriangleIndicesInt16.cs" />
+    <Compile Include="Geometry\TriangleIndicesInt32.cs" />
     <Compile Include="Geometry\VertexAttributes\VertexAttribute.cs" />
     <Compile Include="Geometry\VertexAttributes\VertexAttributeByte.cs" />
     <Compile Include="Geometry\VertexAttributes\VertexAttributeCollection.cs" />
@@ -70,7 +72,6 @@
     <Compile Include="Tessellation\GeographicGridEllipsoidTessellator.cs" />
     <Compile Include="Tessellation\SubdivisionEllipsoidTessellator.cs" />
     <Compile Include="Tessellation\SubdivisionSphereTessellator.cs" />
-    <Compile Include="Geometry\TriangleIndices.cs" />
     <Compile Include="Tessellation\SubdivisionSphereTessellatorSimple.cs" />
     <Compile Include="Tessellation\SubdivisionUtility.cs" />
     <Compile Include="Trig.cs" />

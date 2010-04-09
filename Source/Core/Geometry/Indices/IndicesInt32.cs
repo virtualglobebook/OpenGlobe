@@ -11,32 +11,32 @@ using System.Collections.Generic;
 
 namespace MiniGlobe.Core.Geometry
 {
-    public class IndicesByte : IndicesBase
+    public class IndicesInt32 : IndicesBase
     {
-        public IndicesByte()
-            : base(IndicesType.Byte)
+        public IndicesInt32()
+            : base(IndicesType.Int32)
         {
-            _values = new List<byte>();
+            _values = new List<int>();
         }
 
-        public IndicesByte(int capacity)
-            : base(IndicesType.Byte)
+        public IndicesInt32(int capacity)
+            : base(IndicesType.Int32)
         {
-            _values = new List<byte>(capacity);
+            _values = new List<int>(capacity);
         }
 
-        public IList<byte> Values
+        public IList<int> Values
         {
             get { return _values; }
         }
 
-        public void AddTriangle(TriangleIndicesByte triangle)
+        public void AddTriangle(TriangleIndicesInt32 triangle)
         {
             _values.Add(triangle.I0);
             _values.Add(triangle.I1);
             _values.Add(triangle.I2);
         }
 
-        private List<byte> _values;
+        private List<int> _values;
     }
 }

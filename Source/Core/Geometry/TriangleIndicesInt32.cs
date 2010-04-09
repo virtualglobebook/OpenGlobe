@@ -12,28 +12,28 @@ using System.Globalization;
 
 namespace MiniGlobe.Core.Geometry
 {
-    public struct TriangleIndices<T> : IEquatable<TriangleIndices<T>> where T : IEquatable<T>
+    public struct TriangleIndicesInt32 : IEquatable<TriangleIndicesInt32>
     {
-        public TriangleIndices(T i0, T i1, T i2)
+        public TriangleIndicesInt32(int i0, int i1, int i2)
         {
             _i0 = i0;
             _i1 = i1;
             _i2 = i2;
         }
 
-        public TriangleIndices(TriangleIndices<T> other)
+        public TriangleIndicesInt32(TriangleIndicesInt32 other)
         {
             _i0 = other.I0;
             _i1 = other.I1;
             _i2 = other.I2;
         }
 
-        public static bool operator ==(TriangleIndices<T> left, TriangleIndices<T> right)
+        public static bool operator ==(TriangleIndicesInt32 left, TriangleIndicesInt32 right)
         {
             return left.Equals(right);
         }
 
-        public static bool operator !=(TriangleIndices<T> left, TriangleIndices<T> right)
+        public static bool operator !=(TriangleIndicesInt32 left, TriangleIndicesInt32 right)
         {
             return !left.Equals(right);
         }
@@ -50,15 +50,15 @@ namespace MiniGlobe.Core.Geometry
 
         public override bool Equals(object obj)
         {
-            if (!(obj is TriangleIndices<T>))
+            if (!(obj is TriangleIndicesInt32))
                 return false;
 
-            return this.Equals((TriangleIndices<T>)obj);
+            return this.Equals((TriangleIndicesInt32)obj);
         }
 
         #region IEquatable<TriangleIndices> Members
 
-        public bool Equals(TriangleIndices<T> other)
+        public bool Equals(TriangleIndicesInt32 other)
         {
             return
                 (_i0.Equals(other.I0)) &&
@@ -68,23 +68,23 @@ namespace MiniGlobe.Core.Geometry
 
         #endregion
 
-        public T I0
+        public int I0
         {
             get { return _i0; }
         }
 
-        public T I1
+        public int I1
         {
             get { return _i1; }
         }
 
-        public T I2
+        public int I2
         {
             get { return _i2; }
         }
 
-        private T _i0;
-        private T _i1;
-        private T _i2;
+        private int _i0;
+        private int _i1;
+        private int _i2;
     }
 }
