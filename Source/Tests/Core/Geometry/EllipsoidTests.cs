@@ -193,19 +193,25 @@ namespace MiniGlobe.Core.Geometry
         [Test]
         public void ToGeodetic3D()
         {
-            //Ellipsoid ellipsoid = new Ellipsoid(6378137.0, 6378137.0, 6356752.314245);
+            Ellipsoid ellipsoid = new Ellipsoid(6378137.0, 6378137.0, 6356752.314245);
 
-            //Vector3D v = ellipsoid.ToVector3D(new Geodetic3D(0, 0, 0));
-            //Geodetic3D g = ellipsoid.ToGeodetic3D(v);
-            //Assert.AreEqual(g.Latitude, 0, 1e-10);
-            //Assert.AreEqual(g.Longitude, 0, 1e-10);
-            //Assert.AreEqual(g.Height, 0, 1e-10);
+            Vector3D v = ellipsoid.ToVector3D(new Geodetic3D(0, 0, 0));
+            Geodetic3D g = ellipsoid.ToGeodetic3D(v);
+            Assert.AreEqual(0.0, g.Longitude, 1e-10);
+            Assert.AreEqual(0.0, g.Latitude, 1e-8);
+            Assert.AreEqual(0.0, g.Height, 1e-10);
 
-            //v = ellipsoid.ToVector3D(new Geodetic3D(Trig.ToRadians(45.0), Trig.ToRadians(-60.0), -123.4));
-            //g = ellipsoid.ToGeodetic3D(v);
-            //Assert.AreEqual(g.Latitude, Trig.ToDegrees(45.0), 1e-10);
-            //Assert.AreEqual(g.Longitude, Trig.ToDegrees(-60.0), 1e-10);
-            //Assert.AreEqual(g.Height, -123.4, 1e-10);
+            v = ellipsoid.ToVector3D(new Geodetic3D(Trig.ToRadians(45.0), Trig.ToRadians(-60.0), -123.4));
+            g = ellipsoid.ToGeodetic3D(v);
+            Assert.AreEqual(Trig.ToRadians(45.0), g.Longitude, 1e-10);
+            Assert.AreEqual(Trig.ToRadians(-60.0), g.Latitude, 1e-3);
+            Assert.AreEqual(-123.4, g.Height, 1e-3);
+
+            v = ellipsoid.ToVector3D(new Geodetic3D(Trig.ToRadians(-97.3), Trig.ToRadians(71.2), 1188.7));
+            g = ellipsoid.ToGeodetic3D(v);
+            Assert.AreEqual(Trig.ToRadians(-97.3), g.Longitude, 1e-10);
+            Assert.AreEqual(Trig.ToRadians(71.2), g.Latitude, 1e-3);
+            Assert.AreEqual(1188.7, g.Height, 1e-3);
         }
     }
 }

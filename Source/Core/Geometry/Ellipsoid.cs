@@ -147,32 +147,38 @@ namespace MiniGlobe.Core.Geometry
         public Geodetic3D ToGeodetic3D(Vector3D vector)
         {
             //
-            // Longitude
+            // From: http://en.wikipedia.org/wiki/Geodetic_system; TODO better
+            // reference.
             //
+            double a2 = MaximumRadius * MaximumRadius;
+            double b2 = MinimumRadius * MinimumRadius;
+            double e2 = 1.0 - (b2 / a2);
+            double ep2 = (a2 / b2) - 1.0;
+            Vector3D vector2 = vector.MultiplyComponents(vector);
+            double r = Math.Sqrt(vector2.X + vector2.Y);
+            double r2 = r * r;
+            double E2 = a2 - b2;
+            double F = 54.0 * b2 * vector2.Z;
+            double G = r2 + ((1.0 - e2) * vector2.Z) - (e2 * E2);
+            double C = e2 * e2 * F * r2 / (G * G * G);
+            double temp0 = 1.0 + C + Math.Sqrt((C * C) + (2.0 * C));
+            double S = Math.Pow(temp0, 1.0 / 3.0);
+            temp0 = S + (1.0 / S) + 1.0;
+            double P = F / (3.0 * temp0 * temp0 * G * G);
+            double Q = Math.Sqrt(1.0 + (2.0 * e2 * e2 * P));
+            temp0 = -(P * e2 * r) / (1.0 + Q);
+            double temp1 = (0.5 * a2 * (1.0 + (1.0 / Q))) - ((P * (1 - e2) *
+                vector2.Z) / (Q * (1.0 + Q))) - (0.5 * P * r2);
+            double r0 = temp0 + Math.Sqrt(temp1);
+            temp0 = r - (e2 * r0);
+            temp0 *= temp0;
+            double U = Math.Sqrt(temp0 + vector2.Z);
+            double V = Math.Sqrt(temp0 + ((1.0 - e2) * vector2.Z));
+            temp0 = MaximumRadius * V;
+            double Z0 = b2 * vector.Z / temp0;
+            double height = U * (1.0 - (b2 / temp0));
+            double latitude = Math.Atan((Z0 + (ep2 * Z0)) / r);
             double longitude = Math.Atan2(vector.Y, vector.X);
-
-            //
-            // Normal
-            //
-            Vector2D inEquatorialPlaneVector = new Vector2D(vector.X, vector.Y);
-            Vector2D unnormal = new Vector2D(inEquatorialPlaneVector.Magnitude / (MaximumRadius * MaximumRadius),
-                vector.Z / (MinimumRadius * MinimumRadius));
-            Vector2D normal = unnormal.Normalize();
-            
-            //
-            // Latitude
-            //
-            double latitude = Math.Atan2(normal.Y, normal.X);
-
-            //
-            // Height
-            //
-            Vector3D baseVector = ToVector3D(new Geodetic3D(longitude, latitude, 0.0));
-            double height = (vector - baseVector).Magnitude;
-            if (baseVector.MagnitudeSquared > vector.MagnitudeSquared)
-            {
-                height = -height;
-            }
             return new Geodetic3D(longitude, latitude, height);
         }
 
