@@ -348,6 +348,7 @@ namespace MiniGlobe.Core
             Assert.AreEqual(-1.0, cross2.Z, 1e-14);
         }
 
+#if !CSToJava
         [Test]
         public void TestToString()
         {
@@ -363,6 +364,7 @@ namespace MiniGlobe.Core
                 Thread.CurrentThread.CurrentCulture = originalCulture;
             }
         }
+#endif
 
         [Test]
         public void EqualsEpsilon()

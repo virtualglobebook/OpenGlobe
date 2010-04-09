@@ -110,6 +110,7 @@ namespace MiniGlobe.Core
             Assert.AreNotEqual(a.GetHashCode(), b.GetHashCode());
         }
 
+#if !CSToJava
         [Test]
         public void TestToString()
         {
@@ -125,6 +126,7 @@ namespace MiniGlobe.Core
                 Thread.CurrentThread.CurrentCulture = originalCulture;
             }
         }
+#endif
 
         [Test]
         public void ToVector2S()

@@ -36,7 +36,8 @@ namespace MiniGlobe.Core.Geometry
 
         public void CopyTo(VertexAttribute[] array, int arrayIndex)
         {
-            m_collection.Values.CopyTo(array, arrayIndex);
+            ICollection<VertexAttribute> values = m_collection.Values;
+            values.CopyTo(array, arrayIndex);
         }
 
         public int Count
@@ -61,13 +62,16 @@ namespace MiniGlobe.Core.Geometry
 
         public IEnumerator<VertexAttribute> GetEnumerator()
         {
-            return m_collection.Values.GetEnumerator();
+            ICollection<VertexAttribute> values = m_collection.Values;
+            return values.GetEnumerator();
         }
 
+#if !CSToJava
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
         {
             return GetEnumerator();
         }
+#endif
 
         public VertexAttribute this[string vertexAttributeName]
         {

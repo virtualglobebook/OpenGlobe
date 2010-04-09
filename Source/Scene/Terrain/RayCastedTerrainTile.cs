@@ -300,7 +300,7 @@ namespace MiniGlobe.Terrain
             _tileMinimumHeight = tile.MinimumHeight;
             _tileMaximumHeight = tile.MaximumHeight;
             _tileAABBLowerLeft = Vector3D.Zero;             // TEXEL_SPACE_TODO
-            _tileAABBUpperRight = new Vector3D(tile.Size.Width, tile.Size.Height,
+            _tileAABBUpperRight = new Vector3D(tile.Size.X, tile.Size.Y,
                 tile.MaximumHeight - tile.MinimumHeight);
 
             _heightExaggeration = _sp.Uniforms["u_heightExaggeration"] as Uniform<float>;
@@ -323,7 +323,7 @@ namespace MiniGlobe.Terrain
             pixelBuffer.CopyFromSystemMemory(tile.Heights);
 
             _texture = Device.CreateTexture2DRectangle(new Texture2DDescription(
-                tile.Size.Width, tile.Size.Height, TextureFormat.Red32f));
+                tile.Size.X, tile.Size.Y, TextureFormat.Red32f));
             _texture.CopyFromBuffer(pixelBuffer, ImageFormat.Red, ImageDataType.Float);
             _texture.Filter = Texture2DFilter.NearestClampToEdge;
         }
@@ -332,7 +332,7 @@ namespace MiniGlobe.Terrain
         {
             if (_dirtyVA)
             {
-                Vector3D radii = new Vector3D(_tileSize.Width, _tileSize.Height,
+                Vector3D radii = new Vector3D(_tileSize.X, _tileSize.Y,
                     (_tileMaximumHeight - _tileMinimumHeight) * _heightExaggeration.Value);
                 Vector3D halfRadii = 0.5 * radii;
 
@@ -418,7 +418,7 @@ namespace MiniGlobe.Terrain
         private readonly Uniform<Vector3S> _aabbLowerLeft;
         private readonly Uniform<Vector3S> _aabbUpperRight;
 
-        private readonly Size _tileSize;
+        private readonly Vector2I _tileSize;
         private readonly float _tileMinimumHeight;
         private readonly float _tileMaximumHeight;
         private readonly Vector3D _tileAABBLowerLeft;
