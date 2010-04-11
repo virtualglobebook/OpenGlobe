@@ -89,8 +89,8 @@ namespace MiniGlobe.Scene
                       out vec4 clipP0, 
                       out vec4 clipP1)
                     {
-                      clipP0 = mg_modelViewPerspectiveProjectionMatrix * modelP0;
-                      clipP1 = mg_modelViewPerspectiveProjectionMatrix * modelP1;
+                      clipP0 = modelViewPerspectiveProjectionMatrix * modelP0;
+                      clipP1 = modelViewPerspectiveProjectionMatrix * modelP1;
 
                       float distanceToP0 = clipP0.z - nearPlaneDistance;
                       float distanceToP1 = clipP1.z - nearPlaneDistance;
