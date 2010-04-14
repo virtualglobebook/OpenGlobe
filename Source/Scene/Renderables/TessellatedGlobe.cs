@@ -29,12 +29,34 @@ namespace MiniGlobe.Scene
                   out vec3 positionToEye;
 
                   uniform mat4 mg_modelViewPerspectiveProjectionMatrix;
+                  uniform float mg_perspectiveFarPlaneDistance;
                   uniform vec3 mg_cameraEye;
                   uniform vec3 mg_cameraLightPosition;
+                  uniform bool u_logarithmicDepth;
+                  uniform float u_logarithmicDepthConstant;
+
+                  vec4 ModelToClipCoordinates(
+                      vec4 position,
+                      mat4 modelViewPerspectiveProjectionMatrix,
+                      bool logarithmicDepth,
+                      float logarithmicDepthConstant,
+                      float perspectiveFarPlaneDistance)
+                  {
+                      if (logarithmicDepth)
+                      {
+                          vec4 clip = modelViewPerspectiveProjectionMatrix * position; 
+                          clip.z = (log((logarithmicDepthConstant * clip.z) + 1.0) / 
+                                    log((logarithmicDepthConstant * perspectiveFarPlaneDistance) + 1.0)) * clip.w;
+                          return clip;
+                      }
+
+                      return mg_modelViewPerspectiveProjectionMatrix * position; 
+                  }
 
                   void main()                     
                   {
-                        gl_Position = mg_modelViewPerspectiveProjectionMatrix * position; 
+                        gl_Position = ModelToClipCoordinates(position, mg_modelViewPerspectiveProjectionMatrix,
+                            u_logarithmicDepth, u_logarithmicDepthConstant, mg_perspectiveFarPlaneDistance);
 
                         worldPosition = position.xyz;
                         positionToLight = mg_cameraLightPosition - worldPosition;
@@ -77,7 +99,10 @@ namespace MiniGlobe.Scene
                       fragmentColor = intensity * texture(mg_texture0, ComputeTextureCoordinates(normal)).rgb;
                   }";
             _sp = Device.CreateShaderProgram(vs, fs);
-
+            _logarithmicDepth = _sp.Uniforms["u_logarithmicDepth"] as Uniform<bool>;
+            _logarithmicDepthConstant = _sp.Uniforms["u_logarithmicDepthConstant"] as Uniform<float>;
+            LogarithmicDepthConstant = 1;
+            
             _renderState = new RenderState();
 
             Shape = Ellipsoid.UnitSphere;
@@ -138,6 +163,18 @@ namespace MiniGlobe.Scene
         public bool Wireframe { get; set; }
         public Texture2D Texture { get; set; }
 
+        public bool LogarithmicDepth
+        {
+            get { return _logarithmicDepth.Value; }
+            set { _logarithmicDepth.Value = value; }
+        }
+
+        public float LogarithmicDepthConstant
+        {
+            get { return _logarithmicDepthConstant.Value; }
+            set { _logarithmicDepthConstant.Value = value; }
+        }
+
         public Ellipsoid Shape
         {
             get { return _shape; }
@@ -192,6 +229,8 @@ namespace MiniGlobe.Scene
 
         private readonly Context _context;
         private readonly ShaderProgram _sp;
+        private readonly Uniform<bool> _logarithmicDepth;
+        private readonly Uniform<float> _logarithmicDepthConstant;
 
         private readonly RenderState _renderState;
         private VertexArray _va;

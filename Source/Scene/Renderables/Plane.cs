@@ -27,51 +27,109 @@ namespace MiniGlobe.Scene
                 @"#version 150
 
                   in vec4 position;
-                  in vec4 color;
-
-                  uniform mat4 mg_modelViewPerspectiveProjectionMatrix;
-                  uniform mat4 mg_viewportTransformationMatrix;
-                  uniform float u_lineLength;
-
-                  vec4 ModelToWindowCoordinates(
-                      vec4 v, 
-                      mat4 modelViewPerspectiveProjectionMatrix,
-                      mat4 viewportTransformationMatrix)
-                  {
-                      v = modelViewPerspectiveProjectionMatrix * v;                        // clip coordinates
-                      v.xyz /= v.w;                                                        // normalized device coordinates
-                      v.xyz = (viewportTransformationMatrix * vec4(v.xyz + 1.0, 1.0)).xyz; // windows coordinates
-                      return v;
-                  }
 
                   void main()                     
                   {
-                      gl_Position = ModelToWindowCoordinates(position,
-                          mg_modelViewPerspectiveProjectionMatrix, mg_viewportTransformationMatrix);
+                    gl_Position = position;
                   }";
             string lineGS =
                 @"#version 150 
 
-                  layout(lines) in;
-                  layout(triangle_strip, max_vertices = 4) out;
+                    layout(lines) in;
+                    layout(triangle_strip, max_vertices = 4) out;
 
-                  in vec4 gsColor[];
+                    uniform mat4 mg_modelViewPerspectiveProjectionMatrix;
+                    uniform mat4 mg_viewportTransformationMatrix;
+                    uniform mat4 mg_viewportOrthographicProjectionMatrix;
+                    uniform float mg_perspectiveNearPlaneDistance;
+                    uniform float mg_perspectiveFarPlaneDistance;
+                    uniform bool u_logarithmicDepth;
+                    uniform float u_logarithmicDepthConstant;
+                    uniform float u_fillDistance;
 
-                  uniform mat4 mg_viewportOrthographicProjectionMatrix;
-                  uniform float u_halfLineWidth;
-
-                  void main()
+                  vec4 ModelToClipCoordinates(
+                      vec4 position,
+                      mat4 modelViewPerspectiveProjectionMatrix,
+                      bool logarithmicDepth,
+                      float logarithmicDepthConstant,
+                      float perspectiveFarPlaneDistance)
                   {
-                      vec4 firstPosition = gl_in[0].gl_Position;
-                      vec4 secondPosition = gl_in[1].gl_Position;
+                      if (logarithmicDepth)
+                      {
+                          vec4 clip = modelViewPerspectiveProjectionMatrix * position; 
+                          clip.z = (log((logarithmicDepthConstant * clip.z) + 1.0) / 
+                                    log((logarithmicDepthConstant * perspectiveFarPlaneDistance) + 1.0)) * clip.w;
+                          return clip;
+                      }
 
-                      vec2 direction = secondPosition.xy - firstPosition.xy;
+                      return mg_modelViewPerspectiveProjectionMatrix * position; 
+                  }
+
+                    vec4 ClipToWindowCoordinates(vec4 v, mat4 viewportTransformationMatrix)
+                    {
+                      v.xyz /= v.w;                                                        // normalized device coordinates
+                      v.xyz = (viewportTransformationMatrix * vec4(v.xyz + 1.0, 1.0)).xyz; // windows coordinates
+                      return v;
+                    }
+
+                    void ClipLineSegmentToNearPlane(
+                      float nearPlaneDistance, 
+                      float perspectiveFarPlaneDistance,
+                      mat4 modelViewPerspectiveProjectionMatrix,
+                      bool logarithmicDepth,
+                      float logarithmicDepthConstant,
+                      vec4 modelP0, 
+                      vec4 modelP1, 
+                      out vec4 clipP0, 
+                      out vec4 clipP1)
+                    {
+                      clipP0 = ModelToClipCoordinates(modelP0, modelViewPerspectiveProjectionMatrix,
+                          logarithmicDepth, logarithmicDepthConstant, perspectiveFarPlaneDistance);
+                      clipP1 = ModelToClipCoordinates(modelP1, modelViewPerspectiveProjectionMatrix,
+                          logarithmicDepth, logarithmicDepthConstant, perspectiveFarPlaneDistance);
+
+                      float distanceToP0 = clipP0.z - nearPlaneDistance;
+                      float distanceToP1 = clipP1.z - nearPlaneDistance;
+
+                      if ((distanceToP0 * distanceToP1) < 0.0)
+                      {
+                          float t = distanceToP0 / (distanceToP0 - distanceToP1);
+                          vec3 modelV = vec3(modelP0) + t * (vec3(modelP1) - vec3(modelP0));
+
+                          vec4 clipV = ModelToClipCoordinates(vec4(modelV, 1), modelViewPerspectiveProjectionMatrix,
+                              logarithmicDepth, logarithmicDepthConstant, perspectiveFarPlaneDistance);
+
+                          if (distanceToP0 < 0.0)
+                          {
+                              clipP0 = clipV;
+                          }
+                          else
+                          {
+                              clipP1 = clipV;
+                          }
+                      }
+                    }
+
+                    void main()
+                    {
+                      vec4 clipP0;
+                      vec4 clipP1;
+                      ClipLineSegmentToNearPlane(
+                        mg_perspectiveNearPlaneDistance, mg_perspectiveFarPlaneDistance,
+                        mg_modelViewPerspectiveProjectionMatrix, 
+                        u_logarithmicDepth, u_logarithmicDepthConstant,
+                        gl_in[0].gl_Position, gl_in[1].gl_Position, clipP0, clipP1);
+
+                      vec4 windowP0 = ClipToWindowCoordinates(clipP0, mg_viewportTransformationMatrix);
+                      vec4 windowP1 = ClipToWindowCoordinates(clipP1, mg_viewportTransformationMatrix);
+
+                      vec2 direction = windowP1.xy - windowP0.xy;
                       vec2 normal = normalize(vec2(direction.y, -direction.x));
 
-                      vec4 v0 = vec4(firstPosition.xy - (normal * u_halfLineWidth), firstPosition.z, 1.0);
-                      vec4 v1 = vec4(firstPosition.xy + (normal * u_halfLineWidth), firstPosition.z, 1.0);
-                      vec4 v2 = vec4(secondPosition.xy - (normal * u_halfLineWidth), secondPosition.z, 1.0);
-                      vec4 v3 = vec4(secondPosition.xy + (normal * u_halfLineWidth), secondPosition.z, 1.0);
+                      vec4 v0 = vec4(windowP0.xy - (normal * u_fillDistance), windowP0.z, 1.0);
+                      vec4 v1 = vec4(windowP1.xy - (normal * u_fillDistance), windowP1.z, 1.0);
+                      vec4 v2 = vec4(windowP0.xy + (normal * u_fillDistance), windowP0.z, 1.0);
+                      vec4 v3 = vec4(windowP1.xy + (normal * u_fillDistance), windowP1.z, 1.0);
 
                       gl_Position = mg_viewportOrthographicProjectionMatrix * v0;
                       EmitVertex();
@@ -84,20 +142,23 @@ namespace MiniGlobe.Scene
 
                       gl_Position = mg_viewportOrthographicProjectionMatrix * v3;
                       EmitVertex();
-                  }";
+                    }";
             string lineFS =
                 @"#version 150
-                 
-                  out vec3 fragmentColor;
-                  uniform vec3 u_color;
 
-                  void main()
-                  {
+                    out vec3 fragmentColor;
+                    uniform vec3 u_color;
+
+                    void main()
+                    {
                       fragmentColor = u_color;
-                  }";
+                    }";
             _lineSP = Device.CreateShaderProgram(lineVS, lineGS, lineFS);
 
-            _halfLineWidth = _lineSP.Uniforms["u_halfLineWidth"] as Uniform<float>;
+            _lineLogarithmicDepth = _lineSP.Uniforms["u_logarithmicDepth"] as Uniform<bool>;
+            _lineLogarithmicDepthConstant = _lineSP.Uniforms["u_logarithmicDepthConstant"] as Uniform<float>;
+
+            _lineFillDistance = _lineSP.Uniforms["u_fillDistance"] as Uniform<float>;
             OutlineWidth = 1;
 
             _lineColorUniform = _lineSP.Uniforms["u_color"] as Uniform<Vector3S>;
@@ -118,10 +179,32 @@ namespace MiniGlobe.Scene
 
                   in vec4 position;
                   uniform mat4 mg_modelViewPerspectiveProjectionMatrix;
+                  uniform float mg_perspectiveFarPlaneDistance;
+                  uniform bool u_logarithmicDepth;
+                  uniform float u_logarithmicDepthConstant;
+
+                  vec4 ModelToClipCoordinates(
+                      vec4 position,
+                      mat4 modelViewPerspectiveProjectionMatrix,
+                      bool logarithmicDepth,
+                      float logarithmicDepthConstant,
+                      float perspectiveFarPlaneDistance)
+                  {
+                      if (logarithmicDepth)
+                      {
+                          vec4 clip = modelViewPerspectiveProjectionMatrix * position; 
+                          clip.z = (log((logarithmicDepthConstant * clip.z) + 1.0) / 
+                                    log((logarithmicDepthConstant * perspectiveFarPlaneDistance) + 1.0)) * clip.w;
+                          return clip;
+                      }
+
+                      return mg_modelViewPerspectiveProjectionMatrix * position; 
+                  }
 
                   void main()                     
                   {
-                        gl_Position = mg_modelViewPerspectiveProjectionMatrix * position; 
+                      gl_Position = ModelToClipCoordinates(position, mg_modelViewPerspectiveProjectionMatrix,
+                          u_logarithmicDepth, u_logarithmicDepthConstant, mg_perspectiveFarPlaneDistance);
                   }";
             string fillFS =
                 @"#version 150
@@ -135,6 +218,10 @@ namespace MiniGlobe.Scene
                       fragmentColor = vec4(u_color, u_alpha);
                   }";
             _fillSP = Device.CreateShaderProgram(fillVS, fillFS);
+
+            _fillLogarithmicDepth = _fillSP.Uniforms["u_logarithmicDepth"] as Uniform<bool>;
+            _fillLogarithmicDepthConstant = _fillSP.Uniforms["u_logarithmicDepthConstant"] as Uniform<float>;
+            LogarithmicDepthConstant = 1;
 
             _fillColorUniform = _fillSP.Uniforms["u_color"] as Uniform<Vector3S>;
             FillColor = Color.Gray;
@@ -197,7 +284,7 @@ namespace MiniGlobe.Scene
                 //
                 // Pass 1:  Outline
                 //
-                _halfLineWidth.Value = (float)(OutlineWidth * 0.5 * sceneState.HighResolutionSnapScale);
+                _lineFillDistance.Value = (float)(OutlineWidth * 0.5 * sceneState.HighResolutionSnapScale);
                 _context.Bind(_lineRS);
                 _context.Bind(_lineSP);
                 _context.Draw(PrimitiveType.LineLoop, 0, 4, sceneState);
@@ -275,6 +362,26 @@ namespace MiniGlobe.Scene
         public bool ShowOutline { get; set; }
         public bool ShowFill { get; set; }
 
+        public bool LogarithmicDepth
+        {
+            get { return _lineLogarithmicDepth.Value; }
+            set
+            {
+                _lineLogarithmicDepth.Value = value;
+                _fillLogarithmicDepth.Value = value;
+            }
+        }
+
+        public float LogarithmicDepthConstant
+        {
+            get { return _lineLogarithmicDepthConstant.Value; }
+            set
+            {
+                _lineLogarithmicDepthConstant.Value = value;
+                _fillLogarithmicDepthConstant.Value = value;
+            }
+        }
+
         public Color OutlineColor
         {
             get { return _lineColor; }
@@ -323,13 +430,17 @@ namespace MiniGlobe.Scene
         private readonly Context _context;
         private readonly RenderState _lineRS;
         private readonly ShaderProgram _lineSP;
+        private readonly Uniform<bool> _lineLogarithmicDepth;
+        private readonly Uniform<float> _lineLogarithmicDepthConstant;
 
-        private readonly Uniform<float> _halfLineWidth;
+        private readonly Uniform<float> _lineFillDistance;
         private readonly Uniform<Vector3S> _lineColorUniform;
         private Color _lineColor;
 
         private readonly RenderState _fillRS;
         private readonly ShaderProgram _fillSP;
+        private readonly Uniform<bool> _fillLogarithmicDepth;
+        private readonly Uniform<float> _fillLogarithmicDepthConstant;
 
         private readonly VertexBuffer _positionBuffer;
         private readonly VertexArray _va;
