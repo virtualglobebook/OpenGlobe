@@ -42,15 +42,15 @@ namespace MiniGlobe.Scene
                       float logarithmicDepthConstant,
                       float perspectiveFarPlaneDistance)
                   {
+                      vec4 clip = modelViewPerspectiveProjectionMatrix * position; 
+
                       if (logarithmicDepth)
                       {
-                          vec4 clip = modelViewPerspectiveProjectionMatrix * position; 
                           clip.z = (log((logarithmicDepthConstant * clip.z) + 1.0) / 
                                     log((logarithmicDepthConstant * perspectiveFarPlaneDistance) + 1.0)) * clip.w;
-                          return clip;
                       }
 
-                      return mg_modelViewPerspectiveProjectionMatrix * position; 
+                      return clip;
                   }
 
                   void main()                     

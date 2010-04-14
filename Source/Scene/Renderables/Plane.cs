@@ -54,15 +54,15 @@ namespace MiniGlobe.Scene
                       float logarithmicDepthConstant,
                       float perspectiveFarPlaneDistance)
                   {
+                      vec4 clip = modelViewPerspectiveProjectionMatrix * position; 
+
                       if (logarithmicDepth)
                       {
-                          vec4 clip = modelViewPerspectiveProjectionMatrix * position; 
                           clip.z = (log((logarithmicDepthConstant * clip.z) + 1.0) / 
                                     log((logarithmicDepthConstant * perspectiveFarPlaneDistance) + 1.0)) * clip.w;
-                          return clip;
                       }
 
-                      return mg_modelViewPerspectiveProjectionMatrix * position; 
+                      return clip;
                   }
 
                     vec4 ClipToWindowCoordinates(vec4 v, mat4 viewportTransformationMatrix)
@@ -190,15 +190,15 @@ namespace MiniGlobe.Scene
                       float logarithmicDepthConstant,
                       float perspectiveFarPlaneDistance)
                   {
+                      vec4 clip = modelViewPerspectiveProjectionMatrix * position; 
+
                       if (logarithmicDepth)
                       {
-                          vec4 clip = modelViewPerspectiveProjectionMatrix * position; 
                           clip.z = (log((logarithmicDepthConstant * clip.z) + 1.0) / 
                                     log((logarithmicDepthConstant * perspectiveFarPlaneDistance) + 1.0)) * clip.w;
-                          return clip;
                       }
 
-                      return mg_modelViewPerspectiveProjectionMatrix * position; 
+                      return clip;
                   }
 
                   void main()                     
