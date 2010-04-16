@@ -1,5 +1,5 @@
-Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual C# Express 2008
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual C# Express 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chapter3SubdivisionSphere1", "Examples\Chapter3\SubdivisionSphere1\Chapter3SubdivisionSphere1.csproj", "{2665F0CA-8D86-4486-916C-2E49799C244B}"
 	ProjectSection(ProjectDependencies) = postProject
 		{51502B9C-1A97-4F2C-8541-7D9D61ED6C6D} = {51502B9C-1A97-4F2C-8541-7D9D61ED6C6D}
