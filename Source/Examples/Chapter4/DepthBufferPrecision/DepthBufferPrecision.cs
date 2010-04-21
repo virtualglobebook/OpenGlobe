@@ -60,51 +60,15 @@ namespace MiniGlobe.Examples.Chapter4
             _frameBuffer = _window.Context.CreateFrameBuffer();
             _depthFormatIndex = 1;
             _depthTestLess = true;
+            _logarithmicDepthConstant = 1;
             UpdatePlanesAndDepthTests();
 
             ///////////////////////////////////////////////////////////////////
 
             _hudFont = new Font("Arial", 16);
-
-            _nearDistanceHUD = new HeadsUpDisplay(_window.Context);
-            _nearDistanceHUD.Color = Color.Black;
-            _nearDistanceHUD.Position = new Vector2D(0, 172);
-            UpdateNearDistanceHUD();
-
-            _farDistanceHUD = new HeadsUpDisplay(_window.Context);
-            _farDistanceHUD.Color = Color.Black;
-            _farDistanceHUD.Position = new Vector2D(0, 148);
-            UpdateFarDistanceHUD();
-            
-            _viewerHeightHUD = new HeadsUpDisplay(_window.Context);
-            _viewerHeightHUD.Color = Color.Black;
-            _viewerHeightHUD.Position = new Vector2D(0, 120);
-            UpdateViewerHeightHUD();
-
-            _planeHeightHUD = new HeadsUpDisplay(_window.Context);
-            _planeHeightHUD.Color = Color.Black;
-            _planeHeightHUD.Position = new Vector2D(0, 96);
-            UpdatePlaneHeightHUD();
-
-            _depthFormatHUD = new HeadsUpDisplay(_window.Context);
-            _depthFormatHUD.Color = Color.Black;
-            _depthFormatHUD.Position = new Vector2D(0, 72);
-            UpdateDepthFormatHUD();
-
-            _depthTestHUD = new HeadsUpDisplay(_window.Context);
-            _depthTestHUD.Color = Color.Black;
-            _depthTestHUD.Position = new Vector2D(0, 48);
-            UpdateDepthTestHUD();
-
-            _logarithmicDepthBufferHUD = new HeadsUpDisplay(_window.Context);
-            _logarithmicDepthBufferHUD.Color = Color.Black;
-            _logarithmicDepthBufferHUD.Position = new Vector2D(0, 24);
-            UpdateLogarithmicDepthBufferHUD();
-
-            _logarithmicDepthConstantHUD = new HeadsUpDisplay(_window.Context);
-            _logarithmicDepthConstantHUD.Color = Color.Black;
-            _logarithmicDepthConstant = 1;
-            UpdateLogarithmicDepthConstantHUD();
+            _hud = new HeadsUpDisplay(_window.Context);
+            _hud.Color = Color.Black;
+            UpdateHUD();
         }
 
         private void OnResize()
@@ -150,14 +114,12 @@ namespace MiniGlobe.Examples.Chapter4
                 _nearDistance += (e.Key == KeyboardKey.Up) ? 1 : -1;
 
                 UpdatePlanesAndDepthTests();
-                UpdateNearDistanceHUD();
             }
             else if (_fKeyDown && ((e.Key == KeyboardKey.Up) || (e.Key == KeyboardKey.Down)))
             {
                 _cubeRootFarDistance += (e.Key == KeyboardKey.Up) ? 1 : -1;
 
                 UpdatePlanesAndDepthTests();
-                UpdateFarDistanceHUD();
             }
             else if ((e.Key == KeyboardKey.Plus) || (e.Key == KeyboardKey.KeypadPlus) ||
                 (e.Key == KeyboardKey.Minus) || (e.Key == KeyboardKey.KeypadMinus))
@@ -165,7 +127,6 @@ namespace MiniGlobe.Examples.Chapter4
                 _cubeRootPlaneHeight += ((e.Key == KeyboardKey.Plus) || (e.Key == KeyboardKey.KeypadPlus)) ? 1 : -1;
 
                 UpdatePlaneOrigin();
-                UpdatePlaneHeightHUD();
             }
             else if ((e.Key == KeyboardKey.Left) || (e.Key == KeyboardKey.Right))
             {
@@ -180,29 +141,27 @@ namespace MiniGlobe.Examples.Chapter4
                 }
 
                 UpdateFrameBufferAttachments();
-                UpdateDepthFormatHUD();
             }
             else if (e.Key == KeyboardKey.D)
             {
                 _depthTestLess = !_depthTestLess;
 
                 UpdatePlanesAndDepthTests();
-                UpdateDepthTestHUD();
             }
             else if (e.Key == KeyboardKey.L)
             {
                 _logarithmicDepthBuffer = !_logarithmicDepthBuffer;
 
                 UpdateLogarithmicDepthBuffer();
-                UpdateLogarithmicDepthBufferHUD();
             }
             else if (_cKeyDown && ((e.Key == KeyboardKey.Up) || (e.Key == KeyboardKey.Down)))
             {
                 _logarithmicDepthConstant += (e.Key == KeyboardKey.Up) ? 0.1 : -0.1;
 
                 UpdateLogarithmicDepthConstant();
-                UpdateLogarithmicDepthConstantHUD();
             }
+
+            UpdateHUD();
         }
 
         private void UpdatePlaneOrigin()
@@ -244,70 +203,42 @@ namespace MiniGlobe.Examples.Chapter4
             _plane.LogarithmicDepthConstant = (float)_logarithmicDepthConstant;
         }
 
-        private void UpdateNearDistanceHUD()
-        {
-            UpdateHUDTexture(_nearDistanceHUD, "Near Plane: " + 
-                string.Format(CultureInfo.CurrentCulture, "{0:N}" + " ('n' + up/down)", _nearDistance));
-        }
-
-        private void UpdateFarDistanceHUD()
-        {
-            UpdateHUDTexture(_farDistanceHUD, "Far Plane: " + string.Format(CultureInfo.CurrentCulture, "{0:N}" + " ('f' + up/down)",
-                _cubeRootFarDistance * _cubeRootFarDistance * _cubeRootFarDistance));
-        }
-
-        private void UpdateViewerHeightHUD()
+        private void UpdateViewerHeight()
         {
             double height = _sceneState.Camera.Altitude(_globeShape);
             if (_viewerHeight != height)
             {
-                UpdateHUDTexture(_viewerHeightHUD, "Viewer Height: " + string.Format(CultureInfo.CurrentCulture, "{0:N}", height));
                 _viewerHeight = height;
+                UpdateHUD();
             }
         }
 
-        private void UpdatePlaneHeightHUD()
+        private void UpdateHUD()
         {
-            UpdateHUDTexture(_planeHeightHUD, "Plane Height: " +
-                string.Format(CultureInfo.CurrentCulture, "{0:N}", _cubeRootPlaneHeight * _cubeRootPlaneHeight * _cubeRootPlaneHeight) + " ('-'/'+')");
-        }
+            string text;
 
-        private void UpdateDepthTestHUD()
-        {
-            UpdateHUDTexture(_depthTestHUD, "Depth Test: " + (_depthTestLess ? "less" : "greater") + " ('d')");
-        }
+            text = "Near Plane: " + string.Format(CultureInfo.CurrentCulture, "{0:N}" + " ('n' + up/down)", _nearDistance) + "\n";
+            text += "Far Plane: " + string.Format(CultureInfo.CurrentCulture, "{0:N}" + " ('f' + up/down)", _cubeRootFarDistance * _cubeRootFarDistance * _cubeRootFarDistance) + "\n";
+            text += "Viewer Height: " + string.Format(CultureInfo.CurrentCulture, "{0:N}", _viewerHeight) + "\n";
+            text += "Plane Height: " + string.Format(CultureInfo.CurrentCulture, "{0:N}", _cubeRootPlaneHeight * _cubeRootPlaneHeight * _cubeRootPlaneHeight) + " ('-'/'+')\n";
+            text += "Depth Test: " + (_depthTestLess ? "less" : "greater") + " ('d')\n";
+            text += "Depth Format: " + _depthFormatsStrings[_depthFormatIndex] + " (left/right)\n";
+            text += "Logarithmic Depth Buffer: " + (_logarithmicDepthBuffer ? "on" : "off") + " ('l')\n";
+            text += "Logarithmic Depth Constant: " + _logarithmicDepthConstant + " ('c' + up/down)";
 
-        private void UpdateDepthFormatHUD()
-        {
-            UpdateHUDTexture(_depthFormatHUD, "Depth Format: " + _depthFormatsStrings[_depthFormatIndex] + " (left/right)");
-        }
-
-        private void UpdateLogarithmicDepthBufferHUD()
-        {
-            UpdateHUDTexture(_logarithmicDepthBufferHUD, "Logarithmic Depth Buffer: " + (_logarithmicDepthBuffer ? "on" : "off") + " ('l')");
-        }
-
-        private void UpdateLogarithmicDepthConstantHUD()
-        {
-            UpdateHUDTexture(_logarithmicDepthConstantHUD, "Logarithmic Depth Constant: " + _logarithmicDepthConstant + " ('c' + up/down)");
-        }
-
-        private void UpdateHUDTexture(HeadsUpDisplay hud, string text)
-        {
-            if (hud.Texture != null)
+            if (_hud.Texture != null)
             {
-                hud.Texture.Dispose();
-                hud.Texture = null;
+                _hud.Texture.Dispose();
+                _hud.Texture = null;
             }
-
-            hud.Texture = Device.CreateTexture2D(
+            _hud.Texture = Device.CreateTexture2D(
                 Device.CreateBitmapFromText(text, _hudFont),
                 TextureFormat.RedGreenBlueAlpha8, false);
         }
 
         private void OnRenderFrame()
         {
-            UpdateViewerHeightHUD();
+            UpdateViewerHeight();
 
             Context context = _window.Context;
 
@@ -319,14 +250,7 @@ namespace MiniGlobe.Examples.Chapter4
             _globe.Render(_sceneState);
             _plane.Render(_sceneState);
 
-            _nearDistanceHUD.Render(_sceneState);
-            _farDistanceHUD.Render(_sceneState);
-            _viewerHeightHUD.Render(_sceneState);
-            _planeHeightHUD.Render(_sceneState);
-            _depthFormatHUD.Render(_sceneState);
-            _depthTestHUD.Render(_sceneState);
-            _logarithmicDepthBufferHUD.Render(_sceneState);
-            _logarithmicDepthConstantHUD.Render(_sceneState);
+            _hud.Render(_sceneState);
 
             //
             // Render viewport quad to show contents of frame buffer's color buffer
@@ -350,22 +274,8 @@ namespace MiniGlobe.Examples.Chapter4
             _frameBuffer.Dispose();
 
             _hudFont.Dispose();
-            _nearDistanceHUD.Texture.Dispose();
-            _nearDistanceHUD.Dispose();
-            _farDistanceHUD.Texture.Dispose();
-            _farDistanceHUD.Dispose();
-            _viewerHeightHUD.Texture.Dispose();
-            _viewerHeightHUD.Dispose();
-            _planeHeightHUD.Texture.Dispose();
-            _planeHeightHUD.Dispose();
-            _depthFormatHUD.Texture.Dispose();
-            _depthFormatHUD.Dispose();
-            _depthTestHUD.Texture.Dispose();
-            _depthTestHUD.Dispose();
-            _logarithmicDepthBufferHUD.Texture.Dispose();
-            _logarithmicDepthBufferHUD.Dispose();
-            _logarithmicDepthConstantHUD.Texture.Dispose();
-            _logarithmicDepthConstantHUD.Dispose();
+            _hud.Texture.Dispose();
+            _hud.Dispose();
         }
 
         #endregion
@@ -420,14 +330,7 @@ namespace MiniGlobe.Examples.Chapter4
         private double _logarithmicDepthConstant;
 
         private readonly Font _hudFont;
-        private readonly HeadsUpDisplay _nearDistanceHUD;
-        private readonly HeadsUpDisplay _farDistanceHUD;
-        private readonly HeadsUpDisplay _viewerHeightHUD;
-        private readonly HeadsUpDisplay _planeHeightHUD;
-        private readonly HeadsUpDisplay _depthFormatHUD;
-        private readonly HeadsUpDisplay _depthTestHUD;
-        private readonly HeadsUpDisplay _logarithmicDepthBufferHUD;
-        private readonly HeadsUpDisplay _logarithmicDepthConstantHUD;
+        private readonly HeadsUpDisplay _hud;
 
         private bool _nKeyDown;
         private bool _fKeyDown;
