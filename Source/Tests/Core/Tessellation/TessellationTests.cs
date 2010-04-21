@@ -7,6 +7,7 @@
 //
 #endregion
 
+using System.Collections.Generic;
 using NUnit.Framework;
 using MiniGlobe.Core.Geometry;
 
@@ -91,6 +92,31 @@ namespace MiniGlobe.Core.Tessellation
 
             Assert.IsNotNull(mesh.Attributes["position"] as VertexAttributeDoubleVector3);
             Assert.IsNotNull(mesh.Indices as IndicesByte);
+        }
+
+        [Test]
+        public void RectangleTessellatorTest()
+        {
+            Mesh mesh = RectangleTessellator.Compute(new RectangleD(Vector2D.Zero, new Vector2D(1, 1)), 1, 1);
+
+            Assert.AreEqual(PrimitiveType.Triangles, mesh.PrimitiveType);
+            Assert.AreEqual(WindingOrder.Counterclockwise, mesh.FrontFaceWindingOrder);
+
+            IList<Vector2D> positions = (mesh.Attributes["position"] as VertexAttributeDoubleVector2).Values;
+            Assert.AreEqual(4, positions.Count);
+            Assert.AreEqual(Vector2D.Zero, positions[0]);
+            Assert.AreEqual(Vector2D.UnitX, positions[1]);
+            Assert.AreEqual(Vector2D.UnitY, positions[2]);
+            Assert.AreEqual(new Vector2D(1, 1), positions[3]);
+
+            IList<int> indices = (mesh.Indices as IndicesInt32).Values;
+            Assert.AreEqual(6, indices.Count);
+            Assert.AreEqual(0, indices[0]);
+            Assert.AreEqual(1, indices[1]);
+            Assert.AreEqual(3, indices[2]);
+            Assert.AreEqual(0, indices[3]);
+            Assert.AreEqual(3, indices[4]);
+            Assert.AreEqual(2, indices[5]);
         }
     }
 }

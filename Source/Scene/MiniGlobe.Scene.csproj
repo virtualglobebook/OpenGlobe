@@ -50,6 +50,7 @@
     <Compile Include="Renderables\TessellatedGlobe.cs" />
     <Compile Include="Renderables\Wireframe.cs" />
     <Compile Include="Terrain\RayCastedTerrainTile.cs" />
+    <Compile Include="Terrain\VertexDisplacementMapTerrainTile.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Core\MiniGlobe.Core.csproj">
