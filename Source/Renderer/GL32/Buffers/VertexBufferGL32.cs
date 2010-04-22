@@ -10,13 +10,13 @@
 using MiniGlobe.Renderer;
 using OpenTK.Graphics.OpenGL;
 
-namespace MiniGlobe.Renderer.GL32
+namespace MiniGlobe.Renderer.GL3x
 {
-    internal class VertexBufferGL32 : VertexBuffer
+    internal class VertexBufferGL3x : VertexBuffer
     {
-        public VertexBufferGL32(BufferHint usageHint, int sizeInBytes)
+        public VertexBufferGL3x(BufferHint usageHint, int sizeInBytes)
         {
-            _bufferObject = new BufferGL32(BufferTarget.ArrayBuffer, usageHint, sizeInBytes);
+            _bufferObject = new BufferGL3x(BufferTarget.ArrayBuffer, usageHint, sizeInBytes);
         }
 
         internal void Bind()
@@ -66,6 +66,6 @@ namespace MiniGlobe.Renderer.GL32
 
         #endregion
 
-        BufferGL32 _bufferObject;
+        BufferGL3x _bufferObject;
     }
 }

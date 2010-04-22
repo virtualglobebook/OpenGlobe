@@ -12,9 +12,9 @@ using OpenTK.Input;
 
 namespace MiniGlobe.Renderer
 {
-    public class KeyboardGL32 : Keyboard
+    public class KeyboardGL3x : Keyboard
     {
-        public KeyboardGL32(KeyboardDevice keyboard)
+        public KeyboardGL3x(KeyboardDevice keyboard)
         {
             _keyboard = keyboard;
 

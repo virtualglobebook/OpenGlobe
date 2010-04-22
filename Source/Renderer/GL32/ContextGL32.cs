@@ -16,11 +16,11 @@ using MiniGlobe.Core;
 using MiniGlobe.Core.Geometry;
 using MiniGlobe.Renderer;
 
-namespace MiniGlobe.Renderer.GL32
+namespace MiniGlobe.Renderer.GL3x
 {
-    internal class ContextGL32 : Context
+    internal class ContextGL3x : Context
     {
-        public ContextGL32()
+        public ContextGL3x()
         {
             Vector4 clearColor = new Vector4();
             GL.GetFloat(GetPName.DepthClearValue, out _clearDepth);
@@ -33,7 +33,7 @@ namespace MiniGlobe.Renderer.GL32
                 Convert.ToInt32(clearColor.Z * 255.0));
 
             _renderState = new RenderState();
-            _textureUnits = new TextureUnitsGL32();
+            _textureUnits = new TextureUnitsGL3x();
 
             //
             // Sync GL state with default render state.
@@ -49,11 +49,11 @@ namespace MiniGlobe.Renderer.GL32
             GL.PrimitiveRestartIndex(renderState.PrimitiveRestart.Index);
 
             Enable(EnableCap.CullFace, renderState.FacetCulling.Enabled);
-            GL.CullFace(TypeConverterGL32.To(renderState.FacetCulling.Face));
-            GL.FrontFace(TypeConverterGL32.To(renderState.FacetCulling.FrontFaceWindingOrder));
+            GL.CullFace(TypeConverterGL3x.To(renderState.FacetCulling.Face));
+            GL.FrontFace(TypeConverterGL3x.To(renderState.FacetCulling.FrontFaceWindingOrder));
 
             Enable(EnableCap.ProgramPointSize, renderState.ProgramPointSize == ProgramPointSize.Enabled);
-            GL.PolygonMode(MaterialFace.FrontAndBack, TypeConverterGL32.To(renderState.RasterizationMode));
+            GL.PolygonMode(MaterialFace.FrontAndBack, TypeConverterGL3x.To(renderState.RasterizationMode));
 
             Enable(EnableCap.ScissorTest, renderState.ScissorTest.Enabled);
             Rectangle rectangle = renderState.ScissorTest.Rectangle;
@@ -64,31 +64,31 @@ namespace MiniGlobe.Renderer.GL32
             ForceApplyStencil(StencilFace.Back, renderState.StencilTest.BackFace);
 
             Enable(EnableCap.DepthTest, renderState.DepthTest.Enabled);
-            GL.DepthFunc(TypeConverterGL32.To(renderState.DepthTest.Function));
+            GL.DepthFunc(TypeConverterGL3x.To(renderState.DepthTest.Function));
 
             GL.DepthRange(renderState.DepthRange.Near, renderState.DepthRange.Far);
 
             Enable(EnableCap.Blend, renderState.Blending.Enabled);
             GL.BlendFuncSeparate(
-                TypeConverterGL32.To(renderState.Blending.SourceRGBFactor),
-                TypeConverterGL32.To(renderState.Blending.DestinationRGBFactor),
-                TypeConverterGL32.To(renderState.Blending.SourceAlphaFactor),
-                TypeConverterGL32.To(renderState.Blending.DestinationAlphaFactor));
+                TypeConverterGL3x.To(renderState.Blending.SourceRGBFactor),
+                TypeConverterGL3x.To(renderState.Blending.DestinationRGBFactor),
+                TypeConverterGL3x.To(renderState.Blending.SourceAlphaFactor),
+                TypeConverterGL3x.To(renderState.Blending.DestinationAlphaFactor));
             GL.BlendEquationSeparate(
-                TypeConverterGL32.To(renderState.Blending.RGBEquation),
-                TypeConverterGL32.To(renderState.Blending.AlphaEquation));
+                TypeConverterGL3x.To(renderState.Blending.RGBEquation),
+                TypeConverterGL3x.To(renderState.Blending.AlphaEquation));
             GL.BlendColor(renderState.Blending.Color);
         }
 
         private static void ForceApplyStencil(StencilFace face, StencilTestFace test)
         {
             GL.StencilOpSeparate(face,
-                TypeConverterGL32.To(test.StencilFailOperation),
-                TypeConverterGL32.To(test.DepthPassStencilFailOperation),
-                TypeConverterGL32.To(test.DepthPassStencilPassOperation));
+                TypeConverterGL3x.To(test.StencilFailOperation),
+                TypeConverterGL3x.To(test.DepthPassStencilFailOperation),
+                TypeConverterGL3x.To(test.DepthPassStencilPassOperation));
 
             GL.StencilFuncSeparate(face,
-                TypeConverterGL32.To(test.Function),
+                TypeConverterGL3x.To(test.Function),
                 test.ReferenceValue,
                 test.Mask);
         }
@@ -104,12 +104,12 @@ namespace MiniGlobe.Renderer.GL32
 
         public override VertexArray CreateVertexArray()
         {
-            return new VertexArrayGL32();
+            return new VertexArrayGL3x();
         }
 
         public override FrameBuffer CreateFrameBuffer()
         {
-            return new FrameBufferGL32();
+            return new FrameBufferGL3x();
         }
 
         public override void Clear(ClearBuffers buffers, Color color, float depth, int stencil)
@@ -134,7 +134,7 @@ namespace MiniGlobe.Renderer.GL32
                 _clearStencil = stencil;
             }
 
-            GL.Clear(TypeConverterGL32.To(buffers));
+            GL.Clear(TypeConverterGL3x.To(buffers));
         }
 
         public override Rectangle Viewport
@@ -181,13 +181,13 @@ namespace MiniGlobe.Renderer.GL32
 
             if (_renderState.FacetCulling.Face != facetCulling.Face)
             {
-                GL.CullFace(TypeConverterGL32.To(facetCulling.Face));
+                GL.CullFace(TypeConverterGL3x.To(facetCulling.Face));
                 _renderState.FacetCulling.Face = facetCulling.Face;
             }
 
             if (_renderState.FacetCulling.FrontFaceWindingOrder != facetCulling.FrontFaceWindingOrder)
             {
-                GL.FrontFace(TypeConverterGL32.To(facetCulling.FrontFaceWindingOrder));
+                GL.FrontFace(TypeConverterGL3x.To(facetCulling.FrontFaceWindingOrder));
                 _renderState.FacetCulling.FrontFaceWindingOrder = facetCulling.FrontFaceWindingOrder;
             }
         }
@@ -205,7 +205,7 @@ namespace MiniGlobe.Renderer.GL32
         {
             if (_renderState.RasterizationMode != rasterizationMode)
             {
-                GL.PolygonMode(MaterialFace.FrontAndBack, TypeConverterGL32.To(rasterizationMode));
+                GL.PolygonMode(MaterialFace.FrontAndBack, TypeConverterGL3x.To(rasterizationMode));
                 _renderState.RasterizationMode = rasterizationMode;
             }
         }
@@ -248,9 +248,9 @@ namespace MiniGlobe.Renderer.GL32
                 (currentTest.DepthPassStencilPassOperation != test.DepthPassStencilPassOperation))
             {
                 GL.StencilOpSeparate(face,
-                    TypeConverterGL32.To(test.StencilFailOperation),
-                    TypeConverterGL32.To(test.DepthPassStencilFailOperation),
-                    TypeConverterGL32.To(test.DepthPassStencilPassOperation));
+                    TypeConverterGL3x.To(test.StencilFailOperation),
+                    TypeConverterGL3x.To(test.DepthPassStencilFailOperation),
+                    TypeConverterGL3x.To(test.DepthPassStencilPassOperation));
 
                 currentTest.StencilFailOperation = test.StencilFailOperation;
                 currentTest.DepthPassStencilFailOperation = test.DepthPassStencilFailOperation;
@@ -262,7 +262,7 @@ namespace MiniGlobe.Renderer.GL32
                 (currentTest.Mask != test.Mask))
             {
                 GL.StencilFuncSeparate(face,
-                    TypeConverterGL32.To(test.Function),
+                    TypeConverterGL3x.To(test.Function),
                     test.ReferenceValue,
                     test.Mask);
 
@@ -282,7 +282,7 @@ namespace MiniGlobe.Renderer.GL32
 
             if (_renderState.DepthTest.Function != depthTest.Function)
             {
-                GL.DepthFunc(TypeConverterGL32.To(depthTest.Function));
+                GL.DepthFunc(TypeConverterGL3x.To(depthTest.Function));
                 _renderState.DepthTest.Function = depthTest.Function;
             }
         }
@@ -316,10 +316,10 @@ namespace MiniGlobe.Renderer.GL32
                 (_renderState.Blending.DestinationAlphaFactor != blending.DestinationAlphaFactor))
             {
                 GL.BlendFuncSeparate(
-                    TypeConverterGL32.To(blending.SourceRGBFactor),
-                    TypeConverterGL32.To(blending.DestinationRGBFactor),
-                    TypeConverterGL32.To(blending.SourceAlphaFactor),
-                    TypeConverterGL32.To(blending.DestinationAlphaFactor));
+                    TypeConverterGL3x.To(blending.SourceRGBFactor),
+                    TypeConverterGL3x.To(blending.DestinationRGBFactor),
+                    TypeConverterGL3x.To(blending.SourceAlphaFactor),
+                    TypeConverterGL3x.To(blending.DestinationAlphaFactor));
 
                 _renderState.Blending.SourceRGBFactor = blending.SourceRGBFactor;
                 _renderState.Blending.DestinationRGBFactor = blending.DestinationRGBFactor;
@@ -331,8 +331,8 @@ namespace MiniGlobe.Renderer.GL32
                 (_renderState.Blending.AlphaEquation != blending.AlphaEquation))
             {
                 GL.BlendEquationSeparate(
-                    TypeConverterGL32.To(blending.RGBEquation),
-                    TypeConverterGL32.To(blending.AlphaEquation));
+                    TypeConverterGL3x.To(blending.RGBEquation),
+                    TypeConverterGL3x.To(blending.AlphaEquation));
 
                 _renderState.Blending.RGBEquation = blending.RGBEquation;
                 _renderState.Blending.AlphaEquation = blending.AlphaEquation;
@@ -360,42 +360,42 @@ namespace MiniGlobe.Renderer.GL32
 
         public override void Bind(VertexArray vertexArray)
         {
-            VertexArrayGL32 vertexArrayGL32 = vertexArray as VertexArrayGL32;
+            VertexArrayGL3x vertexArrayGL3x = vertexArray as VertexArrayGL3x;
 
-            if (_boundVertexArray != vertexArrayGL32)
+            if (_boundVertexArray != vertexArrayGL3x)
             {
-                vertexArrayGL32.Bind();
-                _boundVertexArray = vertexArrayGL32;
+                vertexArrayGL3x.Bind();
+                _boundVertexArray = vertexArrayGL3x;
             }
         }
 
         public override void Bind(ShaderProgram shaderProgram)
         {
-            ShaderProgramGL32 shaderProgramGL32 = shaderProgram as ShaderProgramGL32;
+            ShaderProgramGL3x shaderProgramGL3x = shaderProgram as ShaderProgramGL3x;
 
-            if (_boundShaderProgram != shaderProgramGL32)
+            if (_boundShaderProgram != shaderProgramGL3x)
             {
-                shaderProgramGL32.Bind();
-                _boundShaderProgram = shaderProgramGL32;
+                shaderProgramGL3x.Bind();
+                _boundShaderProgram = shaderProgramGL3x;
             }
         }
 
         public override void Bind(FrameBuffer frameBuffer)
         {
-            FrameBufferGL32 frameBufferGL32 = frameBuffer as FrameBufferGL32;
+            FrameBufferGL3x frameBufferGL3x = frameBuffer as FrameBufferGL3x;
 
-            if (_boundFrameBuffer != frameBufferGL32)
+            if (_boundFrameBuffer != frameBufferGL3x)
             {
-                if (frameBufferGL32 != null)
+                if (frameBufferGL3x != null)
                 {
-                    frameBufferGL32.Bind();
+                    frameBufferGL3x.Bind();
                 }
                 else
                 {
-                    FrameBufferGL32.UnBind();
+                    FrameBufferGL3x.UnBind();
                 }
 
-                _boundFrameBuffer = frameBufferGL32;
+                _boundFrameBuffer = frameBufferGL3x;
             }
         }
 
@@ -405,14 +405,14 @@ namespace MiniGlobe.Renderer.GL32
 
             if (_boundIndexBuffer != null)
             {
-                GL.DrawRangeElements(TypeConverterGL32.To(primitiveType),
+                GL.DrawRangeElements(TypeConverterGL3x.To(primitiveType),
                     0, _boundVertexArray.MaximumArrayIndex(), count,
-                    TypeConverterGL32.To(_boundIndexBuffer.DataType), new
-                    IntPtr(offset * SizesGL32.SizeOf(_boundIndexBuffer.DataType)));
+                    TypeConverterGL3x.To(_boundIndexBuffer.DataType), new
+                    IntPtr(offset * SizesGL3x.SizeOf(_boundIndexBuffer.DataType)));
             }
             else
             {
-                GL.DrawArrays(TypeConverterGL32.To(primitiveType), offset, count);
+                GL.DrawArrays(TypeConverterGL3x.To(primitiveType), offset, count);
             }
         }
 
@@ -422,13 +422,13 @@ namespace MiniGlobe.Renderer.GL32
 
             if (_boundIndexBuffer != null)
             {
-                GL.DrawRangeElements(TypeConverterGL32.To(primitiveType),
+                GL.DrawRangeElements(TypeConverterGL3x.To(primitiveType),
                     0, _boundVertexArray.MaximumArrayIndex(), _boundIndexBuffer.Count,
-                    TypeConverterGL32.To(_boundIndexBuffer.DataType), new IntPtr());
+                    TypeConverterGL3x.To(_boundIndexBuffer.DataType), new IntPtr());
             }
             else
             {
-                GL.DrawArrays(TypeConverterGL32.To(primitiveType), 0,
+                GL.DrawArrays(TypeConverterGL3x.To(primitiveType), 0,
                     _boundVertexArray.MaximumArrayIndex() + 1);
             }
         }
@@ -452,7 +452,7 @@ namespace MiniGlobe.Renderer.GL32
         {
             Debug.Assert(_boundVertexArray != null);
             _boundVertexArray.Clean();
-            _boundIndexBuffer = _boundVertexArray.IndexBuffer as IndexBufferGL32;
+            _boundIndexBuffer = _boundVertexArray.IndexBuffer as IndexBufferGL3x;
         }
 
         private void CleanShaderProgram(SceneState sceneState)
@@ -487,11 +487,11 @@ namespace MiniGlobe.Renderer.GL32
         private int _clearStencil;
 
         private RenderState _renderState;
-        private VertexArrayGL32 _boundVertexArray;
-        private IndexBufferGL32 _boundIndexBuffer;
-        private ShaderProgramGL32 _boundShaderProgram;
-        private FrameBufferGL32 _boundFrameBuffer;
+        private VertexArrayGL3x _boundVertexArray;
+        private IndexBufferGL3x _boundIndexBuffer;
+        private ShaderProgramGL3x _boundShaderProgram;
+        private FrameBufferGL3x _boundFrameBuffer;
 
-        private TextureUnitsGL32 _textureUnits;
+        private TextureUnitsGL3x _textureUnits;
     }
 }

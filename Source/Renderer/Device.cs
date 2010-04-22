@@ -10,7 +10,7 @@
 using System;
 using System.Drawing;
 using System.Diagnostics;
-using MiniGlobe.Renderer.GL32;
+using MiniGlobe.Renderer.GL3x;
 using OpenTK.Graphics.OpenGL;
 using ImagingPixelFormat = System.Drawing.Imaging.PixelFormat;
 
@@ -36,14 +36,14 @@ namespace MiniGlobe.Renderer
 
         public static MiniGlobeWindow CreateWindow(int width, int height, string title, WindowType windowType)
         {
-            return new MiniGlobeWindowGL32(width, height, title, windowType);
+            return new MiniGlobeWindowGL3x(width, height, title, windowType);
         }
 
         public static ShaderProgram CreateShaderProgram(
             string vertexShaderSource,
             string fragmentShaderSource)
         {
-            return new ShaderProgramGL32(vertexShaderSource, fragmentShaderSource);
+            return new ShaderProgramGL3x(vertexShaderSource, fragmentShaderSource);
         }
 
         public static ShaderProgram CreateShaderProgram(
@@ -51,32 +51,32 @@ namespace MiniGlobe.Renderer
             string geometryShaderSource,
             string fragmentShaderSource)
         {
-            return new ShaderProgramGL32(vertexShaderSource, geometryShaderSource, fragmentShaderSource);
+            return new ShaderProgramGL3x(vertexShaderSource, geometryShaderSource, fragmentShaderSource);
         }
 
         public static VertexBuffer CreateVertexBuffer(BufferHint usageHint, int sizeInBytes)
         {
-            return new VertexBufferGL32(usageHint, sizeInBytes);
+            return new VertexBufferGL3x(usageHint, sizeInBytes);
         }
 
         public static IndexBuffer CreateIndexBuffer(BufferHint usageHint, int sizeInBytes)
         {
-            return new IndexBufferGL32(usageHint, sizeInBytes);
+            return new IndexBufferGL3x(usageHint, sizeInBytes);
         }
 
         public static UniformBuffer CreateUniformBuffer(BufferHint usageHint, int sizeInBytes)
         {
-            return new UniformBufferGL32(usageHint, sizeInBytes);
+            return new UniformBufferGL3x(usageHint, sizeInBytes);
         }
 
         public static WritePixelBuffer CreateWritePixelBuffer(WritePixelBufferHint usageHint, int sizeInBytes)
         {
-            return new WritePixelBufferGL32(usageHint, sizeInBytes);
+            return new WritePixelBufferGL3x(usageHint, sizeInBytes);
         }
 
         public static Texture2D CreateTexture2D(Texture2DDescription description)
         {
-            return new Texture2DGL32(description, TextureTarget.Texture2D);
+            return new Texture2DGL3x(description, TextureTarget.Texture2D);
         }
 
         public static Texture2D CreateTexture2D(Bitmap bitmap, TextureFormat format, bool generateMipmaps)
@@ -86,7 +86,7 @@ namespace MiniGlobe.Renderer
 
         public static Texture2D CreateTexture2DRectangle(Texture2DDescription description)
         {
-            return new Texture2DGL32(description, TextureTarget.TextureRectangle);
+            return new Texture2DGL3x(description, TextureTarget.TextureRectangle);
         }
 
         public static Texture2D CreateTexture2DRectangle(Bitmap bitmap, TextureFormat format)
@@ -102,7 +102,7 @@ namespace MiniGlobe.Renderer
             pixelBuffer.CopyFromBitmap(bitmap);
 
             Texture2DDescription description = new Texture2DDescription(bitmap.Width, bitmap.Height, format, generateMipmaps);
-            Texture2D texture = new Texture2DGL32(description, textureTarget);
+            Texture2D texture = new Texture2DGL3x(description, textureTarget);
             texture.CopyFromBuffer(pixelBuffer,
                 TextureUtility.ImagingPixelFormatToImageFormat(bitmap.PixelFormat),
                 TextureUtility.ImagingPixelFormatToDataType(bitmap.PixelFormat));
@@ -174,7 +174,7 @@ namespace MiniGlobe.Renderer
         {
             using (MiniGlobeWindow window = CreateWindow(1, 1))
             {
-                return new ExtensionsGL32();
+                return new ExtensionsGL3x();
             }
         }
 

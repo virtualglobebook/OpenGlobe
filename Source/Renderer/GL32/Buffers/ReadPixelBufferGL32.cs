@@ -13,13 +13,13 @@ using MiniGlobe.Renderer;
 using OpenTK.Graphics.OpenGL;
 using ImagingPixelFormat = System.Drawing.Imaging.PixelFormat;
 
-namespace MiniGlobe.Renderer.GL32
+namespace MiniGlobe.Renderer.GL3x
 {
-    internal class ReadPixelBufferGL32 : ReadPixelBuffer
+    internal class ReadPixelBufferGL3x : ReadPixelBuffer
     {
-        public ReadPixelBufferGL32(ReadPixelBufferHint usageHint, int sizeInBytes)
+        public ReadPixelBufferGL3x(ReadPixelBufferHint usageHint, int sizeInBytes)
         {
-            _bufferObject = new BufferGL32(BufferTarget.PixelPackBuffer, ToBufferHint(usageHint), sizeInBytes);
+            _bufferObject = new BufferGL3x(BufferTarget.PixelPackBuffer, ToBufferHint(usageHint), sizeInBytes);
             _usageHint = usageHint;
         }
 
@@ -85,7 +85,7 @@ namespace MiniGlobe.Renderer.GL32
             return _bufferHints[(int)usageHint];
         }
 
-        private BufferGL32 _bufferObject;
+        private BufferGL3x _bufferObject;
         private ReadPixelBufferHint _usageHint;
 
         private static readonly BufferHint[] _bufferHints = new[]

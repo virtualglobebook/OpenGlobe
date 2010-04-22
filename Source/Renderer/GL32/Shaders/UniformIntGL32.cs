@@ -10,11 +10,11 @@
 using OpenTK.Graphics.OpenGL;
 using MiniGlobe.Renderer;
 
-namespace MiniGlobe.Renderer.GL32
+namespace MiniGlobe.Renderer.GL3x
 {
-    internal class UniformIntGL32 : Uniform<int>, ICleanable
+    internal class UniformIntGL3x : Uniform<int>, ICleanable
     {
-        internal UniformIntGL32(string name, int location, UniformType type)
+        internal UniformIntGL3x(string name, int location, UniformType type)
             : base(name, location, type)
         {
             Set(0);

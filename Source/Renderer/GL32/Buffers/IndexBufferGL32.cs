@@ -13,13 +13,13 @@ using MiniGlobe.Renderer;
 using OpenTK.Graphics.OpenGL;
 using System.Runtime.InteropServices;
 
-namespace MiniGlobe.Renderer.GL32
+namespace MiniGlobe.Renderer.GL3x
 {
-    internal class IndexBufferGL32 : IndexBuffer
+    internal class IndexBufferGL3x : IndexBuffer
     {
-        public IndexBufferGL32(BufferHint usageHint, int sizeInBytes)
+        public IndexBufferGL3x(BufferHint usageHint, int sizeInBytes)
         {
-            _bufferObject = new BufferGL32(BufferTarget.ElementArrayBuffer, usageHint, sizeInBytes);
+            _bufferObject = new BufferGL3x(BufferTarget.ElementArrayBuffer, usageHint, sizeInBytes);
         }
 
         internal void Bind()
@@ -93,7 +93,7 @@ namespace MiniGlobe.Renderer.GL32
 
         #endregion
 
-        BufferGL32 _bufferObject;
+        BufferGL3x _bufferObject;
         IndexBufferDataType _dataType;
         int _count;
     }

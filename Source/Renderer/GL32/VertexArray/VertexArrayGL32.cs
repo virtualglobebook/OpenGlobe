@@ -12,14 +12,14 @@ using System.Diagnostics;
 using OpenTK.Graphics.OpenGL;
 using MiniGlobe.Renderer;
 
-namespace MiniGlobe.Renderer.GL32
+namespace MiniGlobe.Renderer.GL3x
 {
-    internal class VertexArrayGL32 : VertexArray
+    internal class VertexArrayGL3x : VertexArray
     {
-        public VertexArrayGL32()
+        public VertexArrayGL3x()
 	    {
             GL.GenVertexArrays(1, out _handle);
-            _attachedVertexBuffers = new AttachedVertexBuffersGL32();
+            _attachedVertexBuffers = new AttachedVertexBuffersGL3x();
         }
 
         internal void Bind()
@@ -35,12 +35,12 @@ namespace MiniGlobe.Renderer.GL32
             {
                 if (_attachedIndexBuffer != null)
                 {
-                    IndexBufferGL32 bufferObjectGL = _attachedIndexBuffer as IndexBufferGL32;
+                    IndexBufferGL3x bufferObjectGL = _attachedIndexBuffer as IndexBufferGL3x;
                     bufferObjectGL.Bind();
                 }
                 else
                 {
-                    IndexBufferGL32.UnBind();
+                    IndexBufferGL3x.UnBind();
                 }
 
                 _dirtyIndexBuffer = false;
@@ -86,7 +86,7 @@ namespace MiniGlobe.Renderer.GL32
         #endregion
         
         private int _handle;
-        private AttachedVertexBuffersGL32 _attachedVertexBuffers;
+        private AttachedVertexBuffersGL3x _attachedVertexBuffers;
         private IndexBuffer _attachedIndexBuffer;
         private bool _dirtyIndexBuffer;
     }

@@ -13,11 +13,11 @@ using OpenTK;
 using OpenTK.Graphics.OpenGL;
 using MiniGlobe.Core;
 
-namespace MiniGlobe.Renderer.GL32
+namespace MiniGlobe.Renderer.GL3x
 {
-    internal class ShaderObjectGL32 : Disposable
+    internal class ShaderObjectGL3x : Disposable
     {
-        public ShaderObjectGL32(ShaderType shaderType, string source)
+        public ShaderObjectGL3x(ShaderType shaderType, string source)
         {
             string builtInConstants =
                 "#version 150                                                   \n" +

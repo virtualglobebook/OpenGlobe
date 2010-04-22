@@ -12,14 +12,14 @@ using System.Diagnostics;
 using MiniGlobe.Renderer;
 using OpenTK.Graphics.OpenGL;
 
-namespace MiniGlobe.Renderer.GL32
+namespace MiniGlobe.Renderer.GL3x
 {
-    internal class FrameBufferGL32 : FrameBuffer
+    internal class FrameBufferGL3x : FrameBuffer
     {
-        public FrameBufferGL32()
+        public FrameBufferGL3x()
         {
             GL.GenFramebuffers(1, out _handle);
-            _colorAttachments = new ColorAttachmentsGL32();
+            _colorAttachments = new ColorAttachmentsGL3x();
         }
 
         internal void Bind()
@@ -36,7 +36,7 @@ namespace MiniGlobe.Renderer.GL32
         {
             if (_colorAttachments.Dirty)
             {
-                ColorAttachmentGL32[] colorAttachments = _colorAttachments.Attachments;
+                ColorAttachmentGL3x[] colorAttachments = _colorAttachments.Attachments;
 
                 for (int i = 0; i < colorAttachments.Length; ++i)
                 {
@@ -106,7 +106,7 @@ namespace MiniGlobe.Renderer.GL32
             if (texture != null)
             {
                 // TODO:  Mipmap level
-                Texture2DGL32 textureGL = texture as Texture2DGL32;
+                Texture2DGL3x textureGL = texture as Texture2DGL3x;
                 GL.FramebufferTexture(FramebufferTarget.Framebuffer, attachPoint, textureGL.Handle, 0);
             }
             else
@@ -138,7 +138,7 @@ namespace MiniGlobe.Renderer.GL32
         }
 
         private int _handle;
-        private ColorAttachmentsGL32 _colorAttachments;
+        private ColorAttachmentsGL3x _colorAttachments;
         private Texture2D _depthAttachment;
         private Texture2D _depthStencilAttachment;
         private DirtyFlags _dirtyFlags;

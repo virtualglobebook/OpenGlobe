@@ -9,11 +9,11 @@
 
 using OpenTK.Graphics.OpenGL;
 
-namespace MiniGlobe.Renderer.GL32
+namespace MiniGlobe.Renderer.GL3x
 {
-    internal class ExtensionsGL32 : Extensions
+    internal class ExtensionsGL3x : Extensions
     {
-        public ExtensionsGL32()
+        public ExtensionsGL3x()
         {
             _anisotropicFiltering = false;
             int numberOfExtensions;

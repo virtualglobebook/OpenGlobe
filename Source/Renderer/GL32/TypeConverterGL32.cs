@@ -12,9 +12,9 @@ using OpenTK.Graphics.OpenGL;
 using MiniGlobe.Core.Geometry;
 using MiniGlobe.Renderer;
 
-namespace MiniGlobe.Renderer.GL32
+namespace MiniGlobe.Renderer.GL3x
 {
-    internal static class TypeConverterGL32
+    internal static class TypeConverterGL3x
     {
         public static ClearBufferMask To(ClearBuffers mask)
         {

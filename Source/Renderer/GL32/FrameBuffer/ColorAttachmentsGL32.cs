@@ -12,21 +12,21 @@ using System.Diagnostics;
 using OpenTK.Graphics.OpenGL;
 using MiniGlobe.Renderer;
 
-namespace MiniGlobe.Renderer.GL32
+namespace MiniGlobe.Renderer.GL3x
 {
-    internal struct ColorAttachmentGL32
+    internal struct ColorAttachmentGL3x
     {
         public Texture2D Texture { get; set; }
         public bool Dirty { get; set; }
     }
 
-    internal class ColorAttachmentsGL32 : ColorAttachments
+    internal class ColorAttachmentsGL3x : ColorAttachments
     {
-        public ColorAttachmentsGL32()
+        public ColorAttachmentsGL3x()
         {
             int maximumColorAttachments;
             GL.GetInteger(GetPName.MaxColorAttachments, out maximumColorAttachments);
-            _colorAttachments = new ColorAttachmentGL32[maximumColorAttachments];
+            _colorAttachments = new ColorAttachmentGL3x[maximumColorAttachments];
         }
 
         #region ColorAttachments Members
@@ -61,7 +61,7 @@ namespace MiniGlobe.Renderer.GL32
 
         public override IEnumerator GetEnumerator()
         {
-            foreach (ColorAttachmentGL32 attachment in _colorAttachments)
+            foreach (ColorAttachmentGL3x attachment in _colorAttachments)
             {
                 if (attachment.Texture != null)
                 {
@@ -74,12 +74,12 @@ namespace MiniGlobe.Renderer.GL32
 
         internal bool Dirty { get; set; }
 
-        internal ColorAttachmentGL32[] Attachments
+        internal ColorAttachmentGL3x[] Attachments
         {
             get { return _colorAttachments; }
         }
 
-        private ColorAttachmentGL32[] _colorAttachments;
+        private ColorAttachmentGL3x[] _colorAttachments;
         private int _count;
     }
 }
