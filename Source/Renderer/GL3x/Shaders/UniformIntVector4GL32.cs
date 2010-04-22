@@ -11,11 +11,11 @@ using OpenTK;
 using OpenTK.Graphics.OpenGL;
 using MiniGlobe.Renderer;
 
-namespace MiniGlobe.Renderer.GL32
+namespace MiniGlobe.Renderer.GL3x
 {
-    internal class UniformIntVector4GL32 : Uniform<Vector4i>, ICleanable
+    internal class UniformIntVector4GL3x : Uniform<Vector4i>, ICleanable
     {
-        internal UniformIntVector4GL32(string name, int location)
+        internal UniformIntVector4GL3x(string name, int location)
             : base(name, location, UniformType.IntVector4)
         {
             Set(new Vector4i());

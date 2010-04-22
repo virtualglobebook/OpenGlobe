@@ -13,21 +13,21 @@ using System.Diagnostics;
 using OpenTK.Graphics.OpenGL;
 using MiniGlobe.Renderer;
 
-namespace MiniGlobe.Renderer.GL32
+namespace MiniGlobe.Renderer.GL3x
 {
-    internal struct AttachedVertexBufferGL32
+    internal struct AttachedVertexBufferGL3x
     {
         public AttachedVertexBuffer AttachedVertexBuffer { get; set; }
         public bool Dirty { get; set; }
     }
 
-    internal class AttachedVertexBuffersGL32 : AttachedVertexBuffers
+    internal class AttachedVertexBuffersGL3x : AttachedVertexBuffers
     {
-        public AttachedVertexBuffersGL32()
+        public AttachedVertexBuffersGL3x()
 	    {
             float numberOfAttributes;
             GL.GetFloat(GetPName.MaxVertexAttribs, out numberOfAttributes);
-            _attachedBuffers = new AttachedVertexBufferGL32[Convert.ToInt32(numberOfAttributes)];
+            _attachedBuffers = new AttachedVertexBufferGL3x[Convert.ToInt32(numberOfAttributes)];
         }
 
         #region AttachedVertexBuffers Members
@@ -60,7 +60,7 @@ namespace MiniGlobe.Renderer.GL32
 
         public override IEnumerator GetEnumerator()
         {
-            foreach (AttachedVertexBufferGL32 vb in _attachedBuffers)
+            foreach (AttachedVertexBufferGL3x vb in _attachedBuffers)
             {
                 if (vb.AttachedVertexBuffer != null)
                 {
@@ -127,9 +127,9 @@ namespace MiniGlobe.Renderer.GL32
 
             GL.EnableVertexAttribArray(index);
 
-            VertexBufferGL32 bufferObjectGL = vb.VertexBuffer as VertexBufferGL32;
-            VertexAttribPointerType vertexDataType = TypeConverterGL32.To(vb.ComponentType);
-            int stride = vb.NumberOfComponents * SizesGL32.SizeOf(vb.ComponentType);
+            VertexBufferGL3x bufferObjectGL = vb.VertexBuffer as VertexBufferGL3x;
+            VertexAttribPointerType vertexDataType = TypeConverterGL3x.To(vb.ComponentType);
+            int stride = vb.NumberOfComponents * SizesGL3x.SizeOf(vb.ComponentType);
 
             bufferObjectGL.Bind();
             GL.VertexAttribPointer(index,
@@ -143,7 +143,7 @@ namespace MiniGlobe.Renderer.GL32
         private static void Detach(int index)
         {
             GL.DisableVertexAttribArray(index);
-            VertexBufferGL32.UnBind();
+            VertexBufferGL3x.UnBind();
             GL.VertexAttribPointer(index, 0, VertexAttribPointerType.Float, false, 0, 0);
         }
 
@@ -158,10 +158,10 @@ namespace MiniGlobe.Renderer.GL32
 
         private static int NumberOfVertices(AttachedVertexBuffer vb)
         {
-            return vb.VertexBuffer.SizeInBytes / (vb.NumberOfComponents * SizesGL32.SizeOf(vb.ComponentType));
+            return vb.VertexBuffer.SizeInBytes / (vb.NumberOfComponents * SizesGL3x.SizeOf(vb.ComponentType));
         }
 
-        private AttachedVertexBufferGL32[] _attachedBuffers;
+        private AttachedVertexBufferGL3x[] _attachedBuffers;
         private int _count;
         private int _maximumArrayIndex;
         private bool _dirty;

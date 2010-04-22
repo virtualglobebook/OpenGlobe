@@ -12,9 +12,9 @@ using OpenTK.Input;
 
 namespace MiniGlobe.Renderer
 {
-    public class MouseGL32 : Mouse
+    public class MouseGL3x : Mouse
     {
-        public MouseGL32(MouseDevice mouse)
+        public MouseGL3x(MouseDevice mouse)
         {
             _mouse = mouse;
 

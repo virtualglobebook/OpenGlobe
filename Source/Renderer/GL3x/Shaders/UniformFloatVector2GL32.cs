@@ -12,11 +12,11 @@ using OpenTK.Graphics.OpenGL;
 using MiniGlobe.Core;
 using MiniGlobe.Renderer;
 
-namespace MiniGlobe.Renderer.GL32
+namespace MiniGlobe.Renderer.GL3x
 {
-    internal class UniformFloatVector2GL32 : Uniform<Vector2S>, ICleanable
+    internal class UniformFloatVector2GL3x : Uniform<Vector2S>, ICleanable
     {
-        internal UniformFloatVector2GL32(string name, int location)
+        internal UniformFloatVector2GL3x(string name, int location)
             : base(name, location, UniformType.FloatVector2)
         {
             Set(new Vector2S());

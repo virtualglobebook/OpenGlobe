@@ -12,11 +12,11 @@ using System.Diagnostics;
 using MiniGlobe.Renderer;
 using OpenTK.Graphics.OpenGL;
 
-namespace MiniGlobe.Renderer.GL32
+namespace MiniGlobe.Renderer.GL3x
 {
-    internal class Texture2DGL32 : Texture2D
+    internal class Texture2DGL3x : Texture2D
     {
-        public Texture2DGL32(Texture2DDescription description, TextureTarget textureTarget)
+        public Texture2DGL3x(Texture2DDescription description, TextureTarget textureTarget)
         {
             Debug.Assert(description.Width > 0);
             Debug.Assert(description.Height > 0);
@@ -37,15 +37,15 @@ namespace MiniGlobe.Renderer.GL32
             //
             // TexImage2D is just used to allocate the texture so a PBO can't be bound.
             //
-            WritePixelBufferGL32.UnBind();
+            WritePixelBufferGL3x.UnBind();
             BindToLastTextureUnit();
             GL.TexImage2D(_target, 0,
-                TypeConverterGL32.To(description.Format),
+                TypeConverterGL3x.To(description.Format),
                 description.Width,
                 description.Height,
                 0,
-                TypeConverterGL32.TextureToPixelFormat(description.Format),   
-                TypeConverterGL32.TextureToPixelType(description.Format),
+                TypeConverterGL3x.TextureToPixelFormat(description.Format),   
+                TypeConverterGL3x.TextureToPixelType(description.Format),
                 new IntPtr());
 
             //
@@ -101,7 +101,7 @@ namespace MiniGlobe.Renderer.GL32
             Debug.Assert(yOffset + height <= _description.Height);
             Debug.Assert(pixelBuffer.SizeInBytes >= TextureUtility.RequiredSizeInBytes(width, height, format, dataType));
 
-            WritePixelBufferGL32 bufferObjectGL = pixelBuffer as WritePixelBufferGL32;
+            WritePixelBufferGL3x bufferObjectGL = pixelBuffer as WritePixelBufferGL3x;
 
             bufferObjectGL.Bind();
             BindToLastTextureUnit();
@@ -111,23 +111,23 @@ namespace MiniGlobe.Renderer.GL32
                 xOffset,
                 width,
                 height,
-                TypeConverterGL32.To(format),
-                TypeConverterGL32.To(dataType),
+                TypeConverterGL3x.To(format),
+                TypeConverterGL3x.To(dataType),
                 new IntPtr());
             GenerateMipmaps();
         }
 
         public override ReadPixelBuffer CopyToBuffer(ImageFormat format, ImageDataType dataType)
         {
-            ReadPixelBufferGL32 pixelBuffer = new ReadPixelBufferGL32(ReadPixelBufferHint.StreamRead,
+            ReadPixelBufferGL3x pixelBuffer = new ReadPixelBufferGL3x(ReadPixelBufferHint.StreamRead,
                 TextureUtility.RequiredSizeInBytes(_description.Width, _description.Height, format, dataType));
 
             pixelBuffer.Bind();
             BindToLastTextureUnit();
             GL.PixelStore(PixelStoreParameter.PackAlignment, 1);
             GL.GetTexImage(_target, 0,
-                TypeConverterGL32.To(format),
-                TypeConverterGL32.To(dataType),
+                TypeConverterGL3x.To(format),
+                TypeConverterGL3x.To(dataType),
                 new IntPtr());
 
             return pixelBuffer;
@@ -182,10 +182,10 @@ namespace MiniGlobe.Renderer.GL32
                 }
             }
 
-            TextureMinFilter minFilter = TypeConverterGL32.To(_filter.MinificationFilter);
-            TextureMagFilter magFilter = TypeConverterGL32.To(_filter.MagnificationFilter);
-            TextureWrapMode wrapS = TypeConverterGL32.To(_filter.WrapS);
-            TextureWrapMode wrapT = TypeConverterGL32.To(_filter.WrapT);
+            TextureMinFilter minFilter = TypeConverterGL3x.To(_filter.MinificationFilter);
+            TextureMagFilter magFilter = TypeConverterGL3x.To(_filter.MagnificationFilter);
+            TextureWrapMode wrapS = TypeConverterGL3x.To(_filter.WrapS);
+            TextureWrapMode wrapT = TypeConverterGL3x.To(_filter.WrapT);
 
             BindToLastTextureUnit();
             GL.TexParameter(_target, TextureParameterName.TextureMinFilter, (int)minFilter);

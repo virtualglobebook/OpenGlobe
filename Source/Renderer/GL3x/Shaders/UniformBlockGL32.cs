@@ -10,11 +10,11 @@
 using System.Diagnostics;
 using OpenTK.Graphics.OpenGL;
 
-namespace MiniGlobe.Renderer.GL32
+namespace MiniGlobe.Renderer.GL3x
 {
-    internal class UniformBlockGL32 : UniformBlock
+    internal class UniformBlockGL3x : UniformBlock
     {
-        internal UniformBlockGL32(string name, int sizeInBytes, int bindHandle)
+        internal UniformBlockGL3x(string name, int sizeInBytes, int bindHandle)
             : base(name, sizeInBytes)
         {
             _bindHandle = bindHandle;
@@ -25,7 +25,7 @@ namespace MiniGlobe.Renderer.GL32
         public override void Bind(UniformBuffer uniformBuffer)
         {
             // TODO: avoid duplicate binds?
-            int bufferHandle = (uniformBuffer as UniformBufferGL32).Handle;
+            int bufferHandle = (uniformBuffer as UniformBufferGL3x).Handle;
             GL.BindBufferBase(BufferTarget.UniformBuffer, _bindHandle, bufferHandle);
         }
 

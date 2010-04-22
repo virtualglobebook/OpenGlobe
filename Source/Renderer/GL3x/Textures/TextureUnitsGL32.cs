@@ -11,22 +11,22 @@ using System.Collections;
 using OpenTK.Graphics.OpenGL;
 using MiniGlobe.Renderer;
 
-namespace MiniGlobe.Renderer.GL32
+namespace MiniGlobe.Renderer.GL3x
 {
-    internal class TextureUnitsGL32 : TextureUnits
+    internal class TextureUnitsGL3x : TextureUnits
     {
-        public TextureUnitsGL32()
+        public TextureUnitsGL3x()
         {
             int textureUnits;
             GL.GetInteger(GetPName.MaxCombinedTextureImageUnits, out textureUnits);
 
             _textureUnits = new TextureUnit[textureUnits];
-            _textureUnitGL32s = new TextureUnitGL32[textureUnits];
+            _textureUnitGL3xs = new TextureUnitGL3x[textureUnits];
             for (int i = 0; i < textureUnits; ++i)
             {
-                TextureUnitGL32 textureUnit = new TextureUnitGL32(i, (i == (textureUnits - 1)));
+                TextureUnitGL3x textureUnit = new TextureUnitGL3x(i, (i == (textureUnits - 1)));
                 _textureUnits[i] = textureUnit;
-                _textureUnitGL32s[i] = textureUnit;
+                _textureUnitGL3xs[i] = textureUnit;
             }
         }
 
@@ -53,11 +53,11 @@ namespace MiniGlobe.Renderer.GL32
         {
             for (int i = 0; i < _textureUnits.Length; ++i)
             {
-                _textureUnitGL32s[i].Clean();
+                _textureUnitGL3xs[i].Clean();
             }
         }
 
         private TextureUnit[] _textureUnits;
-        private TextureUnitGL32[] _textureUnitGL32s;
+        private TextureUnitGL3x[] _textureUnitGL3xs;
     }
 }

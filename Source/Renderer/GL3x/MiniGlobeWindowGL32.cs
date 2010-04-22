@@ -11,11 +11,11 @@ using System;
 using OpenTK;
 using OpenTK.Graphics;
 
-namespace MiniGlobe.Renderer.GL32
+namespace MiniGlobe.Renderer.GL3x
 {
-    internal class MiniGlobeWindowGL32 : MiniGlobeWindow
+    internal class MiniGlobeWindowGL3x : MiniGlobeWindow
     {
-        public MiniGlobeWindowGL32(int width, int height, string title, WindowType windowType)
+        public MiniGlobeWindowGL3x(int width, int height, string title, WindowType windowType)
         {
             GameWindowFlags gameWindowFlags = (windowType == WindowType.Default) ? GameWindowFlags.Default : GameWindowFlags.Fullscreen;
             if (windowType == WindowType.FullScreen)
@@ -31,10 +31,10 @@ namespace MiniGlobe.Renderer.GL32
             _gameWindw.UpdateFrame += new EventHandler<FrameEventArgs>(this.OnUpdateFrame);
             _gameWindw.RenderFrame += new EventHandler<FrameEventArgs>(this.OnRenderFrame);
 
-            _context = new ContextGL32();
+            _context = new ContextGL3x();
 
-            _mouse = new MouseGL32(_gameWindw.Mouse);
-            _keyboard = new KeyboardGL32(_gameWindw.Keyboard);
+            _mouse = new MouseGL3x(_gameWindw.Mouse);
+            _keyboard = new KeyboardGL3x(_gameWindw.Keyboard);
         }
 
         private void OnResize<T>(object sender, T e)
@@ -99,8 +99,8 @@ namespace MiniGlobe.Renderer.GL32
         #endregion
 
         private GameWindow _gameWindw;
-        private ContextGL32 _context;
-        private MouseGL32 _mouse;
-        private KeyboardGL32 _keyboard;
+        private ContextGL3x _context;
+        private MouseGL3x _mouse;
+        private KeyboardGL3x _keyboard;
     }
 }

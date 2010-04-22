@@ -12,9 +12,9 @@ using System.Diagnostics;
 using MiniGlobe.Renderer;
 using OpenTK;
 
-namespace MiniGlobe.Renderer.GL32
+namespace MiniGlobe.Renderer.GL3x
 {
-    internal static class SizesGL32
+    internal static class SizesGL3x
     {
         public static int SizeOf(IndexBufferDataType type)
         {

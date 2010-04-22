@@ -11,11 +11,11 @@ using OpenTK;
 using OpenTK.Graphics.OpenGL;
 using MiniGlobe.Renderer;
 
-namespace MiniGlobe.Renderer.GL32
+namespace MiniGlobe.Renderer.GL3x
 {
-    internal class UniformIntVector2GL32 : Uniform<Vector2i>, ICleanable
+    internal class UniformIntVector2GL3x : Uniform<Vector2i>, ICleanable
     {
-        internal UniformIntVector2GL32(string name, int location)
+        internal UniformIntVector2GL3x(string name, int location)
             : base(name, location, UniformType.IntVector2)
         {
             Set(new Vector2i());

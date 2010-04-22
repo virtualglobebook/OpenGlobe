@@ -14,28 +14,28 @@ using System.Diagnostics;
 using OpenTK.Graphics.OpenGL;
 using MiniGlobe.Renderer;
 
-namespace MiniGlobe.Renderer.GL32
+namespace MiniGlobe.Renderer.GL3x
 {
-    internal class ShaderProgramGL32 : ShaderProgram
+    internal class ShaderProgramGL3x : ShaderProgram
     {
-        public ShaderProgramGL32(
+        public ShaderProgramGL3x(
             string vertexShaderSource,
             string fragmentShaderSource)
             : this(vertexShaderSource, string.Empty, fragmentShaderSource)
         {
         }
 
-        public ShaderProgramGL32(
+        public ShaderProgramGL3x(
             string vertexShaderSource,
             string geometryShaderSource,
             string fragmentShaderSource)
         {
-            _vertexShader = new ShaderObjectGL32(ShaderType.VertexShader, vertexShaderSource);
+            _vertexShader = new ShaderObjectGL3x(ShaderType.VertexShader, vertexShaderSource);
             if (geometryShaderSource.Length > 0)
             {
-                _geometryShader = new ShaderObjectGL32(ShaderType.GeometryShaderExt, geometryShaderSource);
+                _geometryShader = new ShaderObjectGL3x(ShaderType.GeometryShaderExt, geometryShaderSource);
             }
-            _fragmentShader = new ShaderObjectGL32(ShaderType.FragmentShader, fragmentShaderSource);
+            _fragmentShader = new ShaderObjectGL3x(ShaderType.FragmentShader, fragmentShaderSource);
 
             _program = GL.CreateProgram();
             GL.AttachShader(_program, _vertexShader.Handle);
@@ -95,7 +95,7 @@ namespace MiniGlobe.Renderer.GL32
                 int attributeLocation = GL.GetAttribLocation(program, attributeName);
 
                 vertexAttributes.Add(new ShaderVertexAttribute(
-                    attributeName, attributeLocation, TypeConverterGL32.To(attributeType), attributeLength));
+                    attributeName, attributeLocation, TypeConverterGL3x.To(attributeType), attributeLength));
             }
 
             return vertexAttributes;
@@ -157,87 +157,87 @@ namespace MiniGlobe.Renderer.GL32
         {
             if (type == ActiveUniformType.Float)
             {
-                return new UniformFloatGL32(name, location);
+                return new UniformFloatGL3x(name, location);
             }
             else if (type == ActiveUniformType.FloatVec2)
             {
-                return new UniformFloatVector2GL32(name, location);
+                return new UniformFloatVector2GL3x(name, location);
             }
             else if (type == ActiveUniformType.FloatVec3)
             {
-                return new UniformFloatVector3GL32(name, location);
+                return new UniformFloatVector3GL3x(name, location);
             }
             else if (type == ActiveUniformType.FloatVec4)
             {
-                return new UniformFloatVector4GL32(name, location);
+                return new UniformFloatVector4GL3x(name, location);
             }
             else if (type == ActiveUniformType.Int)
             {
-                return new UniformIntGL32(name, location, UniformType.Int);
+                return new UniformIntGL3x(name, location, UniformType.Int);
             }
             else if (type == ActiveUniformType.IntVec2)
             {
-                return new UniformIntVector2GL32(name, location);
+                return new UniformIntVector2GL3x(name, location);
             }
             else if (type == ActiveUniformType.IntVec3)
             {
-                return new UniformIntVector3GL32(name, location);
+                return new UniformIntVector3GL3x(name, location);
             }
             else if (type == ActiveUniformType.IntVec4)
             {
-                return new UniformIntVector4GL32(name, location);
+                return new UniformIntVector4GL3x(name, location);
             }
             else if (type == ActiveUniformType.Bool)
             {
-                return new UniformBoolGL32(name, location);
+                return new UniformBoolGL3x(name, location);
             }
             else if (type == ActiveUniformType.BoolVec2)
             {
-                return new UniformBoolVector2GL32(name, location);
+                return new UniformBoolVector2GL3x(name, location);
             }
             else if (type == ActiveUniformType.BoolVec3)
             {
-                return new UniformBoolVector3GL32(name, location);
+                return new UniformBoolVector3GL3x(name, location);
             }
             else if (type == ActiveUniformType.BoolVec4)
             {
-                return new UniformBoolVector4GL32(name, location);
+                return new UniformBoolVector4GL3x(name, location);
             }
             else if (type == ActiveUniformType.FloatMat2)
             {
-                return new UniformFloatMatrix22GL32(name, location);
+                return new UniformFloatMatrix22GL3x(name, location);
             }
             else if (type == ActiveUniformType.FloatMat3)
             {
-                return new UniformFloatMatrix33GL32(name, location);
+                return new UniformFloatMatrix33GL3x(name, location);
             }
             else if (type == ActiveUniformType.FloatMat4)
             {
-                return new UniformFloatMatrix44GL32(name, location);
+                return new UniformFloatMatrix44GL3x(name, location);
             }
             else if (type == ActiveUniformType.FloatMat2x3)
             {
-                return new UniformFloatMatrix23GL32(name, location);
+                return new UniformFloatMatrix23GL3x(name, location);
             }
             else if (type == ActiveUniformType.FloatMat2x4)
             {
-                return new UniformFloatMatrix24GL32(name, location);
+                return new UniformFloatMatrix24GL3x(name, location);
             }
             else if (type == ActiveUniformType.FloatMat3x2)
             {
-                return new UniformFloatMatrix32GL32(name, location);
+                return new UniformFloatMatrix32GL3x(name, location);
             }
             else if (type == ActiveUniformType.FloatMat3x4)
             {
-                return new UniformFloatMatrix34GL32(name, location);
+                return new UniformFloatMatrix34GL3x(name, location);
             }
             else if (type == ActiveUniformType.FloatMat4x2)
             {
-                return new UniformFloatMatrix42GL32(name, location);
+                return new UniformFloatMatrix42GL3x(name, location);
             }
             else if (type == ActiveUniformType.FloatMat4x3)
             {
-                return new UniformFloatMatrix43GL32(name, location);
+                return new UniformFloatMatrix43GL3x(name, location);
             }
             else if ((type == ActiveUniformType.Sampler1D) ||
                      (type == ActiveUniformType.Sampler2D) ||
@@ -267,7 +267,7 @@ namespace MiniGlobe.Renderer.GL32
                      (type == ActiveUniformType.UnsignedIntSampler1DArray) ||
                      (type == ActiveUniformType.UnsignedIntSampler2DArray))
             {
-                return new UniformIntGL32(name, location, TypeConverterGL32.To(type));
+                return new UniformIntGL3x(name, location, TypeConverterGL3x.To(type));
             }
 
             //
@@ -324,14 +324,14 @@ namespace MiniGlobe.Renderer.GL32
                 GL.GetActiveUniforms(program, numberOfUniformsInBlock, uniformIndicesInBlock, ActiveUniformParameter.UniformMatrixStride, uniformmatrixStrideInBytess);
                 GL.GetActiveUniforms(program, numberOfUniformsInBlock, uniformIndicesInBlock, ActiveUniformParameter.UniformIsRowMajor, uniformRowMajors);
 
-                UniformBlock uniformBlock = new UniformBlockGL32(uniformBlockName, uniformBlockSizeInBytes, i);
+                UniformBlock uniformBlock = new UniformBlockGL3x(uniformBlockName, uniformBlockSizeInBytes, i);
 
                 for (int j = 0; j < numberOfUniformsInBlock; ++j)
                 {
                     string uniformName = GL.GetActiveUniformName(program, uniformIndicesInBlock[j]);
                     uniformName = CorrectUniformName(uniformName);
 
-                    UniformType uniformType = TypeConverterGL32.To((ActiveUniformType)uniformTypes[j]);
+                    UniformType uniformType = TypeConverterGL3x.To((ActiveUniformType)uniformTypes[j]);
 
                     uniformBlock.Members.Add(CreateUniformBlockMember(uniformName,
                         uniformType, uniformOffsetsInBytes[j], uniformLengths[j], uniformArrayStridesInBytes[j],
@@ -493,9 +493,9 @@ namespace MiniGlobe.Renderer.GL32
 
         #endregion
 
-        private readonly ShaderObjectGL32 _vertexShader;
-        private readonly ShaderObjectGL32 _geometryShader;
-        private readonly ShaderObjectGL32 _fragmentShader;
+        private readonly ShaderObjectGL3x _vertexShader;
+        private readonly ShaderObjectGL3x _geometryShader;
+        private readonly ShaderObjectGL3x _fragmentShader;
         private readonly int _program;
         private readonly ShaderVertexAttributeCollection _vertexAttributes;
         private readonly UniformCollection _uniforms;

@@ -11,11 +11,11 @@ using OpenTK;
 using OpenTK.Graphics.OpenGL;
 using MiniGlobe.Renderer;
 
-namespace MiniGlobe.Renderer.GL32
+namespace MiniGlobe.Renderer.GL3x
 {
-    internal class UniformFloatMatrix22GL32 : Uniform<Matrix2>, ICleanable
+    internal class UniformFloatMatrix22GL3x : Uniform<Matrix2>, ICleanable
     {
-        internal UniformFloatMatrix22GL32(string name, int location)
+        internal UniformFloatMatrix22GL3x(string name, int location)
             : base(name, location, UniformType.FloatMatrix22)
         {
             Set(new Matrix2());

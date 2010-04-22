@@ -10,13 +10,13 @@
 using MiniGlobe.Renderer;
 using OpenTK.Graphics.OpenGL;
 
-namespace MiniGlobe.Renderer.GL32
+namespace MiniGlobe.Renderer.GL3x
 {
-    internal class UniformBufferGL32 : UniformBuffer
+    internal class UniformBufferGL3x : UniformBuffer
     {
-        public UniformBufferGL32(BufferHint usageHint, int sizeInBytes)
+        public UniformBufferGL3x(BufferHint usageHint, int sizeInBytes)
         {
-            _bufferObject = new BufferGL32(BufferTarget.UniformBuffer, usageHint, sizeInBytes);
+            _bufferObject = new BufferGL3x(BufferTarget.UniformBuffer, usageHint, sizeInBytes);
         }
 
         internal int Handle
@@ -61,6 +61,6 @@ namespace MiniGlobe.Renderer.GL32
 
         #endregion
 
-        BufferGL32 _bufferObject;
+        BufferGL3x _bufferObject;
     }
 }

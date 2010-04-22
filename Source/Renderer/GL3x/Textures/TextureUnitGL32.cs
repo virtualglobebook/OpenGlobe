@@ -11,11 +11,11 @@ using System;
 using MiniGlobe.Renderer;
 using OpenTK.Graphics.OpenGL;
 
-namespace MiniGlobe.Renderer.GL32
+namespace MiniGlobe.Renderer.GL3x
 {
-    internal class TextureUnitGL32 : TextureUnit
+    internal class TextureUnitGL3x : TextureUnit
     {
-        public TextureUnitGL32(int index, bool lastTextureUnit)
+        public TextureUnitGL3x(int index, bool lastTextureUnit)
         {
             _textureUnit = OpenTK.Graphics.OpenGL.TextureUnit.Texture0 + index;
             _lastTextureUnit = lastTextureUnit;
@@ -29,7 +29,7 @@ namespace MiniGlobe.Renderer.GL32
 
             set 
             {
-                Texture2DGL32 texture = value as Texture2DGL32;
+                Texture2DGL3x texture = value as Texture2DGL3x;
 
                 if (texture.Target != TextureTarget.Texture2D)
                 {
@@ -50,7 +50,7 @@ namespace MiniGlobe.Renderer.GL32
 
             set
             {
-                Texture2DGL32 texture = value as Texture2DGL32;
+                Texture2DGL3x texture = value as Texture2DGL3x;
 
                 if (texture.Target != TextureTarget.TextureRectangle)
                 {
@@ -73,7 +73,7 @@ namespace MiniGlobe.Renderer.GL32
             // If the last texture unit has a texture attached, it
             // is cleaned even if it isn't dirty because the last
             // texture unit is used for texture uploads and downloads in
-            // Texture2DGL32, the texture unit could be dirty without
+            // Texture2DGL3x, the texture unit could be dirty without
             // knowing it.
             //
             if ((_lastTextureUnit) && ((_texture2D != null) || (_texture2DRectangle != null)))
@@ -93,7 +93,7 @@ namespace MiniGlobe.Renderer.GL32
                     }
                     else
                     {
-                        Texture2DGL32.UnBind(TextureTarget.Texture2D);
+                        Texture2DGL3x.UnBind(TextureTarget.Texture2D);
                     }
                 }
 
@@ -105,7 +105,7 @@ namespace MiniGlobe.Renderer.GL32
                     }
                     else
                     {
-                        Texture2DGL32.UnBind(TextureTarget.TextureRectangle);
+                        Texture2DGL3x.UnBind(TextureTarget.TextureRectangle);
                     }
                 }
 
@@ -124,8 +124,8 @@ namespace MiniGlobe.Renderer.GL32
 
         private readonly OpenTK.Graphics.OpenGL.TextureUnit _textureUnit;
         private readonly bool _lastTextureUnit;
-        private Texture2DGL32 _texture2D;
-        private Texture2DGL32 _texture2DRectangle;
+        private Texture2DGL3x _texture2D;
+        private Texture2DGL3x _texture2DRectangle;
         private DirtyFlags _dirtyFlags;
     }
 }

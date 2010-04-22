@@ -16,11 +16,11 @@ using OpenTK.Graphics.OpenGL;
 using MiniGlobe.Core;
 using ImagingPixelFormat = System.Drawing.Imaging.PixelFormat;
 
-namespace MiniGlobe.Renderer.GL32
+namespace MiniGlobe.Renderer.GL3x
 {
-    internal class BufferGL32
+    internal class BufferGL3x
     {
-        public BufferGL32(
+        public BufferGL3x(
             BufferTarget type, 
             BufferHint usageHint, 
             int sizeInBytes)
@@ -30,7 +30,7 @@ namespace MiniGlobe.Renderer.GL32
             GL.GenBuffers(1, out _handle);
             _sizeInBytes = sizeInBytes;
             _type = type;
-            _usageHint = TypeConverterGL32.To(usageHint);
+            _usageHint = TypeConverterGL3x.To(usageHint);
 
             //
             // Allocating here with GL.BufferData, then writing with GL.BufferSubData
@@ -135,7 +135,7 @@ namespace MiniGlobe.Renderer.GL32
 
         public BufferHint UsageHint
         {
-            get { return TypeConverterGL32.To(_usageHint); }
+            get { return TypeConverterGL3x.To(_usageHint); }
         }
 
         internal int Handle
