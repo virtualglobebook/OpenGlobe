@@ -8,12 +8,13 @@
 #endregion
 
 using System.Collections;
+using System.Collections.Generic;
 using OpenTK.Graphics.OpenGL;
 using MiniGlobe.Renderer;
 
 namespace MiniGlobe.Renderer.GL3x
 {
-    internal class TextureUnitsGL3x : TextureUnits
+    internal class TextureUnitsGL3x : TextureUnits, ICleanableObserver
     {
         public TextureUnitsGL3x()
         {
@@ -21,13 +22,13 @@ namespace MiniGlobe.Renderer.GL3x
             GL.GetInteger(GetPName.MaxCombinedTextureImageUnits, out textureUnits);
 
             _textureUnits = new TextureUnit[textureUnits];
-            _textureUnitGL3xs = new TextureUnitGL3x[textureUnits];
             for (int i = 0; i < textureUnits; ++i)
             {
-                TextureUnitGL3x textureUnit = new TextureUnitGL3x(i, (i == (textureUnits - 1)));
+                TextureUnitGL3x textureUnit = new TextureUnitGL3x(i, this);
                 _textureUnits[i] = textureUnit;
-                _textureUnitGL3xs[i] = textureUnit;
             }
+            _dirtyTextureUnits = new List<ICleanable>();
+            _lastTextureUnit = _textureUnits[textureUnits - 1] as TextureUnitGL3x;
         }
 
         #region TextureUnits Members
@@ -51,13 +52,25 @@ namespace MiniGlobe.Renderer.GL3x
 
         internal void Clean()
         {
-            for (int i = 0; i < _textureUnits.Length; ++i)
+            for (int i = 0; i < _dirtyTextureUnits.Count; ++i)
             {
-                _textureUnitGL3xs[i].Clean();
+                _dirtyTextureUnits[i].Clean();
             }
+            _dirtyTextureUnits.Clear();
+            _lastTextureUnit.CleanLastTextureUnit();
         }
 
+        #region ICleanableObserver Members
+
+        public void NotifyDirty(ICleanable value)
+        {
+            _dirtyTextureUnits.Add(value);
+        }
+
+        #endregion
+
         private TextureUnit[] _textureUnits;
-        private TextureUnitGL3x[] _textureUnitGL3xs;
+        private IList<ICleanable> _dirtyTextureUnits;
+        private TextureUnitGL3x _lastTextureUnit;
     }
 }

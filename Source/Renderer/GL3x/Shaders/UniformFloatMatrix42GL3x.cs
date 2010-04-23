@@ -68,6 +68,6 @@ namespace MiniGlobe.Renderer.GL3x
 
         private Matrix42 _value;
         private bool _dirty;
-        private ICleanableObserver _observer;
+        private readonly ICleanableObserver _observer;
     }
 }

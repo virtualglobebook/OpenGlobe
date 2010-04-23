@@ -58,6 +58,6 @@ namespace MiniGlobe.Renderer.GL3x
 
         private Vector4S _value;
         private bool _dirty;
-        private ICleanableObserver _observer;
+        private readonly ICleanableObserver _observer;
     }
 }
