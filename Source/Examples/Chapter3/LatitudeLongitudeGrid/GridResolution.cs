@@ -11,8 +11,6 @@ using MiniGlobe.Core;
 
 namespace MiniGlobe.Examples.Chapter3
 {
-    // TODO:  Add POI marker to this example
-    // TODO:  Add equator, etc.
     class GridResolution
     {
         public GridResolution(Interval interval, Vector2D resolution)

@@ -69,7 +69,6 @@ namespace MiniGlobe.Renderer.GL3x
 
         internal void Bind()
         {
-            // TODO: avoid duplicate binds
             GL.BindTexture(_target, _handle);
         }
 

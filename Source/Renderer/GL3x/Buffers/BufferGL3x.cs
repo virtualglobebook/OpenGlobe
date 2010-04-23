@@ -145,7 +145,6 @@ namespace MiniGlobe.Renderer.GL3x
 
         internal void Bind()
         {
-            // TODO: avoid duplicate binds
             GL.BindBuffer(_type, _handle);
         }
 

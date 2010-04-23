@@ -30,7 +30,6 @@ namespace MiniGlobe.Renderer.GL3x
 
         internal static void UnBind()
         {
-            // TODO: avoid duplicate binds
             GL.BindBuffer(BufferTarget.PixelUnpackBuffer, 0);
         }
 
