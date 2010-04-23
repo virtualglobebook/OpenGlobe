@@ -37,6 +37,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chapter4DepthBufferPrecisio
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chapter5VertexDisplacementMap", "Examples\Chapter5\VertexDisplacementMap\Chapter5VertexDisplacementMap.csproj", "{35405C20-1149-4941-99E3-5EC639B1086A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chapter5TriangleMesh", "Examples\Chapter5\TriangleMesh\Chapter5TriangleMesh.csproj", "{E78F07C0-90CB-42CD-A83F-ED5A27AC8ED5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -103,6 +105,10 @@ Global
 		{35405C20-1149-4941-99E3-5EC639B1086A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{35405C20-1149-4941-99E3-5EC639B1086A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{35405C20-1149-4941-99E3-5EC639B1086A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E78F07C0-90CB-42CD-A83F-ED5A27AC8ED5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E78F07C0-90CB-42CD-A83F-ED5A27AC8ED5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E78F07C0-90CB-42CD-A83F-ED5A27AC8ED5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E78F07C0-90CB-42CD-A83F-ED5A27AC8ED5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
