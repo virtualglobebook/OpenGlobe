@@ -16,7 +16,7 @@ using MiniGlobe.Renderer;
 
 namespace MiniGlobe.Renderer.GL3x
 {
-    internal class ShaderProgramGL3x : ShaderProgram
+    internal class ShaderProgramGL3x : ShaderProgram, ICleanableObserver
     {
         public ShaderProgramGL3x(
             string vertexShaderSource,
@@ -56,8 +56,8 @@ namespace MiniGlobe.Renderer.GL3x
             }
 
             _vertexAttributes = FindVertexAttributes(_program);
+            _dirtyUniforms = new List<ICleanable>();
             _uniforms = FindUniforms(_program);
-            _uniformsToClean = CreateUniformsToClean(_uniforms);
             _uniformBlocks = FindUniformBlocks(_program);
 
             InitializeAutomaticUniforms(_uniforms);
@@ -101,7 +101,7 @@ namespace MiniGlobe.Renderer.GL3x
             return vertexAttributes;
         }
 
-        private static UniformCollection FindUniforms(int program)
+        private UniformCollection FindUniforms(int program)
         {
             int numberOfUniforms;
             GL.GetProgram(program, ProgramParameter.ActiveUniforms, out numberOfUniforms);
@@ -150,94 +150,94 @@ namespace MiniGlobe.Renderer.GL3x
             return uniforms;
         }
 
-        private static Uniform CreateUniform(
+        private Uniform CreateUniform(
             string name, 
             int location, 
             ActiveUniformType type)
         {
             if (type == ActiveUniformType.Float)
             {
-                return new UniformFloatGL3x(name, location);
+                return new UniformFloatGL3x(name, location, this);
             }
             else if (type == ActiveUniformType.FloatVec2)
             {
-                return new UniformFloatVector2GL3x(name, location);
+                return new UniformFloatVector2GL3x(name, location, this);
             }
             else if (type == ActiveUniformType.FloatVec3)
             {
-                return new UniformFloatVector3GL3x(name, location);
+                return new UniformFloatVector3GL3x(name, location, this);
             }
             else if (type == ActiveUniformType.FloatVec4)
             {
-                return new UniformFloatVector4GL3x(name, location);
+                return new UniformFloatVector4GL3x(name, location, this);
             }
             else if (type == ActiveUniformType.Int)
             {
-                return new UniformIntGL3x(name, location, UniformType.Int);
+                return new UniformIntGL3x(name, location, UniformType.Int, this);
             }
             else if (type == ActiveUniformType.IntVec2)
             {
-                return new UniformIntVector2GL3x(name, location);
+                return new UniformIntVector2GL3x(name, location, this);
             }
             else if (type == ActiveUniformType.IntVec3)
             {
-                return new UniformIntVector3GL3x(name, location);
+                return new UniformIntVector3GL3x(name, location, this);
             }
             else if (type == ActiveUniformType.IntVec4)
             {
-                return new UniformIntVector4GL3x(name, location);
+                return new UniformIntVector4GL3x(name, location, this);
             }
             else if (type == ActiveUniformType.Bool)
             {
-                return new UniformBoolGL3x(name, location);
+                return new UniformBoolGL3x(name, location, this);
             }
             else if (type == ActiveUniformType.BoolVec2)
             {
-                return new UniformBoolVector2GL3x(name, location);
+                return new UniformBoolVector2GL3x(name, location, this);
             }
             else if (type == ActiveUniformType.BoolVec3)
             {
-                return new UniformBoolVector3GL3x(name, location);
+                return new UniformBoolVector3GL3x(name, location, this);
             }
             else if (type == ActiveUniformType.BoolVec4)
             {
-                return new UniformBoolVector4GL3x(name, location);
+                return new UniformBoolVector4GL3x(name, location, this);
             }
             else if (type == ActiveUniformType.FloatMat2)
             {
-                return new UniformFloatMatrix22GL3x(name, location);
+                return new UniformFloatMatrix22GL3x(name, location, this);
             }
             else if (type == ActiveUniformType.FloatMat3)
             {
-                return new UniformFloatMatrix33GL3x(name, location);
+                return new UniformFloatMatrix33GL3x(name, location, this);
             }
             else if (type == ActiveUniformType.FloatMat4)
             {
-                return new UniformFloatMatrix44GL3x(name, location);
+                return new UniformFloatMatrix44GL3x(name, location, this);
             }
             else if (type == ActiveUniformType.FloatMat2x3)
             {
-                return new UniformFloatMatrix23GL3x(name, location);
+                return new UniformFloatMatrix23GL3x(name, location, this);
             }
             else if (type == ActiveUniformType.FloatMat2x4)
             {
-                return new UniformFloatMatrix24GL3x(name, location);
+                return new UniformFloatMatrix24GL3x(name, location, this);
             }
             else if (type == ActiveUniformType.FloatMat3x2)
             {
-                return new UniformFloatMatrix32GL3x(name, location);
+                return new UniformFloatMatrix32GL3x(name, location, this);
             }
             else if (type == ActiveUniformType.FloatMat3x4)
             {
-                return new UniformFloatMatrix34GL3x(name, location);
+                return new UniformFloatMatrix34GL3x(name, location, this);
             }
             else if (type == ActiveUniformType.FloatMat4x2)
             {
-                return new UniformFloatMatrix42GL3x(name, location);
+                return new UniformFloatMatrix42GL3x(name, location, this);
             }
             else if (type == ActiveUniformType.FloatMat4x3)
             {
-                return new UniformFloatMatrix43GL3x(name, location);
+                return new UniformFloatMatrix43GL3x(name, location, this);
             }
             else if ((type == ActiveUniformType.Sampler1D) ||
                      (type == ActiveUniformType.Sampler2D) ||
@@ -267,7 +267,7 @@ namespace MiniGlobe.Renderer.GL3x
                      (type == ActiveUniformType.UnsignedIntSampler1DArray) ||
                      (type == ActiveUniformType.UnsignedIntSampler2DArray))
             {
-                return new UniformIntGL3x(name, location, TypeConverterGL3x.To(type));
+                return new UniformIntGL3x(name, location, TypeConverterGL3x.To(type), this);
             }
 
             //
@@ -275,18 +275,6 @@ namespace MiniGlobe.Renderer.GL3x
             //
             Debug.Assert(false);
             return null;
-        }
-
-        private static ICleanable[] CreateUniformsToClean(UniformCollection uniforms)
-        {
-            ICleanable[] uniformsToClean = new ICleanable[uniforms.Count];
-
-            for (int i = 0; i < uniforms.Count; ++i)
-            {
-                uniformsToClean[i] = uniforms[i] as ICleanable;
-            }
-
-            return uniformsToClean;
         }
 
         private static UniformBlockCollection FindUniformBlocks(int program)
@@ -438,10 +426,11 @@ namespace MiniGlobe.Renderer.GL3x
         {
             SetDrawAutomaticUniforms(context, sceneState);
 
-            for (int i = 0; i < _uniformsToClean.Length; ++i)
+            for (int i = 0; i < _dirtyUniforms.Count; ++i)
             {
-                _uniformsToClean[i].Clean();
+                _dirtyUniforms[i].Clean();
             }
+            _dirtyUniforms.Clear();
         }
 
         private string ProgramInfoLog
@@ -473,6 +462,15 @@ namespace MiniGlobe.Renderer.GL3x
 
         #endregion
 
+        #region ICleanableObserver Members
+
+        public void NotifyDirty(ICleanable value)
+        {
+            _dirtyUniforms.Add(value);
+        }
+
+        #endregion
+
         #region Disposable Members
 
         protected override void Dispose(bool disposing)
@@ -498,8 +496,8 @@ namespace MiniGlobe.Renderer.GL3x
         private readonly ShaderObjectGL3x _fragmentShader;
         private readonly int _program;
         private readonly ShaderVertexAttributeCollection _vertexAttributes;
+        private readonly IList<ICleanable> _dirtyUniforms;
         private readonly UniformCollection _uniforms;
-        private readonly ICleanable[] _uniformsToClean;
         private readonly UniformBlockCollection _uniformBlocks;
     }
 }

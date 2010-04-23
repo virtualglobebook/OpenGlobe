@@ -15,30 +15,30 @@ namespace MiniGlobe.Renderer.GL3x
 {
     internal class UniformFloatMatrix22GL3x : Uniform<Matrix2>, ICleanable
     {
-        internal UniformFloatMatrix22GL3x(string name, int location)
+        internal UniformFloatMatrix22GL3x(string name, int location, ICleanableObserver observer)
             : base(name, location, UniformType.FloatMatrix22)
         {
-            Set(new Matrix2());
+            _dirty = true;
+            _observer = observer;
+            _observer.NotifyDirty(this);
         }
 
         private void Set(Matrix2 value)
         {
+            if (!_dirty && (_value != value))
+            {
+                _dirty = true;
+                _observer.NotifyDirty(this);
+            }
+
             _value = value;
-            _dirty = true;
         }
 
         #region Uniform<> Members
 
         public override Matrix2 Value
         {
-            set
-            {
-                if (_value != value)
-                {
-                    Set(value);
-                }
-            }
-
+            set { Set(value); }
             get { return _value; }
         }
 
@@ -48,24 +48,22 @@ namespace MiniGlobe.Renderer.GL3x
 
         public void Clean()
         {
-            if (_dirty)
-            {
-                Vector2 column0 = _value.Column0;
-                Vector2 column1 = _value.Column1;
+            Vector2 column0 = _value.Column0;
+            Vector2 column1 = _value.Column1;
 
-                float[] columnMajorElements = new float[] { 
-                column0.X, column0.Y,
-                column1.X, column1.Y };
+            float[] columnMajorElements = new float[] { 
+            column0.X, column0.Y,
+            column1.X, column1.Y };
 
-                GL.UniformMatrix2(Location, 1, false, columnMajorElements);
+            GL.UniformMatrix2(Location, 1, false, columnMajorElements);
 
-                _dirty = false;
-            }
+            _dirty = false;
         }
 
         #endregion
 
         private Matrix2 _value;
         private bool _dirty;
+        private ICleanableObserver _observer;
     }
 }

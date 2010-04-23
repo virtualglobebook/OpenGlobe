@@ -14,30 +14,30 @@ namespace MiniGlobe.Renderer.GL3x
 {
     internal class UniformFloatGL3x : Uniform<float>, ICleanable
     {
-        internal UniformFloatGL3x(string name, int location)
+        internal UniformFloatGL3x(string name, int location, ICleanableObserver observer)
             : base(name, location, UniformType.Float)
         {
-            Set(0);
+            _dirty = true;
+            _observer = observer;
+            _observer.NotifyDirty(this);
         }
 
         private void Set(float value)
         {
+            if (!_dirty && (_value != value))
+            {
+                _dirty = true;
+                _observer.NotifyDirty(this);
+            }
+
             _value = value;
-            _dirty = true;
         }
 
         #region Uniform<> Members
 
         public override float Value
         {
-            set
-            {
-                if (_value != value)
-                {
-                    Set(value);
-                }
-            }
-
+            set { Set(value); }
             get { return _value; }
         }
 
@@ -47,16 +47,14 @@ namespace MiniGlobe.Renderer.GL3x
 
         public void Clean()
         {
-            if (_dirty)
-            {
-                GL.Uniform1(Location, _value);
-                _dirty = false;
-            }
+            GL.Uniform1(Location, _value);
+            _dirty = false;
         }
 
         #endregion
 
         private float _value;
         private bool _dirty;
+        private ICleanableObserver _observer;
     }
 }

@@ -15,30 +15,30 @@ namespace MiniGlobe.Renderer.GL3x
 {
     internal class UniformFloatMatrix44GL3x : Uniform<Matrix4>, ICleanable
     {
-        internal UniformFloatMatrix44GL3x(string name, int location)
+        internal UniformFloatMatrix44GL3x(string name, int location, ICleanableObserver observer)
             : base(name, location, UniformType.FloatMatrix44)
         {
-            Set(new Matrix4());
+            _dirty = true;
+            _observer = observer;
+            _observer.NotifyDirty(this);
         }
 
         private void Set(Matrix4 value)
         {
+            if (!_dirty && (_value != value))
+            {
+                _dirty = true;
+                _observer.NotifyDirty(this);
+            }
+
             _value = value;
-            _dirty = true;
         }
 
         #region Uniform<> Members
 
         public override Matrix4 Value
         {
-            set
-            {
-                if (_value != value)
-                {
-                    Set(value);
-                }
-            }
-
+            set { Set(value); }
             get { return _value; }
         }
 
@@ -48,16 +48,14 @@ namespace MiniGlobe.Renderer.GL3x
 
         public void Clean()
         {
-            if (_dirty)
-            {
-                GL.UniformMatrix4(Location, false, ref _value);
-                _dirty = false;
-            }
+            GL.UniformMatrix4(Location, false, ref _value);
+            _dirty = false;
         }
 
         #endregion
 
         private Matrix4 _value;
         private bool _dirty;
+        private ICleanableObserver _observer;
     }
 }

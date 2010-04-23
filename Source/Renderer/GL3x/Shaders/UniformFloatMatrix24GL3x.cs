@@ -15,30 +15,30 @@ namespace MiniGlobe.Renderer.GL3x
 {
     internal class UniformFloatMatrix24GL3x : Uniform<Matrix24>, ICleanable
     {
-        internal UniformFloatMatrix24GL3x(string name, int location)
+        internal UniformFloatMatrix24GL3x(string name, int location, ICleanableObserver observer)
             : base(name, location, UniformType.FloatMatrix24)
         {
-            Set(new Matrix24());
+            _dirty = true;
+            _observer = observer;
+            _observer.NotifyDirty(this);
         }
 
         private void Set(Matrix24 value)
         {
+            if (!_dirty && (_value != value))
+            {
+                _dirty = true;
+                _observer.NotifyDirty(this);
+            }
+
             _value = value;
-            _dirty = true;
         }
 
         #region Uniform<> Members
 
         public override Matrix24 Value
         {
-            set
-            {
-                if (_value != value)
-                {
-                    Set(value);
-                }
-            }
-
+            set { Set(value); }
             get { return _value; }
         }
 
@@ -48,24 +48,22 @@ namespace MiniGlobe.Renderer.GL3x
 
         public void Clean()
         {
-            if (_dirty)
-            {
-                Vector4 column0 = _value.Column0;
-                Vector4 column1 = _value.Column1;
+            Vector4 column0 = _value.Column0;
+            Vector4 column1 = _value.Column1;
 
-                float[] columnMajorElements = new float[] { 
-                column0.X, column0.Y, column0.Z, column0.W,
-                column1.X, column1.Y, column1.Z, column0.W };
+            float[] columnMajorElements = new float[] { 
+            column0.X, column0.Y, column0.Z, column0.W,
+            column1.X, column1.Y, column1.Z, column0.W };
 
-                GL.UniformMatrix2x4(Location, 1, false, columnMajorElements);
+            GL.UniformMatrix2x4(Location, 1, false, columnMajorElements);
 
-                _dirty = false;
-            }
+            _dirty = false;
         }
 
         #endregion
 
         private Matrix24 _value;
         private bool _dirty;
+        private ICleanableObserver _observer;
     }
 }

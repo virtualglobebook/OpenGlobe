@@ -15,30 +15,30 @@ namespace MiniGlobe.Renderer.GL3x
 {
     internal class UniformFloatMatrix32GL3x : Uniform<Matrix32>, ICleanable
     {
-        internal UniformFloatMatrix32GL3x(string name, int location)
+        internal UniformFloatMatrix32GL3x(string name, int location, ICleanableObserver observer)
             : base(name, location, UniformType.FloatMatrix32)
         {
-            Set(new Matrix32());
+            _dirty = true;
+            _observer = observer;
+            _observer.NotifyDirty(this);
         }
 
         private void Set(Matrix32 value)
         {
+            if (!_dirty && (_value != value))
+            {
+                _dirty = true;
+                _observer.NotifyDirty(this);
+            }
+
             _value = value;
-            _dirty = true;
         }
 
         #region Uniform<> Members
 
         public override Matrix32 Value
         {
-            set
-            {
-                if (_value != value)
-                {
-                    Set(value);
-                }
-            }
-
+            set { Set(value); }
             get { return _value; }
         }
 
@@ -48,26 +48,24 @@ namespace MiniGlobe.Renderer.GL3x
 
         public void Clean()
         {
-            if (_dirty)
-            {
-                Vector2 column0 = _value.Column0;
-                Vector2 column1 = _value.Column1;
-                Vector2 column2 = _value.Column2;
+            Vector2 column0 = _value.Column0;
+            Vector2 column1 = _value.Column1;
+            Vector2 column2 = _value.Column2;
 
-                float[] columnMajorElements = new float[] { 
-                column0.X, column0.Y, 
-                column1.X, column1.Y, 
-                column2.X, column2.Y };
+            float[] columnMajorElements = new float[] { 
+            column0.X, column0.Y, 
+            column1.X, column1.Y, 
+            column2.X, column2.Y };
 
-                GL.UniformMatrix3x2(Location, 1, false, columnMajorElements);
+            GL.UniformMatrix3x2(Location, 1, false, columnMajorElements);
 
-                _dirty = false;
-            }
+            _dirty = false;
         }
 
         #endregion
 
         private Matrix32 _value;
         private bool _dirty;
+        private ICleanableObserver _observer;
     }
 }

@@ -15,30 +15,30 @@ namespace MiniGlobe.Renderer.GL3x
 {
     internal class UniformBoolVector2GL3x : Uniform<Vector2b>, ICleanable
     {
-        internal UniformBoolVector2GL3x(string name, int location)
+        internal UniformBoolVector2GL3x(string name, int location, ICleanableObserver observer)
             : base(name, location, UniformType.BoolVector2)
         {
-            Set(new Vector2b(false, false));
+            _dirty = true;
+            _observer = observer;
+            _observer.NotifyDirty(this);
         }
 
         private void Set(Vector2b value)
         {
+            if (!_dirty && (_value != value))
+            {
+                _dirty = true;
+                _observer.NotifyDirty(this);
+            }
+
             _value = value;
-            _dirty = true;
         }
 
         #region Uniform<> Members
 
         public override Vector2b Value
         {
-            set
-            {
-                if (_value != value)
-                {
-                    Set(value);
-                }
-            }
-
+            set { Set(value); }
             get { return _value; }
         }
 
@@ -48,16 +48,14 @@ namespace MiniGlobe.Renderer.GL3x
 
         public void Clean()
         {
-            if (_dirty)
-            {
-                GL.Uniform2(Location, _value.X ? 1 : 0, _value.Y ? 1 : 0);
-                _dirty = false;
-            }
+            GL.Uniform2(Location, _value.X ? 1 : 0, _value.Y ? 1 : 0);
+            _dirty = false;
         }
 
         #endregion
 
         private Vector2b _value;
         private bool _dirty;
+        private ICleanableObserver _observer;
     }
 }

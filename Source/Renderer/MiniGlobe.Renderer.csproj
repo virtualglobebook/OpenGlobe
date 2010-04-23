@@ -52,6 +52,7 @@
     <Compile Include="FrameBuffer\HighResolutionSnapFrameBuffer.cs" />
     <Compile Include="GL3x\ExtensionsGL3x.cs" />
     <Compile Include="GL3x\ICleanable.cs" />
+    <Compile Include="GL3x\ICleanableObserver.cs" />
     <Compile Include="GL3x\Input\KeyboardGL3x.cs" />
     <Compile Include="GL3x\Input\MouseGL3x.cs" />
     <Compile Include="Input\Keyboard.cs" />
