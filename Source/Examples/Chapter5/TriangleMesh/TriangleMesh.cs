@@ -32,7 +32,7 @@ namespace MiniGlobe.Examples.Chapter5
             ///////////////////////////////////////////////////////////////////
 
             TerrainTile terrainTile = TerrainTile.FromBitmap(new Bitmap(@"ps-e.lg.jpg"));
-            _tile = new VertexDisplacementMapTerrainTile(_window.Context, terrainTile);
+            _tile = new TriangleMeshTerrainTile(_window.Context, terrainTile);
             _tile.HeightExaggeration = 30;
 
             ///////////////////////////////////////////////////////////////////
@@ -94,7 +94,7 @@ namespace MiniGlobe.Examples.Chapter5
         private readonly MiniGlobeWindow _window;
         private readonly SceneState _sceneState;
         private readonly CameraLookAtPoint _camera;
-        private readonly VertexDisplacementMapTerrainTile _tile;
+        private readonly TriangleMeshTerrainTile _tile;
         private readonly Axes _axes;
     }
 }
