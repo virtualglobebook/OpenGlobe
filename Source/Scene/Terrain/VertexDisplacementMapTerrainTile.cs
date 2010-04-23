@@ -58,7 +58,6 @@ namespace MiniGlobe.Terrain
                   }";
             _sp = Device.CreateShaderProgram(vs, fs);
 
-            _tileSize = tile.Size;
             _tileMinimumHeight = tile.MinimumHeight;
             _tileMaximumHeight = tile.MaximumHeight;
 
@@ -110,7 +109,7 @@ namespace MiniGlobe.Terrain
             {
                 if (value <= 0)
                 {
-                    throw new ArgumentOutOfRangeException("HeightExaggeration must be greater than zero.");
+                    throw new ArgumentOutOfRangeException("HeightExaggeration", "HeightExaggeration must be greater than zero.");
                 }
 
                 if (_heightExaggeration.Value != value)
@@ -144,7 +143,6 @@ namespace MiniGlobe.Terrain
         private readonly Uniform<float> _minimumHeight;
         private readonly Uniform<float> _maximumHeight;
 
-        private readonly Vector2I _tileSize;
         private readonly float _tileMinimumHeight;
         private readonly float _tileMaximumHeight;
 

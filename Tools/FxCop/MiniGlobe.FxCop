@@ -34,6 +34,8 @@
   <Target Name="$(ProjectDir)/../../Source/Examples/Chapter4/DepthBufferPrecision/bin/Release/Chapter4DepthBufferPrecision.exe" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/../../Source/Examples/Chapter4/NumberPrecision/bin/Release/Chapter4NumberPrecision.exe" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/../../Source/Examples/Chapter5/RayCasting/bin/Release/Chapter5RayCasting.exe" Analyze="True" AnalyzeAllChildren="True" />
+  <Target Name="$(ProjectDir)/../../Source/Examples/Chapter5/TriangleMesh/bin/Release/Chapter5TriangleMesh.exe" Analyze="True" AnalyzeAllChildren="True" />
+  <Target Name="$(ProjectDir)/../../Source/Examples/Chapter5/VertexDisplacementMap/bin/Release/Chapter5VertexDisplacementMap.exe" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/../../Source/Examples/Chapter7/Billboards/bin/Release/Chapter7Billboards.exe" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/../../Source/Tests/bin/Release/MiniGlobe.Core.dll" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/../../Source/Tests/bin/Release/MiniGlobe.Renderer.dll" Analyze="True" AnalyzeAllChildren="True" />
@@ -94,20 +96,6 @@
       <Notes>
        <User Name="pjcozzi">
         <Note Id="15" />
-       </User>
-      </Notes>
-     </Message>
-    </Messages>
-   </Namespace>
-   <Namespace Name="MiniGlobe.Renderer.GL32">
-    <Messages>
-     <Message TypeName="AvoidNamespacesWithFewTypes" Category="Microsoft.Design" CheckId="CA1020" Status="Excluded" Created="2009-12-11 23:38:35Z">
-      <Issue>
-       <Item>MiniGlobe.Renderer.GL32</Item>
-      </Issue>
-      <Notes>
-       <User Name="pjcozzi">
-        <Note Id="2" />
        </User>
       </Notes>
      </Message>
@@ -254,6 +242,32 @@
        <Message TypeName="AssembliesShouldHaveValidStrongNames" Category="Microsoft.Design" CheckId="CA2210" Created="2010-03-31 02:44:15Z">
         <Issue Name="NoStrongName">
          <Item>'Chapter5RayCasting.exe'</Item>
+        </Issue>
+       </Message>
+      </Messages>
+     </Module>
+    </Modules>
+   </Target>
+   <Target Name="$(ProjectDir)/../../Source/Examples/Chapter5/TriangleMesh/bin/Release/Chapter5TriangleMesh.exe">
+    <Modules>
+     <Module Name="chapter5trianglemesh.exe">
+      <Messages>
+       <Message TypeName="AssembliesShouldHaveValidStrongNames" Category="Microsoft.Design" CheckId="CA2210" Created="2010-04-23 21:59:11Z">
+        <Issue Name="NoStrongName">
+         <Item>'Chapter5TriangleMesh.exe'</Item>
+        </Issue>
+       </Message>
+      </Messages>
+     </Module>
+    </Modules>
+   </Target>
+   <Target Name="$(ProjectDir)/../../Source/Examples/Chapter5/VertexDisplacementMap/bin/Release/Chapter5VertexDisplacementMap.exe">
+    <Modules>
+     <Module Name="chapter5vertexdisplacementmap.exe">
+      <Messages>
+       <Message TypeName="AssembliesShouldHaveValidStrongNames" Category="Microsoft.Design" CheckId="CA2210" Created="2010-04-23 21:59:11Z">
+        <Issue Name="NoStrongName">
+         <Item>'Chapter5VertexDisplacementMap.exe'</Item>
         </Issue>
        </Message>
       </Messages>
@@ -574,6 +588,44 @@
                 <Note Id="9" />
                </User>
               </Notes>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="Vector2I">
+          <Members>
+           <Member Name="#.ctor(System.Int32,System.Int32)">
+            <Messages>
+             <Message Id="x" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-04-23 21:59:11Z">
+              <Issue Name="MemberParameterMoreMeaningfulName">
+               <Item>'Vector2I.Vector2I(int, int)'</Item>
+               <Item>'x'</Item>
+              </Issue>
+             </Message>
+             <Message Id="y" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-04-23 21:59:11Z">
+              <Issue Name="MemberParameterMoreMeaningfulName">
+               <Item>'Vector2I.Vector2I(int, int)'</Item>
+               <Item>'y'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#X">
+            <Messages>
+             <Message Id="X" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-04-23 21:59:11Z">
+              <Issue Name="MemberMoreMeaningfulName">
+               <Item>'Vector2I.X'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Y">
+            <Messages>
+             <Message Id="Y" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-04-23 21:59:11Z">
+              <Issue Name="MemberMoreMeaningfulName">
+               <Item>'Vector2I.Y'</Item>
+              </Issue>
              </Message>
             </Messages>
            </Member>
@@ -1573,22 +1625,6 @@
            </Member>
           </Members>
          </Type>
-         <Type Name="Indices`1">
-          <Messages>
-           <Message Id="Indices" TypeName="UsePreferredTerms" Category="Microsoft.Naming" CheckId="CA1726" Status="Excluded" Created="2009-12-29 14:04:17Z">
-            <Issue Name="Type">
-             <Item>Indices</Item>
-             <Item>'Indices&lt;T&gt;'</Item>
-             <Item>Indexes</Item>
-            </Issue>
-            <Notes>
-             <User Name="pjcozzi">
-              <Note Id="26" />
-             </User>
-            </Notes>
-           </Message>
-          </Messages>
-         </Type>
          <Type Name="IndicesBase">
           <Messages>
            <Message Id="Indices" TypeName="UsePreferredTerms" Category="Microsoft.Naming" CheckId="CA1726" Status="Excluded" Created="2009-12-29 14:04:17Z">
@@ -1621,35 +1657,25 @@
            </Message>
           </Messages>
          </Type>
-         <Type Name="IndicesInt">
+         <Type Name="IndicesInt16">
           <Messages>
-           <Message Id="Indices" TypeName="UsePreferredTerms" Category="Microsoft.Naming" CheckId="CA1726" Status="Excluded" Created="2009-12-29 14:04:17Z">
+           <Message Id="Indices" TypeName="UsePreferredTerms" Category="Microsoft.Naming" CheckId="CA1726" Created="2010-04-23 21:59:11Z">
             <Issue Name="Type">
              <Item>Indices</Item>
-             <Item>'IndicesInt'</Item>
+             <Item>'IndicesInt16'</Item>
              <Item>Indexes</Item>
             </Issue>
-            <Notes>
-             <User Name="pjcozzi">
-              <Note Id="26" />
-             </User>
-            </Notes>
            </Message>
           </Messages>
          </Type>
-         <Type Name="IndicesShort">
+         <Type Name="IndicesInt32">
           <Messages>
-           <Message Id="Indices" TypeName="UsePreferredTerms" Category="Microsoft.Naming" CheckId="CA1726" Status="Excluded" Created="2009-12-29 14:04:17Z">
+           <Message Id="Indices" TypeName="UsePreferredTerms" Category="Microsoft.Naming" CheckId="CA1726" Created="2010-04-23 21:59:11Z">
             <Issue Name="Type">
              <Item>Indices</Item>
-             <Item>'IndicesShort'</Item>
+             <Item>'IndicesInt32'</Item>
              <Item>Indexes</Item>
             </Issue>
-            <Notes>
-             <User Name="pjcozzi">
-              <Note Id="26" />
-             </User>
-            </Notes>
            </Message>
           </Messages>
          </Type>
@@ -1689,45 +1715,103 @@
            </Member>
           </Members>
          </Type>
-         <Type Name="TriangleIndices`1">
+         <Type Name="TriangleIndicesByte">
           <Messages>
-           <Message Id="Indices" TypeName="UsePreferredTerms" Category="Microsoft.Naming" CheckId="CA1726" Status="Excluded" Created="2009-12-29 14:04:17Z">
+           <Message Id="Indices" TypeName="UsePreferredTerms" Category="Microsoft.Naming" CheckId="CA1726" Created="2010-04-23 21:59:11Z">
             <Issue Name="Type">
              <Item>Indices</Item>
-             <Item>'TriangleIndices&lt;T&gt;'</Item>
+             <Item>'TriangleIndicesByte'</Item>
              <Item>Indexes</Item>
             </Issue>
-            <Notes>
-             <User Name="pjcozzi">
-              <Note Id="26" />
-             </User>
-            </Notes>
            </Message>
           </Messages>
           <Members>
-           <Member Name="#.ctor(!0,!0,!0)">
+           <Member Name="#.ctor(System.Byte,System.Byte,System.Byte)">
             <Messages>
-             <Message Id="i" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2009-12-29 14:04:17Z">
+             <Message Id="i" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-04-23 21:59:11Z">
               <Issue Name="MemberParameter">
-               <Item>'TriangleIndices&lt;T&gt;.TriangleIndices(T, T, T)'</Item>
+               <Item>'TriangleIndicesByte.TriangleIndicesByte(byte, byte, byte)'</Item>
                <Item>i</Item>
                <Item>'i0'</Item>
               </Issue>
               <Issue Name="MemberParameter">
-               <Item>'TriangleIndices&lt;T&gt;.TriangleIndices(T, T, T)'</Item>
+               <Item>'TriangleIndicesByte.TriangleIndicesByte(byte, byte, byte)'</Item>
                <Item>i</Item>
                <Item>'i1'</Item>
               </Issue>
               <Issue Name="MemberParameter">
-               <Item>'TriangleIndices&lt;T&gt;.TriangleIndices(T, T, T)'</Item>
+               <Item>'TriangleIndicesByte.TriangleIndicesByte(byte, byte, byte)'</Item>
                <Item>i</Item>
                <Item>'i2'</Item>
               </Issue>
-              <Notes>
-               <User Name="pjcozzi">
-                <Note Id="27" />
-               </User>
-              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="TriangleIndicesInt16">
+          <Messages>
+           <Message Id="Indices" TypeName="UsePreferredTerms" Category="Microsoft.Naming" CheckId="CA1726" Created="2010-04-23 21:59:11Z">
+            <Issue Name="Type">
+             <Item>Indices</Item>
+             <Item>'TriangleIndicesInt16'</Item>
+             <Item>Indexes</Item>
+            </Issue>
+           </Message>
+          </Messages>
+          <Members>
+           <Member Name="#.ctor(System.Int16,System.Int16,System.Int16)">
+            <Messages>
+             <Message Id="i" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-04-23 21:59:11Z">
+              <Issue Name="MemberParameter">
+               <Item>'TriangleIndicesInt16.TriangleIndicesInt16(short, short, short)'</Item>
+               <Item>i</Item>
+               <Item>'i0'</Item>
+              </Issue>
+              <Issue Name="MemberParameter">
+               <Item>'TriangleIndicesInt16.TriangleIndicesInt16(short, short, short)'</Item>
+               <Item>i</Item>
+               <Item>'i1'</Item>
+              </Issue>
+              <Issue Name="MemberParameter">
+               <Item>'TriangleIndicesInt16.TriangleIndicesInt16(short, short, short)'</Item>
+               <Item>i</Item>
+               <Item>'i2'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="TriangleIndicesInt32">
+          <Messages>
+           <Message Id="Indices" TypeName="UsePreferredTerms" Category="Microsoft.Naming" CheckId="CA1726" Created="2010-04-23 21:59:11Z">
+            <Issue Name="Type">
+             <Item>Indices</Item>
+             <Item>'TriangleIndicesInt32'</Item>
+             <Item>Indexes</Item>
+            </Issue>
+           </Message>
+          </Messages>
+          <Members>
+           <Member Name="#.ctor(System.Int32,System.Int32,System.Int32)">
+            <Messages>
+             <Message Id="i" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-04-23 21:59:11Z">
+              <Issue Name="MemberParameter">
+               <Item>'TriangleIndicesInt32.TriangleIndicesInt32(int, int, int)'</Item>
+               <Item>i</Item>
+               <Item>'i0'</Item>
+              </Issue>
+              <Issue Name="MemberParameter">
+               <Item>'TriangleIndicesInt32.TriangleIndicesInt32(int, int, int)'</Item>
+               <Item>i</Item>
+               <Item>'i1'</Item>
+              </Issue>
+              <Issue Name="MemberParameter">
+               <Item>'TriangleIndicesInt32.TriangleIndicesInt32(int, int, int)'</Item>
+               <Item>i</Item>
+               <Item>'i2'</Item>
+              </Issue>
              </Message>
             </Messages>
            </Member>
@@ -1762,6 +1846,48 @@
             </Notes>
            </Message>
           </Messages>
+         </Type>
+         <Type Name="VertexAttributeCollection">
+          <Members>
+           <Member Name="#Add(MiniGlobe.Core.Geometry.VertexAttribute)">
+            <Messages>
+             <Message Id="0#" TypeName="ParameterNamesShouldMatchBaseDeclaration" Category="Microsoft.Naming" CheckId="CA1725" Created="2010-04-23 21:59:11Z">
+              <Issue>
+               <Item>'VertexAttributeCollection.Add(VertexAttribute)'</Item>
+               <Item>'vertexAttribute'</Item>
+               <Item>'item'</Item>
+               <Item>'ICollection&lt;VertexAttribute&gt;.Add(VertexAttribute)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Contains(MiniGlobe.Core.Geometry.VertexAttribute)">
+            <Messages>
+             <Message Id="0#" TypeName="ParameterNamesShouldMatchBaseDeclaration" Category="Microsoft.Naming" CheckId="CA1725" Created="2010-04-23 21:59:11Z">
+              <Issue>
+               <Item>'VertexAttributeCollection.Contains(VertexAttribute)'</Item>
+               <Item>'vertexAttribute'</Item>
+               <Item>'item'</Item>
+               <Item>'ICollection&lt;VertexAttribute&gt;.Contains(VertexAttribute)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#System.Collections.Generic.ICollection`1&lt;MiniGlobe.Core.Geometry.VertexAttribute&gt;.IsReadOnly">
+            <Accessors>
+             <Accessor Name="#System.Collections.Generic.ICollection`1&lt;MiniGlobe.Core.Geometry.VertexAttribute&gt;.get_IsReadOnly()">
+              <Messages>
+               <Message TypeName="InterfaceMethodsShouldBeCallableByChildTypes" Category="Microsoft.Design" CheckId="CA1033" Created="2010-04-23 21:59:11Z">
+                <Issue>
+                 <Item>'VertexAttributeCollection'</Item>
+                 <Item>'ICollection&lt;VertexAttribute&gt;.IsReadOnly.get()'</Item>
+                </Issue>
+               </Message>
+              </Messages>
+             </Accessor>
+            </Accessors>
+           </Member>
+          </Members>
          </Type>
          <Type Name="VertexAttributeRGBA">
           <Messages>
@@ -2166,6 +2292,22 @@
             </Messages>
            </Member>
           </Members>
+         </Type>
+         <Type Name="KeyboardGL3x">
+          <Messages>
+           <Message Id="x" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Excluded" Created="2010-04-23 21:59:11Z">
+            <Issue Name="Type">
+             <Item>x</Item>
+             <Item>'KeyboardGL3x'</Item>
+             <Item>X</Item>
+            </Issue>
+            <Notes>
+             <User Name="pjcozzi">
+              <Note Id="61" />
+             </User>
+            </Notes>
+           </Message>
+          </Messages>
          </Type>
          <Type Name="KeyboardKey">
           <Members>
@@ -3297,6 +3439,22 @@
             <Issue>
              <Item>'MiniGlobeWindow.MiniGlobeHandler'</Item>
             </Issue>
+           </Message>
+          </Messages>
+         </Type>
+         <Type Name="MouseGL3x">
+          <Messages>
+           <Message Id="x" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Excluded" Created="2010-04-23 21:59:11Z">
+            <Issue Name="Type">
+             <Item>x</Item>
+             <Item>'MouseGL3x'</Item>
+             <Item>X</Item>
+            </Issue>
+            <Notes>
+             <User Name="pjcozzi">
+              <Note Id="60" />
+             </User>
+            </Notes>
            </Message>
           </Messages>
          </Type>
@@ -4789,13 +4947,38 @@
                <Message TypeName="InstantiateArgumentExceptionsCorrectly" Category="Microsoft.Usage" CheckId="CA2208" Status="Excluded" Created="2010-03-31 02:44:15Z">
                 <Issue Name="IncorrectParameterName">
                  <Item>'RayCastedTerrainTile.HeightExaggeration.set(float)'</Item>
-                 <Item>HeightExaggeration must be greater than zero.</Item>
+                 <Item>HeightExaggeration</Item>
                  <Item>'paramName'</Item>
                  <Item>'ArgumentOutOfRangeException'</Item>
                 </Issue>
                 <Notes>
                  <User Name="pjcozzi">
                   <Note Id="37" />
+                 </User>
+                </Notes>
+               </Message>
+              </Messages>
+             </Accessor>
+            </Accessors>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="VertexDisplacementMapTerrainTile">
+          <Members>
+           <Member Name="#HeightExaggeration">
+            <Accessors>
+             <Accessor Name="#set_HeightExaggeration(System.Single)">
+              <Messages>
+               <Message TypeName="InstantiateArgumentExceptionsCorrectly" Category="Microsoft.Usage" CheckId="CA2208" Status="Excluded" Created="2010-04-23 21:59:11Z">
+                <Issue Name="IncorrectParameterName">
+                 <Item>'VertexDisplacementMapTerrainTile.HeightExaggeration.set(float)'</Item>
+                 <Item>HeightExaggeration</Item>
+                 <Item>'paramName'</Item>
+                 <Item>'ArgumentOutOfRangeException'</Item>
+                </Issue>
+                <Notes>
+                 <User Name="pjcozzi">
+                  <Note Id="2" />
                  </User>
                 </Notes>
                </Message>
@@ -7991,6 +8174,20 @@
              </Message>
             </Messages>
            </Member>
+           <Member Name="#ToGeodetic3D()">
+            <Messages>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-04-23 21:59:11Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'EllipsoidTests.ToGeodetic3D()'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="27" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
            <Member Name="#ToVector3D()">
             <Messages>
              <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-03-03 23:33:07Z" FixCategory="DependsOnFix">
@@ -8120,6 +8317,20 @@
               <Notes>
                <User Name="pjcozzi">
                 <Note Id="34" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#RectangleTessellatorTest()">
+            <Messages>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-04-23 21:59:11Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'TessellationTests.RectangleTessellatorTest()'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="27" />
                </User>
               </Notes>
              </Message>
@@ -9040,7 +9251,7 @@
    <User Name="pjcozzi">
     <Note Id="0" Modified="2009-12-14 17:38:53Z">[Test] cannot be static</Note>
     <Note Id="1" Modified="2009-12-14 18:00:30Z">[Test] cannot be static.</Note>
-    <Note Id="2" Modified="2009-12-14 18:07:49Z">This namespace has several types but they are all internal because they are the OpenGL renderer implementation.</Note>
+    <Note Id="2" Modified="2010-04-23 22:04:11Z">Ok.</Note>
     <Note Id="3" Modified="2009-12-14 19:28:59Z">No thank you.</Note>
     <Note Id="4" Modified="2009-12-14 19:30:02Z">X, Y, and Z are ok.</Note>
     <Note Id="5" Modified="2009-12-14 19:31:02Z">X, Y, Z, and W are ok.</Note>
@@ -9065,7 +9276,7 @@
     <Note Id="24" Modified="2009-12-29 14:08:58Z">No.</Note>
     <Note Id="25" Modified="2009-12-29 14:09:23Z">In computer graphics, these are indices.</Note>
     <Note Id="26" Modified="2009-12-29 14:11:26Z">Indices are ok in computer graphics.</Note>
-    <Note Id="27" Modified="2009-12-29 14:11:47Z">These are ok for indices.</Note>
+    <Note Id="27" Modified="2010-04-23 21:59:45Z">Ok.</Note>
     <Note Id="28" Modified="2010-01-12 14:01:16Z">[Test] cannot be static.</Note>
     <Note Id="29" Modified="2010-01-13 21:00:43Z">[Test] cannot be static.</Note>
     <Note Id="30" Modified="2010-01-13 21:06:32Z">In graphics, it is a vertex attribute.</Note>
@@ -9098,6 +9309,8 @@
     <Note Id="57" Modified="2010-04-06 19:47:23Z">[Test] cannot be static.</Note>
     <Note Id="58" Modified="2010-04-06 19:50:27Z">Ok.</Note>
     <Note Id="59" Modified="2010-04-06 19:51:10Z">Ok.</Note>
+    <Note Id="60" Modified="2010-04-23 22:02:18Z">Ok.</Note>
+    <Note Id="61" Modified="2010-04-23 22:02:24Z">Ok.</Note>
    </User>
   </Notes>
   <Rules>
@@ -9143,7 +9356,6 @@
     <Resolution Name="MemberMoreMeaningfulName">Consider providing a more meaningful name than member name {0}.</Resolution>
     <Resolution Name="MemberParameter">In method {0}, correct the spelling of '{1}' in parameter name {2} or remove it entirely if it represents any sort of Hungarian notation.</Resolution>
     <Resolution Name="MemberParameterMoreMeaningfulName">In method {0}, consider providing a more meaningful name than parameter name {1}.</Resolution>
-    <Resolution Name="Type" />
    </Rule>
    <Rule TypeName="IdentifiersShouldHaveCorrectSuffix" Category="Microsoft.Naming" CheckId="CA1710">
     <Resolution Name="Default">Rename {0} to end in '{1}'.</Resolution>
@@ -9152,8 +9364,10 @@
     <Resolution Name="TypeNoAlternate">Rename type name {0} so that it does not end in '{1}'.</Resolution>
    </Rule>
    <Rule TypeName="InstantiateArgumentExceptionsCorrectly" Category="Microsoft.Usage" CheckId="CA2208">
-    <Resolution Name="IncorrectMessage" />
     <Resolution Name="IncorrectParameterName">Method {0} passes '{1}' as the {2} argument to a {3} constructor. Replace this argument with one of the method's parameter names. Note that the provided parameter name should have the exact casing as declared on the method.</Resolution>
+   </Rule>
+   <Rule TypeName="InterfaceMethodsShouldBeCallableByChildTypes" Category="Microsoft.Design" CheckId="CA1033">
+    <Resolution Name="Default">Make {0} sealed (a breaking change if this class has previously shipped), implement the method non-explicitly, or implement a new method that exposes the functionality of {1} and is visible to derived classes.</Resolution>
    </Rule>
    <Rule TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822">
     <Resolution Name="Default">The 'this' parameter (or 'Me' in Visual Basic) of {0} is never used. Mark the member as static (or Shared in Visual Basic) or use 'this'/'Me' in the method body or at least one property accessor, if appropriate.</Resolution>
@@ -9163,6 +9377,9 @@
    </Rule>
    <Rule TypeName="OperatorOverloadsHaveNamedAlternates" Category="Microsoft.Usage" CheckId="CA2225">
     <Resolution Name="Default">Provide a method named '{0}' as a friendly alternate for operator {1}.</Resolution>
+   </Rule>
+   <Rule TypeName="ParameterNamesShouldMatchBaseDeclaration" Category="Microsoft.Naming" CheckId="CA1725">
+    <Resolution Name="Default">In member {0}, change parameter name {1} to {2} in order to match the identifier as it has been declared in {3}.</Resolution>
    </Rule>
    <Rule TypeName="PropertiesShouldNotReturnArrays" Category="Microsoft.Performance" CheckId="CA1819">
     <Resolution Name="Default">Change {0} to return a collection or make it a method.</Resolution>
