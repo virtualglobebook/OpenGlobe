@@ -58,6 +58,7 @@
     <Compile Include="GL3x\Input\KeyboardGL3x.cs" />
     <Compile Include="GL3x\Input\MouseGL3x.cs" />
     <Compile Include="GL3x\Handles\VertexArrayHandleGL3x.cs" />
+    <Compile Include="GL3x\Shaders\FragmentOutputsGL3x.cs" />
     <Compile Include="Input\Keyboard.cs" />
     <Compile Include="Input\KeyboardKey.cs" />
     <Compile Include="Input\KeyboardKeyEvent.cs" />
@@ -111,6 +112,7 @@
     <Compile Include="Shaders\DrawAutomaticUniforms\Wgs84AltitudeUniformFactory.cs" />
     <Compile Include="Shaders\DrawAutomaticUniforms\WindowToWorldNearPlaneUniform.cs" />
     <Compile Include="Shaders\DrawAutomaticUniforms\WindowToWorldNearPlaneUniformFactory.cs" />
+    <Compile Include="Shaders\FragmentOutputs.cs" />
     <Compile Include="Shaders\LinkAutomaticUniforms\LinkAutomaticUniform.cs" />
     <Compile Include="Shaders\LinkAutomaticUniforms\LinkAutomaticUniformCollection.cs" />
     <Compile Include="Shaders\LinkAutomaticUniforms\TextureUniform.cs" />

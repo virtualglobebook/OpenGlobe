@@ -184,6 +184,53 @@ namespace MiniGlobe.Renderer
             window.Dispose();
         }
 
+        [Test]
+        public void RenderPointMultipleColorAttachments()
+        {
+            MiniGlobeWindow window = Device.CreateWindow(1, 1);
+            FrameBuffer frameBuffer = window.Context.CreateFrameBuffer();
+
+            Texture2DDescription description = new Texture2DDescription(1, 1, TextureFormat.RedGreenBlue8, false);
+            Texture2D redTexture = Device.CreateTexture2D(description);
+            Texture2D greenTexture = Device.CreateTexture2D(description);
+
+            window.Context.Viewport = new Rectangle(0, 0, 1, 1);
+
+            string fs =
+                @"#version 150
+                 
+                  out vec3 RedColor;
+                  out vec3 GreenColor;
+
+                  void main()
+                  {
+                      RedColor = vec3(1.0, 0.0, 0.0);
+                      GreenColor = vec3(0.0, 1.0, 0.0);
+                  }";
+
+            ShaderProgram sp = Device.CreateShaderProgram(ShaderSources.PassThroughVertexShader(), fs);
+            VertexArray va = CreateVertexArray(window.Context, sp.VertexAttributes["position"].Location);
+
+            Assert.AreNotEqual(sp.FragmentOutputs["RedColor"], sp.FragmentOutputs["GreenColor"]);
+            frameBuffer.ColorAttachments[sp.FragmentOutputs["RedColor"]] = redTexture;
+            frameBuffer.ColorAttachments[sp.FragmentOutputs["GreenColor"]] = greenTexture;
+
+            window.Context.Bind(frameBuffer);
+            window.Context.Bind(sp);
+            window.Context.Bind(va);
+            window.Context.Draw(PrimitiveType.Points, 0, 1);
+
+            TestUtility.ValidateColor(frameBuffer.ColorAttachments[0], 255, 0, 0);
+            TestUtility.ValidateColor(frameBuffer.ColorAttachments[1], 0, 255, 0);
+
+            va.Dispose();
+            sp.Dispose();
+            greenTexture.Dispose();
+            redTexture.Dispose();
+            frameBuffer.Dispose();
+            window.Dispose();
+        }
+
         /// <summary>
         /// Renders one point with two 1x1 textures.
         /// </summary>

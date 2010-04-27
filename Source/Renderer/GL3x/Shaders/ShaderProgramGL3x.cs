@@ -55,6 +55,7 @@ namespace MiniGlobe.Renderer.GL3x
                 throw new CouldNotCreateVideoCardResourceException("Could not link shader program.  Link Log:  \n\n" + ProgramInfoLog);
             }
 
+            _fragmentOutputs = new FragmentOutputsGL3x(_program);
             _vertexAttributes = FindVertexAttributes(_program);
             _dirtyUniforms = new List<ICleanable>();
             _uniforms = FindUniforms(_program);
@@ -451,6 +452,11 @@ namespace MiniGlobe.Renderer.GL3x
             get { return ProgramInfoLog; }
         }
 
+        public override FragmentOutputs FragmentOutputs 
+        {
+            get { return _fragmentOutputs; }
+        }
+
         public override ShaderVertexAttributeCollection VertexAttributes
         {
             get { return _vertexAttributes; }
@@ -502,6 +508,7 @@ namespace MiniGlobe.Renderer.GL3x
         private readonly ShaderObjectGL3x _geometryShader;
         private readonly ShaderObjectGL3x _fragmentShader;
         private readonly int _program;
+        private readonly FragmentOutputsGL3x _fragmentOutputs;
         private readonly ShaderVertexAttributeCollection _vertexAttributes;
         private readonly IList<ICleanable> _dirtyUniforms;
         private readonly UniformCollection _uniforms;

@@ -8,6 +8,7 @@
 #endregion
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using MiniGlobe.Renderer;
 using OpenTK.Graphics.OpenGL;
@@ -43,6 +44,9 @@ namespace MiniGlobe.Renderer.GL3x
             if (_colorAttachments.Dirty)
             {
                 ColorAttachmentGL3x[] colorAttachments = _colorAttachments.Attachments;
+                
+                DrawBuffersEnum[] drawBuffers = new DrawBuffersEnum[colorAttachments.Length];
+                int drawBuffersIndex = 0;
 
                 for (int i = 0; i < colorAttachments.Length; ++i)
                 {
@@ -51,7 +55,13 @@ namespace MiniGlobe.Renderer.GL3x
                         Attach(FramebufferAttachment.ColorAttachment0 + i, colorAttachments[i].Texture);
                         colorAttachments[i].Dirty = false;
                     }
+
+                    if (colorAttachments[i].Texture != null)
+                    {
+                        drawBuffers[drawBuffersIndex++] = DrawBuffersEnum.ColorAttachment0 + i;
+                    }
                 }
+                GL.DrawBuffers(drawBuffersIndex, drawBuffers);
 
                 _colorAttachments.Dirty = false;
             }
@@ -119,7 +129,6 @@ namespace MiniGlobe.Renderer.GL3x
             {
                 GL.FramebufferTexture(FramebufferTarget.Framebuffer, attachPoint, 0, 0);
             }
-
         }
 
         #region Disposable Members
