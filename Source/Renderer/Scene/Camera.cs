@@ -130,10 +130,9 @@ namespace MiniGlobe.Renderer
                 Convert.ToDouble(up[2], CultureInfo.InvariantCulture));
         }
 
-        // TODO:  This is not accurate
         public double Altitude(Ellipsoid shape)
         {
-            return Eye.Magnitude - shape.MinimumRadius;
+            return shape.ToGeodetic3D(Eye).Height;
         }
     }
 }
