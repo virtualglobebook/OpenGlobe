@@ -26,6 +26,7 @@ namespace MiniGlobe.Examples.Chapter5
             _window = Device.CreateWindow(800, 600, "Chapter 5:  Vertex Shader Displacement Mapping");
             _window.Resize += OnResize;
             _window.RenderFrame += OnRenderFrame;
+            _window.Keyboard.KeyUp += OnKeyUp;
             _sceneState = new SceneState();
             _sceneState.Camera.PerspectiveFarPlaneDistance = 4096;
 
@@ -37,10 +38,6 @@ namespace MiniGlobe.Examples.Chapter5
 
             ///////////////////////////////////////////////////////////////////
 
-            _axes = new Axes(_window.Context);
-            _axes.Length = 25;
-            _axes.Width = 3;
-
             double tileRadius = Math.Max(terrainTile.Size.X, terrainTile.Size.Y) * 0.5;
             _camera = new CameraLookAtPoint(_sceneState.Camera, _window, Ellipsoid.UnitSphere);
             _camera.CenterPoint = new Vector3D(terrainTile.Size.X * 0.5, terrainTile.Size.Y * 0.5, 0.0);
@@ -50,6 +47,29 @@ namespace MiniGlobe.Examples.Chapter5
             snap.ColorFilename = @"E:\Manuscript\TerrainRendering\Figures\VertexDisplacementMap.png";
             snap.WidthInInches = 3;
             snap.DotsPerInch = 600;
+
+            ///////////////////////////////////////////////////////////////////
+
+            _hudFont = new Font("Arial", 16);
+            _hud = new HeadsUpDisplay(_window.Context);
+            _hud.Color = Color.Black;
+            UpdateHUD();
+        }
+
+        private void UpdateHUD()
+        {
+            string text;
+
+            text = "Height Exaggeration: " + _tile.HeightExaggeration + " (up/down)";
+
+            if (_hud.Texture != null)
+            {
+                _hud.Texture.Dispose();
+                _hud.Texture = null;
+            }
+            _hud.Texture = Device.CreateTexture2D(
+                Device.CreateBitmapFromText(text, _hudFont),
+                TextureFormat.RedGreenBlueAlpha8, false);
         }
 
         private void OnResize()
@@ -58,12 +78,22 @@ namespace MiniGlobe.Examples.Chapter5
             _sceneState.Camera.AspectRatio = _window.Width / (double)_window.Height;
         }
 
+        private void OnKeyUp(object sender, KeyboardKeyEventArgs e)
+        {
+            if ((e.Key == KeyboardKey.Up) || (e.Key == KeyboardKey.Down))
+            {
+                _tile.HeightExaggeration = Math.Max(1, _tile.HeightExaggeration + ((e.Key == KeyboardKey.Up) ? 1 : -1));
+            }
+
+            UpdateHUD();
+        }
+
         private void OnRenderFrame()
         {
             _window.Context.Clear(ClearBuffers.ColorAndDepthBuffer, Color.White, 1, 0);
 
             _tile.Render(_sceneState);
-            _axes.Render(_sceneState);
+            _hud.Render(_sceneState);
         }
 
         #region IDisposable Members
@@ -72,7 +102,9 @@ namespace MiniGlobe.Examples.Chapter5
         {
             _camera.Dispose();
             _tile.Dispose();
-            _axes.Dispose();
+            _hudFont.Dispose();
+            _hud.Texture.Dispose();
+            _hud.Dispose();
             _window.Dispose();
         }
 
@@ -95,6 +127,8 @@ namespace MiniGlobe.Examples.Chapter5
         private readonly SceneState _sceneState;
         private readonly CameraLookAtPoint _camera;
         private readonly VertexDisplacementMapTerrainTile _tile;
-        private readonly Axes _axes;
+
+        private readonly Font _hudFont;
+        private readonly HeadsUpDisplay _hud;
     }
 }
