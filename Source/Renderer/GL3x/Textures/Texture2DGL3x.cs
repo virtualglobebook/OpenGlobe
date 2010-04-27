@@ -59,6 +59,7 @@ namespace MiniGlobe.Renderer.GL3x
 
         ~Texture2DGL3x()
         {
+            FinalizerThreadContextGL3x.MakeCurrent();
             Dispose(false);
         }
 

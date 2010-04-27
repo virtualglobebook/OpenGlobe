@@ -24,6 +24,7 @@ namespace MiniGlobe.Renderer.GL3x
 
         ~FrameBufferGL3x()
         {
+            FinalizerThreadContextGL3x.MakeCurrent();
             Dispose(false);
         }
 

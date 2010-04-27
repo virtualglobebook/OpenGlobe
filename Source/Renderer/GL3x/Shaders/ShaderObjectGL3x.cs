@@ -70,6 +70,7 @@ namespace MiniGlobe.Renderer.GL3x
 
         ~ShaderObjectGL3x()
         {
+            FinalizerThreadContextGL3x.MakeCurrent();
             Dispose(false);
         }
 
