@@ -12,6 +12,7 @@ using System.Collections;
 using System.Diagnostics;
 using OpenTK.Graphics.OpenGL;
 using MiniGlobe.Renderer;
+using MiniGlobe.Core;
 
 namespace MiniGlobe.Renderer.GL3x
 {
@@ -159,6 +160,21 @@ namespace MiniGlobe.Renderer.GL3x
         private static int NumberOfVertices(AttachedVertexBuffer vb)
         {
             return vb.VertexBuffer.SizeInBytes / (vb.NumberOfComponents * SizesGL3x.SizeOf(vb.ComponentType));
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                foreach (AttachedVertexBufferGL3x attachedBuffer in _attachedBuffers)
+                {
+                    if (attachedBuffer.AttachedVertexBuffer != null)
+                    {
+                        attachedBuffer.AttachedVertexBuffer.Dispose();
+                    }
+                }
+            }
+            base.Dispose(disposing);
         }
 
         private AttachedVertexBufferGL3x[] _attachedBuffers;

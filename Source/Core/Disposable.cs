@@ -13,11 +13,6 @@ namespace MiniGlobe.Core
 {
     public abstract class Disposable : IDisposable
     {
-        ~Disposable()
-        {
-            Dispose(false);
-        }
-
         protected virtual void Dispose(bool disposing)
         {
         }

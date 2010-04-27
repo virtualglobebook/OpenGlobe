@@ -8,10 +8,11 @@
 #endregion
 
 using System.Collections;
+using MiniGlobe.Core;
 
 namespace MiniGlobe.Renderer
 {
-    public abstract class AttachedVertexBuffers
+    public abstract class AttachedVertexBuffers : Disposable
     {
         public abstract AttachedVertexBuffer this[int index] { get; set; }
         public abstract int Count { get; }

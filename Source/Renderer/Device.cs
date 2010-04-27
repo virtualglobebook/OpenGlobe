@@ -98,16 +98,18 @@ namespace MiniGlobe.Renderer
         {
             const int bitsPerByte = 8;
             int sizeInBytes = bitmap.Width * bitmap.Height * (Bitmap.GetPixelFormatSize(bitmap.PixelFormat) / bitsPerByte);
-            WritePixelBuffer pixelBuffer = Device.CreateWritePixelBuffer(WritePixelBufferHint.StreamDraw, sizeInBytes);
-            pixelBuffer.CopyFromBitmap(bitmap);
+            using (WritePixelBuffer pixelBuffer = Device.CreateWritePixelBuffer(WritePixelBufferHint.StreamDraw, sizeInBytes))
+            {
+                pixelBuffer.CopyFromBitmap(bitmap);
 
-            Texture2DDescription description = new Texture2DDescription(bitmap.Width, bitmap.Height, format, generateMipmaps);
-            Texture2D texture = new Texture2DGL3x(description, textureTarget);
-            texture.CopyFromBuffer(pixelBuffer,
-                TextureUtility.ImagingPixelFormatToImageFormat(bitmap.PixelFormat),
-                TextureUtility.ImagingPixelFormatToDataType(bitmap.PixelFormat));
+                Texture2DDescription description = new Texture2DDescription(bitmap.Width, bitmap.Height, format, generateMipmaps);
+                Texture2D texture = new Texture2DGL3x(description, textureTarget);
+                texture.CopyFromBuffer(pixelBuffer,
+                    TextureUtility.ImagingPixelFormatToImageFormat(bitmap.PixelFormat),
+                    TextureUtility.ImagingPixelFormatToDataType(bitmap.PixelFormat));
 
-            return texture;
+                return texture;
+            }
         }
 
         public static Bitmap CreateBitmapFromText(string text, Font font)

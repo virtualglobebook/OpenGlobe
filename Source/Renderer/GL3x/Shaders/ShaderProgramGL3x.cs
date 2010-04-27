@@ -63,6 +63,11 @@ namespace MiniGlobe.Renderer.GL3x
             InitializeAutomaticUniforms(_uniforms);
         }
 
+        ~ShaderProgramGL3x()
+        {
+            Dispose(false);
+        }
+
         private static ShaderVertexAttributeCollection FindVertexAttributes(int program)
         {
             int numberOfAttributes;
@@ -475,10 +480,11 @@ namespace MiniGlobe.Renderer.GL3x
 
         protected override void Dispose(bool disposing)
         {
+            // Always delete the program, even in the finalizer.
+            GL.DeleteProgram(_program);
+
             if (disposing)
             {
-                GL.DeleteProgram(_program);
-
                 _vertexShader.Dispose();
                 if (_geometryShader != null)
                 {

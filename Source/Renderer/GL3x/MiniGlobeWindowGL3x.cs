@@ -17,6 +17,8 @@ namespace MiniGlobe.Renderer.GL3x
     {
         public MiniGlobeWindowGL3x(int width, int height, string title, WindowType windowType)
         {
+            FinalizerThreadContextGL3x.Initialize();
+
             GameWindowFlags gameWindowFlags = (windowType == WindowType.Default) ? GameWindowFlags.Default : GameWindowFlags.Fullscreen;
             if (windowType == WindowType.FullScreen)
             {
@@ -93,7 +95,11 @@ namespace MiniGlobe.Renderer.GL3x
 
         protected override void Dispose(bool disposing)
         {
-            _gameWindw.Dispose();
+            if (disposing)
+            {
+                _gameWindw.Dispose();
+            }
+            base.Dispose(disposing);
         }
 
         #endregion

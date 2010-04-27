@@ -8,10 +8,11 @@
 #endregion
 
 using System.Diagnostics;
+using MiniGlobe.Core;
 
 namespace MiniGlobe.Renderer
 {
-    public class AttachedVertexBuffer
+    public class AttachedVertexBuffer : Disposable
     {
         public AttachedVertexBuffer(
             VertexBuffer vertexBuffer,
@@ -51,6 +52,18 @@ namespace MiniGlobe.Renderer
         public bool Normalize
         {
             get { return _normalize; }
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                if (_vertexBuffer != null)
+                {
+                    _vertexBuffer.Dispose();
+                }
+            }
+            base.Dispose(disposing);
         }
 
         private VertexBuffer _vertexBuffer;

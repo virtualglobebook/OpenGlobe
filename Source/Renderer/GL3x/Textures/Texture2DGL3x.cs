@@ -57,6 +57,11 @@ namespace MiniGlobe.Renderer.GL3x
             ApplyFilter();
         }
 
+        ~Texture2DGL3x()
+        {
+            Dispose(false);
+        }
+
         internal int Handle
         {
             get { return _handle; }
@@ -215,10 +220,8 @@ namespace MiniGlobe.Renderer.GL3x
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
-            {
-                GL.DeleteTexture(_handle);
-            }
+            // Always delete the texture, even in the finalizer.
+            GL.DeleteTexture(_handle);
             base.Dispose(disposing);
         }
 

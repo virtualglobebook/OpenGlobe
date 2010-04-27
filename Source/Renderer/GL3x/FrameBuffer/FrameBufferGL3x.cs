@@ -22,6 +22,11 @@ namespace MiniGlobe.Renderer.GL3x
             _colorAttachments = new ColorAttachmentsGL3x();
         }
 
+        ~FrameBufferGL3x()
+        {
+            Dispose(false);
+        }
+
         internal void Bind()
         {
             GL.BindFramebuffer(FramebufferTarget.Framebuffer, _handle);
@@ -120,10 +125,8 @@ namespace MiniGlobe.Renderer.GL3x
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
-            {
-                GL.DeleteFramebuffers(1, ref _handle);
-            }
+            // Always delete the frame buffer, even in the finalizer.
+            GL.DeleteFramebuffers(1, ref _handle);
             base.Dispose(disposing);
         }
 

@@ -18,7 +18,7 @@ using ImagingPixelFormat = System.Drawing.Imaging.PixelFormat;
 
 namespace MiniGlobe.Renderer.GL3x
 {
-    internal class BufferGL3x
+    internal sealed class BufferGL3x : IDisposable
     {
         public BufferGL3x(
             BufferTarget type, 
@@ -27,7 +27,10 @@ namespace MiniGlobe.Renderer.GL3x
         {
             Debug.Assert(sizeInBytes > 0);
 
-            GL.GenBuffers(1, out _handle);
+            int handle;
+            GL.GenBuffers(1, out handle);
+            _handle = new BufferHandleGL3x(handle);
+
             _sizeInBytes = sizeInBytes;
             _type = type;
             _usageHint = TypeConverterGL3x.To(usageHint);
@@ -138,25 +141,22 @@ namespace MiniGlobe.Renderer.GL3x
             get { return TypeConverterGL3x.To(_usageHint); }
         }
 
-        internal int Handle
+        public int Handle
         {
-            get { return _handle; }
+            get { return _handle.Value; }
         }
 
-        internal void Bind()
+        public void Bind()
         {
-            GL.BindBuffer(_type, _handle);
+            GL.BindBuffer(_type, _handle.Value);
         }
 
-        internal void Dispose(bool disposing)
+        public void Dispose()
         {
-            if (disposing)
-            {
-                GL.DeleteBuffers(1, ref _handle);
-            }
+            _handle.Dispose();
         }
 
-        private int _handle;
+        private BufferHandleGL3x _handle;
         private readonly int _sizeInBytes;
         private readonly BufferTarget _type;
         private readonly BufferUsageHint _usageHint;

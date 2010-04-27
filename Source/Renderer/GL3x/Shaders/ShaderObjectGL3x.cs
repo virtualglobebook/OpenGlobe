@@ -68,6 +68,11 @@ namespace MiniGlobe.Renderer.GL3x
             }
         }
 
+        ~ShaderObjectGL3x()
+        {
+            Dispose(false);
+        }
+
         public int Handle
         {
             get { return _shaderObject; }
@@ -82,10 +87,8 @@ namespace MiniGlobe.Renderer.GL3x
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
-            {
-                GL.DeleteShader(_shaderObject);
-            }
+            // Always delete the shader, even in the finalizer.
+            GL.DeleteShader(_shaderObject);
             base.Dispose(disposing);
         }
 

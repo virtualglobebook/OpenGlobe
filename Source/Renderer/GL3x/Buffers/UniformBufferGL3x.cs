@@ -55,7 +55,10 @@ namespace MiniGlobe.Renderer.GL3x
 
         protected override void Dispose(bool disposing)
         {
-            _bufferObject.Dispose(disposing);
+            if (disposing)
+            {
+                _bufferObject.Dispose();
+            }
             base.Dispose(disposing);
         }
 

@@ -18,13 +18,15 @@ namespace MiniGlobe.Renderer.GL3x
     {
         public VertexArrayGL3x()
 	    {
-            GL.GenVertexArrays(1, out _handle);
+            int handle;
+            GL.GenVertexArrays(1, out handle);
+            _handle = new VertexArrayHandleGL3x(handle);
             _attachedVertexBuffers = new AttachedVertexBuffersGL3x();
         }
 
         internal void Bind()
         {
-            GL.BindVertexArray(_handle);
+            GL.BindVertexArray(_handle.Value);
         }
 
         internal void Clean()
@@ -78,14 +80,19 @@ namespace MiniGlobe.Renderer.GL3x
         {
             if (disposing)
             {
-                GL.DeleteVertexArrays(1, ref _handle);
+                _attachedVertexBuffers.Dispose();
+                if (_attachedIndexBuffer != null)
+                {
+                    _attachedIndexBuffer.Dispose();
+                }
+                _handle.Dispose();
             }
             base.Dispose(disposing);
         }
 
         #endregion
-        
-        private int _handle;
+
+        private VertexArrayHandleGL3x _handle;
         private AttachedVertexBuffersGL3x _attachedVertexBuffers;
         private IndexBuffer _attachedIndexBuffer;
         private bool _dirtyIndexBuffer;
