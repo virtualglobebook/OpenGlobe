@@ -233,13 +233,13 @@ namespace MiniGlobe.Examples.Chapter3
 
         public void Dispose()
         {
-            _window.Dispose();
             _camera.Dispose();
             _sp.Dispose();
             _va.Dispose();
             _texture.Dispose();
             _vancouverLabel.Texture.Dispose();
             _vancouverLabel.Dispose();
+            _window.Dispose();
         }
 
         #endregion

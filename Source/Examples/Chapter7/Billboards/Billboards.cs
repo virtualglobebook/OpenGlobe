@@ -70,12 +70,12 @@ namespace MiniGlobe.Examples.Chapter7
 
         public void Dispose()
         {
-            _window.Dispose();
             _camera.Dispose();
             _globe.Dispose();
             _texture.Dispose();
             _billboards.Texture.Dispose();
             _billboards.Dispose();
+            _window.Dispose();
         }
 
         #endregion

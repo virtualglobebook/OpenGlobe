@@ -81,12 +81,12 @@ namespace MiniGlobe.Examples.Chapter5
 
         public void Dispose()
         {
-            _window.Dispose();
             _camera.Dispose();
             _tile.Dispose();
             _axes.Dispose();
             _labels.Texture.Dispose();
             _labels.Dispose();
+            _window.Dispose();
         }
 
         #endregion

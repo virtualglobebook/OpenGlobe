@@ -128,8 +128,8 @@ namespace MiniGlobe.Scene
 
             public void Dispose()
             {
-                _window.Dispose();
                 _group.Dispose();
+                _window.Dispose();
             }
 
             #endregion

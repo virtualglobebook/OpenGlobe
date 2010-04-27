@@ -172,13 +172,13 @@ namespace MiniGlobe.Examples.Chapter3.NumberPrecision
 
         public void Dispose()
         {
-            _window.Dispose();
             _camera.Dispose();
             _sp.Dispose();
             _va.Dispose();
             _bg.Texture.Dispose();
             _bg.Dispose();
             _positionVertexBuffer.Dispose();
+            _window.Dispose();
         }
 
         #endregion

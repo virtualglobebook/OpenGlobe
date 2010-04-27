@@ -291,10 +291,10 @@ namespace MiniGlobe.Examples.Chapter2
 
         public void Dispose()
         {
-            _window.Dispose();
             _camera.Dispose();
             _instructions.Dispose();
             DisposeScene();
+            _window.Dispose();
         }
 
         #endregion

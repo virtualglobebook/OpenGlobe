@@ -263,7 +263,6 @@ namespace MiniGlobe.Examples.Chapter4
 
         public void Dispose()
         {
-            _window.Dispose();
             _camera.Dispose();
             _globe.Texture.Dispose();
             _globe.Dispose();
@@ -276,6 +275,7 @@ namespace MiniGlobe.Examples.Chapter4
             _hudFont.Dispose();
             _hud.Texture.Dispose();
             _hud.Dispose();
+            _window.Dispose();
         }
 
         #endregion
