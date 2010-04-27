@@ -17,8 +17,6 @@ namespace MiniGlobe.Renderer.GL3x
     {
         public MiniGlobeWindowGL3x(int width, int height, string title, WindowType windowType)
         {
-            FinalizerThreadContextGL3x.Initialize();
-
             GameWindowFlags gameWindowFlags = (windowType == WindowType.Default) ? GameWindowFlags.Default : GameWindowFlags.Fullscreen;
             if (windowType == WindowType.FullScreen)
             {
@@ -28,6 +26,9 @@ namespace MiniGlobe.Renderer.GL3x
 
             _gameWindw = new GameWindow(width, height, new GraphicsMode(32, 24, 8), title, gameWindowFlags,
                 DisplayDevice.Default, 3, 2, GraphicsContextFlags.ForwardCompatible | GraphicsContextFlags.Debug);
+
+            FinalizerThreadContextGL3x.Initialize();
+            _gameWindw.MakeCurrent();
 
             _gameWindw.Resize += new EventHandler<EventArgs>(this.OnResize);
             _gameWindw.UpdateFrame += new EventHandler<FrameEventArgs>(this.OnUpdateFrame);
