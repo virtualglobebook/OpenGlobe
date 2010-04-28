@@ -66,8 +66,10 @@ namespace MiniGlobe.Renderer.GL3x
 
         ~ShaderProgramGL3x()
         {
-            FinalizerThreadContextGL3x.MakeCurrent();
-            Dispose(false);
+            if (FinalizerThreadContextGL3x.MakeCurrent())
+            {
+                Dispose(false);
+            }
         }
 
         private static ShaderVertexAttributeCollection FindVertexAttributes(int program)

@@ -21,8 +21,10 @@ namespace MiniGlobe.Renderer.GL3x
 
         ~BufferHandleGL3x()
         {
-            FinalizerThreadContextGL3x.MakeCurrent();
-            Dispose(false);
+            if (FinalizerThreadContextGL3x.MakeCurrent())
+            {
+                Dispose(false);
+            }
         }
 
         public void Dispose()

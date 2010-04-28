@@ -14,17 +14,32 @@ namespace MiniGlobe.Renderer.GL3x
 {
     internal static class FinalizerThreadContextGL3x
     {
-        public static void MakeCurrent()
+        static FinalizerThreadContextGL3x()
         {
-            if (_window == null)
-            {
-                _window = new NativeWindow();
-                _context = new GraphicsContext(new GraphicsMode(32, 24, 8), _window.WindowInfo, 3, 2, GraphicsContextFlags.ForwardCompatible | GraphicsContextFlags.Debug);
-                _context.MakeCurrent(_window.WindowInfo);
-            }
+            _window = new NativeWindow();
+            _context = new GraphicsContext(new GraphicsMode(32, 24, 8), _window.WindowInfo, 3, 2, GraphicsContextFlags.ForwardCompatible | GraphicsContextFlags.Debug);
+            MakeCurrent();
         }
 
-        private static INativeWindow _window;
-        private static IGraphicsContext _context;
+        public static void Initialize()
+        {
+        }
+
+        public static bool MakeCurrent()
+        {
+            try
+            {
+                if (!_context.IsDisposed)
+                    _context.MakeCurrent(_window.WindowInfo);
+                return true;
+            }
+            catch
+            {
+            }
+            return false;
+        }
+
+        private static NativeWindow _window;
+        private static GraphicsContext _context;
     }
 }
