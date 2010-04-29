@@ -155,6 +155,15 @@ namespace MiniGlobe.Renderer
         }
 
         [Test]
+        public void DepthWrite()
+        {
+            RenderState renderState = new RenderState();
+            renderState.DepthWrite = false;
+
+            Assert.IsFalse(renderState.DepthWrite);
+        }
+
+        [Test]
         public void ApplyDefaultStateBlock()
         {
             MiniGlobeWindow window = Device.CreateWindow(1, 1);

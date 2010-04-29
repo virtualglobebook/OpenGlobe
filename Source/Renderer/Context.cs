@@ -258,6 +258,7 @@ namespace MiniGlobe.Renderer
             Bind(renderState.DepthTest);
             Bind(renderState.DepthRange);
             Bind(renderState.Blending);
+            Bind(renderState.DepthWrite);
         }
 
         public abstract void Bind(PrimitiveRestart primitiveRestart);
@@ -272,6 +273,7 @@ namespace MiniGlobe.Renderer
         public abstract void Bind(VertexArray vertexArray);
         public abstract void Bind(ShaderProgram shaderProgram);
         public abstract void Bind(FrameBuffer frameBuffer);
+        public abstract void Bind(bool depthWrite);
         
         public virtual void Draw(PrimitiveType primitiveType, int offset, int count)
         {

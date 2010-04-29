@@ -37,6 +37,7 @@ namespace MiniGlobe.Renderer
             DepthTest = new DepthTest();
             DepthRange = new DepthRange();
             Blending = new Blending();
+            DepthWrite = true;
         }
 
         public PrimitiveRestart PrimitiveRestart { get; set; }
@@ -48,5 +49,6 @@ namespace MiniGlobe.Renderer
         public DepthTest DepthTest { get; set; }
         public DepthRange DepthRange { get; set; }
         public Blending Blending { get; set; }
+        public bool DepthWrite { get; set; }
     }
 }

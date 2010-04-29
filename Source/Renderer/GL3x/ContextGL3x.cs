@@ -78,6 +78,8 @@ namespace MiniGlobe.Renderer.GL3x
                 TypeConverterGL3x.To(renderState.Blending.RGBEquation),
                 TypeConverterGL3x.To(renderState.Blending.AlphaEquation));
             GL.BlendColor(renderState.Blending.Color);
+
+            GL.DepthMask(renderState.DepthWrite);
         }
 
         private static void ForceApplyStencil(StencilFace face, StencilTestFace test)
@@ -396,6 +398,15 @@ namespace MiniGlobe.Renderer.GL3x
                 }
 
                 _boundFrameBuffer = frameBufferGL3x;
+            }
+        }
+
+        public override void Bind(bool depthWrite)
+        {
+            if (_renderState.DepthWrite != depthWrite)
+            {
+                GL.DepthMask(depthWrite);
+                _renderState.DepthWrite = depthWrite;
             }
         }
 
