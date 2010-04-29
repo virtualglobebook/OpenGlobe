@@ -37,6 +37,7 @@
   <Target Name="$(ProjectDir)/../../Source/Examples/Chapter5/TriangleMesh/bin/Release/Chapter5TriangleMesh.exe" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/../../Source/Examples/Chapter5/VertexDisplacementMap/bin/Release/Chapter5VertexDisplacementMap.exe" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/../../Source/Examples/Chapter7/Billboards/bin/Release/Chapter7Billboards.exe" Analyze="True" AnalyzeAllChildren="True" />
+  <Target Name="$(ProjectDir)/../../Source/Examples/Chapter8/LinesOnTerrain/bin/Release/Chapter8LinesOnTerrain.exe" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/../../Source/Tests/bin/Release/MiniGlobe.Core.dll" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/../../Source/Tests/bin/Release/MiniGlobe.Renderer.dll" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/../../Source/Tests/bin/Release/MiniGlobe.Scene.dll" Analyze="True" AnalyzeAllChildren="True" />
@@ -281,6 +282,19 @@
        <Message TypeName="AssembliesShouldHaveValidStrongNames" Category="Microsoft.Design" CheckId="CA2210" Created="2010-03-31 02:44:15Z">
         <Issue Name="NoStrongName">
          <Item>'Chapter7Billboards.exe'</Item>
+        </Issue>
+       </Message>
+      </Messages>
+     </Module>
+    </Modules>
+   </Target>
+   <Target Name="$(ProjectDir)/../../Source/Examples/Chapter8/LinesOnTerrain/bin/Release/Chapter8LinesOnTerrain.exe">
+    <Modules>
+     <Module Name="chapter8linesonterrain.exe">
+      <Messages>
+       <Message TypeName="AssembliesShouldHaveValidStrongNames" Category="Microsoft.Design" CheckId="CA2210" Created="2010-04-29 00:40:41Z">
+        <Issue Name="NoStrongName">
+         <Item>'Chapter8LinesOnTerrain.exe'</Item>
         </Issue>
        </Message>
       </Messages>
@@ -4848,6 +4862,61 @@
          </Type>
         </Types>
        </Namespace>
+       <Namespace Name="MiniGlobe.Renderer.GL3x">
+        <Types>
+         <Type Name="BufferHandleGL3x">
+          <Members>
+           <Member Name="#Dispose(System.Boolean)">
+            <Messages>
+             <Message Id="disposing" TypeName="ReviewUnusedParameters" Category="Microsoft.Usage" CheckId="CA1801" Created="2010-04-29 00:40:41Z" FixCategory="NonBreaking">
+              <Issue>
+               <Item>'disposing'</Item>
+               <Item>'BufferHandleGL3x.Dispose(bool)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="FinalizerThreadContextGL3x">
+          <Members>
+           <Member Name="#.cctor()">
+            <Messages>
+             <Message TypeName="InitializeReferenceTypeStaticFieldsInline" Category="Microsoft.Performance" CheckId="CA1810" Created="2010-04-29 00:40:41Z">
+              <Issue>
+               <Item>'FinalizerThreadContextGL3x'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#MakeCurrent()">
+            <Messages>
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2010-04-29 00:40:41Z">
+              <Issue>
+               <Item>'FinalizerThreadContextGL3x.MakeCurrent()'</Item>
+               <Item>'object'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="VertexArrayHandleGL3x">
+          <Members>
+           <Member Name="#Dispose(System.Boolean)">
+            <Messages>
+             <Message Id="disposing" TypeName="ReviewUnusedParameters" Category="Microsoft.Usage" CheckId="CA1801" Created="2010-04-29 00:40:41Z" FixCategory="NonBreaking">
+              <Issue>
+               <Item>'disposing'</Item>
+               <Item>'VertexArrayHandleGL3x.Dispose(bool)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+        </Types>
+       </Namespace>
       </Namespaces>
      </Module>
     </Modules>
@@ -4954,6 +5023,31 @@
                 <Notes>
                  <User Name="pjcozzi">
                   <Note Id="37" />
+                 </User>
+                </Notes>
+               </Message>
+              </Messages>
+             </Accessor>
+            </Accessors>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="TriangleMeshTerrainTile">
+          <Members>
+           <Member Name="#HeightExaggeration">
+            <Accessors>
+             <Accessor Name="#set_HeightExaggeration(System.Single)">
+              <Messages>
+               <Message TypeName="InstantiateArgumentExceptionsCorrectly" Category="Microsoft.Usage" CheckId="CA2208" Status="Excluded" Created="2010-04-29 00:40:41Z">
+                <Issue Name="IncorrectParameterName">
+                 <Item>'TriangleMeshTerrainTile.HeightExaggeration.set(float)'</Item>
+                 <Item>HeightExaggeration</Item>
+                 <Item>'paramName'</Item>
+                 <Item>'ArgumentOutOfRangeException'</Item>
+                </Issue>
+                <Notes>
+                 <User Name="pjcozzi">
+                  <Note Id="63" />
                  </User>
                 </Notes>
                </Message>
@@ -8830,6 +8924,20 @@
              </Message>
             </Messages>
            </Member>
+           <Member Name="#RenderPointMultipleColorAttachments()">
+            <Messages>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-04-29 00:40:41Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'SystemTests.RenderPointMultipleColorAttachments()'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="62" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
            <Member Name="#RenderPointWithDrawAutomaticUniforms()">
             <Messages>
              <Message Id="WithDraw" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Status="Excluded" Created="2009-12-23 01:33:54Z">
@@ -9311,6 +9419,8 @@
     <Note Id="59" Modified="2010-04-06 19:51:10Z">Ok.</Note>
     <Note Id="60" Modified="2010-04-23 22:02:18Z">Ok.</Note>
     <Note Id="61" Modified="2010-04-23 22:02:24Z">Ok.</Note>
+    <Note Id="62" Modified="2010-04-29 00:41:04Z">Ok</Note>
+    <Note Id="63" Modified="2010-04-29 00:42:59Z">Property name.</Note>
    </User>
   </Notes>
   <Rules>
@@ -9334,6 +9444,9 @@
    </Rule>
    <Rule TypeName="DoNotCastUnnecessarily" Category="Microsoft.Performance" CheckId="CA1800">
     <Resolution Name="Local">{0}, a variable, is cast to type {1} multiple times in method {2}. Cache the result of the 'as' operator or direct cast in order to eliminate the redundant {3} instruction.</Resolution>
+   </Rule>
+   <Rule TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031">
+    <Resolution Name="Default">Modify {0} to catch a more specific exception than {1} or rethrow the exception.</Resolution>
    </Rule>
    <Rule TypeName="DoNotDeclareReadOnlyMutableReferenceTypes" Category="Microsoft.Security" CheckId="CA2104">
     <Resolution Name="Default">Remove the read-only designation from {0} or change the field to one that is an immutable reference type. If the reference type {1} is, in fact, immutable, exclude this message.</Resolution>
@@ -9363,7 +9476,11 @@
    <Rule TypeName="IdentifiersShouldNotHaveIncorrectSuffix" Category="Microsoft.Naming" CheckId="CA1711">
     <Resolution Name="TypeNoAlternate">Rename type name {0} so that it does not end in '{1}'.</Resolution>
    </Rule>
+   <Rule TypeName="InitializeReferenceTypeStaticFieldsInline" Category="Microsoft.Performance" CheckId="CA1810">
+    <Resolution Name="Default">Initialize all static fields in {0} when those fields are declared and remove the explicit static constructor.</Resolution>
+   </Rule>
    <Rule TypeName="InstantiateArgumentExceptionsCorrectly" Category="Microsoft.Usage" CheckId="CA2208">
+    <Resolution Name="IncorrectMessage" />
     <Resolution Name="IncorrectParameterName">Method {0} passes '{1}' as the {2} argument to a {3} constructor. Replace this argument with one of the method's parameter names. Note that the provided parameter name should have the exact casing as declared on the method.</Resolution>
    </Rule>
    <Rule TypeName="InterfaceMethodsShouldBeCallableByChildTypes" Category="Microsoft.Design" CheckId="CA1033">

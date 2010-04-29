@@ -39,6 +39,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chapter5VertexDisplacementM
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chapter5TriangleMesh", "Examples\Chapter5\TriangleMesh\Chapter5TriangleMesh.csproj", "{E78F07C0-90CB-42CD-A83F-ED5A27AC8ED5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chapter8LinesOnTerrain", "Examples\Chapter8\LinesOnTerrain\Chapter8LinesOnTerrain.csproj", "{2F86841E-018F-4FB7-A428-981B34A2F9F8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -109,6 +111,10 @@ Global
 		{E78F07C0-90CB-42CD-A83F-ED5A27AC8ED5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E78F07C0-90CB-42CD-A83F-ED5A27AC8ED5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E78F07C0-90CB-42CD-A83F-ED5A27AC8ED5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2F86841E-018F-4FB7-A428-981B34A2F9F8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2F86841E-018F-4FB7-A428-981B34A2F9F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2F86841E-018F-4FB7-A428-981B34A2F9F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2F86841E-018F-4FB7-A428-981B34A2F9F8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
