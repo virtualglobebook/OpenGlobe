@@ -69,6 +69,7 @@
     <Compile Include="Input\MouseButtonEventArgs.cs" />
     <Compile Include="Input\MouseMoveEventArgs.cs" />
     <Compile Include="OpenTK\Matrix3d.cs" />
+    <Compile Include="RenderState\ColorMask.cs" />
     <Compile Include="RenderState\DepthRange.cs" />
     <Compile Include="Scene\Camera.cs" />
     <Compile Include="Scene\PersistentView.cs" />

@@ -155,6 +155,27 @@ namespace MiniGlobe.Renderer
         }
 
         [Test]
+        public void ColorMaskTest()
+        {
+            ColorMask mask = new ColorMask(true, false, true, false);
+            Assert.IsTrue(mask.Red);
+            Assert.IsFalse(mask.Green);
+            Assert.IsTrue(mask.Blue);
+            Assert.IsFalse(mask.Alpha);
+
+            ColorMask mask2 = new ColorMask(true, false, true, false);
+            Assert.IsTrue(mask == mask2);
+
+            ColorMask mask3 = new ColorMask(false, true, false, true);
+            Assert.IsTrue(mask != mask3);
+
+            RenderState renderState = new RenderState();
+            renderState.ColorMask = mask;
+
+            Assert.AreEqual(mask, renderState.ColorMask);
+        }
+
+        [Test]
         public void DepthWrite()
         {
             RenderState renderState = new RenderState();
@@ -166,26 +187,10 @@ namespace MiniGlobe.Renderer
         [Test]
         public void ApplyDefaultStateBlock()
         {
-            MiniGlobeWindow window = Device.CreateWindow(1, 1);
-
-            //
-            // Entire state
-            //
-            window.Context.Bind(new RenderState());
-
-            //
-            // Individual states
-            //
-            window.Context.Bind(new PrimitiveRestart());
-            window.Context.Bind(new FacetCulling());
-            window.Context.Bind(MiniGlobe.Renderer.RasterizationMode.Line);
-            window.Context.Bind(new ScissorTest());
-            window.Context.Bind(new StencilTest());
-            window.Context.Bind(new DepthTest());
-            window.Context.Bind(new DepthRange());
-            window.Context.Bind(new Blending());
-
-            window.Dispose();
+            using (MiniGlobeWindow window = Device.CreateWindow(1, 1))
+            {
+                window.Context.Bind(new RenderState());
+            }
         }
     }
 }

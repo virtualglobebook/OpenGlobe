@@ -247,33 +247,10 @@ namespace MiniGlobe.Renderer
         public abstract void Clear(ClearBuffers buffers, Color color, float depth, int stencil);
         public abstract Rectangle Viewport { get; set; }
 
-        public virtual void Bind(RenderState renderState)
-        {
-            Bind(renderState.PrimitiveRestart);
-            Bind(renderState.FacetCulling);
-            Bind(renderState.ProgramPointSize);
-            Bind(renderState.RasterizationMode);
-            Bind(renderState.ScissorTest);
-            Bind(renderState.StencilTest);
-            Bind(renderState.DepthTest);
-            Bind(renderState.DepthRange);
-            Bind(renderState.Blending);
-            Bind(renderState.DepthWrite);
-        }
-
-        public abstract void Bind(PrimitiveRestart primitiveRestart);
-        public abstract void Bind(FacetCulling facetCulling);
-        public abstract void Bind(ProgramPointSize programPointSize);
-        public abstract void Bind(RasterizationMode rasterizationMode);
-        public abstract void Bind(ScissorTest scissorTest);
-        public abstract void Bind(StencilTest stencilTest);
-        public abstract void Bind(DepthTest depthTest);
-        public abstract void Bind(DepthRange depthRange);
-        public abstract void Bind(Blending blending);
+        public abstract void Bind(RenderState renderState);
         public abstract void Bind(VertexArray vertexArray);
         public abstract void Bind(ShaderProgram shaderProgram);
         public abstract void Bind(FrameBuffer frameBuffer);
-        public abstract void Bind(bool depthWrite);
         
         public virtual void Draw(PrimitiveType primitiveType, int offset, int count)
         {

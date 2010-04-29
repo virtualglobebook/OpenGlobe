@@ -41,10 +41,10 @@ namespace MiniGlobe.Renderer
             //
             // Scissor out window and verify clear doesn't modify contents
             //
-            ScissorTest scissorTest = new ScissorTest();
-            scissorTest.Enabled = true;
-            scissorTest.Rectangle = new Rectangle(0, 0, 0, 0);
-            window.Context.Bind(scissorTest);
+            RenderState renderState = new RenderState();
+            renderState.ScissorTest.Enabled = true;
+            renderState.ScissorTest.Rectangle = new Rectangle(0, 0, 0, 0);
+            window.Context.Bind(renderState);
 
             window.Context.Clear(ClearBuffers.All, Color.Blue, 1, 0);
             TestUtility.ValidateColor(frameBuffer.ColorAttachments[0], 255, 0, 0);

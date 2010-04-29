@@ -80,6 +80,8 @@ namespace MiniGlobe.Renderer.GL3x
             GL.BlendColor(renderState.Blending.Color);
 
             GL.DepthMask(renderState.DepthWrite);
+            GL.ColorMask(renderState.ColorMask.Red, renderState.ColorMask.Green, 
+                renderState.ColorMask.Blue, renderState.ColorMask.Alpha);
         }
 
         private static void ForceApplyStencil(StencilFace face, StencilTestFace test)
@@ -158,206 +160,19 @@ namespace MiniGlobe.Renderer.GL3x
             }
         }
 
-        public override void Bind(PrimitiveRestart primitiveRestart)
+        public override void Bind(RenderState renderState)
         {
-            if (_renderState.PrimitiveRestart.Enabled != primitiveRestart.Enabled)
-            {
-                Enable(EnableCap.PrimitiveRestart, primitiveRestart.Enabled);
-                _renderState.PrimitiveRestart.Enabled = primitiveRestart.Enabled;
-            }
-
-            if (_renderState.PrimitiveRestart.Index != primitiveRestart.Index)
-            {
-                GL.PrimitiveRestartIndex(primitiveRestart.Index);
-                _renderState.PrimitiveRestart.Index = primitiveRestart.Index;
-            }
-        }
-        
-        public override void Bind(FacetCulling facetCulling)
-        {
-            if (_renderState.FacetCulling.Enabled != facetCulling.Enabled)
-            {
-                Enable(EnableCap.CullFace, facetCulling.Enabled);
-                _renderState.FacetCulling.Enabled = facetCulling.Enabled;
-            }
-
-            if (_renderState.FacetCulling.Face != facetCulling.Face)
-            {
-                GL.CullFace(TypeConverterGL3x.To(facetCulling.Face));
-                _renderState.FacetCulling.Face = facetCulling.Face;
-            }
-
-            if (_renderState.FacetCulling.FrontFaceWindingOrder != facetCulling.FrontFaceWindingOrder)
-            {
-                GL.FrontFace(TypeConverterGL3x.To(facetCulling.FrontFaceWindingOrder));
-                _renderState.FacetCulling.FrontFaceWindingOrder = facetCulling.FrontFaceWindingOrder;
-            }
-        }
-
-        public override void Bind(ProgramPointSize programPointSize)
-        {
-            if (_renderState.ProgramPointSize != programPointSize)
-            {
-                Enable(EnableCap.ProgramPointSize, programPointSize == ProgramPointSize.Enabled);
-                _renderState.ProgramPointSize = programPointSize;
-            }
-        }
-
-        public override void Bind(RasterizationMode rasterizationMode)
-        {
-            if (_renderState.RasterizationMode != rasterizationMode)
-            {
-                GL.PolygonMode(MaterialFace.FrontAndBack, TypeConverterGL3x.To(rasterizationMode));
-                _renderState.RasterizationMode = rasterizationMode;
-            }
-        }
-
-        public override void Bind(ScissorTest scissorTest)
-        {
-            Rectangle rectangle = scissorTest.Rectangle;
-            Debug.Assert(rectangle.Width >= 0);
-            Debug.Assert(rectangle.Height >= 0);
-
-            if (_renderState.ScissorTest.Enabled != scissorTest.Enabled)
-            {
-                Enable(EnableCap.ScissorTest, scissorTest.Enabled);
-                _renderState.ScissorTest.Enabled = scissorTest.Enabled;
-            }
-
-            if (_renderState.ScissorTest.Rectangle != scissorTest.Rectangle)
-            {
-                GL.Scissor(rectangle.Left, rectangle.Bottom, rectangle.Width, rectangle.Height);
-                _renderState.ScissorTest.Rectangle = scissorTest.Rectangle;
-            }
-        }
-
-        public override void Bind(StencilTest stencilTest)
-        {
-            if (_renderState.StencilTest.Enabled != stencilTest.Enabled)
-            {
-                Enable(EnableCap.StencilTest, stencilTest.Enabled);
-                _renderState.StencilTest.Enabled = stencilTest.Enabled;
-            }
-
-            ApplyStencil(StencilFace.Front, _renderState.StencilTest.FrontFace, stencilTest.FrontFace);
-            ApplyStencil(StencilFace.Back, _renderState.StencilTest.BackFace, stencilTest.BackFace);
-        }
-
-        private static void ApplyStencil(StencilFace face, StencilTestFace currentTest, StencilTestFace test)
-        {
-            if ((currentTest.StencilFailOperation != test.StencilFailOperation) ||
-                (currentTest.DepthPassStencilFailOperation != test.DepthPassStencilFailOperation) ||
-                (currentTest.DepthPassStencilPassOperation != test.DepthPassStencilPassOperation))
-            {
-                GL.StencilOpSeparate(face,
-                    TypeConverterGL3x.To(test.StencilFailOperation),
-                    TypeConverterGL3x.To(test.DepthPassStencilFailOperation),
-                    TypeConverterGL3x.To(test.DepthPassStencilPassOperation));
-
-                currentTest.StencilFailOperation = test.StencilFailOperation;
-                currentTest.DepthPassStencilFailOperation = test.DepthPassStencilFailOperation;
-                currentTest.DepthPassStencilPassOperation = test.DepthPassStencilPassOperation;
-            }
-
-            if ((currentTest.Function != test.Function) ||
-                (currentTest.ReferenceValue != test.ReferenceValue) ||
-                (currentTest.Mask != test.Mask))
-            {
-                GL.StencilFuncSeparate(face,
-                    TypeConverterGL3x.To(test.Function),
-                    test.ReferenceValue,
-                    test.Mask);
-
-                currentTest.Function = test.Function;
-                currentTest.ReferenceValue = test.ReferenceValue;
-                currentTest.Mask = test.Mask;
-            }
-        }
-
-        public override void Bind(DepthTest depthTest)
-        {
-            if (_renderState.DepthTest.Enabled != depthTest.Enabled)
-            {
-                Enable(EnableCap.DepthTest, depthTest.Enabled);
-                _renderState.DepthTest.Enabled = depthTest.Enabled;
-            }
-
-            if (_renderState.DepthTest.Function != depthTest.Function)
-            {
-                GL.DepthFunc(TypeConverterGL3x.To(depthTest.Function));
-                _renderState.DepthTest.Function = depthTest.Function;
-            }
-        }
-
-        public override void Bind(DepthRange depthRange)
-        {
-            Debug.Assert(depthRange.Near >= 0.0 && depthRange.Near <= 1.0);
-            Debug.Assert(depthRange.Far >= 0.0 && depthRange.Far <= 1.0);
-
-            if ((_renderState.DepthRange.Near != depthRange.Near) ||
-                (_renderState.DepthRange.Far != depthRange.Far))
-            {
-                GL.DepthRange(depthRange.Near, depthRange.Far);
-
-                _renderState.DepthRange.Near = depthRange.Near;
-                _renderState.DepthRange.Far = depthRange.Far;
-            }
-        }
-
-        public override void Bind(Blending blending)
-        {
-            if (_renderState.Blending.Enabled != blending.Enabled)
-            {
-                Enable(EnableCap.Blend, blending.Enabled);
-                _renderState.Blending.Enabled = blending.Enabled;
-            }
-
-            if ((_renderState.Blending.SourceRGBFactor != blending.SourceRGBFactor) ||
-                (_renderState.Blending.DestinationRGBFactor != blending.DestinationRGBFactor) ||
-                (_renderState.Blending.SourceAlphaFactor != blending.SourceAlphaFactor) ||
-                (_renderState.Blending.DestinationAlphaFactor != blending.DestinationAlphaFactor))
-            {
-                GL.BlendFuncSeparate(
-                    TypeConverterGL3x.To(blending.SourceRGBFactor),
-                    TypeConverterGL3x.To(blending.DestinationRGBFactor),
-                    TypeConverterGL3x.To(blending.SourceAlphaFactor),
-                    TypeConverterGL3x.To(blending.DestinationAlphaFactor));
-
-                _renderState.Blending.SourceRGBFactor = blending.SourceRGBFactor;
-                _renderState.Blending.DestinationRGBFactor = blending.DestinationRGBFactor;
-                _renderState.Blending.SourceAlphaFactor = blending.SourceAlphaFactor;
-                _renderState.Blending.DestinationAlphaFactor = blending.DestinationAlphaFactor;
-            }
-
-            if ((_renderState.Blending.RGBEquation != blending.RGBEquation) ||
-                (_renderState.Blending.AlphaEquation != blending.AlphaEquation))
-            {
-                GL.BlendEquationSeparate(
-                    TypeConverterGL3x.To(blending.RGBEquation),
-                    TypeConverterGL3x.To(blending.AlphaEquation));
-
-                _renderState.Blending.RGBEquation = blending.RGBEquation;
-                _renderState.Blending.AlphaEquation = blending.AlphaEquation;
-
-            }
-
-            if (_renderState.Blending.Color != blending.Color)
-            {
-                GL.BlendColor(blending.Color);
-                _renderState.Blending.Color = blending.Color;
-            }
-        }
-
-        private static void Enable(EnableCap enableCap, bool enable)
-        {
-            if (enable)
-            {
-                GL.Enable(enableCap);
-            }
-            else
-            {
-                GL.Disable(enableCap);
-            }
+            ApplyPrimitiveRestart(renderState.PrimitiveRestart);
+            ApplyFacetCulling(renderState.FacetCulling);
+            ApplyProgramPointSize(renderState.ProgramPointSize);
+            ApplyRasterizationMode(renderState.RasterizationMode);
+            ApplyScissorTest(renderState.ScissorTest);
+            ApplyStencilTest(renderState.StencilTest);
+            ApplyDepthTest(renderState.DepthTest);
+            ApplyDepthRange(renderState.DepthRange);
+            ApplyBlending(renderState.Blending);
+            ApplyColorMask(renderState.ColorMask);
+            ApplyDepthWrite(renderState.DepthWrite);
         }
 
         public override void Bind(VertexArray vertexArray)
@@ -401,15 +216,6 @@ namespace MiniGlobe.Renderer.GL3x
             }
         }
 
-        public override void Bind(bool depthWrite)
-        {
-            if (_renderState.DepthWrite != depthWrite)
-            {
-                GL.DepthMask(depthWrite);
-                _renderState.DepthWrite = depthWrite;
-            }
-        }
-
         public override void Draw(PrimitiveType primitiveType, int offset, int count, SceneState sceneState)
         {
             CleanBeforeDraw(sceneState);
@@ -445,6 +251,226 @@ namespace MiniGlobe.Renderer.GL3x
         }
 
         #endregion
+
+        private void ApplyPrimitiveRestart(PrimitiveRestart primitiveRestart)
+        {
+            if (_renderState.PrimitiveRestart.Enabled != primitiveRestart.Enabled)
+            {
+                Enable(EnableCap.PrimitiveRestart, primitiveRestart.Enabled);
+                _renderState.PrimitiveRestart.Enabled = primitiveRestart.Enabled;
+            }
+
+            if (_renderState.PrimitiveRestart.Index != primitiveRestart.Index)
+            {
+                GL.PrimitiveRestartIndex(primitiveRestart.Index);
+                _renderState.PrimitiveRestart.Index = primitiveRestart.Index;
+            }
+        }
+
+        private void ApplyFacetCulling(FacetCulling facetCulling)
+        {
+            if (_renderState.FacetCulling.Enabled != facetCulling.Enabled)
+            {
+                Enable(EnableCap.CullFace, facetCulling.Enabled);
+                _renderState.FacetCulling.Enabled = facetCulling.Enabled;
+            }
+
+            if (_renderState.FacetCulling.Face != facetCulling.Face)
+            {
+                GL.CullFace(TypeConverterGL3x.To(facetCulling.Face));
+                _renderState.FacetCulling.Face = facetCulling.Face;
+            }
+
+            if (_renderState.FacetCulling.FrontFaceWindingOrder != facetCulling.FrontFaceWindingOrder)
+            {
+                GL.FrontFace(TypeConverterGL3x.To(facetCulling.FrontFaceWindingOrder));
+                _renderState.FacetCulling.FrontFaceWindingOrder = facetCulling.FrontFaceWindingOrder;
+            }
+        }
+
+        private void ApplyProgramPointSize(ProgramPointSize programPointSize)
+        {
+            if (_renderState.ProgramPointSize != programPointSize)
+            {
+                Enable(EnableCap.ProgramPointSize, programPointSize == ProgramPointSize.Enabled);
+                _renderState.ProgramPointSize = programPointSize;
+            }
+        }
+
+        private void ApplyRasterizationMode(RasterizationMode rasterizationMode)
+        {
+            if (_renderState.RasterizationMode != rasterizationMode)
+            {
+                GL.PolygonMode(MaterialFace.FrontAndBack, TypeConverterGL3x.To(rasterizationMode));
+                _renderState.RasterizationMode = rasterizationMode;
+            }
+        }
+
+        private void ApplyScissorTest(ScissorTest scissorTest)
+        {
+            Rectangle rectangle = scissorTest.Rectangle;
+            Debug.Assert(rectangle.Width >= 0);
+            Debug.Assert(rectangle.Height >= 0);
+
+            if (_renderState.ScissorTest.Enabled != scissorTest.Enabled)
+            {
+                Enable(EnableCap.ScissorTest, scissorTest.Enabled);
+                _renderState.ScissorTest.Enabled = scissorTest.Enabled;
+            }
+
+            if (_renderState.ScissorTest.Rectangle != scissorTest.Rectangle)
+            {
+                GL.Scissor(rectangle.Left, rectangle.Bottom, rectangle.Width, rectangle.Height);
+                _renderState.ScissorTest.Rectangle = scissorTest.Rectangle;
+            }
+        }
+
+        private void ApplyStencilTest(StencilTest stencilTest)
+        {
+            if (_renderState.StencilTest.Enabled != stencilTest.Enabled)
+            {
+                Enable(EnableCap.StencilTest, stencilTest.Enabled);
+                _renderState.StencilTest.Enabled = stencilTest.Enabled;
+            }
+
+            ApplyStencil(StencilFace.Front, _renderState.StencilTest.FrontFace, stencilTest.FrontFace);
+            ApplyStencil(StencilFace.Back, _renderState.StencilTest.BackFace, stencilTest.BackFace);
+        }
+
+        private static void ApplyStencil(StencilFace face, StencilTestFace currentTest, StencilTestFace test)
+        {
+            if ((currentTest.StencilFailOperation != test.StencilFailOperation) ||
+                (currentTest.DepthPassStencilFailOperation != test.DepthPassStencilFailOperation) ||
+                (currentTest.DepthPassStencilPassOperation != test.DepthPassStencilPassOperation))
+            {
+                GL.StencilOpSeparate(face,
+                    TypeConverterGL3x.To(test.StencilFailOperation),
+                    TypeConverterGL3x.To(test.DepthPassStencilFailOperation),
+                    TypeConverterGL3x.To(test.DepthPassStencilPassOperation));
+
+                currentTest.StencilFailOperation = test.StencilFailOperation;
+                currentTest.DepthPassStencilFailOperation = test.DepthPassStencilFailOperation;
+                currentTest.DepthPassStencilPassOperation = test.DepthPassStencilPassOperation;
+            }
+
+            if ((currentTest.Function != test.Function) ||
+                (currentTest.ReferenceValue != test.ReferenceValue) ||
+                (currentTest.Mask != test.Mask))
+            {
+                GL.StencilFuncSeparate(face,
+                    TypeConverterGL3x.To(test.Function),
+                    test.ReferenceValue,
+                    test.Mask);
+
+                currentTest.Function = test.Function;
+                currentTest.ReferenceValue = test.ReferenceValue;
+                currentTest.Mask = test.Mask;
+            }
+        }
+
+        private void ApplyDepthTest(DepthTest depthTest)
+        {
+            if (_renderState.DepthTest.Enabled != depthTest.Enabled)
+            {
+                Enable(EnableCap.DepthTest, depthTest.Enabled);
+                _renderState.DepthTest.Enabled = depthTest.Enabled;
+            }
+
+            if (_renderState.DepthTest.Function != depthTest.Function)
+            {
+                GL.DepthFunc(TypeConverterGL3x.To(depthTest.Function));
+                _renderState.DepthTest.Function = depthTest.Function;
+            }
+        }
+
+        private void ApplyDepthRange(DepthRange depthRange)
+        {
+            Debug.Assert(depthRange.Near >= 0.0 && depthRange.Near <= 1.0);
+            Debug.Assert(depthRange.Far >= 0.0 && depthRange.Far <= 1.0);
+
+            if ((_renderState.DepthRange.Near != depthRange.Near) ||
+                (_renderState.DepthRange.Far != depthRange.Far))
+            {
+                GL.DepthRange(depthRange.Near, depthRange.Far);
+
+                _renderState.DepthRange.Near = depthRange.Near;
+                _renderState.DepthRange.Far = depthRange.Far;
+            }
+        }
+
+        private void ApplyBlending(Blending blending)
+        {
+            if (_renderState.Blending.Enabled != blending.Enabled)
+            {
+                Enable(EnableCap.Blend, blending.Enabled);
+                _renderState.Blending.Enabled = blending.Enabled;
+            }
+
+            if ((_renderState.Blending.SourceRGBFactor != blending.SourceRGBFactor) ||
+                (_renderState.Blending.DestinationRGBFactor != blending.DestinationRGBFactor) ||
+                (_renderState.Blending.SourceAlphaFactor != blending.SourceAlphaFactor) ||
+                (_renderState.Blending.DestinationAlphaFactor != blending.DestinationAlphaFactor))
+            {
+                GL.BlendFuncSeparate(
+                    TypeConverterGL3x.To(blending.SourceRGBFactor),
+                    TypeConverterGL3x.To(blending.DestinationRGBFactor),
+                    TypeConverterGL3x.To(blending.SourceAlphaFactor),
+                    TypeConverterGL3x.To(blending.DestinationAlphaFactor));
+
+                _renderState.Blending.SourceRGBFactor = blending.SourceRGBFactor;
+                _renderState.Blending.DestinationRGBFactor = blending.DestinationRGBFactor;
+                _renderState.Blending.SourceAlphaFactor = blending.SourceAlphaFactor;
+                _renderState.Blending.DestinationAlphaFactor = blending.DestinationAlphaFactor;
+            }
+
+            if ((_renderState.Blending.RGBEquation != blending.RGBEquation) ||
+                (_renderState.Blending.AlphaEquation != blending.AlphaEquation))
+            {
+                GL.BlendEquationSeparate(
+                    TypeConverterGL3x.To(blending.RGBEquation),
+                    TypeConverterGL3x.To(blending.AlphaEquation));
+
+                _renderState.Blending.RGBEquation = blending.RGBEquation;
+                _renderState.Blending.AlphaEquation = blending.AlphaEquation;
+
+            }
+
+            if (_renderState.Blending.Color != blending.Color)
+            {
+                GL.BlendColor(blending.Color);
+                _renderState.Blending.Color = blending.Color;
+            }
+        }
+
+        private void ApplyColorMask(ColorMask colorMask)
+        {
+            if (_renderState.ColorMask != colorMask)
+            {
+                GL.ColorMask(colorMask.Red, colorMask.Green, colorMask.Blue, colorMask.Alpha);
+                _renderState.ColorMask = colorMask;
+            }
+        }
+
+        private void ApplyDepthWrite(bool depthWrite)
+        {
+            if (_renderState.DepthWrite != depthWrite)
+            {
+                GL.DepthMask(depthWrite);
+                _renderState.DepthWrite = depthWrite;
+            }
+        }
+
+        protected static void Enable(EnableCap enableCap, bool enable)
+        {
+            if (enable)
+            {
+                GL.Enable(enableCap);
+            }
+            else
+            {
+                GL.Disable(enableCap);
+            }
+        }
 
         private void CleanBeforeDraw(SceneState sceneState)
         {
