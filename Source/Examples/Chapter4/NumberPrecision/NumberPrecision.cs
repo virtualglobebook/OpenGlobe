@@ -21,7 +21,7 @@ namespace MiniGlobe.Examples.Chapter3.NumberPrecision
     {
         public NumberPrecision()
         {
-            _window = Device.CreateWindow(512, 512, "Chapter 4:  Number Precision");//, WindowType.FullScreen);
+            _window = Device.CreateWindow(1, 1, "Chapter 4:  Number Precision", WindowType.FullScreen);
             _window.Resize += OnResize;
             _window.RenderFrame += OnRenderFrame;
             _window.Keyboard.KeyDown += OnKeyDown;
@@ -101,7 +101,7 @@ namespace MiniGlobe.Examples.Chapter3.NumberPrecision
             //
             // Set the orthographic projection matrix to the identity matrix.
             //
-            _camera.Camera.OrthographicNearPlaneDistance = 0;
+            _camera.Camera.OrthographicNearPlaneDistance = -1;
             _camera.Camera.OrthographicFarPlaneDistance = 1;
             _camera.Camera.OrthographicLeft = -1;
             _camera.Camera.OrthographicRight = 1;
@@ -113,38 +113,8 @@ namespace MiniGlobe.Examples.Chapter3.NumberPrecision
             //
             _renderState = new RenderState();
             _renderState.ProgramPointSize = ProgramPointSize.Enabled;
-#if false
-            
-            //
-            // Labels
-            //
-            Font font = new Font("Arial", 10);
-            _labels = new List<BillboardGroup>();
-            double value = 131071.0;
-            double delta = -0.095;
-            for (int i = 0; i < 20; ++i, value += 0.01, delta += 0.01)
-            {
-                if (i == 10)
-                {
-                    value = 131072.0;
-                }
-                string positionString = String.Format("{0:.00}", value);
-                Vector3D position = new Vector3D(_viewCenterX, delta, 0.0);
-                BillboardGroup bg = new BillboardGroup(_window.Context, new[] { Conversion.ToVector3(position) },
-                    Device.CreateBitmapFromText(positionString, font));
-                bg.Color = Color.Black;
-                _labels.Add(bg);
-            }
-#endif
-            // junk deron tood
-            Ellipsoid el = new Ellipsoid(6378137.0, 6378137.0, 6356752.314245);
-            Vector3D v3d = el.ToVector3D(new Geodetic3D(Trig.ToRadians(-45.0), Trig.ToRadians(-45.0), -1424.0));
-            Geodetic3D g3d = el.ToGeodetic3D(v3d);
-            double latt = Trig.ToDegrees(g3d.Latitude);
-            double lonn = Trig.ToDegrees(g3d.Longitude);
 
             Font font = new Font("Arial", 24);
-
             _bg = new BillboardCollection(_window.Context);
             _bg.Texture = Device.CreateTexture2D(Device.CreateBitmapFromText("131072.00f", font),
                 TextureFormat.RedGreenBlueAlpha8, false);
@@ -180,10 +150,7 @@ namespace MiniGlobe.Examples.Chapter3.NumberPrecision
             //
             // Text
             //
-            //foreach (BillboardGroup label in _labels)
-            //{
-            //    label.Render(_sceneState);
-            //}
+            _bg.Render(_sceneState);
         }
 
         private void OnKeyDown(object sender, KeyboardKeyEventArgs e)
