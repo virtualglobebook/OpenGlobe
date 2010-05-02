@@ -189,7 +189,7 @@ namespace MiniGlobe.Renderer
         {
             using (MiniGlobeWindow window = Device.CreateWindow(1, 1))
             {
-                window.Context.Bind(new RenderState());
+                window.Context.Bind(RenderState.Default);
             }
         }
     }
