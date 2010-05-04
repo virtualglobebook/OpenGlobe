@@ -39,7 +39,8 @@ namespace MiniGlobe.Examples.Chapter5
             TerrainTile terrainTile = TerrainTile.FromBitmap(new Bitmap(@"ps-e.lg.jpg"));
             _tile = new VertexDisplacementMapTerrainTile(_window.Context, terrainTile);
             _tile.HeightExaggeration = 30;
-
+            _tile.ColorRampTexture = Device.CreateTexture2D(new Bitmap("ColorRamp.jpg"), TextureFormat.RedGreenBlue8, false);
+            
             ///////////////////////////////////////////////////////////////////
 
             double tileRadius = Math.Max(terrainTile.Size.X, terrainTile.Size.Y) * 0.5;
@@ -205,6 +206,7 @@ namespace MiniGlobe.Examples.Chapter5
         {
             _camera.Dispose();
             _tile.Dispose();
+            _tile.ColorRampTexture.Dispose();
             _hudFont.Dispose();
             _hud.Texture.Dispose();
             _hud.Dispose();

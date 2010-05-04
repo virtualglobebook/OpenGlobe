@@ -176,6 +176,7 @@ namespace MiniGlobe.Terrain
                   out vec3 fragmentColor;
 
                   uniform vec4 mg_diffuseSpecularAmbientShininess;
+                  uniform sampler2D mg_texture1;    // Color ramp
                   uniform float u_minimumHeight;
                   uniform float u_maximumHeight;
                   uniform int u_normalAlgorithm;
@@ -213,7 +214,7 @@ namespace MiniGlobe.Terrain
                       }
                       if (u_shadingAlgorithm == 2)
                       {
-                          fragmentColor = vec3(intensity, 0.0, 0.0);    // TODO
+                          fragmentColor = intensity * texture(mg_texture1, vec2(0.5, ((height - u_minimumHeight) / (u_maximumHeight - u_minimumHeight)))).rgb;
                       }
                       if (u_shadingAlgorithm == 3)
                       {
@@ -600,9 +601,9 @@ namespace MiniGlobe.Terrain
             _tileMaximumHeight = tile.MaximumHeight;
 
             _heightExaggeration = 1;
+            _shading = TerrainShading.ColorRamp;
             _normals = TerrainNormals.ThreeSamples;
             ShowTerrain = true;
-
             _dirty = true;
         }
 
@@ -642,6 +643,16 @@ namespace MiniGlobe.Terrain
 
                 if (ShowTerrain)
                 {
+                    if (_shading == TerrainShading.ColorRamp)
+                    {
+                        if (ColorRampTexture == null)
+                        {
+                            throw new InvalidOperationException("ColorRampTexture");
+                        }
+
+                        _context.TextureUnits[1].Texture2D = ColorRampTexture;
+                    }
+
                     _context.Bind(_spTerrain);
                     _context.Bind(_rsTerrain);
                     _context.Draw(_primitiveType, sceneState);
@@ -710,6 +721,7 @@ namespace MiniGlobe.Terrain
         public bool ShowTerrain { get; set; }
         public bool ShowWireframe { get; set; }
         public bool ShowNormals { get; set; }
+        public Texture2D ColorRampTexture { get; set; }
 
         #region IDisposable Members
 
