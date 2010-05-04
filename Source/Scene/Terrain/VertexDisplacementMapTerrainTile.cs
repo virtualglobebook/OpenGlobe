@@ -51,19 +51,28 @@ namespace MiniGlobe.Terrain
 
                   in vec2 position;
                   
+                  out float distanceToEyeGS;
+
                   uniform mat4 mg_modelViewPerspectiveProjectionMatrix;
+                  uniform vec3 mg_cameraEye;
                   uniform sampler2DRect mg_texture0;    // Height field
                   uniform float u_heightExaggeration;
 
                   void main()
                   {
-                      gl_Position = vec4(position.xy, texture(mg_texture0, position.xy).r * u_heightExaggeration, 1.0);
+                      vec3 displacedPosition = vec3(position, texture(mg_texture0, position).r * u_heightExaggeration);
+
+                      gl_Position = vec4(displacedPosition, 1.0);
+                      distanceToEyeGS = distance(displacedPosition, mg_cameraEye);
                   }";
             string gs =
                 @"#version 150 
 
                   layout(points) in;
                   layout(triangle_strip, max_vertices = 4) out;
+
+                  in float distanceToEyeGS[];
+                  out float distanceToEyeFS;
 
                   uniform mat4 mg_modelViewPerspectiveProjectionMatrix;
                   uniform mat4 mg_viewportTransformationMatrix;
@@ -215,26 +224,40 @@ namespace MiniGlobe.Terrain
                       vec4 v3 = vec4(windowP1.xy + (normal * u_fillDistance), windowP1.z, 1.0);
 
                       gl_Position = mg_viewportOrthographicProjectionMatrix * v0;
+                      distanceToEyeFS = distanceToEyeGS[0];
                       EmitVertex();
 
                       gl_Position = mg_viewportOrthographicProjectionMatrix * v1;
+                      distanceToEyeFS = distanceToEyeGS[0];
                       EmitVertex();
 
                       gl_Position = mg_viewportOrthographicProjectionMatrix * v2;
+                      distanceToEyeFS = distanceToEyeGS[0];
                       EmitVertex();
 
                       gl_Position = mg_viewportOrthographicProjectionMatrix * v3;
+                      distanceToEyeFS = distanceToEyeGS[0];
                       EmitVertex();
                   }";
             string fs =
                 @"#version 150
                  
+                  in float distanceToEyeFS;
+                  out vec4 fragmentColor;
                   uniform vec3 u_color;
-                  out vec3 fragmentColor;
 
                   void main()
                   {
-                      fragmentColor = u_color;
+                      //
+                      // Apply linear attenuation to alpha
+                      //
+                      float a = min(1.0 / (0.015 * distanceToEyeFS), 1.0);
+                      if (a == 0.0)
+                      {
+                          discard;
+                      }
+
+                      fragmentColor = vec4(u_color, a);
                   }";
             _spNormals = Device.CreateShaderProgram(vs, gs, fs);
             _heightExaggerationNormals = _spNormals.Uniforms["u_heightExaggeration"] as Uniform<float>;
@@ -381,11 +404,11 @@ namespace MiniGlobe.Terrain
 
             _rsNormals = new RenderState();
             _rsNormals.FacetCulling.Enabled = false;
-            //_rsNormals.Blending.Enabled = true;
-            //_rsNormals.Blending.SourceRGBFactor = SourceBlendingFactor.SourceAlpha;
-            //_rsNormals.Blending.SourceAlphaFactor = SourceBlendingFactor.SourceAlpha;
-            //_rsNormals.Blending.DestinationRGBFactor = DestinationBlendingFactor.OneMinusSourceAlpha;
-            //_rsNormals.Blending.DestinationAlphaFactor = DestinationBlendingFactor.OneMinusSourceAlpha;
+            _rsNormals.Blending.Enabled = true;
+            _rsNormals.Blending.SourceRGBFactor = SourceBlendingFactor.SourceAlpha;
+            _rsNormals.Blending.SourceAlphaFactor = SourceBlendingFactor.SourceAlpha;
+            _rsNormals.Blending.DestinationRGBFactor = DestinationBlendingFactor.OneMinusSourceAlpha;
+            _rsNormals.Blending.DestinationAlphaFactor = DestinationBlendingFactor.OneMinusSourceAlpha;
 
             ///////////////////////////////////////////////////////////////////
 
