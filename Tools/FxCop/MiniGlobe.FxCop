@@ -8678,6 +8678,20 @@
              </Message>
             </Messages>
            </Member>
+           <Member Name="#ColorMaskTest()">
+            <Messages>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-05-04 23:09:52Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'RenderStateTests.ColorMaskTest()'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="64" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
            <Member Name="#DepthRange()">
             <Messages>
              <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-03-10 21:45:43Z" FixCategory="DependsOnFix">
@@ -8701,6 +8715,20 @@
               <Notes>
                <User Name="pjcozzi">
                 <Note Id="0" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#DepthWrite()">
+            <Messages>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-05-04 23:09:52Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'RenderStateTests.DepthWrite()'</Item>
+              </Issue>
+              <Notes>
+               <User Name="pjcozzi">
+                <Note Id="64" />
                </User>
               </Notes>
              </Message>
@@ -9421,6 +9449,7 @@
     <Note Id="61" Modified="2010-04-23 22:02:24Z">Ok.</Note>
     <Note Id="62" Modified="2010-04-29 00:41:04Z">Ok</Note>
     <Note Id="63" Modified="2010-04-29 00:42:59Z">Property name.</Note>
+    <Note Id="64" Modified="2010-05-04 23:10:14Z">Ok</Note>
    </User>
   </Notes>
   <Rules>

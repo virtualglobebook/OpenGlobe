@@ -26,8 +26,6 @@ namespace MiniGlobe.Renderer
 
     public class RenderState
     {
-        public static readonly RenderState Default = new RenderState();
-
         public RenderState()
         {
             PrimitiveRestart = new PrimitiveRestart();

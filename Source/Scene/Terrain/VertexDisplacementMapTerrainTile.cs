@@ -18,7 +18,7 @@ using MiniGlobe.Scene;
 
 namespace MiniGlobe.Terrain
 {
-    public enum TerrainNormals
+    public enum TerrainNormalsAlgorithm
     {
         None,
         ThreeSamples,
@@ -26,7 +26,7 @@ namespace MiniGlobe.Terrain
         SobelFilter
     }
 
-    public enum TerrainShading
+    public enum TerrainShadingAlgorithm
     {
         Solid,
         ByHeight,
@@ -212,15 +212,15 @@ namespace MiniGlobe.Terrain
                           intensity = LightIntensity(normalize(normal),  normalize(positionToLight), normalize(positionToEye), mg_diffuseSpecularAmbientShininess);
                       }
 
-                      if (u_shadingAlgorithm == 0)  // TerrainShading.Solid
+                      if (u_shadingAlgorithm == 0)  // TerrainShadingAlgorithm.Solid
                       {
                           fragmentColor = vec3(0.0, intensity, 0.0);
                       }
-                      else if (u_shadingAlgorithm == 1)  // TerrainShading.ByHeight
+                      else if (u_shadingAlgorithm == 1)  // TerrainShadingAlgorithm.ByHeight
                       {
                           fragmentColor = vec3(0.0, intensity * ((height - u_minimumHeight) / (u_maximumHeight - u_minimumHeight)), 0.0);
                       }
-                      else if (u_shadingAlgorithm == 2)  // TerrainShading.HeightContour
+                      else if (u_shadingAlgorithm == 2)  // TerrainShadingAlgorithm.HeightContour
                       {
                           float distanceToContour = mod(height, 5.0);  // Contour every 2 meters 
                           float dx = abs(dFdx(height));
@@ -236,11 +236,11 @@ namespace MiniGlobe.Terrain
                               fragmentColor = vec3(0.0, intensity, 0.0);
                           }
                       }
-                      else if (u_shadingAlgorithm == 3)  // TerrainShading.ColorRamp
+                      else if (u_shadingAlgorithm == 3)  // TerrainShadingAlgorithm.ColorRamp
                       {
                           fragmentColor = intensity * texture(mg_texture1, vec2(0.5, ((height - u_minimumHeight) / (u_maximumHeight - u_minimumHeight)))).rgb;
                       }
-                      else if (u_shadingAlgorithm == 4)  // TerrainShading.BlendRamp
+                      else if (u_shadingAlgorithm == 4)  // TerrainShadingAlgorithm.BlendRamp
                       {
                           float normalizedHeight = (height - u_minimumHeight) / (u_maximumHeight - u_minimumHeight);
                           fragmentColor = intensity * mix(
@@ -248,7 +248,7 @@ namespace MiniGlobe.Terrain
                               texture(mg_texture4, normalizedTextureCoordinate).rgb, 
                               texture(mg_texture2, vec2(0.5, normalizedHeight)).r);
                       }
-                      else if (u_shadingAlgorithm == 5)  // TerrainShading.DetailTexture
+                      else if (u_shadingAlgorithm == 5)  // TerrainShadingAlgorithm.DetailTexture
                       {
                           fragmentColor = vec3(intensity, 0.0, 0.0);    // TODO
                       }
@@ -628,8 +628,8 @@ namespace MiniGlobe.Terrain
             _tileMaximumHeight = tile.MaximumHeight;
 
             _heightExaggeration = 1;
-            _shading = TerrainShading.ColorRamp;
-            _normals = TerrainNormals.ThreeSamples;
+            _shadingAlgorithm = TerrainShadingAlgorithm.ColorRamp;
+            _normalsAlgorithm = TerrainNormalsAlgorithm.ThreeSamples;
             ShowTerrain = true;
             _dirty = true;
         }
@@ -638,9 +638,9 @@ namespace MiniGlobe.Terrain
         {
             if (_dirty)
             {
-                (_spTerrain.Uniforms["u_normalAlgorithm"] as Uniform<int>).Value = (int)_normals;
-                (_spTerrain.Uniforms["u_shadingAlgorithm"] as Uniform<int>).Value = (int)_shading;
-                (_spNormals.Uniforms["u_normalAlgorithm"] as Uniform<int>).Value = (int)_normals;
+                (_spTerrain.Uniforms["u_normalAlgorithm"] as Uniform<int>).Value = (int)_normalsAlgorithm;
+                (_spTerrain.Uniforms["u_shadingAlgorithm"] as Uniform<int>).Value = (int)_shadingAlgorithm;
+                (_spNormals.Uniforms["u_normalAlgorithm"] as Uniform<int>).Value = (int)_normalsAlgorithm;
 
                 _minimumHeight = _spTerrain.Uniforms["u_minimumHeight"] as Uniform<float>;
                 _maximumHeight = _spTerrain.Uniforms["u_maximumHeight"] as Uniform<float>;
@@ -670,7 +670,7 @@ namespace MiniGlobe.Terrain
 
                 if (ShowTerrain)
                 {
-                    if (_shading == TerrainShading.ColorRamp)
+                    if (_shadingAlgorithm == TerrainShadingAlgorithm.ColorRamp)
                     {
                         if (ColorRampTexture == null)
                         {
@@ -679,7 +679,7 @@ namespace MiniGlobe.Terrain
 
                         _context.TextureUnits[1].Texture2D = ColorRampTexture;
                     }
-                    else if (_shading == TerrainShading.BlendRamp)
+                    else if (_shadingAlgorithm == TerrainShadingAlgorithm.BlendRamp)
                     {
                         if (BlendRampTexture == null)
                         {
@@ -713,7 +713,7 @@ namespace MiniGlobe.Terrain
                     _context.Draw(_primitiveType, sceneState);
                 }
 
-                if (ShowNormals && (_normals != TerrainNormals.None))
+                if (ShowNormals && (_normalsAlgorithm != TerrainNormalsAlgorithm.None))
                 {
                     _context.Bind(_spNormals);
                     _context.Bind(_rsNormals);
@@ -740,27 +740,27 @@ namespace MiniGlobe.Terrain
             }
         }
 
-        public TerrainNormals Normals 
+        public TerrainNormalsAlgorithm NormalsAlgorithm 
         {
-            get { return _normals; }
+            get { return _normalsAlgorithm; }
             set
             {
-                if (_normals != value)
+                if (_normalsAlgorithm != value)
                 {
-                    _normals = value;
+                    _normalsAlgorithm = value;
                     _dirty = true;
                 }
             }
         }
 
-        public TerrainShading Shading
+        public TerrainShadingAlgorithm ShadingAlgorithm
         {
-            get { return _shading; }
+            get { return _shadingAlgorithm; }
             set
             {
-                if (_shading != value)
+                if (_shadingAlgorithm != value)
                 {
-                    _shading = value;
+                    _shadingAlgorithm = value;
                     _dirty = true;
                 }
             }
@@ -814,8 +814,8 @@ namespace MiniGlobe.Terrain
         private readonly float _tileMaximumHeight;
 
         private float _heightExaggeration;
-        private TerrainNormals _normals;
-        private TerrainShading _shading;
+        private TerrainNormalsAlgorithm _normalsAlgorithm;
+        private TerrainShadingAlgorithm _shadingAlgorithm;
         private bool _dirty;
     }
 }

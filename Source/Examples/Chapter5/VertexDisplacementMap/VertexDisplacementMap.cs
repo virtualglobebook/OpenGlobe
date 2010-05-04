@@ -66,38 +66,38 @@ namespace MiniGlobe.Examples.Chapter5
             UpdateHUD();
         }
 
-        private static string TerrainNormalsToString(TerrainNormals normals)
+        private static string TerrainNormalsAlgorithmToString(TerrainNormalsAlgorithm normals)
         {
             switch(normals)
             {
-                case TerrainNormals.None:
+                case TerrainNormalsAlgorithm.None:
                     return "n/a";
-                case TerrainNormals.ThreeSamples:
+                case TerrainNormalsAlgorithm.ThreeSamples:
                     return "Three Samples";
-                case TerrainNormals.FourSamples:
+                case TerrainNormalsAlgorithm.FourSamples:
                     return "Four Samples";
-                case TerrainNormals.SobelFilter:
+                case TerrainNormalsAlgorithm.SobelFilter:
                     return "Sobel Filter";
             }
 
             return string.Empty;
         }
 
-        private static string TerrainShadingToString(TerrainShading shading)
+        private static string TerrainShadingAlgorithmToString(TerrainShadingAlgorithm shading)
         {
             switch (shading)
             {
-                case TerrainShading.Solid:
+                case TerrainShadingAlgorithm.Solid:
                     return "Solid";
-                case TerrainShading.ByHeight:
+                case TerrainShadingAlgorithm.ByHeight:
                     return "By Height";
-                case TerrainShading.HeightContour:
+                case TerrainShadingAlgorithm.HeightContour:
                     return "Height Contour";
-                case TerrainShading.ColorRamp:
+                case TerrainShadingAlgorithm.ColorRamp:
                     return "Color Ramp";
-                case TerrainShading.BlendRamp:
+                case TerrainShadingAlgorithm.BlendRamp:
                     return "Blend Ramp";
-                case TerrainShading.DetailTexture:
+                case TerrainShadingAlgorithm.DetailTexture:
                     return "Detail Texture";
             }
 
@@ -109,8 +109,8 @@ namespace MiniGlobe.Examples.Chapter5
             string text;
 
             text = "Height Exaggeration: " + _tile.HeightExaggeration + " (up/down)\n";
-            text += "Shading Algorithm: " + TerrainShadingToString(_tile.Shading) + " ('s' + left/right)\n";
-            text += "Normals Algorithm: " + TerrainNormalsToString(_tile.Normals) + " ('a' + left/right)\n";
+            text += "Shading Algorithm: " + TerrainShadingAlgorithmToString(_tile.ShadingAlgorithm) + " ('s' + left/right)\n";
+            text += "Normals Algorithm: " + TerrainNormalsAlgorithmToString(_tile.NormalsAlgorithm) + " ('a' + left/right)\n";
             text += "Terrain: " + (_tile.ShowTerrain ? "on" : "off") + " ('t')\n";
             text += "Wireframe: " + (_tile.ShowWireframe ? "on" : "off") + " ('w')\n";
             text += "Normals: " + (_tile.ShowNormals ? "on" : "off") + " ('n')\n";
@@ -147,26 +147,26 @@ namespace MiniGlobe.Examples.Chapter5
             }
             else if (_sKeyDown && ((e.Key == KeyboardKey.Left) || (e.Key == KeyboardKey.Right)))
             {
-                _tile.Shading += (e.Key == KeyboardKey.Right) ? 1 : -1;
-                if (_tile.Shading < TerrainShading.Solid)
+                _tile.ShadingAlgorithm += (e.Key == KeyboardKey.Right) ? 1 : -1;
+                if (_tile.ShadingAlgorithm < TerrainShadingAlgorithm.Solid)
                 {
-                    _tile.Shading = TerrainShading.DetailTexture;
+                    _tile.ShadingAlgorithm = TerrainShadingAlgorithm.DetailTexture;
                 }
-                else if (_tile.Shading > TerrainShading.DetailTexture)
+                else if (_tile.ShadingAlgorithm > TerrainShadingAlgorithm.DetailTexture)
                 {
-                    _tile.Shading = TerrainShading.Solid;
+                    _tile.ShadingAlgorithm = TerrainShadingAlgorithm.Solid;
                 }
             }
             else if (_aKeyDown && ((e.Key == KeyboardKey.Left) || (e.Key == KeyboardKey.Right)))
             {
-                _tile.Normals += (e.Key == KeyboardKey.Right) ? 1 : -1;
-                if (_tile.Normals < TerrainNormals.None)
+                _tile.NormalsAlgorithm += (e.Key == KeyboardKey.Right) ? 1 : -1;
+                if (_tile.NormalsAlgorithm < TerrainNormalsAlgorithm.None)
                 {
-                    _tile.Normals = TerrainNormals.SobelFilter;
+                    _tile.NormalsAlgorithm = TerrainNormalsAlgorithm.SobelFilter;
                 }
-                else if (_tile.Normals > TerrainNormals.SobelFilter)
+                else if (_tile.NormalsAlgorithm > TerrainNormalsAlgorithm.SobelFilter)
                 {
-                    _tile.Normals = TerrainNormals.None;
+                    _tile.NormalsAlgorithm = TerrainNormalsAlgorithm.None;
                 }
             }
             else if (e.Key == KeyboardKey.T)

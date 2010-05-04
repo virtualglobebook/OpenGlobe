@@ -8,12 +8,14 @@
           <Word>Mipmaps</Word>
           <Word>Multitexture</Word>
           <Word>Multitextured</Word>
+          <Word>Normals</Word>
           <Word>Polyline</Word>
           <Word>Rasterization</Word>
           <Word>Renderable</Word>
           <Word>rgba</Word>
           <Word>Renderer</Word>
           <Word>Shader</Word>
+          <Word>Sobel</Word>
           <Word>Specular</Word>
           <Word>Tessellator</Word>
           <Word>Wgs</Word>
