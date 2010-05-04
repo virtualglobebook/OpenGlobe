@@ -8,12 +8,12 @@
 #endregion
 
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using MiniGlobe.Core;
 using MiniGlobe.Core.Geometry;
 using MiniGlobe.Core.Tessellation;
 using MiniGlobe.Renderer;
-using System.Collections.Generic;
 using MiniGlobe.Scene;
 
 namespace MiniGlobe.Terrain
@@ -154,8 +154,11 @@ namespace MiniGlobe.Terrain
 
                   in vec4 position;
                   out vec2 windowPosition;
+                  out float distanceToEyeGS;
+
                   uniform mat4 mg_modelViewPerspectiveProjectionMatrix;
                   uniform mat4 mg_viewportTransformationMatrix;
+                  uniform vec3 mg_cameraEye;
                   uniform sampler2DRect mg_texture0;    // Height field
                   uniform float u_heightExaggeration;
 
@@ -173,6 +176,7 @@ namespace MiniGlobe.Terrain
 
                       gl_Position = mg_modelViewPerspectiveProjectionMatrix * displacedPosition;
                       windowPosition = ClipToWindowCoordinates(gl_Position, mg_viewportTransformationMatrix).xy;
+                      distanceToEyeGS = distance(displacedPosition.xyz, mg_cameraEye);
                   }";
             string gsWireframe =
                 @"#version 150 
@@ -181,7 +185,10 @@ namespace MiniGlobe.Terrain
                   layout(triangle_strip, max_vertices = 3) out;
 
                   in vec2 windowPosition[];
+                  in float distanceToEyeGS[];
+
                   noperspective out vec3 distanceToEdges;
+                  out float distanceToEyeFS;
 
                   float distanceToLine(vec2 f, vec2 p0, vec2 p1)
                   {
@@ -203,14 +210,17 @@ namespace MiniGlobe.Terrain
 
                       gl_Position = gl_in[0].gl_Position;
                       distanceToEdges = vec3(distanceToLine(p0, p1, p2), 0.0, 0.0);
+                      distanceToEyeFS = distanceToEyeGS[0];
                       EmitVertex();
 
                       gl_Position = gl_in[1].gl_Position;
                       distanceToEdges = vec3(0.0, distanceToLine(p1, p2, p0), 0.0);
+                      distanceToEyeFS = distanceToEyeGS[1];
                       EmitVertex();
 
                       gl_Position = gl_in[2].gl_Position;
                       distanceToEdges = vec3(0.0, 0.0, distanceToLine(p2, p0, p1));
+                      distanceToEyeFS = distanceToEyeGS[2];
                       EmitVertex();
                   }";
             string fsWireframe =
@@ -218,7 +228,10 @@ namespace MiniGlobe.Terrain
                  
                   uniform float u_halfLineWidth;
                   uniform vec3 u_colorUniform;
+
                   noperspective in vec3 distanceToEdges;
+                  in float distanceToEyeFS;
+
                   out vec4 fragmentColor;
 
                   void main()
@@ -231,20 +244,31 @@ namespace MiniGlobe.Terrain
                       }
 
                       d = clamp(d - (u_halfLineWidth - 1.0), 0.0, 2.0);
-                      fragmentColor = vec4(u_colorUniform, exp2(-2.0 * d * d));
+                      float a = exp2(-2.0 * d * d);
+
+                      //
+                      // Apply linear attenuation to alpha
+                      //
+                      a *= min(1.0 / (0.015 * distanceToEyeFS), 1.0);
+                      if (a == 0.0)
+                      {
+                          discard;
+                      }
+
+                      fragmentColor = vec4(u_colorUniform, a);
                   }";
             _spWireframe = Device.CreateShaderProgram(vsWireframe, gsWireframe, fsWireframe);
 
-            (_spWireframe.Uniforms["u_halfLineWidth"] as Uniform<float>).Value = 1;
-            (_spWireframe.Uniforms["u_colorUniform"] as Uniform<Vector3S>).Value = Vector3S.Zero;
+            _lineWidthWireframe = _spWireframe.Uniforms["u_halfLineWidth"] as Uniform<float>;
             _heightExaggerationWireframe = _spWireframe.Uniforms["u_heightExaggeration"] as Uniform<float>;
+            (_spWireframe.Uniforms["u_colorUniform"] as Uniform<Vector3S>).Value = Vector3S.Zero;
             
             ///////////////////////////////////////////////////////////////////
 
             ShowTerrain = true;
         }
 
-        private void Update()
+        private void Update(SceneState sceneState)
         {
             if (_spDirty)
             {
@@ -494,13 +518,14 @@ namespace MiniGlobe.Terrain
 
             _heightExaggerationUniform.Value = _heightExaggeration;
             _heightExaggerationWireframe.Value = _heightExaggeration;
+            _lineWidthWireframe.Value = (float)(0.5 * 3.0 * sceneState.HighResolutionSnapScale);
         }
 
         public void Render(SceneState sceneState)
         {
             if (ShowTerrain || ShowWireframe)
             {
-                Update();
+                Update(sceneState);
 
                 _context.TextureUnits[0].Texture2DRectangle = _texture;
                 _context.Bind(_va);
@@ -588,6 +613,7 @@ namespace MiniGlobe.Terrain
         private readonly RenderState _rsWireframe;
         private readonly ShaderProgram _spWireframe;
         private readonly Uniform<float> _heightExaggerationWireframe;
+        private readonly Uniform<float> _lineWidthWireframe;
 
         private float _heightExaggeration;
         private TerrainNormals _normals;
