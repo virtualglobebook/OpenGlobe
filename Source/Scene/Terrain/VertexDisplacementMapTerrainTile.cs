@@ -14,6 +14,7 @@ using MiniGlobe.Core.Geometry;
 using MiniGlobe.Core.Tessellation;
 using MiniGlobe.Renderer;
 using System.Collections.Generic;
+using MiniGlobe.Scene;
 
 namespace MiniGlobe.Terrain
 {
@@ -128,7 +129,6 @@ namespace MiniGlobe.Terrain
 
             ///////////////////////////////////////////////////////////////////
 
-            
             Mesh mesh = RectangleTessellator.Compute(new RectangleD(new Vector2D(0.5, 0.5), 
                 new Vector2D((double)tile.Size.X - 0.5, (double)tile.Size.Y - 0.5)), 
                 tile.Size.X - 1, tile.Size.Y - 1);
@@ -137,6 +137,111 @@ namespace MiniGlobe.Terrain
 
             _renderState = new RenderState();
             _renderState.FacetCulling.FrontFaceWindingOrder = mesh.FrontFaceWindingOrder;
+
+            ///////////////////////////////////////////////////////////////////
+
+            _rsWireframe = new RenderState();
+            _rsWireframe.Blending.Enabled = true;
+            _rsWireframe.Blending.SourceRGBFactor = SourceBlendingFactor.SourceAlpha;
+            _rsWireframe.Blending.SourceAlphaFactor = SourceBlendingFactor.SourceAlpha;
+            _rsWireframe.Blending.DestinationRGBFactor = DestinationBlendingFactor.OneMinusSourceAlpha;
+            _rsWireframe.Blending.DestinationAlphaFactor = DestinationBlendingFactor.OneMinusSourceAlpha;
+            _rsWireframe.FacetCulling.FrontFaceWindingOrder = mesh.FrontFaceWindingOrder;
+            _rsWireframe.DepthTest.Function = DepthTestFunction.LessThanOrEqual;
+
+            string vsWireframe =
+                @"#version 150
+
+                  in vec4 position;
+                  out vec2 windowPosition;
+                  uniform mat4 mg_modelViewPerspectiveProjectionMatrix;
+                  uniform mat4 mg_viewportTransformationMatrix;
+                  uniform sampler2DRect mg_texture0;    // Height field
+                  uniform float u_heightExaggeration;
+
+                  vec4 ClipToWindowCoordinates(vec4 v, mat4 viewportTransformationMatrix)
+                  {
+                      v.xyz /= v.w;                                                        // normalized device coordinates
+                      v.xyz = (viewportTransformationMatrix * vec4(v.xyz + 1.0, 1.0)).xyz; // windows coordinates
+                      return v;
+                  }
+
+                  void main()                     
+                  {
+                      vec4 displacedPosition = vec4(position.xy, 
+                          texture(mg_texture0, position.xy).r * u_heightExaggeration, 1.0);
+
+                      gl_Position = mg_modelViewPerspectiveProjectionMatrix * displacedPosition;
+                      windowPosition = ClipToWindowCoordinates(gl_Position, mg_viewportTransformationMatrix).xy;
+                  }";
+            string gsWireframe =
+                @"#version 150 
+
+                  layout(triangles) in;
+                  layout(triangle_strip, max_vertices = 3) out;
+
+                  in vec2 windowPosition[];
+                  noperspective out vec3 distanceToEdges;
+
+                  float distanceToLine(vec2 f, vec2 p0, vec2 p1)
+                  {
+                      vec2 l = f - p0;
+                      vec2 d = p1 - p0;
+
+                      //
+                      // Closed point on line to f
+                      //
+                      vec2 p = p0 + (d * (dot(l, d) / dot(d, d)));
+                      return distance(f, p);
+                  }
+
+                  void main()
+                  {
+                      vec2 p0 = windowPosition[0];
+                      vec2 p1 = windowPosition[1];
+                      vec2 p2 = windowPosition[2];
+
+                      gl_Position = gl_in[0].gl_Position;
+                      distanceToEdges = vec3(distanceToLine(p0, p1, p2), 0.0, 0.0);
+                      EmitVertex();
+
+                      gl_Position = gl_in[1].gl_Position;
+                      distanceToEdges = vec3(0.0, distanceToLine(p1, p2, p0), 0.0);
+                      EmitVertex();
+
+                      gl_Position = gl_in[2].gl_Position;
+                      distanceToEdges = vec3(0.0, 0.0, distanceToLine(p2, p0, p1));
+                      EmitVertex();
+                  }";
+            string fsWireframe =
+                @"#version 150
+                 
+                  uniform float u_halfLineWidth;
+                  uniform vec3 u_colorUniform;
+                  noperspective in vec3 distanceToEdges;
+                  out vec4 fragmentColor;
+
+                  void main()
+                  {
+                      float d = min(distanceToEdges.x, min(distanceToEdges.y, distanceToEdges.z));
+
+                      if (d > u_halfLineWidth + 1.0)
+                      {
+                          discard;
+                      }
+
+                      d = clamp(d - (u_halfLineWidth - 1.0), 0.0, 2.0);
+                      fragmentColor = vec4(u_colorUniform, exp2(-2.0 * d * d));
+                  }";
+            _spWireframe = Device.CreateShaderProgram(vsWireframe, gsWireframe, fsWireframe);
+
+            (_spWireframe.Uniforms["u_halfLineWidth"] as Uniform<float>).Value = 1;
+            (_spWireframe.Uniforms["u_colorUniform"] as Uniform<Vector3S>).Value = Vector3S.Zero;
+            _heightExaggerationWireframe = _spWireframe.Uniforms["u_heightExaggeration"] as Uniform<float>;
+            
+            ///////////////////////////////////////////////////////////////////
+
+            ShowTerrain = true;
         }
 
         private void Update()
@@ -388,17 +493,32 @@ namespace MiniGlobe.Terrain
             }
 
             _heightExaggerationUniform.Value = _heightExaggeration;
+            _heightExaggerationWireframe.Value = _heightExaggeration;
         }
 
         public void Render(SceneState sceneState)
         {
-            Update();
+            if (ShowTerrain || ShowWireframe)
+            {
+                Update();
 
-            _context.TextureUnits[0].Texture2DRectangle = _texture;
-            _context.Bind(_sp);
-            _context.Bind(_va);
-            _context.Bind(_renderState);
-            _context.Draw(_primitiveType, sceneState);
+                _context.TextureUnits[0].Texture2DRectangle = _texture;
+                _context.Bind(_va);
+
+                if (ShowTerrain)
+                {
+                    _context.Bind(_sp);
+                    _context.Bind(_renderState);
+                    _context.Draw(_primitiveType, sceneState);
+                }
+
+                if (ShowWireframe)
+                {
+                    _context.Bind(_spWireframe);
+                    _context.Bind(_rsWireframe);
+                    _context.Draw(_primitiveType, sceneState);
+                }
+            }
         }
 
         public float HeightExaggeration
@@ -434,6 +554,9 @@ namespace MiniGlobe.Terrain
             }
         }
 
+        public bool ShowTerrain { get; set; }
+        public bool ShowWireframe { get; set; }
+
         #region IDisposable Members
 
         public void Dispose()
@@ -441,6 +564,7 @@ namespace MiniGlobe.Terrain
             _sp.Dispose();
             _va.Dispose();
             _texture.Dispose();
+            _spWireframe.Dispose();
         }
 
         #endregion
@@ -460,6 +584,10 @@ namespace MiniGlobe.Terrain
 
         private readonly VertexArray _va;
         private readonly PrimitiveType _primitiveType;
+
+        private readonly RenderState _rsWireframe;
+        private readonly ShaderProgram _spWireframe;
+        private readonly Uniform<float> _heightExaggerationWireframe;
 
         private float _heightExaggeration;
         private TerrainNormals _normals;

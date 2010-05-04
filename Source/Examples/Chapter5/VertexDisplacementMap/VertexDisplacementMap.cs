@@ -82,8 +82,10 @@ namespace MiniGlobe.Examples.Chapter5
             string text;
 
             text = "Height Exaggeration: " + _tile.HeightExaggeration + " (up/down)\n";
-            text += "Normals: " + TerrainNormalsToString(_tile.Normals) + " ('n' + left/right)";
-                
+            text += "Normals: " + TerrainNormalsToString(_tile.Normals) + " ('n' + left/right)\n";
+            text += "Terrain: " + (_tile.ShowTerrain ? "on" : "off") + " ('t')\n";
+            text += "Wireframe: " + (_tile.ShowWireframe ? "on" : "off") + " ('w')\n";
+
             if (_hud.Texture != null)
             {
                 _hud.Texture.Dispose();
@@ -121,6 +123,14 @@ namespace MiniGlobe.Examples.Chapter5
                 {
                     _tile.Normals = TerrainNormals.None;
                 }
+            }
+            else if (e.Key == KeyboardKey.T)
+            {
+                _tile.ShowTerrain = !_tile.ShowTerrain;
+            }
+            else if (e.Key == KeyboardKey.W)
+            {
+                _tile.ShowWireframe = !_tile.ShowWireframe;
             }
 
             UpdateHUD();
