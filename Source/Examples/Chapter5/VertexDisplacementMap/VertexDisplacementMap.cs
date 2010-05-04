@@ -79,11 +79,25 @@ namespace MiniGlobe.Examples.Chapter5
             return string.Empty;
         }
 
+        private static string TerrainShadingToString(TerrainShading shading)
+        {
+            switch (shading)
+            {
+                case TerrainShading.Solid:
+                    return "Solid";
+                case TerrainShading.ByHeight:
+                    return "By Height";
+            }
+
+            return string.Empty;
+        }
+
         private void UpdateHUD()
         {
             string text;
 
             text = "Height Exaggeration: " + _tile.HeightExaggeration + " (up/down)\n";
+            text += "Shading Algorithm: " + TerrainShadingToString(_tile.Shading) + " ('s' + left/right)\n";
             text += "Normals Algorithm: " + TerrainNormalsToString(_tile.Normals) + " ('a' + left/right)\n";
             text += "Terrain: " + (_tile.ShowTerrain ? "on" : "off") + " ('t')\n";
             text += "Wireframe: " + (_tile.ShowWireframe ? "on" : "off") + " ('w')\n";
@@ -107,13 +121,29 @@ namespace MiniGlobe.Examples.Chapter5
 
         private void OnKeyDown(object sender, KeyboardKeyEventArgs e)
         {
-            if (e.Key == KeyboardKey.A)
+            if (e.Key == KeyboardKey.S)
+            {
+                _sKeyDown = true;
+            } 
+            else if (e.Key == KeyboardKey.A)
             {
                 _aKeyDown = true;
             }
-            if ((e.Key == KeyboardKey.Up) || (e.Key == KeyboardKey.Down))
+            else if ((e.Key == KeyboardKey.Up) || (e.Key == KeyboardKey.Down))
             {
                 _tile.HeightExaggeration = Math.Max(1, _tile.HeightExaggeration + ((e.Key == KeyboardKey.Up) ? 1 : -1));
+            }
+            else if (_sKeyDown && ((e.Key == KeyboardKey.Left) || (e.Key == KeyboardKey.Right)))
+            {
+                _tile.Shading += (e.Key == KeyboardKey.Right) ? 1 : -1;
+                if (_tile.Shading < TerrainShading.Solid)
+                {
+                    _tile.Shading = TerrainShading.ByHeight;
+                }
+                else if (_tile.Shading > TerrainShading.ByHeight)
+                {
+                    _tile.Shading = TerrainShading.Solid;
+                }
             }
             else if (_aKeyDown && ((e.Key == KeyboardKey.Left) || (e.Key == KeyboardKey.Right)))
             {
@@ -145,7 +175,11 @@ namespace MiniGlobe.Examples.Chapter5
 
         private void OnKeyUp(object sender, KeyboardKeyEventArgs e)
         {
-            if (e.Key == KeyboardKey.A)
+            if (e.Key == KeyboardKey.S)
+            {
+                _sKeyDown = false;
+            }
+            else if (e.Key == KeyboardKey.A)
             {
                 _aKeyDown = false;
             }
@@ -194,6 +228,7 @@ namespace MiniGlobe.Examples.Chapter5
         private readonly Font _hudFont;
         private readonly HeadsUpDisplay _hud;
 
+        private bool _sKeyDown;
         private bool _aKeyDown;
     }
 }

@@ -26,6 +26,12 @@ namespace MiniGlobe.Terrain
         SobelFilter
     }
 
+    public enum TerrainShading
+    {
+        Solid,
+        ByHeight
+    }
+
     public sealed class VertexDisplacementMapTerrainTile : IDisposable
     {
         public VertexDisplacementMapTerrainTile(Context context, TerrainTile tile)
@@ -43,8 +49,7 @@ namespace MiniGlobe.Terrain
                 tile.Size.X, tile.Size.Y, TextureFormat.Red32f));
             _texture.CopyFromBuffer(pixelBuffer, ImageFormat.Red, ImageDataType.Float);
             _texture.Filter = Texture2DFilter.NearestClampToEdge;
-
-
+            
             ///////////////////////////////////////////////////////////////////
 
             string vsTerrain =
@@ -171,6 +176,7 @@ namespace MiniGlobe.Terrain
                   uniform float u_minimumHeight;
                   uniform float u_maximumHeight;
                   uniform int u_normalAlgorithm;
+                  uniform int u_shadingAlgorithm;
 
                   float LightIntensity(vec3 normal, vec3 toLight, vec3 toEye, vec4 diffuseSpecularAmbientShininess)
                   {
@@ -187,21 +193,24 @@ namespace MiniGlobe.Terrain
 
                   void main()
                   {
-                      if (u_normalAlgorithm == 0)
+                      float intensity = 1.0;
+
+                      if (u_normalAlgorithm != 0)
                       {
-                          fragmentColor = vec3(0.0, 1.0, 0.0);
+                          intensity = LightIntensity(normalize(normal),  normalize(positionToLight), normalize(positionToEye), mg_diffuseSpecularAmbientShininess);
                       }
-                      else
+
+                      if (u_shadingAlgorithm == 0)
                       {
-                          float intensity = LightIntensity(normalize(normal),  normalize(positionToLight), normalize(positionToEye), mg_diffuseSpecularAmbientShininess);
-                          //fragmentColor = intensity * vec3((height - u_minimumHeight) / (u_maximumHeight - u_minimumHeight), 0.0, 0.0);
                           fragmentColor = vec3(0.0, intensity, 0.0);
+                      }
+                      else if (u_shadingAlgorithm == 1)
+                      {
+                          fragmentColor = vec3(0.0, intensity * ((height - u_minimumHeight) / (u_maximumHeight - u_minimumHeight)), 0.0);
                       }
                   }";
             _spTerrain = Device.CreateShaderProgram(vsTerrain, fsTerrain);
             _heightExaggerationUniform = _spTerrain.Uniforms["u_heightExaggeration"] as Uniform<float>;
-            //_minimumHeight = _spTerrain.Uniforms["u_minimumHeight"] as Uniform<float>;
-            //_maximumHeight = _spTerrain.Uniforms["u_maximumHeight"] as Uniform<float>;
 
             ///////////////////////////////////////////////////////////////////
 
@@ -586,23 +595,24 @@ namespace MiniGlobe.Terrain
             if (_dirty)
             {
                 (_spTerrain.Uniforms["u_normalAlgorithm"] as Uniform<int>).Value = (int)_normals;
+                (_spTerrain.Uniforms["u_shadingAlgorithm"] as Uniform<int>).Value = (int)_shading;
                 (_spNormals.Uniforms["u_normalAlgorithm"] as Uniform<int>).Value = (int)_normals;
+
+                _minimumHeight = _spTerrain.Uniforms["u_minimumHeight"] as Uniform<float>;
+                _maximumHeight = _spTerrain.Uniforms["u_maximumHeight"] as Uniform<float>;
 
                 _dirty = false;
             }
 
             _heightExaggerationUniform.Value = _heightExaggeration;
-            //_minimumHeight.Value = _tileMinimumHeight * _heightExaggeration;
-            //_maximumHeight.Value = _tileMaximumHeight * _heightExaggeration;
+            _minimumHeight.Value = _tileMinimumHeight * _heightExaggeration;
+            _maximumHeight.Value = _tileMaximumHeight * _heightExaggeration;
 
             _heightExaggerationWireframe.Value = _heightExaggeration;
             _lineWidthWireframe.Value = (float)(0.5 * 3.0 * sceneState.HighResolutionSnapScale);
 
-            if (_normals != TerrainNormals.None)
-            {
-                _heightExaggerationNormals.Value = _heightExaggeration;
-                _fillDistanceNormals.Value = (float)(0.5 * 3.0 * sceneState.HighResolutionSnapScale);
-            }
+            _heightExaggerationNormals.Value = _heightExaggeration;
+            _fillDistanceNormals.Value = (float)(0.5 * 3.0 * sceneState.HighResolutionSnapScale);
         }
 
         public void Render(SceneState sceneState)
@@ -668,6 +678,19 @@ namespace MiniGlobe.Terrain
             }
         }
 
+        public TerrainShading Shading
+        {
+            get { return _shading; }
+            set
+            {
+                if (_shading != value)
+                {
+                    _shading = value;
+                    _dirty = true;
+                }
+            }
+        }
+
         public bool ShowTerrain { get; set; }
         public bool ShowWireframe { get; set; }
         public bool ShowNormals { get; set; }
@@ -691,8 +714,8 @@ namespace MiniGlobe.Terrain
         private readonly RenderState _rsTerrain;
         private readonly ShaderProgram _spTerrain;
         private readonly Uniform<float> _heightExaggerationUniform;
-        private readonly Uniform<float> _minimumHeight;
-        private readonly Uniform<float> _maximumHeight;
+        private Uniform<float> _minimumHeight;
+        private Uniform<float> _maximumHeight;
 
         private readonly RenderState _rsWireframe;
         private readonly ShaderProgram _spWireframe;
@@ -713,6 +736,7 @@ namespace MiniGlobe.Terrain
 
         private float _heightExaggeration;
         private TerrainNormals _normals;
+        private TerrainShading _shading;
         private bool _dirty;
     }
 }
