@@ -64,6 +64,7 @@ namespace MiniGlobe.Terrain
                   out vec3 normal;
                   out vec3 positionToLight;
                   out vec3 positionToEye;
+                  out vec2 normalizedTextureCoordinate;
                   out float height;
 
                   uniform mat4 mg_modelViewPerspectiveProjectionMatrix;
@@ -144,7 +145,6 @@ namespace MiniGlobe.Terrain
                       vec3 displacedPosition = vec3(position.xy, texture(mg_texture0, position.xy).r * u_heightExaggeration);
 
                       gl_Position = mg_modelViewPerspectiveProjectionMatrix * vec4(displacedPosition, 1.0);
-                      height = displacedPosition.z;
 
                       if (u_normalAlgorithm != 0)
                       {
@@ -164,20 +164,27 @@ namespace MiniGlobe.Terrain
                           positionToLight = mg_cameraLightPosition - displacedPosition;
                           positionToEye = mg_cameraEye - displacedPosition;
                       }
+
+                      normalizedTextureCoordinate = position / 512.0;   // TODO
+                      height = displacedPosition.z;
                   }";
 
             string fsTerrain =
                 @"#version 150
                  
-                  in float height;
                   in vec3 normal;
                   in vec3 positionToLight;
                   in vec3 positionToEye;
+                  in vec2 normalizedTextureCoordinate;
+                  in float height;
 
                   out vec3 fragmentColor;
 
                   uniform vec4 mg_diffuseSpecularAmbientShininess;
                   uniform sampler2D mg_texture1;    // Color ramp
+                  uniform sampler2D mg_texture2;    // Blend ramp for grass and stone
+                  uniform sampler2D mg_texture3;    // Grass
+                  uniform sampler2D mg_texture4;    // Stone
                   uniform float u_minimumHeight;
                   uniform float u_maximumHeight;
                   uniform int u_normalAlgorithm;
@@ -205,15 +212,15 @@ namespace MiniGlobe.Terrain
                           intensity = LightIntensity(normalize(normal),  normalize(positionToLight), normalize(positionToEye), mg_diffuseSpecularAmbientShininess);
                       }
 
-                      if (u_shadingAlgorithm == 0)
+                      if (u_shadingAlgorithm == 0)  // TerrainShading.Solid
                       {
                           fragmentColor = vec3(0.0, intensity, 0.0);
                       }
-                      else if (u_shadingAlgorithm == 1)
+                      else if (u_shadingAlgorithm == 1)  // TerrainShading.ByHeight
                       {
                           fragmentColor = vec3(0.0, intensity * ((height - u_minimumHeight) / (u_maximumHeight - u_minimumHeight)), 0.0);
                       }
-                      else if (u_shadingAlgorithm == 2)
+                      else if (u_shadingAlgorithm == 2)  // TerrainShading.HeightContour
                       {
                           float distanceToContour = mod(height, 5.0);  // Contour every 2 meters 
                           float dx = abs(dFdx(height));
@@ -229,15 +236,19 @@ namespace MiniGlobe.Terrain
                               fragmentColor = vec3(0.0, intensity, 0.0);
                           }
                       }
-                      else if (u_shadingAlgorithm == 3)
+                      else if (u_shadingAlgorithm == 3)  // TerrainShading.ColorRamp
                       {
                           fragmentColor = intensity * texture(mg_texture1, vec2(0.5, ((height - u_minimumHeight) / (u_maximumHeight - u_minimumHeight)))).rgb;
                       }
-                      else if (u_shadingAlgorithm == 4)
+                      else if (u_shadingAlgorithm == 4)  // TerrainShading.BlendRamp
                       {
-                          fragmentColor = vec3(intensity, 0.0, 0.0);    // TODO
+                          float normalizedHeight = (height - u_minimumHeight) / (u_maximumHeight - u_minimumHeight);
+                          fragmentColor = intensity * mix(
+                              texture(mg_texture3, normalizedTextureCoordinate).rgb, 
+                              texture(mg_texture4, normalizedTextureCoordinate).rgb, 
+                              texture(mg_texture2, vec2(0.5, normalizedHeight)).r);
                       }
-                      else if (u_shadingAlgorithm == 5)
+                      else if (u_shadingAlgorithm == 5)  // TerrainShading.DetailTexture
                       {
                           fragmentColor = vec3(intensity, 0.0, 0.0);    // TODO
                       }
@@ -668,6 +679,27 @@ namespace MiniGlobe.Terrain
 
                         _context.TextureUnits[1].Texture2D = ColorRampTexture;
                     }
+                    else if (_shading == TerrainShading.BlendRamp)
+                    {
+                        if (BlendRampTexture == null)
+                        {
+                            throw new InvalidOperationException("BlendRampTexture");
+                        }
+
+                        if (GrassTexture == null)
+                        {
+                            throw new InvalidOperationException("GrassTexture");
+                        }
+
+                        if (StoneTexture == null)
+                        {
+                            throw new InvalidOperationException("StoneTexture");
+                        }
+
+                        _context.TextureUnits[2].Texture2D = BlendRampTexture;
+                        _context.TextureUnits[3].Texture2D = GrassTexture;
+                        _context.TextureUnits[4].Texture2D = StoneTexture;
+                    }
 
                     _context.Bind(_spTerrain);
                     _context.Bind(_rsTerrain);
@@ -738,6 +770,9 @@ namespace MiniGlobe.Terrain
         public bool ShowWireframe { get; set; }
         public bool ShowNormals { get; set; }
         public Texture2D ColorRampTexture { get; set; }
+        public Texture2D BlendRampTexture { get; set; }
+        public Texture2D GrassTexture { get; set; }
+        public Texture2D StoneTexture { get; set; }
 
         #region IDisposable Members
 

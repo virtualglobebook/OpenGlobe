@@ -36,10 +36,13 @@ namespace MiniGlobe.Examples.Chapter5
 
             ///////////////////////////////////////////////////////////////////
 
-            TerrainTile terrainTile = TerrainTile.FromBitmap(new Bitmap(@"ps-e.lg.jpg"));
+            TerrainTile terrainTile = TerrainTile.FromBitmap(new Bitmap("ps-e.lg.jpg"));
             _tile = new VertexDisplacementMapTerrainTile(_window.Context, terrainTile);
             _tile.HeightExaggeration = 30;
             _tile.ColorRampTexture = Device.CreateTexture2D(new Bitmap("ColorRamp.jpg"), TextureFormat.RedGreenBlue8, false);
+            _tile.BlendRampTexture = Device.CreateTexture2D(new Bitmap("BlendRamp.jpg"), TextureFormat.Red8, false);
+            _tile.GrassTexture = Device.CreateTexture2D(new Bitmap("Grass.jpg"), TextureFormat.RedGreenBlue8, false);
+            _tile.StoneTexture = Device.CreateTexture2D(new Bitmap("Stone.jpg"), TextureFormat.RedGreenBlue8, false);
             
             ///////////////////////////////////////////////////////////////////
 
