@@ -87,6 +87,12 @@ namespace MiniGlobe.Examples.Chapter5
                     return "Solid";
                 case TerrainShading.ByHeight:
                     return "By Height";
+                case TerrainShading.ColorRamp:
+                    return "Color Ramp";
+                case TerrainShading.BlendRamp:
+                    return "Blend Ramp";
+                case TerrainShading.DetailTexture:
+                    return "Detail Texture";
             }
 
             return string.Empty;
@@ -138,9 +144,9 @@ namespace MiniGlobe.Examples.Chapter5
                 _tile.Shading += (e.Key == KeyboardKey.Right) ? 1 : -1;
                 if (_tile.Shading < TerrainShading.Solid)
                 {
-                    _tile.Shading = TerrainShading.ByHeight;
+                    _tile.Shading = TerrainShading.DetailTexture;
                 }
-                else if (_tile.Shading > TerrainShading.ByHeight)
+                else if (_tile.Shading > TerrainShading.DetailTexture)
                 {
                     _tile.Shading = TerrainShading.Solid;
                 }

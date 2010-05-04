@@ -29,7 +29,10 @@ namespace MiniGlobe.Terrain
     public enum TerrainShading
     {
         Solid,
-        ByHeight
+        ByHeight,
+        ColorRamp,
+        BlendRamp,
+        DetailTexture
     }
 
     public sealed class VertexDisplacementMapTerrainTile : IDisposable
@@ -208,6 +211,19 @@ namespace MiniGlobe.Terrain
                       {
                           fragmentColor = vec3(0.0, intensity * ((height - u_minimumHeight) / (u_maximumHeight - u_minimumHeight)), 0.0);
                       }
+                      if (u_shadingAlgorithm == 2)
+                      {
+                          fragmentColor = vec3(intensity, 0.0, 0.0);    // TODO
+                      }
+                      if (u_shadingAlgorithm == 3)
+                      {
+                          fragmentColor = vec3(intensity, 0.0, 0.0);    // TODO
+                      }
+                      if (u_shadingAlgorithm == 4)
+                      {
+                          fragmentColor = vec3(intensity, 0.0, 0.0);    // TODO
+                      }
+
                   }";
             _spTerrain = Device.CreateShaderProgram(vsTerrain, fsTerrain);
             _heightExaggerationUniform = _spTerrain.Uniforms["u_heightExaggeration"] as Uniform<float>;
