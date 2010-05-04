@@ -30,6 +30,7 @@ namespace MiniGlobe.Terrain
     {
         Solid,
         ByHeight,
+        HeightContour,
         ColorRamp,
         BlendRamp,
         DetailTexture
@@ -212,19 +213,34 @@ namespace MiniGlobe.Terrain
                       {
                           fragmentColor = vec3(0.0, intensity * ((height - u_minimumHeight) / (u_maximumHeight - u_minimumHeight)), 0.0);
                       }
-                      if (u_shadingAlgorithm == 2)
+                      else if (u_shadingAlgorithm == 2)
+                      {
+                          float distanceToContour = mod(height, 5.0);  // Contour every 2 meters 
+                          float dx = abs(dFdx(height));
+                          float dy = abs(dFdy(height));
+                          float dF = max(dx, dy) * 2.0;  // Line width
+
+                          if (distanceToContour < dF)
+                          {
+                              fragmentColor = vec3(intensity, 0.0, 0.0);
+                          }
+                          else
+                          {
+                              fragmentColor = vec3(0.0, intensity, 0.0);
+                          }
+                      }
+                      else if (u_shadingAlgorithm == 3)
                       {
                           fragmentColor = intensity * texture(mg_texture1, vec2(0.5, ((height - u_minimumHeight) / (u_maximumHeight - u_minimumHeight)))).rgb;
                       }
-                      if (u_shadingAlgorithm == 3)
+                      else if (u_shadingAlgorithm == 4)
                       {
                           fragmentColor = vec3(intensity, 0.0, 0.0);    // TODO
                       }
-                      if (u_shadingAlgorithm == 4)
+                      else if (u_shadingAlgorithm == 5)
                       {
                           fragmentColor = vec3(intensity, 0.0, 0.0);    // TODO
                       }
-
                   }";
             _spTerrain = Device.CreateShaderProgram(vsTerrain, fsTerrain);
             _heightExaggerationUniform = _spTerrain.Uniforms["u_heightExaggeration"] as Uniform<float>;

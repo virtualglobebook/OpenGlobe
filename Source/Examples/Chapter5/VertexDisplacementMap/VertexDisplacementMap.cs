@@ -88,6 +88,8 @@ namespace MiniGlobe.Examples.Chapter5
                     return "Solid";
                 case TerrainShading.ByHeight:
                     return "By Height";
+                case TerrainShading.HeightContour:
+                    return "Height Contour";
                 case TerrainShading.ColorRamp:
                     return "Color Ramp";
                 case TerrainShading.BlendRamp:
