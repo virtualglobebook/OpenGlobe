@@ -109,7 +109,7 @@ namespace MiniGlobe.Scene
                 @"#version 150
                  
                   uniform float u_halfLineWidth;
-                  uniform vec3 u_colorUniform;
+                  uniform vec3 u_color;
                   noperspective in vec3 distanceToEdges;
                   out vec4 fragmentColor;
 
@@ -123,14 +123,14 @@ namespace MiniGlobe.Scene
                       }
 
                       d = clamp(d - (u_halfLineWidth - 1.0), 0.0, 2.0);
-                      fragmentColor = vec4(u_colorUniform, exp2(-2.0 * d * d));
+                      fragmentColor = vec4(u_color, exp2(-2.0 * d * d));
                   }";
             _sp = Device.CreateShaderProgram(vs, gs, fs);
 
             _lineWidth = _sp.Uniforms["u_halfLineWidth"] as Uniform<float>;
             Width = 1;
 
-            _colorUniform = _sp.Uniforms["u_colorUniform"] as Uniform<Vector3S>;
+            _colorUniform = _sp.Uniforms["u_color"] as Uniform<Vector3S>;
             Color = Color.Black;
 
             _va = context.CreateVertexArray(mesh, _sp.VertexAttributes, BufferHint.StaticDraw);

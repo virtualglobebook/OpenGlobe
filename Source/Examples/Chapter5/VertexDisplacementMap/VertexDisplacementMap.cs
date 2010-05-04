@@ -46,11 +46,13 @@ namespace MiniGlobe.Examples.Chapter5
             _camera = new CameraLookAtPoint(_sceneState.Camera, _window, Ellipsoid.UnitSphere);
             _camera.CenterPoint = new Vector3D(terrainTile.Size.X * 0.5, terrainTile.Size.Y * 0.5, 0.0);
             _sceneState.Camera.ZoomToTarget(tileRadius);
-            
-            HighResolutionSnap snap = new HighResolutionSnap(_window, _sceneState);
-            snap.ColorFilename = @"E:\Manuscript\TerrainRendering\Figures\VertexDisplacementMap.png";
-            snap.WidthInInches = 3;
-            snap.DotsPerInch = 600;
+
+            PersistentView.Execute(@"E:\Manuscript\TerrainRendering\Figures\VertexDisplacementMap.xml", _window, _sceneState.Camera);
+
+            //HighResolutionSnap snap = new HighResolutionSnap(_window, _sceneState);
+            //snap.ColorFilename = @"E:\Manuscript\TerrainRendering\Figures\VertexDisplacementMap.png";
+            //snap.WidthInInches = 3;
+            //snap.DotsPerInch = 600;
 
             ///////////////////////////////////////////////////////////////////
 
@@ -65,7 +67,7 @@ namespace MiniGlobe.Examples.Chapter5
             switch(normals)
             {
                 case TerrainNormals.None:
-                    return "No lighting";
+                    return "n/a";
                 case TerrainNormals.ThreeSamples:
                     return "Three Samples";
                 case TerrainNormals.FourSamples:
@@ -82,9 +84,10 @@ namespace MiniGlobe.Examples.Chapter5
             string text;
 
             text = "Height Exaggeration: " + _tile.HeightExaggeration + " (up/down)\n";
-            text += "Normals: " + TerrainNormalsToString(_tile.Normals) + " ('n' + left/right)\n";
+            text += "Normals Algorithm: " + TerrainNormalsToString(_tile.Normals) + " ('a' + left/right)\n";
             text += "Terrain: " + (_tile.ShowTerrain ? "on" : "off") + " ('t')\n";
             text += "Wireframe: " + (_tile.ShowWireframe ? "on" : "off") + " ('w')\n";
+            text += "Normals: " + (_tile.ShowNormals ? "on" : "off") + " ('n')\n";
 
             if (_hud.Texture != null)
             {
@@ -104,15 +107,15 @@ namespace MiniGlobe.Examples.Chapter5
 
         private void OnKeyDown(object sender, KeyboardKeyEventArgs e)
         {
-            if (e.Key == KeyboardKey.N)
+            if (e.Key == KeyboardKey.A)
             {
-                _nKeyDown = true;
+                _aKeyDown = true;
             }
             if ((e.Key == KeyboardKey.Up) || (e.Key == KeyboardKey.Down))
             {
                 _tile.HeightExaggeration = Math.Max(1, _tile.HeightExaggeration + ((e.Key == KeyboardKey.Up) ? 1 : -1));
             }
-            else if (_nKeyDown && ((e.Key == KeyboardKey.Left) || (e.Key == KeyboardKey.Right)))
+            else if (_aKeyDown && ((e.Key == KeyboardKey.Left) || (e.Key == KeyboardKey.Right)))
             {
                 _tile.Normals += (e.Key == KeyboardKey.Right) ? 1 : -1;
                 if (_tile.Normals < TerrainNormals.None)
@@ -132,15 +135,19 @@ namespace MiniGlobe.Examples.Chapter5
             {
                 _tile.ShowWireframe = !_tile.ShowWireframe;
             }
+            else if (e.Key == KeyboardKey.N)
+            {
+                _tile.ShowNormals = !_tile.ShowNormals;
+            }
 
             UpdateHUD();
         }
 
         private void OnKeyUp(object sender, KeyboardKeyEventArgs e)
         {
-            if (e.Key == KeyboardKey.N)
+            if (e.Key == KeyboardKey.A)
             {
-                _nKeyDown = false;
+                _aKeyDown = false;
             }
         }
 
@@ -187,6 +194,6 @@ namespace MiniGlobe.Examples.Chapter5
         private readonly Font _hudFont;
         private readonly HeadsUpDisplay _hud;
 
-        private bool _nKeyDown;
+        private bool _aKeyDown;
     }
 }

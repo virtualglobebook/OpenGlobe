@@ -93,7 +93,7 @@ namespace MiniGlobe.Scene
                   out vec4 fragmentColor;
 
                   uniform sampler2D mg_texture0;
-                  uniform vec3 u_colorUniform;
+                  uniform vec3 u_color;
 
                   void main()
                   {
@@ -103,10 +103,10 @@ namespace MiniGlobe.Scene
                       {
                           discard;
                       }
-                      fragmentColor = vec4(color.rgb * u_colorUniform.rgb, color.a);
+                      fragmentColor = vec4(color.rgb * u_color.rgb, color.a);
                   }";
             _sp = Device.CreateShaderProgram(vs, gs, fs);
-            _colorUniform = _sp.Uniforms["u_colorUniform"] as Uniform<Vector3S>;
+            _colorUniform = _sp.Uniforms["u_color"] as Uniform<Vector3S>;
             _originScaleUniform = _sp.Uniforms["u_originScale"] as Uniform<Vector2S>;
             
             ///////////////////////////////////////////////////////////////////
