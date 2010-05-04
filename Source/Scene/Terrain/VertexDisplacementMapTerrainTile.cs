@@ -44,9 +44,168 @@ namespace MiniGlobe.Terrain
             _texture.CopyFromBuffer(pixelBuffer, ImageFormat.Red, ImageDataType.Float);
             _texture.Filter = Texture2DFilter.NearestClampToEdge;
 
+
             ///////////////////////////////////////////////////////////////////
 
-            string vs =
+            string vsTerrain =
+                @"#version 150
+
+                  in vec2 position;
+                  
+                  out vec3 normal;
+                  out vec3 positionToLight;
+                  out vec3 positionToEye;
+                  out float height;
+
+                  uniform mat4 mg_modelViewPerspectiveProjectionMatrix;
+                  uniform vec3 mg_cameraEye;
+                  uniform vec3 mg_cameraLightPosition;
+                  uniform sampler2DRect mg_texture0;    // Height field
+                  uniform float u_heightExaggeration;
+                  uniform int u_normalAlgorithm;
+
+                  vec3 ComputeNormalThreeSamples(
+                      vec3 displacedPosition, 
+                      sampler2DRect heightField, 
+                      float heightExaggeration)
+                  {
+                      vec3 right = vec3(displacedPosition.xy + vec2(1.0, 0.0), texture(heightField, displacedPosition.xy + vec2(1.0, 0.0)).r * heightExaggeration);
+                      vec3 top = vec3(displacedPosition.xy + vec2(0.0, 1.0), texture(heightField, displacedPosition.xy + vec2(0.0, 1.0)).r * heightExaggeration);
+                      return cross(right - displacedPosition, top - displacedPosition);
+                  }
+
+                  vec3 ComputeNormalFourSamples(
+                      vec3 displacedPosition, 
+                      sampler2DRect heightField, 
+                      float heightExaggeration)
+                  {
+                      vec2 position = displacedPosition.xy;
+                      vec3 left = vec3(position - vec2(1.0, 0.0), texture(heightField, position - vec2(1.0, 0.0)).r * heightExaggeration);
+                      vec3 right = vec3(position + vec2(1.0, 0.0), texture(heightField, position + vec2(1.0, 0.0)).r * heightExaggeration);
+                      vec3 bottom = vec3(position - vec2(0.0, 1.0), texture(heightField, position - vec2(0.0, 1.0)).r * heightExaggeration);
+                      vec3 top = vec3(position + vec2(0.0, 1.0), texture(heightField, position.xy + vec2(0.0, 1.0)).r * heightExaggeration);
+                      return cross(right - left, top - bottom);
+                  }
+
+                  float SumElements(mat3 m)
+                  {
+                      return 
+                          m[0].x + m[0].y + m[0].z +
+                          m[1].x + m[1].y + m[1].z +
+                          m[2].x + m[2].y + m[2].z;
+                  }
+
+                  vec3 ComputeNormalSobelFilter(
+                      vec3 displacedPosition, 
+                      sampler2DRect heightField, 
+                      float heightExaggeration)
+                  {
+                      vec2 position = displacedPosition.xy;
+                      float upperLeft = texture(heightField, position + vec2(-1.0, 1.0)).r * heightExaggeration;
+                      float upperCenter = texture(heightField, position + vec2(0.0, 1.0)).r * heightExaggeration;
+                      float upperRight = texture(heightField, position + vec2(1.0, 1.0)).r * heightExaggeration;
+                      float left = texture(heightField, position + vec2(-1.0, 0.0)).r * heightExaggeration;
+                      float right = texture(heightField, position + vec2(1.0, 0.0)).r * heightExaggeration;
+                      float lowerLeft = texture(heightField, position + vec2(-1.0, -1.0)).r * heightExaggeration;
+                      float lowerCenter = texture(heightField, position + vec2(0.0, -1.0)).r * heightExaggeration;
+                      float lowerRight = texture(heightField, position + vec2(1.0, -1.0)).r * heightExaggeration;
+
+                      mat3 positions = mat3(
+                          upperLeft, left, lowerLeft,
+                          upperCenter, 0.0, lowerCenter,
+                          upperRight, right, lowerRight);
+
+                      mat3 sobelX = mat3(
+                          -1.0, -2.0, -1.0,
+                          0.0,  0.0,  0.0,
+                          1.0,  2.0,  1.0);
+                      mat3 sobelY = mat3(
+                          -1.0, 0.0, 1.0,
+                          -2.0, 0.0, 2.0,
+                          -1.0, 0.0, 1.0);
+
+                      float x = SumElements(matrixCompMult(positions, sobelX));
+                      float y = SumElements(matrixCompMult(positions, sobelY));
+
+                      return normalize(vec3(x, y, 1.0 * 8.0));
+                  }
+
+                  void main()
+                  {
+                      vec3 displacedPosition = vec3(position.xy, texture(mg_texture0, position.xy).r * u_heightExaggeration);
+
+                      gl_Position = mg_modelViewPerspectiveProjectionMatrix * vec4(displacedPosition, 1.0);
+                      height = displacedPosition.z;
+
+                      if (u_normalAlgorithm != 0)
+                      {
+                          if (u_normalAlgorithm == 1)
+                          {
+                              normal = ComputeNormalThreeSamples(displacedPosition, mg_texture0, u_heightExaggeration);
+                          }
+                          else if (u_normalAlgorithm == 2)
+                          {
+                              normal = ComputeNormalFourSamples(displacedPosition, mg_texture0, u_heightExaggeration);
+                          }
+                          else if (u_normalAlgorithm == 3)
+                          {
+                              normal = ComputeNormalSobelFilter(displacedPosition, mg_texture0, u_heightExaggeration);
+                          }
+
+                          positionToLight = mg_cameraLightPosition - displacedPosition;
+                          positionToEye = mg_cameraEye - displacedPosition;
+                      }
+                  }";
+
+            string fsTerrain =
+                @"#version 150
+                 
+                  in float height;
+                  in vec3 normal;
+                  in vec3 positionToLight;
+                  in vec3 positionToEye;
+
+                  out vec3 fragmentColor;
+
+                  uniform vec4 mg_diffuseSpecularAmbientShininess;
+                  uniform float u_minimumHeight;
+                  uniform float u_maximumHeight;
+                  uniform int u_normalAlgorithm;
+
+                  float LightIntensity(vec3 normal, vec3 toLight, vec3 toEye, vec4 diffuseSpecularAmbientShininess)
+                  {
+                      vec3 toReflectedLight = reflect(-toLight, normal);
+
+                      float diffuse = max(dot(toLight, normal), 0.0);
+                      float specular = max(dot(toReflectedLight, toEye), 0.0);
+                      specular = pow(specular, diffuseSpecularAmbientShininess.w);
+
+                      return (diffuseSpecularAmbientShininess.x * diffuse) +
+                              (diffuseSpecularAmbientShininess.y * specular) +
+                              diffuseSpecularAmbientShininess.z;
+                  }
+
+                  void main()
+                  {
+                      if (u_normalAlgorithm == 0)
+                      {
+                          fragmentColor = vec3(0.0, 1.0, 0.0);
+                      }
+                      else
+                      {
+                          float intensity = LightIntensity(normalize(normal),  normalize(positionToLight), normalize(positionToEye), mg_diffuseSpecularAmbientShininess);
+                          //fragmentColor = intensity * vec3((height - u_minimumHeight) / (u_maximumHeight - u_minimumHeight), 0.0, 0.0);
+                          fragmentColor = vec3(0.0, intensity, 0.0);
+                      }
+                  }";
+            _spTerrain = Device.CreateShaderProgram(vsTerrain, fsTerrain);
+            _heightExaggerationUniform = _spTerrain.Uniforms["u_heightExaggeration"] as Uniform<float>;
+            //_minimumHeight = _spTerrain.Uniforms["u_minimumHeight"] as Uniform<float>;
+            //_maximumHeight = _spTerrain.Uniforms["u_maximumHeight"] as Uniform<float>;
+
+            ///////////////////////////////////////////////////////////////////
+
+            string vsNormals =
                 @"#version 150
 
                   in vec2 position;
@@ -65,7 +224,7 @@ namespace MiniGlobe.Terrain
                       gl_Position = vec4(displacedPosition, 1.0);
                       distanceToEyeGS = distance(displacedPosition, mg_cameraEye);
                   }";
-            string gs =
+            string gsNormals =
                 @"#version 150 
 
                   layout(points) in;
@@ -191,15 +350,15 @@ namespace MiniGlobe.Terrain
                   {
                       vec3 terrainNormal = vec3(0.0);
 
-                      if (u_normalAlgorithm == 0)
+                      if (u_normalAlgorithm == 1)
                       {
                           terrainNormal = ComputeNormalThreeSamples(gl_in[0].gl_Position.xyz, mg_texture0, u_heightExaggeration);
                       }
-                      else if (u_normalAlgorithm == 1)
+                      else if (u_normalAlgorithm == 2)
                       {
                           terrainNormal = ComputeNormalFourSamples(gl_in[0].gl_Position.xyz, mg_texture0, u_heightExaggeration);
                       }
-                      else if (u_normalAlgorithm == 2)
+                      else if (u_normalAlgorithm == 3)
                       {
                           terrainNormal = ComputeNormalSobelFilter(gl_in[0].gl_Position.xyz, mg_texture0, u_heightExaggeration);
                       }
@@ -239,7 +398,7 @@ namespace MiniGlobe.Terrain
                       distanceToEyeFS = distanceToEyeGS[0];
                       EmitVertex();
                   }";
-            string fs =
+            string fsNormals =
                 @"#version 150
                  
                   in float distanceToEyeFS;
@@ -259,7 +418,7 @@ namespace MiniGlobe.Terrain
 
                       fragmentColor = vec4(u_color, a);
                   }";
-            _spNormals = Device.CreateShaderProgram(vs, gs, fs);
+            _spNormals = Device.CreateShaderProgram(vsNormals, gsNormals, fsNormals);
             _heightExaggerationNormals = _spNormals.Uniforms["u_heightExaggeration"] as Uniform<float>;
             _fillDistanceNormals = _spNormals.Uniforms["u_fillDistance"] as Uniform<float>;
             (_spNormals.Uniforms["u_color"] as Uniform<Vector3S>).Value = Vector3S.Zero;
@@ -422,279 +581,14 @@ namespace MiniGlobe.Terrain
             _dirty = true;
         }
 
-        private void UpdateTerrainShader()
-        {
-            if (_spTerrain != null)
-            {
-                _spTerrain.Dispose();
-                _spTerrain = null;
-            }
-
-            string vs = string.Empty;
-            string fs = string.Empty;
-
-            if (_normals == TerrainNormals.None)
-            {
-                vs =
-                    @"#version 150
-
-                      in vec2 position;
-                
-                      out float height;
-
-                      uniform mat4 mg_modelViewPerspectiveProjectionMatrix;
-                      uniform sampler2DRect mg_texture0;    // Height field
-                      uniform float u_heightExaggeration;
-
-                      void main()
-                      {
-                          vec4 displacedPosition = vec4(position.xy, 
-                              texture(mg_texture0, position.xy).r * u_heightExaggeration, 1.0);
-
-                          gl_Position = mg_modelViewPerspectiveProjectionMatrix * displacedPosition;
-                          height = displacedPosition.z;
-                      }";
-            }
-            else if (_normals == TerrainNormals.ThreeSamples)
-            {
-                vs =
-                    @"#version 150
-
-                      in vec2 position;
-                  
-                      out vec3 normal;
-                      out vec3 positionToLight;
-                      out vec3 positionToEye;
-                      out float height;
-
-                      uniform mat4 mg_modelViewPerspectiveProjectionMatrix;
-                      uniform vec3 mg_cameraEye;
-                      uniform vec3 mg_cameraLightPosition;
-                      uniform sampler2DRect mg_texture0;    // Height field
-                      uniform float u_heightExaggeration;
-
-                      vec3 ComputeNormalThreeSamples(
-                          vec3 displacedPosition, 
-                          sampler2DRect heightField, 
-                          float heightExaggeration)
-                      {
-                          vec3 right = vec3(displacedPosition.xy + vec2(1.0, 0.0), texture(heightField, displacedPosition.xy + vec2(1.0, 0.0)).r * heightExaggeration);
-                          vec3 top = vec3(displacedPosition.xy + vec2(0.0, 1.0), texture(heightField, displacedPosition.xy + vec2(0.0, 1.0)).r * heightExaggeration);
-                          return cross(right - displacedPosition, top - displacedPosition);
-                      }
-
-                      void main()
-                      {
-                          vec4 displacedPosition = vec4(position.xy, 
-                              texture(mg_texture0, position.xy).r * u_heightExaggeration, 1.0);
-
-                          gl_Position = mg_modelViewPerspectiveProjectionMatrix * displacedPosition;
-                          height = displacedPosition.z;
-                          normal = ComputeNormalThreeSamples(displacedPosition.xyz, mg_texture0, u_heightExaggeration);
-                          positionToLight = mg_cameraLightPosition - displacedPosition.xyz;
-                          positionToEye = mg_cameraEye - displacedPosition.xyz;
-                      }";
-            }
-            else if (_normals == TerrainNormals.FourSamples)
-            {
-                vs =
-                    @"#version 150
-
-                      in vec2 position;
-                  
-                      out vec3 normal;
-                      out vec3 positionToLight;
-                      out vec3 positionToEye;
-                      out float height;
-
-                      uniform mat4 mg_modelViewPerspectiveProjectionMatrix;
-                      uniform vec3 mg_cameraEye;
-                      uniform vec3 mg_cameraLightPosition;
-                      uniform sampler2DRect mg_texture0;    // Height field
-                      uniform float u_heightExaggeration;
-
-                      vec3 ComputeNormalFourSamples(
-                          vec2 position, 
-                          sampler2DRect heightField, 
-                          float heightExaggeration)
-                      {
-                          vec3 left = vec3(position - vec2(1.0, 0.0), texture(heightField, position - vec2(1.0, 0.0)).r * heightExaggeration);
-                          vec3 right = vec3(position + vec2(1.0, 0.0), texture(heightField, position + vec2(1.0, 0.0)).r * heightExaggeration);
-                          vec3 bottom = vec3(position - vec2(0.0, 1.0), texture(heightField, position - vec2(0.0, 1.0)).r * heightExaggeration);
-                          vec3 top = vec3(position + vec2(0.0, 1.0), texture(heightField, position.xy + vec2(0.0, 1.0)).r * heightExaggeration);
-                          return cross(right - left, top - bottom);
-                      }
-
-                      void main()
-                      {
-                          vec4 displacedPosition = vec4(position.xy, 
-                              texture(mg_texture0, position.xy).r * u_heightExaggeration, 1.0);
-
-                          gl_Position = mg_modelViewPerspectiveProjectionMatrix * displacedPosition;
-                          height = displacedPosition.z;
-                          normal = ComputeNormalFourSamples(position, mg_texture0, u_heightExaggeration);
-                          positionToLight = mg_cameraLightPosition - displacedPosition.xyz;
-                          positionToEye = mg_cameraEye - displacedPosition.xyz;
-                      }";
-            }
-            else if (_normals == TerrainNormals.SobelFilter)
-            {
-                vs =
-                    @"#version 150
-
-                      in vec2 position;
-                  
-                      out vec3 normal;
-                      out vec3 positionToLight;
-                      out vec3 positionToEye;
-                      out float height;
-
-                      uniform mat4 mg_modelViewPerspectiveProjectionMatrix;
-                      uniform vec3 mg_cameraEye;
-                      uniform vec3 mg_cameraLightPosition;
-                      uniform sampler2DRect mg_texture0;    // Height field
-                      uniform float u_heightExaggeration;
-
-                      float SumElements(mat3 m)
-                      {
-                          return 
-                              m[0].x + m[0].y + m[0].z +
-                              m[1].x + m[1].y + m[1].z +
-                              m[2].x + m[2].y + m[2].z;
-                      }
-
-                      vec3 ComputeNormalSobelFilter(
-                          vec2 position, 
-                          sampler2DRect heightField, 
-                          float heightExaggeration)
-                      {
-                          float upperLeft = texture(heightField, position + vec2(-1.0, 1.0)).r * heightExaggeration;
-                          float upperCenter = texture(heightField, position + vec2(0.0, 1.0)).r * heightExaggeration;
-                          float upperRight = texture(heightField, position + vec2(1.0, 1.0)).r * heightExaggeration;
-                          float left = texture(heightField, position + vec2(-1.0, 0.0)).r * heightExaggeration;
-                          float right = texture(heightField, position + vec2(1.0, 0.0)).r * heightExaggeration;
-                          float lowerLeft = texture(heightField, position + vec2(-1.0, -1.0)).r * heightExaggeration;
-                          float lowerCenter = texture(heightField, position + vec2(0.0, -1.0)).r * heightExaggeration;
-                          float lowerRight = texture(heightField, position + vec2(1.0, -1.0)).r * heightExaggeration;
-
-                          mat3 positions = mat3(
-                              upperLeft, left, lowerLeft,
-                              upperCenter, 0.0, lowerCenter,
-                              upperRight, right, lowerRight);
-
-                          mat3 sobelX = mat3(
-                              -1.0, -2.0, -1.0,
-                               0.0,  0.0,  0.0,
-                               1.0,  2.0,  1.0);
-                          mat3 sobelY = mat3(
-                              -1.0, 0.0, 1.0,
-                              -2.0, 0.0, 2.0,
-                              -1.0, 0.0, 1.0);
-
-                          float x = SumElements(matrixCompMult(positions, sobelX));
-                          float y = SumElements(matrixCompMult(positions, sobelY));
-
-                          return normalize(vec3(x, y, 1.0 * 8.0));
-                      }
-
-                      void main()
-                      {
-                          vec4 displacedPosition = vec4(position.xy, 
-                              texture(mg_texture0, position.xy).r * u_heightExaggeration, 1.0);
-
-                          gl_Position = mg_modelViewPerspectiveProjectionMatrix * displacedPosition;
-                          height = displacedPosition.z;
-                          normal = ComputeNormalSobelFilter(position, mg_texture0, u_heightExaggeration);
-                          positionToLight = mg_cameraLightPosition - displacedPosition.xyz;
-                          positionToEye = mg_cameraEye - displacedPosition.xyz;
-                      }";
-            }
-
-            if (_normals == TerrainNormals.None)
-            {
-                fs =
-                    @"#version 150
-                 
-                      in float height;
-
-                      out vec3 fragmentColor;
-
-                      uniform float u_minimumHeight;
-                      uniform float u_maximumHeight;
-
-                      void main()
-                      {
-                          //fragmentColor = intensity * vec3((height - u_minimumHeight) / (u_maximumHeight - u_minimumHeight), 0.0, 0.0);
-                          fragmentColor = vec3(0.0, 1.0, 0.0);
-                      }";
-            }
-            else
-            {
-                fs =
-                    @"#version 150
-                 
-                      in float height;
-                      in vec3 normal;
-                      in vec3 positionToLight;
-                      in vec3 positionToEye;
-
-                      out vec3 fragmentColor;
-
-                      uniform vec4 mg_diffuseSpecularAmbientShininess;
-                      uniform float u_minimumHeight;
-                      uniform float u_maximumHeight;
-
-                      float LightIntensity(vec3 normal, vec3 toLight, vec3 toEye, vec4 diffuseSpecularAmbientShininess)
-                      {
-                          vec3 toReflectedLight = reflect(-toLight, normal);
-
-                          float diffuse = max(dot(toLight, normal), 0.0);
-                          float specular = max(dot(toReflectedLight, toEye), 0.0);
-                          specular = pow(specular, diffuseSpecularAmbientShininess.w);
-
-                          return (diffuseSpecularAmbientShininess.x * diffuse) +
-                                  (diffuseSpecularAmbientShininess.y * specular) +
-                                  diffuseSpecularAmbientShininess.z;
-                      }
-
-                      void main()
-                      {
-                          float intensity = LightIntensity(normalize(normal),  normalize(positionToLight), normalize(positionToEye), mg_diffuseSpecularAmbientShininess);
-                          //fragmentColor = intensity * vec3((height - u_minimumHeight) / (u_maximumHeight - u_minimumHeight), 0.0, 0.0);
-                          fragmentColor = vec3(0.0, intensity, 0.0);
-                      }";
-            }
-
-            _spTerrain = Device.CreateShaderProgram(vs, fs);
-            _heightExaggerationUniform = _spTerrain.Uniforms["u_heightExaggeration"] as Uniform<float>;
-            //_minimumHeight = _spTerrain.Uniforms["u_minimumHeight"] as Uniform<float>;
-            //_maximumHeight = _spTerrain.Uniforms["u_maximumHeight"] as Uniform<float>;
-        }
-
-        private void UpdateNormalsShader()
-        {
-            if (_normals == TerrainNormals.ThreeSamples)
-            {
-                (_spNormals.Uniforms["u_normalAlgorithm"] as Uniform<int>).Value = 0;
-            }
-            else if (_normals == TerrainNormals.FourSamples)
-            {
-                (_spNormals.Uniforms["u_normalAlgorithm"] as Uniform<int>).Value = 1;
-            }
-            else if (_normals == TerrainNormals.SobelFilter)
-            {
-                (_spNormals.Uniforms["u_normalAlgorithm"] as Uniform<int>).Value = 2;
-            }
-        }
-
         private void Update(SceneState sceneState)
         {
             if (_dirty)
             {
-                _dirty = false;
+                (_spTerrain.Uniforms["u_normalAlgorithm"] as Uniform<int>).Value = (int)_normals;
+                (_spNormals.Uniforms["u_normalAlgorithm"] as Uniform<int>).Value = (int)_normals;
 
-                UpdateTerrainShader();
-                UpdateNormalsShader();
+                _dirty = false;
             }
 
             _heightExaggerationUniform.Value = _heightExaggeration;
@@ -782,11 +676,7 @@ namespace MiniGlobe.Terrain
 
         public void Dispose()
         {
-            if (_spTerrain != null)
-            {
-                _spTerrain.Dispose();
-            }
-
+            _spTerrain.Dispose();
             _spWireframe.Dispose();
             _spNormals.Dispose();
 
@@ -799,10 +689,10 @@ namespace MiniGlobe.Terrain
         private readonly Context _context;
 
         private readonly RenderState _rsTerrain;
-        private ShaderProgram _spTerrain;
-        private Uniform<float> _heightExaggerationUniform;
-        private Uniform<float> _minimumHeight;
-        private Uniform<float> _maximumHeight;
+        private readonly ShaderProgram _spTerrain;
+        private readonly Uniform<float> _heightExaggerationUniform;
+        private readonly Uniform<float> _minimumHeight;
+        private readonly Uniform<float> _maximumHeight;
 
         private readonly RenderState _rsWireframe;
         private readonly ShaderProgram _spWireframe;
