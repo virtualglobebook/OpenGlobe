@@ -26,9 +26,13 @@ namespace MiniGlobe.Examples.Chapter5
             _window = Device.CreateWindow(800, 600, "Chapter 5:  Vertex Shader Displacement Mapping");
             _window.Resize += OnResize;
             _window.RenderFrame += OnRenderFrame;
+            _window.Keyboard.KeyDown += OnKeyDown;
             _window.Keyboard.KeyUp += OnKeyUp;
             _sceneState = new SceneState();
             _sceneState.Camera.PerspectiveFarPlaneDistance = 4096;
+            _sceneState.DiffuseIntensity = 0.9f;
+            _sceneState.SpecularIntensity = 0.05f;
+            _sceneState.AmbientIntensity = 0.05f;
 
             ///////////////////////////////////////////////////////////////////
 
@@ -56,12 +60,30 @@ namespace MiniGlobe.Examples.Chapter5
             UpdateHUD();
         }
 
+        private static string TerrainNormalsToString(TerrainNormals normals)
+        {
+            switch(normals)
+            {
+                case TerrainNormals.None:
+                    return "No lighting";
+                case TerrainNormals.ThreeSamples:
+                    return "Three Samples";
+                case TerrainNormals.FourSamples:
+                    return "Four Samples";
+                case TerrainNormals.SobelFilter:
+                    return "Sobel Filter";
+            }
+
+            return string.Empty;
+        }
+
         private void UpdateHUD()
         {
             string text;
 
-            text = "Height Exaggeration: " + _tile.HeightExaggeration + " (up/down)";
-
+            text = "Height Exaggeration: " + _tile.HeightExaggeration + " (up/down)\n";
+            text += "Normals: " + TerrainNormalsToString(_tile.Normals) + " ('n' + left/right)";
+                
             if (_hud.Texture != null)
             {
                 _hud.Texture.Dispose();
@@ -78,14 +100,38 @@ namespace MiniGlobe.Examples.Chapter5
             _sceneState.Camera.AspectRatio = _window.Width / (double)_window.Height;
         }
 
-        private void OnKeyUp(object sender, KeyboardKeyEventArgs e)
+        private void OnKeyDown(object sender, KeyboardKeyEventArgs e)
         {
+            if (e.Key == KeyboardKey.N)
+            {
+                _nKeyDown = true;
+            }
             if ((e.Key == KeyboardKey.Up) || (e.Key == KeyboardKey.Down))
             {
                 _tile.HeightExaggeration = Math.Max(1, _tile.HeightExaggeration + ((e.Key == KeyboardKey.Up) ? 1 : -1));
             }
+            else if (_nKeyDown && ((e.Key == KeyboardKey.Left) || (e.Key == KeyboardKey.Right)))
+            {
+                _tile.Normals += (e.Key == KeyboardKey.Right) ? 1 : -1;
+                if (_tile.Normals < TerrainNormals.None)
+                {
+                    _tile.Normals = TerrainNormals.SobelFilter;
+                }
+                else if (_tile.Normals > TerrainNormals.SobelFilter)
+                {
+                    _tile.Normals = TerrainNormals.None;
+                }
+            }
 
             UpdateHUD();
+        }
+
+        private void OnKeyUp(object sender, KeyboardKeyEventArgs e)
+        {
+            if (e.Key == KeyboardKey.N)
+            {
+                _nKeyDown = false;
+            }
         }
 
         private void OnRenderFrame()
@@ -130,5 +176,7 @@ namespace MiniGlobe.Examples.Chapter5
 
         private readonly Font _hudFont;
         private readonly HeadsUpDisplay _hud;
+
+        private bool _nKeyDown;
     }
 }
