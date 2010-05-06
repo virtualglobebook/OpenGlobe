@@ -30,8 +30,10 @@ namespace MiniGlobe.Renderer.GL3x
             try
             {
                 if (!_context.IsDisposed)
+                {
                     _context.MakeCurrent(_window.WindowInfo);
-                return true;
+                    return true;
+                }
             }
             catch
             {
