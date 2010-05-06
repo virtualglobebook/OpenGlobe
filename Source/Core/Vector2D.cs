@@ -16,7 +16,7 @@ using System.Runtime.InteropServices;
 namespace MiniGlobe.Core
 {
     /// <summary>
-    /// test! A set of 2-dimensional cartesian coordinates where the two components,
+    /// A set of 2-dimensional cartesian coordinates where the two components,
     /// <see cref="X"/> and <see cref="Y"/>, are represented as
     /// double-precision (64-bit) floating point numbers.
     /// </summary>
