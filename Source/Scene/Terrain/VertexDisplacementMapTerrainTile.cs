@@ -91,12 +91,22 @@ namespace MiniGlobe.Terrain
                       sampler2DRect heightField, 
                       float heightExaggeration)
                   {
+                      //
+                      // Original unoptimized verion
+                      //
+                      //vec2 position = displacedPosition.xy;
+                      //vec3 left = vec3(position - vec2(1.0, 0.0), texture(heightField, position - vec2(1.0, 0.0)).r * heightExaggeration);
+                      //vec3 right = vec3(position + vec2(1.0, 0.0), texture(heightField, position + vec2(1.0, 0.0)).r * heightExaggeration);
+                      //vec3 bottom = vec3(position - vec2(0.0, 1.0), texture(heightField, position - vec2(0.0, 1.0)).r * heightExaggeration);
+                      //vec3 top = vec3(position + vec2(0.0, 1.0), texture(heightField, position.xy + vec2(0.0, 1.0)).r * heightExaggeration);
+                      //return cross(right - left, top - bottom);
+
                       vec2 position = displacedPosition.xy;
-                      vec3 left = vec3(position - vec2(1.0, 0.0), texture(heightField, position - vec2(1.0, 0.0)).r * heightExaggeration);
-                      vec3 right = vec3(position + vec2(1.0, 0.0), texture(heightField, position + vec2(1.0, 0.0)).r * heightExaggeration);
-                      vec3 bottom = vec3(position - vec2(0.0, 1.0), texture(heightField, position - vec2(0.0, 1.0)).r * heightExaggeration);
-                      vec3 top = vec3(position + vec2(0.0, 1.0), texture(heightField, position.xy + vec2(0.0, 1.0)).r * heightExaggeration);
-                      return cross(right - left, top - bottom);
+                      float leftHeight = texture(heightField, position - vec2(1.0, 0.0)).r * heightExaggeration;
+                      float rightHeight = texture(heightField, position + vec2(1.0, 0.0)).r * heightExaggeration;
+                      float bottomHeight = texture(heightField, position - vec2(0.0, 1.0)).r * heightExaggeration;
+                      float topHeight = texture(heightField, position.xy + vec2(0.0, 1.0)).r * heightExaggeration;
+                      return vec3(leftHeight - rightHeight, bottomHeight - topHeight, 2.0);
                   }
 
                   float SumElements(mat3 m)
@@ -112,6 +122,37 @@ namespace MiniGlobe.Terrain
                       sampler2DRect heightField, 
                       float heightExaggeration)
                   {
+                      //
+                      // Original unoptimized verion
+                      //
+//                      vec2 position = displacedPosition.xy;
+//                      float upperLeft = texture(heightField, position + vec2(-1.0, 1.0)).r * heightExaggeration;
+//                      float upperCenter = texture(heightField, position + vec2(0.0, 1.0)).r * heightExaggeration;
+//                      float upperRight = texture(heightField, position + vec2(1.0, 1.0)).r * heightExaggeration;
+//                      float left = texture(heightField, position + vec2(-1.0, 0.0)).r * heightExaggeration;
+//                      float right = texture(heightField, position + vec2(1.0, 0.0)).r * heightExaggeration;
+//                      float lowerLeft = texture(heightField, position + vec2(-1.0, -1.0)).r * heightExaggeration;
+//                      float lowerCenter = texture(heightField, position + vec2(0.0, -1.0)).r * heightExaggeration;
+//                      float lowerRight = texture(heightField, position + vec2(1.0, -1.0)).r * heightExaggeration;
+//
+//                      mat3 positions = mat3(
+//                          upperLeft, left, lowerLeft,
+//                          upperCenter, 0.0, lowerCenter,
+//                          upperRight, right, lowerRight);
+//                      mat3 sobelX = mat3(
+//                          -1.0, -2.0, -1.0,
+//                          0.0,  0.0,  0.0,
+//                          1.0,  2.0,  1.0);
+//                      mat3 sobelY = mat3(
+//                          -1.0, 0.0, 1.0,
+//                          -2.0, 0.0, 2.0,
+//                          -1.0, 0.0, 1.0);
+//
+//                      float x = SumElements(matrixCompMult(positions, sobelX));
+//                      float y = SumElements(matrixCompMult(positions, sobelY));
+//
+//                      return vec3(-x, y, 4.0);
+
                       vec2 position = displacedPosition.xy;
                       float upperLeft = texture(heightField, position + vec2(-1.0, 1.0)).r * heightExaggeration;
                       float upperCenter = texture(heightField, position + vec2(0.0, 1.0)).r * heightExaggeration;
@@ -122,24 +163,10 @@ namespace MiniGlobe.Terrain
                       float lowerCenter = texture(heightField, position + vec2(0.0, -1.0)).r * heightExaggeration;
                       float lowerRight = texture(heightField, position + vec2(1.0, -1.0)).r * heightExaggeration;
 
-                      mat3 positions = mat3(
-                          upperLeft, left, lowerLeft,
-                          upperCenter, 0.0, lowerCenter,
-                          upperRight, right, lowerRight);
+                      float x = upperRight + (2.0 * right) + lowerRight - upperLeft - (2.0 * left) - lowerLeft;
+                      float y = lowerLeft + (2.0 * lowerCenter) + lowerRight - upperLeft - (2.0 * upperCenter) - upperRight;
 
-                      mat3 sobelX = mat3(
-                          -1.0, -2.0, -1.0,
-                          0.0,  0.0,  0.0,
-                          1.0,  2.0,  1.0);
-                      mat3 sobelY = mat3(
-                          -1.0, 0.0, 1.0,
-                          -2.0, 0.0, 2.0,
-                          -1.0, 0.0, 1.0);
-
-                      float x = SumElements(matrixCompMult(positions, sobelX));
-                      float y = SumElements(matrixCompMult(positions, sobelY));
-
-                      return normalize(vec3(x, y, 1.0 * 8.0));
+                      return vec3(-x, y, 4.0);
                   }
 
                   void main()
@@ -150,15 +177,15 @@ namespace MiniGlobe.Terrain
 
                       if (u_normalAlgorithm != 0)
                       {
-                          if (u_normalAlgorithm == 1)
+                          if (u_normalAlgorithm == 1)       // TerrainNormalsAlgorithm.ThreeSamples
                           {
                               normalFS = ComputeNormalThreeSamples(displacedPosition, mg_texture0, u_heightExaggeration);
                           }
-                          else if (u_normalAlgorithm == 2)
+                          else if (u_normalAlgorithm == 2)  // TerrainNormalsAlgorithm.FourSamples
                           {
                               normalFS = ComputeNormalFourSamples(displacedPosition, mg_texture0, u_heightExaggeration);
                           }
-                          else if (u_normalAlgorithm == 3)
+                          else if (u_normalAlgorithm == 3)  // TerrainNormalsAlgorithm.SobelFilter
                           {
                               normalFS = ComputeNormalSobelFilter(displacedPosition, mg_texture0, u_heightExaggeration);
                           }
@@ -210,7 +237,7 @@ namespace MiniGlobe.Terrain
                       float intensity = 1.0;
                       vec3 normal = normalize(normalFS);
 
-                      if (u_normalAlgorithm != 0)
+                      if (u_normalAlgorithm != 0)   // TerrainNormalsAlgorithm.None
                       {
                           intensity = LightIntensity(normal,  normalize(positionToLight), normalize(positionToEye), mg_diffuseSpecularAmbientShininess);
                       }
@@ -363,19 +390,11 @@ namespace MiniGlobe.Terrain
                       float heightExaggeration)
                   {
                       vec2 position = displacedPosition.xy;
-                      vec3 left = vec3(position - vec2(1.0, 0.0), texture(heightField, position - vec2(1.0, 0.0)).r * heightExaggeration);
-                      vec3 right = vec3(position + vec2(1.0, 0.0), texture(heightField, position + vec2(1.0, 0.0)).r * heightExaggeration);
-                      vec3 bottom = vec3(position - vec2(0.0, 1.0), texture(heightField, position - vec2(0.0, 1.0)).r * heightExaggeration);
-                      vec3 top = vec3(position + vec2(0.0, 1.0), texture(heightField, position.xy + vec2(0.0, 1.0)).r * heightExaggeration);
-                      return cross(right - left, top - bottom);
-                  }
-
-                  float SumElements(mat3 m)
-                  {
-                      return 
-                          m[0].x + m[0].y + m[0].z +
-                          m[1].x + m[1].y + m[1].z +
-                          m[2].x + m[2].y + m[2].z;
+                      float leftHeight = texture(heightField, position - vec2(1.0, 0.0)).r * heightExaggeration;
+                      float rightHeight = texture(heightField, position + vec2(1.0, 0.0)).r * heightExaggeration;
+                      float bottomHeight = texture(heightField, position - vec2(0.0, 1.0)).r * heightExaggeration;
+                      float topHeight = texture(heightField, position.xy + vec2(0.0, 1.0)).r * heightExaggeration;
+                      return vec3(leftHeight - rightHeight, bottomHeight - topHeight, 2.0);
                   }
 
                   vec3 ComputeNormalSobelFilter(
@@ -393,39 +412,25 @@ namespace MiniGlobe.Terrain
                       float lowerCenter = texture(heightField, position + vec2(0.0, -1.0)).r * heightExaggeration;
                       float lowerRight = texture(heightField, position + vec2(1.0, -1.0)).r * heightExaggeration;
 
-                      mat3 positions = mat3(
-                          upperLeft, left, lowerLeft,
-                          upperCenter, 0.0, lowerCenter,
-                          upperRight, right, lowerRight);
+                      float x = upperRight + (2.0 * right) + lowerRight - upperLeft - (2.0 * left) - lowerLeft;
+                      float y = lowerLeft + (2.0 * lowerCenter) + lowerRight - upperLeft - (2.0 * upperCenter) - upperRight;
 
-                      mat3 sobelX = mat3(
-                          -1.0, -2.0, -1.0,
-                          0.0,  0.0,  0.0,
-                          1.0,  2.0,  1.0);
-                      mat3 sobelY = mat3(
-                          -1.0, 0.0, 1.0,
-                          -2.0, 0.0, 2.0,
-                          -1.0, 0.0, 1.0);
-
-                      float x = SumElements(matrixCompMult(positions, sobelX));
-                      float y = SumElements(matrixCompMult(positions, sobelY));
-
-                      return normalize(vec3(x, y, 1.0 * 8.0));
+                      return vec3(-x, y, 4.0);
                   }
 
                   void main()
                   {
                       vec3 terrainNormal = vec3(0.0);
 
-                      if (u_normalAlgorithm == 1)
+                      if (u_normalAlgorithm == 1)       // TerrainNormalsAlgorithm.ThreeSamples
                       {
                           terrainNormal = ComputeNormalThreeSamples(gl_in[0].gl_Position.xyz, mg_texture0, u_heightExaggeration);
                       }
-                      else if (u_normalAlgorithm == 2)
+                      else if (u_normalAlgorithm == 2)  // TerrainNormalsAlgorithm.FourSamples
                       {
                           terrainNormal = ComputeNormalFourSamples(gl_in[0].gl_Position.xyz, mg_texture0, u_heightExaggeration);
                       }
-                      else if (u_normalAlgorithm == 3)
+                      else if (u_normalAlgorithm == 3)  // TerrainNormalsAlgorithm.SobelFilter
                       {
                           terrainNormal = ComputeNormalSobelFilter(gl_in[0].gl_Position.xyz, mg_texture0, u_heightExaggeration);
                       }
@@ -433,10 +438,10 @@ namespace MiniGlobe.Terrain
                       vec4 clipP0;
                       vec4 clipP1;
                       ClipLineSegmentToNearPlane(mg_perspectiveNearPlaneDistance, 
-                      mg_modelViewPerspectiveProjectionMatrix,
-                      gl_in[0].gl_Position, 
-                      gl_in[0].gl_Position + vec4(normalize(terrainNormal), 0.0),
-                      clipP0, clipP1);
+                          mg_modelViewPerspectiveProjectionMatrix,
+                          gl_in[0].gl_Position, 
+                          gl_in[0].gl_Position + vec4(normalize(terrainNormal), 0.0),
+                          clipP0, clipP1);
 
                       vec4 windowP0 = ClipToWindowCoordinates(clipP0, mg_viewportTransformationMatrix);
                       vec4 windowP1 = ClipToWindowCoordinates(clipP1, mg_viewportTransformationMatrix);
