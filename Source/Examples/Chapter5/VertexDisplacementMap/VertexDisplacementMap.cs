@@ -43,6 +43,7 @@ namespace MiniGlobe.Examples.Chapter5
             _tile.BlendRampTexture = Device.CreateTexture2D(new Bitmap("BlendRamp.jpg"), TextureFormat.Red8, false);
             _tile.GrassTexture = Device.CreateTexture2D(new Bitmap("Grass.jpg"), TextureFormat.RedGreenBlue8, false);
             _tile.StoneTexture = Device.CreateTexture2D(new Bitmap("Stone.jpg"), TextureFormat.RedGreenBlue8, false);
+            _tile.BlendMaskTexture = Device.CreateTexture2D(new Bitmap("BlendMask.jpg"), TextureFormat.Red8, false);
             
             ///////////////////////////////////////////////////////////////////
 
@@ -101,8 +102,8 @@ namespace MiniGlobe.Examples.Chapter5
                     return "By Slope";
                 case TerrainShadingAlgorithm.BlendRampBySlope:
                     return "Blend Ramp By Slope";
-                case TerrainShadingAlgorithm.DetailTexture:
-                    return "Detail Texture";
+                case TerrainShadingAlgorithm.BlendMask:
+                    return "Blend Mask";
             }
 
             return string.Empty;
@@ -154,9 +155,9 @@ namespace MiniGlobe.Examples.Chapter5
                 _tile.ShadingAlgorithm += (e.Key == KeyboardKey.Right) ? 1 : -1;
                 if (_tile.ShadingAlgorithm < TerrainShadingAlgorithm.Solid)
                 {
-                    _tile.ShadingAlgorithm = TerrainShadingAlgorithm.DetailTexture;
+                    _tile.ShadingAlgorithm = TerrainShadingAlgorithm.BlendMask;
                 }
-                else if (_tile.ShadingAlgorithm > TerrainShadingAlgorithm.DetailTexture)
+                else if (_tile.ShadingAlgorithm > TerrainShadingAlgorithm.BlendMask)
                 {
                     _tile.ShadingAlgorithm = TerrainShadingAlgorithm.Solid;
                 }

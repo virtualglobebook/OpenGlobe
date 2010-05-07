@@ -35,7 +35,7 @@ namespace MiniGlobe.Terrain
         BlendRampByHeight,
         BySlope,
         BlendRampBySlope,
-        DetailTexture
+        BlendMask
     }
 
     public sealed class VertexDisplacementMapTerrainTile : IDisposable
@@ -66,7 +66,8 @@ namespace MiniGlobe.Terrain
                   out vec3 normalFS;
                   out vec3 positionToLight;
                   out vec3 positionToEye;
-                  out vec2 normalizedTextureCoordinate;
+                  out vec2 textureCoordinate;
+                  out vec2 repeatTextureCoordinate;
                   out float height;
 
                   uniform mat4 mg_modelViewPerspectiveProjectionMatrix;
@@ -76,6 +77,7 @@ namespace MiniGlobe.Terrain
                   uniform float u_heightExaggeration;
                   uniform int u_normalAlgorithm;
                   uniform vec2 u_positionToTextureCoordinate;
+                  uniform vec2 u_positionToRepeatTextureCoordinate;
 
                   vec3 ComputeNormalThreeSamples(
                       vec3 displacedPosition, 
@@ -195,7 +197,8 @@ namespace MiniGlobe.Terrain
                           positionToEye = mg_cameraEye - displacedPosition;
                       }
 
-                      normalizedTextureCoordinate = position * u_positionToTextureCoordinate;
+                      textureCoordinate = position * u_positionToTextureCoordinate;
+                      repeatTextureCoordinate = position * u_positionToRepeatTextureCoordinate;
                       height = displacedPosition.z;
                   }";
 
@@ -205,7 +208,8 @@ namespace MiniGlobe.Terrain
                   in vec3 normalFS;
                   in vec3 positionToLight;
                   in vec3 positionToEye;
-                  in vec2 normalizedTextureCoordinate;
+                  in vec2 textureCoordinate;
+                  in vec2 repeatTextureCoordinate;
                   in float height;
 
                   out vec3 fragmentColor;
@@ -215,6 +219,7 @@ namespace MiniGlobe.Terrain
                   uniform sampler2D mg_texture2;    // Blend ramp for grass and stone
                   uniform sampler2D mg_texture3;    // Grass
                   uniform sampler2D mg_texture4;    // Stone
+                  uniform sampler2D mg_texture5;    // Blend map
                   uniform float u_minimumHeight;
                   uniform float u_maximumHeight;
                   uniform int u_normalAlgorithm;
@@ -275,8 +280,8 @@ namespace MiniGlobe.Terrain
                       {
                           float normalizedHeight = (height - u_minimumHeight) / (u_maximumHeight - u_minimumHeight);
                           fragmentColor = intensity * mix(
-                              texture(mg_texture3, normalizedTextureCoordinate).rgb, // Grass
-                              texture(mg_texture4, normalizedTextureCoordinate).rgb, // Stone
+                              texture(mg_texture3, repeatTextureCoordinate).rgb, // Grass
+                              texture(mg_texture4, repeatTextureCoordinate).rgb, // Stone
                               texture(mg_texture2, vec2(0.5, normalizedHeight)).r);
                       }
                       else if (u_shadingAlgorithm == 5)  // TerrainShadingAlgorithm.BySlope
@@ -286,18 +291,25 @@ namespace MiniGlobe.Terrain
                       else if (u_shadingAlgorithm == 6)  // TerrainShadingAlgorithm.BlendRampBySlope
                       {
                           fragmentColor = intensity * mix(
-                              texture(mg_texture4, normalizedTextureCoordinate).rgb, // Stone
-                              texture(mg_texture3, normalizedTextureCoordinate).rgb, // Grass
+                              texture(mg_texture4, repeatTextureCoordinate).rgb, // Stone
+                              texture(mg_texture3, repeatTextureCoordinate).rgb, // Grass
                               texture(mg_texture2, vec2(0.5, normal.z)).r);
                       }
-                      else if (u_shadingAlgorithm == 7)  // TerrainShadingAlgorithm.DetailTexture
+                      else if (u_shadingAlgorithm == 7)  // TerrainShadingAlgorithm.BlendMask
                       {
-                          fragmentColor = vec3(intensity, 0.0, 0.0);    // TODO
+                          fragmentColor = intensity * mix(
+                              texture(mg_texture3, repeatTextureCoordinate).rgb, // Grass
+                              texture(mg_texture4, repeatTextureCoordinate).rgb, // Stone
+                              texture(mg_texture2, vec2(0.5, texture(mg_texture5, textureCoordinate).r)).r);
                       }
                   }";
             _spTerrain = Device.CreateShaderProgram(vsTerrain, fsTerrain);
             _heightExaggerationUniform = _spTerrain.Uniforms["u_heightExaggeration"] as Uniform<float>;
+
             (_spTerrain.Uniforms["u_positionToTextureCoordinate"] as Uniform<Vector2S>).Value = new Vector2S(
+                (float)(1.0 / (double)(tile.Size.X)), 
+                (float)( 1.0 / (double)(tile.Size.Y)));
+            (_spTerrain.Uniforms["u_positionToRepeatTextureCoordinate"] as Uniform<Vector2S>).Value = new Vector2S(
                 (float)(4.0 / (double)tile.Size.X),
                 (float)(4.0 / (double)tile.Size.Y));
             
@@ -684,53 +696,49 @@ namespace MiniGlobe.Terrain
 
         public void Render(SceneState sceneState)
         {
+            if (ColorRampTexture == null)
+            {
+                throw new InvalidOperationException("ColorRampTexture");
+            }
+
+            if (BlendRampTexture == null)
+            {
+                throw new InvalidOperationException("BlendRampTexture");
+            }
+
+            if (GrassTexture == null)
+            {
+                throw new InvalidOperationException("GrassTexture");
+            }
+
+            if (StoneTexture == null)
+            {
+                throw new InvalidOperationException("StoneTexture");
+            }
+
+            if (BlendMaskTexture == null)
+            {
+                throw new InvalidOperationException("BlendMaskTexture");
+            }
+
             if (ShowTerrain || ShowWireframe || ShowNormals)
             {
                 Update(sceneState);
 
+                GrassTexture.Filter = Texture2DFilter.LinearRepeat;
+                StoneTexture.Filter = Texture2DFilter.LinearRepeat;
+
                 _context.TextureUnits[0].Texture2DRectangle = _texture;
+                _context.TextureUnits[1].Texture2D = ColorRampTexture;
+                _context.TextureUnits[2].Texture2D = BlendRampTexture;
+                _context.TextureUnits[3].Texture2D = GrassTexture;
+                _context.TextureUnits[4].Texture2D = StoneTexture;
+                _context.TextureUnits[5].Texture2D = BlendMaskTexture;
+
                 _context.Bind(_va);
-
-                if (ShowTerrain)
-                {
-                    if (_shadingAlgorithm == TerrainShadingAlgorithm.ColorRampByHeight)
-                    {
-                        if (ColorRampTexture == null)
-                        {
-                            throw new InvalidOperationException("ColorRampTexture");
-                        }
-
-                        _context.TextureUnits[1].Texture2D = ColorRampTexture;
-                    }
-                    else if (_shadingAlgorithm == TerrainShadingAlgorithm.BlendRampByHeight)
-                    {
-                        if (BlendRampTexture == null)
-                        {
-                            throw new InvalidOperationException("BlendRampTexture");
-                        }
-
-                        if (GrassTexture == null)
-                        {
-                            throw new InvalidOperationException("GrassTexture");
-                        }
-
-                        if (StoneTexture == null)
-                        {
-                            throw new InvalidOperationException("StoneTexture");
-                        }
-
-                        GrassTexture.Filter = Texture2DFilter.LinearRepeat;
-                        StoneTexture.Filter = Texture2DFilter.LinearRepeat;
-
-                        _context.TextureUnits[2].Texture2D = BlendRampTexture;
-                        _context.TextureUnits[3].Texture2D = GrassTexture;
-                        _context.TextureUnits[4].Texture2D = StoneTexture;
-                    }
-
-                    _context.Bind(_spTerrain);
-                    _context.Bind(_rsTerrain);
-                    _context.Draw(_primitiveType, sceneState);
-                }
+                _context.Bind(_spTerrain);
+                _context.Bind(_rsTerrain);
+                _context.Draw(_primitiveType, sceneState);
 
                 if (ShowWireframe)
                 {
@@ -799,6 +807,7 @@ namespace MiniGlobe.Terrain
         public Texture2D BlendRampTexture { get; set; }
         public Texture2D GrassTexture { get; set; }
         public Texture2D StoneTexture { get; set; }
+        public Texture2D BlendMaskTexture { get; set; }
 
         #region IDisposable Members
 
