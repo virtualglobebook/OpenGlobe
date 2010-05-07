@@ -34,6 +34,7 @@ namespace MiniGlobe.Terrain
         ColorRamp,
         BlendRamp,
         BySlope,
+        BlendRampBySlope,
         DetailTexture
     }
 
@@ -246,15 +247,22 @@ namespace MiniGlobe.Terrain
                       {
                           float normalizedHeight = (height - u_minimumHeight) / (u_maximumHeight - u_minimumHeight);
                           fragmentColor = intensity * mix(
-                              texture(mg_texture3, normalizedTextureCoordinate).rgb, 
-                              texture(mg_texture4, normalizedTextureCoordinate).rgb, 
+                              texture(mg_texture3, normalizedTextureCoordinate).rgb, // Grass
+                              texture(mg_texture4, normalizedTextureCoordinate).rgb, // Stone
                               texture(mg_texture2, vec2(0.5, normalizedHeight)).r);
                       }
                       else if (u_shadingAlgorithm == 5)  // TerrainShadingAlgorithm.BySlope
                       {
                           fragmentColor = vec3(normal.z);
                       }
-                      else if (u_shadingAlgorithm == 6)  // TerrainShadingAlgorithm.DetailTexture
+                      else if (u_shadingAlgorithm == 6)  // TerrainShadingAlgorithm.BlendRampBySlope
+                      {
+                          fragmentColor = intensity * mix(
+                              texture(mg_texture4, normalizedTextureCoordinate).rgb, // Stone
+                              texture(mg_texture3, normalizedTextureCoordinate).rgb, // Grass
+                              texture(mg_texture2, vec2(0.5, normal.z)).r);
+                      }
+                      else if (u_shadingAlgorithm == 7)  // TerrainShadingAlgorithm.DetailTexture
                       {
                           fragmentColor = vec3(intensity, 0.0, 0.0);    // TODO
                       }

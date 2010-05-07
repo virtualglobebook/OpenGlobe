@@ -99,6 +99,8 @@ namespace MiniGlobe.Examples.Chapter5
                     return "Blend Ramp";
                 case TerrainShadingAlgorithm.BySlope:
                     return "By Slope";
+                case TerrainShadingAlgorithm.BlendRampBySlope:
+                    return "Blend Ramp By Slope";
                 case TerrainShadingAlgorithm.DetailTexture:
                     return "Detail Texture";
             }
@@ -204,7 +206,7 @@ namespace MiniGlobe.Examples.Chapter5
             _window.Context.Clear(ClearBuffers.ColorAndDepthBuffer, Color.White, 1, 0);
 
             _tile.Render(_sceneState);
-            _hud.Render(_sceneState);
+            //_hud.Render(_sceneState);
         }
 
         #region IDisposable Members
