@@ -93,10 +93,10 @@ namespace MiniGlobe.Examples.Chapter5
                     return "By Height";
                 case TerrainShadingAlgorithm.HeightContour:
                     return "Height Contour";
-                case TerrainShadingAlgorithm.ColorRamp:
-                    return "Color Ramp";
-                case TerrainShadingAlgorithm.BlendRamp:
-                    return "Blend Ramp";
+                case TerrainShadingAlgorithm.ColorRampByHeight:
+                    return "Color Ramp By Height";
+                case TerrainShadingAlgorithm.BlendRampByHeight:
+                    return "Blend Ramp By Height";
                 case TerrainShadingAlgorithm.BySlope:
                     return "By Slope";
                 case TerrainShadingAlgorithm.BlendRampBySlope:
@@ -206,7 +206,7 @@ namespace MiniGlobe.Examples.Chapter5
             _window.Context.Clear(ClearBuffers.ColorAndDepthBuffer, Color.White, 1, 0);
 
             _tile.Render(_sceneState);
-            //_hud.Render(_sceneState);
+            _hud.Render(_sceneState);
         }
 
         #region IDisposable Members

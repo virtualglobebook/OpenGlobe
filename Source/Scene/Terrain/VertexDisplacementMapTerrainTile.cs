@@ -31,8 +31,8 @@ namespace MiniGlobe.Terrain
         Solid,
         ByHeight,
         HeightContour,
-        ColorRamp,
-        BlendRamp,
+        ColorRampByHeight,
+        BlendRampByHeight,
         BySlope,
         BlendRampBySlope,
         DetailTexture
@@ -239,11 +239,11 @@ namespace MiniGlobe.Terrain
                               fragmentColor = vec3(0.0, intensity, 0.0);
                           }
                       }
-                      else if (u_shadingAlgorithm == 3)  // TerrainShadingAlgorithm.ColorRamp
+                      else if (u_shadingAlgorithm == 3)  // TerrainShadingAlgorithm.ColorRampByHeight
                       {
                           fragmentColor = intensity * texture(mg_texture1, vec2(0.5, ((height - u_minimumHeight) / (u_maximumHeight - u_minimumHeight)))).rgb;
                       }
-                      else if (u_shadingAlgorithm == 4)  // TerrainShadingAlgorithm.BlendRamp
+                      else if (u_shadingAlgorithm == 4)  // TerrainShadingAlgorithm.BlendRampByHeight
                       {
                           float normalizedHeight = (height - u_minimumHeight) / (u_maximumHeight - u_minimumHeight);
                           fragmentColor = intensity * mix(
@@ -642,7 +642,7 @@ namespace MiniGlobe.Terrain
             _tileMaximumHeight = tile.MaximumHeight;
 
             _heightExaggeration = 1;
-            _shadingAlgorithm = TerrainShadingAlgorithm.ColorRamp;
+            _shadingAlgorithm = TerrainShadingAlgorithm.ColorRampByHeight;
             _normalsAlgorithm = TerrainNormalsAlgorithm.ThreeSamples;
             ShowTerrain = true;
             _dirty = true;
@@ -684,7 +684,7 @@ namespace MiniGlobe.Terrain
 
                 if (ShowTerrain)
                 {
-                    if (_shadingAlgorithm == TerrainShadingAlgorithm.ColorRamp)
+                    if (_shadingAlgorithm == TerrainShadingAlgorithm.ColorRampByHeight)
                     {
                         if (ColorRampTexture == null)
                         {
@@ -693,7 +693,7 @@ namespace MiniGlobe.Terrain
 
                         _context.TextureUnits[1].Texture2D = ColorRampTexture;
                     }
-                    else if (_shadingAlgorithm == TerrainShadingAlgorithm.BlendRamp)
+                    else if (_shadingAlgorithm == TerrainShadingAlgorithm.BlendRampByHeight)
                     {
                         if (BlendRampTexture == null)
                         {
