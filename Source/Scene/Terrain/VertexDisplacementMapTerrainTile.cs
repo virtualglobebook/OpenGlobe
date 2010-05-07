@@ -33,6 +33,7 @@ namespace MiniGlobe.Terrain
         HeightContour,
         ColorRamp,
         BlendRamp,
+        BySlope,
         DetailTexture
     }
 
@@ -61,7 +62,7 @@ namespace MiniGlobe.Terrain
 
                   in vec2 position;
                   
-                  out vec3 normal;
+                  out vec3 normalFS;
                   out vec3 positionToLight;
                   out vec3 positionToEye;
                   out vec2 normalizedTextureCoordinate;
@@ -150,15 +151,15 @@ namespace MiniGlobe.Terrain
                       {
                           if (u_normalAlgorithm == 1)
                           {
-                              normal = ComputeNormalThreeSamples(displacedPosition, mg_texture0, u_heightExaggeration);
+                              normalFS = ComputeNormalThreeSamples(displacedPosition, mg_texture0, u_heightExaggeration);
                           }
                           else if (u_normalAlgorithm == 2)
                           {
-                              normal = ComputeNormalFourSamples(displacedPosition, mg_texture0, u_heightExaggeration);
+                              normalFS = ComputeNormalFourSamples(displacedPosition, mg_texture0, u_heightExaggeration);
                           }
                           else if (u_normalAlgorithm == 3)
                           {
-                              normal = ComputeNormalSobelFilter(displacedPosition, mg_texture0, u_heightExaggeration);
+                              normalFS = ComputeNormalSobelFilter(displacedPosition, mg_texture0, u_heightExaggeration);
                           }
 
                           positionToLight = mg_cameraLightPosition - displacedPosition;
@@ -172,7 +173,7 @@ namespace MiniGlobe.Terrain
             string fsTerrain =
                 @"#version 150
                  
-                  in vec3 normal;
+                  in vec3 normalFS;
                   in vec3 positionToLight;
                   in vec3 positionToEye;
                   in vec2 normalizedTextureCoordinate;
@@ -206,10 +207,11 @@ namespace MiniGlobe.Terrain
                   void main()
                   {
                       float intensity = 1.0;
+                      vec3 normal = normalize(normalFS);
 
                       if (u_normalAlgorithm != 0)
                       {
-                          intensity = LightIntensity(normalize(normal),  normalize(positionToLight), normalize(positionToEye), mg_diffuseSpecularAmbientShininess);
+                          intensity = LightIntensity(normal,  normalize(positionToLight), normalize(positionToEye), mg_diffuseSpecularAmbientShininess);
                       }
 
                       if (u_shadingAlgorithm == 0)  // TerrainShadingAlgorithm.Solid
@@ -248,7 +250,11 @@ namespace MiniGlobe.Terrain
                               texture(mg_texture4, normalizedTextureCoordinate).rgb, 
                               texture(mg_texture2, vec2(0.5, normalizedHeight)).r);
                       }
-                      else if (u_shadingAlgorithm == 5)  // TerrainShadingAlgorithm.DetailTexture
+                      else if (u_shadingAlgorithm == 5)  // TerrainShadingAlgorithm.BySlope
+                      {
+                          fragmentColor = vec3(normal.z);
+                      }
+                      else if (u_shadingAlgorithm == 6)  // TerrainShadingAlgorithm.DetailTexture
                       {
                           fragmentColor = vec3(intensity, 0.0, 0.0);    // TODO
                       }

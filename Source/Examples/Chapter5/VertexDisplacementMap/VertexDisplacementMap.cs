@@ -97,6 +97,8 @@ namespace MiniGlobe.Examples.Chapter5
                     return "Color Ramp";
                 case TerrainShadingAlgorithm.BlendRamp:
                     return "Blend Ramp";
+                case TerrainShadingAlgorithm.BySlope:
+                    return "By Slope";
                 case TerrainShadingAlgorithm.DetailTexture:
                     return "Detail Texture";
             }
