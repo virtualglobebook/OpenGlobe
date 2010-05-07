@@ -75,6 +75,7 @@ namespace MiniGlobe.Terrain
                   uniform sampler2DRect mg_texture0;    // Height field
                   uniform float u_heightExaggeration;
                   uniform int u_normalAlgorithm;
+                  uniform vec2 u_positionToTextureCoordinate;
 
                   vec3 ComputeNormalThreeSamples(
                       vec3 displacedPosition, 
@@ -194,7 +195,7 @@ namespace MiniGlobe.Terrain
                           positionToEye = mg_cameraEye - displacedPosition;
                       }
 
-                      normalizedTextureCoordinate = position / 512.0;   // TODO
+                      normalizedTextureCoordinate = position * u_positionToTextureCoordinate;
                       height = displacedPosition.z;
                   }";
 
@@ -296,7 +297,10 @@ namespace MiniGlobe.Terrain
                   }";
             _spTerrain = Device.CreateShaderProgram(vsTerrain, fsTerrain);
             _heightExaggerationUniform = _spTerrain.Uniforms["u_heightExaggeration"] as Uniform<float>;
-
+            (_spTerrain.Uniforms["u_positionToTextureCoordinate"] as Uniform<Vector2S>).Value = new Vector2S(
+                (float)(4.0 / (double)tile.Size.X),
+                (float)(4.0 / (double)tile.Size.Y));
+            
             ///////////////////////////////////////////////////////////////////
 
             string vsNormals =
@@ -714,6 +718,9 @@ namespace MiniGlobe.Terrain
                         {
                             throw new InvalidOperationException("StoneTexture");
                         }
+
+                        GrassTexture.Filter = Texture2DFilter.LinearRepeat;
+                        StoneTexture.Filter = Texture2DFilter.LinearRepeat;
 
                         _context.TextureUnits[2].Texture2D = BlendRampTexture;
                         _context.TextureUnits[3].Texture2D = GrassTexture;
