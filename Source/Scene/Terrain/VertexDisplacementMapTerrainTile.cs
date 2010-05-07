@@ -28,6 +28,7 @@ namespace MiniGlobe.Terrain
 
     public enum TerrainShadingAlgorithm
     {
+        ColorMap,
         Solid,
         ByHeight,
         HeightContour,
@@ -215,6 +216,7 @@ namespace MiniGlobe.Terrain
                   out vec3 fragmentColor;
 
                   uniform vec4 mg_diffuseSpecularAmbientShininess;
+                  uniform sampler2D mg_texture6;    // Color map
                   uniform sampler2D mg_texture1;    // Color ramp
                   uniform sampler2D mg_texture2;    // Blend ramp for grass and stone
                   uniform sampler2D mg_texture3;    // Grass
@@ -248,15 +250,19 @@ namespace MiniGlobe.Terrain
                           intensity = LightIntensity(normal,  normalize(positionToLight), normalize(positionToEye), mg_diffuseSpecularAmbientShininess);
                       }
 
-                      if (u_shadingAlgorithm == 0)  // TerrainShadingAlgorithm.Solid
+                      if (u_shadingAlgorithm == 0)  // TerrainShadingAlgorithm.ColorMap
+                      {
+                          fragmentColor = intensity * texture(mg_texture6, textureCoordinate).rgb;
+                      }
+                      if (u_shadingAlgorithm == 1)  // TerrainShadingAlgorithm.Solid
                       {
                           fragmentColor = vec3(0.0, intensity, 0.0);
                       }
-                      else if (u_shadingAlgorithm == 1)  // TerrainShadingAlgorithm.ByHeight
+                      else if (u_shadingAlgorithm == 2)  // TerrainShadingAlgorithm.ByHeight
                       {
                           fragmentColor = vec3(0.0, intensity * ((height - u_minimumHeight) / (u_maximumHeight - u_minimumHeight)), 0.0);
                       }
-                      else if (u_shadingAlgorithm == 2)  // TerrainShadingAlgorithm.HeightContour
+                      else if (u_shadingAlgorithm == 3)  // TerrainShadingAlgorithm.HeightContour
                       {
                           float distanceToContour = mod(height, 5.0);  // Contour every 2 meters 
                           float dx = abs(dFdx(height));
@@ -272,11 +278,11 @@ namespace MiniGlobe.Terrain
                               fragmentColor = vec3(0.0, intensity, 0.0);
                           }
                       }
-                      else if (u_shadingAlgorithm == 3)  // TerrainShadingAlgorithm.ColorRampByHeight
+                      else if (u_shadingAlgorithm == 4)  // TerrainShadingAlgorithm.ColorRampByHeight
                       {
                           fragmentColor = intensity * texture(mg_texture1, vec2(0.5, ((height - u_minimumHeight) / (u_maximumHeight - u_minimumHeight)))).rgb;
                       }
-                      else if (u_shadingAlgorithm == 4)  // TerrainShadingAlgorithm.BlendRampByHeight
+                      else if (u_shadingAlgorithm == 5)  // TerrainShadingAlgorithm.BlendRampByHeight
                       {
                           float normalizedHeight = (height - u_minimumHeight) / (u_maximumHeight - u_minimumHeight);
                           fragmentColor = intensity * mix(
@@ -284,18 +290,18 @@ namespace MiniGlobe.Terrain
                               texture(mg_texture4, repeatTextureCoordinate).rgb, // Stone
                               texture(mg_texture2, vec2(0.5, normalizedHeight)).r);
                       }
-                      else if (u_shadingAlgorithm == 5)  // TerrainShadingAlgorithm.BySlope
+                      else if (u_shadingAlgorithm == 6)  // TerrainShadingAlgorithm.BySlope
                       {
                           fragmentColor = vec3(normal.z);
                       }
-                      else if (u_shadingAlgorithm == 6)  // TerrainShadingAlgorithm.BlendRampBySlope
+                      else if (u_shadingAlgorithm == 7)  // TerrainShadingAlgorithm.BlendRampBySlope
                       {
                           fragmentColor = intensity * mix(
                               texture(mg_texture4, repeatTextureCoordinate).rgb, // Stone
                               texture(mg_texture3, repeatTextureCoordinate).rgb, // Grass
                               texture(mg_texture2, vec2(0.5, normal.z)).r);
                       }
-                      else if (u_shadingAlgorithm == 7)  // TerrainShadingAlgorithm.BlendMask
+                      else if (u_shadingAlgorithm == 8)  // TerrainShadingAlgorithm.BlendMask
                       {
                           fragmentColor = intensity * mix(
                               texture(mg_texture3, repeatTextureCoordinate).rgb, // Grass
@@ -663,7 +669,6 @@ namespace MiniGlobe.Terrain
             _tileMaximumHeight = tile.MaximumHeight;
 
             _heightExaggeration = 1;
-            _shadingAlgorithm = TerrainShadingAlgorithm.ColorRampByHeight;
             _normalsAlgorithm = TerrainNormalsAlgorithm.ThreeSamples;
             ShowTerrain = true;
             _dirty = true;
@@ -694,33 +699,23 @@ namespace MiniGlobe.Terrain
             _fillDistanceNormals.Value = (float)(0.5 * 3.0 * sceneState.HighResolutionSnapScale);
         }
 
+        private static void ThrowInvalidOperationIfNull(Texture2D texture, string memberName)
+        {
+            if (texture == null)
+            {
+                throw new InvalidOperationException(memberName);
+            }
+        }
+
         public void Render(SceneState sceneState)
         {
-            if (ColorRampTexture == null)
-            {
-                throw new InvalidOperationException("ColorRampTexture");
-            }
-
-            if (BlendRampTexture == null)
-            {
-                throw new InvalidOperationException("BlendRampTexture");
-            }
-
-            if (GrassTexture == null)
-            {
-                throw new InvalidOperationException("GrassTexture");
-            }
-
-            if (StoneTexture == null)
-            {
-                throw new InvalidOperationException("StoneTexture");
-            }
-
-            if (BlendMaskTexture == null)
-            {
-                throw new InvalidOperationException("BlendMaskTexture");
-            }
-
+            ThrowInvalidOperationIfNull(ColorMapTexture, "ColorMap");
+            ThrowInvalidOperationIfNull(ColorRampTexture, "ColorRampTexture");
+            ThrowInvalidOperationIfNull(BlendRampTexture, "BlendRampTexture");
+            ThrowInvalidOperationIfNull(GrassTexture, "GrassTexture");
+            ThrowInvalidOperationIfNull(StoneTexture, "StoneTexture");
+            ThrowInvalidOperationIfNull(BlendMaskTexture, "BlendMaskTexture");
+            
             if (ShowTerrain || ShowWireframe || ShowNormals)
             {
                 Update(sceneState);
@@ -729,6 +724,7 @@ namespace MiniGlobe.Terrain
                 StoneTexture.Filter = Texture2DFilter.LinearRepeat;
 
                 _context.TextureUnits[0].Texture2DRectangle = _texture;
+                _context.TextureUnits[6].Texture2D = ColorMapTexture;
                 _context.TextureUnits[1].Texture2D = ColorRampTexture;
                 _context.TextureUnits[2].Texture2D = BlendRampTexture;
                 _context.TextureUnits[3].Texture2D = GrassTexture;
@@ -803,6 +799,7 @@ namespace MiniGlobe.Terrain
         public bool ShowTerrain { get; set; }
         public bool ShowWireframe { get; set; }
         public bool ShowNormals { get; set; }
+        public Texture2D ColorMapTexture { get; set; }
         public Texture2D ColorRampTexture { get; set; }
         public Texture2D BlendRampTexture { get; set; }
         public Texture2D GrassTexture { get; set; }

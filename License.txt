@@ -139,6 +139,7 @@ MiniGlobe uses data from Natural Earth:
 MiniGlobe uses data from USGS and The University of Washington:
 
    Terrain\ps-e.lg.jpg
+   Imagery\USGS\ps_texture_1k.png
       http://www.cc.gatech.edu/projects/large_models/ps.html
 
    Acknowledgements from above website:

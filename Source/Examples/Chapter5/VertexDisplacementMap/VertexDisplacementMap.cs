@@ -39,6 +39,7 @@ namespace MiniGlobe.Examples.Chapter5
             TerrainTile terrainTile = TerrainTile.FromBitmap(new Bitmap("ps-e.lg.jpg"));
             _tile = new VertexDisplacementMapTerrainTile(_window.Context, terrainTile);
             _tile.HeightExaggeration = 30;
+            _tile.ColorMapTexture = Device.CreateTexture2D(new Bitmap("ps_texture_1k.png"), TextureFormat.RedGreenBlue8, false);
             _tile.ColorRampTexture = Device.CreateTexture2D(new Bitmap("ColorRamp.jpg"), TextureFormat.RedGreenBlue8, false);
             _tile.BlendRampTexture = Device.CreateTexture2D(new Bitmap("BlendRamp.jpg"), TextureFormat.Red8, false);
             _tile.GrassTexture = Device.CreateTexture2D(new Bitmap("Grass.jpg"), TextureFormat.RedGreenBlue8, false);
@@ -88,6 +89,8 @@ namespace MiniGlobe.Examples.Chapter5
         {
             switch (shading)
             {
+                case TerrainShadingAlgorithm.ColorMap:
+                    return "Color Map";
                 case TerrainShadingAlgorithm.Solid:
                     return "Solid";
                 case TerrainShadingAlgorithm.ByHeight:
@@ -153,13 +156,13 @@ namespace MiniGlobe.Examples.Chapter5
             else if (_sKeyDown && ((e.Key == KeyboardKey.Left) || (e.Key == KeyboardKey.Right)))
             {
                 _tile.ShadingAlgorithm += (e.Key == KeyboardKey.Right) ? 1 : -1;
-                if (_tile.ShadingAlgorithm < TerrainShadingAlgorithm.Solid)
+                if (_tile.ShadingAlgorithm < TerrainShadingAlgorithm.ColorMap)
                 {
                     _tile.ShadingAlgorithm = TerrainShadingAlgorithm.BlendMask;
                 }
                 else if (_tile.ShadingAlgorithm > TerrainShadingAlgorithm.BlendMask)
                 {
-                    _tile.ShadingAlgorithm = TerrainShadingAlgorithm.Solid;
+                    _tile.ShadingAlgorithm = TerrainShadingAlgorithm.ColorMap;
                 }
             }
             else if (_aKeyDown && ((e.Key == KeyboardKey.Left) || (e.Key == KeyboardKey.Right)))
