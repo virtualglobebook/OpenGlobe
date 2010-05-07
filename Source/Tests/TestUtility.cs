@@ -34,7 +34,7 @@ namespace MiniGlobe
 
         public static void ValidateColor(Texture2D colorTexture, byte red, byte green, byte blue)
         {
-            using (ReadPixelBuffer readPixelBuffer = colorTexture.CopyToBuffer(ImageFormat.RedGreenBlue, ImageDataType.UnsignedByte))
+            using (ReadPixelBuffer readPixelBuffer = colorTexture.CopyToBuffer(ImageFormat.RedGreenBlue, ImageDataType.UnsignedByte, 1))
             {
                 byte[] color = readPixelBuffer.CopyToSystemMemory<byte>();
                 Assert.AreEqual(red, color[0]);

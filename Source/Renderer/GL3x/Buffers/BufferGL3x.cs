@@ -66,20 +66,31 @@ namespace MiniGlobe.Renderer.GL3x
                 bufferInSystemMemory);
         }
 
+
         public void CopyFromBitmap(Bitmap bitmap)
         {
-            //
-            // OpenGL wants rows bottom to top.
-            //
-            Bitmap flippedBitmap = bitmap.Clone() as Bitmap;
-            flippedBitmap.RotateFlip(RotateFlipType.RotateNoneFlipY);
-            
-            BitmapData lockedPixels = flippedBitmap.LockBits(new Rectangle(
-                0, 0, flippedBitmap.Width, flippedBitmap.Height),
-                ImageLockMode.ReadOnly, flippedBitmap.PixelFormat);
+            Bitmap lockedBitmap;
 
-            // TODO:  Does the row have padding?  e.g. 4 byte aligned, not tightly packed
+            if (BitmapAlgorithms.RowOrder(bitmap) == ImageRowOrder.TopToBottom)
+            {
+                //
+                // OpenGL wants rows bottom to top.
+                //
+                Bitmap flippedBitmap = bitmap.Clone() as Bitmap;
+                flippedBitmap.RotateFlip(RotateFlipType.RotateNoneFlipY);
+                lockedBitmap = flippedBitmap;
+            }
+            else
+            {
+                lockedBitmap = bitmap;
+            }
+
+            BitmapData lockedPixels = lockedBitmap.LockBits(new Rectangle(
+                0, 0, lockedBitmap.Width, lockedBitmap.Height),
+                ImageLockMode.ReadOnly, lockedBitmap.PixelFormat);
+
             int sizeInBytes = lockedPixels.Stride * lockedPixels.Height;
+            Debug.Assert(sizeInBytes <= _sizeInBytes);
 
             Bind();
             GL.BufferSubData(_type,
@@ -87,7 +98,7 @@ namespace MiniGlobe.Renderer.GL3x
                 new IntPtr(sizeInBytes),
                 lockedPixels.Scan0);
 
-            flippedBitmap.UnlockBits(lockedPixels);
+            lockedBitmap.UnlockBits(lockedPixels);
         }
 
         public T[] CopyToSystemMemory<T>(int offsetInBytes, int lengthInBytes) where T : struct

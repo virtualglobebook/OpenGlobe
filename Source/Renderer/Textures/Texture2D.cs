@@ -73,7 +73,16 @@ namespace MiniGlobe.Renderer
             ImageFormat format,
             ImageDataType dataType)
         {
-            CopyFromBuffer(pixelBuffer, 0, 0, Description.Width, Description.Height, format, dataType);
+            CopyFromBuffer(pixelBuffer, 0, 0, Description.Width, Description.Height, format, dataType, 4);
+        }
+
+        public virtual void CopyFromBuffer(
+            WritePixelBuffer pixelBuffer,
+            ImageFormat format,
+            ImageDataType dataType,
+            int rowAlignment)
+        {
+            CopyFromBuffer(pixelBuffer, 0, 0, Description.Width, Description.Height, format, dataType, rowAlignment);
         }
 
         public abstract void CopyFromBuffer(
@@ -83,9 +92,19 @@ namespace MiniGlobe.Renderer
             int width,
             int height,
             ImageFormat format,
-            ImageDataType dataType);
+            ImageDataType dataType,
+            int rowAlignment);
 
-        public abstract ReadPixelBuffer CopyToBuffer(ImageFormat format, ImageDataType dataType);
+        public virtual ReadPixelBuffer CopyToBuffer(ImageFormat format, ImageDataType dataType)
+        {
+            return CopyToBuffer(format, dataType, 4);
+        }
+        
+        public abstract ReadPixelBuffer CopyToBuffer(
+            ImageFormat format, 
+            ImageDataType dataType,
+            int rowAlignment);
+
         public abstract Texture2DDescription Description { get; }
         public abstract Texture2DFilter Filter { get; set; }
 
@@ -109,7 +128,7 @@ namespace MiniGlobe.Renderer
 
         private void SaveColor(string filename)
         {
-            using (ReadPixelBuffer pixelBuffer = CopyToBuffer(ImageFormat.BlueGreenRed, ImageDataType.UnsignedByte))
+            using (ReadPixelBuffer pixelBuffer = CopyToBuffer(ImageFormat.BlueGreenRed, ImageDataType.UnsignedByte, 1))
             {
                 Bitmap bitmap = pixelBuffer.CopyToBitmap(Description.Width, Description.Height, PixelFormat.Format24bppRgb);
                 bitmap.Save(filename);
@@ -118,7 +137,7 @@ namespace MiniGlobe.Renderer
 
         private void SaveDepth(string filename)
         {
-            using (ReadPixelBuffer pixelBuffer = CopyToBuffer(ImageFormat.DepthComponent, ImageDataType.Float))
+            using (ReadPixelBuffer pixelBuffer = CopyToBuffer(ImageFormat.DepthComponent, ImageDataType.Float, 1))
             {
                 float[] depths = pixelBuffer.CopyToSystemMemory<float>();
 

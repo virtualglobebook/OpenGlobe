@@ -100,38 +100,46 @@ namespace MiniGlobe.Renderer.GL3x
             int width,
             int height,
             ImageFormat format,
-            ImageDataType dataType)
+            ImageDataType dataType,
+            int rowAlignment)
         {
             Debug.Assert(xOffset >= 0);
             Debug.Assert(yOffset >= 0);
             Debug.Assert(xOffset + width <= _description.Width);
             Debug.Assert(yOffset + height <= _description.Height);
             Debug.Assert(pixelBuffer.SizeInBytes >= TextureUtility.RequiredSizeInBytes(width, height, format, dataType));
+            Debug.Assert((rowAlignment == 1) || (rowAlignment == 2) || (rowAlignment == 4) || (rowAlignment == 8));
 
             WritePixelBufferGL3x bufferObjectGL = pixelBuffer as WritePixelBufferGL3x;
 
             bufferObjectGL.Bind();
             BindToLastTextureUnit();
-            GL.PixelStore(PixelStoreParameter.UnpackAlignment, 1);
+            GL.PixelStore(PixelStoreParameter.UnpackAlignment, rowAlignment);
             GL.TexSubImage2D(_target, 0,
                 xOffset,
-                xOffset,
+                yOffset,
                 width,
                 height,
                 TypeConverterGL3x.To(format),
                 TypeConverterGL3x.To(dataType),
                 new IntPtr());
+
             GenerateMipmaps();
         }
 
-        public override ReadPixelBuffer CopyToBuffer(ImageFormat format, ImageDataType dataType)
+        public override ReadPixelBuffer CopyToBuffer(
+            ImageFormat format, 
+            ImageDataType dataType,
+            int rowAlignment)
         {
+            Debug.Assert((rowAlignment == 1) || (rowAlignment == 2) || (rowAlignment == 4) || (rowAlignment == 8));
+
             ReadPixelBufferGL3x pixelBuffer = new ReadPixelBufferGL3x(ReadPixelBufferHint.StreamRead,
                 TextureUtility.RequiredSizeInBytes(_description.Width, _description.Height, format, dataType));
 
             pixelBuffer.Bind();
             BindToLastTextureUnit();
-            GL.PixelStore(PixelStoreParameter.PackAlignment, 1);
+            GL.PixelStore(PixelStoreParameter.PackAlignment, rowAlignment);
             GL.GetTexImage(_target, 0,
                 TypeConverterGL3x.To(format),
                 TypeConverterGL3x.To(dataType),

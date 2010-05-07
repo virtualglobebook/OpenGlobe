@@ -10,9 +10,11 @@
 using System;
 using System.Drawing;
 using System.Diagnostics;
+using MiniGlobe.Core;
 using MiniGlobe.Renderer.GL3x;
 using OpenTK.Graphics.OpenGL;
 using ImagingPixelFormat = System.Drawing.Imaging.PixelFormat;
+using System.Drawing.Imaging;
 
 namespace MiniGlobe.Renderer
 {
@@ -96,9 +98,8 @@ namespace MiniGlobe.Renderer
 
         private static Texture2D CreateTexture2DFromBitmap(Bitmap bitmap, TextureFormat format, bool generateMipmaps, TextureTarget textureTarget)
         {
-            const int bitsPerByte = 8;
-            int sizeInBytes = bitmap.Width * bitmap.Height * (Bitmap.GetPixelFormatSize(bitmap.PixelFormat) / bitsPerByte);
-            using (WritePixelBuffer pixelBuffer = Device.CreateWritePixelBuffer(WritePixelBufferHint.StreamDraw, sizeInBytes))
+            using (WritePixelBuffer pixelBuffer = Device.CreateWritePixelBuffer(WritePixelBufferHint.StreamDraw, 
+                BitmapAlgorithms.SizeOfPixelsInBytes(bitmap)))
             {
                 pixelBuffer.CopyFromBitmap(bitmap);
 

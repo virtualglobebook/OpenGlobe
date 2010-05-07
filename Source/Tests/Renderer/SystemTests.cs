@@ -468,7 +468,7 @@ namespace MiniGlobe.Renderer
 
         private static void ValidateDepth(Texture2D depthTexture, float depth)
         {
-            using (ReadPixelBuffer readPixelBuffer = depthTexture.CopyToBuffer(ImageFormat.DepthComponent, ImageDataType.Float))
+            using (ReadPixelBuffer readPixelBuffer = depthTexture.CopyToBuffer(ImageFormat.DepthComponent, ImageDataType.Float, 1))
             {
                 float[] readDepth = readPixelBuffer.CopyToSystemMemory<float>();
                 Assert.AreEqual (depth, readDepth[0]);
@@ -477,19 +477,13 @@ namespace MiniGlobe.Renderer
 
         private static void ValidateStencil(Texture2D depthStencilTexture, int stencil)
         {
-            // TODO:  Don't call ReadPixels directly
+            // TODO:  Don't call ReadPixels directly.  Reading back the FBO's depth/stencil is
+            // not supported according to the spec.
             byte readStencil = 0;
             OpenTK.Graphics.OpenGL.GL.ReadPixels(0, 0, 1, 1, 
                 OpenTK.Graphics.OpenGL.PixelFormat.StencilIndex,
                 OpenTK.Graphics.OpenGL.PixelType.UnsignedByte, ref readStencil);
             Assert.AreEqual(stencil, readStencil);
-
-            // TODO:  Can we get this to work!
-            using (ReadPixelBuffer readPixelBuffer = depthStencilTexture.CopyToBuffer(ImageFormat.StencilIndex, ImageDataType.UnsignedByte))
-            {
-                //byte[] readStencil = readPixelBuffer.CopyToSystemMemory<byte>();
-                //Assert.AreEqual(stencil, readStencil[0]);
-            }
         }
     }
 
