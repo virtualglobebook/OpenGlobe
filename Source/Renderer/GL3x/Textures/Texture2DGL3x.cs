@@ -107,7 +107,7 @@ namespace MiniGlobe.Renderer.GL3x
             Debug.Assert(yOffset >= 0);
             Debug.Assert(xOffset + width <= _description.Width);
             Debug.Assert(yOffset + height <= _description.Height);
-            Debug.Assert(pixelBuffer.SizeInBytes >= TextureUtility.RequiredSizeInBytes(width, height, format, dataType));
+            Debug.Assert(pixelBuffer.SizeInBytes >= TextureUtility.RequiredSizeInBytes(width, height, format, dataType, rowAlignment));
             Debug.Assert((rowAlignment == 1) || (rowAlignment == 2) || (rowAlignment == 4) || (rowAlignment == 8));
 
             WritePixelBufferGL3x bufferObjectGL = pixelBuffer as WritePixelBufferGL3x;
@@ -135,7 +135,7 @@ namespace MiniGlobe.Renderer.GL3x
             Debug.Assert((rowAlignment == 1) || (rowAlignment == 2) || (rowAlignment == 4) || (rowAlignment == 8));
 
             ReadPixelBufferGL3x pixelBuffer = new ReadPixelBufferGL3x(ReadPixelBufferHint.StreamRead,
-                TextureUtility.RequiredSizeInBytes(_description.Width, _description.Height, format, dataType));
+                TextureUtility.RequiredSizeInBytes(_description.Width, _description.Height, format, dataType, rowAlignment));
 
             pixelBuffer.Bind();
             BindToLastTextureUnit();

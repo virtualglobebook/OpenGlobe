@@ -83,7 +83,7 @@ namespace MiniGlobe.Renderer
             //
             // Read back pixels
             //
-            ReadPixelBuffer readPixelBuffer = texture.CopyToBuffer(BlittableRGBA.Format, BlittableRGBA.DataType, 1);
+            ReadPixelBuffer readPixelBuffer = texture.CopyToBuffer(BlittableRGBA.Format, BlittableRGBA.DataType);
             BlittableRGBA[] readPixels = readPixelBuffer.CopyToSystemMemory<BlittableRGBA>();
 
             //
@@ -123,7 +123,7 @@ namespace MiniGlobe.Renderer
             //
             Texture2DDescription description = new Texture2DDescription(2, 2, TextureFormat.Red32f, true);
             Texture2D texture = Device.CreateTexture2D(description);
-            texture.CopyFromBuffer(writePixelBuffer, ImageFormat.Red, ImageDataType.Float);
+            texture.CopyFromBuffer(writePixelBuffer, ImageFormat.Red, ImageDataType.Float, 1);
 
             //
             // Read back pixels
@@ -203,6 +203,54 @@ namespace MiniGlobe.Renderer
                 Assert.AreEqual(pixels[i], readPixels[i]);
             }
             Assert.AreEqual(description, texture.Description);
+
+            writePixelBuffer.Dispose();
+            texture.Dispose();
+            readPixelBuffer.Dispose();
+            window.Dispose();
+        }
+
+        [Test]
+        [Explicit("The last channel of the last pixel is not written to the texture")]
+        public void Texture2DRowAlignment()
+        {
+            MiniGlobeWindow window = Device.CreateWindow(1, 1);
+
+            //
+            // Create pixel buffer - RGB, 4 byte aligned, 255 is padding
+            //
+            byte[] pixels = new byte[]
+            {
+                1, 2, 3, 255,
+                4, 5, 6, 255
+            };
+
+            int sizeInBytes = pixels.Length * sizeof(byte);
+            WritePixelBuffer writePixelBuffer = Device.CreateWritePixelBuffer(WritePixelBufferHint.StreamDraw, sizeInBytes);
+            writePixelBuffer.CopyFromSystemMemory(pixels);
+
+            //
+            // Create texture with pixel buffer
+            //
+            Texture2DDescription description = new Texture2DDescription(1, 2, TextureFormat.RedGreenBlue8, false);
+            Texture2D texture = Device.CreateTexture2D(description);
+            texture.CopyFromBuffer(writePixelBuffer, ImageFormat.RedGreenBlue, ImageDataType.UnsignedByte);
+
+            //
+            // Read back pixels
+            //
+            ReadPixelBuffer readPixelBuffer = texture.CopyToBuffer(ImageFormat.RedGreenBlue, ImageDataType.UnsignedByte, 1);
+            byte[] readPixels = readPixelBuffer.CopyToSystemMemory<byte>();
+
+            //
+            // Verify
+            //
+            Assert.AreEqual(1, readPixels[0]);
+            Assert.AreEqual(2, readPixels[1]);
+            Assert.AreEqual(3, readPixels[2]);
+            Assert.AreEqual(4, readPixels[3]);
+            Assert.AreEqual(5, readPixels[4]);
+            Assert.AreEqual(6, readPixels[5]);
 
             writePixelBuffer.Dispose();
             texture.Dispose();

@@ -97,9 +97,26 @@ namespace MiniGlobe.Renderer
             return (i != 0) && ((i & (i - 1)) == 0);
         }
 
-        public static int RequiredSizeInBytes(int width, int height, ImageFormat format, ImageDataType dataType)
+        public static int RequiredSizeInBytes(
+            int width, 
+            int height, 
+            ImageFormat format, 
+            ImageDataType dataType, 
+            int rowAlignment)
         {
-            return width * height * NumberOfChannels(format) * SizeInBytes(dataType);
+            int rowSize = width * NumberOfChannels(format) * SizeInBytes(dataType);
+
+            if (rowSize < rowAlignment)
+            {
+                rowSize = rowAlignment;
+            }
+            else
+            {
+                int remainder = (rowSize % rowAlignment);
+                rowSize += remainder;
+            }
+
+            return rowSize * height;
         }
 
         public static int NumberOfChannels(ImageFormat format)
