@@ -197,6 +197,11 @@ namespace MiniGlobe.Terrain
                           positionToLight = mg_cameraLightPosition - displacedPosition;
                           positionToEye = mg_cameraEye - displacedPosition;
                       }
+                      else
+                      {
+                          // Even if lighting isn't used, shading algorithms based on terrain slope require the normal.
+                          normalFS = ComputeNormalThreeSamples(displacedPosition, mg_texture0, u_heightExaggeration);
+                      }
 
                       textureCoordinate = position * u_positionToTextureCoordinate;
                       repeatTextureCoordinate = position * u_positionToRepeatTextureCoordinate;
@@ -222,6 +227,7 @@ namespace MiniGlobe.Terrain
                   uniform sampler2D mg_texture3;    // Grass
                   uniform sampler2D mg_texture4;    // Stone
                   uniform sampler2D mg_texture5;    // Blend map
+                  uniform float mg_highResolutionSnapScale;
                   uniform float u_minimumHeight;
                   uniform float u_maximumHeight;
                   uniform int u_normalAlgorithm;
@@ -264,19 +270,12 @@ namespace MiniGlobe.Terrain
                       }
                       else if (u_shadingAlgorithm == 3)  // TerrainShadingAlgorithm.HeightContour
                       {
-                          float distanceToContour = mod(height, 5.0);  // Contour every 2 meters 
+                          float distanceToContour = mod(height, 5.0);  // Contour every 5 meters 
                           float dx = abs(dFdx(height));
                           float dy = abs(dFdy(height));
-                          float dF = max(dx, dy) * 2.0;  // Line width
+                          float dF = max(dx, dy) * mg_highResolutionSnapScale * 2.0;  // Line width
 
-                          if (distanceToContour < dF)
-                          {
-                              fragmentColor = vec3(intensity, 0.0, 0.0);
-                          }
-                          else
-                          {
-                              fragmentColor = vec3(0.0, intensity, 0.0);
-                          }
+                          fragmentColor = mix(vec3(0.0, intensity, 0.0), vec3(intensity, 0.0, 0.0), (distanceToContour < dF));
                       }
                       else if (u_shadingAlgorithm == 4)  // TerrainShadingAlgorithm.ColorRampByHeight
                       {
