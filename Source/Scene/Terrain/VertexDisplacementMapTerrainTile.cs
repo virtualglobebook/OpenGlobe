@@ -35,6 +35,8 @@ namespace MiniGlobe.Terrain
         ColorRampByHeight,
         BlendRampByHeight,
         BySlope,
+        SlopeContour,
+        ColorRampBySlope,
         BlendRampBySlope,
         BlendMask
     }
@@ -222,7 +224,8 @@ namespace MiniGlobe.Terrain
 
                   uniform vec4 mg_diffuseSpecularAmbientShininess;
                   uniform sampler2D mg_texture6;    // Color map
-                  uniform sampler2D mg_texture1;    // Color ramp
+                  uniform sampler2D mg_texture1;    // Color ramp for height
+                  uniform sampler2D mg_texture7;    // Color ramp for slope
                   uniform sampler2D mg_texture2;    // Blend ramp for grass and stone
                   uniform sampler2D mg_texture3;    // Grass
                   uniform sampler2D mg_texture4;    // Stone
@@ -285,22 +288,36 @@ namespace MiniGlobe.Terrain
                       {
                           float normalizedHeight = (height - u_minimumHeight) / (u_maximumHeight - u_minimumHeight);
                           fragmentColor = intensity * mix(
-                              texture(mg_texture3, repeatTextureCoordinate).rgb, // Grass
-                              texture(mg_texture4, repeatTextureCoordinate).rgb, // Stone
-                              texture(mg_texture2, vec2(0.5, normalizedHeight)).r);
+                              texture(mg_texture3, repeatTextureCoordinate).rgb,    // Grass
+                              texture(mg_texture4, repeatTextureCoordinate).rgb,    // Stone
+                              texture(mg_texture2, vec2(0.5, normalizedHeight)).r); // Blend Ramp
                       }
                       else if (u_shadingAlgorithm == 6)  // TerrainShadingAlgorithm.BySlope
                       {
                           fragmentColor = vec3(normal.z);
                       }
-                      else if (u_shadingAlgorithm == 7)  // TerrainShadingAlgorithm.BlendRampBySlope
+                      else if (u_shadingAlgorithm == 7)  // TerrainShadingAlgorithm.SlopeContour
+                      {
+                          float slopeAngle = acos(normal.z);
+                          float distanceToContour = mod(slopeAngle, radians(15.0));  // Contour every 15 degrees
+                          float dx = abs(dFdx(slopeAngle));
+                          float dy = abs(dFdy(slopeAngle));
+                          float dF = max(dx, dy) * mg_highResolutionSnapScale * 2.0;  // Line width
+
+                          fragmentColor = mix(vec3(0.0, intensity, 0.0), vec3(intensity, 0.0, 0.0), (distanceToContour < dF));
+                      }
+                      else if (u_shadingAlgorithm == 8)  // TerrainShadingAlgorithm.ColorRampBySlope
+                      {
+                          fragmentColor = intensity * texture(mg_texture7, vec2(0.5, normal.z)).rgb;
+                      }
+                      else if (u_shadingAlgorithm == 9)  // TerrainShadingAlgorithm.BlendRampBySlope
                       {
                           fragmentColor = intensity * mix(
                               texture(mg_texture4, repeatTextureCoordinate).rgb, // Stone
                               texture(mg_texture3, repeatTextureCoordinate).rgb, // Grass
                               texture(mg_texture2, vec2(0.5, normal.z)).r);
                       }
-                      else if (u_shadingAlgorithm == 8)  // TerrainShadingAlgorithm.BlendMask
+                      else if (u_shadingAlgorithm == 10)  // TerrainShadingAlgorithm.BlendMask
                       {
                           fragmentColor = intensity * mix(
                               texture(mg_texture3, repeatTextureCoordinate).rgb, // Grass
@@ -709,7 +726,8 @@ namespace MiniGlobe.Terrain
         public void Render(SceneState sceneState)
         {
             ThrowInvalidOperationIfNull(ColorMapTexture, "ColorMap");
-            ThrowInvalidOperationIfNull(ColorRampTexture, "ColorRampTexture");
+            ThrowInvalidOperationIfNull(ColorRampHeightTexture, "ColorRampTexture");
+            ThrowInvalidOperationIfNull(ColorRampSlopeTexture, "ColorRampSlopeTexture");
             ThrowInvalidOperationIfNull(BlendRampTexture, "BlendRampTexture");
             ThrowInvalidOperationIfNull(GrassTexture, "GrassTexture");
             ThrowInvalidOperationIfNull(StoneTexture, "StoneTexture");
@@ -724,7 +742,8 @@ namespace MiniGlobe.Terrain
 
                 _context.TextureUnits[0].Texture2DRectangle = _texture;
                 _context.TextureUnits[6].Texture2D = ColorMapTexture;
-                _context.TextureUnits[1].Texture2D = ColorRampTexture;
+                _context.TextureUnits[1].Texture2D = ColorRampHeightTexture;
+                _context.TextureUnits[7].Texture2D = ColorRampSlopeTexture;
                 _context.TextureUnits[2].Texture2D = BlendRampTexture;
                 _context.TextureUnits[3].Texture2D = GrassTexture;
                 _context.TextureUnits[4].Texture2D = StoneTexture;
@@ -799,7 +818,8 @@ namespace MiniGlobe.Terrain
         public bool ShowWireframe { get; set; }
         public bool ShowNormals { get; set; }
         public Texture2D ColorMapTexture { get; set; }
-        public Texture2D ColorRampTexture { get; set; }
+        public Texture2D ColorRampHeightTexture { get; set; }
+        public Texture2D ColorRampSlopeTexture { get; set; }
         public Texture2D BlendRampTexture { get; set; }
         public Texture2D GrassTexture { get; set; }
         public Texture2D StoneTexture { get; set; }

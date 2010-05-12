@@ -40,12 +40,16 @@ namespace MiniGlobe.Examples.Chapter5
             _tile = new VertexDisplacementMapTerrainTile(_window.Context, terrainTile);
             _tile.HeightExaggeration = 30;
             _tile.ColorMapTexture = Device.CreateTexture2D(new Bitmap("ps_texture_1k.png"), TextureFormat.RedGreenBlue8, false);
-            _tile.ColorRampTexture = Device.CreateTexture2D(new Bitmap("ColorRamp.jpg"), TextureFormat.RedGreenBlue8, false);
+            _tile.ColorRampHeightTexture = Device.CreateTexture2D(new Bitmap("ColorRamp.jpg"), TextureFormat.RedGreenBlue8, false);
+            _tile.ColorRampSlopeTexture = Device.CreateTexture2D(new Bitmap("ColorRampSlope.jpg"), TextureFormat.RedGreenBlue8, false);
             _tile.BlendRampTexture = Device.CreateTexture2D(new Bitmap("BlendRamp.jpg"), TextureFormat.Red8, false);
             _tile.GrassTexture = Device.CreateTexture2D(new Bitmap("Grass.jpg"), TextureFormat.RedGreenBlue8, false);
             _tile.StoneTexture = Device.CreateTexture2D(new Bitmap("Stone.jpg"), TextureFormat.RedGreenBlue8, false);
             _tile.BlendMaskTexture = Device.CreateTexture2D(new Bitmap("BlendMask.jpg"), TextureFormat.Red8, false);
-            
+
+            //_tile.NormalsAlgorithm = TerrainNormalsAlgorithm.None;
+            //_tile.ShadingAlgorithm = TerrainShadingAlgorithm.BlendRampBySlope;
+
             ///////////////////////////////////////////////////////////////////
 
             double tileRadius = Math.Max(terrainTile.Size.X, terrainTile.Size.Y) * 0.5;
@@ -53,12 +57,12 @@ namespace MiniGlobe.Examples.Chapter5
             _camera.CenterPoint = new Vector3D(terrainTile.Size.X * 0.5, terrainTile.Size.Y * 0.5, 0.0);
             _sceneState.Camera.ZoomToTarget(tileRadius);
 
-            PersistentView.Execute(@"E:\Manuscript\TerrainRendering\Figures\VertexDisplacementMap.xml", _window, _sceneState.Camera);
+            PersistentView.Execute(@"E:\Manuscript\TerrainRendering\Figures\BlendRampBySlope.xml", _window, _sceneState.Camera);
 
-            //HighResolutionSnap snap = new HighResolutionSnap(_window, _sceneState);
-            //snap.ColorFilename = @"E:\Manuscript\TerrainRendering\Figures\VertexDisplacementMap.png";
-            //snap.WidthInInches = 3;
-            //snap.DotsPerInch = 600;
+            HighResolutionSnap snap = new HighResolutionSnap(_window, _sceneState);
+            snap.ColorFilename = @"E:\Manuscript\TerrainRendering\Figures\BlendRampBySlope.png";
+            snap.WidthInInches = 3;
+            snap.DotsPerInch = 600;
 
             ///////////////////////////////////////////////////////////////////
 
@@ -103,6 +107,10 @@ namespace MiniGlobe.Examples.Chapter5
                     return "Blend Ramp By Height";
                 case TerrainShadingAlgorithm.BySlope:
                     return "By Slope";
+                case TerrainShadingAlgorithm.SlopeContour:
+                    return "Slope Contour";
+                case TerrainShadingAlgorithm.ColorRampBySlope:
+                    return "Color Ramp By Slope";
                 case TerrainShadingAlgorithm.BlendRampBySlope:
                     return "Blend Ramp By Slope";
                 case TerrainShadingAlgorithm.BlendMask:
@@ -219,7 +227,13 @@ namespace MiniGlobe.Examples.Chapter5
         {
             _camera.Dispose();
             _tile.Dispose();
-            _tile.ColorRampTexture.Dispose();
+            _tile.ColorMapTexture.Dispose();
+            _tile.ColorRampHeightTexture.Dispose();
+            _tile.ColorRampSlopeTexture.Dispose();
+            _tile.BlendRampTexture.Dispose();
+            _tile.GrassTexture.Dispose();
+            _tile.StoneTexture.Dispose();
+            _tile.BlendMaskTexture.Dispose();
             _hudFont.Dispose();
             _hud.Texture.Dispose();
             _hud.Dispose();
