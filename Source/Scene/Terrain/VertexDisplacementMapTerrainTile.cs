@@ -322,7 +322,7 @@ namespace MiniGlobe.Terrain
                           fragmentColor = intensity * mix(
                               texture(mg_texture3, repeatTextureCoordinate).rgb, // Grass
                               texture(mg_texture4, repeatTextureCoordinate).rgb, // Stone
-                              texture(mg_texture2, vec2(0.5, texture(mg_texture5, textureCoordinate).r)).r);
+                              texture(mg_texture5, textureCoordinate).r);        // Blend mask
                       }
                   }";
             _spTerrain = Device.CreateShaderProgram(vsTerrain, fsTerrain);

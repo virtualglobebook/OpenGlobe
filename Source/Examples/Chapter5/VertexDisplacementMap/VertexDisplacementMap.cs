@@ -47,9 +47,6 @@ namespace MiniGlobe.Examples.Chapter5
             _tile.StoneTexture = Device.CreateTexture2D(new Bitmap("Stone.jpg"), TextureFormat.RedGreenBlue8, false);
             _tile.BlendMaskTexture = Device.CreateTexture2D(new Bitmap("BlendMask.jpg"), TextureFormat.Red8, false);
 
-            //_tile.NormalsAlgorithm = TerrainNormalsAlgorithm.None;
-            //_tile.ShadingAlgorithm = TerrainShadingAlgorithm.BlendRampBySlope;
-
             ///////////////////////////////////////////////////////////////////
 
             double tileRadius = Math.Max(terrainTile.Size.X, terrainTile.Size.Y) * 0.5;
@@ -57,10 +54,10 @@ namespace MiniGlobe.Examples.Chapter5
             _camera.CenterPoint = new Vector3D(terrainTile.Size.X * 0.5, terrainTile.Size.Y * 0.5, 0.0);
             _sceneState.Camera.ZoomToTarget(tileRadius);
 
-            PersistentView.Execute(@"E:\Manuscript\TerrainRendering\Figures\BlendRampBySlope.xml", _window, _sceneState.Camera);
+            PersistentView.Execute(@"E:\Manuscript\TerrainRendering\Figures\BlendMask.xml", _window, _sceneState.Camera);
 
             HighResolutionSnap snap = new HighResolutionSnap(_window, _sceneState);
-            snap.ColorFilename = @"E:\Manuscript\TerrainRendering\Figures\BlendRampBySlope.png";
+            snap.ColorFilename = @"E:\Manuscript\TerrainRendering\Figures\BlendMaskTerrain.png";
             snap.WidthInInches = 3;
             snap.DotsPerInch = 600;
 
