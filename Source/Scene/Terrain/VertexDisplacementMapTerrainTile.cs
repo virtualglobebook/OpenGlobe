@@ -750,9 +750,13 @@ namespace MiniGlobe.Terrain
                 _context.TextureUnits[5].Texture2D = BlendMaskTexture;
 
                 _context.Bind(_va);
-                _context.Bind(_spTerrain);
-                _context.Bind(_rsTerrain);
-                _context.Draw(_primitiveType, sceneState);
+
+                if (ShowTerrain)
+                {
+                    _context.Bind(_spTerrain);
+                    _context.Bind(_rsTerrain);
+                    _context.Draw(_primitiveType, sceneState);
+                }
 
                 if (ShowWireframe)
                 {

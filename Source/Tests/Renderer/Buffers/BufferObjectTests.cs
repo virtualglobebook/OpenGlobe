@@ -117,7 +117,7 @@ namespace MiniGlobe.Renderer
             ShaderProgram sp = Device.CreateShaderProgram(
                 ShaderSources.PassThroughVertexShader(),
                 ShaderSources.RedUniformBlockFragmentShader());
-            Assert.IsEmpty(sp.LinkLog);
+            Assert.IsFalse(sp.LinkLog.Contains("warning"));
 
             UniformBlock redBlock = sp.UniformBlocks["RedBlock"];
             UniformBlockMember red = redBlock.Members["red"];

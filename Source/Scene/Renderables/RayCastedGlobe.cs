@@ -165,14 +165,14 @@ namespace MiniGlobe.Scene
 
                       if (discriminant < 0.0)
                       {
-                          return Intersection(false, 0);
+                          return Intersection(false, 0.0);
                       }
                       else if (discriminant == 0.0)
                       {
                           return Intersection(true, -0.5 * b / a);
                       }
 
-                      float t = -0.5 * (b + (b > 0 ? 1.0 : -1.0) * sqrt(discriminant));
+                      float t = -0.5 * (b + (b > 0.0 ? 1.0 : -1.0) * sqrt(discriminant));
                       float root1 = t / a;
                       float root2 = c / t;
 
