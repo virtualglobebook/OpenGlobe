@@ -104,14 +104,14 @@ namespace MiniGlobe.Terrain
                       //vec3 left = vec3(position - vec2(1.0, 0.0), texture(heightField, position - vec2(1.0, 0.0)).r * heightExaggeration);
                       //vec3 right = vec3(position + vec2(1.0, 0.0), texture(heightField, position + vec2(1.0, 0.0)).r * heightExaggeration);
                       //vec3 bottom = vec3(position - vec2(0.0, 1.0), texture(heightField, position - vec2(0.0, 1.0)).r * heightExaggeration);
-                      //vec3 top = vec3(position + vec2(0.0, 1.0), texture(heightField, position.xy + vec2(0.0, 1.0)).r * heightExaggeration);
+                      //vec3 top = vec3(position + vec2(0.0, 1.0), texture(heightField, position + vec2(0.0, 1.0)).r * heightExaggeration);
                       //return cross(right - left, top - bottom);
 
                       vec2 position = displacedPosition.xy;
                       float leftHeight = texture(heightField, position - vec2(1.0, 0.0)).r * heightExaggeration;
                       float rightHeight = texture(heightField, position + vec2(1.0, 0.0)).r * heightExaggeration;
                       float bottomHeight = texture(heightField, position - vec2(0.0, 1.0)).r * heightExaggeration;
-                      float topHeight = texture(heightField, position.xy + vec2(0.0, 1.0)).r * heightExaggeration;
+                      float topHeight = texture(heightField, position + vec2(0.0, 1.0)).r * heightExaggeration;
                       return vec3(leftHeight - rightHeight, bottomHeight - topHeight, 2.0);
                   }
 
@@ -157,7 +157,7 @@ namespace MiniGlobe.Terrain
 //                      float x = SumElements(matrixCompMult(positions, sobelX));
 //                      float y = SumElements(matrixCompMult(positions, sobelY));
 //
-//                      return vec3(-x, y, 4.0);
+//                      return vec3(-x, y, 1.0);
 
                       vec2 position = displacedPosition.xy;
                       float upperLeft = texture(heightField, position + vec2(-1.0, 1.0)).r * heightExaggeration;
@@ -172,7 +172,7 @@ namespace MiniGlobe.Terrain
                       float x = upperRight + (2.0 * right) + lowerRight - upperLeft - (2.0 * left) - lowerLeft;
                       float y = lowerLeft + (2.0 * lowerCenter) + lowerRight - upperLeft - (2.0 * upperCenter) - upperRight;
 
-                      return vec3(-x, y, 4.0);
+                      return vec3(-x, y, 1.0);
                   }
 
                   void main()
@@ -453,7 +453,7 @@ namespace MiniGlobe.Terrain
                       float x = upperRight + (2.0 * right) + lowerRight - upperLeft - (2.0 * left) - lowerLeft;
                       float y = lowerLeft + (2.0 * lowerCenter) + lowerRight - upperLeft - (2.0 * upperCenter) - upperRight;
 
-                      return vec3(-x, y, 4.0);
+                      return vec3(-x, y, 1.0);
                   }
 
                   void main()
