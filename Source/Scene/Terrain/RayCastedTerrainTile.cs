@@ -42,7 +42,7 @@ namespace MiniGlobe.Terrain
 
                   out vec3 fragmentColor;
 
-                  uniform sampler2DRect mg_texture0;    // Height field
+                  uniform sampler2DRect mg_texture0;    // Height map
                   uniform vec3 mg_cameraEye;
                   uniform mat4x2 mg_modelZToClipCoordinates;
 

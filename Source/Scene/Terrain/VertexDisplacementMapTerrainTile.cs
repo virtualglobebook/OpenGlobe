@@ -76,7 +76,7 @@ namespace MiniGlobe.Terrain
                   uniform mat4 mg_modelViewPerspectiveProjectionMatrix;
                   uniform vec3 mg_cameraEye;
                   uniform vec3 mg_cameraLightPosition;
-                  uniform sampler2DRect mg_texture0;    // Height field
+                  uniform sampler2DRect mg_texture0;    // Height map
                   uniform float u_heightExaggeration;
                   uniform int u_normalAlgorithm;
                   uniform vec2 u_positionToTextureCoordinate;
@@ -84,34 +84,34 @@ namespace MiniGlobe.Terrain
 
                   vec3 ComputeNormalThreeSamples(
                       vec3 displacedPosition, 
-                      sampler2DRect heightField, 
+                      sampler2DRect heightMap, 
                       float heightExaggeration)
                   {
-                      vec3 right = vec3(displacedPosition.xy + vec2(1.0, 0.0), texture(heightField, displacedPosition.xy + vec2(1.0, 0.0)).r * heightExaggeration);
-                      vec3 top = vec3(displacedPosition.xy + vec2(0.0, 1.0), texture(heightField, displacedPosition.xy + vec2(0.0, 1.0)).r * heightExaggeration);
+                      vec3 right = vec3(displacedPosition.xy + vec2(1.0, 0.0), texture(heightMap, displacedPosition.xy + vec2(1.0, 0.0)).r * heightExaggeration);
+                      vec3 top = vec3(displacedPosition.xy + vec2(0.0, 1.0), texture(heightMap, displacedPosition.xy + vec2(0.0, 1.0)).r * heightExaggeration);
                       return cross(right - displacedPosition, top - displacedPosition);
                   }
 
                   vec3 ComputeNormalFourSamples(
                       vec3 displacedPosition, 
-                      sampler2DRect heightField, 
+                      sampler2DRect heightMap, 
                       float heightExaggeration)
                   {
                       //
                       // Original unoptimized verion
                       //
                       //vec2 position = displacedPosition.xy;
-                      //vec3 left = vec3(position - vec2(1.0, 0.0), texture(heightField, position - vec2(1.0, 0.0)).r * heightExaggeration);
-                      //vec3 right = vec3(position + vec2(1.0, 0.0), texture(heightField, position + vec2(1.0, 0.0)).r * heightExaggeration);
-                      //vec3 bottom = vec3(position - vec2(0.0, 1.0), texture(heightField, position - vec2(0.0, 1.0)).r * heightExaggeration);
-                      //vec3 top = vec3(position + vec2(0.0, 1.0), texture(heightField, position + vec2(0.0, 1.0)).r * heightExaggeration);
+                      //vec3 left = vec3(position - vec2(1.0, 0.0), texture(heightMap, position - vec2(1.0, 0.0)).r * heightExaggeration);
+                      //vec3 right = vec3(position + vec2(1.0, 0.0), texture(heightMap, position + vec2(1.0, 0.0)).r * heightExaggeration);
+                      //vec3 bottom = vec3(position - vec2(0.0, 1.0), texture(heightMap, position - vec2(0.0, 1.0)).r * heightExaggeration);
+                      //vec3 top = vec3(position + vec2(0.0, 1.0), texture(heightMap, position + vec2(0.0, 1.0)).r * heightExaggeration);
                       //return cross(right - left, top - bottom);
 
                       vec2 position = displacedPosition.xy;
-                      float leftHeight = texture(heightField, position - vec2(1.0, 0.0)).r * heightExaggeration;
-                      float rightHeight = texture(heightField, position + vec2(1.0, 0.0)).r * heightExaggeration;
-                      float bottomHeight = texture(heightField, position - vec2(0.0, 1.0)).r * heightExaggeration;
-                      float topHeight = texture(heightField, position + vec2(0.0, 1.0)).r * heightExaggeration;
+                      float leftHeight = texture(heightMap, position - vec2(1.0, 0.0)).r * heightExaggeration;
+                      float rightHeight = texture(heightMap, position + vec2(1.0, 0.0)).r * heightExaggeration;
+                      float bottomHeight = texture(heightMap, position - vec2(0.0, 1.0)).r * heightExaggeration;
+                      float topHeight = texture(heightMap, position + vec2(0.0, 1.0)).r * heightExaggeration;
                       return vec3(leftHeight - rightHeight, bottomHeight - topHeight, 2.0);
                   }
 
@@ -125,21 +125,21 @@ namespace MiniGlobe.Terrain
 
                   vec3 ComputeNormalSobelFilter(
                       vec3 displacedPosition, 
-                      sampler2DRect heightField, 
+                      sampler2DRect heightMap, 
                       float heightExaggeration)
                   {
                       //
                       // Original unoptimized verion
                       //
 //                      vec2 position = displacedPosition.xy;
-//                      float upperLeft = texture(heightField, position + vec2(-1.0, 1.0)).r * heightExaggeration;
-//                      float upperCenter = texture(heightField, position + vec2(0.0, 1.0)).r * heightExaggeration;
-//                      float upperRight = texture(heightField, position + vec2(1.0, 1.0)).r * heightExaggeration;
-//                      float left = texture(heightField, position + vec2(-1.0, 0.0)).r * heightExaggeration;
-//                      float right = texture(heightField, position + vec2(1.0, 0.0)).r * heightExaggeration;
-//                      float lowerLeft = texture(heightField, position + vec2(-1.0, -1.0)).r * heightExaggeration;
-//                      float lowerCenter = texture(heightField, position + vec2(0.0, -1.0)).r * heightExaggeration;
-//                      float lowerRight = texture(heightField, position + vec2(1.0, -1.0)).r * heightExaggeration;
+//                      float upperLeft = texture(heightMap, position + vec2(-1.0, 1.0)).r * heightExaggeration;
+//                      float upperCenter = texture(heightMap, position + vec2(0.0, 1.0)).r * heightExaggeration;
+//                      float upperRight = texture(heightMap, position + vec2(1.0, 1.0)).r * heightExaggeration;
+//                      float left = texture(heightMap, position + vec2(-1.0, 0.0)).r * heightExaggeration;
+//                      float right = texture(heightMap, position + vec2(1.0, 0.0)).r * heightExaggeration;
+//                      float lowerLeft = texture(heightMap, position + vec2(-1.0, -1.0)).r * heightExaggeration;
+//                      float lowerCenter = texture(heightMap, position + vec2(0.0, -1.0)).r * heightExaggeration;
+//                      float lowerRight = texture(heightMap, position + vec2(1.0, -1.0)).r * heightExaggeration;
 //
 //                      mat3 positions = mat3(
 //                          upperLeft, left, lowerLeft,
@@ -160,14 +160,14 @@ namespace MiniGlobe.Terrain
 //                      return vec3(-x, y, 1.0);
 
                       vec2 position = displacedPosition.xy;
-                      float upperLeft = texture(heightField, position + vec2(-1.0, 1.0)).r * heightExaggeration;
-                      float upperCenter = texture(heightField, position + vec2(0.0, 1.0)).r * heightExaggeration;
-                      float upperRight = texture(heightField, position + vec2(1.0, 1.0)).r * heightExaggeration;
-                      float left = texture(heightField, position + vec2(-1.0, 0.0)).r * heightExaggeration;
-                      float right = texture(heightField, position + vec2(1.0, 0.0)).r * heightExaggeration;
-                      float lowerLeft = texture(heightField, position + vec2(-1.0, -1.0)).r * heightExaggeration;
-                      float lowerCenter = texture(heightField, position + vec2(0.0, -1.0)).r * heightExaggeration;
-                      float lowerRight = texture(heightField, position + vec2(1.0, -1.0)).r * heightExaggeration;
+                      float upperLeft = texture(heightMap, position + vec2(-1.0, 1.0)).r * heightExaggeration;
+                      float upperCenter = texture(heightMap, position + vec2(0.0, 1.0)).r * heightExaggeration;
+                      float upperRight = texture(heightMap, position + vec2(1.0, 1.0)).r * heightExaggeration;
+                      float left = texture(heightMap, position + vec2(-1.0, 0.0)).r * heightExaggeration;
+                      float right = texture(heightMap, position + vec2(1.0, 0.0)).r * heightExaggeration;
+                      float lowerLeft = texture(heightMap, position + vec2(-1.0, -1.0)).r * heightExaggeration;
+                      float lowerCenter = texture(heightMap, position + vec2(0.0, -1.0)).r * heightExaggeration;
+                      float lowerRight = texture(heightMap, position + vec2(1.0, -1.0)).r * heightExaggeration;
 
                       float x = upperRight + (2.0 * right) + lowerRight - upperLeft - (2.0 * left) - lowerLeft;
                       float y = lowerLeft + (2.0 * lowerCenter) + lowerRight - upperLeft - (2.0 * upperCenter) - upperRight;
@@ -346,7 +346,7 @@ namespace MiniGlobe.Terrain
 
                   uniform mat4 mg_modelViewPerspectiveProjectionMatrix;
                   uniform vec3 mg_cameraEye;
-                  uniform sampler2DRect mg_texture0;    // Height field
+                  uniform sampler2DRect mg_texture0;    // Height map
                   uniform float u_heightExaggeration;
 
                   void main()
@@ -369,7 +369,7 @@ namespace MiniGlobe.Terrain
                   uniform mat4 mg_viewportTransformationMatrix;
                   uniform mat4 mg_viewportOrthographicProjectionMatrix;
                   uniform float mg_perspectiveNearPlaneDistance;
-                  uniform sampler2DRect mg_texture0;    // Height field
+                  uniform sampler2DRect mg_texture0;    // Height map
                   uniform float u_heightExaggeration;
                   uniform float u_fillDistance;
                   uniform int u_normalAlgorithm;
@@ -414,41 +414,41 @@ namespace MiniGlobe.Terrain
 
                   vec3 ComputeNormalThreeSamples(
                       vec3 displacedPosition, 
-                      sampler2DRect heightField, 
+                      sampler2DRect heightMap, 
                       float heightExaggeration)
                   {
-                      vec3 right = vec3(displacedPosition.xy + vec2(1.0, 0.0), texture(heightField, displacedPosition.xy + vec2(1.0, 0.0)).r * heightExaggeration);
-                      vec3 top = vec3(displacedPosition.xy + vec2(0.0, 1.0), texture(heightField, displacedPosition.xy + vec2(0.0, 1.0)).r * heightExaggeration);
+                      vec3 right = vec3(displacedPosition.xy + vec2(1.0, 0.0), texture(heightMap, displacedPosition.xy + vec2(1.0, 0.0)).r * heightExaggeration);
+                      vec3 top = vec3(displacedPosition.xy + vec2(0.0, 1.0), texture(heightMap, displacedPosition.xy + vec2(0.0, 1.0)).r * heightExaggeration);
                       return cross(right - displacedPosition, top - displacedPosition);
                   }
 
                   vec3 ComputeNormalFourSamples(
                       vec3 displacedPosition, 
-                      sampler2DRect heightField, 
+                      sampler2DRect heightMap, 
                       float heightExaggeration)
                   {
                       vec2 position = displacedPosition.xy;
-                      float leftHeight = texture(heightField, position - vec2(1.0, 0.0)).r * heightExaggeration;
-                      float rightHeight = texture(heightField, position + vec2(1.0, 0.0)).r * heightExaggeration;
-                      float bottomHeight = texture(heightField, position - vec2(0.0, 1.0)).r * heightExaggeration;
-                      float topHeight = texture(heightField, position.xy + vec2(0.0, 1.0)).r * heightExaggeration;
+                      float leftHeight = texture(heightMap, position - vec2(1.0, 0.0)).r * heightExaggeration;
+                      float rightHeight = texture(heightMap, position + vec2(1.0, 0.0)).r * heightExaggeration;
+                      float bottomHeight = texture(heightMap, position - vec2(0.0, 1.0)).r * heightExaggeration;
+                      float topHeight = texture(heightMap, position.xy + vec2(0.0, 1.0)).r * heightExaggeration;
                       return vec3(leftHeight - rightHeight, bottomHeight - topHeight, 2.0);
                   }
 
                   vec3 ComputeNormalSobelFilter(
                       vec3 displacedPosition, 
-                      sampler2DRect heightField, 
+                      sampler2DRect heightMap, 
                       float heightExaggeration)
                   {
                       vec2 position = displacedPosition.xy;
-                      float upperLeft = texture(heightField, position + vec2(-1.0, 1.0)).r * heightExaggeration;
-                      float upperCenter = texture(heightField, position + vec2(0.0, 1.0)).r * heightExaggeration;
-                      float upperRight = texture(heightField, position + vec2(1.0, 1.0)).r * heightExaggeration;
-                      float left = texture(heightField, position + vec2(-1.0, 0.0)).r * heightExaggeration;
-                      float right = texture(heightField, position + vec2(1.0, 0.0)).r * heightExaggeration;
-                      float lowerLeft = texture(heightField, position + vec2(-1.0, -1.0)).r * heightExaggeration;
-                      float lowerCenter = texture(heightField, position + vec2(0.0, -1.0)).r * heightExaggeration;
-                      float lowerRight = texture(heightField, position + vec2(1.0, -1.0)).r * heightExaggeration;
+                      float upperLeft = texture(heightMap, position + vec2(-1.0, 1.0)).r * heightExaggeration;
+                      float upperCenter = texture(heightMap, position + vec2(0.0, 1.0)).r * heightExaggeration;
+                      float upperRight = texture(heightMap, position + vec2(1.0, 1.0)).r * heightExaggeration;
+                      float left = texture(heightMap, position + vec2(-1.0, 0.0)).r * heightExaggeration;
+                      float right = texture(heightMap, position + vec2(1.0, 0.0)).r * heightExaggeration;
+                      float lowerLeft = texture(heightMap, position + vec2(-1.0, -1.0)).r * heightExaggeration;
+                      float lowerCenter = texture(heightMap, position + vec2(0.0, -1.0)).r * heightExaggeration;
+                      float lowerRight = texture(heightMap, position + vec2(1.0, -1.0)).r * heightExaggeration;
 
                       float x = upperRight + (2.0 * right) + lowerRight - upperLeft - (2.0 * left) - lowerLeft;
                       float y = lowerLeft + (2.0 * lowerCenter) + lowerRight - upperLeft - (2.0 * upperCenter) - upperRight;
@@ -545,7 +545,7 @@ namespace MiniGlobe.Terrain
                   uniform mat4 mg_modelViewPerspectiveProjectionMatrix;
                   uniform mat4 mg_viewportTransformationMatrix;
                   uniform vec3 mg_cameraEye;
-                  uniform sampler2DRect mg_texture0;    // Height field
+                  uniform sampler2DRect mg_texture0;    // Height map
                   uniform float u_heightExaggeration;
 
                   vec4 ClipToWindowCoordinates(vec4 v, mat4 viewportTransformationMatrix)
