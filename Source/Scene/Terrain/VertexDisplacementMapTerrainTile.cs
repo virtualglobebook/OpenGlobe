@@ -67,8 +67,8 @@ namespace MiniGlobe.Terrain
                   in vec2 position;
                   
                   out vec3 normalFS;
-                  out vec3 positionToLight;
-                  out vec3 positionToEye;
+                  out vec3 positionToLightFS;
+                  out vec3 positionToEyeFS;
                   out vec2 textureCoordinate;
                   out vec2 repeatTextureCoordinate;
                   out float height;
@@ -196,8 +196,8 @@ namespace MiniGlobe.Terrain
                               normalFS = ComputeNormalSobelFilter(displacedPosition, mg_texture0, u_heightExaggeration);
                           }
 
-                          positionToLight = mg_cameraLightPosition - displacedPosition;
-                          positionToEye = mg_cameraEye - displacedPosition;
+                          positionToLightFS = mg_cameraLightPosition - displacedPosition;
+                          positionToEyeFS = mg_cameraEye - displacedPosition;
                       }
                       else
                       {
@@ -214,8 +214,8 @@ namespace MiniGlobe.Terrain
                 @"#version 150
                  
                   in vec3 normalFS;
-                  in vec3 positionToLight;
-                  in vec3 positionToEye;
+                  in vec3 positionToLightFS;
+                  in vec3 positionToEyeFS;
                   in vec2 textureCoordinate;
                   in vec2 repeatTextureCoordinate;
                   in float height;
@@ -235,6 +235,8 @@ namespace MiniGlobe.Terrain
                   uniform float u_maximumHeight;
                   uniform int u_normalAlgorithm;
                   uniform int u_shadingAlgorithm;
+                  uniform bool u_showTerrain;
+                  uniform bool u_showSilhouette;
 
                   float LightIntensity(vec3 normal, vec3 toLight, vec3 toEye, vec4 diffuseSpecularAmbientShininess)
                   {
@@ -251,12 +253,28 @@ namespace MiniGlobe.Terrain
 
                   void main()
                   {
-                      float intensity = 1.0;
                       vec3 normal = normalize(normalFS);
+                      vec3 positionToLight = normalize(positionToLightFS);
+                      vec3 positionToEye = normalize(positionToEyeFS);
 
+                      if (u_showSilhouette)
+                      {
+                          if (dot(normal, positionToEye) < 0.25)
+                          {
+                              fragmentColor = vec3(0.0);
+                              return;
+                          }
+                      }
+
+                      if (!u_showTerrain)
+                      {
+                          discard;
+                      }
+
+                      float intensity = 1.0;
                       if (u_normalAlgorithm != 0)   // TerrainNormalsAlgorithm.None
                       {
-                          intensity = LightIntensity(normal,  normalize(positionToLight), normalize(positionToEye), mg_diffuseSpecularAmbientShininess);
+                          intensity = LightIntensity(normal,  positionToLight, positionToEye, mg_diffuseSpecularAmbientShininess);
                       }
 
                       if (u_shadingAlgorithm == 0)  // TerrainShadingAlgorithm.ColorMap
@@ -696,6 +714,8 @@ namespace MiniGlobe.Terrain
             {
                 (_spTerrain.Uniforms["u_normalAlgorithm"] as Uniform<int>).Value = (int)_normalsAlgorithm;
                 (_spTerrain.Uniforms["u_shadingAlgorithm"] as Uniform<int>).Value = (int)_shadingAlgorithm;
+                (_spTerrain.Uniforms["u_showTerrain"] as Uniform<bool>).Value = _showTerrain;
+                (_spTerrain.Uniforms["u_showSilhouette"] as Uniform<bool>).Value = _showSilhouette;
                 (_spNormals.Uniforms["u_normalAlgorithm"] as Uniform<int>).Value = (int)_normalsAlgorithm;
 
                 _minimumHeight = _spTerrain.Uniforms["u_minimumHeight"] as Uniform<float>;
@@ -733,7 +753,7 @@ namespace MiniGlobe.Terrain
             ThrowInvalidOperationIfNull(StoneTexture, "StoneTexture");
             ThrowInvalidOperationIfNull(BlendMaskTexture, "BlendMaskTexture");
             
-            if (ShowTerrain || ShowWireframe || ShowNormals)
+            if (ShowTerrain || ShowSilhouette || ShowWireframe || ShowNormals)
             {
                 Update(sceneState);
 
@@ -751,7 +771,7 @@ namespace MiniGlobe.Terrain
 
                 _context.Bind(_va);
 
-                if (ShowTerrain)
+                if (ShowTerrain || ShowSilhouette)
                 {
                     _context.Bind(_spTerrain);
                     _context.Bind(_rsTerrain);
@@ -818,7 +838,32 @@ namespace MiniGlobe.Terrain
             }
         }
 
-        public bool ShowTerrain { get; set; }
+        public bool ShowTerrain
+        {
+            get { return _showTerrain; }
+            set
+            {
+                if (_showTerrain != value)
+                {
+                    _showTerrain = value;
+                    _dirty = true;
+                }
+            }
+        }
+
+        public bool ShowSilhouette 
+        {
+            get { return _showSilhouette; }
+            set
+            {
+                if (_showSilhouette != value)
+                {
+                    _showSilhouette = value;
+                    _dirty = true;
+                }
+            }
+        }
+
         public bool ShowWireframe { get; set; }
         public bool ShowNormals { get; set; }
         public Texture2D ColorMapTexture { get; set; }
@@ -871,6 +916,8 @@ namespace MiniGlobe.Terrain
         private float _heightExaggeration;
         private TerrainNormalsAlgorithm _normalsAlgorithm;
         private TerrainShadingAlgorithm _shadingAlgorithm;
+        private bool _showTerrain;
+        private bool _showSilhouette;
         private bool _dirty;
     }
 }

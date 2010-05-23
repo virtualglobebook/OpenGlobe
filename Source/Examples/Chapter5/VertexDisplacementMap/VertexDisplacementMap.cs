@@ -125,6 +125,7 @@ namespace MiniGlobe.Examples.Chapter5
             text += "Shading Algorithm: " + TerrainShadingAlgorithmToString(_tile.ShadingAlgorithm) + " ('s' + left/right)\n";
             text += "Normals Algorithm: " + TerrainNormalsAlgorithmToString(_tile.NormalsAlgorithm) + " ('a' + left/right)\n";
             text += "Terrain: " + (_tile.ShowTerrain ? "on" : "off") + " ('t')\n";
+            text += "Silhouette: " + (_tile.ShowSilhouette ? "on" : "off") + " ('l')\n";
             text += "Wireframe: " + (_tile.ShowWireframe ? "on" : "off") + " ('w')\n";
             text += "Normals: " + (_tile.ShowNormals ? "on" : "off") + " ('n')\n";
 
@@ -185,6 +186,10 @@ namespace MiniGlobe.Examples.Chapter5
             else if (e.Key == KeyboardKey.T)
             {
                 _tile.ShowTerrain = !_tile.ShowTerrain;
+            }
+            else if (e.Key == KeyboardKey.L)
+            {
+                _tile.ShowSilhouette = !_tile.ShowSilhouette;
             }
             else if (e.Key == KeyboardKey.W)
             {
