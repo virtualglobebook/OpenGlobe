@@ -44,7 +44,9 @@ namespace MiniGlobe.Scene
                 @"#version 150
                  
                   in vec3 worldPosition;
-                  out vec3 fragmentColor;
+                  out vec4 dayColor;
+                  out vec4 nightColor;
+                  out float blendAlpha;
 
                   uniform mat4x2 mg_modelZToClipCoordinates;
                   uniform vec4 mg_diffuseSpecularAmbientShininess;
@@ -108,20 +110,9 @@ namespace MiniGlobe.Scene
 
                           float diffuse = dot(toLight, normal);
 
-                          if (diffuse > u_blendDuration)
-                          {
-                              fragmentColor = DayColor(normal, toLight, normalize(toLight), diffuse, mg_diffuseSpecularAmbientShininess);
-                          }
-                          else if (diffuse < -u_blendDuration)
-                          {
-                              fragmentColor = NightColor(normal);
-                          }
-                          else
-                          {
-                              vec3 night = NightColor(normal);
-                              vec3 day = DayColor(normal, toLight, normalize(toLight), diffuse, mg_diffuseSpecularAmbientShininess);
-                              fragmentColor = mix(night, day, (diffuse + u_blendDuration) * u_blendDurationScale);
-                          }
+                          dayColor = vec4(DayColor(normal, toLight, normalize(toLight), diffuse, mg_diffuseSpecularAmbientShininess), 1.0);
+                          nightColor = vec4(NightColor(normal), 1.0);
+                          blendAlpha = clamp((diffuse + u_blendDuration) * u_blendDurationScale, 0.0, 1.0);
 
                           gl_FragDepth = ComputeWorldPositionDepth(position, mg_modelZToClipCoordinates);
                       }
@@ -278,6 +269,11 @@ namespace MiniGlobe.Scene
         public bool ShowWireframeBoundingBox { get; set; }
         public Texture2D DayTexture { get; set; }
         public Texture2D NightTexture { get; set; }
+
+        public int FragmentOutputs(string name)
+        {
+            return _sp.FragmentOutputs[name];
+        }
 
         #region IDisposable Members
 
