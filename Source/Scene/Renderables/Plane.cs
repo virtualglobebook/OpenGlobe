@@ -19,6 +19,8 @@ namespace MiniGlobe.Scene
     {
         public Plane(Context context)
         {
+            Verify.ThrowIfNull(context);
+
             _context = context;
             _lineRS = new RenderState();
             _lineRS.FacetCulling.Enabled = false;

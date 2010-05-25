@@ -26,10 +26,7 @@ namespace MiniGlobe.Scene
 
         public BillboardCollection(Context context, int capacity)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException("context");
-            }
+            Verify.ThrowIfNull(context);
 
             if (capacity < 0)
             {
@@ -353,10 +350,7 @@ namespace MiniGlobe.Scene
         {
             Update();
 
-            if (Texture == null)
-            {
-                throw new InvalidOperationException("Texture");
-            }
+            Verify.ThrowInvalidOperationIfNull(Texture, "Texture");
 
             if (_va != null)
             {

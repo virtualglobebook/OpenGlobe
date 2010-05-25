@@ -19,12 +19,7 @@ namespace MiniGlobe.Scene
     {
         public ViewportQuad(Context context)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException("context");
-            }
-
-            ///////////////////////////////////////////////////////////////////
+            Verify.ThrowIfNull(context);
 
             _context = context;
             _renderState = new RenderState();
@@ -112,10 +107,7 @@ namespace MiniGlobe.Scene
 
         public void Render(SceneState sceneState)
         {
-            if (Texture == null)
-            {
-                throw new InvalidOperationException("Texture");
-            }
+            Verify.ThrowInvalidOperationIfNull(Texture, "Texture");
 
             Update();
 

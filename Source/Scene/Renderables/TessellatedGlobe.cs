@@ -18,6 +18,8 @@ namespace MiniGlobe.Scene
     {
         public TessellatedGlobe(Context context)
         {
+            Verify.ThrowIfNull(context);
+
             _context = context;
 
             string vs =
@@ -133,10 +135,7 @@ namespace MiniGlobe.Scene
 
         public void Render(SceneState sceneState)
         {
-            if (Texture == null)
-            {
-                throw new InvalidOperationException("Texture");
-            }
+            Verify.ThrowInvalidOperationIfNull(Texture, "Texture");
 
             Clean();
 

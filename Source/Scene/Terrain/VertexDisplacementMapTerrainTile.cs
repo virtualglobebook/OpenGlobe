@@ -163,23 +163,15 @@ namespace MiniGlobe.Terrain
             _fillDistanceNormals.Value = (float)(0.5 * 3.0 * sceneState.HighResolutionSnapScale);
         }
 
-        private static void ThrowInvalidOperationIfNull(Texture2D texture, string memberName)
-        {
-            if (texture == null)
-            {
-                throw new InvalidOperationException(memberName);
-            }
-        }
-
         public void Render(SceneState sceneState)
         {
-            ThrowInvalidOperationIfNull(ColorMapTexture, "ColorMap");
-            ThrowInvalidOperationIfNull(ColorRampHeightTexture, "ColorRampTexture");
-            ThrowInvalidOperationIfNull(ColorRampSlopeTexture, "ColorRampSlopeTexture");
-            ThrowInvalidOperationIfNull(BlendRampTexture, "BlendRampTexture");
-            ThrowInvalidOperationIfNull(GrassTexture, "GrassTexture");
-            ThrowInvalidOperationIfNull(StoneTexture, "StoneTexture");
-            ThrowInvalidOperationIfNull(BlendMaskTexture, "BlendMaskTexture");
+            Verify.ThrowInvalidOperationIfNull(ColorMapTexture, "ColorMap");
+            Verify.ThrowInvalidOperationIfNull(ColorRampHeightTexture, "ColorRampTexture");
+            Verify.ThrowInvalidOperationIfNull(ColorRampSlopeTexture, "ColorRampSlopeTexture");
+            Verify.ThrowInvalidOperationIfNull(BlendRampTexture, "BlendRampTexture");
+            Verify.ThrowInvalidOperationIfNull(GrassTexture, "GrassTexture");
+            Verify.ThrowInvalidOperationIfNull(StoneTexture, "StoneTexture");
+            Verify.ThrowInvalidOperationIfNull(BlendMaskTexture, "BlendMaskTexture");
             
             if (ShowTerrain || ShowSilhouette || ShowWireframe || ShowNormals)
             {

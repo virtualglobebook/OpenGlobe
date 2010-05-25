@@ -19,12 +19,7 @@ namespace MiniGlobe.Scene
     {
         public DayNightViewportQuad(Context context)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException("context");
-            }
-
-            ///////////////////////////////////////////////////////////////////
+            Verify.ThrowIfNull(context);
 
             _context = context;
             _renderState = new RenderState();
@@ -116,20 +111,11 @@ namespace MiniGlobe.Scene
             }
         }
 
-        // TODO: Everywhere
-        private static void ThrowInvalidOperationIfNull(Texture2D texture, string memberName)
-        {
-            if (texture == null)
-            {
-                throw new InvalidOperationException(memberName);
-            }
-        }
-
         public void Render(SceneState sceneState)
         {
-            ThrowInvalidOperationIfNull(DayTexture, "DayTexture");
-            ThrowInvalidOperationIfNull(NightTexture, "NightTexture");
-            ThrowInvalidOperationIfNull(BlendTexture, "BlendTexture");
+            Verify.ThrowInvalidOperationIfNull(DayTexture, "DayTexture");
+            Verify.ThrowInvalidOperationIfNull(NightTexture, "NightTexture");
+            Verify.ThrowInvalidOperationIfNull(BlendTexture, "BlendTexture");
 
             Update();
 

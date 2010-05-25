@@ -19,10 +19,7 @@ namespace MiniGlobe.Scene
     {
         public DayNightGlobe(Context context)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException("context");
-            }
+            Verify.ThrowIfNull(context);
 
             _context = context;
 
@@ -214,15 +211,8 @@ namespace MiniGlobe.Scene
 
         public void Render(SceneState sceneState)
         {
-            if (DayTexture == null)
-            {
-                throw new InvalidOperationException("DayTexture");
-            }
-
-            if (NightTexture == null)
-            {
-                throw new InvalidOperationException("NightTexture");
-            }
+            Verify.ThrowInvalidOperationIfNull(DayTexture, "DayTexture");
+            Verify.ThrowInvalidOperationIfNull(NightTexture, "NightTexture");
 
             Clean();
 

@@ -19,6 +19,8 @@ namespace MiniGlobe.Scene
     {
         public Axes(Context context)
         {
+            Verify.ThrowIfNull(context);
+
             _context = context;
             _polyline = new Polyline(_context);
             Length = 1;
