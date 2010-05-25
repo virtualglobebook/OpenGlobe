@@ -188,6 +188,17 @@ MiniGlobe uses data from Natural Earth:
       http://www.naturalearthdata.com/downloads/50m-natural-earth-2/
       50m-natural-earth-ii-with-shaded-relief-and-water/
 
+   Data\Vector\NaturalEarth\110m-admin-1-states-provinces-lines-shp
+      http://www.naturalearthdata.com/downloads/110m-cultural-vectors/
+      110m-admin-1-states-provinces/
+
+   Data\Vector\NaturalEarth\50m-rivers-lake-centerlines
+      http://www.naturalearthdata.com/downloads/50m-physical-vectors/
+      50m-rivers-lake-centerlines/
+
+   Data\Vector\NaturalEarth\110m-admin-0-countries
+      http://www.naturalearthdata.com/downloads/110m-cultural-vectors/
+      110m-admin-0-countries/
 
    Terms of use:  http://www.naturalearthdata.com/about/terms-of-use/
 
