@@ -5,10 +5,10 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{35405c20-1149-4941-99e3-5ec639b1086a}</ProjectGuid>
+    <ProjectGuid>{35405C20-1149-4941-99E3-5EC639B1086A}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MiniGlobe.Examples.Chapter5.VertexDisplacementMap</RootNamespace>
+    <RootNamespace>MiniGlobe.Examples.Chapter5</RootNamespace>
     <AssemblyName>Chapter5VertexDisplacementMap</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

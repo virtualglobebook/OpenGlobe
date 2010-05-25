@@ -5,10 +5,10 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{e78f07c0-90cb-42cd-a83f-ed5a27ac8ed5}</ProjectGuid>
+    <ProjectGuid>{E78F07C0-90CB-42CD-A83F-ED5A27AC8ED5}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MiniGlobe.Examples.Chapter5.TriangleMesh</RootNamespace>
+    <RootNamespace>MiniGlobe.Examples.Chapter5</RootNamespace>
     <AssemblyName>Chapter5TriangleMesh</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
