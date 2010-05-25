@@ -36,6 +36,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Cameras\CameraLookAtPoint.cs" />
+    <Compile Include="Infrastructure\EmbeddedResources.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Renderables\Axes.cs" />
     <Compile Include="Renderables\BillboardCollection\Billboard.cs" />
@@ -62,6 +63,22 @@
       <Project>{E735AB3A-EB92-4C51-814E-E5E1F2173AA4}</Project>
       <Name>MiniGlobe.Renderer</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Terrain\VertexDisplacementMapTerrainTile\TerrainVS.glsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Terrain\VertexDisplacementMapTerrainTile\TerrainFS.glsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Terrain\VertexDisplacementMapTerrainTile\NormalsFS.glsl" />
+    <EmbeddedResource Include="Terrain\VertexDisplacementMapTerrainTile\NormalsGS.glsl" />
+    <EmbeddedResource Include="Terrain\VertexDisplacementMapTerrainTile\NormalsVS.glsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Terrain\VertexDisplacementMapTerrainTile\WireframeFS.glsl" />
+    <EmbeddedResource Include="Terrain\VertexDisplacementMapTerrainTile\WireframeGS.glsl" />
+    <EmbeddedResource Include="Terrain\VertexDisplacementMapTerrainTile\WireframeVS.glsl" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
