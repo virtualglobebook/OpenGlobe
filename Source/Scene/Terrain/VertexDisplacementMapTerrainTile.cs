@@ -181,29 +181,26 @@ namespace MiniGlobe.Terrain
 
                       gl_Position = mg_modelViewPerspectiveProjectionMatrix * vec4(displacedPosition, 1.0);
 
-                      if (u_normalAlgorithm != 0)
+                      if (u_normalAlgorithm == 1)       // TerrainNormalsAlgorithm.ThreeSamples
                       {
-                          if (u_normalAlgorithm == 1)       // TerrainNormalsAlgorithm.ThreeSamples
-                          {
-                              normalFS = ComputeNormalThreeSamples(displacedPosition, mg_texture0, u_heightExaggeration);
-                          }
-                          else if (u_normalAlgorithm == 2)  // TerrainNormalsAlgorithm.FourSamples
-                          {
-                              normalFS = ComputeNormalFourSamples(displacedPosition, mg_texture0, u_heightExaggeration);
-                          }
-                          else if (u_normalAlgorithm == 3)  // TerrainNormalsAlgorithm.SobelFilter
-                          {
-                              normalFS = ComputeNormalSobelFilter(displacedPosition, mg_texture0, u_heightExaggeration);
-                          }
-
-                          positionToLightFS = mg_cameraLightPosition - displacedPosition;
-                          positionToEyeFS = mg_cameraEye - displacedPosition;
+                          normalFS = ComputeNormalThreeSamples(displacedPosition, mg_texture0, u_heightExaggeration);
+                      }
+                      else if (u_normalAlgorithm == 2)  // TerrainNormalsAlgorithm.FourSamples
+                      {
+                          normalFS = ComputeNormalFourSamples(displacedPosition, mg_texture0, u_heightExaggeration);
+                      }
+                      else if (u_normalAlgorithm == 3)  // TerrainNormalsAlgorithm.SobelFilter
+                      {
+                          normalFS = ComputeNormalSobelFilter(displacedPosition, mg_texture0, u_heightExaggeration);
                       }
                       else
                       {
                           // Even if lighting isn't used, shading algorithms based on terrain slope require the normal.
                           normalFS = ComputeNormalThreeSamples(displacedPosition, mg_texture0, u_heightExaggeration);
                       }
+
+                      positionToLightFS = mg_cameraLightPosition - displacedPosition;
+                      positionToEyeFS = mg_cameraEye - displacedPosition;
 
                       textureCoordinate = position * u_positionToTextureCoordinate;
                       repeatTextureCoordinate = position * u_positionToRepeatTextureCoordinate;
@@ -259,7 +256,7 @@ namespace MiniGlobe.Terrain
 
                       if (u_showSilhouette)
                       {
-                          if (dot(normal, positionToEye) < 0.25)
+                          if (abs(dot(normal, positionToEye)) < 0.25)
                           {
                               fragmentColor = vec3(0.0);
                               return;
