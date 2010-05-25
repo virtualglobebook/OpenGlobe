@@ -44,7 +44,6 @@
     <Compile Include="Renderables\BillboardCollection\BillboardCollection.cs" />
     <Compile Include="Renderables\Globes\DayNightGlobe.cs" />
     <Compile Include="Renderables\Globes\DayNightViewportQuad.cs" />
-    <Compile Include="Renderables\ViewportQuad.cs" />
     <Compile Include="Renderables\HeadsUpDisplay.cs" />
     <Compile Include="Renderables\Plane.cs" />
     <Compile Include="Renderables\Polyline\Polyline.cs" />
@@ -52,6 +51,7 @@
     <Compile Include="Renderables\Polyline\OutlinedPolylineTexture.cs" />
     <Compile Include="Renderables\RayCastedGlobe.cs" />
     <Compile Include="Renderables\TessellatedGlobe.cs" />
+    <Compile Include="Renderables\ViewportQuad\ViewportQuad.cs" />
     <Compile Include="Renderables\Wireframe.cs" />
     <Compile Include="Terrain\RayCastedTerrainTile.cs" />
     <Compile Include="Terrain\TriangleMeshTerrainTile.cs" />
@@ -83,6 +83,7 @@
     <EmbeddedResource Include="Terrain\VertexDisplacementMapTerrainTile\WireframeGS.glsl" />
     <EmbeddedResource Include="Terrain\VertexDisplacementMapTerrainTile\WireframeVS.glsl" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
