@@ -15,7 +15,7 @@ using MiniGlobe.Renderer;
 
 namespace MiniGlobe.Scene
 {
-    public sealed class HeadsUpDisplay
+    public sealed class HeadsUpDisplay : IDisposable
     {
         public HeadsUpDisplay(Context context)
         {

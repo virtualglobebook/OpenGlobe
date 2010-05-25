@@ -52,6 +52,7 @@
     <Compile Include="Renderables\RayCastedGlobe.cs" />
     <Compile Include="Renderables\TessellatedGlobe.cs" />
     <Compile Include="Renderables\ViewportQuad\ViewportQuad.cs" />
+    <Compile Include="Renderables\ViewportQuad\ViewportQuadGeometry.cs" />
     <Compile Include="Renderables\Wireframe.cs" />
     <Compile Include="Terrain\RayCastedTerrainTile.cs" />
     <Compile Include="Terrain\TriangleMeshTerrainTile.cs" />
