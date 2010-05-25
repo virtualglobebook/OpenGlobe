@@ -20,6 +20,13 @@ namespace MiniGlobe.Core
             _height = height;
         }
 
+        public Geodetic3D(double longitude, double latitude)
+        {
+            _longitude = longitude;
+            _latitude = latitude;
+            _height = 0;
+        }
+
         public Geodetic3D(Geodetic2D geodetic2D)
         {
             _longitude = geodetic2D.Longitude;

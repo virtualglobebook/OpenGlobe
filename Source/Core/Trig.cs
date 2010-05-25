@@ -22,9 +22,30 @@ namespace MiniGlobe.Core
             return degrees * RadiansPerDegree;
         }
 
+        public static Geodetic3D ToRadians(Geodetic3D geodetic)
+        {
+            return new Geodetic3D(ToRadians(geodetic.Longitude), ToRadians(geodetic.Latitude), geodetic.Height);
+        }
+
+        public static Geodetic2D ToRadians(Geodetic2D geodetic)
+        {
+            return new Geodetic2D(ToRadians(geodetic.Longitude), ToRadians(geodetic.Latitude));
+        }
+
         public static double ToDegrees(double radians)
         {
             return radians / RadiansPerDegree;
         }
+
+        public static Geodetic3D ToDegrees(Geodetic3D geodetic)
+        {
+            return new Geodetic3D(ToDegrees(geodetic.Longitude), ToDegrees(geodetic.Latitude), geodetic.Height);
+        }
+
+        public static Geodetic2D ToDegrees(Geodetic2D geodetic)
+        {
+            return new Geodetic2D(ToDegrees(geodetic.Longitude), ToDegrees(geodetic.Latitude));
+        }
+
     }
 }
