@@ -61,6 +61,11 @@ namespace MiniGlobe.Examples.Chapter7
 
             foreach (Shape shape in shapefile)
             {
+                if (shape.Type == ShapeType.Null)
+                {
+                    continue;
+                }
+
                 if (shape.Type != ShapeType.PolyLine)
                 {
                     throw new NotSupportedException("The type of an individual shape does not match the Shapefile type.");
@@ -105,6 +110,11 @@ namespace MiniGlobe.Examples.Chapter7
 
             foreach (Shape shape in shapefile)
             {
+                if (shape.Type == ShapeType.Null)
+                {
+                    continue;
+                }
+
                 if (shape.Type != ShapeType.PolyLine)
                 {
                     throw new NotSupportedException("The type of an individual shape does not match the Shapefile type.");
