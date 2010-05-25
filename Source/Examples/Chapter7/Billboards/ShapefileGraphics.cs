@@ -21,6 +21,11 @@ namespace MiniGlobe.Examples.Chapter7
     public class ShapefileGraphics : IDisposable
     {
         public ShapefileGraphics(Context context, Ellipsoid globeShape, string filename)
+            : this(context, globeShape, filename, Color.Yellow, Color.Black)
+        {
+        }
+
+        public ShapefileGraphics(Context context, Ellipsoid globeShape, string filename, Color color, Color outlineColor)
         {
             if (context == null)
             {
@@ -39,7 +44,12 @@ namespace MiniGlobe.Examples.Chapter7
                 if (shapefile.Type == ShapeType.PolyLine)
                 {
                     _polyline = new OutlinedPolylineTexture(context);
-                    CreatePolylines(globeShape, shapefile);
+                    CreatePolylines(globeShape, shapefile, color, outlineColor);
+                }
+                else if (shapefile.Type == ShapeType.Polygon)
+                {
+                    _polyline = new OutlinedPolylineTexture(context);
+                    CreatePolygons(globeShape, shapefile, color, outlineColor);
                 }
                 else
                 {
@@ -48,7 +58,7 @@ namespace MiniGlobe.Examples.Chapter7
             }
         }
 
-        private void CreatePolylines(Ellipsoid globeShape, Shapefile shapefile)
+        private void CreatePolylines(Ellipsoid globeShape, Shapefile shapefile, Color color, Color outlineColor)
         {
             int positionsCount = 0;
             int indicesCount = 0;
@@ -82,8 +92,8 @@ namespace MiniGlobe.Examples.Chapter7
                         PointD point = part[i];
 
                         positionAttribute.Values.Add(globeShape.ToVector3D(Trig.ToRadians(new Geodetic3D(point.X, point.Y))));
-                        colorAttribute.AddColor(Color.Yellow);
-                        outlineColorAttribute.AddColor(Color.Black);
+                        colorAttribute.AddColor(color);
+                        outlineColorAttribute.AddColor(outlineColor);
 
                         if (i != 0)
                         {
@@ -101,6 +111,9 @@ namespace MiniGlobe.Examples.Chapter7
             mesh.Attributes.Add(outlineColorAttribute);
             mesh.Indices = indices;
             _polyline.Set(mesh);
+
+            PolylineWidth = _polyline.Width;
+            PolylineOutlineWidth = _polyline.OutlineWidth;
         }
 
         private static void PolylineCapacities(Shapefile shapefile, out int positionsCount, out int indicesCount)
@@ -133,13 +146,76 @@ namespace MiniGlobe.Examples.Chapter7
             indicesCount = numberOfIndices;
         }
 
+        private void CreatePolygons(Ellipsoid globeShape, Shapefile shapefile, Color color, Color outlineColor)
+        {
+            //
+            // TODO:  This is temporary.  Since polygon tessellation is not supported yet,
+            // polylines are created instead of polygons.
+            //
+            VertexAttributeDoubleVector3 positionAttribute = new VertexAttributeDoubleVector3("position");
+            VertexAttributeRGBA colorAttribute = new VertexAttributeRGBA("color");
+            VertexAttributeRGBA outlineColorAttribute = new VertexAttributeRGBA("outlineColor");
+            IndicesInt32 indices = new IndicesInt32();
+
+            foreach (Shape shape in shapefile)
+            {
+                if (shape.Type == ShapeType.Null)
+                {
+                    continue;
+                }
+
+                if (shape.Type != ShapeType.Polygon)
+                {
+                    throw new NotSupportedException("The type of an individual shape does not match the Shapefile type.");
+                }
+
+                IList<PointD[]> parts = (shape as ShapePolygon).Parts;
+
+                for (int j = 0; j < parts.Count; ++j)
+                {
+                    PointD[] part = parts[j];
+
+                    for (int i = 0; i < part.Length; ++i)
+                    {
+                        PointD point = part[i];
+
+                        positionAttribute.Values.Add(globeShape.ToVector3D(Trig.ToRadians(new Geodetic3D(point.X, point.Y))));
+                        colorAttribute.AddColor(color);
+                        outlineColorAttribute.AddColor(outlineColor);
+
+                        if (i != 0)
+                        {
+                            indices.Values.Add(positionAttribute.Values.Count - 2);
+                            indices.Values.Add(positionAttribute.Values.Count - 1);
+                        }
+                    }
+                }
+            }
+
+            Mesh mesh = new Mesh();
+            mesh.PrimitiveType = PrimitiveType.Lines;
+            mesh.Attributes.Add(positionAttribute);
+            mesh.Attributes.Add(colorAttribute);
+            mesh.Attributes.Add(outlineColorAttribute);
+            mesh.Indices = indices;
+            _polyline.Set(mesh);
+
+            PolylineWidth = _polyline.Width;
+            PolylineOutlineWidth = _polyline.OutlineWidth;
+        }
+
         public void Render(SceneState sceneState)
         {
             if (_polyline != null)
             {
+                _polyline.Width = PolylineWidth;
+                _polyline.OutlineWidth = PolylineOutlineWidth;
                 _polyline.Render(sceneState);
             }
         }
+
+        public double PolylineWidth { get; set; }
+        public double PolylineOutlineWidth { get; set; }
 
         public Context Context
         {
