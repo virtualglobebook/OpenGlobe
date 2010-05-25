@@ -54,7 +54,8 @@ namespace MiniGlobe.Scene
                   uniform vec3 u_cameraEyeSquared;
                   uniform vec3 u_globeOneOverRadiiSquared;
                   uniform float u_blendDuration;
-                  uniform float u_blendDurationScale;";
+                  uniform float u_blendDurationScale;
+                  uniform bool u_useAverageDepth;";
             fs += RayIntersectEllipsoidGLSL();
             fs += ComputeWorldPositionDepthGLSL();
             fs +=
@@ -99,7 +100,7 @@ namespace MiniGlobe.Scene
 
                       if (i.Intersects)
                       {
-                          vec3 position = mg_cameraEye + (i.Time * rayDirection);
+                          vec3 position = mg_cameraEye + (i.NearTime * rayDirection);
                           vec3 normal = ComputeDeticSurfaceNormal(position, u_globeOneOverRadiiSquared);
 
                           vec3 toLight = normalize(mg_sunPosition - position);
@@ -111,6 +112,11 @@ namespace MiniGlobe.Scene
                           nightColor = vec4(NightColor(normal), 1.0);
                           blendAlpha = clamp((diffuse + u_blendDuration) * u_blendDurationScale, 0.0, 1.0);
 
+                          if (u_useAverageDepth)
+                          {
+                              position = mg_cameraEye + (mix(i.NearTime, i.FarTime, 0.5) * rayDirection);
+                          }
+
                           gl_FragDepth = ComputeWorldPositionDepth(position, mg_modelZToClipCoordinates);
                       }
                       else
@@ -120,6 +126,7 @@ namespace MiniGlobe.Scene
                   }";
             _sp = Device.CreateShaderProgram(vs, fs);
             _cameraEyeSquaredSP = _sp.Uniforms["u_cameraEyeSquared"] as Uniform<Vector3S>;
+            _useAverageDepth = _sp.Uniforms["u_useAverageDepth"] as Uniform<bool>;
 
             float blendDurationScale = 0.1f;
             (_sp.Uniforms["u_blendDuration"] as Uniform<float>).Value = blendDurationScale;
@@ -137,7 +144,8 @@ namespace MiniGlobe.Scene
                 @"struct Intersection
                   {
                       bool  Intersects;
-                      float Time;         // Along ray
+                      float NearTime;         // Along ray
+                      float FarTime;          // Along ray
                   };
 
                   //
@@ -152,18 +160,19 @@ namespace MiniGlobe.Scene
 
                       if (discriminant < 0.0)
                       {
-                          return Intersection(false, 0.0);
+                          return Intersection(false, 0.0, 0.0);
                       }
                       else if (discriminant == 0.0)
                       {
-                          return Intersection(true, -0.5 * b / a);
+                          float time = -0.5 * b / a;
+                          return Intersection(true, time, time);
                       }
 
                       float t = -0.5 * (b + (b > 0.0 ? 1.0 : -1.0) * sqrt(discriminant));
                       float root1 = t / a;
                       float root2 = c / t;
 
-                      return Intersection(true, min(root1, root2));
+                      return Intersection(true, min(root1, root2), max(root1, root2));
                   }";
         }
 
@@ -260,6 +269,12 @@ namespace MiniGlobe.Scene
         public Texture2D DayTexture { get; set; }
         public Texture2D NightTexture { get; set; }
 
+        public bool UseAverageDepth
+        {
+            get { return _useAverageDepth.Value; }
+            set { _useAverageDepth.Value = value; }
+        }
+
         public int FragmentOutputs(string name)
         {
             return _sp.FragmentOutputs[name];
@@ -289,7 +304,8 @@ namespace MiniGlobe.Scene
         private readonly RenderState _renderState;
         private readonly ShaderProgram _sp;
         private readonly Uniform<Vector3S> _cameraEyeSquaredSP;
-
+        private readonly Uniform<bool> _useAverageDepth;
+        
         private VertexArray _va;
         private PrimitiveType _primitiveType;
 
