@@ -24,43 +24,9 @@ namespace MiniGlobe.Scene
             _renderState.FacetCulling.Enabled = false;
             _renderState.DepthTest.Enabled = false;
 
-            string vs =
-                @"#version 150
-
-                  in vec4 position;
-                  in vec2 textureCoordinates;
-
-                  out vec2 fsTextureCoordinates;
-
-                  uniform mat4 mg_viewportOrthographicProjectionMatrix;
-
-                  void main()                     
-                  {
-                      gl_Position = mg_viewportOrthographicProjectionMatrix * position;
-                      fsTextureCoordinates = textureCoordinates;
-                  }";
-            string fs =
-                @"#version 150
-                 
-                  in vec2 fsTextureCoordinates;
-
-                  out vec4 fragmentColor;
-
-                  uniform sampler2D mg_texture0;    // Day
-                  uniform sampler2D mg_texture1;    // Night
-                  uniform sampler2D mg_texture2;    // Blend
-
-                  void main()
-                  {
-                      vec4 dayColor = texture(mg_texture0, fsTextureCoordinates);
-                      vec4 nightColor = texture(mg_texture1, fsTextureCoordinates);
-                      float blend = texture(mg_texture2, fsTextureCoordinates).r;
-
-                      fragmentColor = mix(nightColor, dayColor, blend);
-                  }";
+            string vs = EmbeddedResources.GetText("MiniGlobe.Scene.Globes.DayNight.Shaders.ViewportQuadVS.glsl");
+            string fs = EmbeddedResources.GetText("MiniGlobe.Scene.Globes.DayNight.Shaders.ViewportQuadFS.glsl");
             _sp = Device.CreateShaderProgram(vs, fs);
-
-            ///////////////////////////////////////////////////////////////////
 
             _geometry = new ViewportQuadGeometry();
         }

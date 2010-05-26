@@ -84,7 +84,14 @@
     <EmbeddedResource Include="Terrain\VertexDisplacementMapTerrainTile\WireframeGS.glsl" />
     <EmbeddedResource Include="Terrain\VertexDisplacementMapTerrainTile\WireframeVS.glsl" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Globes\DayNight\Shaders\ViewportQuadFS.glsl" />
+    <EmbeddedResource Include="Globes\DayNight\Shaders\ViewportQuadVS.glsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Globes\DayNight\Shaders\GlobeFS.glsl" />
+    <EmbeddedResource Include="Globes\DayNight\Shaders\GlobeVS.glsl" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
