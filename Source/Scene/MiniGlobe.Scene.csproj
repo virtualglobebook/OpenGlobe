@@ -42,8 +42,8 @@
     <Compile Include="Renderables\Axes.cs" />
     <Compile Include="Renderables\BillboardCollection\Billboard.cs" />
     <Compile Include="Renderables\BillboardCollection\BillboardCollection.cs" />
-    <Compile Include="Renderables\Globes\DayNightGlobe.cs" />
-    <Compile Include="Renderables\Globes\DayNightViewportQuad.cs" />
+    <Compile Include="Renderables\DayNightGlobe\DayNightGlobe.cs" />
+    <Compile Include="Renderables\DayNightGlobe\DayNightViewportQuad.cs" />
     <Compile Include="Renderables\HeadsUpDisplay.cs" />
     <Compile Include="Renderables\Plane.cs" />
     <Compile Include="Renderables\Polyline\Polyline.cs" />
