@@ -12,6 +12,7 @@ using System.Drawing;
 using MiniGlobe.Core;
 using MiniGlobe.Core.Geometry;
 using MiniGlobe.Core.Tessellation;
+using MiniGlobe.Scene;
 using MiniGlobe.Renderer;
 using System.Collections.Generic;
 
@@ -23,37 +24,9 @@ namespace MiniGlobe.Terrain
         {
             _context = context;
 
-            string vs =
-                @"#version 150
-
-                  in vec3 position;
-                  
-                  out float height;
-
-                  uniform mat4 mg_modelViewPerspectiveProjectionMatrix;
-                  uniform float u_heightExaggeration;
-
-                  void main()
-                  {
-                      vec4 exaggeratedPosition = vec4(position.xy, position.z * u_heightExaggeration, 1.0);
-                      gl_Position = mg_modelViewPerspectiveProjectionMatrix * exaggeratedPosition;
-                      height = exaggeratedPosition.z;
-                  }";
-            string fs =
-                @"#version 150
-                 
-                  in float height;
-
-                  out vec3 fragmentColor;
-
-                  uniform float u_minimumHeight;
-                  uniform float u_maximumHeight;
-
-                  void main()
-                  {
-                      fragmentColor = vec3((height - u_minimumHeight) / (u_maximumHeight - u_minimumHeight), 0.0, 0.0);
-                  }";
-            _sp = Device.CreateShaderProgram(vs, fs);
+            _sp = Device.CreateShaderProgram(
+                EmbeddedResources.GetText("MiniGlobe.Scene.Terrain.TriangleMeshTerrainTile.TerrainVS.glsl"),
+                EmbeddedResources.GetText("MiniGlobe.Scene.Terrain.TriangleMeshTerrainTile.TerrainFS.glsl"));
 
             _tileMinimumHeight = tile.MinimumHeight;
             _tileMaximumHeight = tile.MaximumHeight;

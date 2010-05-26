@@ -107,6 +107,15 @@
   <ItemGroup>
     <EmbeddedResource Include="Globes\RayCasted\Shaders\SolidShadedGlobeFS.glsl" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Terrain\RayCastedTerrainTile\TerrainFS.glsl" />
+    <EmbeddedResource Include="Terrain\RayCastedTerrainTile\TerrainVS.glsl" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Terrain\TriangleMeshTerrainTile\TerrainFS.glsl" />
+    <EmbeddedResource Include="Terrain\TriangleMeshTerrainTile\TerrainVS.glsl" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
