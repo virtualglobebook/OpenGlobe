@@ -13,12 +13,27 @@ out vec4 fragmentColor;
 uniform sampler2D mg_texture0;    // Day
 uniform sampler2D mg_texture1;    // Night
 uniform sampler2D mg_texture2;    // Blend
+uniform int u_DayNightOutput;
 
 void main()
 {
-    vec4 dayColor = texture(mg_texture0, fsTextureCoordinates);
-    vec4 nightColor = texture(mg_texture1, fsTextureCoordinates);
-    float blend = texture(mg_texture2, fsTextureCoordinates).r;
-
-    fragmentColor = mix(nightColor, dayColor, blend);
+	if (u_DayNightOutput == 0)  // DayNightOutput.Composite
+	{
+		vec4 dayColor = texture(mg_texture0, fsTextureCoordinates);
+		vec4 nightColor = texture(mg_texture1, fsTextureCoordinates);
+		float blend = texture(mg_texture2, fsTextureCoordinates).r;
+		fragmentColor = mix(nightColor, dayColor, blend);
+	}
+	else if (u_DayNightOutput == 1)  // DayNightOutput.DayBuffer
+	{
+		fragmentColor = texture(mg_texture0, fsTextureCoordinates);
+	}
+	else if (u_DayNightOutput == 2)  // DayNightOutput.NightBuffer
+	{
+		fragmentColor = texture(mg_texture1, fsTextureCoordinates);
+	}
+	else if (u_DayNightOutput == 3)  // DayNightOutput.BlendBuffer
+	{
+		fragmentColor = vec4(texture(mg_texture2, fsTextureCoordinates).r);
+	}
 }

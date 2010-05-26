@@ -26,6 +26,8 @@ namespace MiniGlobe.Examples.Chapter7
             _window = Device.CreateWindow(800, 600, "Chapter 7:  Vector Data");
             _window.Resize += OnResize;
             _window.RenderFrame += OnRenderFrame;
+            _window.Keyboard.KeyDown += OnKeyDown;
+            _window.Keyboard.KeyUp += OnKeyUp; 
             _sceneState = new SceneState();
             _camera = new CameraLookAtPoint(_sceneState.Camera, _window, globeShape);
 
@@ -48,12 +50,86 @@ namespace MiniGlobe.Examples.Chapter7
             _rivers.PolylineWidth = 1;
             _rivers.PolylineOutlineWidth = 0;
 
+            _hudFont = new Font("Arial", 16);
+            _hud = new HeadsUpDisplay(_window.Context);
+
+            _showVectorData = true;
+
             _sceneState.DiffuseIntensity = 0.5f;
             _sceneState.SpecularIntensity = 0.1f;
             _sceneState.AmbientIntensity = 0.4f;
             _sceneState.Camera.ZoomToTarget(globeShape.MaximumRadius);
 
             PersistentView.Execute(@"E:\Test.xml", _window, _sceneState.Camera);
+
+            UpdateHUD();
+        }
+
+        private static string DayNightOutputToString(DayNightOutput dayNightOutput)
+        {
+            switch (dayNightOutput)
+            {
+                case DayNightOutput.Composite:
+                    return "Composited Buffers";
+                case DayNightOutput.DayBuffer:
+                    return "Day Buffer";
+                case DayNightOutput.NightBuffer:
+                    return "Night Buffer";
+                case DayNightOutput.BlendBuffer:
+                    return "Blend Buffer";
+            }
+
+            return string.Empty;
+        }
+
+        private void UpdateHUD()
+        {
+            string text = "Output: " + DayNightOutputToString(_quad.DayNightOutput) + " ('o' + left/right)\n";
+            text += "Vector Data: " + (_showVectorData ? "on" : "off") + " ('v')\n";
+
+            if (_hud.Texture != null)
+            {
+                _hud.Texture.Dispose();
+                _hud.Texture = null;
+            }
+            _hud.Texture = Device.CreateTexture2D(
+                Device.CreateBitmapFromText(text, _hudFont),
+                TextureFormat.RedGreenBlueAlpha8, false);
+        }
+
+        private void OnKeyDown(object sender, KeyboardKeyEventArgs e)
+        {
+            if (e.Key == KeyboardKey.O)
+            {
+                _oKeyDown = true;
+            }
+            else if (_oKeyDown && ((e.Key == KeyboardKey.Left) || (e.Key == KeyboardKey.Right)))
+            {
+                _quad.DayNightOutput += (e.Key == KeyboardKey.Right) ? 1 : -1;
+
+                if (_quad.DayNightOutput < DayNightOutput.Composite)
+                {
+                    _quad.DayNightOutput = DayNightOutput.BlendBuffer;
+                }
+                else if (_quad.DayNightOutput > DayNightOutput.BlendBuffer)
+                {
+                    _quad.DayNightOutput = DayNightOutput.Composite;
+                }
+            }
+            else if (e.Key == KeyboardKey.V)
+            {
+                _showVectorData = !_showVectorData;
+            }
+
+            UpdateHUD();
+        }
+
+        private void OnKeyUp(object sender, KeyboardKeyEventArgs e)
+        {
+            if (e.Key == KeyboardKey.O)
+            {
+                _oKeyDown = false;
+            }
         }
 
         private void OnResize()
@@ -93,21 +169,25 @@ namespace MiniGlobe.Examples.Chapter7
             _window.Context.Clear(ClearBuffers.ColorAndDepthBuffer, Color.Black, 1, 0);
             _globe.Render(_sceneState);
 
-            _frameBuffer.ColorAttachments[_globe.FragmentOutputs("nightColor")] = null;
-            _frameBuffer.ColorAttachments[_globe.FragmentOutputs("blendAlpha")] = null;
-            
-            _countries.Render(_sceneState);
-            _states.Render(_sceneState);
-            _rivers.Render(_sceneState);
+            if (_showVectorData)
+            {
+                _frameBuffer.ColorAttachments[_globe.FragmentOutputs("nightColor")] = null;
+                _frameBuffer.ColorAttachments[_globe.FragmentOutputs("blendAlpha")] = null;
 
-            _frameBuffer.ColorAttachments[_globe.FragmentOutputs("nightColor")] = _nightTexture;
-            _frameBuffer.ColorAttachments[_globe.FragmentOutputs("blendAlpha")] = _blendTexture;
+                _countries.Render(_sceneState);
+                _states.Render(_sceneState);
+                _rivers.Render(_sceneState);
+
+                _frameBuffer.ColorAttachments[_globe.FragmentOutputs("nightColor")] = _nightTexture;
+                _frameBuffer.ColorAttachments[_globe.FragmentOutputs("blendAlpha")] = _blendTexture;
+            }
 
             //
             // Render viewport quad to show contents of frame buffer's color buffer
             //
             context.Bind(null as FrameBuffer);
             _quad.Render(_sceneState);
+            _hud.Render(_sceneState);
         }
 
         #region IDisposable Members
@@ -124,6 +204,9 @@ namespace MiniGlobe.Examples.Chapter7
             _countries.Dispose();
             _states.Dispose();
             _rivers.Dispose();
+            _hudFont.Dispose();
+            _hud.Texture.Dispose();
+            _hud.Dispose();
             _window.Dispose();
         }
 
@@ -184,5 +267,12 @@ namespace MiniGlobe.Examples.Chapter7
         private readonly ShapefileGraphics _countries;
         private readonly ShapefileGraphics _states;
         private readonly ShapefileGraphics _rivers;
+
+        private readonly Font _hudFont;
+        private readonly HeadsUpDisplay _hud;
+
+        private bool _showVectorData;
+
+        private bool _oKeyDown;
     }
 }

@@ -11,6 +11,14 @@ using System;
 using MiniGlobe.Core.Geometry;
 using MiniGlobe.Renderer;
 
+public enum DayNightOutput
+{
+    Composite,
+    DayBuffer,
+    NightBuffer,
+    BlendBuffer
+}
+
 namespace MiniGlobe.Scene
 {
     public sealed class DayNightViewportQuad : IDisposable
@@ -27,6 +35,7 @@ namespace MiniGlobe.Scene
             string vs = EmbeddedResources.GetText("MiniGlobe.Scene.Globes.DayNight.Shaders.ViewportQuadVS.glsl");
             string fs = EmbeddedResources.GetText("MiniGlobe.Scene.Globes.DayNight.Shaders.ViewportQuadFS.glsl");
             _sp = Device.CreateShaderProgram(vs, fs);
+            _dayNightOutput = _sp.Uniforms["u_DayNightOutput"] as Uniform<int>;
 
             _geometry = new ViewportQuadGeometry();
         }
@@ -57,6 +66,12 @@ namespace MiniGlobe.Scene
         public Texture2D NightTexture { get; set; }
         public Texture2D BlendTexture { get; set; }
 
+        public DayNightOutput DayNightOutput
+        {
+            get { return (DayNightOutput)_dayNightOutput.Value; }
+            set { _dayNightOutput.Value = (int)value; }
+        }
+
         #region IDisposable Members
 
         public void Dispose()
@@ -70,6 +85,7 @@ namespace MiniGlobe.Scene
         private readonly Context _context;
         private readonly RenderState _renderState;
         private readonly ShaderProgram _sp;
+        private readonly Uniform<int> _dayNightOutput;
         private readonly ViewportQuadGeometry _geometry;
     }
 }
