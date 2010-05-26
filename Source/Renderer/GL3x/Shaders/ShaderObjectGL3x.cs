@@ -36,6 +36,11 @@ namespace MiniGlobe.Renderer.GL3x
 
             string modifiedSource;
 
+            //
+            // This requires that #version be the first line in the shader.  This
+            // doesn't follow the spec exactly, which allows whitespace and
+            // comments to come beforehand.
+            //
             if (source.StartsWith("#version", StringComparison.CurrentCulture))
             {
                 Debug.Assert(source.StartsWith("#version 150", StringComparison.CurrentCulture));
