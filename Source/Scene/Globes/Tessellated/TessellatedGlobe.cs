@@ -22,84 +22,8 @@ namespace MiniGlobe.Scene
 
             _context = context;
 
-            string vs =
-                @"#version 150
-
-                  in vec4 position;
-                  out vec3 worldPosition;
-                  out vec3 positionToLight;
-                  out vec3 positionToEye;
-
-                  uniform mat4 mg_modelViewPerspectiveProjectionMatrix;
-                  uniform float mg_perspectiveFarPlaneDistance;
-                  uniform vec3 mg_cameraEye;
-                  uniform vec3 mg_cameraLightPosition;
-                  uniform bool u_logarithmicDepth;
-                  uniform float u_logarithmicDepthConstant;
-
-                  vec4 ModelToClipCoordinates(
-                      vec4 position,
-                      mat4 modelViewPerspectiveProjectionMatrix,
-                      bool logarithmicDepth,
-                      float logarithmicDepthConstant,
-                      float perspectiveFarPlaneDistance)
-                  {
-                      vec4 clip = modelViewPerspectiveProjectionMatrix * position; 
-
-                      if (logarithmicDepth)
-                      {
-                          clip.z = (log((logarithmicDepthConstant * clip.z) + 1.0) / 
-                                    log((logarithmicDepthConstant * perspectiveFarPlaneDistance) + 1.0)) * clip.w;
-                      }
-
-                      return clip;
-                  }
-
-                  void main()                     
-                  {
-                        gl_Position = ModelToClipCoordinates(position, mg_modelViewPerspectiveProjectionMatrix,
-                            u_logarithmicDepth, u_logarithmicDepthConstant, mg_perspectiveFarPlaneDistance);
-
-                        worldPosition = position.xyz;
-                        positionToLight = mg_cameraLightPosition - worldPosition;
-                        positionToEye = mg_cameraEye - worldPosition;
-                  }";
-
-            string fs =
-                @"#version 150
-                 
-                  in vec3 worldPosition;
-                  in vec3 positionToLight;
-                  in vec3 positionToEye;
-                  out vec3 fragmentColor;
-
-                  uniform vec4 mg_diffuseSpecularAmbientShininess;
-                  uniform sampler2D mg_texture0;
-
-                  float LightIntensity(vec3 normal, vec3 toLight, vec3 toEye, vec4 diffuseSpecularAmbientShininess)
-                  {
-                      vec3 toReflectedLight = reflect(-toLight, normal);
-
-                      float diffuse = max(dot(toLight, normal), 0.0);
-                      float specular = max(dot(toReflectedLight, toEye), 0.0);
-                      specular = pow(specular, diffuseSpecularAmbientShininess.w);
-
-                      return (diffuseSpecularAmbientShininess.x * diffuse) +
-                             (diffuseSpecularAmbientShininess.y * specular) +
-                              diffuseSpecularAmbientShininess.z;
-                  }
-
-                  vec2 ComputeTextureCoordinates(vec3 normal)
-                  {
-                      return vec2(atan(normal.y, normal.x) * mg_oneOverTwoPi + 0.5, asin(normal.z) * mg_oneOverPi + 0.5);
-                  }
-
-                  void main()
-                  {
-                      vec3 normal = normalize(worldPosition);
-                      float intensity = LightIntensity(normal,  normalize(positionToLight), normalize(positionToEye), mg_diffuseSpecularAmbientShininess);
-                      fragmentColor = intensity * texture(mg_texture0, ComputeTextureCoordinates(normal)).rgb;
-                  }";
+            string vs = EmbeddedResources.GetText("MiniGlobe.Scene.Globes.Tessellated.Shaders.GlobeVS.glsl");
+            string fs = EmbeddedResources.GetText("MiniGlobe.Scene.Globes.Tessellated.Shaders.GlobeFS.glsl");
             _sp = Device.CreateShaderProgram(vs, fs);
             _logarithmicDepth = _sp.Uniforms["u_logarithmicDepth"] as Uniform<bool>;
             _logarithmicDepthConstant = _sp.Uniforms["u_logarithmicDepthConstant"] as Uniform<float>;

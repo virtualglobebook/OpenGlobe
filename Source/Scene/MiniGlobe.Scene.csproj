@@ -92,6 +92,17 @@
     <EmbeddedResource Include="Globes\DayNight\Shaders\GlobeFS.glsl" />
     <EmbeddedResource Include="Globes\DayNight\Shaders\GlobeVS.glsl" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Globes\Tessellated\Shaders\GlobeFS.glsl" />
+    <EmbeddedResource Include="Globes\Tessellated\Shaders\GlobeVS.glsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Globes\RayCasted\Shaders\GlobeFS.glsl" />
+    <EmbeddedResource Include="Globes\RayCasted\Shaders\GlobeVS.glsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Globes\RayCasted\Shaders\SolidShadedGlobeFS.glsl" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
