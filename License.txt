@@ -59,7 +59,7 @@ MiniGlobe uses OpenTK:
   Also available at http://www.opentk.com/project/license
 
 
-MiniGlobe examples use ESRI Shapefile Reader (Catfood.Shapefile.dll):
+MiniGlobe uses ESRI Shapefile Reader (Catfood.Shapefile.dll):
 
   (c)copyright 2009 Catfood Software - http://www.catfood.net
 

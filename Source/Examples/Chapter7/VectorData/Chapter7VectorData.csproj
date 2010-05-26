@@ -5,7 +5,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{a13eb11d-aa8d-4cb0-9822-56a20a431ce6}</ProjectGuid>
+    <ProjectGuid>{A13EB11D-AA8D-4CB0-9822-56A20A431CE6}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>MiniGlobe.Examples.Chapter7</RootNamespace>
@@ -41,16 +41,12 @@
   </Target>
   -->
   <ItemGroup>
-    <Reference Include="Catfood.Shapefile">
-      <HintPath>..\..\..\..\ThirdParty\Catfood.Shapefile.1.10\Catfood.Shapefile\bin\Release\Catfood.Shapefile.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Drawing" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="VectorData.cs" />
-    <Compile Include="ShapefileGraphics.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\..\ThirdParty\opentk-1.0.0-rc1\Source\OpenTK\OpenTK.dll.config">

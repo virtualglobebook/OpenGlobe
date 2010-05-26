@@ -31,6 +31,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Catfood.Shapefile">
+      <HintPath>..\..\ThirdParty\Catfood.Shapefile.1.10\Catfood.Shapefile\bin\Release\Catfood.Shapefile.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Drawing" />
   </ItemGroup>
@@ -54,6 +57,7 @@
     <Compile Include="Renderables\ViewportQuad\ViewportQuad.cs" />
     <Compile Include="Renderables\ViewportQuad\ViewportQuadGeometry.cs" />
     <Compile Include="Renderables\Wireframe.cs" />
+    <Compile Include="ShapefileGraphics\ShapefileGraphics.cs" />
     <Compile Include="Terrain\RayCastedTerrainTile.cs" />
     <Compile Include="Terrain\TriangleMeshTerrainTile.cs" />
     <Compile Include="Terrain\VertexDisplacementMapTerrainTile.cs" />
