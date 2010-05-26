@@ -111,7 +111,11 @@
     <EmbeddedResource Include="Terrain\RayCastedTerrainTile\TerrainFS.glsl" />
     <EmbeddedResource Include="Terrain\RayCastedTerrainTile\TerrainVS.glsl" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Renderables\BillboardCollection\Shaders\BillboardsFS.glsl" />
+    <EmbeddedResource Include="Renderables\BillboardCollection\Shaders\BillboardsGS.glsl" />
+    <EmbeddedResource Include="Renderables\BillboardCollection\Shaders\BillboardsVS.glsl" />
+  </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Terrain\TriangleMeshTerrainTile\TerrainFS.glsl" />
     <EmbeddedResource Include="Terrain\TriangleMeshTerrainTile\TerrainVS.glsl" />
