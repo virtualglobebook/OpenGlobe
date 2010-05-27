@@ -41,9 +41,6 @@
   </Target>
   -->
   <ItemGroup>
-    <Reference Include="Catfood.Shapefile">
-      <HintPath>..\..\..\..\ThirdParty\Catfood.Shapefile.1.10\Catfood.Shapefile\bin\Release\Catfood.Shapefile.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Drawing" />
   </ItemGroup>
@@ -51,7 +48,6 @@
     <Compile Include="Cities.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Billboards.cs" />
-    <Compile Include="ShapefileGraphics.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\..\ThirdParty\opentk-1.0.0-rc1\Source\OpenTK\OpenTK.dll.config">
