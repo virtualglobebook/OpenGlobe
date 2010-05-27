@@ -58,6 +58,7 @@
     <Compile Include="Renderables\ViewportQuad\ViewportQuadGeometry.cs" />
     <Compile Include="Renderables\Wireframe.cs" />
     <Compile Include="ShapefileGraphics\ShapefileGraphics.cs" />
+    <Compile Include="Shapefiles\PointShapefile.cs" />
     <Compile Include="Terrain\RayCastedTerrainTile.cs" />
     <Compile Include="Terrain\TriangleMeshTerrainTile.cs" />
     <Compile Include="Terrain\VertexDisplacementMapTerrainTile.cs" />

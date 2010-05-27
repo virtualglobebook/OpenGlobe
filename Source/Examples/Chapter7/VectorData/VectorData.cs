@@ -31,27 +31,30 @@ namespace MiniGlobe.Examples.Chapter7
             _sceneState = new SceneState();
             _camera = new CameraLookAtPoint(_sceneState.Camera, _window, globeShape);
 
-            _frameBuffer = _window.Context.CreateFrameBuffer();
-            _quad = new DayNightViewportQuad(_window.Context);
+            Context context = _window.Context;
 
-            _globe = new DayNightGlobe(_window.Context);
+            _frameBuffer = context.CreateFrameBuffer();
+            _quad = new DayNightViewportQuad(context);
+
+            _globe = new DayNightGlobe(context);
             _globe.Shape = globeShape;
             _globe.UseAverageDepth = true;
             _globe.DayTexture = Device.CreateTexture2D(new Bitmap("NE2_50M_SR_W_4096.jpg"), TextureFormat.RedGreenBlue8, false);
             _globe.NightTexture = Device.CreateTexture2D(new Bitmap("land_ocean_ice_lights_2048.jpg"), TextureFormat.RedGreenBlue8, false);
 
-            _countries = new ShapefileGraphics(_window.Context, globeShape, "110m_admin_0_countries.shp");
+            _countries = new ShapefileGraphics("110m_admin_0_countries.shp", context, globeShape);
             _countries.PolylineWidth = 1;
             _countries.PolylineOutlineWidth = 1;
-            _states = new ShapefileGraphics(_window.Context, globeShape, "110m_admin_1_states_provinces_lines_shp.shp");
+            _states = new ShapefileGraphics("110m_admin_1_states_provinces_lines_shp.shp", context, globeShape);
             _states.PolylineWidth = 1;
             _states.PolylineOutlineWidth = 1;
-            _rivers = new ShapefileGraphics(_window.Context, globeShape, "50m-rivers-lake-centerlines.shp", Color.LightBlue, Color.LightBlue);
+            _rivers = new ShapefileGraphics("50m-rivers-lake-centerlines.shp", context, globeShape, Color.LightBlue, Color.LightBlue);
             _rivers.PolylineWidth = 1;
             _rivers.PolylineOutlineWidth = 0;
+            _cities = new PointShapefile("110m_populated_places_simple.shp", context, globeShape, new Bitmap("032.png"));
 
             _hudFont = new Font("Arial", 16);
-            _hud = new HeadsUpDisplay(_window.Context);
+            _hud = new HeadsUpDisplay(context);
 
             _showVectorData = true;
 
@@ -148,11 +151,6 @@ namespace MiniGlobe.Examples.Chapter7
             _blendTexture = Device.CreateTexture2D(new Texture2DDescription(_window.Width, _window.Height, TextureFormat.Red32f, false));
             _depthTexture = Device.CreateTexture2D(new Texture2DDescription(_window.Width, _window.Height, TextureFormat.Depth24, false));
             
-            _frameBuffer.ColorAttachments[_globe.FragmentOutputs("dayColor")] = _dayTexture;
-            _frameBuffer.ColorAttachments[_globe.FragmentOutputs("nightColor")] = _nightTexture;
-            _frameBuffer.ColorAttachments[_globe.FragmentOutputs("blendAlpha")] = _blendTexture;
-            _frameBuffer.DepthAttachment = _depthTexture;
-
             _quad.DayTexture = _dayTexture;
             _quad.NightTexture = _nightTexture;
             _quad.BlendTexture = _blendTexture;
@@ -166,28 +164,46 @@ namespace MiniGlobe.Examples.Chapter7
             // Render to frame buffer
             //
             context.Bind(_frameBuffer);
+
+            SetFrameBufferAttachments(_dayTexture, _nightTexture, null);
             _window.Context.Clear(ClearBuffers.ColorAndDepthBuffer, Color.Black, 1, 0);
+
+            SetFrameBufferAttachments(null, null, _blendTexture);
+            _window.Context.Clear(ClearBuffers.ColorAndDepthBuffer, Color.White, 1, 0);
+
+            //
+            // Render globe to day, night, and blend buffers
+            //
+            SetFrameBufferAttachments(_dayTexture, _nightTexture, _blendTexture);
             _globe.Render(_sceneState);
 
             if (_showVectorData)
             {
-                _frameBuffer.ColorAttachments[_globe.FragmentOutputs("nightColor")] = null;
-                _frameBuffer.ColorAttachments[_globe.FragmentOutputs("blendAlpha")] = null;
+                SetFrameBufferAttachments(_dayTexture, null, null);
 
-                _countries.Render(_sceneState);
-                _states.Render(_sceneState);
+                //
+                // Render vector data, layered bottom to top, to the day buffer only
+                //
                 _rivers.Render(_sceneState);
-
-                _frameBuffer.ColorAttachments[_globe.FragmentOutputs("nightColor")] = _nightTexture;
-                _frameBuffer.ColorAttachments[_globe.FragmentOutputs("blendAlpha")] = _blendTexture;
+                _states.Render(_sceneState);
+                _countries.Render(_sceneState);
+                _cities.Render(_sceneState);
             }
 
             //
-            // Render viewport quad to show contents of frame buffer's color buffer
+            // Render viewport quad to composite buffers
             //
             context.Bind(null as FrameBuffer);
             _quad.Render(_sceneState);
             _hud.Render(_sceneState);
+        }
+
+        private void SetFrameBufferAttachments(Texture2D day, Texture2D night, Texture2D blend)
+        {
+            _frameBuffer.ColorAttachments[_globe.FragmentOutputs("dayColor")] = day;
+            _frameBuffer.ColorAttachments[_globe.FragmentOutputs("nightColor")] = night;
+            _frameBuffer.ColorAttachments[_globe.FragmentOutputs("blendAlpha")] = blend;
+            _frameBuffer.DepthAttachment = _depthTexture;
         }
 
         #region IDisposable Members
@@ -204,6 +220,7 @@ namespace MiniGlobe.Examples.Chapter7
             _countries.Dispose();
             _states.Dispose();
             _rivers.Dispose();
+            _cities.Dispose();
             _hudFont.Dispose();
             _hud.Texture.Dispose();
             _hud.Dispose();
@@ -267,7 +284,8 @@ namespace MiniGlobe.Examples.Chapter7
         private readonly ShapefileGraphics _countries;
         private readonly ShapefileGraphics _states;
         private readonly ShapefileGraphics _rivers;
-
+        private readonly PointShapefile _cities;
+        
         private readonly Font _hudFont;
         private readonly HeadsUpDisplay _hud;
 

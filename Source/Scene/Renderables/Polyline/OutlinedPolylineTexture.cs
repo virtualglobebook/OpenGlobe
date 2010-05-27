@@ -271,6 +271,12 @@ namespace MiniGlobe.Scene
             set { _renderState.RasterizationMode = value ? RasterizationMode.Line : RasterizationMode.Fill; }
         }
 
+        public bool DepthWrite
+        {
+            get { return _renderState.DepthWrite; }
+            set { _renderState.DepthWrite = value; }
+        }
+
         #region IDisposable Members
 
         public void Dispose()

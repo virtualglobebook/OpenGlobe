@@ -13,31 +13,25 @@ using System.Collections.Generic;
 using MiniGlobe.Core;
 using MiniGlobe.Core.Geometry;
 using MiniGlobe.Renderer;
-using MiniGlobe.Scene;
 using Catfood.Shapefile;
 
-namespace MiniGlobe.Examples.Chapter7
+namespace MiniGlobe.Scene
 {
     public class ShapefileGraphics : IDisposable
     {
-        public ShapefileGraphics(Context context, Ellipsoid globeShape, string filename)
-            : this(context, globeShape, filename, Color.Yellow, Color.Black)
+        public ShapefileGraphics(string filename, Context context, Ellipsoid globeShape)
+            : this(filename, context, globeShape, Color.Yellow, Color.Black)
         {
         }
 
-        public ShapefileGraphics(Context context, Ellipsoid globeShape, string filename, Color color, Color outlineColor)
+        public ShapefileGraphics(string filename, Context context, Ellipsoid globeShape, Color color, Color outlineColor)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException("context");
-            }
+            Verify.ThrowIfNull(context);
 
             if (globeShape == null)
             {
                 throw new ArgumentNullException("globeShape");
             }
-
-            _context = context;
 
             using (Shapefile shapefile = new Shapefile(filename))
             {
@@ -206,20 +200,30 @@ namespace MiniGlobe.Examples.Chapter7
 
         public void Render(SceneState sceneState)
         {
-            if (_polyline != null)
-            {
-                _polyline.Width = PolylineWidth;
-                _polyline.OutlineWidth = PolylineOutlineWidth;
-                _polyline.Render(sceneState);
-            }
+            _polyline.Render(sceneState);
         }
 
-        public double PolylineWidth { get; set; }
-        public double PolylineOutlineWidth { get; set; }
+        public double PolylineWidth 
+        {
+            get { return _polyline.OutlineWidth;  }
+            set { _polyline.OutlineWidth = value;  }
+        }
+        
+        public double PolylineOutlineWidth 
+        {
+            get { return _polyline.Width;  }
+            set { _polyline.Width = value;  }
+        }
+        
+        public bool DepthWrite 
+        {
+            get { return _polyline.DepthWrite;  }
+            set { _polyline.DepthWrite = value;  }
+        }
 
         public Context Context
         {
-            get { return _context; }
+            get { return _polyline.Context; }
         }
 
         #region IDisposable Members
@@ -234,7 +238,6 @@ namespace MiniGlobe.Examples.Chapter7
 
         #endregion
 
-        private readonly Context _context;
         private readonly OutlinedPolylineTexture _polyline;
     }
 }

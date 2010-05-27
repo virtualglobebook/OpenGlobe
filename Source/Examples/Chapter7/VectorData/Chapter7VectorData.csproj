@@ -79,6 +79,18 @@
     <None Include="..\..\..\..\Data\Vector\NaturalEarth\50m-rivers-lake-centerlines\50m-rivers-lake-centerlines.shx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="..\..\..\..\Data\Vector\NaturalEarth\110m-populated-places-simple\110m_populated_places_simple.dbf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\..\..\Data\Vector\NaturalEarth\110m-populated-places-simple\110m_populated_places_simple.shp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\..\..\Data\Vector\NaturalEarth\110m-populated-places-simple\110m_populated_places_simple.shx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\..\..\Data\Icons\YusukeKamiyamane\032.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Core\MiniGlobe.Core.csproj">

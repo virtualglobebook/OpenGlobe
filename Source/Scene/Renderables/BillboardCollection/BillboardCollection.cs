@@ -53,8 +53,6 @@ namespace MiniGlobe.Scene
                 EmbeddedResources.GetText("MiniGlobe.Scene.Renderables.BillboardCollection.Shaders.BillboardsVS.glsl"),
                 EmbeddedResources.GetText("MiniGlobe.Scene.Renderables.BillboardCollection.Shaders.BillboardsGS.glsl"),
                 EmbeddedResources.GetText("MiniGlobe.Scene.Renderables.BillboardCollection.Shaders.BillboardsFS.glsl"));
-
-            _zOffsetUniform = _sp.Uniforms["u_zOffset"] as Uniform<float>;
         }
 
         private void CreateVertexArray()
@@ -228,7 +226,6 @@ namespace MiniGlobe.Scene
 
             if (_va != null)
             {
-                _zOffsetUniform.Value = (float)ZOffset;
                 _context.TextureUnits[0].Texture2D = Texture;
                 _context.Bind(_renderState);
                 _context.Bind(_sp);
@@ -256,8 +253,11 @@ namespace MiniGlobe.Scene
             set { _renderState.DepthTest.Enabled = value; }
         }
 
-        // TODO:  Better way to avoid z fighting
-        public double ZOffset { get; set; }
+        public bool DepthWrite
+        {
+            get { return _renderState.DepthWrite; }
+            set { _renderState.DepthWrite = value; }
+        }
 
         #region IList<Billboard> Members
 
@@ -475,7 +475,6 @@ namespace MiniGlobe.Scene
         private readonly Context _context;
         private readonly RenderState _renderState;
         private readonly ShaderProgram _sp;
-        private readonly Uniform<float> _zOffsetUniform;
 
         private VertexBuffer _positionBuffer;
         private VertexBuffer _textureCoordinatesBuffer;

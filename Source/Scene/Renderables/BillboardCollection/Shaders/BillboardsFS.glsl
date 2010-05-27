@@ -12,7 +12,6 @@ in vec4 fsColor;
 out vec4 fragmentColor;
 
 uniform sampler2D mg_texture0;
-uniform float u_zOffset;
 
 void main()
 {
@@ -23,5 +22,4 @@ void main()
         discard;
     }
     fragmentColor = vec4(color.rgb * fsColor.rgb, color.a);
-    gl_FragDepth = gl_FragCoord.z + u_zOffset;
 }
