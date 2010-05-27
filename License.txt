@@ -200,6 +200,10 @@ MiniGlobe uses data from Natural Earth:
       http://www.naturalearthdata.com/downloads/110m-cultural-vectors/
       110m-admin-0-countries/
 
+   Data\Vector\NaturalEarth\110m-populated-places-simple
+      http://www.naturalearthdata.com/downloads/110m-cultural-vectors/
+      110m-populated-places/
+
    Terms of use:  http://www.naturalearthdata.com/about/terms-of-use/
 
 
