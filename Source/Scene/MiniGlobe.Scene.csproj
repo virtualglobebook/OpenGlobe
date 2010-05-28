@@ -61,7 +61,7 @@
     <Compile Include="Renderables\Polyline\OutlinedPolylineTexture.cs" />
     <Compile Include="Renderables\ViewportQuad\ViewportQuad.cs" />
     <Compile Include="Renderables\ViewportQuad\ViewportQuadGeometry.cs" />
-    <Compile Include="Renderables\Wireframe.cs" />
+    <Compile Include="Renderables\Wireframe\Wireframe.cs" />
     <Compile Include="Shapefiles\PointShapefile.cs" />
     <Compile Include="Shapefiles\PolygonShapefile.cs" />
     <Compile Include="Shapefiles\PolylineShapefile.cs" />
@@ -145,6 +145,11 @@
     <EmbeddedResource Include="Renderables\Polyline\OutlinedPolylineGeometryShader\PolylineFS.glsl" />
     <EmbeddedResource Include="Renderables\Polyline\OutlinedPolylineGeometryShader\PolylineGS.glsl" />
     <EmbeddedResource Include="Renderables\Polyline\OutlinedPolylineGeometryShader\PolylineVS.glsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Renderables\Wireframe\Shaders\WireframeFS.glsl" />
+    <EmbeddedResource Include="Renderables\Wireframe\Shaders\WireframeGS.glsl" />
+    <EmbeddedResource Include="Renderables\Wireframe\Shaders\WireframeVS.glsl" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

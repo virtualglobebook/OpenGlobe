@@ -46,87 +46,10 @@ namespace MiniGlobe.Scene
             //    Two Methods for Antialiased Wireframe Drawing with Hidden Line Removal
             //    http://orbit.dtu.dk/getResource?recordId=219956&objectId=1&versionId=1
             //
-            string vs =
-                @"#version 150
-
-                  in vec4 position;
-                  out vec2 windowPosition;
-                  uniform mat4 mg_modelViewPerspectiveProjectionMatrix;
-                  uniform mat4 mg_viewportTransformationMatrix;
-
-                  vec4 ClipToWindowCoordinates(vec4 v, mat4 viewportTransformationMatrix)
-                  {
-                      v.xyz /= v.w;                                                        // normalized device coordinates
-                      v.xyz = (viewportTransformationMatrix * vec4(v.xyz + 1.0, 1.0)).xyz; // windows coordinates
-                      return v;
-                  }
-
-                  void main()                     
-                  {
-                      gl_Position = mg_modelViewPerspectiveProjectionMatrix * position;
-                      windowPosition = ClipToWindowCoordinates(gl_Position, mg_viewportTransformationMatrix).xy;
-                  }";
-            string gs =
-                @"#version 150 
-
-                  layout(triangles) in;
-                  layout(triangle_strip, max_vertices = 3) out;
-
-                  in vec2 windowPosition[];
-                  noperspective out vec3 distanceToEdges;
-
-                  float distanceToLine(vec2 f, vec2 p0, vec2 p1)
-                  {
-                      vec2 l = f - p0;
-                      vec2 d = p1 - p0;
-
-                      //
-                      // Closed point on line to f
-                      //
-                      vec2 p = p0 + (d * (dot(l, d) / dot(d, d)));
-                      return distance(f, p);
-                  }
-
-                  void main()
-                  {
-                      vec2 p0 = windowPosition[0];
-                      vec2 p1 = windowPosition[1];
-                      vec2 p2 = windowPosition[2];
-
-                      gl_Position = gl_in[0].gl_Position;
-                      distanceToEdges = vec3(distanceToLine(p0, p1, p2), 0.0, 0.0);
-                      EmitVertex();
-
-                      gl_Position = gl_in[1].gl_Position;
-                      distanceToEdges = vec3(0.0, distanceToLine(p1, p2, p0), 0.0);
-                      EmitVertex();
-
-                      gl_Position = gl_in[2].gl_Position;
-                      distanceToEdges = vec3(0.0, 0.0, distanceToLine(p2, p0, p1));
-                      EmitVertex();
-                  }";
-            string fs =
-                @"#version 150
-                 
-                  uniform float u_halfLineWidth;
-                  uniform vec3 u_color;
-                  noperspective in vec3 distanceToEdges;
-                  out vec4 fragmentColor;
-
-                  void main()
-                  {
-                      float d = min(distanceToEdges.x, min(distanceToEdges.y, distanceToEdges.z));
-
-                      if (d > u_halfLineWidth + 1.0)
-                      {
-                          discard;
-                      }
-
-                      d = clamp(d - (u_halfLineWidth - 1.0), 0.0, 2.0);
-                      fragmentColor = vec4(u_color, exp2(-2.0 * d * d));
-                  }";
-            _sp = Device.CreateShaderProgram(vs, gs, fs);
-
+            _sp = Device.CreateShaderProgram(
+                EmbeddedResources.GetText("MiniGlobe.Scene.Renderables.Wireframe.Shaders.WireframeVS.glsl"),
+                EmbeddedResources.GetText("MiniGlobe.Scene.Renderables.Wireframe.Shaders.WireframeGS.glsl"),
+                EmbeddedResources.GetText("MiniGlobe.Scene.Renderables.Wireframe.Shaders.WireframeFS.glsl"));
             _lineWidth = _sp.Uniforms["u_halfLineWidth"] as Uniform<float>;
             Width = 1;
 
