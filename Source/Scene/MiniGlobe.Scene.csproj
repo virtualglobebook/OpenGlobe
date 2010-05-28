@@ -151,6 +151,13 @@
     <EmbeddedResource Include="Renderables\Wireframe\Shaders\WireframeGS.glsl" />
     <EmbeddedResource Include="Renderables\Wireframe\Shaders\WireframeVS.glsl" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Renderables\Plane\Shaders\FillFS.glsl" />
+    <EmbeddedResource Include="Renderables\Plane\Shaders\FillVS.glsl" />
+    <EmbeddedResource Include="Renderables\Plane\Shaders\LineFS.glsl" />
+    <EmbeddedResource Include="Renderables\Plane\Shaders\LineGS.glsl" />
+    <EmbeddedResource Include="Renderables\Plane\Shaders\LineVS.glsl" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
