@@ -37,8 +37,8 @@ namespace MiniGlobe.Scene
             {
                 if (shapefile.Type == ShapeType.Polygon)
                 {
-                    _polyline = new OutlinedPolylineTexture(context);
-                    CreatePolygons(globeShape, shapefile, color, outlineColor);
+                    _polyline = new OutlinedPolylineTexture();
+                    CreatePolygons(context, globeShape, shapefile, color, outlineColor);
                 }
                 else
                 {
@@ -47,7 +47,7 @@ namespace MiniGlobe.Scene
             }
         }
 
-        private void CreatePolygons(Ellipsoid globeShape, Shapefile shapefile, Color color, Color outlineColor)
+        private void CreatePolygons(Context context, Ellipsoid globeShape, Shapefile shapefile, Color color, Color outlineColor)
         {
             //
             // TODO:  This is temporary.  Since polygon tessellation is not supported yet,
@@ -99,15 +99,15 @@ namespace MiniGlobe.Scene
             mesh.Attributes.Add(colorAttribute);
             mesh.Attributes.Add(outlineColorAttribute);
             mesh.Indices = indices;
-            _polyline.Set(mesh);
+            _polyline.Set(context, mesh);
 
             Width = _polyline.Width;
             OutlineWidth = _polyline.OutlineWidth;
         }
 
-        public void Render(SceneState sceneState)
+        public void Render(Context context, SceneState sceneState)
         {
-            _polyline.Render(sceneState);
+            _polyline.Render(context, sceneState);
         }
 
         public double Width 
@@ -126,11 +126,6 @@ namespace MiniGlobe.Scene
         {
             get { return _polyline.DepthWrite;  }
             set { _polyline.DepthWrite = value;  }
-        }
-
-        public Context Context
-        {
-            get { return _polyline.Context; }
         }
 
         #region IDisposable Members

@@ -22,8 +22,6 @@ namespace MiniGlobe.Terrain
     {
         public TriangleMeshTerrainTile(Context context, TerrainTile tile)
         {
-            _context = context;
-
             _sp = Device.CreateShaderProgram(
                 EmbeddedResources.GetText("MiniGlobe.Scene.Terrain.TriangleMeshTerrainTile.TerrainVS.glsl"),
                 EmbeddedResources.GetText("MiniGlobe.Scene.Terrain.TriangleMeshTerrainTile.TerrainFS.glsl"));
@@ -91,19 +89,22 @@ namespace MiniGlobe.Terrain
                 i += 1;
             }
 
-            _va = _context.CreateVertexArray(mesh, _sp.VertexAttributes, BufferHint.StaticDraw);
+            _va = context.CreateVertexArray(mesh, _sp.VertexAttributes, BufferHint.StaticDraw);
             _primitiveType = mesh.PrimitiveType;
 
             _renderState = new RenderState();
             _renderState.FacetCulling.FrontFaceWindingOrder = mesh.FrontFaceWindingOrder;
         }
 
-        public void Render(SceneState sceneState)
+        public void Render(Context context, SceneState sceneState)
         {
-            _context.Bind(_sp);
-            _context.Bind(_va);
-            _context.Bind(_renderState);
-            _context.Draw(_primitiveType, sceneState);
+            Verify.ThrowIfNull(context);
+            Verify.ThrowIfNull(sceneState);
+
+            context.Bind(_sp);
+            context.Bind(_va);
+            context.Bind(_renderState);
+            context.Draw(_primitiveType, sceneState);
         }
 
         public float HeightExaggeration
@@ -139,7 +140,6 @@ namespace MiniGlobe.Terrain
 
         #endregion
 
-        private readonly Context _context;
         private readonly ShaderProgram _sp;
 
         private readonly Uniform<float> _heightExaggeration;

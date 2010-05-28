@@ -21,8 +21,6 @@ namespace MiniGlobe.Scene
         {
             Verify.ThrowIfNull(context);
 
-            _context = context;
-
             string vs = EmbeddedResources.GetText("MiniGlobe.Scene.Globes.RayCasted.Shaders.GlobeVS.glsl");
             _sp = Device.CreateShaderProgram(vs, EmbeddedResources.GetText("MiniGlobe.Scene.Globes.RayCasted.Shaders.GlobeFS.glsl"));
             _cameraEyeSquaredSP = _sp.Uniforms["u_cameraEyeSquared"] as Uniform<Vector3S>;
@@ -41,7 +39,7 @@ namespace MiniGlobe.Scene
             ShowGlobe = true;
         }
 
-        private void Clean()
+        private void Clean(Context context)
         {
             if (_dirty)
             {
@@ -51,7 +49,7 @@ namespace MiniGlobe.Scene
                 }
 
                 Mesh mesh = BoxTessellator.Compute(2 * _shape.Radii);
-                _va = _context.CreateVertexArray(mesh, _sp.VertexAttributes, BufferHint.StaticDraw);
+                _va = context.CreateVertexArray(mesh, _sp.VertexAttributes, BufferHint.StaticDraw);
                 _primitiveType = mesh.PrimitiveType;
 
                 _renderState.FacetCulling.Face = CullFace.Front;
@@ -64,7 +62,7 @@ namespace MiniGlobe.Scene
                 {
                     _wireframe.Dispose();
                 }
-                _wireframe = new Wireframe(_context, mesh);
+                _wireframe = new Wireframe(context, mesh);
                 _wireframe.FacetCullingFace = CullFace.Front;
                 _wireframe.Width = 3;
 
@@ -72,15 +70,17 @@ namespace MiniGlobe.Scene
             }
         }
 
-        public void Render(SceneState sceneState)
+        public void Render(Context context, SceneState sceneState)
         {
+            Verify.ThrowIfNull(context);
+            Verify.ThrowIfNull(sceneState);
             Verify.ThrowInvalidOperationIfNull(Texture, "Texture");
 
-            Clean();
+            Clean(context);
 
             if (ShowGlobe || ShowWireframeBoundingBox)
             {
-                _context.Bind(_va);
+                context.Bind(_va);
             }
 
             if (ShowGlobe)
@@ -90,28 +90,23 @@ namespace MiniGlobe.Scene
 
                 if (Shade)
                 {
-                    _context.TextureUnits[0].Texture2D = Texture;
-                    _context.Bind(_sp);
+                    context.TextureUnits[0].Texture2D = Texture;
+                    context.Bind(_sp);
                     _cameraEyeSquaredSP.Value = cameraEyeSquared;
                 }
                 else
                 {
-                    _context.Bind(_solidSP);
+                    context.Bind(_solidSP);
                     _cameraEyeSquaredSolidSP.Value = cameraEyeSquared;
                 }
-                _context.Bind(_renderState);
-                _context.Draw(_primitiveType, sceneState);
+                context.Bind(_renderState);
+                context.Draw(_primitiveType, sceneState);
             }
 
             if (ShowWireframeBoundingBox)
             {
-                _wireframe.Render(sceneState);
+                _wireframe.Render(context, sceneState);
             }
-        }
-
-        public Context Context
-        {
-            get { return _context; }
         }
 
         public Ellipsoid Shape
@@ -148,8 +143,6 @@ namespace MiniGlobe.Scene
         }
 
         #endregion
-
-        private readonly Context _context;
 
         private readonly RenderState _renderState;
         private readonly ShaderProgram _sp;

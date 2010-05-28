@@ -22,8 +22,6 @@ namespace MiniGlobe.Scene
         {
             Verify.ThrowIfNull(context);
 
-            _context = context;
-
             _sp = Device.CreateShaderProgram(
                 EmbeddedResources.GetText("MiniGlobe.Scene.Globes.LatitudeLongitudeGrid.Shaders.GlobeVS.glsl"),
                 EmbeddedResources.GetText("MiniGlobe.Scene.Globes.LatitudeLongitudeGrid.Shaders.GlobeFS.glsl"));
@@ -36,7 +34,7 @@ namespace MiniGlobe.Scene
             Shape = Ellipsoid.UnitSphere;
         }
 
-        private void Clean()
+        private void Clean(Context context)
         {
             if (_dirty)
             {
@@ -46,7 +44,7 @@ namespace MiniGlobe.Scene
                 }
 
                 Mesh mesh = GeographicGridEllipsoidTessellator.Compute(_shape, 64, 32, GeographicGridEllipsoidVertexAttributes.Position);
-                _va = _context.CreateVertexArray(mesh, _sp.VertexAttributes, BufferHint.StaticDraw);
+                _va = context.CreateVertexArray(mesh, _sp.VertexAttributes, BufferHint.StaticDraw);
                 _primitiveType = mesh.PrimitiveType;
 
                 _renderState.FacetCulling.FrontFaceWindingOrder = mesh.FrontFaceWindingOrder;
@@ -57,8 +55,10 @@ namespace MiniGlobe.Scene
             }
         }
 
-        public void Render(SceneState sceneState)
+        public void Render(Context context, SceneState sceneState)
         {
+            Verify.ThrowIfNull(context);
+            Verify.ThrowIfNull(sceneState);
             Verify.ThrowInvalidOperationIfNull(Texture, "Texture");
 
             if (GridResolutions == null)
@@ -66,7 +66,7 @@ namespace MiniGlobe.Scene
                 throw new InvalidOperationException("GridResolutions");
             }
 
-            Clean();
+            Clean(context);
 
             //
             // This could be improved to exploit temporal coherence as described in section x.x.
@@ -84,16 +84,11 @@ namespace MiniGlobe.Scene
             float width = (float)sceneState.HighResolutionSnapScale;
             _gridWidth.Value = new Vector2S(width, width);
 
-            _context.TextureUnits[0].Texture2D = Texture;
-            _context.Bind(_renderState);
-            _context.Bind(_sp);
-            _context.Bind(_va);
-            _context.Draw(_primitiveType, sceneState);
-        }
-
-        public Context Context
-        {
-            get { return _context; }
+            context.TextureUnits[0].Texture2D = Texture;
+            context.Bind(_renderState);
+            context.Bind(_sp);
+            context.Bind(_va);
+            context.Draw(_primitiveType, sceneState);
         }
 
         public Texture2D Texture { get; set; }
@@ -120,7 +115,6 @@ namespace MiniGlobe.Scene
 
         #endregion
 
-        private readonly Context _context;
         private readonly RenderState _renderState;
         private readonly ShaderProgram _sp;
         private readonly Uniform<Vector2S> _gridWidth;

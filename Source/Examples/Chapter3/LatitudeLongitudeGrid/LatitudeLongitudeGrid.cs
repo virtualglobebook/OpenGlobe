@@ -100,10 +100,11 @@ namespace MiniGlobe.Examples.Chapter3
 
         private void OnRenderFrame()
         {
-            _window.Context.Clear(ClearBuffers.ColorAndDepthBuffer, Color.White, 1, 0);
+            Context context = _window.Context;
+            context.Clear(ClearBuffers.ColorAndDepthBuffer, Color.White, 1, 0);
 
-            _globe.Render(_sceneState);
-            _vancouverLabel.Render(_sceneState);
+            _globe.Render(context, _sceneState);
+            _vancouverLabel.Render(context, _sceneState);
         }
 
         #region IDisposable Members

@@ -72,7 +72,7 @@ namespace MiniGlobe.Examples.Chapter2
 
             ///////////////////////////////////////////////////////////////////
 
-            _axes = new Axes(_window.Context);
+            _axes = new Axes();
             _axes.Length = 1.5;
             _axes.Width = 3;
 
@@ -103,8 +103,8 @@ namespace MiniGlobe.Examples.Chapter2
             polyline.Attributes.Add(positionAttribute);
             polyline.Attributes.Add(colorAttribute);
 
-            _normals = new Polyline(_window.Context);
-            _normals.Set(polyline);
+            _normals = new Polyline();
+            _normals.Set(_window.Context, polyline);
             _normals.Width = 3;
 
             ///////////////////////////////////////////////////////////////////
@@ -156,16 +156,16 @@ namespace MiniGlobe.Examples.Chapter2
 
         private void OnRenderFrame()
         {
-            _window.Context.Clear(ClearBuffers.ColorAndDepthBuffer, Color.White, 1, 0);
+            Context context = _window.Context;
+            context.Clear(ClearBuffers.ColorAndDepthBuffer, Color.White, 1, 0);
 
-            _ellipsoid.Render(_sceneState);
-            _wireframe.Render(_sceneState);
-            _axes.Render(_sceneState);
-            _normals.Render(_sceneState);
-            _labels.Render(_sceneState);
-            _tangentPlane.Render(_sceneState);
-
-            _instructions.Render(_sceneState);
+            _ellipsoid.Render(context, _sceneState);
+            _wireframe.Render(context, _sceneState);
+            _axes.Render(context, _sceneState);
+            _normals.Render(context, _sceneState);
+            _labels.Render(context, _sceneState);
+            _tangentPlane.Render(context, _sceneState);
+            _instructions.Render(context, _sceneState);
         }
 
         private void OnKeyDown(object sender, KeyboardKeyEventArgs e)

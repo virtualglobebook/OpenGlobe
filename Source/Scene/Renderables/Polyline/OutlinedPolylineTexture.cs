@@ -16,9 +16,8 @@ namespace MiniGlobe.Scene
 {
     public sealed class OutlinedPolylineTexture : IDisposable
     {
-        public OutlinedPolylineTexture(Context context)
+        public OutlinedPolylineTexture()
         {
-            _context = context;
             _renderState = new RenderState();
             _renderState.FacetCulling.Enabled = false;
             _renderState.Blending.Enabled = true;
@@ -31,8 +30,10 @@ namespace MiniGlobe.Scene
             OutlineWidth = 2;
         }
 
-        public void Set(Mesh mesh)
+        public void Set(Context context, Mesh mesh)
         {
+            Verify.ThrowIfNull(context);
+
             if (mesh == null)
             {
                 throw new ArgumentNullException("mesh");
@@ -62,7 +63,7 @@ namespace MiniGlobe.Scene
             }
 
             ///////////////////////////////////////////////////////////////////
-            _va = _context.CreateVertexArray(mesh, _sp.VertexAttributes, BufferHint.StaticDraw);
+            _va = context.CreateVertexArray(mesh, _sp.VertexAttributes, BufferHint.StaticDraw);
             _primitiveType = mesh.PrimitiveType;
         }
 
@@ -107,25 +108,23 @@ namespace MiniGlobe.Scene
             }
         }
 
-        public void Render(SceneState sceneState)
+        public void Render(Context context, SceneState sceneState)
         {
+            Verify.ThrowIfNull(context);
+            Verify.ThrowIfNull(sceneState);
+
             if (_sp != null)
             {
                 Update(sceneState);
 
                 _distance.Value = (float)(((Width * 0.5) + OutlineWidth + 1) * sceneState.HighResolutionSnapScale);
 
-                _context.TextureUnits[0].Texture2D = _texture;
-                _context.Bind(_renderState);
-                _context.Bind(_sp);
-                _context.Bind(_va);
-                _context.Draw(_primitiveType, sceneState);
+                context.TextureUnits[0].Texture2D = _texture;
+                context.Bind(_renderState);
+                context.Bind(_sp);
+                context.Bind(_va);
+                context.Draw(_primitiveType, sceneState);
             }
-        }
-
-        public Context Context
-        {
-            get { return _context; }
         }
 
         public double Width { get; set; }
@@ -166,7 +165,6 @@ namespace MiniGlobe.Scene
 
         #endregion
 
-        private readonly Context _context;
         private readonly RenderState _renderState;
         private ShaderProgram _sp;
         private Uniform<float> _distance;

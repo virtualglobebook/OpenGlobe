@@ -45,8 +45,6 @@ namespace MiniGlobe.Terrain
     {
         public VertexDisplacementMapTerrainTile(Context context, TerrainTile tile)
         {
-            _context = context;
-
             //
             // Upload height map as a one channel floating point texture
             //
@@ -97,7 +95,7 @@ namespace MiniGlobe.Terrain
             Mesh mesh = RectangleTessellator.Compute(new RectangleD(new Vector2D(0.5, 0.5),
                 new Vector2D((double)tile.Size.X - 0.5, (double)tile.Size.Y - 0.5)),
                 tile.Size.X - 1, tile.Size.Y - 1);
-            _va = _context.CreateVertexArray(mesh, _spWireframe.VertexAttributes, BufferHint.StaticDraw);
+            _va = context.CreateVertexArray(mesh, _spWireframe.VertexAttributes, BufferHint.StaticDraw);
             _primitiveType = mesh.PrimitiveType;
 
             ///////////////////////////////////////////////////////////////////
@@ -160,8 +158,10 @@ namespace MiniGlobe.Terrain
             _fillDistanceNormals.Value = (float)(0.5 * 3.0 * sceneState.HighResolutionSnapScale);
         }
 
-        public void Render(SceneState sceneState)
+        public void Render(Context context, SceneState sceneState)
         {
+            Verify.ThrowIfNull(context);
+            Verify.ThrowIfNull(sceneState);
             Verify.ThrowInvalidOperationIfNull(ColorMapTexture, "ColorMap");
             Verify.ThrowInvalidOperationIfNull(ColorRampHeightTexture, "ColorRampTexture");
             Verify.ThrowInvalidOperationIfNull(ColorRampSlopeTexture, "ColorRampSlopeTexture");
@@ -177,36 +177,36 @@ namespace MiniGlobe.Terrain
                 GrassTexture.Filter = Texture2DFilter.LinearRepeat;
                 StoneTexture.Filter = Texture2DFilter.LinearRepeat;
 
-                _context.TextureUnits[0].Texture2DRectangle = _texture;
-                _context.TextureUnits[6].Texture2D = ColorMapTexture;
-                _context.TextureUnits[1].Texture2D = ColorRampHeightTexture;
-                _context.TextureUnits[7].Texture2D = ColorRampSlopeTexture;
-                _context.TextureUnits[2].Texture2D = BlendRampTexture;
-                _context.TextureUnits[3].Texture2D = GrassTexture;
-                _context.TextureUnits[4].Texture2D = StoneTexture;
-                _context.TextureUnits[5].Texture2D = BlendMaskTexture;
+                context.TextureUnits[0].Texture2DRectangle = _texture;
+                context.TextureUnits[6].Texture2D = ColorMapTexture;
+                context.TextureUnits[1].Texture2D = ColorRampHeightTexture;
+                context.TextureUnits[7].Texture2D = ColorRampSlopeTexture;
+                context.TextureUnits[2].Texture2D = BlendRampTexture;
+                context.TextureUnits[3].Texture2D = GrassTexture;
+                context.TextureUnits[4].Texture2D = StoneTexture;
+                context.TextureUnits[5].Texture2D = BlendMaskTexture;
 
-                _context.Bind(_va);
+                context.Bind(_va);
 
                 if (ShowTerrain || ShowSilhouette)
                 {
-                    _context.Bind(_spTerrain);
-                    _context.Bind(_rsTerrain);
-                    _context.Draw(_primitiveType, sceneState);
+                    context.Bind(_spTerrain);
+                    context.Bind(_rsTerrain);
+                    context.Draw(_primitiveType, sceneState);
                 }
 
                 if (ShowWireframe)
                 {
-                    _context.Bind(_spWireframe);
-                    _context.Bind(_rsWireframe);
-                    _context.Draw(_primitiveType, sceneState);
+                    context.Bind(_spWireframe);
+                    context.Bind(_rsWireframe);
+                    context.Draw(_primitiveType, sceneState);
                 }
 
                 if (ShowNormals && (_normalsAlgorithm != TerrainNormalsAlgorithm.None))
                 {
-                    _context.Bind(_spNormals);
-                    _context.Bind(_rsNormals);
-                    _context.Draw(PrimitiveType.Points, sceneState);
+                    context.Bind(_spNormals);
+                    context.Bind(_rsNormals);
+                    context.Draw(PrimitiveType.Points, sceneState);
                 }
             }
         }
@@ -304,8 +304,6 @@ namespace MiniGlobe.Terrain
         }
 
         #endregion
-
-        private readonly Context _context;
 
         private readonly RenderState _rsTerrain;
         private readonly ShaderProgram _spTerrain;

@@ -37,8 +37,8 @@ namespace MiniGlobe.Scene
             {
                 if (shapefile.Type == ShapeType.PolyLine)
                 {
-                    _polyline = new OutlinedPolylineTexture(context);
-                    CreatePolylines(globeShape, shapefile, color, outlineColor);
+                    _polyline = new OutlinedPolylineTexture();
+                    CreatePolylines(context, globeShape, shapefile, color, outlineColor);
                 }
                 else
                 {
@@ -47,7 +47,7 @@ namespace MiniGlobe.Scene
             }
         }
 
-        private void CreatePolylines(Ellipsoid globeShape, Shapefile shapefile, Color color, Color outlineColor)
+        private void CreatePolylines(Context context, Ellipsoid globeShape, Shapefile shapefile, Color color, Color outlineColor)
         {
             int positionsCount = 0;
             int indicesCount = 0;
@@ -99,7 +99,7 @@ namespace MiniGlobe.Scene
             mesh.Attributes.Add(colorAttribute);
             mesh.Attributes.Add(outlineColorAttribute);
             mesh.Indices = indices;
-            _polyline.Set(mesh);
+            _polyline.Set(context, mesh);
 
             Width = _polyline.Width;
             OutlineWidth = _polyline.OutlineWidth;
@@ -135,9 +135,9 @@ namespace MiniGlobe.Scene
             indicesCount = numberOfIndices;
         }
 
-        public void Render(SceneState sceneState)
+        public void Render(Context context, SceneState sceneState)
         {
-            _polyline.Render(sceneState);
+            _polyline.Render(context, sceneState);
         }
 
         public double Width 
@@ -156,11 +156,6 @@ namespace MiniGlobe.Scene
         {
             get { return _polyline.DepthWrite;  }
             set { _polyline.DepthWrite = value;  }
-        }
-
-        public Context Context
-        {
-            get { return _polyline.Context; }
         }
 
         #region IDisposable Members

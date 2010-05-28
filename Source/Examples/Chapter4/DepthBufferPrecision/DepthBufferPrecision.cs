@@ -248,16 +248,16 @@ namespace MiniGlobe.Examples.Chapter4
             //
             context.Bind(_frameBuffer);
             context.Clear(ClearBuffers.ColorAndDepthBuffer, Color.White, _depthTestLess ? 1 : 0, 0);
-            _globe.Render(_sceneState);
-            _plane.Render(_sceneState);
+            _globe.Render(context, _sceneState);
+            _plane.Render(context, _sceneState);
 
-            _hud.Render(_sceneState);
+            _hud.Render(context, _sceneState);
 
             //
             // Render viewport quad to show contents of frame buffer's color buffer
             //
             context.Bind(null as FrameBuffer);
-            _viewportQuad.Render(_sceneState);
+            _viewportQuad.Render(context, _sceneState);
         }
 
         #region IDisposable Members

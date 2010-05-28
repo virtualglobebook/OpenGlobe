@@ -29,5 +29,13 @@ namespace MiniGlobe.Scene
                 throw new ArgumentNullException("context");
             }
         }
+
+        public static void ThrowIfNull(SceneState sceneState)
+        {
+            if (sceneState == null)
+            {
+                throw new ArgumentNullException("sceneState");
+            }
+        }
     }
 }

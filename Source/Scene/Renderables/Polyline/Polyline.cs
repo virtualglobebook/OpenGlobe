@@ -16,17 +16,18 @@ namespace MiniGlobe.Scene
 {
     public sealed class Polyline : IDisposable
     {
-        public Polyline(Context context)
+        public Polyline()
         {
-            _context = context;
             _renderState = new RenderState();
             _renderState.FacetCulling.Enabled = false;
 
             Width = 1;
         }
 
-        public void Set(Mesh mesh)
+        public void Set(Context context, Mesh mesh)
         {
+            Verify.ThrowIfNull(context);
+
             if (mesh == null)
             {
                 throw new ArgumentNullException("mesh");
@@ -55,26 +56,24 @@ namespace MiniGlobe.Scene
             }
 
             ///////////////////////////////////////////////////////////////////
-            _va = _context.CreateVertexArray(mesh, _sp.VertexAttributes, BufferHint.StaticDraw);
+            _va = context.CreateVertexArray(mesh, _sp.VertexAttributes, BufferHint.StaticDraw);
             _primitiveType = mesh.PrimitiveType;
         }
 
-        public void Render(SceneState sceneState)
+        public void Render(Context context, SceneState sceneState)
         {
+            Verify.ThrowIfNull(context);
+            Verify.ThrowIfNull(sceneState);
+
             if (_sp != null)
             {
                 _fillDistance.Value = (float)(Width * 0.5 * sceneState.HighResolutionSnapScale);
 
-                _context.Bind(_renderState);
-                _context.Bind(_sp);
-                _context.Bind(_va);
-                _context.Draw(_primitiveType, sceneState);
+                context.Bind(_renderState);
+                context.Bind(_sp);
+                context.Bind(_va);
+                context.Draw(_primitiveType, sceneState);
             }
-        }
-
-        public Context Context
-        {
-            get { return _context; }
         }
 
         public double Width { get; set; }
@@ -102,7 +101,6 @@ namespace MiniGlobe.Scene
 
         #endregion
 
-        private readonly Context _context;
         private readonly RenderState _renderState;
         private ShaderProgram _sp;
         private Uniform<float> _fillDistance;

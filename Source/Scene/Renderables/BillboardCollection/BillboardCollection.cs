@@ -40,7 +40,6 @@ namespace MiniGlobe.Scene
 
             ///////////////////////////////////////////////////////////////////
 
-            _context = context;
             _renderState = new RenderState();
             _renderState.FacetCulling.Enabled = false;
             _renderState.Blending.Enabled = true;
@@ -55,7 +54,7 @@ namespace MiniGlobe.Scene
                 EmbeddedResources.GetText("MiniGlobe.Scene.Renderables.BillboardCollection.Shaders.BillboardsFS.glsl"));
         }
 
-        private void CreateVertexArray()
+        private void CreateVertexArray(Context context)
         {
             // TODO:  Hint per buffer?  One hint?
             _positionBuffer = Device.CreateVertexBuffer(BufferHint.StaticDraw, _billboards.Count * SizeInBytes<Vector3S>.Value);
@@ -75,7 +74,7 @@ namespace MiniGlobe.Scene
             AttachedVertexBuffer attachedTextureCoordinatesBuffer = new AttachedVertexBuffer(
                 _textureCoordinatesBuffer, VertexAttributeComponentType.HalfFloat, 4);
 
-            _va = _context.CreateVertexArray();
+            _va = context.CreateVertexArray();
             _va.VertexBuffers[_sp.VertexAttributes["position"].Location] = attachedPositionBuffer;
             _va.VertexBuffers[_sp.VertexAttributes["textureCoordinates"].Location] = attachedTextureCoordinatesBuffer;
             _va.VertexBuffers[_sp.VertexAttributes["color"].Location] = attachedColorBuffer;
@@ -83,11 +82,11 @@ namespace MiniGlobe.Scene
             _va.VertexBuffers[_sp.VertexAttributes["pixelOffset"].Location] = attachedPixelOffsetBuffer;
         }
 
-        private void Update()
+        private void Update(Context context)
         {
             if (_rewriteBillboards)
             {
-                UpdateAll();
+                UpdateAll(context);
             }
             else if (_dirtyBillboards.Count != 0)
             {
@@ -95,7 +94,7 @@ namespace MiniGlobe.Scene
             }
         }
 
-        private void UpdateAll()
+        private void UpdateAll(Context context)
         {
             //
             // Since billboards were added or removed, all billboards are 
@@ -110,7 +109,7 @@ namespace MiniGlobe.Scene
 
             if (_billboards.Count != 0)
             {
-                CreateVertexArray();
+                CreateVertexArray(context);
 
                 //
                 // Write vertex buffers
@@ -218,25 +217,22 @@ namespace MiniGlobe.Scene
             return (byte)((byte)b.HorizontalOrigin | ((byte)b.VerticalOrigin << 2));
         }
 
-        public void Render(SceneState sceneState)
+        public void Render(Context context, SceneState sceneState)
         {
-            Update();
-
+            Verify.ThrowIfNull(context);
+            Verify.ThrowIfNull(sceneState);
             Verify.ThrowInvalidOperationIfNull(Texture, "Texture");
+
+            Update(context);
 
             if (_va != null)
             {
-                _context.TextureUnits[0].Texture2D = Texture;
-                _context.Bind(_renderState);
-                _context.Bind(_sp);
-                _context.Bind(_va);
-                _context.Draw(PrimitiveType.Points, sceneState);
+                context.TextureUnits[0].Texture2D = Texture;
+                context.Bind(_renderState);
+                context.Bind(_sp);
+                context.Bind(_va);
+                context.Draw(PrimitiveType.Points, sceneState);
             }
-        }
-
-        public Context Context
-        {
-            get { return _context; }
         }
 
         public Texture2D Texture { get; set; }
@@ -472,7 +468,6 @@ namespace MiniGlobe.Scene
 
         private bool _rewriteBillboards;
 
-        private readonly Context _context;
         private readonly RenderState _renderState;
         private readonly ShaderProgram _sp;
 

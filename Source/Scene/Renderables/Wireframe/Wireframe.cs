@@ -19,8 +19,6 @@ namespace MiniGlobe.Scene
     {
         public Wireframe(Context context, Mesh mesh)
         {
-            _context = context;
-
             _renderState = new RenderState();
             _renderState.Blending.Enabled = true;
             _renderState.Blending.SourceRGBFactor = SourceBlendingFactor.SourceAlpha;
@@ -60,19 +58,17 @@ namespace MiniGlobe.Scene
             _primitiveType = mesh.PrimitiveType;
         }
 
-        public void Render(SceneState sceneState)
+        public void Render(Context context, SceneState sceneState)
         {
+            Verify.ThrowIfNull(context);
+            Verify.ThrowIfNull(sceneState);
+
             _lineWidth.Value = (float)(0.5 * Width * sceneState.HighResolutionSnapScale);
 
-            _context.Bind(_renderState);
-            _context.Bind(_sp);
-            _context.Bind(_va);
-            _context.Draw(_primitiveType, sceneState);
-        }
-
-        public Context Context
-        {
-            get { return _context; }
+            context.Bind(_renderState);
+            context.Bind(_sp);
+            context.Bind(_va);
+            context.Draw(_primitiveType, sceneState);
         }
 
         public double Width { get; set; }
@@ -118,7 +114,6 @@ namespace MiniGlobe.Scene
 
         #endregion
 
-        private readonly Context _context;
         private readonly RenderState _renderState;
         private readonly ShaderProgram _sp;
         private readonly Uniform<float> _lineWidth;

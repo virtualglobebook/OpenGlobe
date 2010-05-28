@@ -134,23 +134,25 @@ namespace MiniGlobe.Examples.Chapter3.NumberPrecision
 
         private void OnRenderFrame()
         {
+            Context context = _window.Context;
+
             //
             // Clear
             //
-            _window.Context.Clear(ClearBuffers.ColorAndDepthBuffer, Color.White, 1, 0);
+            context.Clear(ClearBuffers.ColorAndDepthBuffer, Color.White, 1, 0);
 
             //
             // Points
             //
-            _window.Context.Bind(_renderState);
-            _window.Context.Bind(_sp);
-            _window.Context.Bind(_va);
-            _window.Context.Draw(PrimitiveType.Points, _sceneState);
+            context.Bind(_renderState);
+            context.Bind(_sp);
+            context.Bind(_va);
+            context.Draw(PrimitiveType.Points, _sceneState);
             
             //
             // Text
             //
-            _bg.Render(_sceneState);
+            _bg.Render(context, _sceneState);
         }
 
         private void OnKeyDown(object sender, KeyboardKeyEventArgs e)

@@ -22,8 +22,6 @@ namespace MiniGlobe.Terrain
     {
         public RayCastedTerrainTile(Context context, TerrainTile tile)
         {
-            _context = context;
-            
             _sp = Device.CreateShaderProgram(
                 EmbeddedResources.GetText("MiniGlobe.Scene.Terrain.RayCastedTerrainTile.TerrainVS.glsl"),
                 EmbeddedResources.GetText("MiniGlobe.Scene.Terrain.RayCastedTerrainTile.TerrainFS.glsl"));
@@ -60,7 +58,7 @@ namespace MiniGlobe.Terrain
             _texture.Filter = Texture2DFilter.NearestClampToEdge;
         }
 
-        private void Update()
+        private void Update(Context context)
         {
             if (_dirtyVA)
             {
@@ -84,7 +82,7 @@ namespace MiniGlobe.Terrain
                 {
                     _va.Dispose();
                 }
-                _va = _context.CreateVertexArray(mesh, _sp.VertexAttributes, BufferHint.StaticDraw);
+                _va = context.CreateVertexArray(mesh, _sp.VertexAttributes, BufferHint.StaticDraw);
                 _primitiveType = mesh.PrimitiveType;
                 _renderState.FacetCulling.FrontFaceWindingOrder = mesh.FrontFaceWindingOrder;
 
@@ -92,15 +90,18 @@ namespace MiniGlobe.Terrain
             }
         }
 
-        public void Render(SceneState sceneState)
+        public void Render(Context context, SceneState sceneState)
         {
-            Update();
+            Verify.ThrowIfNull(context);
+            Verify.ThrowIfNull(sceneState);
 
-            _context.TextureUnits[0].Texture2DRectangle = _texture;
-            _context.Bind(_sp);
-            _context.Bind(_va);
-            _context.Bind(_renderState);
-            _context.Draw(_primitiveType, sceneState);
+            Update(context);
+
+            context.TextureUnits[0].Texture2DRectangle = _texture;
+            context.Bind(_sp);
+            context.Bind(_va);
+            context.Bind(_renderState);
+            context.Draw(_primitiveType, sceneState);
         }
 
         public float HeightExaggeration
@@ -141,7 +142,6 @@ namespace MiniGlobe.Terrain
 
         #endregion
 
-        private readonly Context _context;
         private readonly ShaderProgram _sp;
 
         private readonly Uniform<float> _heightExaggeration;

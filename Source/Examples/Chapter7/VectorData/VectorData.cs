@@ -179,7 +179,7 @@ namespace MiniGlobe.Examples.Chapter7
             // Render globe to day, night, and blend buffers
             //
             SetFrameBufferAttachments(_dayTexture, _nightTexture, _blendTexture);
-            _globe.Render(_sceneState);
+            _globe.Render(context, _sceneState);
 
             if (_showVectorData)
             {
@@ -188,18 +188,18 @@ namespace MiniGlobe.Examples.Chapter7
                 //
                 // Render vector data, layered bottom to top, to the day buffer only
                 //
-                _rivers.Render(_sceneState);
-                _states.Render(_sceneState);
-                _countries.Render(_sceneState);
-                _cities.Render(_sceneState);
+                _rivers.Render(context, _sceneState);
+                _states.Render(context, _sceneState);
+                _countries.Render(context, _sceneState);
+                _cities.Render(context, _sceneState);
             }
 
             //
             // Render viewport quad to composite buffers
             //
             context.Bind(null as FrameBuffer);
-            _quad.Render(_sceneState);
-            _hud.Render(_sceneState);
+            _quad.Render(context, _sceneState);
+            _hud.Render(context, _sceneState);
         }
 
         private void SetFrameBufferAttachments(Texture2D day, Texture2D night, Texture2D blend)

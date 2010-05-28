@@ -25,7 +25,6 @@ namespace MiniGlobe.Scene
             BillboardCollectionTest billboardGroup = new BillboardCollectionTest();
             BillboardCollection group = billboardGroup.Group;
 
-            Assert.AreEqual(billboardGroup.Context, group.Context);
             Assert.IsTrue(group.DepthTestEnabled);
             Assert.IsFalse(group.Wireframe);
 

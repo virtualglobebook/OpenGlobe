@@ -96,20 +96,15 @@ namespace MiniGlobe.Scene
             font.Dispose();
         }
 
-        public void Render(SceneState sceneState)
+        public void Render(Context context, SceneState sceneState)
         {
-            _billboards.Render(sceneState);
+            _billboards.Render(context, sceneState);
         }
 
         public bool DepthWrite 
         {
             get { return _billboards.DepthWrite; }
             set { _billboards.DepthWrite = value; }
-        }
-
-        public Context Context
-        {
-            get { return _billboards.Context; }
         }
 
         #region IDisposable Members

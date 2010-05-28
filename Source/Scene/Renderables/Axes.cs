@@ -17,17 +17,14 @@ namespace MiniGlobe.Scene
 {
     public sealed class Axes : IDisposable
     {
-        public Axes(Context context)
+        public Axes()
         {
-            Verify.ThrowIfNull(context);
-
-            _context = context;
-            _polyline = new Polyline(_context);
+            _polyline = new Polyline();
             Length = 1;
             Width = 1;
         }
 
-        private void Update()
+        private void Update(Context context)
         {
             if (_dirtyLength)
             {
@@ -52,7 +49,7 @@ namespace MiniGlobe.Scene
                 mesh.Attributes.Add(positionAttribute);
                 mesh.Attributes.Add(colorAttribute);
 
-                _polyline.Set(mesh);
+                _polyline.Set(context, mesh);
 
                 _dirtyLength = false;
             }
@@ -60,15 +57,10 @@ namespace MiniGlobe.Scene
             _polyline.Width = Width;
         }
 
-        public void Render(SceneState sceneState)
+        public void Render(Context context, SceneState sceneState)
         {
-            Update();
-            _polyline.Render(sceneState);
-        }
-
-        public Context Context
-        {
-            get { return _context; }
+            Update(context);
+            _polyline.Render(context, sceneState);
         }
 
         public double Length
@@ -95,7 +87,6 @@ namespace MiniGlobe.Scene
 
         #endregion
 
-        private readonly Context _context;
         private Polyline _polyline;
         private double _length;
         private bool _dirtyLength;

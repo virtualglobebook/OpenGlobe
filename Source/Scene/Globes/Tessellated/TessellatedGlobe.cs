@@ -20,8 +20,6 @@ namespace MiniGlobe.Scene
         {
             Verify.ThrowIfNull(context);
 
-            _context = context;
-
             _sp = Device.CreateShaderProgram(
                 EmbeddedResources.GetText("MiniGlobe.Scene.Globes.Tessellated.Shaders.GlobeVS.glsl"),
                 EmbeddedResources.GetText("MiniGlobe.Scene.Globes.Tessellated.Shaders.GlobeFS.glsl"));
@@ -37,7 +35,7 @@ namespace MiniGlobe.Scene
             NumberOfStackPartitions = 16;
         }
 
-        private void Clean()
+        private void Clean(Context context)
         {
             if (_dirty)
             {
@@ -48,7 +46,7 @@ namespace MiniGlobe.Scene
 
                 Mesh mesh = GeographicGridEllipsoidTessellator.Compute(Shape,
                     _numberOfSlicePartitions, _numberOfStackPartitions, GeographicGridEllipsoidVertexAttributes.Position);
-                _va = _context.CreateVertexArray(mesh, _sp.VertexAttributes, BufferHint.StaticDraw);
+                _va = context.CreateVertexArray(mesh, _sp.VertexAttributes, BufferHint.StaticDraw);
                 _primitiveType = mesh.PrimitiveType;
                 _numberOfTriangles = ((mesh.Indices as IndicesInt32).Values.Count / 3);
 
@@ -58,27 +56,25 @@ namespace MiniGlobe.Scene
             }
         }
 
-        public void Render(SceneState sceneState)
+        public void Render(Context context, SceneState sceneState)
         {
-            Clean();
+            Verify.ThrowIfNull(context);
+            Verify.ThrowIfNull(sceneState);
+
+            Clean(context);
 
             if (_textured.Value)
             {
                 Verify.ThrowInvalidOperationIfNull(Texture, "Texture");
-                _context.TextureUnits[0].Texture2D = Texture;
+                context.TextureUnits[0].Texture2D = Texture;
             }
 
             _renderState.RasterizationMode = Wireframe ? RasterizationMode.Line : RasterizationMode.Fill;
 
-            _context.Bind(_renderState);
-            _context.Bind(_sp);
-            _context.Bind(_va);
-            _context.Draw(_primitiveType, sceneState);
-        }
-
-        public Context Context
-        {
-            get { return _context; }
+            context.Bind(_renderState);
+            context.Bind(_sp);
+            context.Bind(_va);
+            context.Draw(_primitiveType, sceneState);
         }
 
         public DepthTestFunction DepthTestFunction
@@ -142,7 +138,8 @@ namespace MiniGlobe.Scene
         {
             get 
             {
-                Clean();
+                // TODO: This is wrong unless Clean is called.
+                //Clean();
                 return _numberOfTriangles; 
             }
         }
@@ -160,7 +157,6 @@ namespace MiniGlobe.Scene
 
         #endregion
 
-        private readonly Context _context;
         private readonly ShaderProgram _sp;
         private readonly Uniform<bool> _textured;
         private readonly Uniform<bool> _logarithmicDepth;

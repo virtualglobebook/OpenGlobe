@@ -21,7 +21,6 @@ namespace MiniGlobe.Scene
         {
             Verify.ThrowIfNull(context);
 
-            _context = context;
             _lineRS = new RenderState();
             _lineRS.FacetCulling.Enabled = false;
 
@@ -105,11 +104,14 @@ namespace MiniGlobe.Scene
             }
         }
 
-        public void Render(SceneState sceneState)
+        public void Render(Context context, SceneState sceneState)
         {
+            Verify.ThrowIfNull(context);
+            Verify.ThrowIfNull(sceneState);
+
             Update();
 
-            _context.Bind(_va);
+            context.Bind(_va);
 
             if (ShowOutline)
             {
@@ -117,9 +119,9 @@ namespace MiniGlobe.Scene
                 // Pass 1:  Outline
                 //
                 _lineFillDistance.Value = (float)(OutlineWidth * 0.5 * sceneState.HighResolutionSnapScale);
-                _context.Bind(_lineRS);
-                _context.Bind(_lineSP);
-                _context.Draw(PrimitiveType.LineLoop, 0, 4, sceneState);
+                context.Bind(_lineRS);
+                context.Bind(_lineSP);
+                context.Draw(PrimitiveType.LineLoop, 0, 4, sceneState);
             }
 
             if (ShowFill)
@@ -127,15 +129,10 @@ namespace MiniGlobe.Scene
                 //
                 // Pass 2:  Fill
                 //
-                _context.Bind(_fillRS);
-                _context.Bind(_fillSP);
-                _context.Draw(PrimitiveType.Triangles, 4, 6, sceneState);
+                context.Bind(_fillRS);
+                context.Bind(_fillSP);
+                context.Draw(PrimitiveType.Triangles, 4, 6, sceneState);
             }
-        }
-
-        public Context Context
-        {
-            get { return _context; }
         }
 
         public DepthTestFunction DepthTestFunction
@@ -259,7 +256,6 @@ namespace MiniGlobe.Scene
 
         #endregion
 
-        private readonly Context _context;
         private readonly RenderState _lineRS;
         private readonly ShaderProgram _lineSP;
         private readonly Uniform<bool> _lineLogarithmicDepth;

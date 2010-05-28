@@ -21,7 +21,6 @@ namespace MiniGlobe.Scene
         {
             Verify.ThrowIfNull(context);
 
-            _context = context;
             _renderState = new RenderState();
             _renderState.FacetCulling.Enabled = false;
             _renderState.DepthTest.Enabled = false;
@@ -46,7 +45,7 @@ namespace MiniGlobe.Scene
             _positionDirty = true;
         }
 
-        private void CreateVertexArray()
+        private void CreateVertexArray(Context context)
         {
             // TODO:  Hint per buffer?  One hint?
             _positionBuffer = Device.CreateVertexBuffer(BufferHint.StaticDraw, SizeInBytes<Vector2S>.Value);
@@ -54,16 +53,16 @@ namespace MiniGlobe.Scene
             AttachedVertexBuffer attachedPositionBuffer = new AttachedVertexBuffer(
                 _positionBuffer, VertexAttributeComponentType.Float, 2);
 
-            _va = _context.CreateVertexArray();
+            _va = context.CreateVertexArray();
             _va.VertexBuffers[_sp.VertexAttributes["position"].Location] = attachedPositionBuffer;
          }
 
-        private void Update()
+        private void Update(Context context)
         {
             if (_positionDirty)
             {
                 DisposeVertexArray();
-                CreateVertexArray();
+                CreateVertexArray(context);
 
                 Vector2S[] positions = new Vector2S[] { _position.ToVector2S() };
                 _positionBuffer.CopyFromSystemMemory(positions);
@@ -72,25 +71,22 @@ namespace MiniGlobe.Scene
             }
         }
 
-        public void Render(SceneState sceneState)
+        public void Render(Context context, SceneState sceneState)
         {
+            Verify.ThrowIfNull(context);
+            Verify.ThrowIfNull(sceneState);
             Verify.ThrowInvalidOperationIfNull(Texture, "Texture");
 
-            Update();
+            Update(context);
 
             if (_va != null)
             {
-                _context.TextureUnits[0].Texture2D = Texture;
-                _context.Bind(_renderState);
-                _context.Bind(_sp);
-                _context.Bind(_va);
-                _context.Draw(PrimitiveType.Points, sceneState);
+                context.TextureUnits[0].Texture2D = Texture;
+                context.Bind(_renderState);
+                context.Bind(_sp);
+                context.Bind(_va);
+                context.Draw(PrimitiveType.Points, sceneState);
             }
-        }
-
-        public Context Context
-        {
-            get { return _context; }
         }
 
         public Texture2D Texture { get; set; }
@@ -169,7 +165,6 @@ namespace MiniGlobe.Scene
             }
         }
 
-        private readonly Context _context;
         private readonly RenderState _renderState;
         private readonly ShaderProgram _sp;
         private readonly Uniform<Vector3S> _colorUniform;

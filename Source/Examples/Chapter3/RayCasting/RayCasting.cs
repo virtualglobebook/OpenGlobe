@@ -69,8 +69,9 @@ namespace MiniGlobe.Examples.Chapter3
 
         private void OnRenderFrame()
         {
-            _window.Context.Clear(ClearBuffers.ColorAndDepthBuffer, Color.White, 1, 0);
-            _globe.Render(_sceneState);
+            Context context = _window.Context;
+            context.Clear(ClearBuffers.ColorAndDepthBuffer, Color.White, 1, 0);
+            _globe.Render(context, _sceneState);
         }
 
         private void CenterCameraOnPoint()

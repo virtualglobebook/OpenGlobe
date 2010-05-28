@@ -217,10 +217,11 @@ namespace MiniGlobe.Examples.Chapter5
 
         private void OnRenderFrame()
         {
-            _window.Context.Clear(ClearBuffers.ColorAndDepthBuffer, Color.White, 1, 0);
+            Context context = _window.Context;
+            context.Clear(ClearBuffers.ColorAndDepthBuffer, Color.White, 1, 0);
 
-            _tile.Render(_sceneState);
-            _hud.Render(_sceneState);
+            _tile.Render(context, _sceneState);
+            _hud.Render(context, _sceneState);
         }
 
         #region IDisposable Members
