@@ -45,7 +45,6 @@
     <Reference Include="System.Drawing" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GridResolution.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="LatitudeLongitudeGrid.cs" />
   </ItemGroup>

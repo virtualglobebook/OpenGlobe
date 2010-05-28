@@ -9,9 +9,9 @@
 
 using MiniGlobe.Core;
 
-namespace MiniGlobe.Examples.Chapter3
+namespace MiniGlobe.Scene
 {
-    class GridResolution
+    public class GridResolution
     {
         public GridResolution(Interval interval, Vector2D resolution)
         {

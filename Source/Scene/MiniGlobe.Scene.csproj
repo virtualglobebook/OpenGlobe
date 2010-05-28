@@ -46,6 +46,9 @@
     <Compile Include="Cameras\CameraLookAtPoint.cs" />
     <Compile Include="Globes\DayNight\DayNightGlobe.cs" />
     <Compile Include="Globes\DayNight\DayNightViewportQuad.cs" />
+    <Compile Include="Globes\LatitudeLongitudeGrid\GridResolution.cs" />
+    <Compile Include="Globes\LatitudeLongitudeGrid\GridResolutionCollection.cs" />
+    <Compile Include="Globes\LatitudeLongitudeGrid\LatitudeLongitudeGridGlobe.cs" />
     <Compile Include="Globes\RayCasted\RayCastedGlobe.cs" />
     <Compile Include="Globes\Tessellated\TessellatedGlobe.cs" />
     <Compile Include="Infrastructure\EmbeddedResources.cs" />
@@ -163,6 +166,10 @@
     <EmbeddedResource Include="Renderables\HeadsUpDisplay\Shaders\HeadsUpDisplayFS.glsl" />
     <EmbeddedResource Include="Renderables\HeadsUpDisplay\Shaders\HeadsUpDisplayGS.glsl" />
     <EmbeddedResource Include="Renderables\HeadsUpDisplay\Shaders\HeadsUpDisplayVS.glsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Globes\LatitudeLongitudeGrid\Shaders\GlobeFS.glsl" />
+    <EmbeddedResource Include="Globes\LatitudeLongitudeGrid\Shaders\GlobeVS.glsl" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
