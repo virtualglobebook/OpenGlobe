@@ -284,6 +284,11 @@ namespace MiniGlobe.Scene
             double yawWindowRatio = (double)movement.Width / (double)_window.Width;
             double pitchWindowRatio = (double)movement.Height / (double)_window.Height;
 
+            Quaterniond rotateX = Quaterniond.FromAxisAngle(Vector3d.UnitX, _roll);
+            Vector3d yawPitch = Vector3d.Transform(new Vector3d(0.0, pitchWindowRatio, yawWindowRatio), rotateX);
+            pitchWindowRatio = yawPitch.Y;
+            yawWindowRatio = yawPitch.Z;
+
             _yaw -= yawWindowRatio * Math.PI;
             _pitch -= pitchWindowRatio * Math.PI;
 
@@ -348,16 +353,18 @@ namespace MiniGlobe.Scene
         {
             _camera.Eye = _position;
 
-            Quaterniond yaw = Quaterniond.FromAxisAngle(Vector3d.UnitZ, _yaw);
-            Vector3d y = Vector3d.Transform(Vector3d.UnitY, yaw);
-            Vector3d look = Vector3d.Transform(Vector3d.UnitX, yaw);
-            Vector3d up = Vector3d.Transform(Vector3d.UnitZ, yaw);
-            Quaterniond pitch = Quaterniond.FromAxisAngle(y, _pitch);
-            look = Vector3d.Transform(look, pitch);
-            up = Vector3d.Transform(up, pitch);
-            Quaterniond roll = Quaterniond.FromAxisAngle(look, _roll);
-            look = Vector3d.Transform(look, roll);
-            up = Vector3d.Transform(up, roll);
+            Quaterniond rotateX = Quaterniond.FromAxisAngle(Vector3d.UnitX, _roll);
+            Quaterniond rotateY = Quaterniond.FromAxisAngle(Vector3d.UnitY, _pitch);
+            Quaterniond rotateZ = Quaterniond.FromAxisAngle(Vector3d.UnitZ, _yaw);
+
+            Vector3d look = Vector3d.Transform(Vector3d.UnitX, rotateX);
+            look = Vector3d.Transform(look, rotateY);
+            look = Vector3d.Transform(look, rotateZ);
+
+            Vector3d up = Vector3d.Transform(Vector3d.UnitZ, rotateX);
+            up = Vector3d.Transform(up, rotateY);
+            up = Vector3d.Transform(up, rotateZ);
+
             look.Normalize();
             up.Normalize();
 
