@@ -24,16 +24,14 @@ namespace MiniGlobe.Scene
             _context = context;
 
             string vs = EmbeddedResources.GetText("MiniGlobe.Scene.Globes.RayCasted.Shaders.GlobeVS.glsl");
-            string fs = EmbeddedResources.GetText("MiniGlobe.Scene.Globes.RayCasted.Shaders.GlobeFS.glsl");
-            _sp = Device.CreateShaderProgram(vs, fs);
+            _sp = Device.CreateShaderProgram(vs, EmbeddedResources.GetText("MiniGlobe.Scene.Globes.RayCasted.Shaders.GlobeFS.glsl"));
             _cameraEyeSquaredSP = _sp.Uniforms["u_cameraEyeSquared"] as Uniform<Vector3S>;
 
             _renderState = new RenderState();
 
             ///////////////////////////////////////////////////////////////////
 
-            string solidFS = EmbeddedResources.GetText("MiniGlobe.Scene.Globes.RayCasted.Shaders.SolidShadedGlobeFS.glsl");
-            _solidSP = Device.CreateShaderProgram(vs, solidFS);
+            _solidSP = Device.CreateShaderProgram(vs, EmbeddedResources.GetText("MiniGlobe.Scene.Globes.RayCasted.Shaders.SolidShadedGlobeFS.glsl"));
             _cameraEyeSquaredSolidSP = _solidSP.Uniforms["u_cameraEyeSquared"] as Uniform<Vector3S>;
 
             ///////////////////////////////////////////////////////////////////

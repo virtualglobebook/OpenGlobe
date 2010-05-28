@@ -61,10 +61,9 @@ namespace MiniGlobe.Terrain
             
             ///////////////////////////////////////////////////////////////////
 
-            string terrainVS = EmbeddedResources.GetText("MiniGlobe.Scene.Terrain.VertexDisplacementMapTerrainTile.TerrainVS.glsl");
-            string terrainFS = EmbeddedResources.GetText("MiniGlobe.Scene.Terrain.VertexDisplacementMapTerrainTile.TerrainFS.glsl");
-
-            _spTerrain = Device.CreateShaderProgram(terrainVS, terrainFS);
+            _spTerrain = Device.CreateShaderProgram(
+                EmbeddedResources.GetText("MiniGlobe.Scene.Terrain.VertexDisplacementMapTerrainTile.TerrainVS.glsl"),
+                EmbeddedResources.GetText("MiniGlobe.Scene.Terrain.VertexDisplacementMapTerrainTile.TerrainFS.glsl"));
             _heightExaggerationUniform = _spTerrain.Uniforms["u_heightExaggeration"] as Uniform<float>;
             (_spTerrain.Uniforms["u_positionToTextureCoordinate"] as Uniform<Vector2S>).Value = new Vector2S(
                 (float)(1.0 / (double)(tile.Size.X)), 
@@ -75,22 +74,20 @@ namespace MiniGlobe.Terrain
             
             ///////////////////////////////////////////////////////////////////
 
-            string normalsVS = EmbeddedResources.GetText("MiniGlobe.Scene.Terrain.VertexDisplacementMapTerrainTile.NormalsVS.glsl");
-            string normalsGS = EmbeddedResources.GetText("MiniGlobe.Scene.Terrain.VertexDisplacementMapTerrainTile.NormalsGS.glsl");
-            string normalsFS = EmbeddedResources.GetText("MiniGlobe.Scene.Terrain.VertexDisplacementMapTerrainTile.NormalsFS.glsl");
-
-            _spNormals = Device.CreateShaderProgram(normalsVS, normalsGS, normalsFS);
+            _spNormals = Device.CreateShaderProgram(
+                EmbeddedResources.GetText("MiniGlobe.Scene.Terrain.VertexDisplacementMapTerrainTile.NormalsVS.glsl"),
+                EmbeddedResources.GetText("MiniGlobe.Scene.Terrain.VertexDisplacementMapTerrainTile.NormalsGS.glsl"),
+                EmbeddedResources.GetText("MiniGlobe.Scene.Terrain.VertexDisplacementMapTerrainTile.NormalsFS.glsl"));
             _heightExaggerationNormals = _spNormals.Uniforms["u_heightExaggeration"] as Uniform<float>;
             _fillDistanceNormals = _spNormals.Uniforms["u_fillDistance"] as Uniform<float>;
             (_spNormals.Uniforms["u_color"] as Uniform<Vector3S>).Value = Vector3S.Zero;
 
             ///////////////////////////////////////////////////////////////////
 
-            string wireframeVS = EmbeddedResources.GetText("MiniGlobe.Scene.Terrain.VertexDisplacementMapTerrainTile.WireframeVS.glsl");
-            string wireframeGS = EmbeddedResources.GetText("MiniGlobe.Scene.Terrain.VertexDisplacementMapTerrainTile.WireframeGS.glsl");
-            string wireframeFS = EmbeddedResources.GetText("MiniGlobe.Scene.Terrain.VertexDisplacementMapTerrainTile.WireframeFS.glsl");
-
-            _spWireframe = Device.CreateShaderProgram(wireframeVS, wireframeGS, wireframeFS);
+            _spWireframe = Device.CreateShaderProgram(
+                EmbeddedResources.GetText("MiniGlobe.Scene.Terrain.VertexDisplacementMapTerrainTile.WireframeVS.glsl"),
+                EmbeddedResources.GetText("MiniGlobe.Scene.Terrain.VertexDisplacementMapTerrainTile.WireframeGS.glsl"),
+                EmbeddedResources.GetText("MiniGlobe.Scene.Terrain.VertexDisplacementMapTerrainTile.WireframeFS.glsl"));
             _lineWidthWireframe = _spWireframe.Uniforms["u_halfLineWidth"] as Uniform<float>;
             _heightExaggerationWireframe = _spWireframe.Uniforms["u_heightExaggeration"] as Uniform<float>;
             (_spWireframe.Uniforms["u_color"] as Uniform<Vector3S>).Value = Vector3S.Zero;

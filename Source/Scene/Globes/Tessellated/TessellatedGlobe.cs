@@ -22,9 +22,9 @@ namespace MiniGlobe.Scene
 
             _context = context;
 
-            string vs = EmbeddedResources.GetText("MiniGlobe.Scene.Globes.Tessellated.Shaders.GlobeVS.glsl");
-            string fs = EmbeddedResources.GetText("MiniGlobe.Scene.Globes.Tessellated.Shaders.GlobeFS.glsl");
-            _sp = Device.CreateShaderProgram(vs, fs);
+            _sp = Device.CreateShaderProgram(
+                EmbeddedResources.GetText("MiniGlobe.Scene.Globes.Tessellated.Shaders.GlobeVS.glsl"),
+                EmbeddedResources.GetText("MiniGlobe.Scene.Globes.Tessellated.Shaders.GlobeFS.glsl"));
             _logarithmicDepth = _sp.Uniforms["u_logarithmicDepth"] as Uniform<bool>;
             _logarithmicDepthConstant = _sp.Uniforms["u_logarithmicDepthConstant"] as Uniform<float>;
             LogarithmicDepthConstant = 1;

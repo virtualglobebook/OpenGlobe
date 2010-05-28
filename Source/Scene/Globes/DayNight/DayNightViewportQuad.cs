@@ -32,9 +32,9 @@ namespace MiniGlobe.Scene
             _renderState.FacetCulling.Enabled = false;
             _renderState.DepthTest.Enabled = false;
 
-            string vs = EmbeddedResources.GetText("MiniGlobe.Scene.Globes.DayNight.Shaders.ViewportQuadVS.glsl");
-            string fs = EmbeddedResources.GetText("MiniGlobe.Scene.Globes.DayNight.Shaders.ViewportQuadFS.glsl");
-            _sp = Device.CreateShaderProgram(vs, fs);
+            _sp = Device.CreateShaderProgram(
+                EmbeddedResources.GetText("MiniGlobe.Scene.Globes.DayNight.Shaders.ViewportQuadVS.glsl"),
+                EmbeddedResources.GetText("MiniGlobe.Scene.Globes.DayNight.Shaders.ViewportQuadFS.glsl"));
             _dayNightOutput = _sp.Uniforms["u_DayNightOutput"] as Uniform<int>;
 
             _geometry = new ViewportQuadGeometry();
