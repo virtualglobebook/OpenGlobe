@@ -17,14 +17,14 @@ using Catfood.Shapefile;
 
 namespace MiniGlobe.Scene
 {
-    public class ShapefileGraphics : IDisposable
+    public class PolylineShapefile : IDisposable
     {
-        public ShapefileGraphics(string filename, Context context, Ellipsoid globeShape)
+        public PolylineShapefile(string filename, Context context, Ellipsoid globeShape)
             : this(filename, context, globeShape, Color.Yellow, Color.Black)
         {
         }
 
-        public ShapefileGraphics(string filename, Context context, Ellipsoid globeShape, Color color, Color outlineColor)
+        public PolylineShapefile(string filename, Context context, Ellipsoid globeShape, Color color, Color outlineColor)
         {
             Verify.ThrowIfNull(context);
 
@@ -40,14 +40,9 @@ namespace MiniGlobe.Scene
                     _polyline = new OutlinedPolylineTexture(context);
                     CreatePolylines(globeShape, shapefile, color, outlineColor);
                 }
-                else if (shapefile.Type == ShapeType.Polygon)
-                {
-                    _polyline = new OutlinedPolylineTexture(context);
-                    CreatePolygons(globeShape, shapefile, color, outlineColor);
-                }
                 else
                 {
-                    throw new NotSupportedException("Shapefile type is not supported.");
+                    throw new NotSupportedException("Shapefile type \"" + shapefile.Type.ToString() + "\" is not a polyline shape file.");
                 }
             }
         }
@@ -106,8 +101,8 @@ namespace MiniGlobe.Scene
             mesh.Indices = indices;
             _polyline.Set(mesh);
 
-            PolylineWidth = _polyline.Width;
-            PolylineOutlineWidth = _polyline.OutlineWidth;
+            Width = _polyline.Width;
+            OutlineWidth = _polyline.OutlineWidth;
         }
 
         private static void PolylineCapacities(Shapefile shapefile, out int positionsCount, out int indicesCount)
@@ -140,76 +135,18 @@ namespace MiniGlobe.Scene
             indicesCount = numberOfIndices;
         }
 
-        private void CreatePolygons(Ellipsoid globeShape, Shapefile shapefile, Color color, Color outlineColor)
-        {
-            //
-            // TODO:  This is temporary.  Since polygon tessellation is not supported yet,
-            // polylines are created instead of polygons.
-            //
-            VertexAttributeDoubleVector3 positionAttribute = new VertexAttributeDoubleVector3("position");
-            VertexAttributeRGBA colorAttribute = new VertexAttributeRGBA("color");
-            VertexAttributeRGBA outlineColorAttribute = new VertexAttributeRGBA("outlineColor");
-            IndicesInt32 indices = new IndicesInt32();
-
-            foreach (Shape shape in shapefile)
-            {
-                if (shape.Type == ShapeType.Null)
-                {
-                    continue;
-                }
-
-                if (shape.Type != ShapeType.Polygon)
-                {
-                    throw new NotSupportedException("The type of an individual shape does not match the Shapefile type.");
-                }
-
-                IList<PointD[]> parts = (shape as ShapePolygon).Parts;
-
-                for (int j = 0; j < parts.Count; ++j)
-                {
-                    PointD[] part = parts[j];
-
-                    for (int i = 0; i < part.Length; ++i)
-                    {
-                        PointD point = part[i];
-
-                        positionAttribute.Values.Add(globeShape.ToVector3D(Trig.ToRadians(new Geodetic3D(point.X, point.Y))));
-                        colorAttribute.AddColor(color);
-                        outlineColorAttribute.AddColor(outlineColor);
-
-                        if (i != 0)
-                        {
-                            indices.Values.Add(positionAttribute.Values.Count - 2);
-                            indices.Values.Add(positionAttribute.Values.Count - 1);
-                        }
-                    }
-                }
-            }
-
-            Mesh mesh = new Mesh();
-            mesh.PrimitiveType = PrimitiveType.Lines;
-            mesh.Attributes.Add(positionAttribute);
-            mesh.Attributes.Add(colorAttribute);
-            mesh.Attributes.Add(outlineColorAttribute);
-            mesh.Indices = indices;
-            _polyline.Set(mesh);
-
-            PolylineWidth = _polyline.Width;
-            PolylineOutlineWidth = _polyline.OutlineWidth;
-        }
-
         public void Render(SceneState sceneState)
         {
             _polyline.Render(sceneState);
         }
 
-        public double PolylineWidth 
+        public double Width 
         {
             get { return _polyline.OutlineWidth;  }
             set { _polyline.OutlineWidth = value;  }
         }
         
-        public double PolylineOutlineWidth 
+        public double OutlineWidth 
         {
             get { return _polyline.Width;  }
             set { _polyline.Width = value;  }

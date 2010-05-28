@@ -24,37 +24,9 @@ namespace MiniGlobe.Scene
             _renderState.FacetCulling.Enabled = false;
             _renderState.DepthTest.Enabled = false;
 
-            string vs =
-                @"#version 150
-
-                  in vec4 position;
-                  in vec2 textureCoordinates;
-
-                  out vec2 fsTextureCoordinates;
-
-                  uniform mat4 mg_viewportOrthographicProjectionMatrix;
-
-                  void main()                     
-                  {
-                      gl_Position = mg_viewportOrthographicProjectionMatrix * position;
-                      fsTextureCoordinates = textureCoordinates;
-                  }";
-            string fs =
-                @"#version 150
-                 
-                  in vec2 fsTextureCoordinates;
-
-                  out vec4 fragmentColor;
-
-                  uniform sampler2D mg_texture0;
-
-                  void main()
-                  {
-                      fragmentColor = texture(mg_texture0, fsTextureCoordinates);
-                  }";
-            _sp = Device.CreateShaderProgram(vs, fs);
-
-            ///////////////////////////////////////////////////////////////////
+            _sp = Device.CreateShaderProgram(
+                EmbeddedResources.GetText("MiniGlobe.Scene.Renderables.ViewportQuad.Shaders.ViewportQuadVS.glsl"),
+                EmbeddedResources.GetText("MiniGlobe.Scene.Renderables.ViewportQuad.Shaders.ViewportQuadFS.glsl"));
 
             _geometry = new ViewportQuadGeometry();
         }

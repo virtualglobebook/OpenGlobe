@@ -42,15 +42,15 @@ namespace MiniGlobe.Examples.Chapter7
             _globe.DayTexture = Device.CreateTexture2D(new Bitmap("NE2_50M_SR_W_4096.jpg"), TextureFormat.RedGreenBlue8, false);
             _globe.NightTexture = Device.CreateTexture2D(new Bitmap("land_ocean_ice_lights_2048.jpg"), TextureFormat.RedGreenBlue8, false);
 
-            _countries = new ShapefileGraphics("110m_admin_0_countries.shp", context, globeShape);
-            _countries.PolylineWidth = 1;
-            _countries.PolylineOutlineWidth = 1;
-            _states = new ShapefileGraphics("110m_admin_1_states_provinces_lines_shp.shp", context, globeShape);
-            _states.PolylineWidth = 1;
-            _states.PolylineOutlineWidth = 1;
-            _rivers = new ShapefileGraphics("50m-rivers-lake-centerlines.shp", context, globeShape, Color.LightBlue, Color.LightBlue);
-            _rivers.PolylineWidth = 1;
-            _rivers.PolylineOutlineWidth = 0;
+            _countries = new PolygonShapefile("110m_admin_0_countries.shp", context, globeShape);
+            _countries.Width = 1;
+            _countries.OutlineWidth = 1;
+            _states = new PolylineShapefile("110m_admin_1_states_provinces_lines_shp.shp", context, globeShape);
+            _states.Width = 1;
+            _states.OutlineWidth = 1;
+            _rivers = new PolylineShapefile("50m-rivers-lake-centerlines.shp", context, globeShape, Color.LightBlue, Color.LightBlue);
+            _rivers.Width = 1;
+            _rivers.OutlineWidth = 0;
             _cities = new PointShapefile("110m_populated_places_simple.shp", context, globeShape, new Bitmap("032.png"));
 
             _hudFont = new Font("Arial", 16);
@@ -281,9 +281,9 @@ namespace MiniGlobe.Examples.Chapter7
         private readonly DayNightViewportQuad _quad;
 
         private readonly DayNightGlobe _globe;
-        private readonly ShapefileGraphics _countries;
-        private readonly ShapefileGraphics _states;
-        private readonly ShapefileGraphics _rivers;
+        private readonly PolygonShapefile _countries;
+        private readonly PolylineShapefile _states;
+        private readonly PolylineShapefile _rivers;
         private readonly PointShapefile _cities;
         
         private readonly Font _hudFont;

@@ -57,8 +57,9 @@
     <Compile Include="Renderables\ViewportQuad\ViewportQuad.cs" />
     <Compile Include="Renderables\ViewportQuad\ViewportQuadGeometry.cs" />
     <Compile Include="Renderables\Wireframe.cs" />
-    <Compile Include="ShapefileGraphics\ShapefileGraphics.cs" />
     <Compile Include="Shapefiles\PointShapefile.cs" />
+    <Compile Include="Shapefiles\PolygonShapefile.cs" />
+    <Compile Include="Shapefiles\PolylineShapefile.cs" />
     <Compile Include="Terrain\RayCastedTerrainTile.cs" />
     <Compile Include="Terrain\TriangleMeshTerrainTile.cs" />
     <Compile Include="Terrain\VertexDisplacementMapTerrainTile.cs" />
@@ -120,6 +121,11 @@
   <ItemGroup>
     <EmbeddedResource Include="Terrain\TriangleMeshTerrainTile\TerrainFS.glsl" />
     <EmbeddedResource Include="Terrain\TriangleMeshTerrainTile\TerrainVS.glsl" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Renderables\ViewportQuad\Shaders\ViewportQuadFS.glsl" />
+    <EmbeddedResource Include="Renderables\ViewportQuad\Shaders\ViewportQuadVS.glsl" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
