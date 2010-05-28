@@ -25,6 +25,7 @@ namespace MiniGlobe.Scene
             _sp = Device.CreateShaderProgram(
                 EmbeddedResources.GetText("MiniGlobe.Scene.Globes.Tessellated.Shaders.GlobeVS.glsl"),
                 EmbeddedResources.GetText("MiniGlobe.Scene.Globes.Tessellated.Shaders.GlobeFS.glsl"));
+            _textured = _sp.Uniforms["u_Textured"] as Uniform<bool>;
             _logarithmicDepth = _sp.Uniforms["u_logarithmicDepth"] as Uniform<bool>;
             _logarithmicDepthConstant = _sp.Uniforms["u_logarithmicDepthConstant"] as Uniform<float>;
             LogarithmicDepthConstant = 1;
@@ -59,13 +60,16 @@ namespace MiniGlobe.Scene
 
         public void Render(SceneState sceneState)
         {
-            Verify.ThrowInvalidOperationIfNull(Texture, "Texture");
-
             Clean();
+
+            if (_textured.Value)
+            {
+                Verify.ThrowInvalidOperationIfNull(Texture, "Texture");
+                _context.TextureUnits[0].Texture2D = Texture;
+            }
 
             _renderState.RasterizationMode = Wireframe ? RasterizationMode.Line : RasterizationMode.Fill;
 
-            _context.TextureUnits[0].Texture2D = Texture;
             _context.Bind(_renderState);
             _context.Bind(_sp);
             _context.Bind(_va);
@@ -85,6 +89,12 @@ namespace MiniGlobe.Scene
 
         public bool Wireframe { get; set; }
         public Texture2D Texture { get; set; }
+
+        public bool Textured
+        {
+            get { return _textured.Value; }
+            set { _textured.Value = value; }
+        }
 
         public bool LogarithmicDepth
         {
@@ -152,6 +162,7 @@ namespace MiniGlobe.Scene
 
         private readonly Context _context;
         private readonly ShaderProgram _sp;
+        private readonly Uniform<bool> _textured;
         private readonly Uniform<bool> _logarithmicDepth;
         private readonly Uniform<float> _logarithmicDepthConstant;
 

@@ -13,6 +13,7 @@ out vec3 fragmentColor;
 
 uniform vec4 mg_diffuseSpecularAmbientShininess;
 uniform sampler2D mg_texture0;
+uniform bool u_Textured;
 
 float LightIntensity(vec3 normal, vec3 toLight, vec3 toEye, vec4 diffuseSpecularAmbientShininess)
 {
@@ -36,5 +37,13 @@ void main()
 {
     vec3 normal = normalize(worldPosition);
     float intensity = LightIntensity(normal,  normalize(positionToLight), normalize(positionToEye), mg_diffuseSpecularAmbientShininess);
-    fragmentColor = intensity * texture(mg_texture0, ComputeTextureCoordinates(normal)).rgb;
+
+	if (u_Textured)
+	{
+		fragmentColor = intensity * texture(mg_texture0, ComputeTextureCoordinates(normal)).rgb;
+	}
+	else
+	{
+		fragmentColor = vec3(intensity, 0, intensity);
+	}
 }

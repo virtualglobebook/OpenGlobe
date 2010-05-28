@@ -47,6 +47,7 @@ namespace MiniGlobe.Examples.Chapter4
             _globe = new TessellatedGlobe(_window.Context);
             _globe.Shape = _globeShape;
             _globe.Texture = Device.CreateTexture2D(new Bitmap("MapperWDB.jpg"), TextureFormat.RedGreenBlue8, false);
+            _globe.Textured = true;
 
             _plane = new Plane(_window.Context);
             _plane.XAxis = 0.6 * _globeShape.MaximumRadius * Vector3D.UnitX;
