@@ -122,7 +122,11 @@
     <EmbeddedResource Include="Terrain\TriangleMeshTerrainTile\TerrainFS.glsl" />
     <EmbeddedResource Include="Terrain\TriangleMeshTerrainTile\TerrainVS.glsl" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Renderables\Polyline\OutlinedPolylineTexture\PolylineFS.glsl" />
+    <EmbeddedResource Include="Renderables\Polyline\OutlinedPolylineTexture\PolylineGS.glsl" />
+    <EmbeddedResource Include="Renderables\Polyline\OutlinedPolylineTexture\PolylineVS.glsl" />
+  </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Renderables\ViewportQuad\Shaders\ViewportQuadFS.glsl" />
     <EmbeddedResource Include="Renderables\ViewportQuad\Shaders\ViewportQuadVS.glsl" />
