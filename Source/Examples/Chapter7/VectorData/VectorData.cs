@@ -45,13 +45,17 @@ namespace MiniGlobe.Examples.Chapter7
             _countries = new PolygonShapefile("110m_admin_0_countries.shp", context, globeShape);
             _countries.Width = 1;
             _countries.OutlineWidth = 1;
+            _countries.DepthWrite = false;
             _states = new PolylineShapefile("110m_admin_1_states_provinces_lines_shp.shp", context, globeShape);
             _states.Width = 1;
             _states.OutlineWidth = 1;
+            _states.DepthWrite = false;
             _rivers = new PolylineShapefile("50m-rivers-lake-centerlines.shp", context, globeShape, Color.LightBlue, Color.LightBlue);
             _rivers.Width = 1;
             _rivers.OutlineWidth = 0;
+            _rivers.DepthWrite = false;
             _cities = new PointShapefile("110m_populated_places_simple.shp", context, globeShape, new Bitmap("032.png"));
+            _cities.DepthWrite = false;
 
             _hudFont = new Font("Arial", 16);
             _hud = new HeadsUpDisplay(context);
