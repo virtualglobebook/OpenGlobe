@@ -31,76 +31,10 @@ namespace MiniGlobe.Scene
             _renderState.Blending.DestinationRGBFactor = DestinationBlendingFactor.OneMinusSourceAlpha;
             _renderState.Blending.DestinationAlphaFactor = DestinationBlendingFactor.OneMinusSourceAlpha;
 
-            string vs =
-                @"#version 150
-
-                  in vec4 position;
-
-                  void main()                     
-                  {
-                      gl_Position = position;
-                  }";
-            string gs =
-                @"#version 150 
-
-                  layout(points) in;
-                  layout(triangle_strip, max_vertices = 4) out;
-
-                  out vec2 fsTextureCoordinates;
-
-                  uniform mat4 mg_viewportOrthographicProjectionMatrix;
-                  uniform sampler2D mg_texture0;
-                  uniform float mg_highResolutionSnapScale;
-                  uniform vec2 u_originScale;
-
-                  void main()
-                  {
-                      vec2 halfSize = vec2(textureSize(mg_texture0, 0)) * 0.5 * mg_highResolutionSnapScale;
-                      vec4 center = gl_in[0].gl_Position;
-                      center.xy += (u_originScale * halfSize);
-
-                      vec4 v0 = vec4(center.xy - halfSize, center.z, 1.0);
-                      vec4 v1 = vec4(center.xy + vec2(halfSize.x, -halfSize.y), center.z, 1.0);
-                      vec4 v2 = vec4(center.xy + vec2(-halfSize.x, halfSize.y), center.z, 1.0);
-                      vec4 v3 = vec4(center.xy + halfSize, center.z, 1.0);
-
-                      gl_Position = mg_viewportOrthographicProjectionMatrix * v0;
-                      fsTextureCoordinates = vec2(0.0, 0.0);
-                      EmitVertex();
-
-                      gl_Position = mg_viewportOrthographicProjectionMatrix * v1;
-                      fsTextureCoordinates = vec2(1.0, 0.0);
-                      EmitVertex();
-
-                      gl_Position = mg_viewportOrthographicProjectionMatrix * v2;
-                      fsTextureCoordinates = vec2(0.0, 1.0);
-                      EmitVertex();
-
-                      gl_Position = mg_viewportOrthographicProjectionMatrix * v3;
-                      fsTextureCoordinates = vec2(1.0, 1.0);
-                      EmitVertex();
-                  }";
-            string fs =
-                @"#version 150
-                 
-                  in vec2 fsTextureCoordinates;
-
-                  out vec4 fragmentColor;
-
-                  uniform sampler2D mg_texture0;
-                  uniform vec3 u_color;
-
-                  void main()
-                  {
-                      vec4 color = texture(mg_texture0, fsTextureCoordinates);
-
-                      if (color.a == 0.0)
-                      {
-                          discard;
-                      }
-                      fragmentColor = vec4(color.rgb * u_color.rgb, color.a);
-                  }";
-            _sp = Device.CreateShaderProgram(vs, gs, fs);
+            _sp = Device.CreateShaderProgram(
+                EmbeddedResources.GetText("MiniGlobe.Scene.Renderables.HeadsUpDisplay.Shaders.HeadsUpDisplayVS.glsl"),
+                EmbeddedResources.GetText("MiniGlobe.Scene.Renderables.HeadsUpDisplay.Shaders.HeadsUpDisplayGS.glsl"),
+                EmbeddedResources.GetText("MiniGlobe.Scene.Renderables.HeadsUpDisplay.Shaders.HeadsUpDisplayFS.glsl"));
             _colorUniform = _sp.Uniforms["u_color"] as Uniform<Vector3S>;
             _originScaleUniform = _sp.Uniforms["u_originScale"] as Uniform<Vector2S>;
             
