@@ -34,10 +34,15 @@
     <Reference Include="Catfood.Shapefile">
       <HintPath>..\..\ThirdParty\Catfood.Shapefile.1.10\Catfood.Shapefile\bin\Release\Catfood.Shapefile.dll</HintPath>
     </Reference>
+    <Reference Include="OpenTK, Version=1.0.0.201, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\ThirdParty\opentk-1.0.0-rc1\Binaries\OpenTK\Release\OpenTK.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Drawing" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Cameras\CameraFly.cs" />
     <Compile Include="Cameras\CameraLookAtPoint.cs" />
     <Compile Include="Globes\DayNight\DayNightGlobe.cs" />
     <Compile Include="Globes\DayNight\DayNightViewportQuad.cs" />
