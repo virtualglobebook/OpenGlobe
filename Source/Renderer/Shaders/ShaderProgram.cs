@@ -14,7 +14,7 @@ namespace MiniGlobe.Renderer
 {
     public abstract class ShaderProgram : Disposable
     {
-        public abstract string LinkLog { get; }
+        public abstract string Log { get; }
         public abstract FragmentOutputs FragmentOutputs  { get; }
         public abstract ShaderVertexAttributeCollection VertexAttributes { get; }
         public abstract UniformCollection Uniforms { get; }

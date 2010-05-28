@@ -9,6 +9,7 @@
 
 using System.Drawing;
 using NUnit.Framework;
+using MiniGlobe.Core;
 using MiniGlobe.Renderer;
 
 namespace MiniGlobe
@@ -30,6 +31,40 @@ namespace MiniGlobe
             context.Viewport = new Rectangle(0, 0, 1, 1);
 
             return frameBuffer;
+        }
+
+        /// <summary>
+        /// Creates a 1x1 RGBA8 texture
+        /// </summary>
+        public static Texture2D CreateTexture(BlittableRGBA rgba)
+        {
+            Texture2DDescription description = new Texture2DDescription(1, 1, TextureFormat.RedGreenBlueAlpha8, false);
+            Texture2D texture = Device.CreateTexture2D(description);
+
+            BlittableRGBA[] pixels = new BlittableRGBA[] { rgba };
+
+            int sizeInBytes = pixels.Length * SizeInBytes<BlittableRGBA>.Value;
+            using (WritePixelBuffer writePixelBuffer = Device.CreateWritePixelBuffer(WritePixelBufferHint.StreamDraw, sizeInBytes))
+            {
+                writePixelBuffer.CopyFromSystemMemory(pixels);
+                texture.CopyFromBuffer(writePixelBuffer, ImageFormat.RedGreenBlueAlpha, ImageDataType.UnsignedByte);
+            }
+            texture.Filter = Texture2DFilter.NearestClampToEdge;
+
+            return texture;
+        }
+
+        public static VertexArray CreateVertexArray(Context context, int positionLocation)
+        {
+            Vector4S[] positions = new[] { new Vector4S(0, 0, 0, 1) };
+            VertexBuffer positionsBuffer = Device.CreateVertexBuffer(BufferHint.StaticDraw, positions.Length * SizeInBytes<Vector4S>.Value);
+            positionsBuffer.CopyFromSystemMemory(positions);
+
+            VertexArray va = context.CreateVertexArray();
+            va.VertexBuffers[positionLocation] =
+                new AttachedVertexBuffer(positionsBuffer, VertexAttributeComponentType.Float, 4);
+
+            return va;
         }
 
         public static void ValidateColor(Texture2D colorTexture, byte red, byte green, byte blue)

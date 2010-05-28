@@ -7,7 +7,6 @@
 //
 #endregion
 
-using System.Threading;
 using System.Drawing;
 using NUnit.Framework;
 using MiniGlobe.Core;
@@ -62,7 +61,7 @@ namespace MiniGlobe.Renderer
             FrameBuffer frameBuffer = TestUtility.CreateFrameBuffer(window.Context);
 
             ShaderProgram sp = Device.CreateShaderProgram(ShaderSources.PassThroughVertexShader(), ShaderSources.PassThroughFragmentShader());
-            VertexArray va = CreateVertexArray(window.Context, sp.VertexAttributes["position"].Location);
+            VertexArray va = TestUtility.CreateVertexArray(window.Context, sp.VertexAttributes["position"].Location);
 
             window.Context.Bind(frameBuffer);
             window.Context.Bind(sp);
@@ -164,8 +163,8 @@ namespace MiniGlobe.Renderer
 
             ///////////////////////////////////////////////////////////////////
 
-            Texture2D texture = CreateTexture(new BlittableRGBA(Color.FromArgb(0, 255, 0, 0)));
-            VertexArray va = CreateVertexArray(window.Context, sp.VertexAttributes["position"].Location);
+            Texture2D texture = TestUtility.CreateTexture(new BlittableRGBA(Color.FromArgb(0, 255, 0, 0)));
+            VertexArray va = TestUtility.CreateVertexArray(window.Context, sp.VertexAttributes["position"].Location);
 
             ///////////////////////////////////////////////////////////////////
 
@@ -209,7 +208,7 @@ namespace MiniGlobe.Renderer
                   }";
 
             ShaderProgram sp = Device.CreateShaderProgram(ShaderSources.PassThroughVertexShader(), fs);
-            VertexArray va = CreateVertexArray(window.Context, sp.VertexAttributes["position"].Location);
+            VertexArray va = TestUtility.CreateVertexArray(window.Context, sp.VertexAttributes["position"].Location);
 
             Assert.AreNotEqual(sp.FragmentOutputs["RedColor"], sp.FragmentOutputs["GreenColor"]);
             frameBuffer.ColorAttachments[sp.FragmentOutputs["RedColor"]] = redTexture;
@@ -240,13 +239,13 @@ namespace MiniGlobe.Renderer
             MiniGlobeWindow window = Device.CreateWindow(1, 1);
             FrameBuffer frameBuffer = TestUtility.CreateFrameBuffer(window.Context);
 
-            ShaderProgram sp = Device.CreateShaderProgram(ShaderSources.PassThroughVertexShader(), MultitextureFragmentShader());
+            ShaderProgram sp = Device.CreateShaderProgram(ShaderSources.PassThroughVertexShader(), ShaderSources.MultitextureFragmentShader());
 
             ///////////////////////////////////////////////////////////////////
 
-            Texture2D texture0 = CreateTexture(new BlittableRGBA(Color.FromArgb(0, 255, 0, 0)));
-            Texture2D texture1 = CreateTexture(new BlittableRGBA(Color.FromArgb(0, 0, 255, 0)));
-            VertexArray va = CreateVertexArray(window.Context, sp.VertexAttributes["position"].Location);
+            Texture2D texture0 = TestUtility.CreateTexture(new BlittableRGBA(Color.FromArgb(0, 255, 0, 0)));
+            Texture2D texture1 = TestUtility.CreateTexture(new BlittableRGBA(Color.FromArgb(0, 0, 255, 0)));
+            VertexArray va = TestUtility.CreateVertexArray(window.Context, sp.VertexAttributes["position"].Location);
 
             ///////////////////////////////////////////////////////////////////
 
@@ -268,64 +267,6 @@ namespace MiniGlobe.Renderer
         }
 
         /// <summary>
-        /// Creates two 1x1 textures on two different threads, then 
-        /// uses the textures to render one point.
-        /// </summary>
-        [Test]
-        [Explicit]
-        public void RenderMultitexturedPointThreads()
-        {
-            // TODO:  If the main thread context is created first, this test does not pass.
-            ///////////////////////////////////////////////////////////////////
-
-            TextureFactory factory0 = new TextureFactory(new BlittableRGBA(Color.FromArgb(0, 255, 0, 0)));
-            TextureFactory factory1 = new TextureFactory(new BlittableRGBA(Color.FromArgb(0, 0, 255, 0)));
-
-            Thread t0 = new Thread(factory0.Create);
-            t0.Start();
-            t0.Join();
-            //factory0.Create();
-
-            Thread t1 = new Thread(factory1.Create);
-            t1.Start();
-            t1.Join();
-            //factory1.Create();
-
-            ///////////////////////////////////////////////////////////////////
-
-            MiniGlobeWindow window = Device.CreateWindow(1, 1);
-            FrameBuffer frameBuffer = TestUtility.CreateFrameBuffer(window.Context);
-
-            ShaderProgram sp = Device.CreateShaderProgram(ShaderSources.PassThroughVertexShader(), MultitextureFragmentShader());
-
-            ///////////////////////////////////////////////////////////////////
-
-            Texture2D texture0 = CreateTexture(new BlittableRGBA(Color.FromArgb(0, 255, 0, 0)));
-            Texture2D texture1 = CreateTexture(new BlittableRGBA(Color.FromArgb(0, 0, 255, 0)));
-            VertexArray va = CreateVertexArray(window.Context, sp.VertexAttributes["position"].Location);
-
-            ///////////////////////////////////////////////////////////////////
-
-            window.Context.TextureUnits[0].Texture2D = factory0.Texture;
-            window.Context.TextureUnits[1].Texture2D = factory1.Texture;
-            window.Context.Bind(frameBuffer);
-            window.Context.Bind(sp);
-            window.Context.Bind(va);
-            window.Context.Draw(PrimitiveType.Points, 0, 1);
-
-            TestUtility.ValidateColor(frameBuffer.ColorAttachments[0], 255, 255, 0);
-
-            va.Dispose();
-            texture1.Dispose();
-            texture0.Dispose();
-            sp.Dispose();
-            frameBuffer.Dispose();
-            window.Dispose();
-            factory1.Dispose();
-            factory0.Dispose();
-        }
-
-        /// <summary>
         /// Renders a point to color and stencil buffers
         /// </summary>
         [Test]
@@ -339,7 +280,7 @@ namespace MiniGlobe.Renderer
             frameBuffer.DepthStencilAttachment = depthStencilTexture;
 
             ShaderProgram sp = Device.CreateShaderProgram(ShaderSources.PassThroughVertexShader(), ShaderSources.PassThroughFragmentShader());
-            VertexArray va = CreateVertexArray(window.Context, sp.VertexAttributes["position"].Location);
+            VertexArray va = TestUtility.CreateVertexArray(window.Context, sp.VertexAttributes["position"].Location);
 
             ///////////////////////////////////////////////////////////////////
 
@@ -397,7 +338,7 @@ namespace MiniGlobe.Renderer
                         }
                   }";
             ShaderProgram sp = Device.CreateShaderProgram(vs, ShaderSources.PassThroughFragmentShader());
-            VertexArray va = CreateVertexArray(window.Context, sp.VertexAttributes["position"].Location);
+            VertexArray va = TestUtility.CreateVertexArray(window.Context, sp.VertexAttributes["position"].Location);
 
             SceneState sceneState = new SceneState();
             sceneState.Camera.Eye = 2 * Vector3D.UnitX;
@@ -418,54 +359,6 @@ namespace MiniGlobe.Renderer
 
         ///////////////////////////////////////////////////////////////////////
 
-        public static string MultitextureFragmentShader()
-        {
-            return
-                @"#version 150
-                 
-                  uniform sampler2D mg_texture0;
-                  uniform sampler2D mg_texture1;
-                  out vec4 FragColor;
-
-                  void main()
-                  {
-                      FragColor = vec4(
-                          texture(mg_texture0, vec2(0, 0)).r,
-                          texture(mg_texture1, vec2(0, 0)).g, 0, 1);
-                  }";
-        }
-
-        public static Texture2D CreateTexture(BlittableRGBA rgba)
-        {
-            Texture2DDescription description = new Texture2DDescription(1, 1, TextureFormat.RedGreenBlueAlpha8, false);
-            Texture2D texture = Device.CreateTexture2D(description);
-
-            BlittableRGBA[] pixels = new BlittableRGBA[] { rgba };
-
-            int sizeInBytes = pixels.Length * SizeInBytes<BlittableRGBA>.Value;
-            using (WritePixelBuffer writePixelBuffer = Device.CreateWritePixelBuffer(WritePixelBufferHint.StreamDraw, sizeInBytes))
-            {
-                writePixelBuffer.CopyFromSystemMemory(pixels);
-                texture.CopyFromBuffer(writePixelBuffer, ImageFormat.RedGreenBlueAlpha, ImageDataType.UnsignedByte);
-            }
-            texture.Filter = Texture2DFilter.NearestClampToEdge;
-
-            return texture;
-        }
-
-        private static VertexArray CreateVertexArray(Context context, int positionLocation)
-        {
-            Vector4S[] positions = new[] { new Vector4S(0, 0, 0, 1) };
-            VertexBuffer positionsBuffer = Device.CreateVertexBuffer(BufferHint.StaticDraw, positions.Length * SizeInBytes<Vector4S>.Value);
-            positionsBuffer.CopyFromSystemMemory(positions);
-
-            VertexArray va = context.CreateVertexArray();
-            va.VertexBuffers[positionLocation] =
-                new AttachedVertexBuffer(positionsBuffer, VertexAttributeComponentType.Float, 4);
-
-            return va;
-        }
-
         private static void ValidateDepth(Texture2D depthTexture, float depth)
         {
             using (ReadPixelBuffer readPixelBuffer = depthTexture.CopyToBuffer(ImageFormat.DepthComponent, ImageDataType.Float, 1))
@@ -485,51 +378,5 @@ namespace MiniGlobe.Renderer
                 OpenTK.Graphics.OpenGL.PixelType.UnsignedByte, ref readStencil);
             Assert.AreEqual(stencil, readStencil);
         }
-    }
-
-    internal class TextureFactory : Disposable
-    {
-        public TextureFactory(BlittableRGBA rgba)
-	    {
-            _rgba = rgba;
-    	}
-
-        public void Create()
-        {
-            //_window = new NativeWindow();
-            //_context = new GraphicsContext(new GraphicsMode(32, 24, 8), _window.WindowInfo, 3, 2, GraphicsContextFlags.ForwardCompatible | GraphicsContextFlags.Debug);
-
-            _window = Device.CreateWindow(1, 1);
-            _texture = SystemTests.CreateTexture(_rgba);
-
-            // TODO:  Don't call Flush directly.
-            OpenTK.Graphics.OpenGL.GL.Flush();
-        }
-
-        public Texture2D Texture 
-        {
-            get { return _texture; }
-        }
-
-        #region Disposable Members
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                _texture.Dispose();
-                _window.Dispose();
-            }
-            base.Dispose(disposing);
-        }
-
-        #endregion
-
-        //private NativeWindow _window;
-        //private GraphicsContext _context;
-
-        private MiniGlobeWindow _window;
-        private Texture2D _texture;
-        private BlittableRGBA _rgba;
     }
 }

@@ -80,5 +80,22 @@ namespace MiniGlobe.Renderer
                       FragColor = vec4(red, 0, 0, 1);
                   }";
         }
+
+        public static string MultitextureFragmentShader()
+        {
+            return
+                @"#version 150
+                 
+                  uniform sampler2D mg_texture0;
+                  uniform sampler2D mg_texture1;
+                  out vec4 FragColor;
+
+                  void main()
+                  {
+                      FragColor = vec4(
+                          texture(mg_texture0, vec2(0, 0)).r,
+                          texture(mg_texture1, vec2(0, 0)).g, 0, 1);
+                  }";
+        }
     }
 }

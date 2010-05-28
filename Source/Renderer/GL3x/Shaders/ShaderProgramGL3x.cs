@@ -449,7 +449,7 @@ namespace MiniGlobe.Renderer.GL3x
 
         #region ShaderProgram Members
 
-        public override string LinkLog
+        public override string Log
         {
             get { return ProgramInfoLog; }
         }

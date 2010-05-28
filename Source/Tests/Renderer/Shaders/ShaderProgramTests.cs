@@ -22,7 +22,7 @@ namespace MiniGlobe.Renderer
             MiniGlobeWindow window = Device.CreateWindow(1, 1);
 
             ShaderProgram sp = Device.CreateShaderProgram(ShaderSources.PassThroughVertexShader(), ShaderSources.PassThroughFragmentShader());
-            Assert.IsFalse(sp.LinkLog.Contains("warning"));
+            Assert.IsFalse(sp.Log.Contains("warning"));
             Assert.IsEmpty(sp.Uniforms);
             Assert.IsEmpty(sp.UniformBlocks);
 
@@ -48,7 +48,7 @@ namespace MiniGlobe.Renderer
                 ShaderSources.PassThroughGeometryShader(),
                 ShaderSources.PassThroughFragmentShader());
 
-            Assert.IsFalse(sp.LinkLog.Contains("warning"));
+            Assert.IsFalse(sp.Log.Contains("warning"));
             Assert.IsEmpty(sp.Uniforms);
             Assert.IsEmpty(sp.UniformBlocks);
 
@@ -144,7 +144,7 @@ namespace MiniGlobe.Renderer
                   }";
 
             ShaderProgram sp = Device.CreateShaderProgram(ShaderSources.PassThroughVertexShader(), fs);
-            Assert.IsFalse(sp.LinkLog.Contains("warning"));
+            Assert.IsFalse(sp.Log.Contains("warning"));
             Assert.IsEmpty(sp.UniformBlocks);
             Assert.AreEqual(24, sp.Uniforms.Count);
 
@@ -404,7 +404,7 @@ namespace MiniGlobe.Renderer
             ShaderProgram sp = Device.CreateShaderProgram(
                 ShaderSources.PassThroughVertexShader(),
                 ShaderSources.RedUniformBlockFragmentShader());
-            Assert.IsFalse(sp.LinkLog.Contains("warning"));
+            Assert.IsFalse(sp.Log.Contains("warning"));
             Assert.IsEmpty(sp.Uniforms);
             Assert.AreEqual(1, sp.UniformBlocks.Count);
 
