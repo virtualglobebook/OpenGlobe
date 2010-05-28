@@ -131,6 +131,16 @@
     <EmbeddedResource Include="Renderables\ViewportQuad\Shaders\ViewportQuadFS.glsl" />
     <EmbeddedResource Include="Renderables\ViewportQuad\Shaders\ViewportQuadVS.glsl" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Renderables\Polyline\Polyline\PolylineFS.glsl" />
+    <EmbeddedResource Include="Renderables\Polyline\Polyline\PolylineGS.glsl" />
+    <EmbeddedResource Include="Renderables\Polyline\Polyline\PolylineVS.glsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Renderables\Polyline\OutlinedPolylineGeometryShader\PolylineFS.glsl" />
+    <EmbeddedResource Include="Renderables\Polyline\OutlinedPolylineGeometryShader\PolylineGS.glsl" />
+    <EmbeddedResource Include="Renderables\Polyline\OutlinedPolylineGeometryShader\PolylineVS.glsl" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
