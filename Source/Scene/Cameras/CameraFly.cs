@@ -9,12 +9,10 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Diagnostics;
+using System.Drawing;
 using MiniGlobe.Core;
 using MiniGlobe.Renderer;
-using System.Drawing;
-using System.Diagnostics;
 using OpenTK;
 
 namespace MiniGlobe.Scene
