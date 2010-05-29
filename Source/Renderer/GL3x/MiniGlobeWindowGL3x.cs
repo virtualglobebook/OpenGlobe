@@ -60,6 +60,11 @@ namespace MiniGlobe.Renderer.GL3x
 
         #region MiniGlobeWindow Members
 
+        public override void MakeCurrent()
+        {
+            _gameWindw.MakeCurrent();
+        }
+
         public override void Run(double updateRate)
         {
             _gameWindw.Run(updateRate);

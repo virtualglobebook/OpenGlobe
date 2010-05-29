@@ -67,6 +67,7 @@ namespace MiniGlobe.Renderer
             }
         }
 
+        public abstract void MakeCurrent();
         public abstract void Run(double updateRate);
         public abstract Context Context { get; }
         public abstract int Width { get; }
