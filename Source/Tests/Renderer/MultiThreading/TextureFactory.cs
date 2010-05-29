@@ -8,8 +8,6 @@
 #endregion
 
 using MiniGlobe.Core;
-using OpenTK;
-using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
 
 namespace MiniGlobe.Renderer
@@ -21,13 +19,11 @@ namespace MiniGlobe.Renderer
             _rgba = rgba;
         }
 
-        public void Create()
+        public void Create(MiniGlobeWindow window)
         {
-            //_window = new NativeWindow();
-            //_context = new GraphicsContext(new GraphicsMode(32, 24, 8), _window.WindowInfo, 3, 2, GraphicsContextFlags.ForwardCompatible | GraphicsContextFlags.Debug);
-            //_context.MakeCurrent(_window.WindowInfo);
+            window.MakeCurrent();
+            _window = window;
 
-            //_window = Device.CreateWindow(1, 1);
             _texture = TestUtility.CreateTexture(_rgba);
 
             // TODO:  Don't call Flush directly.
@@ -46,18 +42,15 @@ namespace MiniGlobe.Renderer
             if (disposing)
             {
                 _texture.Dispose();
-                //_window.Dispose();
+                _window.Dispose();
             }
             base.Dispose(disposing);
         }
 
         #endregion
 
-        //private NativeWindow _window;
-        //private GraphicsContext _context;
-        //private MiniGlobeWindow _window;
-
-        private Texture2D _texture;
         private BlittableRGBA _rgba;
+        private Texture2D _texture;
+        private MiniGlobeWindow _window;
     }
 }

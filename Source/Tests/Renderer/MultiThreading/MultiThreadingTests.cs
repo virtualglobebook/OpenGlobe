@@ -19,6 +19,34 @@ namespace MiniGlobe.Renderer.MultiThreading
     public class MultiThreadingTests
     {
         /// <summary>
+        /// Creates the rendering context, then creates a texture on a
+        /// different thread.  The textures is then verified in the 
+        /// rendering context.
+        /// </summary>
+        [Test]
+        public void CreateTexture()
+        {
+            var threadWindow = Device.CreateWindow(1, 1);
+            var window = Device.CreateWindow(1, 1);
+            ///////////////////////////////////////////////////////////////////
+
+            TextureFactory factory = new TextureFactory(new BlittableRGBA(Color.FromArgb(0, 1, 2, 3)));
+
+            Thread t = new Thread(delegate()
+            {
+                factory.Create(threadWindow);
+            });
+            t.Start();
+            t.Join();
+            ///////////////////////////////////////////////////////////////////
+
+            TestUtility.ValidateColor(factory.Texture, 1, 2, 3);
+
+            factory.Dispose();
+            window.Dispose();
+        }
+
+        /// <summary>
         /// Creates the rendering context, then creates two textures on two 
         /// different threads ran one after the other.  The textures are 
         /// used to render one point.
@@ -35,22 +63,18 @@ namespace MiniGlobe.Renderer.MultiThreading
             TextureFactory factory1 = new TextureFactory(new BlittableRGBA(Color.FromArgb(0, 0, 255, 0)));
 
             Thread t0 = new Thread(delegate()
-                {
-                    thread0Window.MakeCurrent(); 
-                    factory0.Create();
-                });
+            {
+                factory0.Create(thread0Window);
+            });
             t0.Start();
             t0.Join();
-            //factory0.Create();
 
             Thread t1 = new Thread(delegate()
-                {
-                    thread1Window.MakeCurrent(); 
-                    factory1.Create();
-                });
+            {
+                factory1.Create(thread1Window);
+            });
             t1.Start();
             t1.Join();
-            //factory1.Create();
 
             ///////////////////////////////////////////////////////////////////
 
@@ -75,8 +99,6 @@ namespace MiniGlobe.Renderer.MultiThreading
             frameBuffer.Dispose();
             factory1.Dispose();
             factory0.Dispose();
-            thread1Window.Dispose();
-            thread0Window.Dispose();
             window.Dispose();
         }
 
@@ -97,22 +119,18 @@ namespace MiniGlobe.Renderer.MultiThreading
             TextureFactory factory1 = new TextureFactory(new BlittableRGBA(Color.FromArgb(0, 0, 255, 0)));
 
             Thread t0 = new Thread(delegate()
-                {
-                    thread0Window.MakeCurrent(); 
-                    factory0.Create();
-                });
+            {
+                factory0.Create(thread0Window);
+            });
 
             Thread t1 = new Thread(delegate()
-                {
-                    thread1Window.MakeCurrent();
-                    factory1.Create();
-                });
+            {
+                factory1.Create(thread1Window);
+            });
 
             t0.Start();
             t1.Start();
 
-            //factory0.Create();
-            //factory1.Create();
             t0.Join();
             t1.Join();
 
@@ -139,8 +157,6 @@ namespace MiniGlobe.Renderer.MultiThreading
             frameBuffer.Dispose();
             factory1.Dispose();
             factory0.Dispose();
-            thread1Window.Dispose();
-            thread0Window.Dispose();
             window.Dispose();
         }
     }
