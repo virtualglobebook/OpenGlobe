@@ -12,7 +12,7 @@ using System.Drawing;
 using NUnit.Framework;
 using MiniGlobe.Core.Geometry;
 
-namespace MiniGlobe.Renderer
+namespace MiniGlobe.Renderer.MultiThreading
 {
     [Explicit]
     [TestFixture]
@@ -141,48 +141,6 @@ namespace MiniGlobe.Renderer
             factory0.Dispose();
             thread1Window.Dispose();
             thread0Window.Dispose();
-            window.Dispose();
-        }
-
-        /// <summary>
-        /// Creates the rendering context, then creates a shader program on a
-        /// different thread.  The shader program is used to render one point.
-        /// </summary>
-        [Test]
-        public void CreateShaderProgram()
-        {
-            var threadWindow = Device.CreateWindow(1, 1);
-            var window = Device.CreateWindow(1, 1);
-            ///////////////////////////////////////////////////////////////////
-
-            ShaderProgramFactory factory = new ShaderProgramFactory(ShaderSources.PassThroughVertexShader(), ShaderSources.PassThroughFragmentShader());
-
-            Thread t1 = new Thread(delegate()
-                {
-                    threadWindow.MakeCurrent(); 
-                    factory.Create();
-                });
-            t1.Start();
-            t1.Join();
-            //factory.Create();
-
-            ///////////////////////////////////////////////////////////////////
-
-            FrameBuffer frameBuffer = TestUtility.CreateFrameBuffer(window.Context);
-
-            VertexArray va = TestUtility.CreateVertexArray(window.Context, factory.ShaderProgram.VertexAttributes["position"].Location);
-
-            window.Context.Bind(frameBuffer);
-            window.Context.Bind(factory.ShaderProgram);
-            window.Context.Bind(va);
-            window.Context.Draw(PrimitiveType.Points, 0, 1);
-
-            TestUtility.ValidateColor(frameBuffer.ColorAttachments[0], 255, 0, 0);
-
-            va.Dispose();
-            factory.Dispose();
-            frameBuffer.Dispose();
-            threadWindow.Dispose();
             window.Dispose();
         }
     }

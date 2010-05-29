@@ -8,8 +8,6 @@
 #endregion
 
 using MiniGlobe.Core;
-using OpenTK;
-using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
 
 namespace MiniGlobe.Renderer
@@ -22,12 +20,10 @@ namespace MiniGlobe.Renderer
             _fs = fragmentShader;
         }
 
-        public void Create()
+        public void Create(MiniGlobeWindow window)
         {
-            //_window = new NativeWindow();
-            //_context = new GraphicsContext(new GraphicsMode(32, 24, 8), _window.WindowInfo, 3, 2, GraphicsContextFlags.ForwardCompatible | GraphicsContextFlags.Debug);
-            //_context.MakeCurrent(_window.WindowInfo);
-            //_window = Device.CreateWindow(1, 1);
+            window.MakeCurrent();
+            _window = window;
 
             _sp = Device.CreateShaderProgram(_vs, _fs);
 
@@ -47,19 +43,16 @@ namespace MiniGlobe.Renderer
             if (disposing)
             {
                 _sp.Dispose();
-                //_window.Dispose();
+                _window.Dispose();
             }
             base.Dispose(disposing);
         }
 
         #endregion
 
-        //private NativeWindow _window;
-        //private GraphicsContext _context;
-        //private MiniGlobeWindow _window;
-
         private string _vs;
         private string _fs;
         private ShaderProgram _sp;
+        private MiniGlobeWindow _window;
     }
 }
