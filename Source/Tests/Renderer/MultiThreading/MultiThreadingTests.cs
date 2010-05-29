@@ -24,7 +24,6 @@ namespace MiniGlobe.Renderer
         /// used to render one point.
         /// </summary>
         [Test]
-        [Explicit]
         public void CreateTexturesSequential()
         {
             MiniGlobeWindow window = Device.CreateWindow(1, 1);
