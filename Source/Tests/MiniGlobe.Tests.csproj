@@ -67,7 +67,7 @@
     <Compile Include="IntervalTests.cs" />
     <Compile Include="MiniGlobeAssert.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Renderer\MultiThreading\MultiThreadingTests.cs" />
+    <Compile Include="Renderer\MultiThreading\TextureMultiThreadingTests.cs" />
     <Compile Include="Renderer\MultiThreading\ShaderProgramFactory.cs" />
     <Compile Include="Renderer\MultiThreading\ShaderProgramMultiThreadingTests.cs" />
     <Compile Include="Renderer\MultiThreading\TextureFactory.cs" />

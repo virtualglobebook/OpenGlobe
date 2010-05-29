@@ -16,7 +16,7 @@ namespace MiniGlobe.Renderer.MultiThreading
 {
     [Explicit]
     [TestFixture]
-    public class MultiThreadingTests
+    public class TextureMultiThreadingTests
     {
         /// <summary>
         /// Creates the rendering context, then creates a texture on a
