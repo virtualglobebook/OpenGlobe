@@ -72,9 +72,9 @@ namespace MiniGlobe
             using (ReadPixelBuffer readPixelBuffer = colorTexture.CopyToBuffer(ImageFormat.RedGreenBlue, ImageDataType.UnsignedByte, 1))
             {
                 byte[] color = readPixelBuffer.CopyToSystemMemory<byte>();
-                Assert.AreEqual(red, color[0]);
-                Assert.AreEqual(green, color[1]);
-                Assert.AreEqual(blue, color[2]);
+                Assert.AreEqual(red, color[0], "Red does not match");
+                Assert.AreEqual(green, color[1], "Green does not match");
+                Assert.AreEqual(blue, color[2], "Blue does not match");
             }
         }
     }

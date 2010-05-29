@@ -15,7 +15,6 @@ using MiniGlobe.Core.Geometry;
 namespace MiniGlobe.Renderer
 {
     [TestFixture]
-    [Explicit]
     public class MultiThreadingTests
     {
         /// <summary>
@@ -29,15 +28,29 @@ namespace MiniGlobe.Renderer
             MiniGlobeWindow window = Device.CreateWindow(1, 1);
             ///////////////////////////////////////////////////////////////////
 
+            var thread0Window = new OpenTK.NativeWindow();
+            var thread0Context = new OpenTK.Graphics.GraphicsContext(new OpenTK.Graphics.GraphicsMode(32, 24, 8), thread0Window.WindowInfo, 3, 2, OpenTK.Graphics.GraphicsContextFlags.ForwardCompatible | OpenTK.Graphics.GraphicsContextFlags.Debug);
+
+            var thread1Window = new OpenTK.NativeWindow();
+            var thread1Context = new OpenTK.Graphics.GraphicsContext(new OpenTK.Graphics.GraphicsMode(32, 24, 8), thread1Window.WindowInfo, 3, 2, OpenTK.Graphics.GraphicsContextFlags.ForwardCompatible | OpenTK.Graphics.GraphicsContextFlags.Debug);
+
             TextureFactory factory0 = new TextureFactory(new BlittableRGBA(Color.FromArgb(0, 255, 0, 0)));
             TextureFactory factory1 = new TextureFactory(new BlittableRGBA(Color.FromArgb(0, 0, 255, 0)));
 
-            Thread t0 = new Thread(factory0.Create);
+            Thread t0 = new Thread(delegate()
+                {
+                    thread0Context.MakeCurrent(thread0Window.WindowInfo); 
+                    factory0.Create();
+                });
             t0.Start();
             t0.Join();
             //factory0.Create();
 
-            Thread t1 = new Thread(factory1.Create);
+            Thread t1 = new Thread(delegate()
+                {
+                    thread1Context.MakeCurrent(thread1Window.WindowInfo); 
+                    factory1.Create();
+                });
             t1.Start();
             t1.Join();
             //factory1.Create();
@@ -63,9 +76,13 @@ namespace MiniGlobe.Renderer
             va.Dispose();
             sp.Dispose();
             frameBuffer.Dispose();
-            window.Dispose();
             factory1.Dispose();
             factory0.Dispose();
+            thread1Context.Dispose();
+            thread1Window.Dispose();
+            thread0Context.Dispose();
+            thread0Window.Dispose();
+            window.Dispose();
         }
 
         /// <summary>
@@ -79,13 +96,28 @@ namespace MiniGlobe.Renderer
             MiniGlobeWindow window = Device.CreateWindow(1, 1);
             ///////////////////////////////////////////////////////////////////
 
+            var thread0Window = new OpenTK.NativeWindow();
+            var thread0Context = new OpenTK.Graphics.GraphicsContext(new OpenTK.Graphics.GraphicsMode(32, 24, 8), thread0Window.WindowInfo, 3, 2, OpenTK.Graphics.GraphicsContextFlags.ForwardCompatible | OpenTK.Graphics.GraphicsContextFlags.Debug);
+
+            var thread1Window = new OpenTK.NativeWindow();
+            var thread1Context = new OpenTK.Graphics.GraphicsContext(new OpenTK.Graphics.GraphicsMode(32, 24, 8), thread1Window.WindowInfo, 3, 2, OpenTK.Graphics.GraphicsContextFlags.ForwardCompatible | OpenTK.Graphics.GraphicsContextFlags.Debug);
+
             TextureFactory factory0 = new TextureFactory(new BlittableRGBA(Color.FromArgb(0, 255, 0, 0)));
             TextureFactory factory1 = new TextureFactory(new BlittableRGBA(Color.FromArgb(0, 0, 255, 0)));
 
-            Thread t0 = new Thread(factory0.Create);
-            t0.Start();
+            Thread t0 = new Thread(delegate()
+                {
+                    thread0Context.MakeCurrent(thread0Window.WindowInfo); 
+                    factory0.Create();
+                });
 
-            Thread t1 = new Thread(factory1.Create);
+            Thread t1 = new Thread(delegate()
+                {
+                    thread1Context.MakeCurrent(thread1Window.WindowInfo);
+                    factory1.Create();
+                });
+
+            t0.Start();
             t1.Start();
 
             //factory0.Create();
@@ -114,9 +146,13 @@ namespace MiniGlobe.Renderer
             va.Dispose();
             sp.Dispose();
             frameBuffer.Dispose();
-            window.Dispose();
             factory1.Dispose();
             factory0.Dispose();
+            thread1Context.Dispose();
+            thread1Window.Dispose();
+            thread0Context.Dispose();
+            thread0Window.Dispose();
+            window.Dispose();
         }
 
         /// <summary>
@@ -129,9 +165,16 @@ namespace MiniGlobe.Renderer
             MiniGlobeWindow window = Device.CreateWindow(1, 1);
             ///////////////////////////////////////////////////////////////////
 
+            var threadWindow = new OpenTK.NativeWindow();
+            var threadContext = new OpenTK.Graphics.GraphicsContext(new OpenTK.Graphics.GraphicsMode(32, 24, 8), threadWindow.WindowInfo, 3, 2, OpenTK.Graphics.GraphicsContextFlags.ForwardCompatible | OpenTK.Graphics.GraphicsContextFlags.Debug);
+
             ShaderProgramFactory factory = new ShaderProgramFactory(ShaderSources.PassThroughVertexShader(), ShaderSources.PassThroughFragmentShader());
 
-            Thread t1 = new Thread(factory.Create);
+            Thread t1 = new Thread(delegate()
+                {
+                    threadContext.MakeCurrent(threadWindow.WindowInfo); 
+                    factory.Create();
+                });
             t1.Start();
             t1.Join();
             //factory.Create();
@@ -152,6 +195,8 @@ namespace MiniGlobe.Renderer
             va.Dispose();
             factory.Dispose();
             frameBuffer.Dispose();
+            threadContext.Dispose();
+            threadWindow.Dispose();
             window.Dispose();
         }
     }

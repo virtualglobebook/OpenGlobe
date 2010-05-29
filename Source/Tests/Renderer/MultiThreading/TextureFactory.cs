@@ -23,9 +23,9 @@ namespace MiniGlobe.Renderer
 
         public void Create()
         {
-            _window = new NativeWindow();
-            _context = new GraphicsContext(new GraphicsMode(32, 24, 8), _window.WindowInfo, 3, 2, GraphicsContextFlags.ForwardCompatible | GraphicsContextFlags.Debug);
-            _context.MakeCurrent(_window.WindowInfo);
+            //_window = new NativeWindow();
+            //_context = new GraphicsContext(new GraphicsMode(32, 24, 8), _window.WindowInfo, 3, 2, GraphicsContextFlags.ForwardCompatible | GraphicsContextFlags.Debug);
+            //_context.MakeCurrent(_window.WindowInfo);
 
             //_window = Device.CreateWindow(1, 1);
             _texture = TestUtility.CreateTexture(_rgba);
@@ -46,15 +46,15 @@ namespace MiniGlobe.Renderer
             if (disposing)
             {
                 _texture.Dispose();
-                _window.Dispose();
+                //_window.Dispose();
             }
             base.Dispose(disposing);
         }
 
         #endregion
 
-        private NativeWindow _window;
-        private GraphicsContext _context;
+        //private NativeWindow _window;
+        //private GraphicsContext _context;
         //private MiniGlobeWindow _window;
 
         private Texture2D _texture;
