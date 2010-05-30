@@ -14,16 +14,16 @@ namespace MiniGlobe.Renderer
 {
     internal class ShaderProgramFactory : Disposable
     {
-        public ShaderProgramFactory(string vertexShader, string fragmentShader)
+        public ShaderProgramFactory(MiniGlobeWindow window, string vertexShader, string fragmentShader)
         {
+            _window = window;
             _vs = vertexShader;
             _fs = fragmentShader;
         }
 
-        public void Create(MiniGlobeWindow window)
+        public void Create()
         {
-            window.MakeCurrent();
-            _window = window;
+            _window.MakeCurrent();
 
             _sp = Device.CreateShaderProgram(_vs, _fs);
 
@@ -50,9 +50,9 @@ namespace MiniGlobe.Renderer
 
         #endregion
 
-        private string _vs;
-        private string _fs;
+        private readonly MiniGlobeWindow _window;
+        private readonly string _vs;
+        private readonly string _fs;
         private ShaderProgram _sp;
-        private MiniGlobeWindow _window;
     }
 }

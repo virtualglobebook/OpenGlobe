@@ -30,12 +30,9 @@ namespace MiniGlobe.Renderer.MultiThreading
             var window = Device.CreateWindow(1, 1);
             ///////////////////////////////////////////////////////////////////
 
-            TextureFactory factory = new TextureFactory(new BlittableRGBA(Color.FromArgb(0, 1, 2, 3)));
+            TextureFactory factory = new TextureFactory(threadWindow, new BlittableRGBA(Color.FromArgb(0, 1, 2, 3)));
 
-            Thread t = new Thread(delegate()
-            {
-                factory.Create(threadWindow);
-            });
+            Thread t = new Thread(factory.Create);
             t.Start();
             t.Join();
             ///////////////////////////////////////////////////////////////////
@@ -59,20 +56,14 @@ namespace MiniGlobe.Renderer.MultiThreading
             var window = Device.CreateWindow(1, 1);
             ///////////////////////////////////////////////////////////////////
 
-            TextureFactory factory0 = new TextureFactory(new BlittableRGBA(Color.FromArgb(0, 127, 0, 0)));
-            TextureFactory factory1 = new TextureFactory(new BlittableRGBA(Color.FromArgb(0, 0, 255, 0)));
+            TextureFactory factory0 = new TextureFactory(thread0Window, new BlittableRGBA(Color.FromArgb(0, 127, 0, 0)));
+            TextureFactory factory1 = new TextureFactory(thread1Window, new BlittableRGBA(Color.FromArgb(0, 0, 255, 0)));
 
-            Thread t0 = new Thread(delegate()
-            {
-                factory0.Create(thread0Window);
-            });
+            Thread t0 = new Thread(factory0.Create);
             t0.Start();
             t0.Join();
 
-            Thread t1 = new Thread(delegate()
-            {
-                factory1.Create(thread1Window);
-            });
+            Thread t1 = new Thread(factory1.Create);
             t1.Start();
             t1.Join();
 
@@ -115,19 +106,12 @@ namespace MiniGlobe.Renderer.MultiThreading
             var window = Device.CreateWindow(1, 1);
             ///////////////////////////////////////////////////////////////////
 
-            TextureFactory factory0 = new TextureFactory(new BlittableRGBA(Color.FromArgb(0, 255, 0, 0)));
-            TextureFactory factory1 = new TextureFactory(new BlittableRGBA(Color.FromArgb(0, 0, 255, 0)));
+            TextureFactory factory0 = new TextureFactory(thread0Window, new BlittableRGBA(Color.FromArgb(0, 255, 0, 0)));
+            TextureFactory factory1 = new TextureFactory(thread1Window, new BlittableRGBA(Color.FromArgb(0, 0, 255, 0)));
 
-            Thread t0 = new Thread(delegate()
-            {
-                factory0.Create(thread0Window);
-            });
-
-            Thread t1 = new Thread(delegate()
-            {
-                factory1.Create(thread1Window);
-            });
-
+            Thread t0 = new Thread(factory0.Create);
+            Thread t1 = new Thread(factory1.Create);
+            
             t0.Start();
             t1.Start();
 

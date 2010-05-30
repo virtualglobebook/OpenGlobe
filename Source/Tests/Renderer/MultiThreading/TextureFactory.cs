@@ -14,15 +14,15 @@ namespace MiniGlobe.Renderer
 {
     internal class TextureFactory : Disposable
     {
-        public TextureFactory(BlittableRGBA rgba)
+        public TextureFactory(MiniGlobeWindow window, BlittableRGBA rgba)
         {
+            _window = window;
             _rgba = rgba;
         }
 
-        public void Create(MiniGlobeWindow window)
+        public void Create()
         {
-            window.MakeCurrent();
-            _window = window;
+            _window.MakeCurrent();
 
             _texture = TestUtility.CreateTexture(_rgba);
 
@@ -49,8 +49,8 @@ namespace MiniGlobe.Renderer
 
         #endregion
 
-        private BlittableRGBA _rgba;
+        private readonly MiniGlobeWindow _window;
+        private readonly BlittableRGBA _rgba;
         private Texture2D _texture;
-        private MiniGlobeWindow _window;
     }
 }

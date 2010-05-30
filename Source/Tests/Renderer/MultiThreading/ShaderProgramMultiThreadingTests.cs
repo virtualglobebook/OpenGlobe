@@ -29,12 +29,9 @@ namespace MiniGlobe.Renderer.MultiThreading
             var window = Device.CreateWindow(1, 1);
             ///////////////////////////////////////////////////////////////////
 
-            ShaderProgramFactory factory = new ShaderProgramFactory(ShaderSources.PassThroughVertexShader(), ShaderSources.PassThroughFragmentShader());
+            ShaderProgramFactory factory = new ShaderProgramFactory(threadWindow, ShaderSources.PassThroughVertexShader(), ShaderSources.PassThroughFragmentShader());
 
-            Thread t = new Thread(delegate()
-            {
-                factory.Create(threadWindow);
-            });
+            Thread t = new Thread(factory.Create);
             t.Start();
             t.Join();
 
@@ -70,19 +67,13 @@ namespace MiniGlobe.Renderer.MultiThreading
             var window = Device.CreateWindow(1, 1);
             ///////////////////////////////////////////////////////////////////
 
-            ShaderProgramFactory factory0 = new ShaderProgramFactory(ShaderSources.PassThroughVertexShader(), ShaderSources.PassThroughFragmentShader());
-            Thread t0 = new Thread(delegate()
-            {
-                factory0.Create(thread0Window);
-            });
+            ShaderProgramFactory factory0 = new ShaderProgramFactory(thread0Window, ShaderSources.PassThroughVertexShader(), ShaderSources.PassThroughFragmentShader());
+            Thread t0 = new Thread(factory0.Create);
             t0.Start();
             t0.Join();
 
-            ShaderProgramFactory factory1 = new ShaderProgramFactory(ShaderSources.PassThroughVertexShader(), ShaderSources.PassThroughFragmentShader());
-            Thread t1 = new Thread(delegate()
-            {
-                factory1.Create(thread1Window);
-            });
+            ShaderProgramFactory factory1 = new ShaderProgramFactory(thread1Window, ShaderSources.PassThroughVertexShader(), ShaderSources.PassThroughFragmentShader());
+            Thread t1 = new Thread(factory1.Create);
             t1.Start();
             t1.Join();
 
@@ -123,18 +114,12 @@ namespace MiniGlobe.Renderer.MultiThreading
             var window = Device.CreateWindow(1, 1);
             ///////////////////////////////////////////////////////////////////
 
-            ShaderProgramFactory factory0 = new ShaderProgramFactory(ShaderSources.PassThroughVertexShader(), ShaderSources.PassThroughFragmentShader());
-            Thread t0 = new Thread(delegate()
-            {
-                factory0.Create(thread0Window);
-            });
+            ShaderProgramFactory factory0 = new ShaderProgramFactory(thread0Window, ShaderSources.PassThroughVertexShader(), ShaderSources.PassThroughFragmentShader());
+            Thread t0 = new Thread(factory0.Create);
             t0.Start();
 
-            ShaderProgramFactory factory1 = new ShaderProgramFactory(ShaderSources.PassThroughVertexShader(), ShaderSources.PassThroughFragmentShader());
-            Thread t1 = new Thread(delegate()
-            {
-                factory1.Create(thread1Window);
-            });
+            ShaderProgramFactory factory1 = new ShaderProgramFactory(thread1Window, ShaderSources.PassThroughVertexShader(), ShaderSources.PassThroughFragmentShader());
+            Thread t1 = new Thread(factory1.Create);
             t1.Start();
 
             t0.Join();
