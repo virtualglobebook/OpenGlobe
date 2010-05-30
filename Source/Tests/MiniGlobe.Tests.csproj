@@ -71,6 +71,8 @@
     <Compile Include="Renderer\MultiThreading\ShaderProgramFactory.cs" />
     <Compile Include="Renderer\MultiThreading\ShaderProgramMultiThreadingTests.cs" />
     <Compile Include="Renderer\MultiThreading\TextureFactory.cs" />
+    <Compile Include="Renderer\MultiThreading\VertexBufferFactory.cs" />
+    <Compile Include="Renderer\MultiThreading\VertexBufferMultiThreadingTests.cs" />
     <Compile Include="Renderer\Scene\CameraTest.cs" />
     <Compile Include="Renderer\VertexArray\VertexArrayTests.cs" />
     <Compile Include="Renderer\Buffers\BufferObjectTests.cs" />
