@@ -97,6 +97,9 @@ namespace MiniGlobe.Examples.Chapter8
                 }";
             _passThruSP = Device.CreateShaderProgram(vs, fs);
 
+            //
+            // Line on terrain
+            //
             vs =
                 @"#version 150
 
@@ -108,54 +111,6 @@ namespace MiniGlobe.Examples.Chapter8
                 {
                     gl_Position = mg_modelViewPerspectiveProjectionMatrix * vec4(position, 1.0);
                 }";
-#if false
-            fs =
-                @"#version 150
-                
-                uniform sampler2D mg_texture0;
-                uniform vec2 mg_inverseViewportDimensions;
- 
-                out vec3 fragmentColor;
-
-                void main()
-                {
-                    vec2 of = mg_inverseViewportDimensions * gl_FragCoord.xy;
-                    float center = textureOffset(mg_texture0, of, ivec2(0, 0)).r;
-                    if (gl_FragCoord.z < center)
-                    {
-                        //
-                        // Fragment is above the terrain
-                        //
-                        float upperLeft = textureOffset(mg_texture0, of, ivec2(-1.0, 1.0)).r;
-                        float upperCenter = textureOffset(mg_texture0, of, ivec2(0.0, 1.0)).r;
-                        float upperRight = textureOffset(mg_texture0, of, ivec2(1.0, 1.0)).r;
-                        float left = textureOffset(mg_texture0, of, ivec2(-1.0, 0.0)).r;
-                        float right = textureOffset(mg_texture0, of, ivec2(1.0, 0.0)).r;
-                        float lowerLeft = textureOffset(mg_texture0, of, ivec2(-1.0, -1.0)).r;
-                        float lowerCenter = textureOffset(mg_texture0, of, ivec2(0.0, -1.0)).r;
-                        float lowerRight = textureOffset(mg_texture0, of, ivec2(1.0, -1.0)).r;
-                        if ((step(upperLeft, gl_FragCoord.z) > 0.0) ||
-                            (step(upperCenter, gl_FragCoord.z) > 0.0) ||
-                            (step(upperRight, gl_FragCoord.z) > 0.0) ||
-                            (step(left, gl_FragCoord.z) > 0.0) ||
-                            (step(right, gl_FragCoord.z) > 0.0) ||
-                            (step(lowerLeft, gl_FragCoord.z) > 0.0) ||
-                            (step(lowerCenter, gl_FragCoord.z) > 0.0) ||
-                            (step(lowerRight, gl_FragCoord.z) > 0.0))
-                        {
-                            fragmentColor = vec3(1.0, 1.0, 0.0);
-                        }
-                        else
-                        {
-                            discard;
-                        }
-                    }
-                    else
-                    {
-                        discard;
-                    }
-                }";
-#else
             fs =
                 @"#version 150
                 
@@ -215,7 +170,81 @@ namespace MiniGlobe.Examples.Chapter8
                         discard;
                     }
                 }";
-#endif
+            _lotSP = Device.CreateShaderProgram(vs, fs);
+
+            //
+            // Wireframe lines on terrain
+            //
+            vs =
+               @"#version 150
+
+                uniform mat4 mg_modelViewPerspectiveProjectionMatrix;
+
+                in vec3 position;
+
+                void main()
+                {
+                    gl_Position = mg_modelViewPerspectiveProjectionMatrix * vec4(position, 1.0);
+                }";
+            fs =
+                @"#version 150
+                
+                uniform sampler2D mg_texture0;
+                uniform vec2 mg_inverseViewportDimensions;
+ 
+                out vec3 fragmentColor;
+
+                void main()
+                {
+                    float invDepth = 1.0 / gl_FragCoord.z;
+                    vec2 dInvDepth = vec2(dFdx(invDepth), dFdy(invDepth));
+
+                    vec2 of = mg_inverseViewportDimensions * gl_FragCoord.xy;
+                    float center = texture(mg_texture0, of).r;
+                    if (gl_FragCoord.z < center)
+                    {
+                        //
+                        // Fragment is above the terrain
+                        //
+                        float upperLeft = textureOffset(mg_texture0, of, ivec2(-1.0, 1.0)).r;
+                        float upperCenter = textureOffset(mg_texture0, of, ivec2(0.0, 1.0)).r;
+                        float upperRight = textureOffset(mg_texture0, of, ivec2(1.0, 1.0)).r;
+                        float left = textureOffset(mg_texture0, of, ivec2(-1.0, 0.0)).r;
+                        float right = textureOffset(mg_texture0, of, ivec2(1.0, 0.0)).r;
+                        float lowerLeft = textureOffset(mg_texture0, of, ivec2(-1.0, -1.0)).r;
+                        float lowerCenter = textureOffset(mg_texture0, of, ivec2(0.0, -1.0)).r;
+                        float lowerRight = textureOffset(mg_texture0, of, ivec2(1.0, -1.0)).r;
+
+                        float upperLeftM = 1.0 / (invDepth - dInvDepth.x + dInvDepth.y);
+                        float upperCenterM = 1.0 / (invDepth + dInvDepth.y);
+                        float upperRightM = 1.0 / (invDepth + dInvDepth.x + dInvDepth.y);
+                        float leftM = 1.0 / (invDepth - dInvDepth.x);
+                        float rightM = 1.0 / (invDepth + dInvDepth.x);
+                        float lowerLeftM = 1.0 / (invDepth - dInvDepth.x - dInvDepth.y);
+                        float lowerCenterM = 1.0 / (invDepth - dInvDepth.y);
+                        float lowerRightM = 1.0 / (invDepth + dInvDepth.x - dInvDepth.y);
+
+                        if ((step(upperLeft, upperLeftM) > 0.0) ||
+                            (step(upperCenter, upperCenterM) > 0.0) ||
+                            (step(upperRight, upperRightM) > 0.0) ||
+                            (step(left, leftM) > 0.0) ||
+                            (step(right, rightM) > 0.0) ||
+                            (step(lowerLeft, lowerLeftM) > 0.0) ||
+                            (step(lowerCenter, lowerCenterM) > 0.0) ||
+                            (step(lowerRight, lowerRightM) > 0.0))
+                        {
+                            fragmentColor = vec3(1.0, 1.0, 0.0);
+                        }
+                        else
+                        {
+                            discard;
+                        }
+                    }
+                    else
+                    {
+                        discard;
+                    }
+                }";
             _lotSP = Device.CreateShaderProgram(vs, fs);
 
             //
@@ -267,7 +296,7 @@ namespace MiniGlobe.Examples.Chapter8
             // Depth 
             //
             _window.Context.Bind(_fbo);
-            _tile.Render(_window.Context, _sceneState);
+            _window.Context.Bind(new RenderState());
             _window.Context.Clear(ClearBuffers.ColorAndDepthBuffer, Color.White, 1, 0);
             _tile.Render(_window.Context, _sceneState);
             _window.Context.Bind(null as FrameBuffer);
