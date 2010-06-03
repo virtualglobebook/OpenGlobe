@@ -39,16 +39,24 @@ namespace MiniGlobe.Terrain
             }
 
             return new TerrainTile(
+                new RectangleD(new Vector2D(0.5, 0.5), new Vector2D((double)bitmap.Width - 0.5, (double)bitmap.Height - 0.5)),
                 new Vector2I(bitmap.Width, bitmap.Height),
                 heights, minHeight, maxHeight);
         }
 
         public TerrainTile(
+            RectangleD extent,
             Vector2I size,
             float[] heights,
             float minimumHeight,
             float maximumHeight)
         {
+            if (extent.UpperRight.X <= extent.LowerLeft.X ||
+                extent.UpperRight.Y <= extent.LowerLeft.Y)
+            {
+                throw new ArgumentOutOfRangeException("extent");
+            }
+
             if (size.X < 0 || size.Y < 0)
             {
                 throw new ArgumentOutOfRangeException("size");
@@ -69,10 +77,16 @@ namespace MiniGlobe.Terrain
                 throw new ArgumentOutOfRangeException("minimumHeight", "minimumHeight > maximumHeight");
             }
 
+            _extent = extent;
             _size = size;
             _heights = heights;
             _minimumHeight = minimumHeight;
             _maximumHeight = maximumHeight;
+        }
+
+        public RectangleD Extent
+        {
+            get { return _extent; }
         }
 
         public Vector2I Size
@@ -95,6 +109,7 @@ namespace MiniGlobe.Terrain
             get { return _maximumHeight; }
         }
 
+        private readonly RectangleD _extent;
         private readonly Vector2I _size;
         private readonly float[] _heights;
         private readonly float _minimumHeight;

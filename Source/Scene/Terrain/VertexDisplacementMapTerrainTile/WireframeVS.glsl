@@ -6,7 +6,7 @@
 // See License.txt or http://www.boost.org/LICENSE_1_0.txt.
 //
 
-in vec4 position;
+in vec2 position;
 out vec2 windowPosition;
 out float distanceToEyeGS;
 
@@ -25,8 +25,7 @@ vec4 ClipToWindowCoordinates(vec4 v, mat4 viewportTransformationMatrix)
 
 void main()                     
 {
-    vec4 displacedPosition = vec4(position.xy, 
-        texture(mg_texture0, position.xy).r * u_heightExaggeration, 1.0);
+    vec4 displacedPosition = vec4(position, texture(mg_texture0, position).r * u_heightExaggeration, 1.0);
 
     gl_Position = mg_modelViewPerspectiveProjectionMatrix * displacedPosition;
     windowPosition = ClipToWindowCoordinates(gl_Position, mg_viewportTransformationMatrix).xy;

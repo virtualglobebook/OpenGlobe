@@ -119,7 +119,7 @@ vec3 ComputeNormalSobelFilter(
 
 void main()
 {
-    vec3 displacedPosition = vec3(position.xy, texture(mg_texture0, position.xy).r * u_heightExaggeration);
+    vec3 displacedPosition = vec3(position, texture(mg_texture0, position).r * u_heightExaggeration);
 
     gl_Position = mg_modelViewPerspectiveProjectionMatrix * vec4(displacedPosition, 1.0);
 

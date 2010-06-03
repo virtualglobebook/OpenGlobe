@@ -36,19 +36,17 @@ namespace MiniGlobe.Terrain
 
             ///////////////////////////////////////////////////////////////////
 
-            RectangleD rectangle = new RectangleD(new Vector2D(0.5, 0.5), new Vector2D((double)tile.Size.X - 0.5, (double)tile.Size.Y - 0.5));
-            int numberOfPartitionsX = tile.Size.X - 1;
-            int numberOfPartitionsY = tile.Size.Y - 1;
-
             Mesh mesh = new Mesh();
             mesh.PrimitiveType = PrimitiveType.Triangles;
             mesh.FrontFaceWindingOrder = WindingOrder.Counterclockwise;
 
-            int numberOfPositions = (numberOfPartitionsX + 1) * (numberOfPartitionsY + 1);
+            int numberOfPositions = tile.Size.X * tile.Size.Y;
             VertexAttributeDoubleVector3 positionsAttribute = new VertexAttributeDoubleVector3("position", numberOfPositions);
             IList<Vector3D> positions = positionsAttribute.Values;
             mesh.Attributes.Add(positionsAttribute);
 
+            int numberOfPartitionsX = tile.Size.X - 1;
+            int numberOfPartitionsY = tile.Size.Y - 1;
             int numberOfIndices = (numberOfPartitionsX * numberOfPartitionsY) * 6;
             IndicesInt32 indices = new IndicesInt32(numberOfIndices);
             mesh.Indices = indices;
@@ -56,8 +54,8 @@ namespace MiniGlobe.Terrain
             //
             // Positions
             //
-            Vector2D lowerLeft = rectangle.LowerLeft;
-            Vector2D toUpperRight = rectangle.UpperRight - lowerLeft;
+            Vector2D lowerLeft = tile.Extent.LowerLeft;
+            Vector2D toUpperRight = tile.Extent.UpperRight - lowerLeft;
 
             int heightIndex = 0;
             for (int y = 0; y <= numberOfPartitionsY; ++y)
