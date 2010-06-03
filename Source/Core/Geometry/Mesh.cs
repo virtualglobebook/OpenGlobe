@@ -19,7 +19,11 @@ namespace MiniGlobe.Core.Geometry
         LineStrip,
         Triangles,
         TriangleStrip,
-        TriangleFan
+        TriangleFan,
+        LinesAdjacency,
+        LineStripAdjacency,
+        TrianglesAdjacency,
+        TriangleStripAdjacency
     }
 
     public enum WindingOrder

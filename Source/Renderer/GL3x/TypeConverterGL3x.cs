@@ -435,6 +435,22 @@ namespace MiniGlobe.Renderer.GL3x
             {
                 return BeginMode.TriangleStrip;
             }
+            else if (type == PrimitiveType.LinesAdjacency)
+            {
+                return BeginMode.LinesAdjacency;
+            }
+            else if (type == PrimitiveType.LineStripAdjacency)
+            {
+                return BeginMode.LineStripAdjacency;
+            }
+            else if (type == PrimitiveType.TrianglesAdjacency)
+            {
+                return BeginMode.TrianglesAdjacency;
+            }
+            else if (type == PrimitiveType.TriangleStripAdjacency)
+            {
+                return BeginMode.TriangleStripAdjacency;
+            }
 
             Debug.Assert(type == PrimitiveType.TriangleFan);
             return BeginMode.TriangleFan;
