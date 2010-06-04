@@ -32,12 +32,10 @@ namespace MiniGlobe.Examples.Chapter4
             _window.Keyboard.KeyUp += OnKeyUp;
             _window.Keyboard.KeyDown += OnKeyDown;
             _sceneState = new SceneState();
-
-            ///////////////////////////////////////////////////////////////////
-
             _camera = new CameraLookAtPoint(_sceneState.Camera, _window, _globeShape);
-            _sceneState.Camera.ZoomToTarget(_globeShape.MaximumRadius);
+            _defaultRenderState = new RenderState();
 
+            _sceneState.Camera.ZoomToTarget(_globeShape.MaximumRadius);
             PersistentView.Execute(@"E:\Manuscript\DepthBufferPrecision\Figures\DepthBufferPrecisionNear.xml", _window, _sceneState.Camera);
 
             ///////////////////////////////////////////////////////////////////
@@ -247,6 +245,7 @@ namespace MiniGlobe.Examples.Chapter4
             // Render to frame buffer
             //
             context.Bind(_frameBuffer);
+            context.Bind(_defaultRenderState);
             context.Clear(ClearBuffers.ColorAndDepthBuffer, Color.White, _depthTestLess ? 1 : 0, 0);
             _globe.Render(context, _sceneState);
             _plane.Render(context, _sceneState);
@@ -316,6 +315,7 @@ namespace MiniGlobe.Examples.Chapter4
         private readonly MiniGlobeWindow _window;
         private readonly SceneState _sceneState;
         private readonly CameraLookAtPoint _camera;
+        private readonly RenderState _defaultRenderState;
         private readonly TessellatedGlobe _globe;
         private readonly Plane _plane;
         private double _cubeRootPlaneHeight;

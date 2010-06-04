@@ -28,6 +28,7 @@ namespace MiniGlobe.Examples.Chapter5
             _window.RenderFrame += OnRenderFrame;
             _sceneState = new SceneState();
             _sceneState.Camera.PerspectiveFarPlaneDistance = 4096;
+            _defaultRenderState = new RenderState();
 
             ///////////////////////////////////////////////////////////////////
 
@@ -61,6 +62,7 @@ namespace MiniGlobe.Examples.Chapter5
         private void OnRenderFrame()
         {
             Context context = _window.Context;
+            context.Bind(_defaultRenderState);
             context.Clear(ClearBuffers.ColorAndDepthBuffer, Color.White, 1, 0);
 
             _tile.Render(context, _sceneState);
@@ -95,6 +97,7 @@ namespace MiniGlobe.Examples.Chapter5
         private readonly MiniGlobeWindow _window;
         private readonly SceneState _sceneState;
         private readonly CameraLookAtPoint _camera;
+        private readonly RenderState _defaultRenderState;
         private readonly TriangleMeshTerrainTile _tile;
         private readonly Axes _axes;
     }

@@ -29,6 +29,7 @@ namespace MiniGlobe.Examples.Chapter3
             _window.RenderFrame += OnRenderFrame;
             _sceneState = new SceneState();
             _camera = new CameraLookAtPoint(_sceneState.Camera, _window, globeShape);
+            _defaultRenderState = new RenderState();
 
             _sceneState.Camera.PerspectiveNearPlaneDistance = 0.01 * globeShape.MaximumRadius;
             _sceneState.Camera.PerspectiveFarPlaneDistance = 10.0 * globeShape.MaximumRadius;
@@ -101,6 +102,7 @@ namespace MiniGlobe.Examples.Chapter3
         private void OnRenderFrame()
         {
             Context context = _window.Context;
+            context.Bind(_defaultRenderState);
             context.Clear(ClearBuffers.ColorAndDepthBuffer, Color.White, 1, 0);
 
             _globe.Render(context, _sceneState);
@@ -137,6 +139,7 @@ namespace MiniGlobe.Examples.Chapter3
         private readonly MiniGlobeWindow _window;
         private readonly SceneState _sceneState;
         private readonly CameraLookAtPoint _camera;
+        private readonly RenderState _defaultRenderState;
 
         private readonly LatitudeLongitudeGridGlobe _globe;
         private readonly BillboardCollection _vancouverLabel;

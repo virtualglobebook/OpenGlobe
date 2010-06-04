@@ -30,6 +30,7 @@ namespace MiniGlobe.Examples.Chapter7
             _window.Keyboard.KeyUp += OnKeyUp; 
             _sceneState = new SceneState();
             _camera = new CameraLookAtPoint(_sceneState.Camera, _window, globeShape);
+            _defaultRenderState = new RenderState();
 
             Context context = _window.Context;
 
@@ -168,6 +169,7 @@ namespace MiniGlobe.Examples.Chapter7
             // Render to frame buffer
             //
             context.Bind(_frameBuffer);
+            context.Bind(_defaultRenderState);
 
             SetFrameBufferAttachments(_dayTexture, _nightTexture, null);
             _window.Context.Clear(ClearBuffers.ColorAndDepthBuffer, Color.Black, 1, 0);
@@ -276,6 +278,7 @@ namespace MiniGlobe.Examples.Chapter7
         private readonly MiniGlobeWindow _window;
         private readonly SceneState _sceneState;
         private readonly CameraLookAtPoint _camera;
+        private readonly RenderState _defaultRenderState;
 
         private Texture2D _dayTexture;
         private Texture2D _nightTexture;

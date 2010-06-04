@@ -30,6 +30,7 @@ namespace MiniGlobe.Examples.Chapter8
             _sceneState = new SceneState();
             _sceneState.Camera.PerspectiveFarPlaneDistance = 4096;
             _sceneState.Camera.PerspectiveNearPlaneDistance = 10;
+            _defaultRenderState = new RenderState();
 
             ///////////////////////////////////////////////////////////////////
 
@@ -405,7 +406,7 @@ namespace MiniGlobe.Examples.Chapter8
             // Depth 
             //
             _window.Context.Bind(_fbo);
-            _window.Context.Bind(new RenderState());
+            _window.Context.Bind(_defaultRenderState);
             _window.Context.Clear(ClearBuffers.ColorAndDepthBuffer, Color.White, 1, 0);
             _tile.Render(_window.Context, _sceneState);
             _window.Context.Bind(null as FrameBuffer);
@@ -491,6 +492,7 @@ namespace MiniGlobe.Examples.Chapter8
         private readonly MiniGlobeWindow _window;
         private readonly SceneState _sceneState;
         private readonly CameraLookAtPoint _camera;
+        private readonly RenderState _defaultRenderState;
         private readonly TriangleMeshTerrainTile _tile;
 
         private bool _passThru = false;

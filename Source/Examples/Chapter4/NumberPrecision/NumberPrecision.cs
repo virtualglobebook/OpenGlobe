@@ -30,6 +30,7 @@ namespace MiniGlobe.Examples.Chapter3.NumberPrecision
                 new Vector3D(_viewCenterX, 0.0, 0.0));
             _camera.MouseEnabled = false;
             CenterCameraOnPoint();
+            _defaultRenderState = new RenderState();
 
             //
             // Point shader
@@ -139,6 +140,7 @@ namespace MiniGlobe.Examples.Chapter3.NumberPrecision
             //
             // Clear
             //
+            context.Bind(_defaultRenderState);
             context.Clear(ClearBuffers.ColorAndDepthBuffer, Color.White, 1, 0);
 
             //
@@ -201,6 +203,7 @@ namespace MiniGlobe.Examples.Chapter3.NumberPrecision
         private readonly MiniGlobeWindow _window;
         private readonly SceneState _sceneState;
         private readonly CameraLookAtPoint _camera;
+        private readonly RenderState _defaultRenderState;
         private ShaderProgram _sp;
         private VertexArray _va;
         private readonly BillboardCollection _bg;
