@@ -39,7 +39,7 @@ namespace MiniGlobe.Examples.Chapter2
                 TextureFormat.RedGreenBlueAlpha8, false);
             _instructions.Color = Color.Black;
 
-            _defaultRenderState = new RenderState();
+            _clearState = new ClearState();
 
             CreateScene();
             
@@ -159,8 +159,7 @@ namespace MiniGlobe.Examples.Chapter2
         private void OnRenderFrame()
         {
             Context context = _window.Context;
-            context.Bind(_defaultRenderState);
-            context.Clear(ClearBuffers.ColorAndDepthBuffer, Color.White, 1, 0);
+            context.Clear(_clearState);
 
             _ellipsoid.Render(context, _sceneState);
             _wireframe.Render(context, _sceneState);
@@ -252,7 +251,7 @@ namespace MiniGlobe.Examples.Chapter2
         private readonly SceneState _sceneState;
         private readonly CameraLookAtPoint _camera;
         private readonly HeadsUpDisplay _instructions;
-        private readonly RenderState _defaultRenderState;
+        private readonly ClearState _clearState;
 
         private TessellatedGlobe _ellipsoid;
         private Wireframe _wireframe;

@@ -244,7 +244,7 @@ namespace MiniGlobe.Renderer
         public abstract FrameBuffer CreateFrameBuffer();
         public abstract TextureUnits TextureUnits { get; }
 
-        public abstract void Clear(ClearBuffers buffers, Color color, float depth, int stencil);
+        public abstract void Clear(ClearState clearState);
         public abstract Rectangle Viewport { get; set; }
 
         public abstract void Bind(RenderState renderState);
@@ -264,5 +264,7 @@ namespace MiniGlobe.Renderer
 
         public abstract void Draw(PrimitiveType primitiveType, int offset, int count, SceneState sceneState);
         public abstract void Draw(PrimitiveType primitiveType, SceneState sceneState);
+
+        internal bool HighResolutionSnapFrameBufferBound { get; set; }
     }
 }

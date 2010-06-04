@@ -30,11 +30,19 @@ namespace MiniGlobe.Examples.Chapter7
             _window.Keyboard.KeyUp += OnKeyUp; 
             _sceneState = new SceneState();
             _camera = new CameraLookAtPoint(_sceneState.Camera, _window, globeShape);
-            _defaultRenderState = new RenderState();
 
             Context context = _window.Context;
 
             _frameBuffer = context.CreateFrameBuffer();
+
+            _clearBlack = new ClearState();
+            _clearBlack.FrameBuffer = _frameBuffer;
+            _clearBlack.Color = Color.Black;
+
+            _clearWhite = new ClearState();
+            _clearWhite.FrameBuffer = _frameBuffer;
+            _clearWhite.Color = Color.White;
+
             _quad = new DayNightViewportQuad(context);
 
             _globe = new DayNightGlobe(context);
@@ -168,14 +176,13 @@ namespace MiniGlobe.Examples.Chapter7
             //
             // Render to frame buffer
             //
-            context.Bind(_frameBuffer);
-            context.Bind(_defaultRenderState);
+            context.Bind(_frameBuffer);                 // TODO:  No longer needed
 
             SetFrameBufferAttachments(_dayTexture, _nightTexture, null);
-            _window.Context.Clear(ClearBuffers.ColorAndDepthBuffer, Color.Black, 1, 0);
+            _window.Context.Clear(_clearBlack);
 
             SetFrameBufferAttachments(null, null, _blendTexture);
-            _window.Context.Clear(ClearBuffers.ColorAndDepthBuffer, Color.White, 1, 0);
+            _window.Context.Clear(_clearWhite);
 
             //
             // Render globe to day, night, and blend buffers
@@ -278,7 +285,8 @@ namespace MiniGlobe.Examples.Chapter7
         private readonly MiniGlobeWindow _window;
         private readonly SceneState _sceneState;
         private readonly CameraLookAtPoint _camera;
-        private readonly RenderState _defaultRenderState;
+        private readonly ClearState _clearBlack;
+        private readonly ClearState _clearWhite;
 
         private Texture2D _dayTexture;
         private Texture2D _nightTexture;

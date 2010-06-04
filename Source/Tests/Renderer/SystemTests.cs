@@ -31,9 +31,8 @@ namespace MiniGlobe.Renderer
             Texture2DDescription depthDescription = new Texture2DDescription(1, 1, TextureFormat.Depth32f, false);
             Texture2D depthTexture = Device.CreateTexture2D(depthDescription);
             frameBuffer.DepthAttachment = depthTexture;
-            window.Context.Bind(frameBuffer);
 
-            window.Context.Clear(ClearBuffers.All, Color.Red, 0.5f, 0);
+            window.Context.Clear(new ClearState() { FrameBuffer = frameBuffer, Buffers = ClearBuffers.All, Color = Color.Red, Depth = 0.5f });
             TestUtility.ValidateColor(frameBuffer.ColorAttachments[0], 255, 0, 0);
             ValidateDepth(frameBuffer.DepthAttachment, 0.5f);
 
@@ -43,9 +42,8 @@ namespace MiniGlobe.Renderer
             RenderState renderState = new RenderState();
             renderState.ScissorTest.Enabled = true;
             renderState.ScissorTest.Rectangle = new Rectangle(0, 0, 0, 0);
-            window.Context.Bind(renderState);
 
-            window.Context.Clear(ClearBuffers.All, Color.Blue, 1, 0);
+            window.Context.Clear(new ClearState() { FrameBuffer = frameBuffer, RenderState = renderState, Buffers = ClearBuffers.All, Color = Color.Blue, Depth = 1 });
             TestUtility.ValidateColor(frameBuffer.ColorAttachments[0], 255, 0, 0);
             ValidateDepth(frameBuffer.DepthAttachment, 0.5f);
 
@@ -115,7 +113,7 @@ namespace MiniGlobe.Renderer
             //
             // Verify detach
             //
-            window.Context.Clear(ClearBuffers.ColorBuffer, Color.FromArgb(0, 255, 0), 1, 0);
+            window.Context.Clear(new ClearState() { FrameBuffer = frameBuffer, Buffers = ClearBuffers.ColorBuffer, Color = Color.FromArgb(0, 255, 0) });
             va.VertexBuffers[sp.VertexAttributes["position"].Location] = null;
             va.IndexBuffer = null;
             window.Context.Draw(PrimitiveType.Triangles, 0, 0);
@@ -295,7 +293,7 @@ namespace MiniGlobe.Renderer
             renderState.StencilTest = stencilTest;
 
             window.Context.Bind(frameBuffer);
-            window.Context.Clear(ClearBuffers.All, Color.Black, 1, 0);
+            window.Context.Clear(new ClearState() { FrameBuffer = frameBuffer });
             window.Context.Bind(renderState);
             window.Context.Bind(sp);
             window.Context.Bind(va);

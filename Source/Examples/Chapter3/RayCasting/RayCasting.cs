@@ -28,7 +28,7 @@ namespace MiniGlobe.Examples.Chapter3
             _window.RenderFrame += OnRenderFrame;
             _sceneState = new SceneState();
             _camera = new CameraLookAtPoint(_sceneState.Camera, _window, globeShape);
-            _defaultRenderState = new RenderState();
+            _clearState = new ClearState();
 
             _window.Keyboard.KeyDown += delegate(object sender, KeyboardKeyEventArgs e)
             {
@@ -71,8 +71,7 @@ namespace MiniGlobe.Examples.Chapter3
         private void OnRenderFrame()
         {
             Context context = _window.Context;
-            context.Bind(_defaultRenderState);
-            context.Clear(ClearBuffers.ColorAndDepthBuffer, Color.White, 1, 0);
+            context.Clear(_clearState);
             _globe.Render(context, _sceneState);
         }
 
@@ -121,7 +120,7 @@ namespace MiniGlobe.Examples.Chapter3
         private readonly MiniGlobeWindow _window;
         private readonly SceneState _sceneState;
         private readonly CameraLookAtPoint _camera;
-        private readonly RenderState _defaultRenderState;
+        private readonly ClearState _clearState;
         private readonly RayCastedGlobe _globe;
         private readonly Texture2D _texture;
     }

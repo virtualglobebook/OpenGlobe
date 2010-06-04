@@ -26,7 +26,7 @@ namespace MiniGlobe.Examples.Chapter3
             _window.RenderFrame += OnRenderFrame;
             _sceneState = new SceneState();
             _camera = new CameraLookAtPoint(_sceneState.Camera, _window, Ellipsoid.UnitSphere);
-            _defaultRenderState = new RenderState();
+            _clearState = new ClearState();
 
             string vs =
                 @"#version 150
@@ -153,8 +153,7 @@ namespace MiniGlobe.Examples.Chapter3
         private void OnRenderFrame()
         {
             Context context = _window.Context;
-            context.Bind(_defaultRenderState);
-            context.Clear(ClearBuffers.ColorAndDepthBuffer, Color.White, 1, 0);
+            context.Clear(_clearState);
             context.TextureUnits[0].Texture2D = _dayTexture;
             context.TextureUnits[1].Texture2D = _nightTexture;
             context.Bind(_renderState);
@@ -193,7 +192,7 @@ namespace MiniGlobe.Examples.Chapter3
         private readonly MiniGlobeWindow _window;
         private readonly SceneState _sceneState;
         private readonly CameraLookAtPoint _camera;
-        private readonly RenderState _defaultRenderState;
+        private readonly ClearState _clearState;
         private readonly RenderState _renderState;
         private readonly ShaderProgram _sp;
         private readonly VertexArray _va;

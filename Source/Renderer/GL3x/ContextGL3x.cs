@@ -116,29 +116,32 @@ namespace MiniGlobe.Renderer.GL3x
             return new FrameBufferGL3x();
         }
 
-        public override void Clear(ClearBuffers buffers, Color color, float depth, int stencil)
+        public override void Clear(ClearState clearState)
         {
+            Bind(clearState.FrameBuffer);
+            Bind(clearState.RenderState);
+
             CleanFrameBuffer();
 
-            if (_clearColor != color)
+            if (_clearColor != clearState.Color)
             {
-                GL.ClearColor(color);
-                _clearColor = color;
+                GL.ClearColor(clearState.Color);
+                _clearColor = clearState.Color;
             }
 
-            if (_clearDepth != depth)
+            if (_clearDepth != clearState.Depth)
             {
-                GL.ClearDepth(depth);
-                _clearDepth = depth;
+                GL.ClearDepth(clearState.Depth);
+                _clearDepth = clearState.Depth;
             }
 
-            if (_clearStencil != stencil)
+            if (_clearStencil != clearState.Stencil)
             {
-                GL.ClearStencil(stencil);
-                _clearStencil = stencil;
+                GL.ClearStencil(clearState.Stencil);
+                _clearStencil = clearState.Stencil;
             }
 
-            GL.Clear(TypeConverterGL3x.To(buffers));
+            GL.Clear(TypeConverterGL3x.To(clearState.Buffers));
         }
 
         public override Rectangle Viewport
@@ -199,20 +202,23 @@ namespace MiniGlobe.Renderer.GL3x
 
         public override void Bind(FrameBuffer frameBuffer)
         {
-            FrameBufferGL3x frameBufferGL3x = frameBuffer as FrameBufferGL3x;
-
-            if (_boundFrameBuffer != frameBufferGL3x)
+            if (!HighResolutionSnapFrameBufferBound)
             {
-                if (frameBufferGL3x != null)
-                {
-                    frameBufferGL3x.Bind();
-                }
-                else
-                {
-                    FrameBufferGL3x.UnBind();
-                }
+                FrameBufferGL3x frameBufferGL3x = frameBuffer as FrameBufferGL3x;
 
-                _boundFrameBuffer = frameBufferGL3x;
+                if (_boundFrameBuffer != frameBufferGL3x)
+                {
+                    if (frameBufferGL3x != null)
+                    {
+                        frameBufferGL3x.Bind();
+                    }
+                    else
+                    {
+                        FrameBufferGL3x.UnBind();
+                    }
+
+                    _boundFrameBuffer = frameBufferGL3x;
+                }
             }
         }
 

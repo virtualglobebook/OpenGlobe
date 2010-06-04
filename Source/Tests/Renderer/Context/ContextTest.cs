@@ -20,14 +20,14 @@ namespace MiniGlobe.Renderer
         {
             MiniGlobeWindow window = Device.CreateWindow(1, 1);
 
-            window.Context.Clear(ClearBuffers.ColorBuffer, Color.Red, 1, 0);
-            window.Context.Clear(ClearBuffers.DepthBuffer, Color.Red, 1, 0);
-            window.Context.Clear(ClearBuffers.StencilBuffer, Color.Red, 1, 0);
+            window.Context.Clear(new ClearState { Buffers = ClearBuffers.ColorBuffer });
+            window.Context.Clear(new ClearState { Buffers = ClearBuffers.DepthBuffer });
+            window.Context.Clear(new ClearState { Buffers = ClearBuffers.StencilBuffer });
 
             //
             // The following is much faster
             //
-            window.Context.Clear(ClearBuffers.All, Color.Red, 1, 0);
+            window.Context.Clear(new ClearState { Buffers = ClearBuffers.All });
 
             window.Dispose();
         }

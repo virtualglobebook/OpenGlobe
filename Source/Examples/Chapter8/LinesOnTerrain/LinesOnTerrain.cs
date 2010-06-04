@@ -30,7 +30,6 @@ namespace MiniGlobe.Examples.Chapter8
             _sceneState = new SceneState();
             _sceneState.Camera.PerspectiveFarPlaneDistance = 4096;
             _sceneState.Camera.PerspectiveNearPlaneDistance = 10;
-            _defaultRenderState = new RenderState();
 
             ///////////////////////////////////////////////////////////////////
 
@@ -50,7 +49,12 @@ namespace MiniGlobe.Examples.Chapter8
             snap.ColorFilename = @"E:\Manuscript\TerrainRendering\Figures\LinesOnTerrain.png";
             snap.WidthInInches = 3;
             snap.DotsPerInch = 600;
-            
+
+            _fbo = _window.Context.CreateFrameBuffer();
+            _clearState = new ClearState();
+            _clearStateFBO = new ClearState();
+            _clearStateFBO.FrameBuffer = _fbo;
+
             //
             // Depth
             //
@@ -405,16 +409,15 @@ namespace MiniGlobe.Examples.Chapter8
             //
             // Depth 
             //
-            _window.Context.Bind(_fbo);
-            _window.Context.Bind(_defaultRenderState);
-            _window.Context.Clear(ClearBuffers.ColorAndDepthBuffer, Color.White, 1, 0);
+            _window.Context.Bind(_fbo);                     // TODO:  No longer needed
+            _window.Context.Clear(_clearStateFBO);
             _tile.Render(_window.Context, _sceneState);
-            _window.Context.Bind(null as FrameBuffer);
+            _window.Context.Bind(null as FrameBuffer);      // TODO:  No longer needed
 
             //
             // Terrain
             //
-            _window.Context.Clear(ClearBuffers.ColorAndDepthBuffer, Color.White, 1, 0);
+            _window.Context.Clear(_clearState);
             _tile.Render(_window.Context, _sceneState);
 
             //
@@ -468,10 +471,6 @@ namespace MiniGlobe.Examples.Chapter8
             _depthTexture = Device.CreateTexture2D(t2dd);
             t2dd = new Texture2DDescription(_window.Width, _window.Height, TextureFormat.RedGreenBlue8);
             _colorTexture = Device.CreateTexture2D(t2dd);
-            if (_fbo == null)
-            {
-                _fbo = _window.Context.CreateFrameBuffer();
-            }
             _fbo.DepthAttachment = _depthTexture;
             _fbo.ColorAttachments[0] = _colorTexture;
         }
@@ -492,17 +491,18 @@ namespace MiniGlobe.Examples.Chapter8
         private readonly MiniGlobeWindow _window;
         private readonly SceneState _sceneState;
         private readonly CameraLookAtPoint _camera;
-        private readonly RenderState _defaultRenderState;
+        private readonly ClearState _clearState;
+        private readonly ClearState _clearStateFBO;
         private readonly TriangleMeshTerrainTile _tile;
 
         private bool _passThru = false;
         private bool _passThru1 = true;
-        Texture2D _depthTexture;
-        Texture2D _colorTexture;
-        FrameBuffer _fbo;
-        VertexArray _wallVA;
-        VertexArray _lineVA;
-        RenderState _lotRenderState;
+        private Texture2D _depthTexture;
+        private Texture2D _colorTexture;
+        private readonly FrameBuffer _fbo;
+        private VertexArray _wallVA;
+        private VertexArray _lineVA;
+        private RenderState _lotRenderState;
         private readonly ShaderProgram _passThruSP;
         private readonly ShaderProgram _lotWallSP;
         private readonly ShaderProgram _lotLineSP;
