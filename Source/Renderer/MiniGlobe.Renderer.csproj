@@ -44,6 +44,7 @@
   <ItemGroup>
     <Compile Include="BlittableBGRA.cs" />
     <Compile Include="BlittableRGBA.cs" />
+    <Compile Include="ClearState.cs" />
     <Compile Include="Conversion.cs" />
     <Compile Include="Extensions.cs">
       <SubType>Code</SubType>
