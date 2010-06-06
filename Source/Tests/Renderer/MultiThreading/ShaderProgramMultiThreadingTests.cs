@@ -42,9 +42,7 @@ namespace MiniGlobe.Renderer.MultiThreading
             VertexArray va = TestUtility.CreateVertexArray(window.Context, factory.ShaderProgram.VertexAttributes["position"].Location);
 
             window.Context.Bind(frameBuffer);
-            window.Context.Bind(factory.ShaderProgram);
-            window.Context.Bind(va);
-            window.Context.Draw(PrimitiveType.Points, 0, 1);
+            window.Context.Draw(PrimitiveType.Points, 0, 1, new DrawState(new RenderState(), factory.ShaderProgram, va), null);
 
             TestUtility.ValidateColor(frameBuffer.ColorAttachments[0], 255, 0, 0);
 
@@ -82,16 +80,13 @@ namespace MiniGlobe.Renderer.MultiThreading
             FrameBuffer frameBuffer = TestUtility.CreateFrameBuffer(window.Context);
             VertexArray va = TestUtility.CreateVertexArray(window.Context, factory0.ShaderProgram.VertexAttributes["position"].Location);
             window.Context.Bind(frameBuffer);
-            window.Context.Bind(va);
 
-            window.Context.Bind(factory0.ShaderProgram);
-            window.Context.Draw(PrimitiveType.Points, 0, 1);
+            window.Context.Draw(PrimitiveType.Points, 0, 1, new DrawState(new RenderState(), factory0.ShaderProgram, va), null);
             TestUtility.ValidateColor(frameBuffer.ColorAttachments[0], 255, 0, 0);
 
             window.Context.Clear(new ClearState());
 
-            window.Context.Bind(factory1.ShaderProgram);
-            window.Context.Draw(PrimitiveType.Points, 0, 1);
+            window.Context.Draw(PrimitiveType.Points, 0, 1, new DrawState(new RenderState(), factory1.ShaderProgram, va), null);
             TestUtility.ValidateColor(frameBuffer.ColorAttachments[0], 255, 0, 0);
 
             va.Dispose();
@@ -129,16 +124,13 @@ namespace MiniGlobe.Renderer.MultiThreading
             FrameBuffer frameBuffer = TestUtility.CreateFrameBuffer(window.Context);
             VertexArray va = TestUtility.CreateVertexArray(window.Context, factory0.ShaderProgram.VertexAttributes["position"].Location);
             window.Context.Bind(frameBuffer);
-            window.Context.Bind(va);
 
-            window.Context.Bind(factory0.ShaderProgram);
-            window.Context.Draw(PrimitiveType.Points, 0, 1);
+            window.Context.Draw(PrimitiveType.Points, 0, 1, new DrawState(new RenderState(), factory0.ShaderProgram, va), null);
             TestUtility.ValidateColor(frameBuffer.ColorAttachments[0], 255, 0, 0);
 
             window.Context.Clear(new ClearState());
 
-            window.Context.Bind(factory1.ShaderProgram);
-            window.Context.Draw(PrimitiveType.Points, 0, 1);
+            window.Context.Draw(PrimitiveType.Points, 0, 1, new DrawState(new RenderState(), factory1.ShaderProgram, va), null);
             TestUtility.ValidateColor(frameBuffer.ColorAttachments[0], 255, 0, 0);
 
             va.Dispose();

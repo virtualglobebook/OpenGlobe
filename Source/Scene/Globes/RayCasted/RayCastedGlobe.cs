@@ -21,18 +21,18 @@ namespace MiniGlobe.Scene
         {
             Verify.ThrowIfNull(context);
 
-            string vs = EmbeddedResources.GetText("MiniGlobe.Scene.Globes.RayCasted.Shaders.GlobeVS.glsl");
-            _sp = Device.CreateShaderProgram(vs, EmbeddedResources.GetText("MiniGlobe.Scene.Globes.RayCasted.Shaders.GlobeFS.glsl"));
-            _cameraEyeSquaredSP = _sp.Uniforms["u_cameraEyeSquared"] as Uniform<Vector3S>;
-
             _renderState = new RenderState();
+            _renderState.FacetCulling.Face = CullFace.Front;
+            string vs = EmbeddedResources.GetText("MiniGlobe.Scene.Globes.RayCasted.Shaders.GlobeVS.glsl");
 
-            ///////////////////////////////////////////////////////////////////
+            ShaderProgram sp = Device.CreateShaderProgram(vs, EmbeddedResources.GetText("MiniGlobe.Scene.Globes.RayCasted.Shaders.GlobeFS.glsl"));
+            _cameraEyeSquared = sp.Uniforms["u_cameraEyeSquared"] as Uniform<Vector3S>;
 
-            _solidSP = Device.CreateShaderProgram(vs, EmbeddedResources.GetText("MiniGlobe.Scene.Globes.RayCasted.Shaders.SolidShadedGlobeFS.glsl"));
-            _cameraEyeSquaredSolidSP = _solidSP.Uniforms["u_cameraEyeSquared"] as Uniform<Vector3S>;
+            ShaderProgram solidSP = Device.CreateShaderProgram(vs, EmbeddedResources.GetText("MiniGlobe.Scene.Globes.RayCasted.Shaders.SolidShadedGlobeFS.glsl"));
+            _cameraEyeSquaredSolid = solidSP.Uniforms["u_cameraEyeSquared"] as Uniform<Vector3S>;
 
-            ///////////////////////////////////////////////////////////////////
+            _drawState = new DrawState(_renderState, sp, null);
+            _drawStateSolid = new DrawState(_renderState, solidSP, null);
 
             Shape = Ellipsoid.UnitSphere;
             Shade = true;
@@ -46,21 +46,26 @@ namespace MiniGlobe.Scene
                 if (_va != null)
                 {
                     _va.Dispose();
+                    _va = null;
+                    _drawState.VertexArray = null;
+                    _drawStateSolid.VertexArray = null;
                 }
 
                 Mesh mesh = BoxTessellator.Compute(2 * _shape.Radii);
-                _va = context.CreateVertexArray(mesh, _sp.VertexAttributes, BufferHint.StaticDraw);
+                _va = context.CreateVertexArray(mesh, _drawState.ShaderProgram.VertexAttributes, BufferHint.StaticDraw);
+                _drawState.VertexArray = _va;
+                _drawStateSolid.VertexArray = _va;
                 _primitiveType = mesh.PrimitiveType;
 
-                _renderState.FacetCulling.Face = CullFace.Front;
                 _renderState.FacetCulling.FrontFaceWindingOrder = mesh.FrontFaceWindingOrder;
 
-                (_sp.Uniforms["u_globeOneOverRadiiSquared"] as Uniform<Vector3S>).Value = _shape.OneOverRadiiSquared.ToVector3S();
-                (_solidSP.Uniforms["u_globeOneOverRadiiSquared"] as Uniform<Vector3S>).Value = _shape.OneOverRadiiSquared.ToVector3S();
+                (_drawState.ShaderProgram.Uniforms["u_globeOneOverRadiiSquared"] as Uniform<Vector3S>).Value = _shape.OneOverRadiiSquared.ToVector3S();
+                (_drawStateSolid.ShaderProgram.Uniforms["u_globeOneOverRadiiSquared"] as Uniform<Vector3S>).Value = _shape.OneOverRadiiSquared.ToVector3S();
 
                 if (_wireframe != null)
                 {
                     _wireframe.Dispose();
+                    _wireframe = null;
                 }
                 _wireframe = new Wireframe(context, mesh);
                 _wireframe.FacetCullingFace = CullFace.Front;
@@ -78,11 +83,6 @@ namespace MiniGlobe.Scene
 
             Clean(context);
 
-            if (ShowGlobe || ShowWireframeBoundingBox)
-            {
-                context.Bind(_va);
-            }
-
             if (ShowGlobe)
             {
                 Vector3D eye = sceneState.Camera.Eye;
@@ -91,16 +91,14 @@ namespace MiniGlobe.Scene
                 if (Shade)
                 {
                     context.TextureUnits[0].Texture2D = Texture;
-                    context.Bind(_sp);
-                    _cameraEyeSquaredSP.Value = cameraEyeSquared;
+                    _cameraEyeSquared.Value = cameraEyeSquared;
+                    context.Draw(_primitiveType, _drawState, sceneState);
                 }
                 else
                 {
-                    context.Bind(_solidSP);
-                    _cameraEyeSquaredSolidSP.Value = cameraEyeSquared;
+                    _cameraEyeSquaredSolid.Value = cameraEyeSquared;
+                    context.Draw(_primitiveType, _drawStateSolid, sceneState);
                 }
-                context.Bind(_renderState);
-                context.Draw(_primitiveType, sceneState);
             }
 
             if (ShowWireframeBoundingBox)
@@ -128,8 +126,8 @@ namespace MiniGlobe.Scene
 
         public void Dispose()
         {
-            _sp.Dispose();
-            _solidSP.Dispose();
+            _drawState.ShaderProgram.Dispose();
+            _drawStateSolid.ShaderProgram.Dispose();
 
             if (_va != null)
             {
@@ -144,12 +142,12 @@ namespace MiniGlobe.Scene
 
         #endregion
 
-        private readonly RenderState _renderState;
-        private readonly ShaderProgram _sp;
-        private readonly Uniform<Vector3S> _cameraEyeSquaredSP;
-        private readonly ShaderProgram _solidSP;
-        private readonly Uniform<Vector3S> _cameraEyeSquaredSolidSP;
+        private readonly DrawState _drawState;
+        private readonly Uniform<Vector3S> _cameraEyeSquared;
+        private readonly DrawState _drawStateSolid;
+        private readonly Uniform<Vector3S> _cameraEyeSquaredSolid;
 
+        private readonly RenderState _renderState;
         private VertexArray _va;
         private PrimitiveType _primitiveType;
 

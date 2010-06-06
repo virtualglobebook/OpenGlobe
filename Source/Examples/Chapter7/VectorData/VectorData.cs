@@ -204,7 +204,7 @@ namespace MiniGlobe.Examples.Chapter7
             //
             // Render viewport quad to composite buffers
             //
-            context.Bind(null as FrameBuffer);
+            context.Bind(null);
             _quad.Render(context, _sceneState);
             _hud.Render(context, _sceneState);
         }

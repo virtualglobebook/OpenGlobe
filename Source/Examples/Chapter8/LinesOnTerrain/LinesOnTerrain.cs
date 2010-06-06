@@ -93,7 +93,7 @@ namespace MiniGlobe.Examples.Chapter8
                         discard;
                     }
                 }";
-            _passThruSP = Device.CreateShaderProgram(vs, fs);
+            ShaderProgram passThruSP = Device.CreateShaderProgram(vs, fs);
 
             //
             // Line on terrain wall
@@ -166,7 +166,7 @@ namespace MiniGlobe.Examples.Chapter8
                         discard;
                     }
                 }";
-            _lotWallSP = Device.CreateShaderProgram(vs, fs);
+            ShaderProgram wallSP = Device.CreateShaderProgram(vs, fs);
 
             //
             // Lines on terrain line
@@ -300,8 +300,8 @@ namespace MiniGlobe.Examples.Chapter8
                 {
                     fragmentColor = vec4(1.0, 1.0, 0.0, 1.0);
                 }";
-            _lotLineSP = Device.CreateShaderProgram(vs, gs, fs);
-            _fillDistance = _lotLineSP.Uniforms["u_fillDistance"] as Uniform<float>;
+            ShaderProgram lineSP = Device.CreateShaderProgram(vs, gs, fs);
+            _fillDistance = lineSP.Uniforms["u_fillDistance"] as Uniform<float>;
 
             //
             // Positions
@@ -341,7 +341,7 @@ namespace MiniGlobe.Examples.Chapter8
             //
             // Vertex array
             //
-            _wallVA = _window.Context.CreateVertexArray(wallMesh, _lotWallSP.VertexAttributes, BufferHint.StaticDraw);
+            _wallVA = _window.Context.CreateVertexArray(wallMesh, wallSP.VertexAttributes, BufferHint.StaticDraw);
 
             //
             // Line mesh
@@ -383,16 +383,20 @@ namespace MiniGlobe.Examples.Chapter8
             //
             // Vertex array
             //
-            _lineVA = _window.Context.CreateVertexArray(lineMesh, _lotWallSP.VertexAttributes, BufferHint.StaticDraw);
+            _lineVA = _window.Context.CreateVertexArray(lineMesh, wallSP.VertexAttributes, BufferHint.StaticDraw);
             _lineVA.IndexBuffer = indexBuffer;
 
             //
             // Render state
             //
-            _lotRenderState = new RenderState();
-            _lotRenderState.FacetCulling.Enabled = false;
-            _lotRenderState.DepthTest.Enabled = false;
-            _lotRenderState.DepthWrite = false;
+            RenderState rs = new RenderState();
+            rs.FacetCulling.Enabled = false;
+            rs.DepthTest.Enabled = false;
+            rs.DepthWrite = false;
+
+            _drawStateWall = new DrawState(rs, wallSP, _wallVA);
+            _drawStateLine = new DrawState(rs, lineSP, _lineVA);
+            _drawStatePassThru = new DrawState(rs, passThruSP, _wallVA);
         }
 
         private void OnResize()
@@ -410,7 +414,7 @@ namespace MiniGlobe.Examples.Chapter8
             _window.Context.Bind(_fbo);
             _window.Context.Clear(_clearState);
             _tile.Render(_window.Context, _sceneState);
-            _window.Context.Bind(null as FrameBuffer);
+            _window.Context.Bind(null);
 
             //
             // Terrain
@@ -423,30 +427,22 @@ namespace MiniGlobe.Examples.Chapter8
             //
             if (_passThru1)
             {
-                _window.Context.Bind(_wallVA);
-                _window.Context.Bind(_lotRenderState);
                 _window.Context.TextureUnits[0].Texture2D = _depthTexture;
-                _window.Context.Bind(_lotWallSP);
-                _window.Context.Draw(PrimitiveType.TriangleStrip, _sceneState);
+                _window.Context.Draw(PrimitiveType.TriangleStrip, _drawStateWall, _sceneState);
             }
 
             //
             // Line on terrain line
             //
-            _window.Context.Bind(_lineVA);
-            _window.Context.Bind(_lotRenderState);
-            _window.Context.Bind(_lotLineSP);
             _fillDistance.Value = (float)(_width * 0.5);
-            _window.Context.Draw(PrimitiveType.LinesAdjacency, _sceneState);
+            _window.Context.Draw(PrimitiveType.LinesAdjacency, _drawStateLine, _sceneState);
 
             //
             // Pass-thru line on terrain
             //
             if (_passThru)
             {
-                _window.Context.Bind(_wallVA);
-                _window.Context.Bind(_passThruSP);
-                _window.Context.Draw(PrimitiveType.TriangleStrip, _sceneState);
+                _window.Context.Draw(PrimitiveType.TriangleStrip, _drawStatePassThru, _sceneState);
             }
         }
 
@@ -454,11 +450,19 @@ namespace MiniGlobe.Examples.Chapter8
 
         public void Dispose()
         {
+            _depthTexture.Dispose();
+            _colorTexture.Dispose();
+            _fbo.Dispose();
+            _wallVA.Dispose();
+            _lineVA.Dispose();
+
+            _drawStateWall.ShaderProgram.Dispose();
+            _drawStateLine.ShaderProgram.Dispose();
+            _drawStatePassThru.ShaderProgram.Dispose();
+
             _camera.Dispose();
             _tile.Dispose();
             _window.Dispose();
-
-            // TODO - add all the disposes
         }
 
         #endregion
@@ -499,10 +503,10 @@ namespace MiniGlobe.Examples.Chapter8
         private readonly FrameBuffer _fbo;
         private VertexArray _wallVA;
         private VertexArray _lineVA;
-        private RenderState _lotRenderState;
-        private readonly ShaderProgram _passThruSP;
-        private readonly ShaderProgram _lotWallSP;
-        private readonly ShaderProgram _lotLineSP;
+
+        private readonly DrawState _drawStateWall;
+        private readonly DrawState _drawStateLine;
+        private readonly DrawState _drawStatePassThru;
 
         // TODO - should you keep this here?
         private float _width = 1.0f;

@@ -258,7 +258,7 @@ namespace MiniGlobe.Examples.Chapter4
             //
             // Render viewport quad to show contents of frame buffer's color buffer
             //
-            context.Bind(null as FrameBuffer);
+            context.Bind(null);
             _viewportQuad.Render(context, _sceneState);
         }
 

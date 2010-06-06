@@ -247,22 +247,9 @@ namespace MiniGlobe.Renderer
         public abstract void Clear(ClearState clearState);
         public abstract Rectangle Viewport { get; set; }
 
-        public abstract void Bind(RenderState renderState);
-        public abstract void Bind(VertexArray vertexArray);
-        public abstract void Bind(ShaderProgram shaderProgram);
         public abstract void Bind(FrameBuffer frameBuffer);
-        
-        public virtual void Draw(PrimitiveType primitiveType, int offset, int count)
-        {
-            Draw(primitiveType, offset, count, null);
-        }
 
-        public virtual void Draw(PrimitiveType primitiveType)
-        {
-            Draw(primitiveType, null);
-        }
-
-        public abstract void Draw(PrimitiveType primitiveType, int offset, int count, SceneState sceneState);
-        public abstract void Draw(PrimitiveType primitiveType, SceneState sceneState);
+        public abstract void Draw(PrimitiveType primitiveType, int offset, int count, DrawState drawState, SceneState sceneState);
+        public abstract void Draw(PrimitiveType primitiveType, DrawState drawState, SceneState sceneState);
     }
 }

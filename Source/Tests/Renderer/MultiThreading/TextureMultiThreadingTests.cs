@@ -79,9 +79,7 @@ namespace MiniGlobe.Renderer.MultiThreading
             window.Context.TextureUnits[0].Texture2D = factory0.Texture;
             window.Context.TextureUnits[1].Texture2D = factory1.Texture;
             window.Context.Bind(frameBuffer);
-            window.Context.Bind(sp);
-            window.Context.Bind(va);
-            window.Context.Draw(PrimitiveType.Points, 0, 1);
+            window.Context.Draw(PrimitiveType.Points, 0, 1, new DrawState(new RenderState(), sp, va), null);
 
             TestUtility.ValidateColor(frameBuffer.ColorAttachments[0], 127, 255, 0);
 
@@ -130,9 +128,7 @@ namespace MiniGlobe.Renderer.MultiThreading
             window.Context.TextureUnits[0].Texture2D = factory0.Texture;
             window.Context.TextureUnits[1].Texture2D = factory1.Texture;
             window.Context.Bind(frameBuffer);
-            window.Context.Bind(sp);
-            window.Context.Bind(va);
-            window.Context.Draw(PrimitiveType.Points, 0, 1);
+            window.Context.Draw(PrimitiveType.Points, 0, 1, new DrawState(new RenderState(), sp, va), null);
 
             TestUtility.ValidateColor(frameBuffer.ColorAttachments[0], 255, 255, 0);
 

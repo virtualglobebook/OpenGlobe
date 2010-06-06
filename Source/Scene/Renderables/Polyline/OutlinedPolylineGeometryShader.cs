@@ -18,8 +18,8 @@ namespace MiniGlobe.Scene
     {
         public OutlinedPolylineGeometryShader()
         {
-            _renderState = new RenderState();
-            _renderState.FacetCulling.Enabled = false;
+            _drawState = new DrawState();
+            _drawState.RenderState.FacetCulling.Enabled = false;
 
             Width = 1;
             OutlineWidth = 1;
@@ -48,18 +48,18 @@ namespace MiniGlobe.Scene
                 throw new ArgumentException("mesh.Attributes should contain attributes named \"position\", \"color\", and \"outlineColor\".", "mesh");
             }
 
-            if (_sp == null)
+            if (_drawState.ShaderProgram == null)
             {
-                _sp = Device.CreateShaderProgram(
+                _drawState.ShaderProgram = Device.CreateShaderProgram(
                     EmbeddedResources.GetText("MiniGlobe.Scene.Renderables.Polyline.OutlinedPolylineGeometryShader.PolylineVS.glsl"),
                     EmbeddedResources.GetText("MiniGlobe.Scene.Renderables.Polyline.OutlinedPolylineGeometryShader.PolylineGS.glsl"),
                     EmbeddedResources.GetText("MiniGlobe.Scene.Renderables.Polyline.OutlinedPolylineGeometryShader.PolylineFS.glsl"));
-                _fillDistance = _sp.Uniforms["u_fillDistance"] as Uniform<float>;
-                _outlineDistance = _sp.Uniforms["u_outlineDistance"] as Uniform<float>;
+                _fillDistance = _drawState.ShaderProgram.Uniforms["u_fillDistance"] as Uniform<float>;
+                _outlineDistance = _drawState.ShaderProgram.Uniforms["u_outlineDistance"] as Uniform<float>;
             }
 
             ///////////////////////////////////////////////////////////////////
-            _va = context.CreateVertexArray(mesh, _sp.VertexAttributes, BufferHint.StaticDraw);
+            _drawState.VertexArray = context.CreateVertexArray(mesh, _drawState.ShaderProgram.VertexAttributes, BufferHint.StaticDraw);
             _primitiveType = mesh.PrimitiveType;
         }
 
@@ -68,16 +68,13 @@ namespace MiniGlobe.Scene
             Verify.ThrowIfNull(context);
             Verify.ThrowIfNull(sceneState);
 
-            if (_sp != null)
+            if (_drawState.ShaderProgram != null)
             {
                 double fillDistance = Width * 0.5 * sceneState.HighResolutionSnapScale;
                 _fillDistance.Value = (float)(fillDistance);
                 _outlineDistance.Value = (float)(fillDistance + (OutlineWidth * sceneState.HighResolutionSnapScale));
 
-                context.Bind(_renderState);
-                context.Bind(_sp);
-                context.Bind(_va);
-                context.Draw(_primitiveType, sceneState);
+                context.Draw(_primitiveType, _drawState, sceneState);
             }
         }
 
@@ -87,32 +84,30 @@ namespace MiniGlobe.Scene
 
         public bool Wireframe
         {
-            get { return _renderState.RasterizationMode == RasterizationMode.Line; }
-            set { _renderState.RasterizationMode = value ? RasterizationMode.Line : RasterizationMode.Fill; }
+            get { return _drawState.RenderState.RasterizationMode == RasterizationMode.Line; }
+            set { _drawState.RenderState.RasterizationMode = value ? RasterizationMode.Line : RasterizationMode.Fill; }
         }
 
         #region IDisposable Members
 
         public void Dispose()
         {
-            if (_sp != null)
+            if (_drawState.ShaderProgram != null)
             {
-                _sp.Dispose();
+                _drawState.ShaderProgram.Dispose();
             }
 
-            if (_va != null)
+            if (_drawState.VertexArray != null)
             {
-                _va.Dispose();
+                _drawState.VertexArray.Dispose();
             }
         }
 
         #endregion
 
-        private readonly RenderState _renderState;
-        private ShaderProgram _sp;
+        private readonly DrawState _drawState;
         private Uniform<float> _fillDistance;
         private Uniform<float> _outlineDistance;
-        private VertexArray _va;
         private PrimitiveType _primitiveType;
     }
 }

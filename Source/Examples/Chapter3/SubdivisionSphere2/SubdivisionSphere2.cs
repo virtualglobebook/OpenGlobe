@@ -86,15 +86,17 @@ namespace MiniGlobe.Examples.Chapter3
                       float intensity = LightIntensity(normal,  normalize(positionToLight), normalize(positionToEye), mg_diffuseSpecularAmbientShininess);
                       fragmentColor = intensity * texture(mg_texture0, surfaceTextureCoordinate).rgb;
                   }";
-            _sp = Device.CreateShaderProgram(vs, fs);
+            ShaderProgram sp = Device.CreateShaderProgram(vs, fs);
 
             Mesh mesh = SubdivisionSphereTessellator.Compute(5, SubdivisionSphereVertexAttributes.All);
-            _va = _window.Context.CreateVertexArray(mesh, _sp.VertexAttributes, BufferHint.StaticDraw);
+            VertexArray va = _window.Context.CreateVertexArray(mesh, sp.VertexAttributes, BufferHint.StaticDraw);
             _primitiveType = mesh.PrimitiveType;
 
-            _renderState = new RenderState();
-            _renderState.FacetCulling.FrontFaceWindingOrder = mesh.FrontFaceWindingOrder;
-            
+            RenderState renderState = new RenderState();
+            renderState.FacetCulling.FrontFaceWindingOrder = mesh.FrontFaceWindingOrder;
+
+            _drawState = new DrawState(renderState, sp, va);
+
             Bitmap bitmap = new Bitmap("NE2_50M_SR_W_4096.jpg");
             _texture = Device.CreateTexture2D(bitmap, TextureFormat.RedGreenBlue8, false);
         }
@@ -111,10 +113,7 @@ namespace MiniGlobe.Examples.Chapter3
             Context context = _window.Context;
             context.Clear(_clearState);
             context.TextureUnits[0].Texture2D = _texture;
-            context.Bind(_renderState);
-            context.Bind(_sp);
-            context.Bind(_va);
-            context.Draw(_primitiveType, _sceneState);
+            context.Draw(_primitiveType, _drawState, _sceneState);
         }
 
         #region IDisposable Members
@@ -122,8 +121,8 @@ namespace MiniGlobe.Examples.Chapter3
         public void Dispose()
         {
             _texture.Dispose();
-            _va.Dispose();
-            _sp.Dispose();
+            _drawState.VertexArray.Dispose();
+            _drawState.ShaderProgram.Dispose();
             _camera.Dispose();
             _window.Dispose();
         }
@@ -147,9 +146,7 @@ namespace MiniGlobe.Examples.Chapter3
         private readonly SceneState _sceneState;
         private readonly CameraLookAtPoint _camera;
         private readonly ClearState _clearState;
-        private readonly RenderState _renderState;
-        private readonly ShaderProgram _sp;
-        private readonly VertexArray _va;
+        private readonly DrawState _drawState;
         private readonly Texture2D _texture;
         private readonly PrimitiveType _primitiveType;
     }

@@ -19,11 +19,13 @@ namespace MiniGlobe.Scene
         {
             Verify.ThrowIfNull(context);
 
-            _renderState = new RenderState();
-            _renderState.FacetCulling.Enabled = false;
-            _renderState.DepthTest.Enabled = false;
+            RenderState renderState = new RenderState();
+            renderState.FacetCulling.Enabled = false;
+            renderState.DepthTest.Enabled = false;
 
-            _sp = Device.CreateShaderProgram(
+            _drawState = new DrawState();
+            _drawState.RenderState = renderState;
+            _drawState.ShaderProgram = Device.CreateShaderProgram(
                 EmbeddedResources.GetText("MiniGlobe.Scene.Renderables.ViewportQuad.Shaders.ViewportQuadVS.glsl"),
                 EmbeddedResources.GetText("MiniGlobe.Scene.Renderables.ViewportQuad.Shaders.ViewportQuadFS.glsl"));
 
@@ -33,17 +35,14 @@ namespace MiniGlobe.Scene
         public void Render(Context context, SceneState sceneState)
         {
             Verify.ThrowIfNull(context);
-            Verify.ThrowIfNull(sceneState);
-
             Verify.ThrowInvalidOperationIfNull(Texture, "Texture");
 
-            _geometry.Update(context, _sp);
+            _geometry.Update(context, _drawState.ShaderProgram);
 
             context.TextureUnits[0].Texture2D = Texture;
-            context.Bind(_renderState);
-            context.Bind(_sp);
-            context.Bind(_geometry.VertexArray);
-            context.Draw(PrimitiveType.TriangleStrip, sceneState);
+            _drawState.VertexArray = _geometry.VertexArray;
+
+            context.Draw(PrimitiveType.TriangleStrip, _drawState, sceneState);
         }
 
         public Texture2D Texture { get; set; }
@@ -52,14 +51,13 @@ namespace MiniGlobe.Scene
 
         public void Dispose()
         {
-            _sp.Dispose();
+            _drawState.ShaderProgram.Dispose();
             _geometry.Dispose();
         }
 
         #endregion
 
-        private readonly RenderState _renderState;
-        private readonly ShaderProgram _sp;
+        private readonly DrawState _drawState;
         private readonly ViewportQuadGeometry _geometry;
     }
 }

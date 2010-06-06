@@ -55,9 +55,7 @@ namespace MiniGlobe.Core
             VertexArray va = window.Context.CreateVertexArray(mesh, sp.VertexAttributes, BufferHint.StaticDraw);
 
             window.Context.Bind(frameBuffer);
-            window.Context.Bind(sp);
-            window.Context.Bind(va);
-            window.Context.Draw(PrimitiveType.Triangles);
+            window.Context.Draw(PrimitiveType.Triangles, new DrawState(new RenderState(), sp, va), null);
 
             TestUtility.ValidateColor(frameBuffer.ColorAttachments[0], 255, 0, 0);
 

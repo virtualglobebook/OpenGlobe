@@ -55,8 +55,8 @@ namespace MiniGlobe.Examples.Chapter3.NumberPrecision
                   {
                       FragColor = vec4(1.0, 0.0, 0.0, 0.0);
                   }";
-            _sp = Device.CreateShaderProgram(vs, fs);
-            _va = _window.Context.CreateVertexArray();
+            ShaderProgram sp = Device.CreateShaderProgram(vs, fs);
+            VertexArray va = _window.Context.CreateVertexArray();
 
             //
             // Points
@@ -93,8 +93,8 @@ namespace MiniGlobe.Examples.Chapter3.NumberPrecision
             AttachedVertexBuffer attachedPositionVertexBuffer = new AttachedVertexBuffer(
                 _positionVertexBuffer, VertexAttributeComponentType.Float, 3);
 
-            int location = _sp.VertexAttributes["position"].Location;
-            _va.VertexBuffers[location] = attachedPositionVertexBuffer;
+            int location = sp.VertexAttributes["position"].Location;
+            va.VertexBuffers[location] = attachedPositionVertexBuffer;
 
             _camera.Camera.PerspectiveNearPlaneDistance = 0.005;
             _camera.Camera.PerspectiveFarPlaneDistance = 5.0;
@@ -112,8 +112,10 @@ namespace MiniGlobe.Examples.Chapter3.NumberPrecision
             //
             // Enable point size.
             //
-            _renderState = new RenderState();
-            _renderState.ProgramPointSize = ProgramPointSize.Enabled;
+            RenderState renderState = new RenderState();
+            renderState.ProgramPointSize = ProgramPointSize.Enabled;
+
+            _drawState = new DrawState(renderState, sp, va);
 
             Font font = new Font("Arial", 24);
             _bg = new BillboardCollection(_window.Context);
@@ -145,10 +147,7 @@ namespace MiniGlobe.Examples.Chapter3.NumberPrecision
             //
             // Points
             //
-            context.Bind(_renderState);
-            context.Bind(_sp);
-            context.Bind(_va);
-            context.Draw(PrimitiveType.Points, _sceneState);
+            context.Draw(PrimitiveType.Points, _drawState, _sceneState);
             
             //
             // Text
@@ -176,8 +175,8 @@ namespace MiniGlobe.Examples.Chapter3.NumberPrecision
         public void Dispose()
         {
             _camera.Dispose();
-            _sp.Dispose();
-            _va.Dispose();
+            _drawState.ShaderProgram.Dispose();
+            _drawState.VertexArray.Dispose();
             _bg.Texture.Dispose();
             _bg.Dispose();
             _positionVertexBuffer.Dispose();
@@ -203,11 +202,9 @@ namespace MiniGlobe.Examples.Chapter3.NumberPrecision
         private readonly SceneState _sceneState;
         private readonly CameraLookAtPoint _camera;
         private readonly ClearState _clearState;
-        private ShaderProgram _sp;
-        private VertexArray _va;
+        private readonly DrawState _drawState;
         private readonly BillboardCollection _bg;
         private VertexBuffer _positionVertexBuffer;
-        private readonly RenderState _renderState;
         private double _viewCenterX = 131071.50;
     }
 }

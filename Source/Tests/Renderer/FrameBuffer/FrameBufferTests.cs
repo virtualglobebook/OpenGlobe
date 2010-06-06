@@ -34,7 +34,7 @@ namespace MiniGlobe.Renderer
             // and should bind without error.
             //
             window.Context.Bind(frameBuffer);
-            window.Context.Bind(null as FrameBuffer);
+            window.Context.Bind(null);
 
             frameBuffer.ColorAttachments[0] = null;
             Assert.IsNull(frameBuffer.ColorAttachments[0]);

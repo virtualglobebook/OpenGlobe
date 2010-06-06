@@ -21,43 +21,41 @@ namespace MiniGlobe.Scene
         {
             Verify.ThrowIfNull(context);
 
-            _lineRS = new RenderState();
-            _lineRS.FacetCulling.Enabled = false;
+            RenderState lineRS = new RenderState();
+            lineRS.FacetCulling.Enabled = false;
 
-            _lineSP = Device.CreateShaderProgram(
+            ShaderProgram lineSP = Device.CreateShaderProgram(
                 EmbeddedResources.GetText("MiniGlobe.Scene.Renderables.Plane.Shaders.LineVS.glsl"),
                 EmbeddedResources.GetText("MiniGlobe.Scene.Renderables.Plane.Shaders.LineGS.glsl"),
                 EmbeddedResources.GetText("MiniGlobe.Scene.Renderables.Plane.Shaders.LineFS.glsl"));
-            _lineLogarithmicDepth = _lineSP.Uniforms["u_logarithmicDepth"] as Uniform<bool>;
-            _lineLogarithmicDepthConstant = _lineSP.Uniforms["u_logarithmicDepthConstant"] as Uniform<float>;
+            _lineLogarithmicDepth = lineSP.Uniforms["u_logarithmicDepth"] as Uniform<bool>;
+            _lineLogarithmicDepthConstant = lineSP.Uniforms["u_logarithmicDepthConstant"] as Uniform<float>;
+            _lineFillDistance = lineSP.Uniforms["u_fillDistance"] as Uniform<float>;
+            _lineColorUniform = lineSP.Uniforms["u_color"] as Uniform<Vector3S>;
 
-            _lineFillDistance = _lineSP.Uniforms["u_fillDistance"] as Uniform<float>;
             OutlineWidth = 1;
-
-            _lineColorUniform = _lineSP.Uniforms["u_color"] as Uniform<Vector3S>;
             OutlineColor = Color.Gray;
 
             ///////////////////////////////////////////////////////////////////
 
-            _fillRS = new RenderState();
-            _fillRS.FacetCulling.Enabled = false;
-            _fillRS.Blending.Enabled = true;
-            _fillRS.Blending.SourceRGBFactor = SourceBlendingFactor.SourceAlpha;
-            _fillRS.Blending.SourceAlphaFactor = SourceBlendingFactor.SourceAlpha;
-            _fillRS.Blending.DestinationRGBFactor = DestinationBlendingFactor.OneMinusSourceAlpha;
-            _fillRS.Blending.DestinationAlphaFactor = DestinationBlendingFactor.OneMinusSourceAlpha;
+            RenderState fillRS = new RenderState();
+            fillRS.FacetCulling.Enabled = false;
+            fillRS.Blending.Enabled = true;
+            fillRS.Blending.SourceRGBFactor = SourceBlendingFactor.SourceAlpha;
+            fillRS.Blending.SourceAlphaFactor = SourceBlendingFactor.SourceAlpha;
+            fillRS.Blending.DestinationRGBFactor = DestinationBlendingFactor.OneMinusSourceAlpha;
+            fillRS.Blending.DestinationAlphaFactor = DestinationBlendingFactor.OneMinusSourceAlpha;
             
-            _fillSP = Device.CreateShaderProgram(
+            ShaderProgram fillSP = Device.CreateShaderProgram(
                 EmbeddedResources.GetText("MiniGlobe.Scene.Renderables.Plane.Shaders.FillVS.glsl"),
                 EmbeddedResources.GetText("MiniGlobe.Scene.Renderables.Plane.Shaders.FillFS.glsl"));
-            _fillLogarithmicDepth = _fillSP.Uniforms["u_logarithmicDepth"] as Uniform<bool>;
-            _fillLogarithmicDepthConstant = _fillSP.Uniforms["u_logarithmicDepthConstant"] as Uniform<float>;
+            _fillLogarithmicDepth = fillSP.Uniforms["u_logarithmicDepth"] as Uniform<bool>;
+            _fillLogarithmicDepthConstant = fillSP.Uniforms["u_logarithmicDepthConstant"] as Uniform<float>;
+            _fillColorUniform = fillSP.Uniforms["u_color"] as Uniform<Vector3S>;
+            _fillAlphaUniform = fillSP.Uniforms["u_alpha"] as Uniform<float>;
+
             LogarithmicDepthConstant = 1;
-
-            _fillColorUniform = _fillSP.Uniforms["u_color"] as Uniform<Vector3S>;
             FillColor = Color.Gray;
-
-            _fillAlphaUniform = _fillSP.Uniforms["u_alpha"] as Uniform<float>;
             FillTranslucency = 0.5f;
 
             ///////////////////////////////////////////////////////////////////
@@ -75,13 +73,17 @@ namespace MiniGlobe.Scene
             AttachedVertexBuffer attachedPositionBuffer = new AttachedVertexBuffer(
                 _positionBuffer, VertexAttributeComponentType.Float, 3);
             _va = context.CreateVertexArray();
-            _va.VertexBuffers[_lineSP.VertexAttributes["position"].Location] = attachedPositionBuffer;
+            _va.VertexBuffers[lineSP.VertexAttributes["position"].Location] = attachedPositionBuffer;
             _va.IndexBuffer = indexBuffer;
 
             ShowOutline = true;
             ShowFill = true;
 
             ///////////////////////////////////////////////////////////////////
+
+            _drawStateLine = new DrawState(lineRS, lineSP, _va);
+            _drawStateFill = new DrawState(fillRS, fillSP, _va);
+
             Origin = Vector3D.Zero;
             XAxis = Vector3D.UnitX;
             YAxis = Vector3D.UnitY;
@@ -111,17 +113,13 @@ namespace MiniGlobe.Scene
 
             Update();
 
-            context.Bind(_va);
-
             if (ShowOutline)
             {
                 //
                 // Pass 1:  Outline
                 //
                 _lineFillDistance.Value = (float)(OutlineWidth * 0.5 * sceneState.HighResolutionSnapScale);
-                context.Bind(_lineRS);
-                context.Bind(_lineSP);
-                context.Draw(PrimitiveType.LineLoop, 0, 4, sceneState);
+                context.Draw(PrimitiveType.LineLoop, 0, 4, _drawStateLine, sceneState);
             }
 
             if (ShowFill)
@@ -129,19 +127,17 @@ namespace MiniGlobe.Scene
                 //
                 // Pass 2:  Fill
                 //
-                context.Bind(_fillRS);
-                context.Bind(_fillSP);
-                context.Draw(PrimitiveType.Triangles, 4, 6, sceneState);
+                context.Draw(PrimitiveType.Triangles, 4, 6, _drawStateFill, sceneState);
             }
         }
 
         public DepthTestFunction DepthTestFunction
         {
-            get { return _fillRS.DepthTest.Function; }
+            get { return _drawStateLine.RenderState.DepthTest.Function; }
             set 
             {
-                _lineRS.DepthTest.Function = value;
-                _fillRS.DepthTest.Function = value; 
+                _drawStateLine.RenderState.DepthTest.Function = value;
+                _drawStateFill.RenderState.DepthTest.Function = value; 
             }
         }
 
@@ -248,16 +244,15 @@ namespace MiniGlobe.Scene
 
         public void Dispose()
         {
-            _lineSP.Dispose();
-            _fillSP.Dispose();
+            _drawStateLine.ShaderProgram.Dispose();
+            _drawStateFill.ShaderProgram.Dispose();
             _positionBuffer.Dispose();
             _va.Dispose();
         }
 
         #endregion
 
-        private readonly RenderState _lineRS;
-        private readonly ShaderProgram _lineSP;
+        private readonly DrawState _drawStateLine;
         private readonly Uniform<bool> _lineLogarithmicDepth;
         private readonly Uniform<float> _lineLogarithmicDepthConstant;
 
@@ -265,8 +260,7 @@ namespace MiniGlobe.Scene
         private readonly Uniform<Vector3S> _lineColorUniform;
         private Color _lineColor;
 
-        private readonly RenderState _fillRS;
-        private readonly ShaderProgram _fillSP;
+        private readonly DrawState _drawStateFill;
         private readonly Uniform<bool> _fillLogarithmicDepth;
         private readonly Uniform<float> _fillLogarithmicDepthConstant;
 

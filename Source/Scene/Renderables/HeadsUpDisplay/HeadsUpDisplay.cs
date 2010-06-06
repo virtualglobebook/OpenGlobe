@@ -21,23 +21,23 @@ namespace MiniGlobe.Scene
         {
             Verify.ThrowIfNull(context);
 
-            _renderState = new RenderState();
-            _renderState.FacetCulling.Enabled = false;
-            _renderState.DepthTest.Enabled = false;
-            _renderState.Blending.Enabled = true;
-            _renderState.Blending.SourceRGBFactor = SourceBlendingFactor.SourceAlpha;
-            _renderState.Blending.SourceAlphaFactor = SourceBlendingFactor.SourceAlpha;
-            _renderState.Blending.DestinationRGBFactor = DestinationBlendingFactor.OneMinusSourceAlpha;
-            _renderState.Blending.DestinationAlphaFactor = DestinationBlendingFactor.OneMinusSourceAlpha;
+            RenderState renderState = new RenderState();
+            renderState.FacetCulling.Enabled = false;
+            renderState.DepthTest.Enabled = false;
+            renderState.Blending.Enabled = true;
+            renderState.Blending.SourceRGBFactor = SourceBlendingFactor.SourceAlpha;
+            renderState.Blending.SourceAlphaFactor = SourceBlendingFactor.SourceAlpha;
+            renderState.Blending.DestinationRGBFactor = DestinationBlendingFactor.OneMinusSourceAlpha;
+            renderState.Blending.DestinationAlphaFactor = DestinationBlendingFactor.OneMinusSourceAlpha;
 
-            _sp = Device.CreateShaderProgram(
+            ShaderProgram sp = Device.CreateShaderProgram(
                 EmbeddedResources.GetText("MiniGlobe.Scene.Renderables.HeadsUpDisplay.Shaders.HeadsUpDisplayVS.glsl"),
                 EmbeddedResources.GetText("MiniGlobe.Scene.Renderables.HeadsUpDisplay.Shaders.HeadsUpDisplayGS.glsl"),
                 EmbeddedResources.GetText("MiniGlobe.Scene.Renderables.HeadsUpDisplay.Shaders.HeadsUpDisplayFS.glsl"));
-            _colorUniform = _sp.Uniforms["u_color"] as Uniform<Vector3S>;
-            _originScaleUniform = _sp.Uniforms["u_originScale"] as Uniform<Vector2S>;
-            
-            ///////////////////////////////////////////////////////////////////
+            _colorUniform = sp.Uniforms["u_color"] as Uniform<Vector3S>;
+            _originScaleUniform = sp.Uniforms["u_originScale"] as Uniform<Vector2S>;
+
+            _drawState = new DrawState(renderState, sp, null);
 
             Color = Color.White;
             HorizontalOrigin = HorizontalOrigin.Left;
@@ -53,8 +53,8 @@ namespace MiniGlobe.Scene
             AttachedVertexBuffer attachedPositionBuffer = new AttachedVertexBuffer(
                 _positionBuffer, VertexAttributeComponentType.Float, 2);
 
-            _va = context.CreateVertexArray();
-            _va.VertexBuffers[_sp.VertexAttributes["position"].Location] = attachedPositionBuffer;
+            _drawState.VertexArray = context.CreateVertexArray();
+            _drawState.VertexArray.VertexBuffers[_drawState.ShaderProgram.VertexAttributes["position"].Location] = attachedPositionBuffer;
          }
 
         private void Update(Context context)
@@ -74,18 +74,14 @@ namespace MiniGlobe.Scene
         public void Render(Context context, SceneState sceneState)
         {
             Verify.ThrowIfNull(context);
-            Verify.ThrowIfNull(sceneState);
             Verify.ThrowInvalidOperationIfNull(Texture, "Texture");
 
             Update(context);
 
-            if (_va != null)
+            if (_drawState.VertexArray != null)
             {
                 context.TextureUnits[0].Texture2D = Texture;
-                context.Bind(_renderState);
-                context.Bind(_sp);
-                context.Bind(_va);
-                context.Draw(PrimitiveType.Points, sceneState);
+                context.Draw(PrimitiveType.Points, _drawState, sceneState);
             }
         }
 
@@ -144,7 +140,7 @@ namespace MiniGlobe.Scene
 
         public void Dispose()
         {
-            _sp.Dispose();
+            _drawState.ShaderProgram.Dispose();
             DisposeVertexArray();
         }
 
@@ -158,15 +154,14 @@ namespace MiniGlobe.Scene
                 _positionBuffer = null;
             }
 
-            if (_va != null)
+            if (_drawState.VertexArray != null)
             {
-                _va.Dispose();
-                _va = null;
+                _drawState.VertexArray.Dispose();
+                _drawState.VertexArray = null;
             }
         }
 
-        private readonly RenderState _renderState;
-        private readonly ShaderProgram _sp;
+        private readonly DrawState _drawState;
         private readonly Uniform<Vector3S> _colorUniform;
         private readonly Uniform<Vector2S> _originScaleUniform;
         private Color _color;
@@ -177,7 +172,6 @@ namespace MiniGlobe.Scene
         private VerticalOrigin _verticalOrigin;
 
         private VertexBuffer _positionBuffer;
-        private VertexArray _va;
 
         private static readonly Half[] _originScale = new Half[] { new Half(0.0), new Half(1.0), new Half(-1.0) };
     }

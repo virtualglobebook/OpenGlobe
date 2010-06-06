@@ -20,15 +20,16 @@ namespace MiniGlobe.Scene
         {
             Verify.ThrowIfNull(context);
 
-            _sp = Device.CreateShaderProgram(
+            ShaderProgram sp = Device.CreateShaderProgram(
                 EmbeddedResources.GetText("MiniGlobe.Scene.Globes.Tessellated.Shaders.GlobeVS.glsl"),
                 EmbeddedResources.GetText("MiniGlobe.Scene.Globes.Tessellated.Shaders.GlobeFS.glsl"));
-            _textured = _sp.Uniforms["u_Textured"] as Uniform<bool>;
-            _logarithmicDepth = _sp.Uniforms["u_logarithmicDepth"] as Uniform<bool>;
-            _logarithmicDepthConstant = _sp.Uniforms["u_logarithmicDepthConstant"] as Uniform<float>;
+            _textured = sp.Uniforms["u_Textured"] as Uniform<bool>;
+            _logarithmicDepth = sp.Uniforms["u_logarithmicDepth"] as Uniform<bool>;
+            _logarithmicDepthConstant = sp.Uniforms["u_logarithmicDepthConstant"] as Uniform<float>;
             LogarithmicDepthConstant = 1;
             
-            _renderState = new RenderState();
+            _drawState = new DrawState();
+            _drawState.ShaderProgram = sp;
 
             Shape = Ellipsoid.UnitSphere;
             NumberOfSlicePartitions = 32;
@@ -39,18 +40,19 @@ namespace MiniGlobe.Scene
         {
             if (_dirty)
             {
-                if (_va != null)
+                if (_drawState.VertexArray != null)
                 {
-                    _va.Dispose();
+                    _drawState.VertexArray.Dispose();
+                    _drawState.VertexArray = null;
                 }
 
                 Mesh mesh = GeographicGridEllipsoidTessellator.Compute(Shape,
                     _numberOfSlicePartitions, _numberOfStackPartitions, GeographicGridEllipsoidVertexAttributes.Position);
-                _va = context.CreateVertexArray(mesh, _sp.VertexAttributes, BufferHint.StaticDraw);
+                _drawState.VertexArray = context.CreateVertexArray(mesh, _drawState.ShaderProgram.VertexAttributes, BufferHint.StaticDraw);
                 _primitiveType = mesh.PrimitiveType;
                 _numberOfTriangles = ((mesh.Indices as IndicesInt32).Values.Count / 3);
 
-                _renderState.FacetCulling.FrontFaceWindingOrder = mesh.FrontFaceWindingOrder;
+                _drawState.RenderState.FacetCulling.FrontFaceWindingOrder = mesh.FrontFaceWindingOrder;
 
                 _dirty = false;
             }
@@ -59,7 +61,6 @@ namespace MiniGlobe.Scene
         public void Render(Context context, SceneState sceneState)
         {
             Verify.ThrowIfNull(context);
-            Verify.ThrowIfNull(sceneState);
 
             Clean(context);
 
@@ -69,18 +70,15 @@ namespace MiniGlobe.Scene
                 context.TextureUnits[0].Texture2D = Texture;
             }
 
-            _renderState.RasterizationMode = Wireframe ? RasterizationMode.Line : RasterizationMode.Fill;
+            _drawState.RenderState.RasterizationMode = Wireframe ? RasterizationMode.Line : RasterizationMode.Fill;
 
-            context.Bind(_renderState);
-            context.Bind(_sp);
-            context.Bind(_va);
-            context.Draw(_primitiveType, sceneState);
+            context.Draw(_primitiveType, _drawState, sceneState);
         }
 
         public DepthTestFunction DepthTestFunction
         {
-            get { return _renderState.DepthTest.Function; }
-            set { _renderState.DepthTest.Function = value; }
+            get { return _drawState.RenderState.DepthTest.Function; }
+            set { _drawState.RenderState.DepthTest.Function = value; }
         }
 
         public bool Wireframe { get; set; }
@@ -148,22 +146,20 @@ namespace MiniGlobe.Scene
 
         public void Dispose()
         {
-            _sp.Dispose();
-            if (_va != null)
+            _drawState.ShaderProgram.Dispose();
+            if (_drawState.VertexArray != null)
             {
-                _va.Dispose();
+                _drawState.VertexArray.Dispose();
             }
         }
 
         #endregion
 
-        private readonly ShaderProgram _sp;
         private readonly Uniform<bool> _textured;
         private readonly Uniform<bool> _logarithmicDepth;
         private readonly Uniform<float> _logarithmicDepthConstant;
 
-        private readonly RenderState _renderState;
-        private VertexArray _va;
+        private readonly DrawState _drawState;
         private PrimitiveType _primitiveType;
 
         private Ellipsoid _shape;

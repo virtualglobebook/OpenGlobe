@@ -22,14 +22,15 @@ namespace MiniGlobe.Scene
         {
             Verify.ThrowIfNull(context);
 
-            _sp = Device.CreateShaderProgram(
+            ShaderProgram sp = Device.CreateShaderProgram(
                 EmbeddedResources.GetText("MiniGlobe.Scene.Globes.LatitudeLongitudeGrid.Shaders.GlobeVS.glsl"),
                 EmbeddedResources.GetText("MiniGlobe.Scene.Globes.LatitudeLongitudeGrid.Shaders.GlobeFS.glsl"));
-            _gridWidth = _sp.Uniforms["u_gridLineWidth"] as Uniform<Vector2S>;
-            _gridResolution = _sp.Uniforms["u_gridResolution"] as Uniform<Vector2S>;
-            _globeOneOverRadiiSquared = _sp.Uniforms["u_globeOneOverRadiiSquared"] as Uniform<Vector3S>;
+            _gridWidth = sp.Uniforms["u_gridLineWidth"] as Uniform<Vector2S>;
+            _gridResolution = sp.Uniforms["u_gridResolution"] as Uniform<Vector2S>;
+            _globeOneOverRadiiSquared = sp.Uniforms["u_globeOneOverRadiiSquared"] as Uniform<Vector3S>;
 
-            _renderState = new RenderState();
+            _drawState = new DrawState();
+            _drawState.ShaderProgram = sp;
 
             Shape = Ellipsoid.UnitSphere;
         }
@@ -38,16 +39,17 @@ namespace MiniGlobe.Scene
         {
             if (_dirty)
             {
-                if (_va != null)
+                if (_drawState.VertexArray != null)
                 {
-                    _va.Dispose();
+                    _drawState.VertexArray.Dispose();
+                    _drawState.VertexArray = null;
                 }
 
                 Mesh mesh = GeographicGridEllipsoidTessellator.Compute(_shape, 64, 32, GeographicGridEllipsoidVertexAttributes.Position);
-                _va = context.CreateVertexArray(mesh, _sp.VertexAttributes, BufferHint.StaticDraw);
+                _drawState.VertexArray = context.CreateVertexArray(mesh, _drawState.ShaderProgram.VertexAttributes, BufferHint.StaticDraw);
                 _primitiveType = mesh.PrimitiveType;
 
-                _renderState.FacetCulling.FrontFaceWindingOrder = mesh.FrontFaceWindingOrder;
+                _drawState.RenderState.FacetCulling.FrontFaceWindingOrder = mesh.FrontFaceWindingOrder;
 
                 _globeOneOverRadiiSquared.Value = _shape.OneOverRadiiSquared.ToVector3S();
 
@@ -85,10 +87,7 @@ namespace MiniGlobe.Scene
             _gridWidth.Value = new Vector2S(width, width);
 
             context.TextureUnits[0].Texture2D = Texture;
-            context.Bind(_renderState);
-            context.Bind(_sp);
-            context.Bind(_va);
-            context.Draw(_primitiveType, sceneState);
+            context.Draw(_primitiveType, _drawState, sceneState);
         }
 
         public Texture2D Texture { get; set; }
@@ -109,19 +108,17 @@ namespace MiniGlobe.Scene
 
         public void Dispose()
         {
-            _sp.Dispose();
-            _va.Dispose();
+            _drawState.ShaderProgram.Dispose();
+            _drawState.VertexArray.Dispose();
         }
 
         #endregion
 
-        private readonly RenderState _renderState;
-        private readonly ShaderProgram _sp;
+        private readonly DrawState _drawState;
         private readonly Uniform<Vector2S> _gridWidth;
         private readonly Uniform<Vector2S> _gridResolution;
         private readonly Uniform<Vector3S> _globeOneOverRadiiSquared;
 
-        private VertexArray _va;
         private PrimitiveType _primitiveType;
 
         private Ellipsoid _shape;

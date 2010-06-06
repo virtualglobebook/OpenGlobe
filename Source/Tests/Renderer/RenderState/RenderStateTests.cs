@@ -183,14 +183,5 @@ namespace MiniGlobe.Renderer
 
             Assert.IsFalse(renderState.DepthWrite);
         }
-
-        [Test]
-        public void ApplyDefaultStateBlock()
-        {
-            using (MiniGlobeWindow window = Device.CreateWindow(1, 1))
-            {
-                window.Context.Bind(new RenderState());
-            }
-        }
     }
 }

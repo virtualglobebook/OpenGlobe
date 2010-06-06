@@ -22,7 +22,7 @@ namespace MiniGlobe.Terrain
     {
         public RayCastedTerrainTile(Context context, TerrainTile tile)
         {
-            _sp = Device.CreateShaderProgram(
+            ShaderProgram sp = Device.CreateShaderProgram(
                 EmbeddedResources.GetText("MiniGlobe.Scene.Terrain.RayCastedTerrainTile.TerrainVS.glsl"),
                 EmbeddedResources.GetText("MiniGlobe.Scene.Terrain.RayCastedTerrainTile.TerrainFS.glsl"));
 
@@ -33,17 +33,18 @@ namespace MiniGlobe.Terrain
             _tileAABBUpperRight = new Vector3D(tile.Size.X, tile.Size.Y,
                 tile.MaximumHeight - tile.MinimumHeight);
 
-            _heightExaggeration = _sp.Uniforms["u_heightExaggeration"] as Uniform<float>;
-            _minimumHeight = _sp.Uniforms["u_minimumHeight"] as Uniform<float>;
-            _maximumHeight = _sp.Uniforms["u_maximumHeight"] as Uniform<float>;
-            _aabbLowerLeft = _sp.Uniforms["u_aabbLowerLeft"] as Uniform<Vector3S>;
-            _aabbUpperRight = _sp.Uniforms["u_aabbUpperRight"] as Uniform<Vector3S>;
+            _heightExaggeration = sp.Uniforms["u_heightExaggeration"] as Uniform<float>;
+            _minimumHeight = sp.Uniforms["u_minimumHeight"] as Uniform<float>;
+            _maximumHeight = sp.Uniforms["u_maximumHeight"] as Uniform<float>;
+            _aabbLowerLeft = sp.Uniforms["u_aabbLowerLeft"] as Uniform<Vector3S>;
+            _aabbUpperRight = sp.Uniforms["u_aabbUpperRight"] as Uniform<Vector3S>;
             HeightExaggeration = 1;
 
             ///////////////////////////////////////////////////////////////////
 
-            _renderState = new RenderState();
-            _renderState.FacetCulling.Face = CullFace.Front;
+            _drawState = new DrawState();
+            _drawState.RenderState.FacetCulling.Face = CullFace.Front;
+            _drawState.ShaderProgram = sp;
 
             //
             // Upload height map as a one channel floating point texture
@@ -78,13 +79,14 @@ namespace MiniGlobe.Terrain
                     positions[i] = positions[i] + halfRadii;
                 }
 
-                if (_va != null)
+                if (_drawState.VertexArray != null)
                 {
-                    _va.Dispose();
+                    _drawState.VertexArray.Dispose();
+                    _drawState.VertexArray = null;
                 }
-                _va = context.CreateVertexArray(mesh, _sp.VertexAttributes, BufferHint.StaticDraw);
+                _drawState.VertexArray = context.CreateVertexArray(mesh, _drawState.ShaderProgram.VertexAttributes, BufferHint.StaticDraw);
                 _primitiveType = mesh.PrimitiveType;
-                _renderState.FacetCulling.FrontFaceWindingOrder = mesh.FrontFaceWindingOrder;
+                _drawState.RenderState.FacetCulling.FrontFaceWindingOrder = mesh.FrontFaceWindingOrder;
 
                 _dirtyVA = false;
             }
@@ -93,15 +95,11 @@ namespace MiniGlobe.Terrain
         public void Render(Context context, SceneState sceneState)
         {
             Verify.ThrowIfNull(context);
-            Verify.ThrowIfNull(sceneState);
 
             Update(context);
 
             context.TextureUnits[0].Texture2DRectangle = _texture;
-            context.Bind(_sp);
-            context.Bind(_va);
-            context.Bind(_renderState);
-            context.Draw(_primitiveType, sceneState);
+            context.Draw(_primitiveType, _drawState, sceneState);
         }
 
         public float HeightExaggeration
@@ -135,14 +133,14 @@ namespace MiniGlobe.Terrain
 
         public void Dispose()
         {
-            _sp.Dispose();
-            _va.Dispose();
+            _drawState.ShaderProgram.Dispose();
+            _drawState.VertexArray.Dispose();
             _texture.Dispose();
         }
 
         #endregion
 
-        private readonly ShaderProgram _sp;
+        private readonly DrawState _drawState;
 
         private readonly Uniform<float> _heightExaggeration;
         private readonly Uniform<float> _minimumHeight;
@@ -157,9 +155,7 @@ namespace MiniGlobe.Terrain
         private readonly Vector3D _tileAABBUpperRight;
 
         private readonly Texture2D _texture;
-        private readonly RenderState _renderState;
 
-        private VertexArray _va;
         private PrimitiveType _primitiveType;
         private bool _dirtyVA;
     }

@@ -59,68 +59,72 @@ namespace MiniGlobe.Terrain
             
             ///////////////////////////////////////////////////////////////////
 
-            _spTerrain = Device.CreateShaderProgram(
+            ShaderProgram spTerrain = Device.CreateShaderProgram(
                 EmbeddedResources.GetText("MiniGlobe.Scene.Terrain.VertexDisplacementMapTerrainTile.TerrainVS.glsl"),
                 EmbeddedResources.GetText("MiniGlobe.Scene.Terrain.VertexDisplacementMapTerrainTile.TerrainFS.glsl"));
-            _heightExaggerationUniform = _spTerrain.Uniforms["u_heightExaggeration"] as Uniform<float>;
-            (_spTerrain.Uniforms["u_positionToTextureCoordinate"] as Uniform<Vector2S>).Value = new Vector2S(
+            _heightExaggerationUniform = spTerrain.Uniforms["u_heightExaggeration"] as Uniform<float>;
+            (spTerrain.Uniforms["u_positionToTextureCoordinate"] as Uniform<Vector2S>).Value = new Vector2S(
                 (float)(1.0 / (double)(tile.Size.X)), 
                 (float)( 1.0 / (double)(tile.Size.Y)));
-            (_spTerrain.Uniforms["u_positionToRepeatTextureCoordinate"] as Uniform<Vector2S>).Value = new Vector2S(
+            (spTerrain.Uniforms["u_positionToRepeatTextureCoordinate"] as Uniform<Vector2S>).Value = new Vector2S(
                 (float)(4.0 / (double)tile.Size.X),
                 (float)(4.0 / (double)tile.Size.Y));
             
             ///////////////////////////////////////////////////////////////////
 
-            _spNormals = Device.CreateShaderProgram(
+            ShaderProgram spNormals = Device.CreateShaderProgram(
                 EmbeddedResources.GetText("MiniGlobe.Scene.Terrain.VertexDisplacementMapTerrainTile.NormalsVS.glsl"),
                 EmbeddedResources.GetText("MiniGlobe.Scene.Terrain.VertexDisplacementMapTerrainTile.NormalsGS.glsl"),
                 EmbeddedResources.GetText("MiniGlobe.Scene.Terrain.VertexDisplacementMapTerrainTile.NormalsFS.glsl"));
-            _heightExaggerationNormals = _spNormals.Uniforms["u_heightExaggeration"] as Uniform<float>;
-            _fillDistanceNormals = _spNormals.Uniforms["u_fillDistance"] as Uniform<float>;
-            (_spNormals.Uniforms["u_color"] as Uniform<Vector3S>).Value = Vector3S.Zero;
+            _heightExaggerationNormals = spNormals.Uniforms["u_heightExaggeration"] as Uniform<float>;
+            _fillDistanceNormals = spNormals.Uniforms["u_fillDistance"] as Uniform<float>;
+            (spNormals.Uniforms["u_color"] as Uniform<Vector3S>).Value = Vector3S.Zero;
 
             ///////////////////////////////////////////////////////////////////
 
-            _spWireframe = Device.CreateShaderProgram(
+            ShaderProgram spWireframe = Device.CreateShaderProgram(
                 EmbeddedResources.GetText("MiniGlobe.Scene.Terrain.VertexDisplacementMapTerrainTile.WireframeVS.glsl"),
                 EmbeddedResources.GetText("MiniGlobe.Scene.Terrain.VertexDisplacementMapTerrainTile.WireframeGS.glsl"),
                 EmbeddedResources.GetText("MiniGlobe.Scene.Terrain.VertexDisplacementMapTerrainTile.WireframeFS.glsl"));
-            _lineWidthWireframe = _spWireframe.Uniforms["u_halfLineWidth"] as Uniform<float>;
-            _heightExaggerationWireframe = _spWireframe.Uniforms["u_heightExaggeration"] as Uniform<float>;
-            (_spWireframe.Uniforms["u_color"] as Uniform<Vector3S>).Value = Vector3S.Zero;
+            _lineWidthWireframe = spWireframe.Uniforms["u_halfLineWidth"] as Uniform<float>;
+            _heightExaggerationWireframe = spWireframe.Uniforms["u_heightExaggeration"] as Uniform<float>;
+            (spWireframe.Uniforms["u_color"] as Uniform<Vector3S>).Value = Vector3S.Zero;
             
             ///////////////////////////////////////////////////////////////////
 
             Mesh mesh = RectangleTessellator.Compute(new RectangleD(new Vector2D(0.5, 0.5),
                 new Vector2D((double)tile.Size.X - 0.5, (double)tile.Size.Y - 0.5)),
                 tile.Size.X - 1, tile.Size.Y - 1);
-            _va = context.CreateVertexArray(mesh, _spWireframe.VertexAttributes, BufferHint.StaticDraw);
+            _va = context.CreateVertexArray(mesh, spWireframe.VertexAttributes, BufferHint.StaticDraw);
             _primitiveType = mesh.PrimitiveType;
 
             ///////////////////////////////////////////////////////////////////
 
-            _rsTerrain = new RenderState();
-            _rsTerrain.FacetCulling.FrontFaceWindingOrder = mesh.FrontFaceWindingOrder;
+            RenderState rsTerrain = new RenderState();
+            rsTerrain.FacetCulling.FrontFaceWindingOrder = mesh.FrontFaceWindingOrder;
 
-            _rsWireframe = new RenderState();
-            _rsWireframe.Blending.Enabled = true;
-            _rsWireframe.Blending.SourceRGBFactor = SourceBlendingFactor.SourceAlpha;
-            _rsWireframe.Blending.SourceAlphaFactor = SourceBlendingFactor.SourceAlpha;
-            _rsWireframe.Blending.DestinationRGBFactor = DestinationBlendingFactor.OneMinusSourceAlpha;
-            _rsWireframe.Blending.DestinationAlphaFactor = DestinationBlendingFactor.OneMinusSourceAlpha;
-            _rsWireframe.FacetCulling.FrontFaceWindingOrder = mesh.FrontFaceWindingOrder;
-            _rsWireframe.DepthTest.Function = DepthTestFunction.LessThanOrEqual;
+            RenderState rsWireframe = new RenderState();
+            rsWireframe.Blending.Enabled = true;
+            rsWireframe.Blending.SourceRGBFactor = SourceBlendingFactor.SourceAlpha;
+            rsWireframe.Blending.SourceAlphaFactor = SourceBlendingFactor.SourceAlpha;
+            rsWireframe.Blending.DestinationRGBFactor = DestinationBlendingFactor.OneMinusSourceAlpha;
+            rsWireframe.Blending.DestinationAlphaFactor = DestinationBlendingFactor.OneMinusSourceAlpha;
+            rsWireframe.FacetCulling.FrontFaceWindingOrder = mesh.FrontFaceWindingOrder;
+            rsWireframe.DepthTest.Function = DepthTestFunction.LessThanOrEqual;
 
-            _rsNormals = new RenderState();
-            _rsNormals.FacetCulling.Enabled = false;
-            _rsNormals.Blending.Enabled = true;
-            _rsNormals.Blending.SourceRGBFactor = SourceBlendingFactor.SourceAlpha;
-            _rsNormals.Blending.SourceAlphaFactor = SourceBlendingFactor.SourceAlpha;
-            _rsNormals.Blending.DestinationRGBFactor = DestinationBlendingFactor.OneMinusSourceAlpha;
-            _rsNormals.Blending.DestinationAlphaFactor = DestinationBlendingFactor.OneMinusSourceAlpha;
+            RenderState rsNormals = new RenderState();
+            rsNormals.FacetCulling.Enabled = false;
+            rsNormals.Blending.Enabled = true;
+            rsNormals.Blending.SourceRGBFactor = SourceBlendingFactor.SourceAlpha;
+            rsNormals.Blending.SourceAlphaFactor = SourceBlendingFactor.SourceAlpha;
+            rsNormals.Blending.DestinationRGBFactor = DestinationBlendingFactor.OneMinusSourceAlpha;
+            rsNormals.Blending.DestinationAlphaFactor = DestinationBlendingFactor.OneMinusSourceAlpha;
 
             ///////////////////////////////////////////////////////////////////
+
+            _drawStateTerrain = new DrawState(rsTerrain, spTerrain, _va);
+            _drawStateWireframe = new DrawState(rsWireframe, spWireframe, _va);
+            _drawStateNormals = new DrawState(rsNormals, spNormals, _va);
 
             _tileMinimumHeight = tile.MinimumHeight;
             _tileMaximumHeight = tile.MaximumHeight;
@@ -135,14 +139,14 @@ namespace MiniGlobe.Terrain
         {
             if (_dirty)
             {
-                (_spTerrain.Uniforms["u_normalAlgorithm"] as Uniform<int>).Value = (int)_normalsAlgorithm;
-                (_spTerrain.Uniforms["u_shadingAlgorithm"] as Uniform<int>).Value = (int)_shadingAlgorithm;
-                (_spTerrain.Uniforms["u_showTerrain"] as Uniform<bool>).Value = _showTerrain;
-                (_spTerrain.Uniforms["u_showSilhouette"] as Uniform<bool>).Value = _showSilhouette;
-                (_spNormals.Uniforms["u_normalAlgorithm"] as Uniform<int>).Value = (int)_normalsAlgorithm;
+                (_drawStateTerrain.ShaderProgram.Uniforms["u_normalAlgorithm"] as Uniform<int>).Value = (int)_normalsAlgorithm;
+                (_drawStateTerrain.ShaderProgram.Uniforms["u_shadingAlgorithm"] as Uniform<int>).Value = (int)_shadingAlgorithm;
+                (_drawStateTerrain.ShaderProgram.Uniforms["u_showTerrain"] as Uniform<bool>).Value = _showTerrain;
+                (_drawStateTerrain.ShaderProgram.Uniforms["u_showSilhouette"] as Uniform<bool>).Value = _showSilhouette;
+                (_drawStateNormals.ShaderProgram.Uniforms["u_normalAlgorithm"] as Uniform<int>).Value = (int)_normalsAlgorithm;
 
-                _minimumHeight = _spTerrain.Uniforms["u_minimumHeight"] as Uniform<float>;
-                _maximumHeight = _spTerrain.Uniforms["u_maximumHeight"] as Uniform<float>;
+                _minimumHeight = _drawStateTerrain.ShaderProgram.Uniforms["u_minimumHeight"] as Uniform<float>;
+                _maximumHeight = _drawStateTerrain.ShaderProgram.Uniforms["u_maximumHeight"] as Uniform<float>;
 
                 _dirty = false;
             }
@@ -186,27 +190,19 @@ namespace MiniGlobe.Terrain
                 context.TextureUnits[4].Texture2D = StoneTexture;
                 context.TextureUnits[5].Texture2D = BlendMaskTexture;
 
-                context.Bind(_va);
-
                 if (ShowTerrain || ShowSilhouette)
                 {
-                    context.Bind(_spTerrain);
-                    context.Bind(_rsTerrain);
-                    context.Draw(_primitiveType, sceneState);
+                    context.Draw(_primitiveType, _drawStateTerrain, sceneState);
                 }
 
                 if (ShowWireframe)
                 {
-                    context.Bind(_spWireframe);
-                    context.Bind(_rsWireframe);
-                    context.Draw(_primitiveType, sceneState);
+                    context.Draw(_primitiveType, _drawStateWireframe, sceneState);
                 }
 
                 if (ShowNormals && (_normalsAlgorithm != TerrainNormalsAlgorithm.None))
                 {
-                    context.Bind(_spNormals);
-                    context.Bind(_rsNormals);
-                    context.Draw(PrimitiveType.Points, sceneState);
+                    context.Draw(PrimitiveType.Points, _drawStateNormals, sceneState);
                 }
             }
         }
@@ -295,9 +291,9 @@ namespace MiniGlobe.Terrain
 
         public void Dispose()
         {
-            _spTerrain.Dispose();
-            _spWireframe.Dispose();
-            _spNormals.Dispose();
+            _drawStateTerrain.ShaderProgram.Dispose();
+            _drawStateWireframe.ShaderProgram.Dispose();
+            _drawStateNormals.ShaderProgram.Dispose();
 
             _va.Dispose();
             _texture.Dispose();
@@ -305,19 +301,16 @@ namespace MiniGlobe.Terrain
 
         #endregion
 
-        private readonly RenderState _rsTerrain;
-        private readonly ShaderProgram _spTerrain;
+        private readonly DrawState _drawStateTerrain;
         private readonly Uniform<float> _heightExaggerationUniform;
         private Uniform<float> _minimumHeight;
         private Uniform<float> _maximumHeight;
 
-        private readonly RenderState _rsWireframe;
-        private readonly ShaderProgram _spWireframe;
+        private readonly DrawState _drawStateWireframe;
         private readonly Uniform<float> _heightExaggerationWireframe;
         private readonly Uniform<float> _lineWidthWireframe;
 
-        private readonly RenderState _rsNormals;
-        private readonly ShaderProgram _spNormals;
+        private readonly DrawState _drawStateNormals;
         private readonly Uniform<float> _heightExaggerationNormals;
         private readonly Uniform<float> _fillDistanceNormals;
 

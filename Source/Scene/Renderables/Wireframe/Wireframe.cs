@@ -19,14 +19,14 @@ namespace MiniGlobe.Scene
     {
         public Wireframe(Context context, Mesh mesh)
         {
-            _renderState = new RenderState();
-            _renderState.Blending.Enabled = true;
-            _renderState.Blending.SourceRGBFactor = SourceBlendingFactor.SourceAlpha;
-            _renderState.Blending.SourceAlphaFactor = SourceBlendingFactor.SourceAlpha;
-            _renderState.Blending.DestinationRGBFactor = DestinationBlendingFactor.OneMinusSourceAlpha;
-            _renderState.Blending.DestinationAlphaFactor = DestinationBlendingFactor.OneMinusSourceAlpha;
-            _renderState.FacetCulling.FrontFaceWindingOrder = mesh.FrontFaceWindingOrder;
-            _renderState.DepthTest.Function = DepthTestFunction.LessThanOrEqual;
+            RenderState renderState = new RenderState();
+            renderState.Blending.Enabled = true;
+            renderState.Blending.SourceRGBFactor = SourceBlendingFactor.SourceAlpha;
+            renderState.Blending.SourceAlphaFactor = SourceBlendingFactor.SourceAlpha;
+            renderState.Blending.DestinationRGBFactor = DestinationBlendingFactor.OneMinusSourceAlpha;
+            renderState.Blending.DestinationAlphaFactor = DestinationBlendingFactor.OneMinusSourceAlpha;
+            renderState.FacetCulling.FrontFaceWindingOrder = mesh.FrontFaceWindingOrder;
+            renderState.DepthTest.Function = DepthTestFunction.LessThanOrEqual;
 
             //
             // This implementation is based on the 2006 SIGGRAPH Sketch:
@@ -44,17 +44,17 @@ namespace MiniGlobe.Scene
             //    Two Methods for Antialiased Wireframe Drawing with Hidden Line Removal
             //    http://orbit.dtu.dk/getResource?recordId=219956&objectId=1&versionId=1
             //
-            _sp = Device.CreateShaderProgram(
+            ShaderProgram sp = Device.CreateShaderProgram(
                 EmbeddedResources.GetText("MiniGlobe.Scene.Renderables.Wireframe.Shaders.WireframeVS.glsl"),
                 EmbeddedResources.GetText("MiniGlobe.Scene.Renderables.Wireframe.Shaders.WireframeGS.glsl"),
                 EmbeddedResources.GetText("MiniGlobe.Scene.Renderables.Wireframe.Shaders.WireframeFS.glsl"));
-            _lineWidth = _sp.Uniforms["u_halfLineWidth"] as Uniform<float>;
+            _lineWidth = sp.Uniforms["u_halfLineWidth"] as Uniform<float>;
             Width = 1;
 
-            _colorUniform = _sp.Uniforms["u_color"] as Uniform<Vector3S>;
+            _colorUniform = sp.Uniforms["u_color"] as Uniform<Vector3S>;
             Color = Color.Black;
 
-            _va = context.CreateVertexArray(mesh, _sp.VertexAttributes, BufferHint.StaticDraw);
+            _drawState = new DrawState(renderState, sp, context.CreateVertexArray(mesh, sp.VertexAttributes, BufferHint.StaticDraw));
             _primitiveType = mesh.PrimitiveType;
         }
 
@@ -65,10 +65,7 @@ namespace MiniGlobe.Scene
 
             _lineWidth.Value = (float)(0.5 * Width * sceneState.HighResolutionSnapScale);
 
-            context.Bind(_renderState);
-            context.Bind(_sp);
-            context.Bind(_va);
-            context.Draw(_primitiveType, sceneState);
+            context.Draw(_primitiveType, _drawState, sceneState);
         }
 
         public double Width { get; set; }
@@ -85,20 +82,20 @@ namespace MiniGlobe.Scene
 
         public bool FacetCullingEnabled
         {
-            get { return _renderState.FacetCulling.Enabled; }
-            set { _renderState.FacetCulling.Enabled = value; }
+            get { return _drawState.RenderState.FacetCulling.Enabled; }
+            set { _drawState.RenderState.FacetCulling.Enabled = value; }
         }
 
         public CullFace FacetCullingFace
         {
-            get { return _renderState.FacetCulling.Face; }
-            set { _renderState.FacetCulling.Face = value; }
+            get { return _drawState.RenderState.FacetCulling.Face; }
+            set { _drawState.RenderState.FacetCulling.Face = value; }
         }
-
+        
         public bool DepthTestEnabled
         {
-            get { return _renderState.DepthTest.Enabled; }
-            set { _renderState.DepthTest.Enabled = value; }
+            get { return _drawState.RenderState.DepthTest.Enabled; }
+            set { _drawState.RenderState.DepthTest.Enabled = value; }
         }
 
         public bool Enabled { get; set; }
@@ -108,18 +105,16 @@ namespace MiniGlobe.Scene
 
         public void Dispose()
         {
-            _sp.Dispose();
-            _va.Dispose();
+            _drawState.ShaderProgram.Dispose();
+            _drawState.VertexArray.Dispose();
         }
 
         #endregion
 
-        private readonly RenderState _renderState;
-        private readonly ShaderProgram _sp;
         private readonly Uniform<float> _lineWidth;
         private readonly Uniform<Vector3S> _colorUniform;
         private Color _color;
-        private readonly VertexArray _va;
+        private readonly DrawState _drawState;
         private readonly PrimitiveType _primitiveType;
     }
 }

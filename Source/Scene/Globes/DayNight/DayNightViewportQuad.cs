@@ -27,14 +27,18 @@ namespace MiniGlobe.Scene
         {
             Verify.ThrowIfNull(context);
 
-            _renderState = new RenderState();
-            _renderState.FacetCulling.Enabled = false;
-            _renderState.DepthTest.Enabled = false;
+            RenderState renderState = new RenderState();
+            renderState.FacetCulling.Enabled = false;
+            renderState.DepthTest.Enabled = false;
 
-            _sp = Device.CreateShaderProgram(
+            ShaderProgram sp = Device.CreateShaderProgram(
                 EmbeddedResources.GetText("MiniGlobe.Scene.Globes.DayNight.Shaders.ViewportQuadVS.glsl"),
                 EmbeddedResources.GetText("MiniGlobe.Scene.Globes.DayNight.Shaders.ViewportQuadFS.glsl"));
-            _dayNightOutput = _sp.Uniforms["u_DayNightOutput"] as Uniform<int>;
+            _dayNightOutput = sp.Uniforms["u_DayNightOutput"] as Uniform<int>;
+
+            _drawState = new DrawState();
+            _drawState.RenderState = renderState;
+            _drawState.ShaderProgram = sp;
 
             _geometry = new ViewportQuadGeometry();
         }
@@ -42,20 +46,18 @@ namespace MiniGlobe.Scene
         public void Render(Context context, SceneState sceneState)
         {
             Verify.ThrowIfNull(context);
-            Verify.ThrowIfNull(sceneState);
             Verify.ThrowInvalidOperationIfNull(DayTexture, "DayTexture");
             Verify.ThrowInvalidOperationIfNull(NightTexture, "NightTexture");
             Verify.ThrowInvalidOperationIfNull(BlendTexture, "BlendTexture");
 
-            _geometry.Update(context, _sp);
+            _geometry.Update(context, _drawState.ShaderProgram);
 
             context.TextureUnits[0].Texture2D = DayTexture;
             context.TextureUnits[1].Texture2D = NightTexture;
             context.TextureUnits[2].Texture2D = BlendTexture;
-            context.Bind(_renderState);
-            context.Bind(_sp);
-            context.Bind(_geometry.VertexArray);
-            context.Draw(PrimitiveType.TriangleStrip, sceneState);
+            _drawState.VertexArray = _geometry.VertexArray;
+
+            context.Draw(PrimitiveType.TriangleStrip, _drawState, sceneState);
         }
 
         public Texture2D DayTexture { get; set; }
@@ -72,14 +74,13 @@ namespace MiniGlobe.Scene
 
         public void Dispose()
         {
-            _sp.Dispose();
+            _drawState.ShaderProgram.Dispose();
             _geometry.Dispose();
         }
 
         #endregion
 
-        private readonly RenderState _renderState;
-        private readonly ShaderProgram _sp;
+        private readonly DrawState _drawState;
         private readonly Uniform<int> _dayNightOutput;
         private readonly ViewportQuadGeometry _geometry;
     }

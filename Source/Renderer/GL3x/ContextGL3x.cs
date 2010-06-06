@@ -162,7 +162,7 @@ namespace MiniGlobe.Renderer.GL3x
             }
         }
 
-        public override void Bind(RenderState renderState)
+        private void Bind(RenderState renderState)
         {
             ApplyPrimitiveRestart(renderState.PrimitiveRestart);
             ApplyFacetCulling(renderState.FacetCulling);
@@ -177,7 +177,7 @@ namespace MiniGlobe.Renderer.GL3x
             ApplyDepthWrite(renderState.DepthWrite);
         }
 
-        public override void Bind(VertexArray vertexArray)
+        private void Bind(VertexArray vertexArray)
         {
             VertexArrayGL3x vertexArrayGL3x = vertexArray as VertexArrayGL3x;
 
@@ -188,7 +188,7 @@ namespace MiniGlobe.Renderer.GL3x
             }
         }
 
-        public override void Bind(ShaderProgram shaderProgram)
+        private void Bind(ShaderProgram shaderProgram)
         {
             ShaderProgramGL3x shaderProgramGL3x = shaderProgram as ShaderProgramGL3x;
 
@@ -218,9 +218,10 @@ namespace MiniGlobe.Renderer.GL3x
             }
         }
 
-        public override void Draw(PrimitiveType primitiveType, int offset, int count, SceneState sceneState)
+        public override void Draw(PrimitiveType primitiveType, int offset, int count, DrawState drawState, SceneState sceneState)
         {
-            CleanBeforeDraw(sceneState);
+            VerifyDraw(drawState, sceneState);
+            CleanBeforeDraw(drawState, sceneState);
 
             if (_boundIndexBuffer != null)
             {
@@ -235,9 +236,10 @@ namespace MiniGlobe.Renderer.GL3x
             }
         }
 
-        public override void Draw(PrimitiveType primitiveType, SceneState sceneState)
+        public override void Draw(PrimitiveType primitiveType, DrawState drawState, SceneState sceneState)
         {
-            CleanBeforeDraw(sceneState);
+            VerifyDraw(drawState, sceneState);
+            CleanBeforeDraw(drawState, sceneState);
 
             if (_boundIndexBuffer != null)
             {
@@ -474,8 +476,40 @@ namespace MiniGlobe.Renderer.GL3x
             }
         }
 
-        private void CleanBeforeDraw(SceneState sceneState)
+        private void VerifyDraw(DrawState drawState, SceneState sceneState)
         {
+            if (drawState == null)
+            {
+                throw new ArgumentNullException("drawState");
+            }
+
+            if (drawState.RenderState == null)
+            {
+                throw new ArgumentNullException("drawState.RenderState");
+            }
+
+            if (drawState.ShaderProgram == null)
+            {
+                throw new ArgumentNullException("drawState.ShaderProgram");
+            }
+
+            if (drawState.VertexArray == null)
+            {
+                throw new ArgumentNullException("drawState.VertexArray");
+            }
+
+            if (sceneState == null)
+            {
+                throw new ArgumentNullException("sceneState");
+            }
+        }
+
+        private void CleanBeforeDraw(DrawState drawState, SceneState sceneState)
+        {
+            Bind(drawState.RenderState);
+            Bind(drawState.ShaderProgram);
+            Bind(drawState.VertexArray);
+
             CleanTextureUnits();
             CleanVertexArray();
             CleanShaderProgram(sceneState);

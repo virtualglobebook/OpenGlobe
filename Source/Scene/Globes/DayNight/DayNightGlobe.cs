@@ -21,17 +21,18 @@ namespace MiniGlobe.Scene
         {
             Verify.ThrowIfNull(context);
 
-            _sp = Device.CreateShaderProgram(
+            ShaderProgram sp = Device.CreateShaderProgram(
                 EmbeddedResources.GetText("MiniGlobe.Scene.Globes.DayNight.Shaders.GlobeVS.glsl"),
                 EmbeddedResources.GetText("MiniGlobe.Scene.Globes.DayNight.Shaders.GlobeFS.glsl"));
-            _cameraEyeSquaredSP = _sp.Uniforms["u_cameraEyeSquared"] as Uniform<Vector3S>;
-            _useAverageDepth = _sp.Uniforms["u_useAverageDepth"] as Uniform<bool>;
+            _cameraEyeSquaredSP = sp.Uniforms["u_cameraEyeSquared"] as Uniform<Vector3S>;
+            _useAverageDepth = sp.Uniforms["u_useAverageDepth"] as Uniform<bool>;
 
             float blendDurationScale = 0.1f;
-            (_sp.Uniforms["u_blendDuration"] as Uniform<float>).Value = blendDurationScale;
-            (_sp.Uniforms["u_blendDurationScale"] as Uniform<float>).Value = 1 / (2 * blendDurationScale);
+            (sp.Uniforms["u_blendDuration"] as Uniform<float>).Value = blendDurationScale;
+            (sp.Uniforms["u_blendDurationScale"] as Uniform<float>).Value = 1 / (2 * blendDurationScale);
 
-            _renderState = new RenderState();
+            _drawState = new DrawState();
+            _drawState.ShaderProgram = sp;
 
             Shape = Ellipsoid.UnitSphere;
             ShowGlobe = true;
@@ -41,19 +42,20 @@ namespace MiniGlobe.Scene
         {
             if (_dirty)
             {
-                if (_va != null)
+                if (_drawState.VertexArray != null)
                 {
-                    _va.Dispose();
+                    _drawState.VertexArray.Dispose();
+                    _drawState.VertexArray = null;
                 }
 
                 Mesh mesh = BoxTessellator.Compute(2 * _shape.Radii);
-                _va = context.CreateVertexArray(mesh, _sp.VertexAttributes, BufferHint.StaticDraw);
+                _drawState.VertexArray = context.CreateVertexArray(mesh, _drawState.ShaderProgram.VertexAttributes, BufferHint.StaticDraw);
                 _primitiveType = mesh.PrimitiveType;
 
-                _renderState.FacetCulling.Face = CullFace.Front;
-                _renderState.FacetCulling.FrontFaceWindingOrder = mesh.FrontFaceWindingOrder;
+                _drawState.RenderState.FacetCulling.Face = CullFace.Front;
+                _drawState.RenderState.FacetCulling.FrontFaceWindingOrder = mesh.FrontFaceWindingOrder;
 
-                (_sp.Uniforms["u_globeOneOverRadiiSquared"] as Uniform<Vector3S>).Value = _shape.OneOverRadiiSquared.ToVector3S();
+                (_drawState.ShaderProgram.Uniforms["u_globeOneOverRadiiSquared"] as Uniform<Vector3S>).Value = _shape.OneOverRadiiSquared.ToVector3S();
 
                 if (_wireframe != null)
                 {
@@ -76,11 +78,6 @@ namespace MiniGlobe.Scene
 
             Clean(context);
 
-            if (ShowGlobe || ShowWireframeBoundingBox)
-            {
-                context.Bind(_va);
-            }
-
             if (ShowGlobe)
             {
                 Vector3D eye = sceneState.Camera.Eye;
@@ -89,9 +86,7 @@ namespace MiniGlobe.Scene
 
                 context.TextureUnits[0].Texture2D = DayTexture;
                 context.TextureUnits[1].Texture2D = NightTexture;
-                context.Bind(_sp);
-                context.Bind(_renderState);
-                context.Draw(_primitiveType, sceneState);
+                context.Draw(_primitiveType, _drawState, sceneState);
             }
 
             if (ShowWireframeBoundingBox)
@@ -123,18 +118,18 @@ namespace MiniGlobe.Scene
 
         public int FragmentOutputs(string name)
         {
-            return _sp.FragmentOutputs[name];
+            return _drawState.ShaderProgram.FragmentOutputs[name];
         }
 
         #region IDisposable Members
 
         public void Dispose()
         {
-            _sp.Dispose();
+            _drawState.ShaderProgram.Dispose();
 
-            if (_va != null)
+            if (_drawState.VertexArray != null)
             {
-                _va.Dispose();
+                _drawState.VertexArray.Dispose();
             }
 
             if (_wireframe != null)
@@ -145,12 +140,10 @@ namespace MiniGlobe.Scene
 
         #endregion
 
-        private readonly RenderState _renderState;
-        private readonly ShaderProgram _sp;
+        private readonly DrawState _drawState;
         private readonly Uniform<Vector3S> _cameraEyeSquaredSP;
         private readonly Uniform<bool> _useAverageDepth;
         
-        private VertexArray _va;
         private PrimitiveType _primitiveType;
 
         private Wireframe _wireframe;

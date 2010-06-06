@@ -22,16 +22,16 @@ namespace MiniGlobe.Terrain
     {
         public TriangleMeshTerrainTile(Context context, TerrainTile tile)
         {
-            _sp = Device.CreateShaderProgram(
+            ShaderProgram sp = Device.CreateShaderProgram(
                 EmbeddedResources.GetText("MiniGlobe.Scene.Terrain.TriangleMeshTerrainTile.TerrainVS.glsl"),
                 EmbeddedResources.GetText("MiniGlobe.Scene.Terrain.TriangleMeshTerrainTile.TerrainFS.glsl"));
 
             _tileMinimumHeight = tile.MinimumHeight;
             _tileMaximumHeight = tile.MaximumHeight;
 
-            _heightExaggeration = _sp.Uniforms["u_heightExaggeration"] as Uniform<float>;
-            _minimumHeight = _sp.Uniforms["u_minimumHeight"] as Uniform<float>;
-            _maximumHeight = _sp.Uniforms["u_maximumHeight"] as Uniform<float>;
+            _heightExaggeration = sp.Uniforms["u_heightExaggeration"] as Uniform<float>;
+            _minimumHeight = sp.Uniforms["u_minimumHeight"] as Uniform<float>;
+            _maximumHeight = sp.Uniforms["u_maximumHeight"] as Uniform<float>;
             HeightExaggeration = 1;
 
             ///////////////////////////////////////////////////////////////////
@@ -87,22 +87,18 @@ namespace MiniGlobe.Terrain
                 i += 1;
             }
 
-            _va = context.CreateVertexArray(mesh, _sp.VertexAttributes, BufferHint.StaticDraw);
+            _drawState = new DrawState();
+            _drawState.RenderState.FacetCulling.FrontFaceWindingOrder = mesh.FrontFaceWindingOrder;
+            _drawState.ShaderProgram = sp;
+            _drawState.VertexArray = context.CreateVertexArray(mesh, sp.VertexAttributes, BufferHint.StaticDraw);
             _primitiveType = mesh.PrimitiveType;
-
-            _renderState = new RenderState();
-            _renderState.FacetCulling.FrontFaceWindingOrder = mesh.FrontFaceWindingOrder;
         }
 
         public void Render(Context context, SceneState sceneState)
         {
             Verify.ThrowIfNull(context);
-            Verify.ThrowIfNull(sceneState);
 
-            context.Bind(_sp);
-            context.Bind(_va);
-            context.Bind(_renderState);
-            context.Draw(_primitiveType, sceneState);
+            context.Draw(_primitiveType, _drawState, sceneState);
         }
 
         public float HeightExaggeration
@@ -132,13 +128,13 @@ namespace MiniGlobe.Terrain
 
         public void Dispose()
         {
-            _sp.Dispose();
-            _va.Dispose();
+            _drawState.ShaderProgram.Dispose();
+            _drawState.VertexArray.Dispose();
         }
 
         #endregion
 
-        private readonly ShaderProgram _sp;
+        private readonly DrawState _drawState;
 
         private readonly Uniform<float> _heightExaggeration;
         private readonly Uniform<float> _minimumHeight;
@@ -147,9 +143,6 @@ namespace MiniGlobe.Terrain
         private readonly float _tileMinimumHeight;
         private readonly float _tileMaximumHeight;
 
-        private readonly RenderState _renderState;
-
-        private readonly VertexArray _va;
         private readonly PrimitiveType _primitiveType;
     }
 }

@@ -40,18 +40,20 @@ namespace MiniGlobe.Scene
 
             ///////////////////////////////////////////////////////////////////
 
-            _renderState = new RenderState();
-            _renderState.FacetCulling.Enabled = false;
-            _renderState.Blending.Enabled = true;
-            _renderState.Blending.SourceRGBFactor = SourceBlendingFactor.SourceAlpha;
-            _renderState.Blending.SourceAlphaFactor = SourceBlendingFactor.SourceAlpha;
-            _renderState.Blending.DestinationRGBFactor = DestinationBlendingFactor.OneMinusSourceAlpha;
-            _renderState.Blending.DestinationAlphaFactor = DestinationBlendingFactor.OneMinusSourceAlpha;
+            RenderState renderState = new RenderState();
+            renderState.FacetCulling.Enabled = false;
+            renderState.Blending.Enabled = true;
+            renderState.Blending.SourceRGBFactor = SourceBlendingFactor.SourceAlpha;
+            renderState.Blending.SourceAlphaFactor = SourceBlendingFactor.SourceAlpha;
+            renderState.Blending.DestinationRGBFactor = DestinationBlendingFactor.OneMinusSourceAlpha;
+            renderState.Blending.DestinationAlphaFactor = DestinationBlendingFactor.OneMinusSourceAlpha;
 
-            _sp = Device.CreateShaderProgram(
+            ShaderProgram sp = Device.CreateShaderProgram(
                 EmbeddedResources.GetText("MiniGlobe.Scene.Renderables.BillboardCollection.Shaders.BillboardsVS.glsl"),
                 EmbeddedResources.GetText("MiniGlobe.Scene.Renderables.BillboardCollection.Shaders.BillboardsGS.glsl"),
                 EmbeddedResources.GetText("MiniGlobe.Scene.Renderables.BillboardCollection.Shaders.BillboardsFS.glsl"));
+
+            _drawState = new DrawState(renderState, sp, null);
         }
 
         private void CreateVertexArray(Context context)
@@ -74,12 +76,15 @@ namespace MiniGlobe.Scene
             AttachedVertexBuffer attachedTextureCoordinatesBuffer = new AttachedVertexBuffer(
                 _textureCoordinatesBuffer, VertexAttributeComponentType.HalfFloat, 4);
 
-            _va = context.CreateVertexArray();
-            _va.VertexBuffers[_sp.VertexAttributes["position"].Location] = attachedPositionBuffer;
-            _va.VertexBuffers[_sp.VertexAttributes["textureCoordinates"].Location] = attachedTextureCoordinatesBuffer;
-            _va.VertexBuffers[_sp.VertexAttributes["color"].Location] = attachedColorBuffer;
-            _va.VertexBuffers[_sp.VertexAttributes["origin"].Location] = attachedOriginBuffer;
-            _va.VertexBuffers[_sp.VertexAttributes["pixelOffset"].Location] = attachedPixelOffsetBuffer;
+            ShaderProgram sp = _drawState.ShaderProgram;
+            VertexArray va = context.CreateVertexArray();
+            va.VertexBuffers[sp.VertexAttributes["position"].Location] = attachedPositionBuffer;
+            va.VertexBuffers[sp.VertexAttributes["textureCoordinates"].Location] = attachedTextureCoordinatesBuffer;
+            va.VertexBuffers[sp.VertexAttributes["color"].Location] = attachedColorBuffer;
+            va.VertexBuffers[sp.VertexAttributes["origin"].Location] = attachedOriginBuffer;
+            va.VertexBuffers[sp.VertexAttributes["pixelOffset"].Location] = attachedPixelOffsetBuffer;
+
+            _drawState.VertexArray = va;
         }
 
         private void Update(Context context)
@@ -220,18 +225,14 @@ namespace MiniGlobe.Scene
         public void Render(Context context, SceneState sceneState)
         {
             Verify.ThrowIfNull(context);
-            Verify.ThrowIfNull(sceneState);
             Verify.ThrowInvalidOperationIfNull(Texture, "Texture");
 
             Update(context);
 
-            if (_va != null)
+            if (_drawState.VertexArray != null)
             {
                 context.TextureUnits[0].Texture2D = Texture;
-                context.Bind(_renderState);
-                context.Bind(_sp);
-                context.Bind(_va);
-                context.Draw(PrimitiveType.Points, sceneState);
+                context.Draw(PrimitiveType.Points, _drawState, sceneState);
             }
         }
 
@@ -239,20 +240,20 @@ namespace MiniGlobe.Scene
 
         public bool Wireframe
         {
-            get { return _renderState.RasterizationMode == RasterizationMode.Line; }
-            set { _renderState.RasterizationMode = value ? RasterizationMode.Line : RasterizationMode.Fill; }
+            get { return _drawState.RenderState.RasterizationMode == RasterizationMode.Line; }
+            set { _drawState.RenderState.RasterizationMode = value ? RasterizationMode.Line : RasterizationMode.Fill; }
         }
 
         public bool DepthTestEnabled
         {
-            get { return _renderState.DepthTest.Enabled; }
-            set { _renderState.DepthTest.Enabled = value; }
+            get { return _drawState.RenderState.DepthTest.Enabled; }
+            set { _drawState.RenderState.DepthTest.Enabled = value; }
         }
 
         public bool DepthWrite
         {
-            get { return _renderState.DepthWrite; }
-            set { _renderState.DepthWrite = value; }
+            get { return _drawState.RenderState.DepthWrite; }
+            set { _drawState.RenderState.DepthWrite = value; }
         }
 
         #region IList<Billboard> Members
@@ -411,7 +412,7 @@ namespace MiniGlobe.Scene
                 ReleaseBillboard(b);
             }
 
-            _sp.Dispose();
+            _drawState.ShaderProgram.Dispose();
             DisposeVertexArray();
         }
 
@@ -449,10 +450,10 @@ namespace MiniGlobe.Scene
                 _pixelOffsetBuffer = null;
             }
 
-            if (_va != null)
+            if (_drawState.VertexArray != null)
             {
-                _va.Dispose();
-                _va = null;
+                _drawState.VertexArray.Dispose();
+                _drawState.VertexArray = null;
             }
         }
 
@@ -468,14 +469,12 @@ namespace MiniGlobe.Scene
 
         private bool _rewriteBillboards;
 
-        private readonly RenderState _renderState;
-        private readonly ShaderProgram _sp;
+        private readonly DrawState _drawState;
 
         private VertexBuffer _positionBuffer;
         private VertexBuffer _textureCoordinatesBuffer;
         private VertexBuffer _colorBuffer;
         private VertexBuffer _originBuffer;
         private VertexBuffer _pixelOffsetBuffer;
-        private VertexArray _va;
     }
 }

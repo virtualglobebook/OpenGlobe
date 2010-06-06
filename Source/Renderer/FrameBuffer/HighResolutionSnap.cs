@@ -54,7 +54,7 @@ namespace MiniGlobe.Renderer
                 _snapBuffer.SaveDepthBuffer(DepthFilename);
             }
 
-            _window.Context.Bind(null as FrameBuffer);
+            _window.Context.Bind(null);
             _window.Context.Viewport = _previousViewport;
             _sceneState.HighResolutionSnapScale = _previousSnapScale;
 

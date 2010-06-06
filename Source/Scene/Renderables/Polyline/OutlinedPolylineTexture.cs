@@ -18,14 +18,17 @@ namespace MiniGlobe.Scene
     {
         public OutlinedPolylineTexture()
         {
-            _renderState = new RenderState();
-            _renderState.FacetCulling.Enabled = false;
-            _renderState.Blending.Enabled = true;
-            _renderState.Blending.SourceRGBFactor = SourceBlendingFactor.SourceAlpha;
-            _renderState.Blending.SourceAlphaFactor = SourceBlendingFactor.SourceAlpha;
-            _renderState.Blending.DestinationRGBFactor = DestinationBlendingFactor.OneMinusSourceAlpha;
-            _renderState.Blending.DestinationAlphaFactor = DestinationBlendingFactor.OneMinusSourceAlpha;
-            
+            RenderState renderState = new RenderState();
+            renderState.FacetCulling.Enabled = false;
+            renderState.Blending.Enabled = true;
+            renderState.Blending.SourceRGBFactor = SourceBlendingFactor.SourceAlpha;
+            renderState.Blending.SourceAlphaFactor = SourceBlendingFactor.SourceAlpha;
+            renderState.Blending.DestinationRGBFactor = DestinationBlendingFactor.OneMinusSourceAlpha;
+            renderState.Blending.DestinationAlphaFactor = DestinationBlendingFactor.OneMinusSourceAlpha;
+
+            _drawState = new DrawState();
+            _drawState.RenderState = renderState;
+
             Width = 3;
             OutlineWidth = 2;
         }
@@ -53,17 +56,17 @@ namespace MiniGlobe.Scene
                 throw new ArgumentException("mesh.Attributes should contain attributes named \"position\", \"color\", and \"outlineColor\".", "mesh");
             }
 
-            if (_sp == null)
+            if (_drawState.ShaderProgram == null)
             {
-                _sp = Device.CreateShaderProgram(
+                _drawState.ShaderProgram = Device.CreateShaderProgram(
                     EmbeddedResources.GetText("MiniGlobe.Scene.Renderables.Polyline.OutlinedPolylineTexture.PolylineVS.glsl"),
                     EmbeddedResources.GetText("MiniGlobe.Scene.Renderables.Polyline.OutlinedPolylineTexture.PolylineGS.glsl"),
                     EmbeddedResources.GetText("MiniGlobe.Scene.Renderables.Polyline.OutlinedPolylineTexture.PolylineFS.glsl"));
-                _distance = _sp.Uniforms["u_distance"] as Uniform<float>;
+                _distance = _drawState.ShaderProgram.Uniforms["u_distance"] as Uniform<float>;
             }
 
             ///////////////////////////////////////////////////////////////////
-            _va = context.CreateVertexArray(mesh, _sp.VertexAttributes, BufferHint.StaticDraw);
+            _drawState.VertexArray = context.CreateVertexArray(mesh, _drawState.ShaderProgram.VertexAttributes, BufferHint.StaticDraw);
             _primitiveType = mesh.PrimitiveType;
         }
 
@@ -113,17 +116,14 @@ namespace MiniGlobe.Scene
             Verify.ThrowIfNull(context);
             Verify.ThrowIfNull(sceneState);
 
-            if (_sp != null)
+            if (_drawState.ShaderProgram != null)
             {
                 Update(sceneState);
 
                 _distance.Value = (float)(((Width * 0.5) + OutlineWidth + 1) * sceneState.HighResolutionSnapScale);
 
                 context.TextureUnits[0].Texture2D = _texture;
-                context.Bind(_renderState);
-                context.Bind(_sp);
-                context.Bind(_va);
-                context.Draw(_primitiveType, sceneState);
+                context.Draw(_primitiveType, _drawState, sceneState);
             }
         }
 
@@ -133,28 +133,28 @@ namespace MiniGlobe.Scene
 
         public bool Wireframe
         {
-            get { return _renderState.RasterizationMode == RasterizationMode.Line; }
-            set { _renderState.RasterizationMode = value ? RasterizationMode.Line : RasterizationMode.Fill; }
+            get { return _drawState.RenderState.RasterizationMode == RasterizationMode.Line; }
+            set { _drawState.RenderState.RasterizationMode = value ? RasterizationMode.Line : RasterizationMode.Fill; }
         }
 
         public bool DepthWrite
         {
-            get { return _renderState.DepthWrite; }
-            set { _renderState.DepthWrite = value; }
+            get { return _drawState.RenderState.DepthWrite; }
+            set { _drawState.RenderState.DepthWrite = value; }
         }
 
         #region IDisposable Members
 
         public void Dispose()
         {
-            if (_sp != null)
+            if (_drawState.ShaderProgram != null)
             {
-                _sp.Dispose();
+                _drawState.ShaderProgram.Dispose();
             }
 
-            if (_va != null)
+            if (_drawState.VertexArray != null)
             {
-                _va.Dispose();
+                _drawState.VertexArray.Dispose();
             }
 
             if (_texture != null)
@@ -165,10 +165,8 @@ namespace MiniGlobe.Scene
 
         #endregion
 
-        private readonly RenderState _renderState;
-        private ShaderProgram _sp;
+        private readonly DrawState _drawState;
         private Uniform<float> _distance;
-        private VertexArray _va;
         private PrimitiveType _primitiveType;
         private Texture2D _texture;
     }
