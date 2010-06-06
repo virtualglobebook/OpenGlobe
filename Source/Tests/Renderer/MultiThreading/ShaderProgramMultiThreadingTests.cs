@@ -88,7 +88,7 @@ namespace MiniGlobe.Renderer.MultiThreading
             window.Context.Draw(PrimitiveType.Points, 0, 1);
             TestUtility.ValidateColor(frameBuffer.ColorAttachments[0], 255, 0, 0);
 
-            window.Context.Clear(new ClearState() { FrameBuffer = frameBuffer });
+            window.Context.Clear(new ClearState());
 
             window.Context.Bind(factory1.ShaderProgram);
             window.Context.Draw(PrimitiveType.Points, 0, 1);
@@ -135,7 +135,7 @@ namespace MiniGlobe.Renderer.MultiThreading
             window.Context.Draw(PrimitiveType.Points, 0, 1);
             TestUtility.ValidateColor(frameBuffer.ColorAttachments[0], 255, 0, 0);
 
-            window.Context.Clear(new ClearState() { FrameBuffer = frameBuffer });
+            window.Context.Clear(new ClearState());
 
             window.Context.Bind(factory1.ShaderProgram);
             window.Context.Draw(PrimitiveType.Points, 0, 1);

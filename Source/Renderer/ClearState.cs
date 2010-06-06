@@ -22,7 +22,6 @@ namespace MiniGlobe.Renderer
             Stencil = 0;
         }
 
-        public FrameBuffer FrameBuffer { get; set; }
         public RenderState RenderState { get; set; }
         public ClearBuffers Buffers { get; set; }
         public Color Color { get; set; }

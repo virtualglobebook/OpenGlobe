@@ -138,7 +138,7 @@ namespace MiniGlobe.Renderer
 
             window.Context.Bind(snap.FrameBuffer);
             window.Context.Viewport = new Rectangle(0, 0, snap.WidthInPixels, snap.HeightInPixels);
-            window.Context.Clear(new ClearState() { FrameBuffer = snap.FrameBuffer, Buffers = ClearBuffers.ColorAndDepthBuffer, Color = Color.Red, Depth = 0.5f });
+            window.Context.Clear(new ClearState() { Buffers = ClearBuffers.ColorAndDepthBuffer, Color = Color.Red, Depth = 0.5f });
             
             string colorFile = "color.bmp";
             string depthFile = "depth.bmp";

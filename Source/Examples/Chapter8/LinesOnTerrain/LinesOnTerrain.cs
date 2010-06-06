@@ -52,8 +52,6 @@ namespace MiniGlobe.Examples.Chapter8
 
             _fbo = _window.Context.CreateFrameBuffer();
             _clearState = new ClearState();
-            _clearStateFBO = new ClearState();
-            _clearStateFBO.FrameBuffer = _fbo;
 
             //
             // Depth
@@ -409,10 +407,10 @@ namespace MiniGlobe.Examples.Chapter8
             //
             // Depth 
             //
-            _window.Context.Bind(_fbo);                     // TODO:  No longer needed
-            _window.Context.Clear(_clearStateFBO);
+            _window.Context.Bind(_fbo);
+            _window.Context.Clear(_clearState);
             _tile.Render(_window.Context, _sceneState);
-            _window.Context.Bind(null as FrameBuffer);      // TODO:  No longer needed
+            _window.Context.Bind(null as FrameBuffer);
 
             //
             // Terrain
@@ -492,7 +490,6 @@ namespace MiniGlobe.Examples.Chapter8
         private readonly SceneState _sceneState;
         private readonly CameraLookAtPoint _camera;
         private readonly ClearState _clearState;
-        private readonly ClearState _clearStateFBO;
         private readonly TriangleMeshTerrainTile _tile;
 
         private bool _passThru = false;

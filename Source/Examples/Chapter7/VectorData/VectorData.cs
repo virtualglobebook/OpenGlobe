@@ -36,11 +36,9 @@ namespace MiniGlobe.Examples.Chapter7
             _frameBuffer = context.CreateFrameBuffer();
 
             _clearBlack = new ClearState();
-            _clearBlack.FrameBuffer = _frameBuffer;
             _clearBlack.Color = Color.Black;
 
             _clearWhite = new ClearState();
-            _clearWhite.FrameBuffer = _frameBuffer;
             _clearWhite.Color = Color.White;
 
             _quad = new DayNightViewportQuad(context);
@@ -176,7 +174,7 @@ namespace MiniGlobe.Examples.Chapter7
             //
             // Render to frame buffer
             //
-            context.Bind(_frameBuffer);                 // TODO:  No longer needed
+            context.Bind(_frameBuffer);
 
             SetFrameBufferAttachments(_dayTexture, _nightTexture, null);
             _window.Context.Clear(_clearBlack);

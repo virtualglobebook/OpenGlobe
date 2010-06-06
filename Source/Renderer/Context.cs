@@ -264,7 +264,5 @@ namespace MiniGlobe.Renderer
 
         public abstract void Draw(PrimitiveType primitiveType, int offset, int count, SceneState sceneState);
         public abstract void Draw(PrimitiveType primitiveType, SceneState sceneState);
-
-        internal bool HighResolutionSnapFrameBufferBound { get; set; }
     }
 }

@@ -118,10 +118,9 @@ namespace MiniGlobe.Renderer.GL3x
 
         public override void Clear(ClearState clearState)
         {
-            Bind(clearState.FrameBuffer);
-            Bind(clearState.RenderState);
-
             CleanFrameBuffer();
+
+            Bind(clearState.RenderState);
 
             if (_clearColor != clearState.Color)
             {
@@ -202,23 +201,20 @@ namespace MiniGlobe.Renderer.GL3x
 
         public override void Bind(FrameBuffer frameBuffer)
         {
-            if (!HighResolutionSnapFrameBufferBound)
+            FrameBufferGL3x frameBufferGL3x = frameBuffer as FrameBufferGL3x;
+
+            if (_boundFrameBuffer != frameBufferGL3x)
             {
-                FrameBufferGL3x frameBufferGL3x = frameBuffer as FrameBufferGL3x;
-
-                if (_boundFrameBuffer != frameBufferGL3x)
+                if (frameBufferGL3x != null)
                 {
-                    if (frameBufferGL3x != null)
-                    {
-                        frameBufferGL3x.Bind();
-                    }
-                    else
-                    {
-                        FrameBufferGL3x.UnBind();
-                    }
-
-                    _boundFrameBuffer = frameBufferGL3x;
+                    frameBufferGL3x.Bind();
                 }
+                else
+                {
+                    FrameBufferGL3x.UnBind();
+                }
+
+                _boundFrameBuffer = frameBufferGL3x;
             }
         }
 

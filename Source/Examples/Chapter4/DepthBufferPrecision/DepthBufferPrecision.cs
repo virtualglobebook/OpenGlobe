@@ -62,7 +62,6 @@ namespace MiniGlobe.Examples.Chapter4
             UpdatePlanesAndDepthTests();
 
             _clearState = new ClearState();
-            _clearState.FrameBuffer = _frameBuffer;
 
             ///////////////////////////////////////////////////////////////////
 
@@ -246,7 +245,7 @@ namespace MiniGlobe.Examples.Chapter4
             //
             // Render to frame buffer
             //
-            context.Bind(_frameBuffer);                     // TODO:  No longer needed
+            context.Bind(_frameBuffer);
 
             _clearState.Depth = _depthTestLess ? 1 : 0;
             context.Clear(_clearState);
