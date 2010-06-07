@@ -63,7 +63,7 @@ namespace MiniGlobe.Renderer
             VertexArray va = TestUtility.CreateVertexArray(window.Context, sp.VertexAttributes["position"].Location);
 
             window.Context.Bind(frameBuffer);
-            window.Context.Draw(PrimitiveType.Points, 0, 1, new DrawState(new RenderState(), sp, va), null);
+            window.Context.Draw(PrimitiveType.Points, 0, 1, new DrawState(new RenderState(), sp, va), new SceneState());
 
             TestUtility.ValidateColor(frameBuffer.ColorAttachments[0], 255, 0, 0);
 
@@ -103,7 +103,7 @@ namespace MiniGlobe.Renderer
             va.IndexBuffer = indexBuffer;
 
             window.Context.Bind(frameBuffer);
-            window.Context.Draw(PrimitiveType.Triangles, 0, 3, new DrawState(new RenderState(), sp, va), null);
+            window.Context.Draw(PrimitiveType.Triangles, 0, 3, new DrawState(new RenderState(), sp, va), new SceneState());
 
             TestUtility.ValidateColor(frameBuffer.ColorAttachments[0], 255, 0, 0);
 
@@ -113,7 +113,7 @@ namespace MiniGlobe.Renderer
             window.Context.Clear(new ClearState() { Buffers = ClearBuffers.ColorBuffer, Color = Color.FromArgb(0, 255, 0) });
             va.VertexBuffers[sp.VertexAttributes["position"].Location] = null;
             va.IndexBuffer = null;
-            window.Context.Draw(PrimitiveType.Triangles, 0, 0, new DrawState(new RenderState(), sp, va), null);
+            window.Context.Draw(PrimitiveType.Triangles, 0, 0, new DrawState(new RenderState(), sp, va), new SceneState());
             TestUtility.ValidateColor(frameBuffer.ColorAttachments[0], 0, 255, 0);
 
             //
@@ -121,7 +121,7 @@ namespace MiniGlobe.Renderer
             //
             va.VertexBuffers[sp.VertexAttributes["position"].Location] =
                 new AttachedVertexBuffer(positionsBuffer, VertexAttributeComponentType.Float, 4);
-            window.Context.Draw(PrimitiveType.Triangles, 0, 3, new DrawState(new RenderState(), sp, va), null);
+            window.Context.Draw(PrimitiveType.Triangles, 0, 3, new DrawState(new RenderState(), sp, va), new SceneState());
             TestUtility.ValidateColor(frameBuffer.ColorAttachments[0], 255, 0, 0);
 
             va.Dispose();
@@ -165,7 +165,7 @@ namespace MiniGlobe.Renderer
 
             window.Context.TextureUnits[0].Texture2D = texture;
             window.Context.Bind(frameBuffer);
-            window.Context.Draw(PrimitiveType.Points, 0, 1, new DrawState(new RenderState(), sp, va), null);
+            window.Context.Draw(PrimitiveType.Points, 0, 1, new DrawState(new RenderState(), sp, va), new SceneState());
 
             TestUtility.ValidateColor(frameBuffer.ColorAttachments[0], 255, 0, 0);
 
@@ -208,7 +208,7 @@ namespace MiniGlobe.Renderer
             frameBuffer.ColorAttachments[sp.FragmentOutputs["GreenColor"]] = greenTexture;
 
             window.Context.Bind(frameBuffer);
-            window.Context.Draw(PrimitiveType.Points, 0, 1, new DrawState(new RenderState(), sp, va), null);
+            window.Context.Draw(PrimitiveType.Points, 0, 1, new DrawState(new RenderState(), sp, va), new SceneState());
 
             TestUtility.ValidateColor(frameBuffer.ColorAttachments[0], 255, 0, 0);
             TestUtility.ValidateColor(frameBuffer.ColorAttachments[1], 0, 255, 0);
@@ -243,7 +243,7 @@ namespace MiniGlobe.Renderer
             window.Context.TextureUnits[0].Texture2D = texture0;
             window.Context.TextureUnits[1].Texture2D = texture1;
             window.Context.Bind(frameBuffer);
-            window.Context.Draw(PrimitiveType.Points, 0, 1, new DrawState(new RenderState(), sp, va), null);
+            window.Context.Draw(PrimitiveType.Points, 0, 1, new DrawState(new RenderState(), sp, va), new SceneState());
 
             TestUtility.ValidateColor(frameBuffer.ColorAttachments[0], 255, 255, 0);
 
@@ -285,7 +285,7 @@ namespace MiniGlobe.Renderer
 
             window.Context.Bind(frameBuffer);
             window.Context.Clear(new ClearState());
-            window.Context.Draw(PrimitiveType.Points, 0, 1, new DrawState(renderState, sp, va), null);
+            window.Context.Draw(PrimitiveType.Points, 0, 1, new DrawState(renderState, sp, va), new SceneState());
 
             TestUtility.ValidateColor(frameBuffer.ColorAttachments[0], 255, 0, 0);
             ValidateStencil(frameBuffer.DepthStencilAttachment, stencilTest.FrontFace.ReferenceValue);
