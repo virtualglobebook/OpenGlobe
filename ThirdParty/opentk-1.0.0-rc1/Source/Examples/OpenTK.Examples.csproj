@@ -1,4 +1,5 @@
-<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" >
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
     <ProductVersion>8.0.50727</ProductVersion>
@@ -18,12 +19,16 @@
     <DelaySign>false</DelaySign>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <OutputType>WinExe</OutputType>
-    <AppDesignerFolder></AppDesignerFolder>
+    <AppDesignerFolder>
+    </AppDesignerFolder>
     <RootNamespace>OpenTK.Examples</RootNamespace>
     <StartupObject>Examples.Program</StartupObject>
-    <StartArguments></StartArguments>
+    <StartArguments>
+    </StartArguments>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
+    <OldToolsVersion>2.0</OldToolsVersion>
+    <UpgradeBackupLocation />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
@@ -32,7 +37,8 @@
     <ConfigurationOverrideFile>
     </ConfigurationOverrideFile>
     <DefineConstants>DEBUG;TRACE;</DefineConstants>
-    <DocumentationFile></DocumentationFile>
+    <DocumentationFile>
+    </DocumentationFile>
     <DebugSymbols>True</DebugSymbols>
     <FileAlignment>4096</FileAlignment>
     <Optimize>False</Optimize>
@@ -42,7 +48,8 @@
     <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
     <WarningLevel>4</WarningLevel>
     <NoStdLib>False</NoStdLib>
-    <NoWarn></NoWarn>
+    <NoWarn>
+    </NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
@@ -51,7 +58,8 @@
     <ConfigurationOverrideFile>
     </ConfigurationOverrideFile>
     <DefineConstants>TRACE;</DefineConstants>
-    <DocumentationFile></DocumentationFile>
+    <DocumentationFile>
+    </DocumentationFile>
     <DebugSymbols>False</DebugSymbols>
     <FileAlignment>4096</FileAlignment>
     <Optimize>True</Optimize>
@@ -61,27 +69,28 @@
     <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
     <WarningLevel>4</WarningLevel>
     <NoStdLib>False</NoStdLib>
-    <NoWarn></NoWarn>
+    <NoWarn>
+    </NoWarn>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System" >
-        <Name>System</Name>
+    <Reference Include="System">
+      <Name>System</Name>
       <Private>False</Private>
     </Reference>
-    <Reference Include="System.Data" >
-        <Name>System.Data</Name>
+    <Reference Include="System.Data">
+      <Name>System.Data</Name>
       <Private>False</Private>
     </Reference>
-    <Reference Include="System.Drawing" >
-        <Name>System.Drawing</Name>
+    <Reference Include="System.Drawing">
+      <Name>System.Drawing</Name>
       <Private>False</Private>
     </Reference>
-    <Reference Include="System.Windows.Forms" >
-        <Name>System.Windows.Forms</Name>
+    <Reference Include="System.Windows.Forms">
+      <Name>System.Windows.Forms</Name>
       <Private>False</Private>
     </Reference>
-    <Reference Include="System.Xml" >
-        <Name>System.Xml</Name>
+    <Reference Include="System.Xml">
+      <Name>System.Xml</Name>
       <Private>False</Private>
     </Reference>
   </ItemGroup>
@@ -104,7 +113,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ExampleBrowser.cs">
-      <SubType>Code</SubType>
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="ExampleInfo.cs">
       <SubType>Code</SubType>
@@ -125,7 +134,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="OpenAL\1.1\Parrot.cs">
-      <SubType>Code</SubType>
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="OpenAL\1.1\Playback.cs">
       <SubType>Code</SubType>
@@ -215,7 +224,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="OpenTK\Fonts\FontRenderingBasic.cs">
-      <SubType>Code</SubType>
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="OpenTK\GameWindow\FullscreenAntialias.cs">
       <SubType>Code</SubType>
@@ -227,16 +236,16 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="OpenTK\GLControl\DerivedGLControl.cs">
-      <SubType>Code</SubType>
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="OpenTK\GLControl\GLControlGameLoop.cs">
-      <SubType>Code</SubType>
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="OpenTK\GLControl\MultipleGLControls.cs">
-      <SubType>Code</SubType>
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="OpenTK\GLControl\SimpleGLControl.cs">
-      <SubType>Code</SubType>
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="OpenTK\Test\BlittableValueTypes.cs">
       <SubType>Code</SubType>
@@ -245,13 +254,13 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="OpenTK\Test\Extensions.cs">
-      <SubType>Code</SubType>
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="OpenTK\Test\GameWindowStates.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="OpenTK\Test\InputLogger.cs">
-      <SubType>Code</SubType>
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="OpenTK\Test\MathSerialization.cs">
       <SubType>Code</SubType>
@@ -348,6 +357,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ExampleBrowser.resx">
       <DependentUpon>ExampleBrowser.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <Compile Include="ExampleBrowser.Designer.cs">
       <DependentUpon>ExampleBrowser.cs</DependentUpon>
@@ -408,6 +418,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <None Include="..\Examples\Data\Poem.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

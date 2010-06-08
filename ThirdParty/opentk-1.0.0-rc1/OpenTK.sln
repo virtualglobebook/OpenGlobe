@@ -1,5 +1,13 @@
-Microsoft Visual Studio Solution File, Format Version 9.00
-# Visual Studio 2005
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Files", "Solution Files", "{729E4226-4BED-4200-9BF9-CB7013810308}"
+	ProjectSection(SolutionItems) = preProject
+		Documentation\Changelog.txt = Documentation\Changelog.txt
+		Documentation\License.txt = Documentation\License.txt
+		Documentation\Release.txt = Documentation\Release.txt
+		Documentation\Todo.txt = Documentation\Todo.txt
+	EndProjectSection
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenTK", "Source\OpenTK\OpenTK.csproj", "{2C035F6B-0000-0000-0000-000000000000}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenTK.Build", "Source\Build\OpenTK.Build.csproj", "{94729107-0000-0000-0000-000000000000}"
@@ -9,14 +17,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenTK.Examples", "Source\Examples\OpenTK.Examples.csproj", "{FEA58BC4-0000-0000-0000-000000000000}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenTK.GLControl", "Source\GLControl\OpenTK.GLControl.csproj", "{8CC9D641-0000-0000-0000-000000000000}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Files", "Solution Files", "{729E4226-4BED-4200-9BF9-CB7013810308}"
-	ProjectSection(SolutionItems) = preProject
-		Documentation/Todo.txt = Documentation/Todo.txt
-		Documentation/Release.txt = Documentation/Release.txt
-		Documentation/Changelog.txt = Documentation/Changelog.txt
-		Documentation/License.txt = Documentation/License.txt
-	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -44,5 +44,8 @@ Global
 		{8CC9D641-0000-0000-0000-000000000000}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8CC9D641-0000-0000-0000-000000000000}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8CC9D641-0000-0000-0000-000000000000}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
 	EndGlobalSection
 EndGlobal
