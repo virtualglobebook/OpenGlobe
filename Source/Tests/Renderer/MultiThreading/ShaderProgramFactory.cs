@@ -27,8 +27,8 @@ namespace MiniGlobe.Renderer
 
             _sp = Device.CreateShaderProgram(_vs, _fs);
 
-            // TODO:  Don't call Flush directly.
-            GL.Flush();
+            // TODO:  Don't call Finish directly.
+            GL.Finish();
         }
 
         public ShaderProgram ShaderProgram

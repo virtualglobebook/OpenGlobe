@@ -9,6 +9,7 @@
 
 using OpenTK;
 using OpenTK.Graphics;
+using System;
 
 namespace MiniGlobe.Renderer.GL3x
 {
@@ -18,27 +19,34 @@ namespace MiniGlobe.Renderer.GL3x
         {
             _window = new NativeWindow();
             _context = new GraphicsContext(new GraphicsMode(32, 24, 8), _window.WindowInfo, 3, 2, GraphicsContextFlags.ForwardCompatible | GraphicsContextFlags.Debug);
-            MakeCurrent();
         }
 
         public static void Initialize()
         {
         }
 
-        public static bool MakeCurrent()
+        public delegate void DisposeCallback(bool disposing);
+
+        public static void RunFinalizer(DisposeCallback callback)
         {
             try
             {
                 if (!_context.IsDisposed)
                 {
                     _context.MakeCurrent(_window.WindowInfo);
-                    return true;
+                    try
+                    {
+                        callback(false);
+                    }
+                    finally
+                    {
+                        _context.MakeCurrent(null);
+                    }
                 }
             }
             catch
             {
             }
-            return false;
         }
 
         private static NativeWindow _window;

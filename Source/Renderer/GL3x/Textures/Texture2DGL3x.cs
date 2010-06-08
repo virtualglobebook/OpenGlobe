@@ -59,10 +59,7 @@ namespace MiniGlobe.Renderer.GL3x
 
         ~Texture2DGL3x()
         {
-            if (FinalizerThreadContextGL3x.MakeCurrent())
-            {
-                Dispose(false);
-            }
+            FinalizerThreadContextGL3x.RunFinalizer(Dispose);
         }
 
         internal int Handle

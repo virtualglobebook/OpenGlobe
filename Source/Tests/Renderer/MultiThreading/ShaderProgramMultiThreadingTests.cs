@@ -14,7 +14,6 @@ using MiniGlobe.Core.Geometry;
 
 namespace MiniGlobe.Renderer.MultiThreading
 {
-    [Explicit]
     [TestFixture]
     public class ShaderProgramMultiThreadingTests
     {
@@ -63,6 +62,7 @@ namespace MiniGlobe.Renderer.MultiThreading
             var thread0Window = Device.CreateWindow(1, 1);
             var thread1Window = Device.CreateWindow(1, 1);
             var window = Device.CreateWindow(1, 1);
+
             ///////////////////////////////////////////////////////////////////
 
             ShaderProgramFactory factory0 = new ShaderProgramFactory(thread0Window, ShaderSources.PassThroughVertexShader(), ShaderSources.PassThroughFragmentShader());

@@ -75,10 +75,7 @@ namespace MiniGlobe.Renderer.GL3x
 
         ~ShaderObjectGL3x()
         {
-            if (FinalizerThreadContextGL3x.MakeCurrent())
-            {
-                Dispose(false);
-            }
+            FinalizerThreadContextGL3x.RunFinalizer(Dispose);
         }
 
         public int Handle

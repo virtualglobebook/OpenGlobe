@@ -26,8 +26,8 @@ namespace MiniGlobe.Renderer
 
             _texture = TestUtility.CreateTexture(_rgba);
 
-            // TODO:  Don't call Flush directly.
-            GL.Flush();
+            // TODO:  Don't call Finish directly.
+            GL.Finish();
         }
 
         public Texture2D Texture

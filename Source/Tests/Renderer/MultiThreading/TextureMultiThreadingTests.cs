@@ -14,7 +14,6 @@ using MiniGlobe.Core.Geometry;
 
 namespace MiniGlobe.Renderer.MultiThreading
 {
-    [Explicit]
     [TestFixture]
     public class TextureMultiThreadingTests
     {

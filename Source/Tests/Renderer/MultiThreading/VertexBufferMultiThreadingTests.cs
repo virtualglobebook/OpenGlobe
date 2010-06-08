@@ -15,7 +15,6 @@ using MiniGlobe.Core;
 
 namespace MiniGlobe.Renderer.MultiThreading
 {
-    [Explicit]
     [TestFixture]
     public class VertexBufferMultiThreadingTests
     {

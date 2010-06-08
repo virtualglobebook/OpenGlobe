@@ -29,8 +29,8 @@ namespace MiniGlobe.Renderer
             _vertexBuffer.CopyFromSystemMemory(_positions);
             _positions = null;
 
-            // TODO:  Don't call Flush directly.
-            GL.Flush();
+            // TODO:  Don't call Finish directly.
+            GL.Finish();
         }
 
         public VertexBuffer VertexBuffer
