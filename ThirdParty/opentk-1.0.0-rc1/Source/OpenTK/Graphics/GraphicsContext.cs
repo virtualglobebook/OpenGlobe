@@ -189,7 +189,9 @@ namespace OpenTK.Graphics
                 // A small hack to create a shared context with the first available context.
                 foreach (WeakReference r in GraphicsContext.available_contexts.Values)
                 {
-                    return (IGraphicsContext)r.Target;
+                    IGraphicsContext target = r.Target as IGraphicsContext;
+                    if (target != null)
+                        return target;
                 }
             }
             return null;
