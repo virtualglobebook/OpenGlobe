@@ -8,7 +8,6 @@
 #endregion
 
 using MiniGlobe.Core;
-using OpenTK.Graphics.OpenGL;
 
 namespace MiniGlobe.Renderer
 {
@@ -26,9 +25,7 @@ namespace MiniGlobe.Renderer
             _window.MakeCurrent();
 
             _sp = Device.CreateShaderProgram(_vs, _fs);
-
-            // TODO:  Don't call Finish directly.
-            GL.Finish();
+            _window.Context.Finish();
         }
 
         public ShaderProgram ShaderProgram

@@ -8,7 +8,6 @@
 #endregion
 
 using MiniGlobe.Core;
-using OpenTK.Graphics.OpenGL;
 
 namespace MiniGlobe.Renderer
 {
@@ -25,9 +24,7 @@ namespace MiniGlobe.Renderer
             _window.MakeCurrent();
 
             _texture = TestUtility.CreateTexture(_rgba);
-
-            // TODO:  Don't call Finish directly.
-            GL.Finish();
+            _window.Context.Finish();
         }
 
         public Texture2D Texture

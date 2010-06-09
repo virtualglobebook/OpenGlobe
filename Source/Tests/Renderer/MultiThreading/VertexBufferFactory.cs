@@ -8,7 +8,6 @@
 #endregion
 
 using MiniGlobe.Core;
-using OpenTK.Graphics.OpenGL;
 
 namespace MiniGlobe.Renderer
 {
@@ -29,8 +28,7 @@ namespace MiniGlobe.Renderer
             _vertexBuffer.CopyFromSystemMemory(_positions);
             _positions = null;
 
-            // TODO:  Don't call Finish directly.
-            GL.Finish();
+            _window.Context.Finish();
         }
 
         public VertexBuffer VertexBuffer
