@@ -18,6 +18,12 @@ using System.Collections.Generic;
 
 namespace MiniGlobe.Terrain
 {
+    public enum RayCastedTerrainShadingAlgorithm
+    {
+        ByHeight,
+        ByRaySteps
+    }
+
     public sealed class RayCastedTerrainTile : IDisposable
     {
         public RayCastedTerrainTile(Context context, TerrainTile tile)
@@ -38,6 +44,8 @@ namespace MiniGlobe.Terrain
             _maximumHeight = sp.Uniforms["u_maximumHeight"] as Uniform<float>;
             _aabbLowerLeft = sp.Uniforms["u_aabbLowerLeft"] as Uniform<Vector3S>;
             _aabbUpperRight = sp.Uniforms["u_aabbUpperRight"] as Uniform<Vector3S>;
+            _shadingAlgorithm = sp.Uniforms["u_shadingAlgorithm"] as Uniform<int>;
+
             HeightExaggeration = 1;
 
             ///////////////////////////////////////////////////////////////////
@@ -57,6 +65,8 @@ namespace MiniGlobe.Terrain
                 tile.Size.X, tile.Size.Y, TextureFormat.Red32f));
             _texture.CopyFromBuffer(pixelBuffer, ImageFormat.Red, ImageDataType.Float);
             _texture.Filter = Texture2DFilter.NearestClampToEdge;
+
+            ShowTerrain = true;
         }
 
         private void Update(Context context)
@@ -88,6 +98,14 @@ namespace MiniGlobe.Terrain
                 _primitiveType = mesh.PrimitiveType;
                 _drawState.RenderState.FacetCulling.FrontFaceWindingOrder = mesh.FrontFaceWindingOrder;
 
+                if (_wireframe != null)
+                {
+                    _wireframe.Dispose();
+                }
+                _wireframe = new Wireframe(context, mesh);
+                _wireframe.FacetCullingFace = CullFace.Front;
+                _wireframe.Width = 3;
+
                 _dirtyVA = false;
             }
         }
@@ -98,8 +116,16 @@ namespace MiniGlobe.Terrain
 
             Update(context);
 
-            context.TextureUnits[0].Texture2DRectangle = _texture;
-            context.Draw(_primitiveType, _drawState, sceneState);
+            if (ShowTerrain)
+            {
+                context.TextureUnits[0].Texture2DRectangle = _texture;
+                context.Draw(_primitiveType, _drawState, sceneState);
+            }
+
+            if (ShowWireframe)
+            {
+                _wireframe.Render(context, sceneState);
+            }
         }
 
         public float HeightExaggeration
@@ -129,6 +155,14 @@ namespace MiniGlobe.Terrain
             }
         }
 
+        public bool ShowTerrain { get; set; }
+        public bool ShowWireframe { get; set; }
+        public RayCastedTerrainShadingAlgorithm ShadingAlgorithm 
+        {
+            get { return (RayCastedTerrainShadingAlgorithm)_shadingAlgorithm.Value; }
+            set { _shadingAlgorithm.Value = (int)value;  }
+        }
+
         #region IDisposable Members
 
         public void Dispose()
@@ -136,6 +170,7 @@ namespace MiniGlobe.Terrain
             _drawState.ShaderProgram.Dispose();
             _drawState.VertexArray.Dispose();
             _texture.Dispose();
+            _wireframe.Dispose();
         }
 
         #endregion
@@ -147,6 +182,7 @@ namespace MiniGlobe.Terrain
         private readonly Uniform<float> _maximumHeight;
         private readonly Uniform<Vector3S> _aabbLowerLeft;
         private readonly Uniform<Vector3S> _aabbUpperRight;
+        private readonly Uniform<int> _shadingAlgorithm;
 
         private readonly Vector2I _tileSize;
         private readonly float _tileMinimumHeight;
@@ -155,6 +191,8 @@ namespace MiniGlobe.Terrain
         private readonly Vector3D _tileAABBUpperRight;
 
         private readonly Texture2D _texture;
+
+        private Wireframe _wireframe;
 
         private PrimitiveType _primitiveType;
         private bool _dirtyVA;

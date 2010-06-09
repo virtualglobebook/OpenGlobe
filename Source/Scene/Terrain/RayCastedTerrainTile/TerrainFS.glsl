@@ -19,6 +19,7 @@ uniform vec3 u_aabbUpperRight;
 uniform float u_minimumHeight;
 uniform float u_maximumHeight;
 uniform float u_heightExaggeration;
+uniform int u_shadingAlgorithm;
 
 struct Intersection
 {
@@ -118,25 +119,6 @@ Intersection RayIntersectsAABB(vec3 origin, vec3 direction, vec3 aabbLowerLeft, 
     return Intersection(false, vec3(0.0));
 }
 
-void Mirror(
-    bool mirror,
-    float heightMapSize,
-    inout float boxEntry,
-    inout float direction,
-    inout float mirrorTextureCoordinates)
-{
-    if (mirror)
-    {
-        direction = -direction;
-        boxEntry = heightMapSize - boxEntry;
-        mirrorTextureCoordinates = heightMapSize - 1.0;
-    }
-    else
-    {
-        mirrorTextureCoordinates = 0.0;
-    }
-}
-
 vec2 MirrorRepeat(vec2 textureCoordinate, vec2 mirrorTextureCoordinates)
 {
     return vec2(
@@ -196,19 +178,6 @@ bool StepRay(
     return foundIntersection;
 }
 
-void UnMirrorIntersectionPoint(bvec2 mirror, vec2 heightMapSize, inout vec3 intersectionPoint)
-{
-    if (mirror.x)
-    {
-        intersectionPoint.x = heightMapSize.x - intersectionPoint.x;
-    }
-
-    if (mirror.y)
-    {
-        intersectionPoint.y = heightMapSize.y - intersectionPoint.y;
-    }
-}
-
 float ComputeWorldPositionDepth(vec3 position, mat4x2 modelZToClipCoordinates)
 { 
     vec2 v = modelZToClipCoordinates * vec4(position, 1);   // clip coordinates
@@ -232,30 +201,62 @@ void main()
         boxEntry = i.IntersectionPoint;
     }
 
-    vec2 heightMapSize = vec2(textureSize(mg_texture0, 0));
-
+	//
+	// Mirror such that ray always steps in positive x and y direction
+	//
+    vec2 heightMapSize = vec2(textureSize(mg_texture0));
     bvec2 mirror = lessThan(direction.xy, vec2(0.0));
-    vec2 mirrorTextureCoordinates;
-    Mirror(mirror.x, heightMapSize.x, boxEntry.x, direction.x, mirrorTextureCoordinates.x);
-    Mirror(mirror.y, heightMapSize.y, boxEntry.y, direction.y, mirrorTextureCoordinates.y);
+    vec2 mirrorTextureCoordinates = vec2(0.0);
+
+	if (mirror.x)
+	{
+		direction.x = -direction.x;
+		boxEntry.x = heightMapSize.x - boxEntry.x;
+		mirrorTextureCoordinates.x = heightMapSize.x - 1.0;
+    }
+
+	if (mirror.y)
+	{
+		direction.y = -direction.y;
+		boxEntry.y = heightMapSize.y - boxEntry.y;
+		mirrorTextureCoordinates.y = heightMapSize.y - 1.0;
+    }
 
     vec2 oneOverDirectionXY = vec2(1.0) / direction.xy;
     vec3 texEntry = boxEntry;
     vec3 intersectionPoint;
     bool foundIntersection = false;
+	int numberOfSteps = 0;
 
     while (!foundIntersection && all(lessThan(texEntry.xy, heightMapSize)))
     {
         foundIntersection = StepRay(direction, oneOverDirectionXY, 
             mirrorTextureCoordinates, texEntry, intersectionPoint);
+		++numberOfSteps;
     }
 
     if (foundIntersection)
     {
-        UnMirrorIntersectionPoint(mirror, heightMapSize, intersectionPoint);
+		if (mirror.x)
+		{
+			intersectionPoint.x = heightMapSize.x - intersectionPoint.x;
+		}
 
-        fragmentColor = vec3((intersectionPoint.z - u_minimumHeight) / (u_maximumHeight - u_minimumHeight), 0.0, 0.0);
+		if (mirror.y)
+		{
+			intersectionPoint.y = heightMapSize.y - intersectionPoint.y;
+		}
+
         gl_FragDepth = ComputeWorldPositionDepth(intersectionPoint, mg_modelZToClipCoordinates);
+
+		if (u_shadingAlgorithm == 0)      // RayCastedTerrainShadingAlgorithm.ByHeight
+		{
+	        fragmentColor = vec3((intersectionPoint.z - u_minimumHeight) / (u_maximumHeight - u_minimumHeight), 0.0, 0.0);
+		}
+		else if (u_shadingAlgorithm == 1) // RayCastedTerrainShadingAlgorithm.ByRaySteps
+		{
+			fragmentColor = mix(vec3(1.0, 0.5, 0.0), vec3(0.0, 0.5, 1.0), clamp(float(numberOfSteps) / length(heightMapSize), 0.0, 1.0));
+		}
     }
     else
     {

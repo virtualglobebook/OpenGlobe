@@ -10,11 +10,10 @@
 using System;
 using System.Drawing;
 
+using MiniGlobe.Core;
 using MiniGlobe.Core.Geometry;
 using MiniGlobe.Renderer;
 using MiniGlobe.Scene;
-
-using MiniGlobe.Core;
 using MiniGlobe.Terrain;
 
 namespace MiniGlobe.Examples.Chapter5
@@ -26,6 +25,7 @@ namespace MiniGlobe.Examples.Chapter5
             _window = Device.CreateWindow(800, 600, "Chapter 5:  Ray Casting");
             _window.Resize += OnResize;
             _window.RenderFrame += OnRenderFrame;
+            _window.Keyboard.KeyDown += OnKeyDown;
             _sceneState = new SceneState();
             _sceneState.Camera.PerspectiveFarPlaneDistance = 4096;
             _clearState = new ClearState();
@@ -38,29 +38,54 @@ namespace MiniGlobe.Examples.Chapter5
 
             ///////////////////////////////////////////////////////////////////
 
-            _axes = new Axes();
-            _axes.Length = 25;
-            _axes.Width = 3;
-
-            _labels = new BillboardCollection(_window.Context, 1);
-            _labels.Texture = Device.CreateTexture2D(Device.CreateBitmapFromText("Label", new Font("Arial", 24)), TextureFormat.RedGreenBlueAlpha8, false);
-            _labels.Add(new Billboard()
-            {
-                Position = new Vector3D(3.0, 3.0, 0.5),
-                Color = Color.Cyan,
-                HorizontalOrigin = HorizontalOrigin.Left,
-                VerticalOrigin = VerticalOrigin.Bottom
-            });
-
             double tileRadius = Math.Max(terrainTile.Size.X, terrainTile.Size.Y) * 0.5;
             _camera = new CameraLookAtPoint(_sceneState.Camera, _window, Ellipsoid.UnitSphere);
             _camera.CenterPoint = new Vector3D(terrainTile.Size.X * 0.5, terrainTile.Size.Y * 0.5, 0.0);
             _sceneState.Camera.ZoomToTarget(tileRadius);
 
+            PersistentView.Execute(@"E:\Manuscript\TerrainBasics\Figures\GPURayCastingNearestNeighbor.xml", _window, _sceneState.Camera);
+            
             HighResolutionSnap snap = new HighResolutionSnap(_window, _sceneState);
-            snap.ColorFilename = @"E:\Manuscript\TerrainRendering\Figures\GPURayCasting.png";
-            snap.WidthInInches = 3;
+            snap.ColorFilename = @"E:\Manuscript\TerrainBasics\Figures\GPURayCastingNearestNeighbor.png";
+            snap.WidthInInches = 4;
             snap.DotsPerInch = 600;
+
+            ///////////////////////////////////////////////////////////////////
+
+            _hudFont = new Font("Arial", 16);
+            _hud = new HeadsUpDisplay(_window.Context);
+            _hud.Color = Color.Black;
+            UpdateHUD();
+        }
+
+        private static string TerrainShadingAlgorithmToString(RayCastedTerrainShadingAlgorithm shading)
+        {
+            switch (shading)
+            {
+                case RayCastedTerrainShadingAlgorithm.ByHeight:
+                    return "By Height";
+                case RayCastedTerrainShadingAlgorithm.ByRaySteps:
+                    return "Number of Ray Steps";
+            }
+
+            return string.Empty;
+        }
+
+        private void UpdateHUD()
+        {
+            string text;
+
+            text = "Shading Algorithm: " + TerrainShadingAlgorithmToString(_tile.ShadingAlgorithm) + " (left/right)\n";
+            text += "Wireframe: " + (_tile.ShowWireframe ? "on" : "off") + " ('w')\n";
+
+            if (_hud.Texture != null)
+            {
+                _hud.Texture.Dispose();
+                _hud.Texture = null;
+            }
+            _hud.Texture = Device.CreateTexture2D(
+                Device.CreateBitmapFromText(text, _hudFont),
+                TextureFormat.RedGreenBlueAlpha8, false);
         }
 
         private void OnResize()
@@ -69,14 +94,35 @@ namespace MiniGlobe.Examples.Chapter5
             _sceneState.Camera.AspectRatio = _window.Width / (double)_window.Height;
         }
 
+        private void OnKeyDown(object sender, KeyboardKeyEventArgs e)
+        {
+            if ((e.Key == KeyboardKey.Left) || (e.Key == KeyboardKey.Right))
+            {
+                _tile.ShadingAlgorithm += (e.Key == KeyboardKey.Right) ? 1 : -1;
+                if (_tile.ShadingAlgorithm < RayCastedTerrainShadingAlgorithm.ByHeight)
+                {
+                    _tile.ShadingAlgorithm = RayCastedTerrainShadingAlgorithm.ByRaySteps;
+                }
+                else if (_tile.ShadingAlgorithm > RayCastedTerrainShadingAlgorithm.ByRaySteps)
+                {
+                    _tile.ShadingAlgorithm = RayCastedTerrainShadingAlgorithm.ByHeight;
+                }
+            }
+            if (e.Key == KeyboardKey.W)
+            {
+                _tile.ShowWireframe = !_tile.ShowWireframe;
+            }
+
+            UpdateHUD();
+        }
+
         private void OnRenderFrame()
         {
             Context context = _window.Context;
             context.Clear(_clearState);
 
             _tile.Render(context, _sceneState);
-            _axes.Render(context, _sceneState);
-            _labels.Render(context, _sceneState);
+            _hud.Render(context, _sceneState);
         }
 
         #region IDisposable Members
@@ -85,9 +131,9 @@ namespace MiniGlobe.Examples.Chapter5
         {
             _camera.Dispose();
             _tile.Dispose();
-            _axes.Dispose();
-            _labels.Texture.Dispose();
-            _labels.Dispose();
+            _hudFont.Dispose();
+            _hud.Texture.Dispose();
+            _hud.Dispose();
             _window.Dispose();
         }
 
@@ -111,7 +157,8 @@ namespace MiniGlobe.Examples.Chapter5
         private readonly CameraLookAtPoint _camera;
         private readonly ClearState _clearState;
         private readonly RayCastedTerrainTile _tile;
-        private readonly Axes _axes;
-        private readonly BillboardCollection _labels;
+
+        private readonly Font _hudFont;
+        private readonly HeadsUpDisplay _hud;
     }
 }
