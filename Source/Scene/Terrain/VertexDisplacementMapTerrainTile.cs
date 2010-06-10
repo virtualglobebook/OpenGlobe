@@ -21,8 +21,8 @@ namespace MiniGlobe.Terrain
     public enum TerrainNormalsAlgorithm
     {
         None,
-        ThreeSamples,
-        FourSamples,
+        ForwardDifference,
+        CentralDifference,
         SobelFilter
     }
 
@@ -130,7 +130,7 @@ namespace MiniGlobe.Terrain
             _tileMaximumHeight = tile.MaximumHeight;
 
             _heightExaggeration = 1;
-            _normalsAlgorithm = TerrainNormalsAlgorithm.ThreeSamples;
+            _normalsAlgorithm = TerrainNormalsAlgorithm.ForwardDifference;
             _showTerrain = true;
             _dirty = true;
         }

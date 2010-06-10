@@ -24,7 +24,7 @@ uniform int u_normalAlgorithm;
 uniform vec2 u_positionToTextureCoordinate;
 uniform vec2 u_positionToRepeatTextureCoordinate;
 
-vec3 ComputeNormalThreeSamples(
+vec3 ComputeNormalForwardDifference(
     vec3 displacedPosition, 
     sampler2DRect heightMap, 
     float heightExaggeration)
@@ -34,7 +34,7 @@ vec3 ComputeNormalThreeSamples(
     return cross(right - displacedPosition, top - displacedPosition);
 }
 
-vec3 ComputeNormalFourSamples(
+vec3 ComputeNormalCentralDifference(
     vec3 displacedPosition, 
     sampler2DRect heightMap, 
     float heightExaggeration)
@@ -123,13 +123,13 @@ void main()
 
     gl_Position = mg_modelViewPerspectiveProjectionMatrix * vec4(displacedPosition, 1.0);
 
-    if (u_normalAlgorithm == 1)       // TerrainNormalsAlgorithm.ThreeSamples
+    if (u_normalAlgorithm == 1)       // TerrainNormalsAlgorithm.ThreeForward
     {
-        normalFS = ComputeNormalThreeSamples(displacedPosition, mg_texture0, u_heightExaggeration);
+        normalFS = ComputeNormalForwardDifference(displacedPosition, mg_texture0, u_heightExaggeration);
     }
     else if (u_normalAlgorithm == 2)  // TerrainNormalsAlgorithm.FourSamples
     {
-        normalFS = ComputeNormalFourSamples(displacedPosition, mg_texture0, u_heightExaggeration);
+        normalFS = ComputeNormalCentralDifference(displacedPosition, mg_texture0, u_heightExaggeration);
     }
     else if (u_normalAlgorithm == 3)  // TerrainNormalsAlgorithm.SobelFilter
     {
@@ -140,7 +140,7 @@ void main()
 	    //
         // Even if lighting isn't used, shading algorithms based on terrain slope require the normal.
 		//
-        normalFS = ComputeNormalThreeSamples(displacedPosition, mg_texture0, u_heightExaggeration);
+        normalFS = ComputeNormalForwardDifference(displacedPosition, mg_texture0, u_heightExaggeration);
     }
 
     positionToLightFS = mg_cameraLightPosition - displacedPosition;

@@ -76,10 +76,10 @@ namespace MiniGlobe.Examples.Chapter5
             {
                 case TerrainNormalsAlgorithm.None:
                     return "n/a";
-                case TerrainNormalsAlgorithm.ThreeSamples:
-                    return "Three Samples";
-                case TerrainNormalsAlgorithm.FourSamples:
-                    return "Four Samples";
+                case TerrainNormalsAlgorithm.ForwardDifference:
+                    return "Forward Samples";
+                case TerrainNormalsAlgorithm.CentralDifference:
+                    return "Central Samples";
                 case TerrainNormalsAlgorithm.SobelFilter:
                     return "Sobel Filter";
             }

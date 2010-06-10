@@ -255,7 +255,7 @@ void main()
 		}
 		else if (u_shadingAlgorithm == 1) // RayCastedTerrainShadingAlgorithm.ByRaySteps
 		{
-			fragmentColor = mix(vec3(1.0, 0.5, 0.0), vec3(0.0, 0.5, 1.0), clamp(float(numberOfSteps) / length(heightMapSize), 0.0, 1.0));
+			fragmentColor = mix(vec3(1.0, 0.5, 0.0), vec3(0.0, 0.0, 1.0), float(numberOfSteps) / (heightMapSize.x + heightMapSize.y));
 		}
     }
     else

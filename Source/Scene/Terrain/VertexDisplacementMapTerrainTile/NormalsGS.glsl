@@ -59,7 +59,7 @@ void ClipLineSegmentToNearPlane(
     }
 }
 
-vec3 ComputeNormalThreeSamples(
+vec3 ComputeNormalForwardDifference(
     vec3 displacedPosition, 
     sampler2DRect heightMap, 
     float heightExaggeration)
@@ -69,7 +69,7 @@ vec3 ComputeNormalThreeSamples(
     return cross(right - displacedPosition, top - displacedPosition);
 }
 
-vec3 ComputeNormalFourSamples(
+vec3 ComputeNormalCentralDifference(
     vec3 displacedPosition, 
     sampler2DRect heightMap, 
     float heightExaggeration)
@@ -107,13 +107,13 @@ void main()
 {
     vec3 terrainNormal = vec3(0.0);
 
-    if (u_normalAlgorithm == 1)       // TerrainNormalsAlgorithm.ThreeSamples
+    if (u_normalAlgorithm == 1)       // TerrainNormalsAlgorithm.ForwardDifference
     {
-        terrainNormal = ComputeNormalThreeSamples(gl_in[0].gl_Position.xyz, mg_texture0, u_heightExaggeration);
+        terrainNormal = ComputeNormalForwardDifference(gl_in[0].gl_Position.xyz, mg_texture0, u_heightExaggeration);
     }
-    else if (u_normalAlgorithm == 2)  // TerrainNormalsAlgorithm.FourSamples
+    else if (u_normalAlgorithm == 2)  // TerrainNormalsAlgorithm.CentralDifference
     {
-        terrainNormal = ComputeNormalFourSamples(gl_in[0].gl_Position.xyz, mg_texture0, u_heightExaggeration);
+        terrainNormal = ComputeNormalCentralDifference(gl_in[0].gl_Position.xyz, mg_texture0, u_heightExaggeration);
     }
     else if (u_normalAlgorithm == 3)  // TerrainNormalsAlgorithm.SobelFilter
     {
