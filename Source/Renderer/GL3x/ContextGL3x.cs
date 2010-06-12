@@ -539,10 +539,10 @@ namespace MiniGlobe.Renderer.GL3x
             _boundShaderProgram.Clean(this, sceneState);
 
 #if DEBUG
-            GL.ValidateProgram(_boundShaderProgram.Handle);
+            GL.ValidateProgram(_boundShaderProgram.Handle.Value);
 
             int validateStatus;
-            GL.GetProgram(_boundShaderProgram.Handle, ProgramParameter.ValidateStatus, out validateStatus);
+            GL.GetProgram(_boundShaderProgram.Handle.Value, ProgramParameter.ValidateStatus, out validateStatus);
             if (validateStatus == 0)
             {
                 Debug.Fail("Shader program validation failed: " + _boundShaderProgram.Log);

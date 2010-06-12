@@ -14,9 +14,9 @@ namespace MiniGlobe.Renderer.GL3x
 {
     internal sealed class BufferHandleGL3x : IDisposable
     {
-        public BufferHandleGL3x(int handle)
+        public BufferHandleGL3x()
         {
-            _value = handle;
+            GL.GenBuffers(1, out _value);
         }
 
         ~BufferHandleGL3x()

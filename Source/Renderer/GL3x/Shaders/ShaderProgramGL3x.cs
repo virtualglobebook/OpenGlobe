@@ -37,18 +37,20 @@ namespace MiniGlobe.Renderer.GL3x
             }
             _fragmentShader = new ShaderObjectGL3x(ShaderType.FragmentShader, fragmentShaderSource);
 
-            _program = GL.CreateProgram();
-            GL.AttachShader(_program, _vertexShader.Handle);
+            _program = new ShaderProgramHandleGL3x();
+            int programHandle = _program.Value;
+
+            GL.AttachShader(programHandle, _vertexShader.Handle);
             if (geometryShaderSource.Length > 0)
             {
-                GL.AttachShader(_program, _geometryShader.Handle);
+                GL.AttachShader(programHandle, _geometryShader.Handle);
             }
-            GL.AttachShader(_program, _fragmentShader.Handle);
+            GL.AttachShader(programHandle, _fragmentShader.Handle);
 
-            GL.LinkProgram(_program);
+            GL.LinkProgram(programHandle);
 
             int linkStatus;
-            GL.GetProgram(_program, ProgramParameter.LinkStatus, out linkStatus);
+            GL.GetProgram(programHandle, ProgramParameter.LinkStatus, out linkStatus);
 
             if (linkStatus == 0)
             {
@@ -64,18 +66,15 @@ namespace MiniGlobe.Renderer.GL3x
             InitializeAutomaticUniforms(_uniforms);
         }
 
-        ~ShaderProgramGL3x()
+        private static ShaderVertexAttributeCollection FindVertexAttributes(ShaderProgramHandleGL3x program)
         {
-            FinalizerThreadContextGL3x.RunFinalizer(Dispose);
-        }
+            int programHandle = program.Value;
 
-        private static ShaderVertexAttributeCollection FindVertexAttributes(int program)
-        {
             int numberOfAttributes;
-            GL.GetProgram(program, ProgramParameter.ActiveAttributes, out numberOfAttributes);
+            GL.GetProgram(programHandle, ProgramParameter.ActiveAttributes, out numberOfAttributes);
 
             int attributeNameMaxLength;
-            GL.GetProgram(program, ProgramParameter.ActiveAttributeMaxLength, out attributeNameMaxLength);
+            GL.GetProgram(programHandle, ProgramParameter.ActiveAttributeMaxLength, out attributeNameMaxLength);
 
             ShaderVertexAttributeCollection vertexAttributes = new ShaderVertexAttributeCollection();
             for (int i = 0; i < numberOfAttributes; ++i)
@@ -85,7 +84,7 @@ namespace MiniGlobe.Renderer.GL3x
                 ActiveAttribType attributeType;
                 StringBuilder attributeNameBuilder = new StringBuilder(attributeNameMaxLength);
 
-                GL.GetActiveAttrib(program, i, attributeNameMaxLength,
+                GL.GetActiveAttrib(programHandle, i, attributeNameMaxLength,
                     out attributeNameLength, out attributeLength, out attributeType, attributeNameBuilder);
 
                 string attributeName = attributeNameBuilder.ToString();
@@ -98,7 +97,7 @@ namespace MiniGlobe.Renderer.GL3x
                     continue;
                 }
 
-                int attributeLocation = GL.GetAttribLocation(program, attributeName);
+                int attributeLocation = GL.GetAttribLocation(programHandle, attributeName);
 
                 vertexAttributes.Add(new ShaderVertexAttribute(
                     attributeName, attributeLocation, TypeConverterGL3x.To(attributeType), attributeLength));
@@ -107,13 +106,15 @@ namespace MiniGlobe.Renderer.GL3x
             return vertexAttributes;
         }
 
-        private UniformCollection FindUniforms(int program)
+        private UniformCollection FindUniforms(ShaderProgramHandleGL3x program)
         {
+            int programHandle = program.Value;
+
             int numberOfUniforms;
-            GL.GetProgram(program, ProgramParameter.ActiveUniforms, out numberOfUniforms);
+            GL.GetProgram(programHandle, ProgramParameter.ActiveUniforms, out numberOfUniforms);
 
             int uniformNameMaxLength;
-            GL.GetProgram(program, ProgramParameter.ActiveUniformMaxLength, out uniformNameMaxLength);
+            GL.GetProgram(programHandle, ProgramParameter.ActiveUniformMaxLength, out uniformNameMaxLength);
 
             UniformCollection uniforms = new UniformCollection();
             for (int i = 0; i < numberOfUniforms; ++i)
@@ -123,7 +124,7 @@ namespace MiniGlobe.Renderer.GL3x
                 ActiveUniformType uniformType;
                 StringBuilder uniformNameBuilder = new StringBuilder(uniformNameMaxLength);
 
-                GL.GetActiveUniform(program, i, uniformNameMaxLength,
+                GL.GetActiveUniform(programHandle, i, uniformNameMaxLength,
                     out uniformNameLength, out uniformSize, out uniformType, uniformNameBuilder);
 
                 string uniformName = CorrectUniformName(uniformNameBuilder.ToString());
@@ -140,7 +141,7 @@ namespace MiniGlobe.Renderer.GL3x
                 // Skip uniforms in a named block
                 //
                 int uniformBlockIndex;
-                GL.GetActiveUniforms(program, 1, ref i, ActiveUniformParameter.UniformBlockIndex, out uniformBlockIndex);
+                GL.GetActiveUniforms(programHandle, 1, ref i, ActiveUniformParameter.UniformBlockIndex, out uniformBlockIndex);
                 if (uniformBlockIndex != -1)
                 {
                     continue;
@@ -149,7 +150,7 @@ namespace MiniGlobe.Renderer.GL3x
                 // TODO:  Support arrays
                 Debug.Assert(uniformSize == 1);
 
-                int uniformLocation = GL.GetUniformLocation(program, uniformName);
+                int uniformLocation = GL.GetUniformLocation(programHandle, uniformName);
                 uniforms.Add(CreateUniform(uniformName, uniformLocation, uniformType));
             }
 
@@ -283,24 +284,26 @@ namespace MiniGlobe.Renderer.GL3x
             return null;
         }
 
-        private static UniformBlockCollection FindUniformBlocks(int program)
+        private static UniformBlockCollection FindUniformBlocks(ShaderProgramHandleGL3x program)
         {
+            int programHandle = program.Value;
+
             int numberOfUniformBlocks;
-            GL.GetProgram(program, ProgramParameter.ActiveUniformBlocks, out numberOfUniformBlocks);
+            GL.GetProgram(programHandle, ProgramParameter.ActiveUniformBlocks, out numberOfUniformBlocks);
 
             UniformBlockCollection uniformBlocks = new UniformBlockCollection();
             for (int i = 0; i < numberOfUniformBlocks; ++i)
             {
-                string uniformBlockName = GL.GetActiveUniformBlockName(program, i);
+                string uniformBlockName = GL.GetActiveUniformBlockName(programHandle, i);
 
                 int uniformBlockSizeInBytes;
-                GL.GetActiveUniformBlock(program, i, ActiveUniformBlockParameter.UniformBlockDataSize, out uniformBlockSizeInBytes);
+                GL.GetActiveUniformBlock(programHandle, i, ActiveUniformBlockParameter.UniformBlockDataSize, out uniformBlockSizeInBytes);
 
                 int numberOfUniformsInBlock;
-                GL.GetActiveUniformBlock(program, i, ActiveUniformBlockParameter.UniformBlockActiveUniforms, out numberOfUniformsInBlock);
+                GL.GetActiveUniformBlock(programHandle, i, ActiveUniformBlockParameter.UniformBlockActiveUniforms, out numberOfUniformsInBlock);
 
                 int[] uniformIndicesInBlock = new int[numberOfUniformsInBlock];
-                GL.GetActiveUniformBlock(program, i, ActiveUniformBlockParameter.UniformBlockActiveUniformIndices, uniformIndicesInBlock);
+                GL.GetActiveUniformBlock(programHandle, i, ActiveUniformBlockParameter.UniformBlockActiveUniformIndices, uniformIndicesInBlock);
 
                 //
                 // Query uniforms in this named uniform block
@@ -311,18 +314,18 @@ namespace MiniGlobe.Renderer.GL3x
                 int[] uniformArrayStridesInBytes = new int[numberOfUniformsInBlock];
                 int[] uniformmatrixStrideInBytess = new int[numberOfUniformsInBlock];
                 int[] uniformRowMajors = new int[numberOfUniformsInBlock];
-                GL.GetActiveUniforms(program, numberOfUniformsInBlock, uniformIndicesInBlock, ActiveUniformParameter.UniformType, uniformTypes);
-                GL.GetActiveUniforms(program, numberOfUniformsInBlock, uniformIndicesInBlock, ActiveUniformParameter.UniformOffset, uniformOffsetsInBytes);
-                GL.GetActiveUniforms(program, numberOfUniformsInBlock, uniformIndicesInBlock, ActiveUniformParameter.UniformSize, uniformLengths);
-                GL.GetActiveUniforms(program, numberOfUniformsInBlock, uniformIndicesInBlock, ActiveUniformParameter.UniformArrayStride, uniformArrayStridesInBytes);
-                GL.GetActiveUniforms(program, numberOfUniformsInBlock, uniformIndicesInBlock, ActiveUniformParameter.UniformMatrixStride, uniformmatrixStrideInBytess);
-                GL.GetActiveUniforms(program, numberOfUniformsInBlock, uniformIndicesInBlock, ActiveUniformParameter.UniformIsRowMajor, uniformRowMajors);
+                GL.GetActiveUniforms(programHandle, numberOfUniformsInBlock, uniformIndicesInBlock, ActiveUniformParameter.UniformType, uniformTypes);
+                GL.GetActiveUniforms(programHandle, numberOfUniformsInBlock, uniformIndicesInBlock, ActiveUniformParameter.UniformOffset, uniformOffsetsInBytes);
+                GL.GetActiveUniforms(programHandle, numberOfUniformsInBlock, uniformIndicesInBlock, ActiveUniformParameter.UniformSize, uniformLengths);
+                GL.GetActiveUniforms(programHandle, numberOfUniformsInBlock, uniformIndicesInBlock, ActiveUniformParameter.UniformArrayStride, uniformArrayStridesInBytes);
+                GL.GetActiveUniforms(programHandle, numberOfUniformsInBlock, uniformIndicesInBlock, ActiveUniformParameter.UniformMatrixStride, uniformmatrixStrideInBytess);
+                GL.GetActiveUniforms(programHandle, numberOfUniformsInBlock, uniformIndicesInBlock, ActiveUniformParameter.UniformIsRowMajor, uniformRowMajors);
 
                 UniformBlock uniformBlock = new UniformBlockGL3x(uniformBlockName, uniformBlockSizeInBytes, i);
 
                 for (int j = 0; j < numberOfUniformsInBlock; ++j)
                 {
-                    string uniformName = GL.GetActiveUniformName(program, uniformIndicesInBlock[j]);
+                    string uniformName = GL.GetActiveUniformName(programHandle, uniformIndicesInBlock[j]);
                     uniformName = CorrectUniformName(uniformName);
 
                     UniformType uniformType = TypeConverterGL3x.To((ActiveUniformType)uniformTypes[j]);
@@ -337,7 +340,7 @@ namespace MiniGlobe.Renderer.GL3x
                 //
                 // Create a one to one mapping between uniform blocks and uniform buffer objects.
                 //
-                GL.UniformBlockBinding(program, i, i);
+                GL.UniformBlockBinding(programHandle, i, i);
             }
 
             return uniformBlocks;
@@ -418,14 +421,14 @@ namespace MiniGlobe.Renderer.GL3x
             return name;
         }
 
-        internal int Handle
+        internal ShaderProgramHandleGL3x Handle
         {
             get { return _program; }
         }
 
         internal void Bind()
         {
-            GL.UseProgram(_program);
+            GL.UseProgram(_program.Value);
         }
 
         internal void Clean(Context context, SceneState sceneState)
@@ -441,7 +444,7 @@ namespace MiniGlobe.Renderer.GL3x
 
         private string ProgramInfoLog
         {
-            get { return GL.GetProgramInfoLog(_program); }
+            get { return GL.GetProgramInfoLog(_program.Value); }
         }
 
         #region ShaderProgram Members
@@ -486,11 +489,9 @@ namespace MiniGlobe.Renderer.GL3x
 
         protected override void Dispose(bool disposing)
         {
-            // Always delete the program, even in the finalizer.
-            GL.DeleteProgram(_program);
-
             if (disposing)
             {
+                _program.Dispose();
                 _vertexShader.Dispose();
                 if (_geometryShader != null)
                 {
@@ -506,7 +507,7 @@ namespace MiniGlobe.Renderer.GL3x
         private readonly ShaderObjectGL3x _vertexShader;
         private readonly ShaderObjectGL3x _geometryShader;
         private readonly ShaderObjectGL3x _fragmentShader;
-        private readonly int _program;
+        private readonly ShaderProgramHandleGL3x _program;
         private readonly FragmentOutputsGL3x _fragmentOutputs;
         private readonly ShaderVertexAttributeCollection _vertexAttributes;
         private readonly IList<ICleanable> _dirtyUniforms;

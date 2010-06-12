@@ -29,7 +29,7 @@ namespace MiniGlobe.Renderer.GL3x
             int textureUnits;
             GL.GetInteger(GetPName.MaxCombinedTextureImageUnits, out textureUnits);
 
-            _handle = GL.GenTexture();
+            _handle = new TextureHandleGL3x();
             _target = textureTarget;
             _description = description;
             _lastTextureUnit = OpenTK.Graphics.OpenGL.TextureUnit.Texture0 + (textureUnits - 1);
@@ -57,12 +57,7 @@ namespace MiniGlobe.Renderer.GL3x
             ApplyFilter();
         }
 
-        ~Texture2DGL3x()
-        {
-            FinalizerThreadContextGL3x.RunFinalizer(Dispose);
-        }
-
-        internal int Handle
+        internal TextureHandleGL3x Handle
         {
             get { return _handle; }
         }
@@ -74,7 +69,7 @@ namespace MiniGlobe.Renderer.GL3x
 
         internal void Bind()
         {
-            GL.BindTexture(_target, _handle);
+            GL.BindTexture(_target, _handle.Value);
         }
 
         private void BindToLastTextureUnit()
@@ -228,14 +223,16 @@ namespace MiniGlobe.Renderer.GL3x
 
         protected override void Dispose(bool disposing)
         {
-            // Always delete the texture, even in the finalizer.
-            GL.DeleteTexture(_handle);
+            if (disposing)
+            {
+                _handle.Dispose();
+            }
             base.Dispose(disposing);
         }
 
         #endregion
 
-        private readonly int _handle;
+        private readonly TextureHandleGL3x _handle;
         private readonly TextureTarget _target;
         private readonly Texture2DDescription _description;
         private readonly OpenTK.Graphics.OpenGL.TextureUnit _lastTextureUnit;

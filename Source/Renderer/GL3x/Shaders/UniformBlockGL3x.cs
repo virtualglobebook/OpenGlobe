@@ -25,8 +25,8 @@ namespace MiniGlobe.Renderer.GL3x
         public override void Bind(UniformBuffer uniformBuffer)
         {
             // TODO: avoid duplicate binds?
-            int bufferHandle = (uniformBuffer as UniformBufferGL3x).Handle;
-            GL.BindBufferBase(BufferTarget.UniformBuffer, _bindHandle, bufferHandle);
+            BufferHandleGL3x bufferHandle = (uniformBuffer as UniformBufferGL3x).Handle;
+            GL.BindBufferBase(BufferTarget.UniformBuffer, _bindHandle, bufferHandle.Value);
         }
 
         #endregion

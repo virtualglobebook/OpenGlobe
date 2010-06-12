@@ -19,7 +19,7 @@ namespace MiniGlobe.Renderer.GL3x
             _bufferObject = new BufferGL3x(BufferTarget.UniformBuffer, usageHint, sizeInBytes);
         }
 
-        internal int Handle
+        internal BufferHandleGL3x Handle
         {
             get { return _bufferObject.Handle; }
         }

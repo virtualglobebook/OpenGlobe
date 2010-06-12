@@ -15,7 +15,7 @@ namespace MiniGlobe.Renderer.GL3x
 {
     internal class FragmentOutputsGL3x : FragmentOutputs
     {
-        public FragmentOutputsGL3x(int program)
+        public FragmentOutputsGL3x(ShaderProgramHandleGL3x program)
         {
             _program = program;
         }
@@ -26,7 +26,7 @@ namespace MiniGlobe.Renderer.GL3x
         {
             get 
             {
-                int i = GL.GetFragDataLocation(_program, index);
+                int i = GL.GetFragDataLocation(_program.Value, index);
 
                 if (i == -1)
                 {
@@ -39,6 +39,6 @@ namespace MiniGlobe.Renderer.GL3x
 
         #endregion
 
-        private int _program;
+        private ShaderProgramHandleGL3x _program;
     }
 }

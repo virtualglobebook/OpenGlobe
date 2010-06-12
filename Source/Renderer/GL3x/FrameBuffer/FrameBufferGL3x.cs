@@ -19,18 +19,13 @@ namespace MiniGlobe.Renderer.GL3x
     {
         public FrameBufferGL3x()
         {
-            GL.GenFramebuffers(1, out _handle);
+            _handle = new FrameBufferHandleGL3x();
             _colorAttachments = new ColorAttachmentsGL3x();
-        }
-
-        ~FrameBufferGL3x()
-        {
-            FinalizerThreadContextGL3x.RunFinalizer(Dispose);
         }
 
         internal void Bind()
         {
-            GL.BindFramebuffer(FramebufferTarget.Framebuffer, _handle);
+            GL.BindFramebuffer(FramebufferTarget.Framebuffer, _handle.Value);
         }
 
         internal static void UnBind()
@@ -122,7 +117,7 @@ namespace MiniGlobe.Renderer.GL3x
             {
                 // TODO:  Mipmap level
                 Texture2DGL3x textureGL = texture as Texture2DGL3x;
-                GL.FramebufferTexture(FramebufferTarget.Framebuffer, attachPoint, textureGL.Handle, 0);
+                GL.FramebufferTexture(FramebufferTarget.Framebuffer, attachPoint, textureGL.Handle.Value, 0);
             }
             else
             {
@@ -134,8 +129,10 @@ namespace MiniGlobe.Renderer.GL3x
 
         protected override void Dispose(bool disposing)
         {
-            // Always delete the frame buffer, even in the finalizer.
-            GL.DeleteFramebuffers(1, ref _handle);
+            if (disposing)
+            {
+                _handle.Dispose();
+            }
             base.Dispose(disposing);
         }
 
@@ -149,7 +146,7 @@ namespace MiniGlobe.Renderer.GL3x
             DepthStencilAttachment = 2
         }
 
-        private int _handle;
+        private FrameBufferHandleGL3x _handle;
         private ColorAttachmentsGL3x _colorAttachments;
         private Texture2D _depthAttachment;
         private Texture2D _depthStencilAttachment;

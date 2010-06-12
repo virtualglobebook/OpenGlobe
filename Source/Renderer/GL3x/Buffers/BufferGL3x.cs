@@ -27,9 +27,7 @@ namespace MiniGlobe.Renderer.GL3x
         {
             Debug.Assert(sizeInBytes > 0);
 
-            int handle;
-            GL.GenBuffers(1, out handle);
-            _handle = new BufferHandleGL3x(handle);
+            _handle = new BufferHandleGL3x();
 
             _sizeInBytes = sizeInBytes;
             _type = type;
@@ -152,9 +150,9 @@ namespace MiniGlobe.Renderer.GL3x
             get { return TypeConverterGL3x.To(_usageHint); }
         }
 
-        public int Handle
+        public BufferHandleGL3x Handle
         {
-            get { return _handle.Value; }
+            get { return _handle; }
         }
 
         public void Bind()

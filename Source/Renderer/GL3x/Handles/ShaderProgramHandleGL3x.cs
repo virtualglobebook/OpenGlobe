@@ -12,14 +12,14 @@ using OpenTK.Graphics.OpenGL;
 
 namespace MiniGlobe.Renderer.GL3x
 {
-    internal sealed class VertexArrayNameGL3x : IDisposable
+    internal sealed class ShaderProgramHandleGL3x : IDisposable
     {
-        public VertexArrayNameGL3x()
+        public ShaderProgramHandleGL3x()
         {
-            GL.GenVertexArrays(1, out _value);
+            _value = GL.CreateProgram();
         }
 
-        ~VertexArrayNameGL3x()
+        ~ShaderProgramHandleGL3x()
         {
             FinalizerThreadContextGL3x.RunFinalizer(Dispose);
         }
@@ -39,7 +39,7 @@ namespace MiniGlobe.Renderer.GL3x
         {
             if (_value != 0)
             {
-                GL.DeleteVertexArrays(1, ref _value);
+                GL.DeleteProgram(_value);
                 _value = 0;
             }
         }

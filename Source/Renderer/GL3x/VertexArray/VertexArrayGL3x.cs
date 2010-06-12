@@ -18,9 +18,7 @@ namespace MiniGlobe.Renderer.GL3x
     {
         public VertexArrayGL3x()
 	    {
-            int handle;
-            GL.GenVertexArrays(1, out handle);
-            _handle = new VertexArrayHandleGL3x(handle);
+            _handle = new VertexArrayNameGL3x();
             _attachedVertexBuffers = new AttachedVertexBuffersGL3x();
         }
 
@@ -92,7 +90,7 @@ namespace MiniGlobe.Renderer.GL3x
 
         #endregion
 
-        private VertexArrayHandleGL3x _handle;
+        private VertexArrayNameGL3x _handle;
         private AttachedVertexBuffersGL3x _attachedVertexBuffers;
         private IndexBuffer _attachedIndexBuffer;
         private bool _dirtyIndexBuffer;
