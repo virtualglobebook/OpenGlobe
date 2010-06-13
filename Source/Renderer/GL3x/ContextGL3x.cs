@@ -235,10 +235,13 @@ namespace MiniGlobe.Renderer.GL3x
                 _renderState.PrimitiveRestart.Enabled = primitiveRestart.Enabled;
             }
 
-            if (_renderState.PrimitiveRestart.Index != primitiveRestart.Index)
+            if (primitiveRestart.Enabled)
             {
-                GL.PrimitiveRestartIndex(primitiveRestart.Index);
-                _renderState.PrimitiveRestart.Index = primitiveRestart.Index;
+                if (_renderState.PrimitiveRestart.Index != primitiveRestart.Index)
+                {
+                    GL.PrimitiveRestartIndex(primitiveRestart.Index);
+                    _renderState.PrimitiveRestart.Index = primitiveRestart.Index;
+                }
             }
         }
 
@@ -250,16 +253,19 @@ namespace MiniGlobe.Renderer.GL3x
                 _renderState.FacetCulling.Enabled = facetCulling.Enabled;
             }
 
-            if (_renderState.FacetCulling.Face != facetCulling.Face)
+            if (facetCulling.Enabled)
             {
-                GL.CullFace(TypeConverterGL3x.To(facetCulling.Face));
-                _renderState.FacetCulling.Face = facetCulling.Face;
-            }
+                if (_renderState.FacetCulling.Face != facetCulling.Face)
+                {
+                    GL.CullFace(TypeConverterGL3x.To(facetCulling.Face));
+                    _renderState.FacetCulling.Face = facetCulling.Face;
+                }
 
-            if (_renderState.FacetCulling.FrontFaceWindingOrder != facetCulling.FrontFaceWindingOrder)
-            {
-                GL.FrontFace(TypeConverterGL3x.To(facetCulling.FrontFaceWindingOrder));
-                _renderState.FacetCulling.FrontFaceWindingOrder = facetCulling.FrontFaceWindingOrder;
+                if (_renderState.FacetCulling.FrontFaceWindingOrder != facetCulling.FrontFaceWindingOrder)
+                {
+                    GL.FrontFace(TypeConverterGL3x.To(facetCulling.FrontFaceWindingOrder));
+                    _renderState.FacetCulling.FrontFaceWindingOrder = facetCulling.FrontFaceWindingOrder;
+                }
             }
         }
 
@@ -293,10 +299,13 @@ namespace MiniGlobe.Renderer.GL3x
                 _renderState.ScissorTest.Enabled = scissorTest.Enabled;
             }
 
-            if (_renderState.ScissorTest.Rectangle != scissorTest.Rectangle)
+            if (scissorTest.Enabled)
             {
-                GL.Scissor(rectangle.Left, rectangle.Bottom, rectangle.Width, rectangle.Height);
-                _renderState.ScissorTest.Rectangle = scissorTest.Rectangle;
+                if (_renderState.ScissorTest.Rectangle != scissorTest.Rectangle)
+                {
+                    GL.Scissor(rectangle.Left, rectangle.Bottom, rectangle.Width, rectangle.Height);
+                    _renderState.ScissorTest.Rectangle = scissorTest.Rectangle;
+                }
             }
         }
 
@@ -308,8 +317,11 @@ namespace MiniGlobe.Renderer.GL3x
                 _renderState.StencilTest.Enabled = stencilTest.Enabled;
             }
 
-            ApplyStencil(StencilFace.Front, _renderState.StencilTest.FrontFace, stencilTest.FrontFace);
-            ApplyStencil(StencilFace.Back, _renderState.StencilTest.BackFace, stencilTest.BackFace);
+            if (stencilTest.Enabled)
+            {
+                ApplyStencil(StencilFace.Front, _renderState.StencilTest.FrontFace, stencilTest.FrontFace);
+                ApplyStencil(StencilFace.Back, _renderState.StencilTest.BackFace, stencilTest.BackFace);
+            }
         }
 
         private static void ApplyStencil(StencilFace face, StencilTestFace currentTest, StencilTestFace test)
@@ -351,10 +363,13 @@ namespace MiniGlobe.Renderer.GL3x
                 _renderState.DepthTest.Enabled = depthTest.Enabled;
             }
 
-            if (_renderState.DepthTest.Function != depthTest.Function)
+            if (depthTest.Enabled)
             {
-                GL.DepthFunc(TypeConverterGL3x.To(depthTest.Function));
-                _renderState.DepthTest.Function = depthTest.Function;
+                if (_renderState.DepthTest.Function != depthTest.Function)
+                {
+                    GL.DepthFunc(TypeConverterGL3x.To(depthTest.Function));
+                    _renderState.DepthTest.Function = depthTest.Function;
+                }
             }
         }
 
@@ -381,39 +396,41 @@ namespace MiniGlobe.Renderer.GL3x
                 _renderState.Blending.Enabled = blending.Enabled;
             }
 
-            if ((_renderState.Blending.SourceRGBFactor != blending.SourceRGBFactor) ||
-                (_renderState.Blending.DestinationRGBFactor != blending.DestinationRGBFactor) ||
-                (_renderState.Blending.SourceAlphaFactor != blending.SourceAlphaFactor) ||
-                (_renderState.Blending.DestinationAlphaFactor != blending.DestinationAlphaFactor))
+            if (blending.Enabled)
             {
-                GL.BlendFuncSeparate(
-                    TypeConverterGL3x.To(blending.SourceRGBFactor),
-                    TypeConverterGL3x.To(blending.DestinationRGBFactor),
-                    TypeConverterGL3x.To(blending.SourceAlphaFactor),
-                    TypeConverterGL3x.To(blending.DestinationAlphaFactor));
+                if ((_renderState.Blending.SourceRGBFactor != blending.SourceRGBFactor) ||
+                    (_renderState.Blending.DestinationRGBFactor != blending.DestinationRGBFactor) ||
+                    (_renderState.Blending.SourceAlphaFactor != blending.SourceAlphaFactor) ||
+                    (_renderState.Blending.DestinationAlphaFactor != blending.DestinationAlphaFactor))
+                {
+                    GL.BlendFuncSeparate(
+                        TypeConverterGL3x.To(blending.SourceRGBFactor),
+                        TypeConverterGL3x.To(blending.DestinationRGBFactor),
+                        TypeConverterGL3x.To(blending.SourceAlphaFactor),
+                        TypeConverterGL3x.To(blending.DestinationAlphaFactor));
 
-                _renderState.Blending.SourceRGBFactor = blending.SourceRGBFactor;
-                _renderState.Blending.DestinationRGBFactor = blending.DestinationRGBFactor;
-                _renderState.Blending.SourceAlphaFactor = blending.SourceAlphaFactor;
-                _renderState.Blending.DestinationAlphaFactor = blending.DestinationAlphaFactor;
-            }
+                    _renderState.Blending.SourceRGBFactor = blending.SourceRGBFactor;
+                    _renderState.Blending.DestinationRGBFactor = blending.DestinationRGBFactor;
+                    _renderState.Blending.SourceAlphaFactor = blending.SourceAlphaFactor;
+                    _renderState.Blending.DestinationAlphaFactor = blending.DestinationAlphaFactor;
+                }
 
-            if ((_renderState.Blending.RGBEquation != blending.RGBEquation) ||
-                (_renderState.Blending.AlphaEquation != blending.AlphaEquation))
-            {
-                GL.BlendEquationSeparate(
-                    TypeConverterGL3x.To(blending.RGBEquation),
-                    TypeConverterGL3x.To(blending.AlphaEquation));
+                if ((_renderState.Blending.RGBEquation != blending.RGBEquation) ||
+                    (_renderState.Blending.AlphaEquation != blending.AlphaEquation))
+                {
+                    GL.BlendEquationSeparate(
+                        TypeConverterGL3x.To(blending.RGBEquation),
+                        TypeConverterGL3x.To(blending.AlphaEquation));
 
-                _renderState.Blending.RGBEquation = blending.RGBEquation;
-                _renderState.Blending.AlphaEquation = blending.AlphaEquation;
+                    _renderState.Blending.RGBEquation = blending.RGBEquation;
+                    _renderState.Blending.AlphaEquation = blending.AlphaEquation;
+                }
 
-            }
-
-            if (_renderState.Blending.Color != blending.Color)
-            {
-                GL.BlendColor(blending.Color);
-                _renderState.Blending.Color = blending.Color;
+                if (_renderState.Blending.Color != blending.Color)
+                {
+                    GL.BlendColor(blending.Color);
+                    _renderState.Blending.Color = blending.Color;
+                }
             }
         }
 
