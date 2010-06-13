@@ -245,7 +245,7 @@ namespace MiniGlobe.Examples.Chapter4
             //
             // Render to frame buffer
             //
-            context.Bind(_frameBuffer);
+            context.FrameBuffer = _frameBuffer;
 
             _clearState.Depth = _depthTestLess ? 1 : 0;
             context.Clear(_clearState);
@@ -258,7 +258,7 @@ namespace MiniGlobe.Examples.Chapter4
             //
             // Render viewport quad to show contents of frame buffer's color buffer
             //
-            context.Bind(null);
+            context.FrameBuffer = null;
             _viewportQuad.Render(context, _sceneState);
         }
 

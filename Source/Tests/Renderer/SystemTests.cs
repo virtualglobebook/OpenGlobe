@@ -32,7 +32,7 @@ namespace MiniGlobe.Renderer
             Texture2D depthTexture = Device.CreateTexture2D(depthDescription);
             frameBuffer.DepthAttachment = depthTexture;
 
-            window.Context.Bind(frameBuffer);
+            window.Context.FrameBuffer = frameBuffer;
             window.Context.Clear(new ClearState() { Buffers = ClearBuffers.All, Color = Color.Red, Depth = 0.5f });
             TestUtility.ValidateColor(frameBuffer.ColorAttachments[0], 255, 0, 0);
             ValidateDepth(frameBuffer.DepthAttachment, 0.5f);
@@ -62,7 +62,7 @@ namespace MiniGlobe.Renderer
             ShaderProgram sp = Device.CreateShaderProgram(ShaderSources.PassThroughVertexShader(), ShaderSources.PassThroughFragmentShader());
             VertexArray va = TestUtility.CreateVertexArray(window.Context, sp.VertexAttributes["position"].Location);
 
-            window.Context.Bind(frameBuffer);
+            window.Context.FrameBuffer = frameBuffer;
             window.Context.Draw(PrimitiveType.Points, 0, 1, new DrawState(new RenderState(), sp, va), new SceneState());
 
             TestUtility.ValidateColor(frameBuffer.ColorAttachments[0], 255, 0, 0);
@@ -102,7 +102,7 @@ namespace MiniGlobe.Renderer
                 new AttachedVertexBuffer(positionsBuffer, VertexAttributeComponentType.Float, 4);
             va.IndexBuffer = indexBuffer;
 
-            window.Context.Bind(frameBuffer);
+            window.Context.FrameBuffer = frameBuffer;
             window.Context.Draw(PrimitiveType.Triangles, 0, 3, new DrawState(new RenderState(), sp, va), new SceneState());
 
             TestUtility.ValidateColor(frameBuffer.ColorAttachments[0], 255, 0, 0);
@@ -164,7 +164,7 @@ namespace MiniGlobe.Renderer
             ///////////////////////////////////////////////////////////////////
 
             window.Context.TextureUnits[0].Texture2D = texture;
-            window.Context.Bind(frameBuffer);
+            window.Context.FrameBuffer = frameBuffer;
             window.Context.Draw(PrimitiveType.Points, 0, 1, new DrawState(new RenderState(), sp, va), new SceneState());
 
             TestUtility.ValidateColor(frameBuffer.ColorAttachments[0], 255, 0, 0);
@@ -207,7 +207,7 @@ namespace MiniGlobe.Renderer
             frameBuffer.ColorAttachments[sp.FragmentOutputs["RedColor"]] = redTexture;
             frameBuffer.ColorAttachments[sp.FragmentOutputs["GreenColor"]] = greenTexture;
 
-            window.Context.Bind(frameBuffer);
+            window.Context.FrameBuffer = frameBuffer;
             window.Context.Draw(PrimitiveType.Points, 0, 1, new DrawState(new RenderState(), sp, va), new SceneState());
 
             TestUtility.ValidateColor(frameBuffer.ColorAttachments[0], 255, 0, 0);
@@ -242,7 +242,7 @@ namespace MiniGlobe.Renderer
 
             window.Context.TextureUnits[0].Texture2D = texture0;
             window.Context.TextureUnits[1].Texture2D = texture1;
-            window.Context.Bind(frameBuffer);
+            window.Context.FrameBuffer = frameBuffer;
             window.Context.Draw(PrimitiveType.Points, 0, 1, new DrawState(new RenderState(), sp, va), new SceneState());
 
             TestUtility.ValidateColor(frameBuffer.ColorAttachments[0], 255, 255, 0);
@@ -283,7 +283,7 @@ namespace MiniGlobe.Renderer
             RenderState renderState = new RenderState();
             renderState.StencilTest = stencilTest;
 
-            window.Context.Bind(frameBuffer);
+            window.Context.FrameBuffer = frameBuffer;
             window.Context.Clear(new ClearState());
             window.Context.Draw(PrimitiveType.Points, 0, 1, new DrawState(renderState, sp, va), new SceneState());
 
@@ -331,7 +331,7 @@ namespace MiniGlobe.Renderer
             sceneState.Camera.Target = Vector3D.Zero;
             sceneState.Camera.Up = Vector3D.UnitZ;
 
-            window.Context.Bind(frameBuffer);
+            window.Context.FrameBuffer = frameBuffer;
             window.Context.Draw(PrimitiveType.Points, new DrawState(new RenderState(), sp, va), sceneState);
             TestUtility.ValidateColor(frameBuffer.ColorAttachments[0], 255, 0, 0);
 

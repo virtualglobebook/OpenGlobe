@@ -411,10 +411,10 @@ namespace MiniGlobe.Examples.Chapter8
             //
             // Depth 
             //
-            _window.Context.Bind(_fbo);
+            _window.Context.FrameBuffer = _fbo;
             _window.Context.Clear(_clearState);
             _tile.Render(_window.Context, _sceneState);
-            _window.Context.Bind(null);
+            _window.Context.FrameBuffer = null;
 
             //
             // Terrain

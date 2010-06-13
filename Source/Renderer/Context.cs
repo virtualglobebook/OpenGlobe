@@ -242,13 +242,12 @@ namespace MiniGlobe.Renderer
 
         public abstract VertexArray CreateVertexArray();
         public abstract FrameBuffer CreateFrameBuffer();
+
         public abstract TextureUnits TextureUnits { get; }
+        public abstract Rectangle Viewport { get; set; }
+        public abstract FrameBuffer FrameBuffer { get; set; }
 
         public abstract void Clear(ClearState clearState);
-        public abstract Rectangle Viewport { get; set; }
-
-        public abstract void Bind(FrameBuffer frameBuffer);
-
         public abstract void Draw(PrimitiveType primitiveType, int offset, int count, DrawState drawState, SceneState sceneState);
         public abstract void Draw(PrimitiveType primitiveType, DrawState drawState, SceneState sceneState);
 

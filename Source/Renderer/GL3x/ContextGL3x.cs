@@ -101,11 +101,6 @@ namespace MiniGlobe.Renderer.GL3x
 
         #region Context Members
 
-        public override TextureUnits TextureUnits
-        {
-            get { return _textureUnits; }
-        }
-
         public override VertexArray CreateVertexArray()
         {
             return new VertexArrayGL3x();
@@ -114,6 +109,54 @@ namespace MiniGlobe.Renderer.GL3x
         public override FrameBuffer CreateFrameBuffer()
         {
             return new FrameBufferGL3x();
+        }
+
+        public override TextureUnits TextureUnits
+        {
+            get { return _textureUnits; }
+        }
+
+        public override Rectangle Viewport
+        {
+            get
+            {
+                int[] viewport = new int[4];
+                GL.GetInteger(GetPName.Viewport, viewport);
+
+                return new Rectangle(viewport[0], viewport[1], viewport[2], viewport[3]);
+            }
+
+            set
+            {
+                Debug.Assert(value.Width >= 0);
+                Debug.Assert(value.Height >= 0);
+
+                GL.Viewport(value);
+            }
+        }
+
+        public override FrameBuffer FrameBuffer
+        {
+            get { return _boundFrameBuffer; }
+
+            set
+            {
+                FrameBufferGL3x frameBufferGL3x = value as FrameBufferGL3x;
+
+                if (_boundFrameBuffer != frameBufferGL3x)
+                {
+                    if (frameBufferGL3x != null)
+                    {
+                        frameBufferGL3x.Bind();
+                    }
+                    else
+                    {
+                        FrameBufferGL3x.UnBind();
+                    }
+
+                    _boundFrameBuffer = frameBufferGL3x;
+                }
+            }
         }
 
         public override void Clear(ClearState clearState)
@@ -144,44 +187,6 @@ namespace MiniGlobe.Renderer.GL3x
             }
 
             GL.Clear(TypeConverterGL3x.To(clearState.Buffers));
-        }
-
-        public override Rectangle Viewport
-        {
-            get
-            {
-                int[] viewport = new int[4];
-                GL.GetInteger(GetPName.Viewport, viewport);
-
-                return new Rectangle(viewport[0], viewport[1], viewport[2], viewport[3]);
-            }
-
-            set
-            {
-                Debug.Assert(value.Width >= 0);
-                Debug.Assert(value.Height >= 0);
-
-                GL.Viewport(value);
-            }
-        }
-
-        public override void Bind(FrameBuffer frameBuffer)
-        {
-            FrameBufferGL3x frameBufferGL3x = frameBuffer as FrameBufferGL3x;
-
-            if (_boundFrameBuffer != frameBufferGL3x)
-            {
-                if (frameBufferGL3x != null)
-                {
-                    frameBufferGL3x.Bind();
-                }
-                else
-                {
-                    FrameBufferGL3x.UnBind();
-                }
-
-                _boundFrameBuffer = frameBufferGL3x;
-            }
         }
 
         public override void Draw(PrimitiveType primitiveType, int offset, int count, DrawState drawState, SceneState sceneState)

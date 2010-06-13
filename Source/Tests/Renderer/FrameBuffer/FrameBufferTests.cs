@@ -33,8 +33,8 @@ namespace MiniGlobe.Renderer
             // Since frame buffer has a color attachment, it is complete, 
             // and should bind without error.
             //
-            window.Context.Bind(frameBuffer);
-            window.Context.Bind(null);
+            window.Context.FrameBuffer = frameBuffer;
+            window.Context.FrameBuffer = null;
 
             frameBuffer.ColorAttachments[0] = null;
             Assert.IsNull(frameBuffer.ColorAttachments[0]);
@@ -136,7 +136,7 @@ namespace MiniGlobe.Renderer
             Assert.AreEqual(1, snap.HeightInInches);
             Assert.AreEqual(10, snap.HeightInPixels);
 
-            window.Context.Bind(snap.FrameBuffer);
+            window.Context.FrameBuffer = snap.FrameBuffer;
             window.Context.Viewport = new Rectangle(0, 0, snap.WidthInPixels, snap.HeightInPixels);
             window.Context.Clear(new ClearState() { Buffers = ClearBuffers.ColorAndDepthBuffer, Color = Color.Red, Depth = 0.5f });
             

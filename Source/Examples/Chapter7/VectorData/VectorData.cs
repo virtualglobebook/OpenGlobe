@@ -174,7 +174,7 @@ namespace MiniGlobe.Examples.Chapter7
             //
             // Render to frame buffer
             //
-            context.Bind(_frameBuffer);
+            context.FrameBuffer = _frameBuffer;
 
             SetFrameBufferAttachments(_dayTexture, _nightTexture, null);
             _window.Context.Clear(_clearBlack);
@@ -204,7 +204,7 @@ namespace MiniGlobe.Examples.Chapter7
             //
             // Render viewport quad to composite buffers
             //
-            context.Bind(null);
+            context.FrameBuffer = null;
             _quad.Render(context, _sceneState);
             _hud.Render(context, _sceneState);
         }
