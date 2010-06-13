@@ -165,43 +165,6 @@ namespace MiniGlobe.Renderer.GL3x
             }
         }
 
-        private void Bind(RenderState renderState)
-        {
-            ApplyPrimitiveRestart(renderState.PrimitiveRestart);
-            ApplyFacetCulling(renderState.FacetCulling);
-            ApplyProgramPointSize(renderState.ProgramPointSize);
-            ApplyRasterizationMode(renderState.RasterizationMode);
-            ApplyScissorTest(renderState.ScissorTest);
-            ApplyStencilTest(renderState.StencilTest);
-            ApplyDepthTest(renderState.DepthTest);
-            ApplyDepthRange(renderState.DepthRange);
-            ApplyBlending(renderState.Blending);
-            ApplyColorMask(renderState.ColorMask);
-            ApplyDepthWrite(renderState.DepthWrite);
-        }
-
-        private void Bind(VertexArray vertexArray)
-        {
-            VertexArrayGL3x vertexArrayGL3x = vertexArray as VertexArrayGL3x;
-
-            if (_boundVertexArray != vertexArrayGL3x)
-            {
-                vertexArrayGL3x.Bind();
-                _boundVertexArray = vertexArrayGL3x;
-            }
-        }
-
-        private void Bind(ShaderProgram shaderProgram)
-        {
-            ShaderProgramGL3x shaderProgramGL3x = shaderProgram as ShaderProgramGL3x;
-
-            if (_boundShaderProgram != shaderProgramGL3x)
-            {
-                shaderProgramGL3x.Bind();
-                _boundShaderProgram = shaderProgramGL3x;
-            }
-        }
-
         public override void Bind(FrameBuffer frameBuffer)
         {
             FrameBufferGL3x frameBufferGL3x = frameBuffer as FrameBufferGL3x;
@@ -224,7 +187,7 @@ namespace MiniGlobe.Renderer.GL3x
         public override void Draw(PrimitiveType primitiveType, int offset, int count, DrawState drawState, SceneState sceneState)
         {
             VerifyDraw(drawState, sceneState);
-            CleanBeforeDraw(drawState, sceneState);
+            ApplyBeforeDraw(drawState, sceneState);
 
             if (_boundIndexBuffer != null)
             {
@@ -242,7 +205,7 @@ namespace MiniGlobe.Renderer.GL3x
         public override void Draw(PrimitiveType primitiveType, DrawState drawState, SceneState sceneState)
         {
             VerifyDraw(drawState, sceneState);
-            CleanBeforeDraw(drawState, sceneState);
+            ApplyBeforeDraw(drawState, sceneState);
 
             if (_boundIndexBuffer != null)
             {
@@ -512,33 +475,54 @@ namespace MiniGlobe.Renderer.GL3x
             }
         }
 
-        private void CleanBeforeDraw(DrawState drawState, SceneState sceneState)
+        private void ApplyBeforeDraw(DrawState drawState, SceneState sceneState)
         {
-            Bind(drawState.RenderState);
-            Bind(drawState.ShaderProgram);
-            Bind(drawState.VertexArray);
+            ApplyRenderState(drawState.RenderState);
+            ApplyVertexArray(drawState.VertexArray);
+            ApplyShaderProgram(drawState.ShaderProgram, sceneState);
 
             CleanTextureUnits();
-            CleanVertexArray();
-            CleanShaderProgram(sceneState);
             CleanFrameBuffer();
         }
 
-        private void CleanTextureUnits()
+        private void ApplyRenderState(RenderState renderState)
         {
-            _textureUnits.Clean();
+            ApplyPrimitiveRestart(renderState.PrimitiveRestart);
+            ApplyFacetCulling(renderState.FacetCulling);
+            ApplyProgramPointSize(renderState.ProgramPointSize);
+            ApplyRasterizationMode(renderState.RasterizationMode);
+            ApplyScissorTest(renderState.ScissorTest);
+            ApplyStencilTest(renderState.StencilTest);
+            ApplyDepthTest(renderState.DepthTest);
+            ApplyDepthRange(renderState.DepthRange);
+            ApplyBlending(renderState.Blending);
+            ApplyColorMask(renderState.ColorMask);
+            ApplyDepthWrite(renderState.DepthWrite);
         }
 
-        private void CleanVertexArray()
+        private void ApplyVertexArray(VertexArray vertexArray)
         {
-            Debug.Assert(_boundVertexArray != null);
+            VertexArrayGL3x vertexArrayGL3x = vertexArray as VertexArrayGL3x;
+
+            if (_boundVertexArray != vertexArrayGL3x)
+            {
+                vertexArrayGL3x.Bind();
+                _boundVertexArray = vertexArrayGL3x;
+            }
+
             _boundVertexArray.Clean();
             _boundIndexBuffer = _boundVertexArray.IndexBuffer as IndexBufferGL3x;
         }
 
-        private void CleanShaderProgram(SceneState sceneState)
+        private void ApplyShaderProgram(ShaderProgram shaderProgram, SceneState sceneState)
         {
-            Debug.Assert(_boundShaderProgram != null);
+            ShaderProgramGL3x shaderProgramGL3x = shaderProgram as ShaderProgramGL3x;
+
+            if (_boundShaderProgram != shaderProgramGL3x)
+            {
+                shaderProgramGL3x.Bind();
+                _boundShaderProgram = shaderProgramGL3x;
+            }
             _boundShaderProgram.Clean(this, sceneState);
 
 #if DEBUG
@@ -551,6 +535,11 @@ namespace MiniGlobe.Renderer.GL3x
                 Debug.Fail("Shader program validation failed: " + _boundShaderProgram.Log);
             }
 #endif
+        }
+
+        private void CleanTextureUnits()
+        {
+            _textureUnits.Clean();
         }
 
         private void CleanFrameBuffer()
