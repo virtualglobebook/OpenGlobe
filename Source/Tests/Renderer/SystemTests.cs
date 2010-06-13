@@ -40,11 +40,11 @@ namespace MiniGlobe.Renderer
             //
             // Scissor out window and verify clear doesn't modify contents
             //
-            RenderState renderState = new RenderState();
-            renderState.ScissorTest.Enabled = true;
-            renderState.ScissorTest.Rectangle = new Rectangle(0, 0, 0, 0);
+            ScissorTest scissorTest = new ScissorTest();
+            scissorTest.Enabled = true;
+            scissorTest.Rectangle = new Rectangle(0, 0, 0, 0);
 
-            window.Context.Clear(new ClearState() { RenderState = renderState, Buffers = ClearBuffers.All, Color = Color.Blue, Depth = 1 });
+            window.Context.Clear(new ClearState() { ScissorTest = scissorTest, Buffers = ClearBuffers.All, Color = Color.Blue, Depth = 1 });
             TestUtility.ValidateColor(frameBuffer.ColorAttachments[0], 255, 0, 0);
             ValidateDepth(frameBuffer.DepthAttachment, 0.5f);
 

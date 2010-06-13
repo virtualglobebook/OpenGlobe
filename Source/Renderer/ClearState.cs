@@ -15,14 +15,24 @@ namespace MiniGlobe.Renderer
     {
         public ClearState()
         {
-            RenderState = new RenderState();
+            ScissorTest = new ScissorTest();
+            ColorMask = new ColorMask(true, true, true, true);
+            DepthWrite = true;
+            FrontStencilMask = ~0;
+            BackStencilMask = ~0;
+
             Buffers = ClearBuffers.All;
             Color = Color.White;
             Depth = 1;
             Stencil = 0;
         }
 
-        public RenderState RenderState { get; set; }
+        public ScissorTest ScissorTest { get; set; }
+        public ColorMask ColorMask { get; set; }
+        public bool DepthWrite { get; set; }
+        public int FrontStencilMask { get; set; }
+        public int BackStencilMask { get; set; }
+        
         public ClearBuffers Buffers { get; set; }
         public Color Color { get; set; }
         public float Depth { get; set; }

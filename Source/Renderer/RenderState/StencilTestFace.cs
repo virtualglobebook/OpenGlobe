@@ -42,7 +42,7 @@ namespace MiniGlobe.Renderer
             DepthPassStencilPassOperation = StencilOperation.Keep;
             Function = StencilTestFunction.Always;
             ReferenceValue = 0;
-            Mask = 0xFF;            // TODO: Assumes 8-bit stencil
+            Mask = ~0;
         }
 
         public StencilOperation StencilFailOperation { get; set; }

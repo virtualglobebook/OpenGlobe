@@ -120,7 +120,10 @@ namespace MiniGlobe.Renderer.GL3x
         {
             CleanFrameBuffer();
 
-            Bind(clearState.RenderState);
+            ApplyScissorTest(clearState.ScissorTest);
+            ApplyColorMask(clearState.ColorMask);
+            ApplyDepthWrite(clearState.DepthWrite);
+            // TODO: StencilMaskSeparate
 
             if (_clearColor != clearState.Color)
             {
