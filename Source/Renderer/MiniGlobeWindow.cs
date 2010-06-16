@@ -11,7 +11,7 @@ using OpenGlobe.Core;
 
 namespace OpenGlobe.Renderer
 {
-    public abstract class MiniGlobeWindow : Disposable
+    public abstract class GraphicsWindow : Disposable
     {
         public delegate void MiniGlobeHandler();
 

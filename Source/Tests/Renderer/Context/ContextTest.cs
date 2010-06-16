@@ -18,7 +18,7 @@ namespace OpenGlobe.Renderer
         [Test]
         public void Clear()
         {
-            MiniGlobeWindow window = Device.CreateWindow(1, 1);
+            GraphicsWindow window = Device.CreateWindow(1, 1);
 
             window.Context.Clear(new ClearState { Buffers = ClearBuffers.ColorBuffer });
             window.Context.Clear(new ClearState { Buffers = ClearBuffers.DepthBuffer });

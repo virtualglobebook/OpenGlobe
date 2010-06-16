@@ -13,7 +13,7 @@ namespace OpenGlobe.Renderer
 {
     internal class TextureFactory : Disposable
     {
-        public TextureFactory(MiniGlobeWindow window, BlittableRGBA rgba)
+        public TextureFactory(GraphicsWindow window, BlittableRGBA rgba)
         {
             _window = window;
             _rgba = rgba;
@@ -46,7 +46,7 @@ namespace OpenGlobe.Renderer
 
         #endregion
 
-        private readonly MiniGlobeWindow _window;
+        private readonly GraphicsWindow _window;
         private readonly BlittableRGBA _rgba;
         private Texture2D _texture;
     }

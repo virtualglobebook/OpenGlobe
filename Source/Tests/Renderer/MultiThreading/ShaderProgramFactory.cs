@@ -13,7 +13,7 @@ namespace OpenGlobe.Renderer
 {
     internal class ShaderProgramFactory : Disposable
     {
-        public ShaderProgramFactory(MiniGlobeWindow window, string vertexShader, string fragmentShader)
+        public ShaderProgramFactory(GraphicsWindow window, string vertexShader, string fragmentShader)
         {
             _window = window;
             _vs = vertexShader;
@@ -47,7 +47,7 @@ namespace OpenGlobe.Renderer
 
         #endregion
 
-        private readonly MiniGlobeWindow _window;
+        private readonly GraphicsWindow _window;
         private readonly string _vs;
         private readonly string _fs;
         private ShaderProgram _sp;

@@ -19,7 +19,7 @@ namespace OpenGlobe.Renderer
         [Test]
         public void ColorAttachment()
         {
-            MiniGlobeWindow window = Device.CreateWindow(1, 1);
+            GraphicsWindow window = Device.CreateWindow(1, 1);
             FrameBuffer frameBuffer = window.Context.CreateFrameBuffer();
 
             Texture2DDescription colorDescription = new Texture2DDescription(1, 1, TextureFormat.RedGreenBlue8, false);
@@ -47,7 +47,7 @@ namespace OpenGlobe.Renderer
         [Test]
         public void DepthAttachment()
         {
-            MiniGlobeWindow window = Device.CreateWindow(1, 1);
+            GraphicsWindow window = Device.CreateWindow(1, 1);
             FrameBuffer frameBuffer = window.Context.CreateFrameBuffer();
 
             Texture2DDescription depthDescription = new Texture2DDescription(1, 1, TextureFormat.Depth24, false);
@@ -67,7 +67,7 @@ namespace OpenGlobe.Renderer
         [Test]
         public void DepthStencilAttachment()
         {
-            MiniGlobeWindow window = Device.CreateWindow(1, 1);
+            GraphicsWindow window = Device.CreateWindow(1, 1);
             FrameBuffer frameBuffer = window.Context.CreateFrameBuffer();
 
             Texture2DDescription depthStencilDescription = new Texture2DDescription(1, 1, TextureFormat.Depth32fStencil8, false);
@@ -87,7 +87,7 @@ namespace OpenGlobe.Renderer
         [Test]
         public void EnumerateColorAttachments()
         {
-            MiniGlobeWindow window = Device.CreateWindow(1, 1);
+            GraphicsWindow window = Device.CreateWindow(1, 1);
 
             FrameBuffer frameBuffer = window.Context.CreateFrameBuffer();
             Texture2DDescription description = new Texture2DDescription(1, 1, TextureFormat.RedGreenBlue8, false);
@@ -124,7 +124,7 @@ namespace OpenGlobe.Renderer
         [Test]
         public void HighResolutionSnapFrameBuffer()
         {
-            MiniGlobeWindow window = Device.CreateWindow(1, 1);
+            GraphicsWindow window = Device.CreateWindow(1, 1);
 
             HighResolutionSnapFrameBuffer snap = new HighResolutionSnapFrameBuffer(window.Context, 2, 10, 2);
             Assert.AreEqual(2, snap.AspectRatio);

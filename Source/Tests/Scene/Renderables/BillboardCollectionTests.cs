@@ -133,7 +133,7 @@ namespace OpenGlobe.Scene
 
             #endregion
 
-            private MiniGlobeWindow _window;
+            private GraphicsWindow _window;
             private BillboardCollection _group;
         }
     }

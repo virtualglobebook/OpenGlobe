@@ -58,7 +58,7 @@ namespace OpenGlobe.Renderer
         [Test]
         public void Texture2D()
         {
-            MiniGlobeWindow window = Device.CreateWindow(1, 1);
+            GraphicsWindow window = Device.CreateWindow(1, 1);
 
             //
             // Create pixel buffer
@@ -103,7 +103,7 @@ namespace OpenGlobe.Renderer
         [Test]
         public void Texture2DSubImage()
         {
-            MiniGlobeWindow window = Device.CreateWindow(1, 1);
+            GraphicsWindow window = Device.CreateWindow(1, 1);
 
             //
             // Create pixel buffer
@@ -166,7 +166,7 @@ namespace OpenGlobe.Renderer
         [Test]
         public void Texture2DAlignment()
         {
-            MiniGlobeWindow window = Device.CreateWindow(1, 1);
+            GraphicsWindow window = Device.CreateWindow(1, 1);
 
             //
             // Create pixel buffer
@@ -214,7 +214,7 @@ namespace OpenGlobe.Renderer
         [Explicit("The last channel of the last pixel is not written to the texture")]
         public void Texture2DRowAlignment()
         {
-            MiniGlobeWindow window = Device.CreateWindow(1, 1);
+            GraphicsWindow window = Device.CreateWindow(1, 1);
 
             //
             // Create pixel buffer - RGB, 4 byte aligned, 255 is padding
@@ -261,7 +261,7 @@ namespace OpenGlobe.Renderer
         [Test]
         public void EnumerateTextureUnits()
         {
-            MiniGlobeWindow window = Device.CreateWindow(1, 1);
+            GraphicsWindow window = Device.CreateWindow(1, 1);
 
             int count = 0;
             foreach (TextureUnit unit in window.Context.TextureUnits)
@@ -277,7 +277,7 @@ namespace OpenGlobe.Renderer
         [Test]
         public void TextureUnits()
         {
-            MiniGlobeWindow window = Device.CreateWindow(1, 1);
+            GraphicsWindow window = Device.CreateWindow(1, 1);
 
             Texture2DDescription description = new Texture2DDescription(1, 1, TextureFormat.RedGreenBlueAlpha8, false);
             Texture2D texture = Device.CreateTexture2D(description);

@@ -18,7 +18,7 @@ namespace OpenGlobe.Renderer
         [Test]
         public void VertexArray()
         {
-            MiniGlobeWindow window = Device.CreateWindow(1, 1);
+            GraphicsWindow window = Device.CreateWindow(1, 1);
 
             //
             // Create vertex buffer
@@ -76,7 +76,7 @@ namespace OpenGlobe.Renderer
         [Test]
         public void EnumerateAttachedVertexBuffers()
         {
-            MiniGlobeWindow window = Device.CreateWindow(1, 1);
+            GraphicsWindow window = Device.CreateWindow(1, 1);
 
             VertexArray va = window.Context.CreateVertexArray();
             VertexBuffer vb0 = Device.CreateVertexBuffer(BufferHint.StaticDraw, 4);

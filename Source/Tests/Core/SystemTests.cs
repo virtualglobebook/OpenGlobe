@@ -48,7 +48,7 @@ namespace OpenGlobe.Core
 
         private static void Render(Mesh mesh)
         {
-            MiniGlobeWindow window = Device.CreateWindow(1, 1);
+            GraphicsWindow window = Device.CreateWindow(1, 1);
             FrameBuffer frameBuffer = TestUtility.CreateFrameBuffer(window.Context);
 
             ShaderProgram sp = Device.CreateShaderProgram(ShaderSources.PassThroughVertexShader(), ShaderSources.PassThroughFragmentShader());

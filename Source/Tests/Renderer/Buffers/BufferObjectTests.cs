@@ -20,7 +20,7 @@ namespace OpenGlobe.Renderer
         [Test]
         public void VertexBuffer()
         {
-            MiniGlobeWindow window = Device.CreateWindow(1, 1);
+            GraphicsWindow window = Device.CreateWindow(1, 1);
 
             Vector3S[] positions = new Vector3S[] 
             { 
@@ -70,7 +70,7 @@ namespace OpenGlobe.Renderer
         [Test]
         public void IndexBuffer()
         {
-            MiniGlobeWindow window = Device.CreateWindow(1, 1);
+            GraphicsWindow window = Device.CreateWindow(1, 1);
 
             uint[] indicies = new uint[] { 0, 1, 2 };
 
@@ -112,7 +112,7 @@ namespace OpenGlobe.Renderer
         [Test]
         public void UniformBuffer()
         {
-            MiniGlobeWindow window = Device.CreateWindow(1, 1);
+            GraphicsWindow window = Device.CreateWindow(1, 1);
 
             ShaderProgram sp = Device.CreateShaderProgram(
                 ShaderSources.PassThroughVertexShader(),
@@ -149,7 +149,7 @@ namespace OpenGlobe.Renderer
         [Test]
         public void WritePixelBuffer()
         {
-            MiniGlobeWindow window = Device.CreateWindow(1, 1);
+            GraphicsWindow window = Device.CreateWindow(1, 1);
 
             BlittableRGBA[] pixels = new BlittableRGBA[]
             {
@@ -196,7 +196,7 @@ namespace OpenGlobe.Renderer
         [Test]
         public void WritePixelBufferBitmap()
         {
-            MiniGlobeWindow window = Device.CreateWindow(1, 1);
+            GraphicsWindow window = Device.CreateWindow(1, 1);
 
             Color color = Color.FromArgb(0, 1, 2, 3);
             Bitmap bitmap = new Bitmap(1, 1);

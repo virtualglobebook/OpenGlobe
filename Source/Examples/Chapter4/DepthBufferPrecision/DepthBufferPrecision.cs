@@ -315,7 +315,7 @@ namespace OpenGlobe.Examples.Chapter4
         private double _nearDistance;
         private double _cubeRootFarDistance;
 
-        private readonly MiniGlobeWindow _window;
+        private readonly GraphicsWindow _window;
         private readonly SceneState _sceneState;
         private readonly CameraLookAtPoint _camera;
         private readonly ClearState _clearState;

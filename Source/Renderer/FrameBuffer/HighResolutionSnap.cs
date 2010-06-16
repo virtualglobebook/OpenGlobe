@@ -14,7 +14,7 @@ namespace OpenGlobe.Renderer
 {
     public sealed class HighResolutionSnap : IDisposable
     {
-        public HighResolutionSnap(MiniGlobeWindow window, SceneState sceneState)
+        public HighResolutionSnap(GraphicsWindow window, SceneState sceneState)
         {
             _window = window;
             _sceneState = sceneState;
@@ -106,7 +106,7 @@ namespace OpenGlobe.Renderer
             get { return _snapBuffer; }
         }
 
-        private MiniGlobeWindow _window;
+        private GraphicsWindow _window;
         private SceneState _sceneState;
         private bool _enabled;
         private HighResolutionSnapFrameBuffer _snapBuffer;

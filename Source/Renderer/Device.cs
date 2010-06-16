@@ -26,19 +26,19 @@ namespace OpenGlobe.Renderer
 
     public static class Device
     {
-        public static MiniGlobeWindow CreateWindow(int width, int height)
+        public static GraphicsWindow CreateWindow(int width, int height)
         {
             return CreateWindow(width, height, "");
         }
 
-        public static MiniGlobeWindow CreateWindow(int width, int height, string title)
+        public static GraphicsWindow CreateWindow(int width, int height, string title)
         {
             return CreateWindow(width, height, title, WindowType.Default);
         }
 
-        public static MiniGlobeWindow CreateWindow(int width, int height, string title, WindowType windowType)
+        public static GraphicsWindow CreateWindow(int width, int height, string title, WindowType windowType)
         {
-            return new MiniGlobeWindowGL3x(width, height, title, windowType);
+            return new GraphicsWindowGL3x(width, height, title, windowType);
         }
 
         public static ShaderProgram CreateShaderProgram(
@@ -175,7 +175,7 @@ namespace OpenGlobe.Renderer
 
         private static Extensions CreateExtensions()
         {
-            using (MiniGlobeWindow window = CreateWindow(1, 1))
+            using (GraphicsWindow window = CreateWindow(1, 1))
             {
                 return new ExtensionsGL3x();
             }
@@ -185,7 +185,7 @@ namespace OpenGlobe.Renderer
         {
             LinkAutomaticUniformCollection linkAutomaticUniforms = new LinkAutomaticUniformCollection();
 
-            using (MiniGlobeWindow window = CreateWindow(1, 1))
+            using (GraphicsWindow window = CreateWindow(1, 1))
             {
                 for (int i = 0; i < window.Context.TextureUnits.Count; ++i)
                 {

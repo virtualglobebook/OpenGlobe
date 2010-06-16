@@ -19,7 +19,7 @@ namespace OpenGlobe.Renderer
         [Test]
         public void PassThrough()
         {
-            MiniGlobeWindow window = Device.CreateWindow(1, 1);
+            GraphicsWindow window = Device.CreateWindow(1, 1);
 
             ShaderProgram sp = Device.CreateShaderProgram(ShaderSources.PassThroughVertexShader(), ShaderSources.PassThroughFragmentShader());
             Assert.IsFalse(sp.Log.Contains("warning"));
@@ -41,7 +41,7 @@ namespace OpenGlobe.Renderer
         [Test]
         public void PassThroughWithGeometryShader()
         {
-            MiniGlobeWindow window = Device.CreateWindow(1, 1);
+            GraphicsWindow window = Device.CreateWindow(1, 1);
 
             ShaderProgram sp = Device.CreateShaderProgram(
                 ShaderSources.PassThroughVertexShader(),
@@ -67,7 +67,7 @@ namespace OpenGlobe.Renderer
         [Test]
         public void DefaultUniformBlock()
         {
-            MiniGlobeWindow window = Device.CreateWindow(1, 1);
+            GraphicsWindow window = Device.CreateWindow(1, 1);
 
             //
             // Uniform initializers are not supported because there may be some driver bugs:
@@ -367,7 +367,7 @@ namespace OpenGlobe.Renderer
         [Test]
         public void LinkAutomaticUniforms()
         {
-            MiniGlobeWindow window = Device.CreateWindow(1, 1);
+            GraphicsWindow window = Device.CreateWindow(1, 1);
 
             string fs =
                 @"#version 150
@@ -399,7 +399,7 @@ namespace OpenGlobe.Renderer
         [Test]
         public void UniformBlock()
         {
-            MiniGlobeWindow window = Device.CreateWindow(1, 1);
+            GraphicsWindow window = Device.CreateWindow(1, 1);
 
             ShaderProgram sp = Device.CreateShaderProgram(
                 ShaderSources.PassThroughVertexShader(),

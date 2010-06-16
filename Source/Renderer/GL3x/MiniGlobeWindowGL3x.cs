@@ -13,9 +13,9 @@ using OpenTK.Graphics;
 
 namespace OpenGlobe.Renderer.GL3x
 {
-    internal class MiniGlobeWindowGL3x : MiniGlobeWindow
+    internal class GraphicsWindowGL3x : GraphicsWindow
     {
-        public MiniGlobeWindowGL3x(int width, int height, string title, WindowType windowType)
+        public GraphicsWindowGL3x(int width, int height, string title, WindowType windowType)
         {
             GameWindowFlags gameWindowFlags = (windowType == WindowType.Default) ? GameWindowFlags.Default : GameWindowFlags.Fullscreen;
             if (windowType == WindowType.FullScreen)
@@ -58,7 +58,7 @@ namespace OpenGlobe.Renderer.GL3x
             _gameWindw.SwapBuffers();
         }
 
-        #region MiniGlobeWindow Members
+        #region GraphicsWindow Members
 
         public override void MakeCurrent()
         {

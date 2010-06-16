@@ -19,7 +19,7 @@ namespace OpenGlobe.Scene
 {
     public class CameraFly : IDisposable
     {
-        public CameraFly(Camera camera, MiniGlobeWindow window)
+        public CameraFly(Camera camera, GraphicsWindow window)
         {
             if (camera == null)
             {
@@ -373,7 +373,7 @@ namespace OpenGlobe.Scene
         }
 
         private Camera _camera;
-        private MiniGlobeWindow _window;
+        private GraphicsWindow _window;
 
         private bool _inputEnabled;
         private bool _leftButtonDown;

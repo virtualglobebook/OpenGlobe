@@ -13,7 +13,7 @@ namespace OpenGlobe.Renderer
 {
     public static class PersistentView
     {
-        public static void Execute(string filename, MiniGlobeWindow window, Camera camera)
+        public static void Execute(string filename, GraphicsWindow window, Camera camera)
         {
             if (File.Exists(filename))
             {

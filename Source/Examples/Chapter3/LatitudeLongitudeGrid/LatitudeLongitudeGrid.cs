@@ -135,7 +135,7 @@ namespace OpenGlobe.Examples.Chapter3
             }
         }
 
-        private readonly MiniGlobeWindow _window;
+        private readonly GraphicsWindow _window;
         private readonly SceneState _sceneState;
         private readonly CameraLookAtPoint _camera;
         private readonly ClearState _clearState;

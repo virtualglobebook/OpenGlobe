@@ -31,7 +31,7 @@ namespace OpenGlobe.Scene
         /// <param name="window">The window in which the scene is drawn.</param>
         /// <param name="ellipsoid">The ellipsoid defining the shape of the globe.</param>
         /// <param name="centerPoint">The position on which the camera is centered.</param>
-        public CameraLookAtPoint(Camera camera, MiniGlobeWindow window, Ellipsoid ellipsoid, Vector3D centerPoint)
+        public CameraLookAtPoint(Camera camera, GraphicsWindow window, Ellipsoid ellipsoid, Vector3D centerPoint)
         {
             if (camera == null)
             {
@@ -63,7 +63,7 @@ namespace OpenGlobe.Scene
         /// <param name="camera">The renderer camera that is to be manipulated by the new instance.</param>
         /// <param name="window">The window in which the scene is drawn.</param>
         /// <param name="ellipsoid">The ellipsoid defining the shape of the globe.</param>
-        public CameraLookAtPoint(Camera camera, MiniGlobeWindow window, Ellipsoid ellipsoid) :
+        public CameraLookAtPoint(Camera camera, GraphicsWindow window, Ellipsoid ellipsoid) :
             this(camera, window, ellipsoid, Vector3D.Zero)
         {
         }
@@ -74,7 +74,7 @@ namespace OpenGlobe.Scene
         /// <param name="camera">The renderer camera that is to be manipulated by the new instance.</param>
         /// <param name="window">The window in which the scene is drawn.</param>
         /// <param name="ellipsoid">The ellipsoid defining the shape of the globe.</param>
-        public CameraLookAtPoint(Camera camera, MiniGlobeWindow window) :
+        public CameraLookAtPoint(Camera camera, GraphicsWindow window) :
             this(camera, window, Ellipsoid.UnitSphere, Vector3D.Zero)
         {
         }
@@ -102,7 +102,7 @@ namespace OpenGlobe.Scene
         /// <summary>
         /// Gets the window in which the scene is drawn.
         /// </summary>
-        public MiniGlobeWindow Window
+        public GraphicsWindow Window
         {
             get { return _window; }
         }
@@ -110,7 +110,7 @@ namespace OpenGlobe.Scene
         /// <summary>
         /// Gets or sets the factor used to compute the rate at which the camera zooms in response to mouse events.
         /// The zoom rate is the distance by which the <see cref="Range"/> is adjusted when the mouse moves a distance equal to the
-        /// <see cref="MiniGlobeWindow.Height"/> of the <see cref="Window"/>.  It is computed as follows:
+        /// <see cref="GraphicsWindow.Height"/> of the <see cref="Window"/>.  It is computed as follows:
         /// <code>ZoomRate = <see cref="ZoomFactor"/> * (<see cref="Range"/> - <see cref="ZoomRateRangeAdjustment"/>)</code>.
         /// When the mouse is moved across a fraction of the window, the range is adjusted by the corresponding fraction of the
         /// zoom rate.
@@ -124,7 +124,7 @@ namespace OpenGlobe.Scene
         /// <summary>
         /// Gets or sets the distance that is subtracted from the <see cref="Range"/> when computing the rate at which the camera zooms in
         /// response to mouse events.  The zoom rate is the distance by which the <see cref="Range"/> is adjusted when the mouse moves a
-        /// distance equal to the <see cref="MiniGlobeWindow.Height"/> of the <see cref="Window"/>.  It is computed as follows:
+        /// distance equal to the <see cref="GraphicsWindow.Height"/> of the <see cref="Window"/>.  It is computed as follows:
         /// <code>ZoomRate = <see cref="ZoomFactor"/> * (<see cref="Range"/> - <see cref="ZoomRateRangeAdjustment"/>)</code>.
         /// When the mouse is moved a distance equal to a fraction of the height of the window, the range is adjusted by the
         /// corresponding fraction of the zoom rate.  The <see cref="ZoomRateRangeAdjustment"/> is useful, for example, when the camera
@@ -460,7 +460,7 @@ namespace OpenGlobe.Scene
         }
 
         private Camera _camera;
-        private MiniGlobeWindow _window;
+        private GraphicsWindow _window;
 
         private double _zoomFactor;
         private double _zoomRateRangeAdjustment;

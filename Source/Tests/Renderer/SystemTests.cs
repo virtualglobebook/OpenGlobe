@@ -25,7 +25,7 @@ namespace OpenGlobe.Renderer
         [Test]
         public void ClearColorDepth()
         {
-            MiniGlobeWindow window = Device.CreateWindow(1, 1);
+            GraphicsWindow window = Device.CreateWindow(1, 1);
             FrameBuffer frameBuffer = TestUtility.CreateFrameBuffer(window.Context);
 
             Texture2DDescription depthDescription = new Texture2DDescription(1, 1, TextureFormat.Depth32f, false);
@@ -56,7 +56,7 @@ namespace OpenGlobe.Renderer
         [Test]
         public void RenderPoint()
         {
-            MiniGlobeWindow window = Device.CreateWindow(1, 1);
+            GraphicsWindow window = Device.CreateWindow(1, 1);
             FrameBuffer frameBuffer = TestUtility.CreateFrameBuffer(window.Context);
 
             ShaderProgram sp = Device.CreateShaderProgram(ShaderSources.PassThroughVertexShader(), ShaderSources.PassThroughFragmentShader());
@@ -76,7 +76,7 @@ namespace OpenGlobe.Renderer
         [Test]
         public void RenderTriangle()
         {
-            MiniGlobeWindow window = Device.CreateWindow(1, 1);
+            GraphicsWindow window = Device.CreateWindow(1, 1);
             FrameBuffer frameBuffer = TestUtility.CreateFrameBuffer(window.Context);
 
             ShaderProgram sp = Device.CreateShaderProgram(ShaderSources.PassThroughVertexShader(), ShaderSources.PassThroughFragmentShader());
@@ -137,7 +137,7 @@ namespace OpenGlobe.Renderer
         [Test]
         public void RenderTexturedPoint()
         {
-            MiniGlobeWindow window = Device.CreateWindow(1, 1);
+            GraphicsWindow window = Device.CreateWindow(1, 1);
             FrameBuffer frameBuffer = TestUtility.CreateFrameBuffer(window.Context);
 
             string fs =
@@ -179,7 +179,7 @@ namespace OpenGlobe.Renderer
         [Test]
         public void RenderPointMultipleColorAttachments()
         {
-            MiniGlobeWindow window = Device.CreateWindow(1, 1);
+            GraphicsWindow window = Device.CreateWindow(1, 1);
             FrameBuffer frameBuffer = window.Context.CreateFrameBuffer();
 
             Texture2DDescription description = new Texture2DDescription(1, 1, TextureFormat.RedGreenBlue8, false);
@@ -227,7 +227,7 @@ namespace OpenGlobe.Renderer
         [Test]
         public void RenderMultitexturedPoint()
         {
-            MiniGlobeWindow window = Device.CreateWindow(1, 1);
+            GraphicsWindow window = Device.CreateWindow(1, 1);
             FrameBuffer frameBuffer = TestUtility.CreateFrameBuffer(window.Context);
 
             ShaderProgram sp = Device.CreateShaderProgram(ShaderSources.PassThroughVertexShader(), ShaderSources.MultitextureFragmentShader());
@@ -261,7 +261,7 @@ namespace OpenGlobe.Renderer
         [Test]
         public void RenderPointWithStencil()
         {
-            MiniGlobeWindow window = Device.CreateWindow(1, 1);
+            GraphicsWindow window = Device.CreateWindow(1, 1);
             FrameBuffer frameBuffer = TestUtility.CreateFrameBuffer(window.Context);
 
             Texture2DDescription depthStencilDescription = new Texture2DDescription(1, 1, TextureFormat.Depth24Stencil8, false);
@@ -300,7 +300,7 @@ namespace OpenGlobe.Renderer
         [Test]
         public void RenderPointWithDrawAutomaticUniforms()
         {
-            MiniGlobeWindow window = Device.CreateWindow(1, 1);
+            GraphicsWindow window = Device.CreateWindow(1, 1);
             FrameBuffer frameBuffer = TestUtility.CreateFrameBuffer(window.Context);
 
             string vs =
