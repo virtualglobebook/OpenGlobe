@@ -9,7 +9,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>OpenGlobe.Renderer</RootNamespace>
-    <AssemblyName>MiniGlobe.Renderer</AssemblyName>
+    <AssemblyName>OpenGlobe.Renderer</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -227,7 +227,7 @@
     <Compile Include="Textures\TextureUnits.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Core\MiniGlobe.Core.csproj">
+    <ProjectReference Include="..\Core\OpenGlobe.Core.csproj">
       <Project>{51502B9C-1A97-4F2C-8541-7D9D61ED6C6D}</Project>
       <Name>OpenGlobe.Core</Name>
     </ProjectReference>

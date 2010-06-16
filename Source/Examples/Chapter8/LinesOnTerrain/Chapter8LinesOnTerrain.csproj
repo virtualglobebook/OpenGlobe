@@ -54,15 +54,15 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Core\MiniGlobe.Core.csproj">
+    <ProjectReference Include="..\..\..\Core\OpenGlobe.Core.csproj">
       <Project>{51502B9C-1A97-4F2C-8541-7D9D61ED6C6D}</Project>
       <Name>OpenGlobe.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Renderer\MiniGlobe.Renderer.csproj">
+    <ProjectReference Include="..\..\..\Renderer\OpenGlobe.Renderer.csproj">
       <Project>{E735AB3A-EB92-4C51-814E-E5E1F2173AA4}</Project>
       <Name>OpenGlobe.Renderer</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Scene\MiniGlobe.Scene.csproj">
+    <ProjectReference Include="..\..\..\Scene\OpenGlobe.Scene.csproj">
       <Project>{71ABD41E-1545-45DF-B016-58E89111A4F3}</Project>
       <Name>OpenGlobe.Scene</Name>
     </ProjectReference>

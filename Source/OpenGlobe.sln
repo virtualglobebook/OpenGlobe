@@ -5,19 +5,19 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chapter3SubdivisionSphere1"
 		{51502B9C-1A97-4F2C-8541-7D9D61ED6C6D} = {51502B9C-1A97-4F2C-8541-7D9D61ED6C6D}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenGlobe.Renderer", "Renderer\MiniGlobe.Renderer.csproj", "{E735AB3A-EB92-4C51-814E-E5E1F2173AA4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenGlobe.Renderer", "Renderer\OpenGlobe.Renderer.csproj", "{E735AB3A-EB92-4C51-814E-E5E1F2173AA4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenGlobe.Tests", "Tests\MiniGlobe.Tests.csproj", "{2B3E6147-B17C-4C96-B710-5257620CE911}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenGlobe.Tests", "Tests\OpenGlobe.Tests.csproj", "{2B3E6147-B17C-4C96-B710-5257620CE911}"
 	ProjectSection(ProjectDependencies) = postProject
 		{E735AB3A-EB92-4C51-814E-E5E1F2173AA4} = {E735AB3A-EB92-4C51-814E-E5E1F2173AA4}
 		{51502B9C-1A97-4F2C-8541-7D9D61ED6C6D} = {51502B9C-1A97-4F2C-8541-7D9D61ED6C6D}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenGlobe.Core", "Core\MiniGlobe.Core.csproj", "{51502B9C-1A97-4F2C-8541-7D9D61ED6C6D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenGlobe.Core", "Core\OpenGlobe.Core.csproj", "{51502B9C-1A97-4F2C-8541-7D9D61ED6C6D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chapter3SubdivisionSphere2", "Examples\Chapter3\SubdivisionSphere2\Chapter3SubdivisionSphere2.csproj", "{72B5E11E-40F4-4881-9706-75DD864BF45E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenGlobe.Scene", "Scene\MiniGlobe.Scene.csproj", "{71ABD41E-1545-45DF-B016-58E89111A4F3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenGlobe.Scene", "Scene\OpenGlobe.Scene.csproj", "{71ABD41E-1545-45DF-B016-58E89111A4F3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chapter3RayCasting", "Examples\Chapter3\RayCasting\Chapter3RayCasting.csproj", "{2ABF9F7F-B818-44DC-9237-C1D1DC22ADE7}"
 EndProject
