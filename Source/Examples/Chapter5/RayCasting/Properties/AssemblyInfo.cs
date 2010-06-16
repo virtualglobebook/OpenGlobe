@@ -12,11 +12,11 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
-[assembly: AssemblyTitle("MiniGlobe.Examples.Chapter5.RayCasting")]
+[assembly: AssemblyTitle("OpenGlobe.Examples.Chapter5.RayCasting")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("MiniGlobe.Examples.Chapter5.RayCasting")]
+[assembly: AssemblyProduct("OpenGlobe.Examples.Chapter5.RayCasting")]
 [assembly: AssemblyCopyright("Copyright ©  2010")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

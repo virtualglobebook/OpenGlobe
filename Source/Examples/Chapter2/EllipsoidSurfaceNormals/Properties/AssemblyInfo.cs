@@ -12,11 +12,11 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
-[assembly: AssemblyTitle("MiniGlobe.Examples.Chapter2.EllipsoidSurfaceNormals")]
+[assembly: AssemblyTitle("OpenGlobe.Examples.Chapter2.EllipsoidSurfaceNormals")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("MiniGlobe.Examples.Chapter2.EllipsoidSurfaceNormals")]
+[assembly: AssemblyProduct("OpenGlobe.Examples.Chapter2.EllipsoidSurfaceNormals")]
 [assembly: AssemblyCopyright("Copyright ©  2010")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

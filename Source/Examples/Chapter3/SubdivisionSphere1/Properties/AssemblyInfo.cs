@@ -12,11 +12,11 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
-[assembly: AssemblyTitle("MiniGlobe.Examples.Chapter3.SubdivisionSphere1")]
+[assembly: AssemblyTitle("OpenGlobe.Examples.Chapter3.SubdivisionSphere1")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("MiniGlobe.Examples.Chapter3.SubdivisionSphere1")]
+[assembly: AssemblyProduct("OpenGlobe.Examples.Chapter3.SubdivisionSphere1")]
 [assembly: AssemblyCopyright("Copyright ©  2009")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
