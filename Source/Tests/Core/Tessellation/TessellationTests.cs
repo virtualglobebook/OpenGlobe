@@ -31,10 +31,10 @@ namespace OpenGlobe.Core.Tessellation
             Assert.IsNotNull(sphere.Attributes["normal"] as VertexAttributeHalfFloatVector3);
             Assert.IsNotNull(sphere.Attributes["textureCoordinate"] as VertexAttributeHalfFloatVector2);
 
-            MiniGlobeAssert.ListsAreEqual(
+            GraphicsAssert.ListsAreEqual(
                 (simpleSphere.Indices as IndicesInt32).Values, 
                 (sphere.Indices as IndicesInt32).Values);
-            MiniGlobeAssert.ListsAreEqual(
+            GraphicsAssert.ListsAreEqual(
                 (simpleSphere.Attributes["position"] as VertexAttributeDoubleVector3).Values,
                 (sphere.Attributes["position"] as VertexAttributeDoubleVector3).Values);
         }
@@ -45,16 +45,16 @@ namespace OpenGlobe.Core.Tessellation
             Mesh sphere = SubdivisionSphereTessellator.Compute(1, SubdivisionSphereVertexAttributes.All);
             Mesh ellipsoid = SubdivisionEllipsoidTessellator.Compute(Ellipsoid.UnitSphere, 1, SubdivisionEllipsoidVertexAttributes.All);
 
-            MiniGlobeAssert.ListsAreEqual(
+            GraphicsAssert.ListsAreEqual(
                 (sphere.Indices as IndicesInt32).Values,
                 (ellipsoid.Indices as IndicesInt32).Values);
-            MiniGlobeAssert.ListsAreEqual(
+            GraphicsAssert.ListsAreEqual(
                 (sphere.Attributes["position"] as VertexAttributeDoubleVector3).Values,
                 (ellipsoid.Attributes["position"] as VertexAttributeDoubleVector3).Values);
-            MiniGlobeAssert.ListsAreEqual(
+            GraphicsAssert.ListsAreEqual(
                 (sphere.Attributes["normal"] as VertexAttributeHalfFloatVector3).Values,
                 (ellipsoid.Attributes["normal"] as VertexAttributeHalfFloatVector3).Values);
-            MiniGlobeAssert.ListsAreEqual(
+            GraphicsAssert.ListsAreEqual(
                 (sphere.Attributes["textureCoordinate"] as VertexAttributeHalfFloatVector2).Values,
                 (ellipsoid.Attributes["textureCoordinate"] as VertexAttributeHalfFloatVector2).Values);
         }

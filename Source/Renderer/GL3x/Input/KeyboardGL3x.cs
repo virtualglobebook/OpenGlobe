@@ -24,15 +24,15 @@ namespace OpenGlobe.Renderer
 
         private void OpenTKKeyUp(object sender, OpenTK.Input.KeyboardKeyEventArgs e)
         {
-            OnKeyUp(OpenTKToMiniGlobe(e.Key));
+            OnKeyUp(OpenTKToOpenGlobe(e.Key));
         }
 
         private void OpenTKKeyDown(object sender, OpenTK.Input.KeyboardKeyEventArgs e)
         {
-            OnKeyDown(OpenTKToMiniGlobe(e.Key));
+            OnKeyDown(OpenTKToOpenGlobe(e.Key));
         }
 
-        private static KeyboardKey OpenTKToMiniGlobe(Key key)
+        private static KeyboardKey OpenTKToOpenGlobe(Key key)
         {
             switch (key)
             {

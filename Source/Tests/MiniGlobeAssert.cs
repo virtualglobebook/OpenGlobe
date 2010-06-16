@@ -13,7 +13,7 @@ using NUnit.Framework;
 
 namespace OpenGlobe
 {
-    public static class MiniGlobeAssert
+    public static class GraphicsAssert
     {
         public static void ListsAreEqual<T>(IList<T> left, IList<T> right) where T : IEquatable<T>
         {
