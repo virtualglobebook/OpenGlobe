@@ -152,7 +152,7 @@
     <Compile Include="GL3x\ContextGL3x.cs" />
     <Compile Include="GL3x\FrameBuffer\ColorAttachmentsGL3x.cs" />
     <Compile Include="GL3x\FrameBuffer\FrameBufferGL3x.cs" />
-    <Compile Include="GL3x\MiniGlobeWindowGL3x.cs" />
+    <Compile Include="GL3x\GraphicsWindowGL3x.cs" />
     <Compile Include="GL3x\Shaders\ShaderObjectGL3x.cs" />
     <Compile Include="GL3x\Shaders\ShaderProgramGL3x.cs" />
     <Compile Include="GL3x\Shaders\UniformBlockGL3x.cs" />
@@ -183,7 +183,7 @@
     <Compile Include="GL3x\Textures\TextureUnitsGL3x.cs" />
     <Compile Include="GL3x\TypeConverterGL3x.cs" />
     <Compile Include="InsufficientVideoCardException.cs" />
-    <Compile Include="MiniGlobeWindow.cs" />
+    <Compile Include="GraphicsWindow.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RenderState\Blending.cs" />
     <Compile Include="RenderState\DepthTest.cs" />
