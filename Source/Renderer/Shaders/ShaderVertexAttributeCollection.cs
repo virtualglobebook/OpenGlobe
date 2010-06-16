@@ -9,7 +9,7 @@
 
 using System.Collections.ObjectModel;
 
-namespace MiniGlobe.Renderer
+namespace OpenGlobe.Renderer
 {
     public class ShaderVertexAttributeCollection : KeyedCollection<string, ShaderVertexAttribute>
     {

@@ -11,9 +11,9 @@ using System;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Diagnostics;
-using MiniGlobe.Core;
+using OpenGlobe.Core;
 
-namespace MiniGlobe.Renderer
+namespace OpenGlobe.Renderer
 {
     public enum ImageFormat
     {

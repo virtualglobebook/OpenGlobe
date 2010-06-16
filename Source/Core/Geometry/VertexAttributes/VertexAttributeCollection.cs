@@ -10,7 +10,7 @@
 using System.Collections.ObjectModel;
 using System.Collections.Generic;
 
-namespace MiniGlobe.Core.Geometry
+namespace OpenGlobe.Core.Geometry
 {
     public class VertexAttributeCollection : ICollection<VertexAttribute>
     {

@@ -10,7 +10,7 @@
 using NUnit.Framework;
 using System.Drawing;
 
-namespace MiniGlobe.Renderer
+namespace OpenGlobe.Renderer
 {
     [TestFixture]
     public class ContextTests

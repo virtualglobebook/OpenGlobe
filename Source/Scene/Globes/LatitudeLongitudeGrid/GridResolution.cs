@@ -7,9 +7,9 @@
 //
 #endregion
 
-using MiniGlobe.Core;
+using OpenGlobe.Core;
 
-namespace MiniGlobe.Scene
+namespace OpenGlobe.Scene
 {
     public class GridResolution
     {

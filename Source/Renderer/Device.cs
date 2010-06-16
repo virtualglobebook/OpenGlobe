@@ -10,13 +10,13 @@
 using System;
 using System.Drawing;
 using System.Diagnostics;
-using MiniGlobe.Core;
-using MiniGlobe.Renderer.GL3x;
+using OpenGlobe.Core;
+using OpenGlobe.Renderer.GL3x;
 using OpenTK.Graphics.OpenGL;
 using ImagingPixelFormat = System.Drawing.Imaging.PixelFormat;
 using System.Drawing.Imaging;
 
-namespace MiniGlobe.Renderer
+namespace OpenGlobe.Renderer
 {
     public enum WindowType
     {

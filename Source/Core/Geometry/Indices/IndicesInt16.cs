@@ -9,7 +9,7 @@
 
 using System.Collections.Generic;
 
-namespace MiniGlobe.Core.Geometry
+namespace OpenGlobe.Core.Geometry
 {
     public class IndicesInt16 : IndicesBase
     {

@@ -9,9 +9,9 @@
 
 using System;
 using System.Drawing;
-using MiniGlobe.Core;
+using OpenGlobe.Core;
 
-namespace MiniGlobe.Terrain
+namespace OpenGlobe.Terrain
 {
     public class TerrainTile
     {

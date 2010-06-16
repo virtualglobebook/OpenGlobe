@@ -10,10 +10,10 @@
 using System;
 using System.Globalization;
 using System.Xml;
-using MiniGlobe.Core;
-using MiniGlobe.Core.Geometry;
+using OpenGlobe.Core;
+using OpenGlobe.Core.Geometry;
 
-namespace MiniGlobe.Renderer
+namespace OpenGlobe.Renderer
 {
     public class Camera
     {

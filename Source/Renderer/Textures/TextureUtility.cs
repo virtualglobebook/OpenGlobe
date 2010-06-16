@@ -8,11 +8,11 @@
 #endregion
 
 using System.Diagnostics;
-using MiniGlobe.Core;
+using OpenGlobe.Core;
 
 using ImagingPixelFormat = System.Drawing.Imaging.PixelFormat;
 
-namespace MiniGlobe.Renderer
+namespace OpenGlobe.Renderer
 {
     internal static class TextureUtility
     {

@@ -11,13 +11,13 @@ using System;
 using System.Drawing;
 using System.Collections.Generic;
 
-using MiniGlobe.Core;
-using MiniGlobe.Core.Geometry;
-using MiniGlobe.Core.Tessellation;
-using MiniGlobe.Renderer;
-using MiniGlobe.Scene;
+using OpenGlobe.Core;
+using OpenGlobe.Core.Geometry;
+using OpenGlobe.Core.Tessellation;
+using OpenGlobe.Renderer;
+using OpenGlobe.Scene;
 
-namespace MiniGlobe.Examples.Chapter2
+namespace OpenGlobe.Examples.Chapter2
 {
     sealed class EllipsoidSurfaceNormals : IDisposable
     {

@@ -12,7 +12,7 @@ using System.Drawing;
 using System.Globalization;
 using System.Runtime.InteropServices;
 
-namespace MiniGlobe.Renderer
+namespace OpenGlobe.Renderer
 {
     [Serializable]
     [StructLayout(LayoutKind.Sequential)]

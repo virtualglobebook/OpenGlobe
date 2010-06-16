@@ -13,7 +13,7 @@ using System.Text;
 using System.Globalization;
 using System.Runtime.InteropServices;
 
-namespace MiniGlobe.Core
+namespace OpenGlobe.Core
 {
     /// <summary>
     /// A set of 2-dimensional cartesian coordinates where the two components,

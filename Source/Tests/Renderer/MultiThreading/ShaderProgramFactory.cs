@@ -7,9 +7,9 @@
 //
 #endregion
 
-using MiniGlobe.Core;
+using OpenGlobe.Core;
 
-namespace MiniGlobe.Renderer
+namespace OpenGlobe.Renderer
 {
     internal class ShaderProgramFactory : Disposable
     {

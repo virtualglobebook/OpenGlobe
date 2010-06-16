@@ -7,7 +7,7 @@
 //
 #endregion
 
-namespace MiniGlobe.Renderer
+namespace OpenGlobe.Renderer
 {
     internal class OrthographicProjectionMatrixUniformFactory : DrawAutomaticUniformFactory
     {

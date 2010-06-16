@@ -8,11 +8,11 @@
 #endregion
 
 using System;
-using MiniGlobe.Core.Geometry;
-using MiniGlobe.Core.Tessellation;
-using MiniGlobe.Renderer;
+using OpenGlobe.Core.Geometry;
+using OpenGlobe.Core.Tessellation;
+using OpenGlobe.Renderer;
 
-namespace MiniGlobe.Scene
+namespace OpenGlobe.Scene
 {
     public sealed class TessellatedGlobe : IDisposable
     {

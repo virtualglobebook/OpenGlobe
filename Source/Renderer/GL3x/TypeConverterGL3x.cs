@@ -9,10 +9,10 @@
 
 using System.Diagnostics;
 using OpenTK.Graphics.OpenGL;
-using MiniGlobe.Core.Geometry;
-using MiniGlobe.Renderer;
+using OpenGlobe.Core.Geometry;
+using OpenGlobe.Renderer;
 
-namespace MiniGlobe.Renderer.GL3x
+namespace OpenGlobe.Renderer.GL3x
 {
     internal static class TypeConverterGL3x
     {

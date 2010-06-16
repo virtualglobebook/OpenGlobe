@@ -10,9 +10,9 @@
 using System;
 using System.Diagnostics;
 using OpenTK.Graphics.OpenGL;
-using MiniGlobe.Renderer;
+using OpenGlobe.Renderer;
 
-namespace MiniGlobe.Renderer.GL3x
+namespace OpenGlobe.Renderer.GL3x
 {
     internal class VertexArrayGL3x : VertexArray
     {

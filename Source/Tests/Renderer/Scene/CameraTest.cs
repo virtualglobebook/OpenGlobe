@@ -9,9 +9,9 @@
 
 using System.IO;
 using NUnit.Framework;
-using MiniGlobe.Core;
+using OpenGlobe.Core;
 
-namespace MiniGlobe.Renderer
+namespace OpenGlobe.Renderer
 {
     [TestFixture]
     public class CameraTests

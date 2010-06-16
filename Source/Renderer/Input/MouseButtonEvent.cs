@@ -9,7 +9,7 @@
 
 using System;
 
-namespace MiniGlobe.Renderer
+namespace OpenGlobe.Renderer
 {
     public enum MouseButtonEvent
     {

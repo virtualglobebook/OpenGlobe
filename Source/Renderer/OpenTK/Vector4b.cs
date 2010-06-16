@@ -10,7 +10,7 @@
 using System;
 using OpenTK;
 
-namespace MiniGlobe.Renderer
+namespace OpenGlobe.Renderer
 {
     // TODO:  Belongs in OpenTK namespace
     public struct Vector4b : IEquatable<Vector4b>

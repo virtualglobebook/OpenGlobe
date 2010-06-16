@@ -9,7 +9,7 @@
 
 using System.Collections.ObjectModel;
 
-namespace MiniGlobe.Renderer
+namespace OpenGlobe.Renderer
 {
     internal class DrawAutomaticUniformFactoryCollection : KeyedCollection<string, DrawAutomaticUniformFactory>
     {

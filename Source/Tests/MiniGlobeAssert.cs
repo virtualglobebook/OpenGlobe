@@ -11,7 +11,7 @@ using System;
 using System.Collections.Generic;
 using NUnit.Framework;
 
-namespace MiniGlobe
+namespace OpenGlobe
 {
     public static class MiniGlobeAssert
     {

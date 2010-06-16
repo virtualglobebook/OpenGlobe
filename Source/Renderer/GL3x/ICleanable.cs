@@ -9,7 +9,7 @@
 
 using OpenTK.Graphics.OpenGL;
 
-namespace MiniGlobe.Renderer.GL3x
+namespace OpenGlobe.Renderer.GL3x
 {
     internal interface ICleanable
     {

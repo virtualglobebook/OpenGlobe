@@ -9,9 +9,9 @@
 
 using System.Collections.Generic;
 using OpenTK.Graphics.OpenGL;
-using MiniGlobe.Renderer;
+using OpenGlobe.Renderer;
 
-namespace MiniGlobe.Renderer.GL3x
+namespace OpenGlobe.Renderer.GL3x
 {
     internal class FragmentOutputsGL3x : FragmentOutputs
     {

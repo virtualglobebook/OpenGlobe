@@ -9,7 +9,7 @@
 
 using NUnit.Framework;
 
-namespace MiniGlobe.Core.Geometry
+namespace OpenGlobe.Core.Geometry
 {
     [TestFixture]
     public class EllipsoidTests

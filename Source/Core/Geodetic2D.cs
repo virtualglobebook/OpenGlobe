@@ -9,7 +9,7 @@
 
 using System;
 
-namespace MiniGlobe.Core
+namespace OpenGlobe.Core
 {
     public struct Geodetic2D : IEquatable<Geodetic2D>
     {

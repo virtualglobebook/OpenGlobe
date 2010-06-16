@@ -9,14 +9,14 @@
 
 using System;
 using System.Drawing;
-using MiniGlobe.Core;
-using MiniGlobe.Core.Geometry;
-using MiniGlobe.Core.Tessellation;
-using MiniGlobe.Scene;
-using MiniGlobe.Renderer;
+using OpenGlobe.Core;
+using OpenGlobe.Core.Geometry;
+using OpenGlobe.Core.Tessellation;
+using OpenGlobe.Scene;
+using OpenGlobe.Renderer;
 using System.Collections.Generic;
 
-namespace MiniGlobe.Terrain
+namespace OpenGlobe.Terrain
 {
     public enum RayCastedTerrainShadingAlgorithm
     {

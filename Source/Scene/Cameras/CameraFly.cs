@@ -11,11 +11,11 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
-using MiniGlobe.Core;
-using MiniGlobe.Renderer;
+using OpenGlobe.Core;
+using OpenGlobe.Renderer;
 using OpenTK;
 
-namespace MiniGlobe.Scene
+namespace OpenGlobe.Scene
 {
     public class CameraFly : IDisposable
     {

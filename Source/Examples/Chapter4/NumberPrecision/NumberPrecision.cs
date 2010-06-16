@@ -10,12 +10,12 @@
 using System;
 using System.Drawing;
 
-using MiniGlobe.Core;
-using MiniGlobe.Core.Geometry;
-using MiniGlobe.Renderer;
-using MiniGlobe.Scene;
+using OpenGlobe.Core;
+using OpenGlobe.Core.Geometry;
+using OpenGlobe.Renderer;
+using OpenGlobe.Scene;
 
-namespace MiniGlobe.Examples.Chapter3.NumberPrecision
+namespace OpenGlobe.Examples.Chapter3.NumberPrecision
 {
     sealed class NumberPrecision : IDisposable
     {

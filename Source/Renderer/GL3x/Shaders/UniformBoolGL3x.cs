@@ -8,9 +8,9 @@
 #endregion
 
 using OpenTK.Graphics.OpenGL;
-using MiniGlobe.Renderer;
+using OpenGlobe.Renderer;
 
-namespace MiniGlobe.Renderer.GL3x
+namespace OpenGlobe.Renderer.GL3x
 {
     internal class UniformBoolGL3x : Uniform<bool>, ICleanable
     {

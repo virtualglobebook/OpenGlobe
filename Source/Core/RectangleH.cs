@@ -10,7 +10,7 @@
 using System;
 using System.Globalization;
 
-namespace MiniGlobe.Core
+namespace OpenGlobe.Core
 {
     public struct RectangleH : IEquatable<RectangleH>
     {

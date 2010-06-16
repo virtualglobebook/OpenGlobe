@@ -8,14 +8,14 @@
 #endregion
 
 using NUnit.Framework;
-using MiniGlobe.Renderer;
-using MiniGlobe.Core.Geometry;
-using MiniGlobe.Core.Tessellation;
+using OpenGlobe.Renderer;
+using OpenGlobe.Core.Geometry;
+using OpenGlobe.Core.Tessellation;
 
-namespace MiniGlobe.Core
+namespace OpenGlobe.Core
 {
     /// <summary>
-    /// System tests for MiniGlobe.Core.  System tests are higher level 
+    /// System tests for OpenGlobe.Core.  System tests are higher level 
     /// than unit tests; instead of validating a single class, system tests 
     /// use multiple classes to validate a more complicated task.
     /// </summary>

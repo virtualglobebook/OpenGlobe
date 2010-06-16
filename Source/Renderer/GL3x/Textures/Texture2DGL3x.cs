@@ -9,10 +9,10 @@
 
 using System;
 using System.Diagnostics;
-using MiniGlobe.Renderer;
+using OpenGlobe.Renderer;
 using OpenTK.Graphics.OpenGL;
 
-namespace MiniGlobe.Renderer.GL3x
+namespace OpenGlobe.Renderer.GL3x
 {
     internal class Texture2DGL3x : Texture2D
     {

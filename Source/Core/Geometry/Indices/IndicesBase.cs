@@ -7,7 +7,7 @@
 //
 #endregion
 
-namespace MiniGlobe.Core.Geometry
+namespace OpenGlobe.Core.Geometry
 {
     public enum IndicesType
     {

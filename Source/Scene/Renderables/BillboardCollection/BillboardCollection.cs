@@ -10,12 +10,12 @@
 using System;
 using System.Drawing;
 using System.Collections.Generic;
-using MiniGlobe.Core;
-using MiniGlobe.Core.Geometry;
-using MiniGlobe.Renderer;
+using OpenGlobe.Core;
+using OpenGlobe.Core.Geometry;
+using OpenGlobe.Renderer;
 using System.Collections;
 
-namespace MiniGlobe.Scene
+namespace OpenGlobe.Scene
 {
     public sealed class BillboardCollection : IList<Billboard>, IDisposable
     {

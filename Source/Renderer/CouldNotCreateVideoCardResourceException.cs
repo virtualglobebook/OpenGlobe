@@ -10,7 +10,7 @@
 using System;
 using System.Runtime.Serialization;
 
-namespace MiniGlobe.Renderer
+namespace OpenGlobe.Renderer
 {
     [Serializable]
     public class CouldNotCreateVideoCardResourceException : Exception

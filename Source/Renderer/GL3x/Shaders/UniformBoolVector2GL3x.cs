@@ -9,9 +9,9 @@
 
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
-using MiniGlobe.Renderer;
+using OpenGlobe.Renderer;
 
-namespace MiniGlobe.Renderer.GL3x
+namespace OpenGlobe.Renderer.GL3x
 {
     internal class UniformBoolVector2GL3x : Uniform<Vector2b>, ICleanable
     {

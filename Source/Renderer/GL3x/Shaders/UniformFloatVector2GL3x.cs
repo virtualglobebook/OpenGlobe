@@ -9,10 +9,10 @@
 
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
-using MiniGlobe.Core;
-using MiniGlobe.Renderer;
+using OpenGlobe.Core;
+using OpenGlobe.Renderer;
 
-namespace MiniGlobe.Renderer.GL3x
+namespace OpenGlobe.Renderer.GL3x
 {
     internal class UniformFloatVector2GL3x : Uniform<Vector2S>, ICleanable
     {

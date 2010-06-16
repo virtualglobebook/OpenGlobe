@@ -8,9 +8,9 @@
 #endregion
 
 using System.Collections;
-using MiniGlobe.Core;
+using OpenGlobe.Core;
 
-namespace MiniGlobe.Renderer
+namespace OpenGlobe.Renderer
 {
     public abstract class AttachedVertexBuffers : Disposable
     {

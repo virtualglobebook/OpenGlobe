@@ -13,10 +13,10 @@ using System.Drawing.Imaging;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using OpenTK.Graphics.OpenGL;
-using MiniGlobe.Core;
+using OpenGlobe.Core;
 using ImagingPixelFormat = System.Drawing.Imaging.PixelFormat;
 
-namespace MiniGlobe.Renderer.GL3x
+namespace OpenGlobe.Renderer.GL3x
 {
     internal sealed class BufferGL3x : IDisposable
     {

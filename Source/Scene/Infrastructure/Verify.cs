@@ -8,9 +8,9 @@
 #endregion
 
 using System;
-using MiniGlobe.Renderer;
+using OpenGlobe.Renderer;
 
-namespace MiniGlobe.Scene
+namespace OpenGlobe.Scene
 {
     internal static class Verify
     {

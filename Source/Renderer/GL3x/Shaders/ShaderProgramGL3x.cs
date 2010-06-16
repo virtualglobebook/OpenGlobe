@@ -12,9 +12,9 @@ using System.Text;
 using System.Collections.Generic;
 using System.Diagnostics;
 using OpenTK.Graphics.OpenGL;
-using MiniGlobe.Renderer;
+using OpenGlobe.Renderer;
 
-namespace MiniGlobe.Renderer.GL3x
+namespace OpenGlobe.Renderer.GL3x
 {
     internal class ShaderProgramGL3x : ShaderProgram, ICleanableObserver
     {

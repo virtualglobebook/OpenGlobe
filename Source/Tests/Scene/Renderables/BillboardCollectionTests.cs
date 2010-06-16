@@ -11,10 +11,10 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using NUnit.Framework;
-using MiniGlobe.Core;
-using MiniGlobe.Renderer;
+using OpenGlobe.Core;
+using OpenGlobe.Renderer;
 
-namespace MiniGlobe.Scene
+namespace OpenGlobe.Scene
 {
     [TestFixture]
     public class BillboardCollectionTests

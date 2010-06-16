@@ -9,11 +9,11 @@
 
 using System.Drawing;
 using System.Diagnostics;
-using MiniGlobe.Renderer;
+using OpenGlobe.Renderer;
 using OpenTK.Graphics.OpenGL;
 using ImagingPixelFormat = System.Drawing.Imaging.PixelFormat;
 
-namespace MiniGlobe.Renderer.GL3x
+namespace OpenGlobe.Renderer.GL3x
 {
     internal class ReadPixelBufferGL3x : ReadPixelBuffer
     {

@@ -8,12 +8,12 @@
 #endregion
 
 using System.Diagnostics;
-using MiniGlobe.Core;
-using MiniGlobe.Renderer;
+using OpenGlobe.Core;
+using OpenGlobe.Renderer;
 using OpenTK.Graphics.OpenGL;
 using System.Runtime.InteropServices;
 
-namespace MiniGlobe.Renderer.GL3x
+namespace OpenGlobe.Renderer.GL3x
 {
     internal class IndexBufferGL3x : IndexBuffer
     {

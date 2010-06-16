@@ -9,7 +9,7 @@
 
 using System.Collections.ObjectModel;
 
-namespace MiniGlobe.Renderer
+namespace OpenGlobe.Renderer
 {
     internal class LinkAutomaticUniformCollection : KeyedCollection<string, LinkAutomaticUniform>
     {

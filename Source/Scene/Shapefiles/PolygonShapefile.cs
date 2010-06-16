@@ -10,12 +10,12 @@
 using System;
 using System.Drawing;
 using System.Collections.Generic;
-using MiniGlobe.Core;
-using MiniGlobe.Core.Geometry;
-using MiniGlobe.Renderer;
+using OpenGlobe.Core;
+using OpenGlobe.Core.Geometry;
+using OpenGlobe.Renderer;
 using Catfood.Shapefile;
 
-namespace MiniGlobe.Scene
+namespace OpenGlobe.Scene
 {
     public class PolygonShapefile : IDisposable
     {

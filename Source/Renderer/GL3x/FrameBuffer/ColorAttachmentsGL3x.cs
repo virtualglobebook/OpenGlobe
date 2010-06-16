@@ -10,9 +10,9 @@
 using System.Collections;
 using System.Diagnostics;
 using OpenTK.Graphics.OpenGL;
-using MiniGlobe.Renderer;
+using OpenGlobe.Renderer;
 
-namespace MiniGlobe.Renderer.GL3x
+namespace OpenGlobe.Renderer.GL3x
 {
     internal struct ColorAttachmentGL3x
     {

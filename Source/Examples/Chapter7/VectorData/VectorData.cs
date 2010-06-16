@@ -10,12 +10,12 @@
 using System;
 using System.Drawing;
 
-using MiniGlobe.Core.Geometry;
-using MiniGlobe.Core;
-using MiniGlobe.Renderer;
-using MiniGlobe.Scene;
+using OpenGlobe.Core.Geometry;
+using OpenGlobe.Core;
+using OpenGlobe.Renderer;
+using OpenGlobe.Scene;
 
-namespace MiniGlobe.Examples.Chapter7
+namespace OpenGlobe.Examples.Chapter7
 {
     sealed class VectorData : IDisposable
     {

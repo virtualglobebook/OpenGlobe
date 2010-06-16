@@ -10,7 +10,7 @@
 using System;
 using OpenTK.Input;
 
-namespace MiniGlobe.Renderer
+namespace OpenGlobe.Renderer
 {
     public class MouseGL3x : Mouse
     {

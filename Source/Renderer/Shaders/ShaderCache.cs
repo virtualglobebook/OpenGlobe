@@ -9,7 +9,7 @@
 
 using System.Collections.Generic;
 
-namespace MiniGlobe.Renderer
+namespace OpenGlobe.Renderer
 {
     internal class CachedShaderProgram
     {

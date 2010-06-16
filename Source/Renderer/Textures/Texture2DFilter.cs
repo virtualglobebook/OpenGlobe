@@ -10,7 +10,7 @@
 using System;
 using System.Globalization;
 
-namespace MiniGlobe.Renderer
+namespace OpenGlobe.Renderer
 {
     public enum TextureMinificationFilter
     {

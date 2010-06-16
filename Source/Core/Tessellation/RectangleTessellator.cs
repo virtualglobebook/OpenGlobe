@@ -9,9 +9,9 @@
 
 using System;
 using System.Collections.Generic;
-using MiniGlobe.Core.Geometry;
+using OpenGlobe.Core.Geometry;
 
-namespace MiniGlobe.Core.Tessellation
+namespace OpenGlobe.Core.Tessellation
 {
     public static class RectangleTessellator
     {

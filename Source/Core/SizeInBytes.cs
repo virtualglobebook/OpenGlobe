@@ -9,7 +9,7 @@
 
 using System.Runtime.InteropServices;
 
-namespace MiniGlobe.Core
+namespace OpenGlobe.Core
 {
     public static class SizeInBytes<T>
     {

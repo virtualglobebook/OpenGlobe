@@ -11,7 +11,7 @@ using System;
 using System.Collections.Generic;
 using NUnit.Framework;
 
-namespace MiniGlobe.Core
+namespace OpenGlobe.Core
 {
     [TestFixture]
     public class CollectionAlgorithmsTests

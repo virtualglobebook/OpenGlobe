@@ -10,9 +10,9 @@
 using System.Drawing;
 using System.Drawing.Imaging;
 using NUnit.Framework;
-using MiniGlobe.Core;
+using OpenGlobe.Core;
 
-namespace MiniGlobe.Renderer
+namespace OpenGlobe.Renderer
 {
     [TestFixture]
     public class BufferObjectTests

@@ -11,7 +11,7 @@ using System.Drawing;
 using System.IO;
 using NUnit.Framework;
 
-namespace MiniGlobe.Renderer
+namespace OpenGlobe.Renderer
 {
     [TestFixture]
     public class FrameBufferTests

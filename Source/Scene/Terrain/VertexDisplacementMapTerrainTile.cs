@@ -10,13 +10,13 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using MiniGlobe.Core;
-using MiniGlobe.Core.Geometry;
-using MiniGlobe.Core.Tessellation;
-using MiniGlobe.Renderer;
-using MiniGlobe.Scene;
+using OpenGlobe.Core;
+using OpenGlobe.Core.Geometry;
+using OpenGlobe.Core.Tessellation;
+using OpenGlobe.Renderer;
+using OpenGlobe.Scene;
 
-namespace MiniGlobe.Terrain
+namespace OpenGlobe.Terrain
 {
     public enum TerrainNormalsAlgorithm
     {

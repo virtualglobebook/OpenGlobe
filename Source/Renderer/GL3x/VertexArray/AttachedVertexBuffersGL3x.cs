@@ -11,10 +11,10 @@ using System;
 using System.Collections;
 using System.Diagnostics;
 using OpenTK.Graphics.OpenGL;
-using MiniGlobe.Renderer;
-using MiniGlobe.Core;
+using OpenGlobe.Renderer;
+using OpenGlobe.Core;
 
-namespace MiniGlobe.Renderer.GL3x
+namespace OpenGlobe.Renderer.GL3x
 {
     internal struct AttachedVertexBufferGL3x
     {

@@ -9,9 +9,9 @@
 
 using System;
 using System.Drawing;
-using MiniGlobe.Core;
+using OpenGlobe.Core;
 
-namespace MiniGlobe.Scene
+namespace OpenGlobe.Scene
 {
     public enum HorizontalOrigin
     {

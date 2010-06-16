@@ -9,10 +9,10 @@
 
 using System.Runtime.InteropServices;
 using System.Diagnostics;
-using MiniGlobe.Renderer;
+using OpenGlobe.Renderer;
 using OpenTK;
 
-namespace MiniGlobe.Renderer.GL3x
+namespace OpenGlobe.Renderer.GL3x
 {
     internal static class SizesGL3x
     {
@@ -65,7 +65,7 @@ namespace MiniGlobe.Renderer.GL3x
 
             
             Debug.Assert(type == VertexAttributeComponentType.HalfFloat);
-            return MiniGlobe.Core.SizeInBytes<Half>.Value;
+            return OpenGlobe.Core.SizeInBytes<Half>.Value;
         }
     }
 }

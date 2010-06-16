@@ -9,9 +9,9 @@
 
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using MiniGlobe.Core;
+using OpenGlobe.Core;
 
-namespace MiniGlobe.Renderer
+namespace OpenGlobe.Renderer
 {
     public class TextureCoordinateCollection : Collection<RectangleH>
     {

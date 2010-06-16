@@ -11,7 +11,7 @@ using NUnit.Framework;
 using System.Threading;
 using System.Globalization;
 
-namespace MiniGlobe.Core
+namespace OpenGlobe.Core
 {
     [TestFixture]
     public class Vector2STests

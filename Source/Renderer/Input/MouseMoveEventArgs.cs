@@ -10,7 +10,7 @@
 using System;
 using System.Drawing;
 
-namespace MiniGlobe.Renderer
+namespace OpenGlobe.Renderer
 {
     public class MouseMoveEventArgs : EventArgs
     {

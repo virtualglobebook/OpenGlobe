@@ -11,7 +11,7 @@ using System;
 using OpenTK;
 using OpenTK.Graphics;
 
-namespace MiniGlobe.Renderer.GL3x
+namespace OpenGlobe.Renderer.GL3x
 {
     internal class MiniGlobeWindowGL3x : MiniGlobeWindow
     {

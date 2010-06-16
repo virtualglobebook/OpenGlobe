@@ -9,9 +9,9 @@
 
 using NUnit.Framework;
 using System.Drawing;
-using MiniGlobe.Core.Geometry;
+using OpenGlobe.Core.Geometry;
 
-namespace MiniGlobe.Renderer
+namespace OpenGlobe.Renderer
 {
     [TestFixture]
     public class RenderStateTests
@@ -44,18 +44,18 @@ namespace MiniGlobe.Renderer
         public void ProgramPointSize()
         {
             RenderState renderState = new RenderState();
-            renderState.ProgramPointSize = MiniGlobe.Renderer.ProgramPointSize.Disabled;
+            renderState.ProgramPointSize = OpenGlobe.Renderer.ProgramPointSize.Disabled;
 
-            Assert.AreEqual(MiniGlobe.Renderer.ProgramPointSize.Disabled, renderState.ProgramPointSize);
+            Assert.AreEqual(OpenGlobe.Renderer.ProgramPointSize.Disabled, renderState.ProgramPointSize);
         }
 
         [Test]
         public void RasterizationMode()
         {
             RenderState renderState = new RenderState();
-            renderState.RasterizationMode = MiniGlobe.Renderer.RasterizationMode.Line;
+            renderState.RasterizationMode = OpenGlobe.Renderer.RasterizationMode.Line;
 
-            Assert.AreEqual(MiniGlobe.Renderer.RasterizationMode.Line, renderState.RasterizationMode);
+            Assert.AreEqual(OpenGlobe.Renderer.RasterizationMode.Line, renderState.RasterizationMode);
         }
 
         [Test]

@@ -11,9 +11,9 @@ using System;
 using System.Diagnostics;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
-using MiniGlobe.Core;
+using OpenGlobe.Core;
 
-namespace MiniGlobe.Renderer.GL3x
+namespace OpenGlobe.Renderer.GL3x
 {
     internal class ShaderObjectGL3x : Disposable
     {

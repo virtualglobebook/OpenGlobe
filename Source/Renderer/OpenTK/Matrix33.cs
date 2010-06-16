@@ -12,7 +12,7 @@ using System.Globalization;
 using System.Runtime.InteropServices;
 using OpenTK;
 
-namespace MiniGlobe.Renderer
+namespace OpenGlobe.Renderer
 {
     // TODO:  Belongs in OpenTK namespace
     [Serializable]

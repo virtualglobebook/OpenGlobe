@@ -10,12 +10,12 @@
 using System;
 using System.Drawing;
 
-using MiniGlobe.Core.Geometry;
-using MiniGlobe.Core.Tessellation;
-using MiniGlobe.Renderer;
-using MiniGlobe.Scene;
+using OpenGlobe.Core.Geometry;
+using OpenGlobe.Core.Tessellation;
+using OpenGlobe.Renderer;
+using OpenGlobe.Scene;
 
-namespace MiniGlobe.Examples.Chapter3
+namespace OpenGlobe.Examples.Chapter3
 {
     sealed class NightLights : IDisposable
     {

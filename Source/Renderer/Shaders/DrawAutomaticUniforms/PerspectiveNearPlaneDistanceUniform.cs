@@ -7,9 +7,9 @@
 //
 #endregion
 
-using MiniGlobe.Core.Geometry;
+using OpenGlobe.Core.Geometry;
 
-namespace MiniGlobe.Renderer
+namespace OpenGlobe.Renderer
 {
     internal class PerspectiveNearPlaneDistanceUniform : DrawAutomaticUniform
     {

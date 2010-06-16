@@ -8,9 +8,9 @@
 #endregion
 
 using System.Drawing;
-using MiniGlobe.Core;
+using OpenGlobe.Core;
 
-namespace MiniGlobe.Renderer
+namespace OpenGlobe.Renderer
 {
     internal class ViewportUniform : DrawAutomaticUniform
     {

@@ -9,10 +9,10 @@
 
 using System;
 using System.Drawing;
-using MiniGlobe.Core;
-using MiniGlobe.Renderer;
+using OpenGlobe.Core;
+using OpenGlobe.Renderer;
 
-namespace MiniGlobe.Scene
+namespace OpenGlobe.Scene
 {
     internal sealed class ViewportQuadGeometry : IDisposable
     {

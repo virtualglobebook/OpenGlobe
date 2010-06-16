@@ -10,7 +10,7 @@
 using System.Diagnostics;
 using OpenTK.Graphics.OpenGL;
 
-namespace MiniGlobe.Renderer.GL3x
+namespace OpenGlobe.Renderer.GL3x
 {
     internal class UniformBlockGL3x : UniformBlock
     {

@@ -9,7 +9,7 @@
 
 using System.IO;
 
-namespace MiniGlobe.Renderer
+namespace OpenGlobe.Renderer
 {
     public static class PersistentView
     {

@@ -7,7 +7,7 @@
 //
 #endregion
 
-namespace MiniGlobe.Renderer
+namespace OpenGlobe.Renderer
 {
     public abstract class FragmentOutputs
     {

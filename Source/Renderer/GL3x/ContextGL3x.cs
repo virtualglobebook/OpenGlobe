@@ -12,11 +12,11 @@ using System.Drawing;
 using System.Diagnostics;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
-using MiniGlobe.Core;
-using MiniGlobe.Core.Geometry;
-using MiniGlobe.Renderer;
+using OpenGlobe.Core;
+using OpenGlobe.Core.Geometry;
+using OpenGlobe.Renderer;
 
-namespace MiniGlobe.Renderer.GL3x
+namespace OpenGlobe.Renderer.GL3x
 {
     internal class ContextGL3x : Context
     {

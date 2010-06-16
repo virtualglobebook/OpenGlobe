@@ -12,10 +12,10 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Diagnostics;
-using MiniGlobe.Core.Geometry;
-using MiniGlobe.Core;
+using OpenGlobe.Core.Geometry;
+using OpenGlobe.Core;
 
-namespace MiniGlobe.Renderer
+namespace OpenGlobe.Renderer
 {
     [Flags]
     public enum ClearBuffers

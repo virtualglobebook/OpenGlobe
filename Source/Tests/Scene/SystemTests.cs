@@ -9,10 +9,10 @@
 
 using NUnit.Framework;
 
-namespace MiniGlobe.Scene
+namespace OpenGlobe.Scene
 {
     /// <summary>
-    /// System tests for MiniGlobe.Scene.  System tests are higher level 
+    /// System tests for OpenGlobe.Scene.  System tests are higher level 
     /// than unit tests; instead of validating a single class, system tests 
     /// use multiple classes to validate a more complicated task.
     /// </summary>

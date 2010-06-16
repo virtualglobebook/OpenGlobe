@@ -10,7 +10,7 @@
 using System;
 using OpenTK.Graphics.OpenGL;
 
-namespace MiniGlobe.Renderer.GL3x
+namespace OpenGlobe.Renderer.GL3x
 {
     internal sealed class VertexArrayNameGL3x : IDisposable
     {

@@ -13,7 +13,7 @@ using System.Text;
 using System.Runtime.InteropServices;
 using System.Globalization;
 
-namespace MiniGlobe.Core
+namespace OpenGlobe.Core
 {
     /// <summary>
     /// A set of 3-dimensional cartesian coordinates where the three components,

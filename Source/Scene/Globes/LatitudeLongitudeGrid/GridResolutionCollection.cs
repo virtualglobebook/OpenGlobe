@@ -9,9 +9,9 @@
 
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using MiniGlobe.Core;
+using OpenGlobe.Core;
 
-namespace MiniGlobe.Scene
+namespace OpenGlobe.Scene
 {
     public class GridResolutionCollection : Collection<GridResolution>
     {

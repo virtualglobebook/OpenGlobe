@@ -8,9 +8,9 @@
 #endregion
 
 using System.Collections.Generic;
-using MiniGlobe.Core;
+using OpenGlobe.Core;
 
-namespace MiniGlobe.Renderer
+namespace OpenGlobe.Renderer
 {
     public abstract class ShaderProgram : Disposable
     {

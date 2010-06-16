@@ -9,7 +9,7 @@
 
 using System.Collections;
 
-namespace MiniGlobe.Renderer
+namespace OpenGlobe.Renderer
 {
     public abstract class ColorAttachments
     {

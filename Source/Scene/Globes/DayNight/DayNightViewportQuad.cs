@@ -8,8 +8,8 @@
 #endregion
 
 using System;
-using MiniGlobe.Core.Geometry;
-using MiniGlobe.Renderer;
+using OpenGlobe.Core.Geometry;
+using OpenGlobe.Renderer;
 
 public enum DayNightOutput
 {
@@ -19,7 +19,7 @@ public enum DayNightOutput
     BlendBuffer
 }
 
-namespace MiniGlobe.Scene
+namespace OpenGlobe.Scene
 {
     public sealed class DayNightViewportQuad : IDisposable
     {

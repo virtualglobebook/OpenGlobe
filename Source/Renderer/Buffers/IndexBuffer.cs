@@ -8,9 +8,9 @@
 #endregion
 
 using System.Runtime.InteropServices;
-using MiniGlobe.Core;
+using OpenGlobe.Core;
 
-namespace MiniGlobe.Renderer
+namespace OpenGlobe.Renderer
 {
     public enum IndexBufferDataType
     {

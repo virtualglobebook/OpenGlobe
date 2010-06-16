@@ -9,10 +9,10 @@
 
 using System.Drawing;
 using NUnit.Framework;
-using MiniGlobe.Core;
-using MiniGlobe.Renderer;
+using OpenGlobe.Core;
+using OpenGlobe.Renderer;
 
-namespace MiniGlobe
+namespace OpenGlobe
 {
     public static class TestUtility
     {

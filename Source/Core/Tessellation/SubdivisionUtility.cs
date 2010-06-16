@@ -9,7 +9,7 @@
 
 using System;
 
-namespace MiniGlobe.Core.Tessellation
+namespace OpenGlobe.Core.Tessellation
 {
     internal static class SubdivisionUtility
     {

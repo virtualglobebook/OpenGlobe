@@ -7,7 +7,7 @@
 //
 #endregion
 
-namespace MiniGlobe.Core.Geometry
+namespace OpenGlobe.Core.Geometry
 {
     public class VertexAttributeDoubleVector2 : VertexAttribute<Vector2D>
     {

@@ -9,9 +9,9 @@
 
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
-using MiniGlobe.Renderer;
+using OpenGlobe.Renderer;
 
-namespace MiniGlobe.Renderer.GL3x
+namespace OpenGlobe.Renderer.GL3x
 {
     internal class UniformFloatMatrix44GL3x : Uniform<Matrix4>, ICleanable
     {

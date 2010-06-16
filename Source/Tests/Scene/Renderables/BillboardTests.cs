@@ -8,9 +8,9 @@
 #endregion
 
 using NUnit.Framework;
-using MiniGlobe.Core;
+using OpenGlobe.Core;
 
-namespace MiniGlobe.Scene
+namespace OpenGlobe.Scene
 {
     [TestFixture]
     public class BillboardTests

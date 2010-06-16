@@ -11,7 +11,7 @@ using OpenTK;
 using OpenTK.Graphics;
 using System;
 
-namespace MiniGlobe.Renderer.GL3x
+namespace OpenGlobe.Renderer.GL3x
 {
     internal static class FinalizerThreadContextGL3x
     {

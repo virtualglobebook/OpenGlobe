@@ -9,11 +9,11 @@
 
 using System;
 using System.Drawing;
-using MiniGlobe.Core.Geometry;
-using MiniGlobe.Renderer;
-using MiniGlobe.Core;
+using OpenGlobe.Core.Geometry;
+using OpenGlobe.Renderer;
+using OpenGlobe.Core;
 
-namespace MiniGlobe.Scene
+namespace OpenGlobe.Scene
 {
     public sealed class Axes : IDisposable
     {

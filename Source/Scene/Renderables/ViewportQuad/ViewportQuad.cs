@@ -8,10 +8,10 @@
 #endregion
 
 using System;
-using MiniGlobe.Core.Geometry;
-using MiniGlobe.Renderer;
+using OpenGlobe.Core.Geometry;
+using OpenGlobe.Renderer;
 
-namespace MiniGlobe.Scene
+namespace OpenGlobe.Scene
 {
     public sealed class ViewportQuad : IDisposable
     {

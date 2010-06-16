@@ -10,7 +10,7 @@
 using System;
 using System.Globalization;
 
-namespace MiniGlobe.Core.Geometry
+namespace OpenGlobe.Core.Geometry
 {
     public struct TriangleIndicesByte : IEquatable<TriangleIndicesByte>
     {

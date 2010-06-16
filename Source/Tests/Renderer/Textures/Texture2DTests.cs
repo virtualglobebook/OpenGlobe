@@ -8,10 +8,10 @@
 #endregion
 
 using System.Drawing;
-using MiniGlobe.Core;
+using OpenGlobe.Core;
 using NUnit.Framework;
 
-namespace MiniGlobe.Renderer
+namespace OpenGlobe.Renderer
 {
     [TestFixture]
     public class Texture2DTests
@@ -48,10 +48,10 @@ namespace MiniGlobe.Renderer
             Assert.AreEqual(TextureWrap.Repeat, filter.WrapT);
             Assert.AreEqual(2, filter.MaximumAnisotropic);
 
-            Texture2DFilter filter2 = MiniGlobe.Renderer.Texture2DFilter.LinearClampToEdge;
+            Texture2DFilter filter2 = OpenGlobe.Renderer.Texture2DFilter.LinearClampToEdge;
             Assert.AreNotEqual(filter, filter2);
 
-            Texture2DFilter filter3 = MiniGlobe.Renderer.Texture2DFilter.LinearClampToEdge;
+            Texture2DFilter filter3 = OpenGlobe.Renderer.Texture2DFilter.LinearClampToEdge;
             Assert.AreEqual(filter2, filter3);
         }
 
@@ -281,8 +281,8 @@ namespace MiniGlobe.Renderer
 
             Texture2DDescription description = new Texture2DDescription(1, 1, TextureFormat.RedGreenBlueAlpha8, false);
             Texture2D texture = Device.CreateTexture2D(description);
-            texture.Filter = MiniGlobe.Renderer.Texture2DFilter.LinearRepeat;
-            Assert.AreEqual(MiniGlobe.Renderer.Texture2DFilter.LinearRepeat, texture.Filter);
+            texture.Filter = OpenGlobe.Renderer.Texture2DFilter.LinearRepeat;
+            Assert.AreEqual(OpenGlobe.Renderer.Texture2DFilter.LinearRepeat, texture.Filter);
 
             window.Context.TextureUnits[0].Texture2D = texture;
             Assert.AreEqual(texture, window.Context.TextureUnits[0].Texture2D);

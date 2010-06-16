@@ -10,7 +10,7 @@
 using NUnit.Framework;
 using System;
 
-namespace MiniGlobe.Core
+namespace OpenGlobe.Core
 {
     [TestFixture]
     public class HalfTests

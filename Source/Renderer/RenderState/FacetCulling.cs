@@ -8,9 +8,9 @@
 #endregion
 
 using System.Drawing;
-using MiniGlobe.Core.Geometry;
+using OpenGlobe.Core.Geometry;
 
-namespace MiniGlobe.Renderer
+namespace OpenGlobe.Renderer
 {
     public enum CullFace
     {

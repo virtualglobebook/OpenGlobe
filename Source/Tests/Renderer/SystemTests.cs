@@ -9,13 +9,13 @@
 
 using System.Drawing;
 using NUnit.Framework;
-using MiniGlobe.Core;
-using MiniGlobe.Core.Geometry;
+using OpenGlobe.Core;
+using OpenGlobe.Core.Geometry;
 
-namespace MiniGlobe.Renderer
+namespace OpenGlobe.Renderer
 {
     /// <summary>
-    /// System tests for MiniGlobe.Renderer.  System tests are higher level 
+    /// System tests for OpenGlobe.Renderer.  System tests are higher level 
     /// than unit tests; instead of validating a single class, system tests 
     /// use multiple classes to validate a more complicated task.
     /// </summary>

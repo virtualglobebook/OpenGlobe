@@ -10,9 +10,9 @@
 using System.Threading;
 using System.Drawing;
 using NUnit.Framework;
-using MiniGlobe.Core.Geometry;
+using OpenGlobe.Core.Geometry;
 
-namespace MiniGlobe.Renderer.MultiThreading
+namespace OpenGlobe.Renderer.MultiThreading
 {
     [TestFixture]
     public class ShaderProgramMultiThreadingTests

@@ -9,7 +9,7 @@
 
 using OpenTK;
 
-namespace MiniGlobe.Renderer
+namespace OpenGlobe.Renderer
 {
     internal class ModelViewPerspectiveProjectionMatrixUniform : DrawAutomaticUniform
     {

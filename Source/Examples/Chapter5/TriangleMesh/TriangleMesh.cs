@@ -10,14 +10,14 @@
 using System;
 using System.Drawing;
 
-using MiniGlobe.Core.Geometry;
-using MiniGlobe.Renderer;
-using MiniGlobe.Scene;
+using OpenGlobe.Core.Geometry;
+using OpenGlobe.Renderer;
+using OpenGlobe.Scene;
 
-using MiniGlobe.Core;
-using MiniGlobe.Terrain;
+using OpenGlobe.Core;
+using OpenGlobe.Terrain;
 
-namespace MiniGlobe.Examples.Chapter5
+namespace OpenGlobe.Examples.Chapter5
 {
     sealed class TriangleMesh : IDisposable
     {
