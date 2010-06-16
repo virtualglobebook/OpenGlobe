@@ -38,10 +38,10 @@
   <Target Name="$(ProjectDir)/../../Source/Examples/Chapter5/VertexDisplacementMap/bin/Release/Chapter5VertexDisplacementMap.exe" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/../../Source/Examples/Chapter7/Billboards/bin/Release/Chapter7Billboards.exe" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/../../Source/Examples/Chapter8/LinesOnTerrain/bin/Release/Chapter8LinesOnTerrain.exe" Analyze="True" AnalyzeAllChildren="True" />
-  <Target Name="$(ProjectDir)/../../Source/Tests/bin/Release/MiniGlobe.Core.dll" Analyze="True" AnalyzeAllChildren="True" />
-  <Target Name="$(ProjectDir)/../../Source/Tests/bin/Release/MiniGlobe.Renderer.dll" Analyze="True" AnalyzeAllChildren="True" />
-  <Target Name="$(ProjectDir)/../../Source/Tests/bin/Release/MiniGlobe.Scene.dll" Analyze="True" AnalyzeAllChildren="True" />
-  <Target Name="$(ProjectDir)/../../Source/Tests/bin/Release/MiniGlobe.Tests.dll" Analyze="True" AnalyzeAllChildren="True" />
+  <Target Name="$(ProjectDir)/../../Source/Tests/bin/Release/OpenGlobe.Core.dll" Analyze="True" AnalyzeAllChildren="True" />
+  <Target Name="$(ProjectDir)/../../Source/Tests/bin/Release/OpenGlobe.Renderer.dll" Analyze="True" AnalyzeAllChildren="True" />
+  <Target Name="$(ProjectDir)/../../Source/Tests/bin/Release/OpenGlobe.Scene.dll" Analyze="True" AnalyzeAllChildren="True" />
+  <Target Name="$(ProjectDir)/../../Source/Tests/bin/Release/OpenGlobe.Tests.dll" Analyze="True" AnalyzeAllChildren="True" />
  </Targets>
  <Rules>
   <RuleFiles>
@@ -60,11 +60,11 @@
  </Rules>
  <FxCopReport Version="1.36">
   <Namespaces>
-   <Namespace Name="MiniGlobe">
+   <Namespace Name="OpenGlobe">
     <Messages>
      <Message TypeName="AvoidNamespacesWithFewTypes" Category="Microsoft.Design" CheckId="CA1020" Status="Excluded" Created="2009-12-29 14:04:17Z">
       <Issue>
-       <Item>MiniGlobe</Item>
+       <Item>OpenGlobe</Item>
       </Issue>
       <Notes>
        <User Name="pjcozzi">
@@ -74,11 +74,11 @@
      </Message>
     </Messages>
    </Namespace>
-   <Namespace Name="MiniGlobe.Core">
+   <Namespace Name="OpenGlobe.Core">
     <Messages>
      <Message TypeName="AvoidNamespacesWithFewTypes" Category="Microsoft.Design" CheckId="CA1020" Status="Excluded" Created="2009-12-29 14:04:17Z">
       <Issue>
-       <Item>MiniGlobe.Core</Item>
+       <Item>OpenGlobe.Core</Item>
       </Issue>
       <Notes>
        <User Name="pjcozzi">
@@ -88,11 +88,11 @@
      </Message>
     </Messages>
    </Namespace>
-   <Namespace Name="MiniGlobe.Core.Tessellation">
+   <Namespace Name="OpenGlobe.Core.Tessellation">
     <Messages>
      <Message TypeName="AvoidNamespacesWithFewTypes" Category="Microsoft.Design" CheckId="CA1020" Status="Excluded" Created="2009-12-23 01:33:54Z">
       <Issue>
-       <Item>MiniGlobe.Core.Tessellation</Item>
+       <Item>OpenGlobe.Core.Tessellation</Item>
       </Issue>
       <Notes>
        <User Name="pjcozzi">
@@ -102,11 +102,11 @@
      </Message>
     </Messages>
    </Namespace>
-   <Namespace Name="MiniGlobe.Scene">
+   <Namespace Name="OpenGlobe.Scene">
     <Messages>
      <Message TypeName="AvoidNamespacesWithFewTypes" Category="Microsoft.Design" CheckId="CA1020" Status="Excluded" Created="2009-12-29 14:04:17Z">
       <Issue>
-       <Item>MiniGlobe.Scene</Item>
+       <Item>OpenGlobe.Scene</Item>
       </Issue>
       <Notes>
        <User Name="pjcozzi">
@@ -116,11 +116,11 @@
      </Message>
     </Messages>
    </Namespace>
-   <Namespace Name="MiniGlobe.Terrain">
+   <Namespace Name="OpenGlobe.Terrain">
     <Messages>
      <Message TypeName="AvoidNamespacesWithFewTypes" Category="Microsoft.Design" CheckId="CA1020" Status="Excluded" Created="2010-03-31 02:11:39Z">
       <Issue>
-       <Item>MiniGlobe.Terrain</Item>
+       <Item>OpenGlobe.Terrain</Item>
       </Issue>
       <Notes>
        <User Name="pjcozzi">
@@ -301,18 +301,18 @@
      </Module>
     </Modules>
    </Target>
-   <Target Name="$(ProjectDir)/../../Source/Tests/bin/Release/MiniGlobe.Core.dll">
+   <Target Name="$(ProjectDir)/../../Source/Tests/bin/Release/OpenGlobe.Core.dll">
     <Modules>
-     <Module Name="miniglobe.core.dll">
+     <Module Name="OpenGlobe.core.dll">
       <Messages>
        <Message TypeName="AssembliesShouldHaveValidStrongNames" Category="Microsoft.Design" CheckId="CA2210" Created="2009-12-23 01:33:54Z">
         <Issue Name="NoStrongName">
-         <Item>'MiniGlobe.Core.dll'</Item>
+         <Item>'OpenGlobe.Core.dll'</Item>
         </Issue>
        </Message>
       </Messages>
       <Namespaces>
-       <Namespace Name="MiniGlobe.Core">
+       <Namespace Name="OpenGlobe.Core">
         <Types>
          <Type Name="Half">
           <Members>
@@ -374,7 +374,7 @@
              </Message>
             </Messages>
            </Member>
-           <Member Name="#TryParse(System.String,MiniGlobe.Core.Half&amp;)">
+           <Member Name="#TryParse(System.String,OpenGlobe.Core.Half&amp;)">
             <Messages>
              <Message Id="s" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-03-23 08:41:26Z">
               <Issue Name="MemberParameterMoreMeaningfulName">
@@ -389,7 +389,7 @@
              </Message>
             </Messages>
            </Member>
-           <Member Name="#TryParse(System.String,System.Globalization.NumberStyles,System.IFormatProvider,MiniGlobe.Core.Half&amp;)">
+           <Member Name="#TryParse(System.String,System.Globalization.NumberStyles,System.IFormatProvider,OpenGlobe.Core.Half&amp;)">
             <Messages>
              <Message Id="s" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-03-23 08:41:26Z">
               <Issue Name="MemberParameterMoreMeaningfulName">
@@ -499,7 +499,7 @@
          </Type>
          <Type Name="Vector2H">
           <Members>
-           <Member Name="#.ctor(MiniGlobe.Core.Half,MiniGlobe.Core.Half)">
+           <Member Name="#.ctor(OpenGlobe.Core.Half,OpenGlobe.Core.Half)">
             <Messages>
              <Message Id="x" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-03-23 08:41:26Z">
               <Issue Name="MemberParameterMoreMeaningfulName">
@@ -816,7 +816,7 @@
          </Type>
          <Type Name="Vector3H">
           <Members>
-           <Member Name="#.ctor(MiniGlobe.Core.Half,MiniGlobe.Core.Half,MiniGlobe.Core.Half)">
+           <Member Name="#.ctor(OpenGlobe.Core.Half,OpenGlobe.Core.Half,OpenGlobe.Core.Half)">
             <Messages>
              <Message Id="x" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-03-23 08:41:26Z">
               <Issue Name="MemberParameterMoreMeaningfulName">
@@ -1208,7 +1208,7 @@
          </Type>
          <Type Name="Vector4H">
           <Members>
-           <Member Name="#.ctor(MiniGlobe.Core.Half,MiniGlobe.Core.Half,MiniGlobe.Core.Half,MiniGlobe.Core.Half)">
+           <Member Name="#.ctor(OpenGlobe.Core.Half,OpenGlobe.Core.Half,OpenGlobe.Core.Half,OpenGlobe.Core.Half)">
             <Messages>
              <Message Id="w" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-03-23 08:41:26Z">
               <Issue Name="MemberParameterMoreMeaningfulName">
@@ -1566,7 +1566,7 @@
          </Type>
         </Types>
        </Namespace>
-       <Namespace Name="MiniGlobe.Core.Geometry">
+       <Namespace Name="OpenGlobe.Core.Geometry">
         <Types>
          <Type Name="Ellipsoid">
           <Members>
@@ -1863,7 +1863,7 @@
          </Type>
          <Type Name="VertexAttributeCollection">
           <Members>
-           <Member Name="#Add(MiniGlobe.Core.Geometry.VertexAttribute)">
+           <Member Name="#Add(OpenGlobe.Core.Geometry.VertexAttribute)">
             <Messages>
              <Message Id="0#" TypeName="ParameterNamesShouldMatchBaseDeclaration" Category="Microsoft.Naming" CheckId="CA1725" Created="2010-04-23 21:59:11Z">
               <Issue>
@@ -1875,7 +1875,7 @@
              </Message>
             </Messages>
            </Member>
-           <Member Name="#Contains(MiniGlobe.Core.Geometry.VertexAttribute)">
+           <Member Name="#Contains(OpenGlobe.Core.Geometry.VertexAttribute)">
             <Messages>
              <Message Id="0#" TypeName="ParameterNamesShouldMatchBaseDeclaration" Category="Microsoft.Naming" CheckId="CA1725" Created="2010-04-23 21:59:11Z">
               <Issue>
@@ -1887,9 +1887,9 @@
              </Message>
             </Messages>
            </Member>
-           <Member Name="#System.Collections.Generic.ICollection`1&lt;MiniGlobe.Core.Geometry.VertexAttribute&gt;.IsReadOnly">
+           <Member Name="#System.Collections.Generic.ICollection`1&lt;OpenGlobe.Core.Geometry.VertexAttribute&gt;.IsReadOnly">
             <Accessors>
-             <Accessor Name="#System.Collections.Generic.ICollection`1&lt;MiniGlobe.Core.Geometry.VertexAttribute&gt;.get_IsReadOnly()">
+             <Accessor Name="#System.Collections.Generic.ICollection`1&lt;OpenGlobe.Core.Geometry.VertexAttribute&gt;.get_IsReadOnly()">
               <Messages>
                <Message TypeName="InterfaceMethodsShouldBeCallableByChildTypes" Category="Microsoft.Design" CheckId="CA1033" Created="2010-04-23 21:59:11Z">
                 <Issue>
@@ -1916,7 +1916,7 @@
          </Type>
         </Types>
        </Namespace>
-       <Namespace Name="MiniGlobe.Terrain">
+       <Namespace Name="OpenGlobe.Terrain">
         <Types>
          <Type Name="TerrainTile">
           <Members>
@@ -1937,18 +1937,18 @@
      </Module>
     </Modules>
    </Target>
-   <Target Name="$(ProjectDir)/../../Source/Tests/bin/Release/MiniGlobe.Renderer.dll">
+   <Target Name="$(ProjectDir)/../../Source/Tests/bin/Release/OpenGlobe.Renderer.dll">
     <Modules>
-     <Module Name="miniglobe.renderer.dll">
+     <Module Name="OpenGlobe.renderer.dll">
       <Messages>
        <Message TypeName="AssembliesShouldHaveValidStrongNames" Category="Microsoft.Design" CheckId="CA2210" Created="2010-03-31 02:44:15Z">
         <Issue Name="NoStrongName">
-         <Item>'MiniGlobe.Renderer.dll'</Item>
+         <Item>'OpenGlobe.Renderer.dll'</Item>
         </Issue>
        </Message>
       </Messages>
       <Namespaces>
-       <Namespace Name="MiniGlobe.Renderer">
+       <Namespace Name="OpenGlobe.Renderer">
         <Types>
          <Type Name="Blending">
           <Members>
@@ -2190,7 +2190,7 @@
          </Type>
          <Type Name="Context">
           <Members>
-           <Member Name="#CreateVertexArray(MiniGlobe.Core.Geometry.Mesh,MiniGlobe.Renderer.ShaderVertexAttributeCollection,MiniGlobe.Renderer.BufferHint)">
+           <Member Name="#CreateVertexArray(OpenGlobe.Core.Geometry.Mesh,OpenGlobe.Renderer.ShaderVertexAttributeCollection,OpenGlobe.Renderer.BufferHint)">
             <Messages>
              <Message TypeName="DoNotCastUnnecessarily" Category="Microsoft.Performance" CheckId="CA1800" Status="Excluded" Created="2010-03-23 08:41:26Z">
               <Issue Name="Local">
@@ -3191,7 +3191,7 @@
              </Message>
             </Messages>
            </Member>
-           <Member Name="#op_Multiply(MiniGlobe.Renderer.Matrix3d,MiniGlobe.Core.Vector3D)">
+           <Member Name="#op_Multiply(OpenGlobe.Renderer.Matrix3d,OpenGlobe.Core.Vector3D)">
             <Messages>
              <Message TypeName="OperatorOverloadsHaveNamedAlternates" Category="Microsoft.Usage" CheckId="CA2225" Created="2010-03-31 02:44:15Z">
               <Issue>
@@ -3353,21 +3353,21 @@
            </Member>
           </Members>
          </Type>
-         <Type Name="MiniGlobeWindow">
+         <Type Name="OpenGlobeWindow">
           <Members>
            <Member Name="#PostRenderFrame" Kind="Event">
             <Messages>
              <Message TypeName="DeclareEventHandlersCorrectly" Category="Microsoft.Design" CheckId="CA1009" Created="2010-03-31 02:44:15Z">
               <Issue Name="First">
-               <Item>'MiniGlobeWindow.MiniGlobeHandler'</Item>
+               <Item>'OpenGlobeWindow.OpenGlobeHandler'</Item>
               </Issue>
               <Issue Name="Second">
-               <Item>'MiniGlobeWindow.MiniGlobeHandler'</Item>
+               <Item>'OpenGlobeWindow.OpenGlobeHandler'</Item>
               </Issue>
              </Message>
              <Message TypeName="IdentifiersShouldHaveCorrectSuffix" Category="Microsoft.Naming" CheckId="CA1710" Created="2010-03-31 02:44:15Z">
               <Issue>
-               <Item>'MiniGlobeWindow.MiniGlobeHandler'</Item>
+               <Item>'OpenGlobeWindow.OpenGlobeHandler'</Item>
                <Item>EventHandler</Item>
               </Issue>
              </Message>
@@ -3377,15 +3377,15 @@
             <Messages>
              <Message TypeName="DeclareEventHandlersCorrectly" Category="Microsoft.Design" CheckId="CA1009" Created="2010-03-31 02:44:15Z">
               <Issue Name="First">
-               <Item>'MiniGlobeWindow.MiniGlobeHandler'</Item>
+               <Item>'OpenGlobeWindow.OpenGlobeHandler'</Item>
               </Issue>
               <Issue Name="Second">
-               <Item>'MiniGlobeWindow.MiniGlobeHandler'</Item>
+               <Item>'OpenGlobeWindow.OpenGlobeHandler'</Item>
               </Issue>
              </Message>
              <Message TypeName="IdentifiersShouldHaveCorrectSuffix" Category="Microsoft.Naming" CheckId="CA1710" Created="2010-03-31 02:44:15Z">
               <Issue>
-               <Item>'MiniGlobeWindow.MiniGlobeHandler'</Item>
+               <Item>'OpenGlobeWindow.OpenGlobeHandler'</Item>
                <Item>EventHandler</Item>
               </Issue>
              </Message>
@@ -3395,15 +3395,15 @@
             <Messages>
              <Message TypeName="DeclareEventHandlersCorrectly" Category="Microsoft.Design" CheckId="CA1009" Created="2010-03-31 02:44:15Z">
               <Issue Name="First">
-               <Item>'MiniGlobeWindow.MiniGlobeHandler'</Item>
+               <Item>'OpenGlobeWindow.OpenGlobeHandler'</Item>
               </Issue>
               <Issue Name="Second">
-               <Item>'MiniGlobeWindow.MiniGlobeHandler'</Item>
+               <Item>'OpenGlobeWindow.OpenGlobeHandler'</Item>
               </Issue>
              </Message>
              <Message TypeName="IdentifiersShouldHaveCorrectSuffix" Category="Microsoft.Naming" CheckId="CA1710" Created="2010-03-31 02:44:15Z">
               <Issue>
-               <Item>'MiniGlobeWindow.MiniGlobeHandler'</Item>
+               <Item>'OpenGlobeWindow.OpenGlobeHandler'</Item>
                <Item>EventHandler</Item>
               </Issue>
              </Message>
@@ -3413,15 +3413,15 @@
             <Messages>
              <Message TypeName="DeclareEventHandlersCorrectly" Category="Microsoft.Design" CheckId="CA1009" Created="2010-03-31 02:44:15Z">
               <Issue Name="First">
-               <Item>'MiniGlobeWindow.MiniGlobeHandler'</Item>
+               <Item>'OpenGlobeWindow.OpenGlobeHandler'</Item>
               </Issue>
               <Issue Name="Second">
-               <Item>'MiniGlobeWindow.MiniGlobeHandler'</Item>
+               <Item>'OpenGlobeWindow.OpenGlobeHandler'</Item>
               </Issue>
              </Message>
              <Message TypeName="IdentifiersShouldHaveCorrectSuffix" Category="Microsoft.Naming" CheckId="CA1710" Created="2010-03-31 02:44:15Z">
               <Issue>
-               <Item>'MiniGlobeWindow.MiniGlobeHandler'</Item>
+               <Item>'OpenGlobeWindow.OpenGlobeHandler'</Item>
                <Item>EventHandler</Item>
               </Issue>
              </Message>
@@ -3431,15 +3431,15 @@
             <Messages>
              <Message TypeName="DeclareEventHandlersCorrectly" Category="Microsoft.Design" CheckId="CA1009" Created="2010-03-31 02:44:15Z">
               <Issue Name="First">
-               <Item>'MiniGlobeWindow.MiniGlobeHandler'</Item>
+               <Item>'OpenGlobeWindow.OpenGlobeHandler'</Item>
               </Issue>
               <Issue Name="Second">
-               <Item>'MiniGlobeWindow.MiniGlobeHandler'</Item>
+               <Item>'OpenGlobeWindow.OpenGlobeHandler'</Item>
               </Issue>
              </Message>
              <Message TypeName="IdentifiersShouldHaveCorrectSuffix" Category="Microsoft.Naming" CheckId="CA1710" Created="2010-03-31 02:44:15Z">
               <Issue>
-               <Item>'MiniGlobeWindow.MiniGlobeHandler'</Item>
+               <Item>'OpenGlobeWindow.OpenGlobeHandler'</Item>
                <Item>EventHandler</Item>
               </Issue>
              </Message>
@@ -3447,11 +3447,11 @@
            </Member>
           </Members>
          </Type>
-         <Type Name="MiniGlobeWindow+MiniGlobeHandler">
+         <Type Name="OpenGlobeWindow+OpenGlobeHandler">
           <Messages>
            <Message TypeName="NestedTypesShouldNotBeVisible" Category="Microsoft.Design" CheckId="CA1034" Created="2010-03-31 02:44:15Z">
             <Issue>
-             <Item>'MiniGlobeWindow.MiniGlobeHandler'</Item>
+             <Item>'OpenGlobeWindow.OpenGlobeHandler'</Item>
             </Issue>
            </Message>
           </Messages>
@@ -3474,11 +3474,11 @@
          </Type>
          <Type Name="PersistentView">
           <Members>
-           <Member Name="#Execute(System.String,MiniGlobe.Renderer.MiniGlobeWindow,MiniGlobe.Renderer.Camera)">
+           <Member Name="#Execute(System.String,OpenGlobe.Renderer.OpenGlobeWindow,OpenGlobe.Renderer.Camera)">
             <Messages>
              <Message Id="filename" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Status="Excluded" Created="2010-02-07 19:07:23Z">
               <Issue Name="MemberParameterShouldBeCompoundWord">
-               <Item>'PersistentView.Execute(string, MiniGlobeWindow, Camera)'</Item>
+               <Item>'PersistentView.Execute(string, OpenGlobeWindow, Camera)'</Item>
                <Item>filename</Item>
                <Item>'filename'</Item>
                <Item>fileName</Item>
@@ -3534,7 +3534,7 @@
          </Type>
          <Type Name="Texture2D">
           <Members>
-           <Member Name="#CopyFromBuffer(MiniGlobe.Renderer.WritePixelBuffer,System.Int32,System.Int32,System.Int32,System.Int32,MiniGlobe.Renderer.ImageFormat,MiniGlobe.Renderer.ImageDataType)">
+           <Member Name="#CopyFromBuffer(OpenGlobe.Renderer.WritePixelBuffer,System.Int32,System.Int32,System.Int32,System.Int32,OpenGlobe.Renderer.ImageFormat,OpenGlobe.Renderer.ImageDataType)">
             <Messages>
              <Message Id="x" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-03-23 08:57:57Z">
               <Issue Name="MemberParameter">
@@ -4862,7 +4862,7 @@
          </Type>
         </Types>
        </Namespace>
-       <Namespace Name="MiniGlobe.Renderer.GL3x">
+       <Namespace Name="OpenGlobe.Renderer.GL3x">
         <Types>
          <Type Name="BufferHandleGL3x">
           <Members>
@@ -4921,22 +4921,22 @@
      </Module>
     </Modules>
    </Target>
-   <Target Name="$(ProjectDir)/../../Source/Tests/bin/Release/MiniGlobe.Scene.dll">
+   <Target Name="$(ProjectDir)/../../Source/Tests/bin/Release/OpenGlobe.Scene.dll">
     <Modules>
-     <Module Name="miniglobe.scene.dll">
+     <Module Name="OpenGlobe.scene.dll">
       <Messages>
        <Message TypeName="AssembliesShouldHaveValidStrongNames" Category="Microsoft.Design" CheckId="CA2210" Created="2010-03-31 02:44:15Z">
         <Issue Name="NoStrongName">
-         <Item>'MiniGlobe.Scene.dll'</Item>
+         <Item>'OpenGlobe.Scene.dll'</Item>
         </Issue>
        </Message>
       </Messages>
       <Namespaces>
-       <Namespace Name="MiniGlobe.Scene">
+       <Namespace Name="OpenGlobe.Scene">
         <Types>
          <Type Name="CameraLookAtPoint">
           <Members>
-           <Member Name="#MouseUp(MiniGlobe.Renderer.MouseButton,System.Drawing.Point)">
+           <Member Name="#MouseUp(OpenGlobe.Renderer.MouseButton,System.Drawing.Point)">
             <Messages>
              <Message Id="point" TypeName="ReviewUnusedParameters" Category="Microsoft.Usage" CheckId="CA1801" Status="Excluded" Created="2010-02-24 12:09:42Z" FixCategory="DependsOnFix">
               <Issue>
@@ -4951,7 +4951,7 @@
              </Message>
             </Messages>
            </Member>
-           <Member Name="#ViewPoint(MiniGlobe.Core.Geometry.Ellipsoid,MiniGlobe.Core.Geodetic3D)">
+           <Member Name="#ViewPoint(OpenGlobe.Core.Geometry.Ellipsoid,OpenGlobe.Core.Geodetic3D)">
             <Messages>
              <Message Id="ViewPoint" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Status="Excluded" Created="2010-03-31 02:44:15Z">
               <Issue Name="MemberShouldBeDiscreteTerm">
@@ -4986,9 +4986,9 @@
          </Type>
          <Type Name="ViewportQuad">
           <Members>
-           <Member Name="#.ctor(MiniGlobe.Renderer.Context)">
+           <Member Name="#.ctor(OpenGlobe.Renderer.Context)">
             <Messages>
-             <Message Id="MiniGlobe.Renderer.AttachedVertexBuffer" TypeName="DoNotIgnoreMethodResults" Category="Microsoft.Usage" CheckId="CA1806" Status="Excluded" Created="2010-04-06 19:32:12Z">
+             <Message Id="OpenGlobe.Renderer.AttachedVertexBuffer" TypeName="DoNotIgnoreMethodResults" Category="Microsoft.Usage" CheckId="CA1806" Status="Excluded" Created="2010-04-06 19:32:12Z">
               <Issue Name="ObjectCreation">
                <Item>'ViewportQuad.ViewportQuad(Context)'</Item>
                <Item>'AttachedVertexBuffer'</Item>
@@ -5005,7 +5005,7 @@
          </Type>
         </Types>
        </Namespace>
-       <Namespace Name="MiniGlobe.Terrain">
+       <Namespace Name="OpenGlobe.Terrain">
         <Types>
          <Type Name="RayCastedTerrainTile">
           <Members>
@@ -5088,18 +5088,18 @@
      </Module>
     </Modules>
    </Target>
-   <Target Name="$(ProjectDir)/../../Source/Tests/bin/Release/MiniGlobe.Tests.dll">
+   <Target Name="$(ProjectDir)/../../Source/Tests/bin/Release/OpenGlobe.Tests.dll">
     <Modules>
-     <Module Name="miniglobe.tests.dll">
+     <Module Name="OpenGlobe.tests.dll">
       <Messages>
        <Message TypeName="AssembliesShouldHaveValidStrongNames" Category="Microsoft.Design" CheckId="CA2210" Created="2010-03-31 02:44:15Z">
         <Issue Name="NoStrongName">
-         <Item>'MiniGlobe.Tests.dll'</Item>
+         <Item>'OpenGlobe.Tests.dll'</Item>
         </Issue>
        </Message>
       </Messages>
       <Namespaces>
-       <Namespace Name="MiniGlobe.Core">
+       <Namespace Name="OpenGlobe.Core">
         <Types>
          <Type Name="CollectionAlgorithmsTests">
           <Members>
@@ -5343,7 +5343,7 @@
            </Member>
            <Member Name="#TestOverflow()">
             <Messages>
-             <Message Id="MiniGlobe.Core.Half" TypeName="DoNotIgnoreMethodResults" Category="Microsoft.Usage" CheckId="CA1806" Status="Excluded" Created="2010-03-31 02:44:15Z">
+             <Message Id="OpenGlobe.Core.Half" TypeName="DoNotIgnoreMethodResults" Category="Microsoft.Usage" CheckId="CA1806" Status="Excluded" Created="2010-03-31 02:44:15Z">
               <Issue Name="ObjectCreation">
                <Item>'HalfTests.TestOverflow()'</Item>
                <Item>'Half'</Item>
@@ -8166,7 +8166,7 @@
          </Type>
         </Types>
        </Namespace>
-       <Namespace Name="MiniGlobe.Core.Geometry">
+       <Namespace Name="OpenGlobe.Core.Geometry">
         <Types>
          <Type Name="EllipsoidTests">
           <Members>
@@ -8370,7 +8370,7 @@
          </Type>
         </Types>
        </Namespace>
-       <Namespace Name="MiniGlobe.Core.Tessellation">
+       <Namespace Name="OpenGlobe.Core.Tessellation">
         <Types>
          <Type Name="TessellationTests">
           <Members>
@@ -8462,7 +8462,7 @@
          </Type>
         </Types>
        </Namespace>
-       <Namespace Name="MiniGlobe.Renderer">
+       <Namespace Name="OpenGlobe.Renderer">
         <Types>
          <Type Name="BufferObjectTests">
           <Members>
@@ -9172,7 +9172,7 @@
          </Type>
         </Types>
        </Namespace>
-       <Namespace Name="MiniGlobe.Scene">
+       <Namespace Name="OpenGlobe.Scene">
         <Types>
          <Type Name="BillboardCollectionTests">
           <Members>
