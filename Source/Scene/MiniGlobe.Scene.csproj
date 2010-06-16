@@ -75,11 +75,11 @@
   <ItemGroup>
     <ProjectReference Include="..\Core\MiniGlobe.Core.csproj">
       <Project>{51502B9C-1A97-4F2C-8541-7D9D61ED6C6D}</Project>
-      <Name>MiniGlobe.Core</Name>
+      <Name>OpenGlobe.Core</Name>
     </ProjectReference>
     <ProjectReference Include="..\Renderer\MiniGlobe.Renderer.csproj">
       <Project>{E735AB3A-EB92-4C51-814E-E5E1F2173AA4}</Project>
-      <Name>MiniGlobe.Renderer</Name>
+      <Name>OpenGlobe.Renderer</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
