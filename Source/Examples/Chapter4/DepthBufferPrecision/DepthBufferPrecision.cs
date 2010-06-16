@@ -39,8 +39,6 @@ namespace OpenGlobe.Examples.Chapter4
 
             ///////////////////////////////////////////////////////////////////
 
-            Context context = _window.Context;
-
             _globe = new TessellatedGlobe(_window.Context);
             _globe.Shape = _globeShape;
             _globe.Texture = Device.CreateTexture2D(new Bitmap("MapperWDB.jpg"), TextureFormat.RedGreenBlue8, false);

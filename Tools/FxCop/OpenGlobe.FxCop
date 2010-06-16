@@ -103,24 +103,11 @@
      </Message>
     </Messages>
    </Namespace>
-   <Namespace Name="OpenGlobe.Renderer.MultiThreading">
+   <Namespace Name="OpenGlobe.Renderer.Multithreading">
     <Messages>
-     <Message TypeName="AvoidNamespacesWithFewTypes" Category="Microsoft.Design" CheckId="CA1020" Created="2010-06-16 16:11:42Z">
+     <Message TypeName="AvoidNamespacesWithFewTypes" Category="Microsoft.Design" CheckId="CA1020" Status="Excluded" Created="2010-06-16 16:39:59Z">
       <Issue>
-       <Item>OpenGlobe.Renderer.MultiThreading</Item>
-      </Issue>
-     </Message>
-     <Message Id="MultiThreading" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Created="2010-06-16 16:11:42Z">
-      <Issue Name="NamespaceShouldBeDiscreteTerm">
-       <Item>MultiThreading</Item>
-       <Item>OpenGlobe.Renderer.MultiThreading</Item>
-       <Item>Multithreading</Item>
-      </Issue>
-     </Message>
-     <Message Id="Multi" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-06-16 16:11:42Z">
-      <Issue Name="Namespace">
-       <Item>Multi</Item>
-       <Item>OpenGlobe.Renderer.MultiThreading</Item>
+       <Item>OpenGlobe.Renderer.Multithreading</Item>
       </Issue>
      </Message>
     </Messages>
@@ -243,27 +230,6 @@
         </Issue>
        </Message>
       </Messages>
-      <Namespaces>
-       <Namespace Name="OpenGlobe.Examples.Chapter4">
-        <Types>
-         <Type Name="DepthBufferPrecision">
-          <Members>
-           <Member Name="#.ctor()">
-            <Messages>
-             <Message Id="context" TypeName="RemoveUnusedLocals" Category="Microsoft.Performance" CheckId="CA1804" Created="2010-06-16 16:11:42Z">
-              <Issue>
-               <Item>'DepthBufferPrecision.DepthBufferPrecision()'</Item>
-               <Item>'context'</Item>
-               <Item>'Context'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-          </Members>
-         </Type>
-        </Types>
-       </Namespace>
-      </Namespaces>
      </Module>
     </Modules>
    </Target>
@@ -1004,7 +970,7 @@
           <Members>
            <Member Name="#LoadView(System.String)">
             <Messages>
-             <Message Id="filename" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Created="2010-06-16 16:11:42Z">
+             <Message Id="filename" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Status="Excluded" Created="2010-06-16 16:11:42Z">
               <Issue Name="MemberParameterShouldBeCompoundWord">
                <Item>'Camera.LoadView(string)'</Item>
                <Item>filename</Item>
@@ -1016,7 +982,7 @@
            </Member>
            <Member Name="#SaveView(System.String)">
             <Messages>
-             <Message Id="filename" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Created="2010-06-16 16:11:42Z">
+             <Message Id="filename" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Status="Excluded" Created="2010-06-16 16:11:42Z">
               <Issue Name="MemberParameterShouldBeCompoundWord">
                <Item>'Camera.SaveView(string)'</Item>
                <Item>filename</Item>
@@ -1032,7 +998,7 @@
           <Members>
            <Member Name="#CreateVertexArray(OpenGlobe.Core.Geometry.Mesh,OpenGlobe.Renderer.ShaderVertexAttributeCollection,OpenGlobe.Renderer.BufferHint)">
             <Messages>
-             <Message TypeName="DoNotCastUnnecessarily" Category="Microsoft.Performance" CheckId="CA1800" Created="2010-06-16 16:11:42Z">
+             <Message TypeName="DoNotCastUnnecessarily" Category="Microsoft.Performance" CheckId="CA1800" Status="Excluded" Created="2010-06-16 16:11:42Z">
               <Issue Name="Local">
                <Item>'attribute'</Item>
                <Item>'VertexAttribute&lt;byte&gt;'</Item>
@@ -1240,7 +1206,7 @@
           <Members>
            <Member Name="#C">
             <Messages>
-             <Message Id="C" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-06-16 16:11:42Z">
+             <Message Id="C" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-06-16 16:11:42Z">
               <Issue Name="MemberMoreMeaningfulName">
                <Item>'KeyboardKey.C'</Item>
               </Issue>
@@ -1249,7 +1215,7 @@
            </Member>
            <Member Name="#D">
             <Messages>
-             <Message Id="D" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-06-16 16:11:42Z">
+             <Message Id="D" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-06-16 16:11:42Z">
               <Issue Name="MemberMoreMeaningfulName">
                <Item>'KeyboardKey.D'</Item>
               </Issue>
@@ -1258,7 +1224,7 @@
            </Member>
            <Member Name="#E">
             <Messages>
-             <Message Id="E" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-06-16 16:11:42Z">
+             <Message Id="E" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-06-16 16:11:42Z">
               <Issue Name="MemberMoreMeaningfulName">
                <Item>'KeyboardKey.E'</Item>
               </Issue>
@@ -1267,7 +1233,7 @@
            </Member>
            <Member Name="#F">
             <Messages>
-             <Message Id="F" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-06-16 16:11:42Z">
+             <Message Id="F" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-06-16 16:11:42Z">
               <Issue Name="MemberMoreMeaningfulName">
                <Item>'KeyboardKey.F'</Item>
               </Issue>
@@ -1276,7 +1242,7 @@
            </Member>
            <Member Name="#H">
             <Messages>
-             <Message Id="H" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-06-16 16:11:42Z">
+             <Message Id="H" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-06-16 16:11:42Z">
               <Issue Name="MemberMoreMeaningfulName">
                <Item>'KeyboardKey.H'</Item>
               </Issue>
@@ -1285,7 +1251,7 @@
            </Member>
            <Member Name="#I">
             <Messages>
-             <Message Id="I" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-06-16 16:11:42Z">
+             <Message Id="I" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-06-16 16:11:42Z">
               <Issue Name="MemberMoreMeaningfulName">
                <Item>'KeyboardKey.I'</Item>
               </Issue>
@@ -1294,7 +1260,7 @@
            </Member>
            <Member Name="#J">
             <Messages>
-             <Message Id="J" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-06-16 16:11:42Z">
+             <Message Id="J" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-06-16 16:11:42Z">
               <Issue Name="MemberMoreMeaningfulName">
                <Item>'KeyboardKey.J'</Item>
               </Issue>
@@ -1303,7 +1269,7 @@
            </Member>
            <Member Name="#K">
             <Messages>
-             <Message Id="K" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-06-16 16:11:42Z">
+             <Message Id="K" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-06-16 16:11:42Z">
               <Issue Name="MemberMoreMeaningfulName">
                <Item>'KeyboardKey.K'</Item>
               </Issue>
@@ -1312,7 +1278,7 @@
            </Member>
            <Member Name="#L">
             <Messages>
-             <Message Id="L" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-06-16 16:11:42Z">
+             <Message Id="L" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-06-16 16:11:42Z">
               <Issue Name="MemberMoreMeaningfulName">
                <Item>'KeyboardKey.L'</Item>
               </Issue>
@@ -1321,7 +1287,7 @@
            </Member>
            <Member Name="#M">
             <Messages>
-             <Message Id="M" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-06-16 16:11:42Z">
+             <Message Id="M" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-06-16 16:11:42Z">
               <Issue Name="MemberMoreMeaningfulName">
                <Item>'KeyboardKey.M'</Item>
               </Issue>
@@ -1330,7 +1296,7 @@
            </Member>
            <Member Name="#N">
             <Messages>
-             <Message Id="N" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-06-16 16:11:42Z">
+             <Message Id="N" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-06-16 16:11:42Z">
               <Issue Name="MemberMoreMeaningfulName">
                <Item>'KeyboardKey.N'</Item>
               </Issue>
@@ -1339,7 +1305,7 @@
            </Member>
            <Member Name="#NumLock">
             <Messages>
-             <Message Id="Num" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-06-16 16:11:42Z">
+             <Message Id="Num" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-06-16 16:11:42Z">
               <Issue Name="Member">
                <Item>Num</Item>
                <Item>'KeyboardKey.NumLock'</Item>
@@ -1349,7 +1315,7 @@
            </Member>
            <Member Name="#O">
             <Messages>
-             <Message Id="O" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-06-16 16:11:42Z">
+             <Message Id="O" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-06-16 16:11:42Z">
               <Issue Name="MemberMoreMeaningfulName">
                <Item>'KeyboardKey.O'</Item>
               </Issue>
@@ -1358,7 +1324,7 @@
            </Member>
            <Member Name="#P">
             <Messages>
-             <Message Id="P" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-06-16 16:11:42Z">
+             <Message Id="P" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-06-16 16:11:42Z">
               <Issue Name="MemberMoreMeaningfulName">
                <Item>'KeyboardKey.P'</Item>
               </Issue>
@@ -1367,7 +1333,7 @@
            </Member>
            <Member Name="#Q">
             <Messages>
-             <Message Id="Q" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-06-16 16:11:42Z">
+             <Message Id="Q" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-06-16 16:11:42Z">
               <Issue Name="MemberMoreMeaningfulName">
                <Item>'KeyboardKey.Q'</Item>
               </Issue>
@@ -1376,7 +1342,7 @@
            </Member>
            <Member Name="#S">
             <Messages>
-             <Message Id="S" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-06-16 16:11:42Z">
+             <Message Id="S" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-06-16 16:11:42Z">
               <Issue Name="MemberMoreMeaningfulName">
                <Item>'KeyboardKey.S'</Item>
               </Issue>
@@ -1385,7 +1351,7 @@
            </Member>
            <Member Name="#T">
             <Messages>
-             <Message Id="T" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-06-16 16:11:42Z">
+             <Message Id="T" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-06-16 16:11:42Z">
               <Issue Name="MemberMoreMeaningfulName">
                <Item>'KeyboardKey.T'</Item>
               </Issue>
@@ -1394,7 +1360,7 @@
            </Member>
            <Member Name="#U">
             <Messages>
-             <Message Id="U" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-06-16 16:11:42Z">
+             <Message Id="U" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-06-16 16:11:42Z">
               <Issue Name="MemberMoreMeaningfulName">
                <Item>'KeyboardKey.U'</Item>
               </Issue>
@@ -1403,7 +1369,7 @@
            </Member>
            <Member Name="#V">
             <Messages>
-             <Message Id="V" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-06-16 16:11:42Z">
+             <Message Id="V" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2010-06-16 16:11:42Z">
               <Issue Name="MemberMoreMeaningfulName">
                <Item>'KeyboardKey.V'</Item>
               </Issue>
@@ -2007,7 +1973,7 @@
          </Type>
          <Type Name="ShaderVertexAttribute">
           <Messages>
-           <Message TypeName="IdentifiersShouldNotHaveIncorrectSuffix" Category="Microsoft.Naming" CheckId="CA1711" Created="2010-06-16 16:11:42Z">
+           <Message TypeName="IdentifiersShouldNotHaveIncorrectSuffix" Category="Microsoft.Naming" CheckId="CA1711" Status="Excluded" Created="2010-06-16 16:11:42Z">
             <Issue Name="TypeNoAlternate">
              <Item>'ShaderVertexAttribute'</Item>
              <Item>Attribute</Item>
@@ -2576,7 +2542,7 @@
           <Members>
            <Member Name="#VerifyDraw(OpenGlobe.Renderer.DrawState,OpenGlobe.Renderer.SceneState)">
             <Messages>
-             <Message TypeName="InstantiateArgumentExceptionsCorrectly" Category="Microsoft.Usage" CheckId="CA2208" Created="2010-06-16 16:11:42Z">
+             <Message TypeName="InstantiateArgumentExceptionsCorrectly" Category="Microsoft.Usage" CheckId="CA2208" Status="Excluded" Created="2010-06-16 16:11:42Z">
               <Issue Name="IncorrectParameterName">
                <Item>'ContextGL3x.VerifyDraw(DrawState, SceneState)'</Item>
                <Item>drawState.RenderState</Item>
@@ -2594,11 +2560,6 @@
                <Item>drawState.VertexArray</Item>
                <Item>'paramName'</Item>
                <Item>'ArgumentNullException'</Item>
-              </Issue>
-             </Message>
-             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Created="2010-06-16 16:11:42Z" FixCategory="NonBreaking">
-              <Issue>
-               <Item>'ContextGL3x.VerifyDraw(DrawState, SceneState)'</Item>
               </Issue>
              </Message>
             </Messages>
@@ -2905,21 +2866,11 @@
         <Types>
          <Type Name="RayCastedTerrainTile">
           <Members>
-           <Member Name="#.ctor(OpenGlobe.Renderer.Context,OpenGlobe.Terrain.TerrainTile)">
-            <Messages>
-             <Message Id="context" TypeName="ReviewUnusedParameters" Category="Microsoft.Usage" CheckId="CA1801" Created="2010-06-16 16:11:42Z" FixCategory="DependsOnFix">
-              <Issue>
-               <Item>'context'</Item>
-               <Item>'RayCastedTerrainTile.RayCastedTerrainTile(Context, TerrainTile)'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
            <Member Name="#HeightExaggeration">
             <Accessors>
              <Accessor Name="#set_HeightExaggeration(System.Single)">
               <Messages>
-               <Message TypeName="InstantiateArgumentExceptionsCorrectly" Category="Microsoft.Usage" CheckId="CA2208" Created="2010-06-16 16:11:42Z">
+               <Message TypeName="InstantiateArgumentExceptionsCorrectly" Category="Microsoft.Usage" CheckId="CA2208" Status="Excluded" Created="2010-06-16 16:11:42Z">
                 <Issue Name="IncorrectParameterName">
                  <Item>'RayCastedTerrainTile.HeightExaggeration.set(float)'</Item>
                  <Item>HeightExaggeration</Item>
@@ -2939,7 +2890,7 @@
             <Accessors>
              <Accessor Name="#set_HeightExaggeration(System.Single)">
               <Messages>
-               <Message TypeName="InstantiateArgumentExceptionsCorrectly" Category="Microsoft.Usage" CheckId="CA2208" Created="2010-06-16 16:11:42Z">
+               <Message TypeName="InstantiateArgumentExceptionsCorrectly" Category="Microsoft.Usage" CheckId="CA2208" Status="Excluded" Created="2010-06-16 16:11:42Z">
                 <Issue Name="IncorrectParameterName">
                  <Item>'TriangleMeshTerrainTile.HeightExaggeration.set(float)'</Item>
                  <Item>HeightExaggeration</Item>
@@ -2959,7 +2910,7 @@
             <Accessors>
              <Accessor Name="#set_HeightExaggeration(System.Single)">
               <Messages>
-               <Message TypeName="InstantiateArgumentExceptionsCorrectly" Category="Microsoft.Usage" CheckId="CA2208" Created="2010-06-16 16:11:42Z">
+               <Message TypeName="InstantiateArgumentExceptionsCorrectly" Category="Microsoft.Usage" CheckId="CA2208" Status="Excluded" Created="2010-06-16 16:11:42Z">
                 <Issue Name="IncorrectParameterName">
                  <Item>'VertexDisplacementMapTerrainTile.HeightExaggeration.set(float)'</Item>
                  <Item>HeightExaggeration</Item>
@@ -5539,7 +5490,7 @@
            </Member>
            <Member Name="#ValidateStencil(OpenGlobe.Renderer.Texture2D,System.Int32)">
             <Messages>
-             <Message Id="depthStencilTexture" TypeName="ReviewUnusedParameters" Category="Microsoft.Usage" CheckId="CA1801" Created="2010-06-16 16:11:42Z" FixCategory="NonBreaking">
+             <Message Id="depthStencilTexture" TypeName="ReviewUnusedParameters" Category="Microsoft.Usage" CheckId="CA1801" Status="Excluded" Created="2010-06-16 16:11:42Z" FixCategory="NonBreaking">
               <Issue>
                <Item>'depthStencilTexture'</Item>
                <Item>'SystemTests.ValidateStencil(Texture2D, int)'</Item>
@@ -5649,140 +5600,95 @@
          </Type>
         </Types>
        </Namespace>
-       <Namespace Name="OpenGlobe.Renderer.MultiThreading">
+       <Namespace Name="OpenGlobe.Renderer.Multithreading">
         <Types>
-         <Type Name="ShaderProgramMultiThreadingTests">
-          <Messages>
-           <Message Id="MultiThreading" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Created="2010-06-16 16:11:42Z">
-            <Issue Name="TypeShouldBeDiscreteTerm">
-             <Item>MultiThreading</Item>
-             <Item>'ShaderProgramMultiThreadingTests'</Item>
-             <Item>Multithreading</Item>
-            </Issue>
-           </Message>
-           <Message Id="Multi" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-06-16 16:11:42Z">
-            <Issue Name="Type">
-             <Item>Multi</Item>
-             <Item>'ShaderProgramMultiThreadingTests'</Item>
-            </Issue>
-           </Message>
-          </Messages>
+         <Type Name="ShaderProgramMultithreadingTests">
           <Members>
            <Member Name="#CreateShaderProgram()">
             <Messages>
-             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-06-16 16:11:42Z" FixCategory="DependsOnFix">
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-06-16 16:39:59Z" FixCategory="DependsOnFix">
               <Issue>
-               <Item>'ShaderProgramMultiThreadingTests.CreateShaderProgram()'</Item>
+               <Item>'ShaderProgramMultithreadingTests.CreateShaderProgram()'</Item>
               </Issue>
              </Message>
             </Messages>
            </Member>
            <Member Name="#CreateShaderProgramParallel()">
             <Messages>
-             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-06-16 16:11:42Z" FixCategory="DependsOnFix">
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-06-16 16:39:59Z" FixCategory="DependsOnFix">
               <Issue>
-               <Item>'ShaderProgramMultiThreadingTests.CreateShaderProgramParallel()'</Item>
+               <Item>'ShaderProgramMultithreadingTests.CreateShaderProgramParallel()'</Item>
               </Issue>
              </Message>
             </Messages>
            </Member>
            <Member Name="#CreateShaderProgramSequential()">
             <Messages>
-             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-06-16 16:11:42Z" FixCategory="DependsOnFix">
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-06-16 16:39:59Z" FixCategory="DependsOnFix">
               <Issue>
-               <Item>'ShaderProgramMultiThreadingTests.CreateShaderProgramSequential()'</Item>
+               <Item>'ShaderProgramMultithreadingTests.CreateShaderProgramSequential()'</Item>
               </Issue>
              </Message>
             </Messages>
            </Member>
           </Members>
          </Type>
-         <Type Name="TextureMultiThreadingTests">
-          <Messages>
-           <Message Id="MultiThreading" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Created="2010-06-16 16:11:42Z">
-            <Issue Name="TypeShouldBeDiscreteTerm">
-             <Item>MultiThreading</Item>
-             <Item>'TextureMultiThreadingTests'</Item>
-             <Item>Multithreading</Item>
-            </Issue>
-           </Message>
-           <Message Id="Multi" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-06-16 16:11:42Z">
-            <Issue Name="Type">
-             <Item>Multi</Item>
-             <Item>'TextureMultiThreadingTests'</Item>
-            </Issue>
-           </Message>
-          </Messages>
+         <Type Name="TextureMultithreadingTests">
           <Members>
            <Member Name="#CreateTexture()">
             <Messages>
-             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-06-16 16:11:42Z" FixCategory="DependsOnFix">
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-06-16 16:39:59Z" FixCategory="DependsOnFix">
               <Issue>
-               <Item>'TextureMultiThreadingTests.CreateTexture()'</Item>
+               <Item>'TextureMultithreadingTests.CreateTexture()'</Item>
               </Issue>
              </Message>
             </Messages>
            </Member>
            <Member Name="#CreateTexturesParallel()">
             <Messages>
-             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-06-16 16:11:42Z" FixCategory="DependsOnFix">
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-06-16 16:39:59Z" FixCategory="DependsOnFix">
               <Issue>
-               <Item>'TextureMultiThreadingTests.CreateTexturesParallel()'</Item>
+               <Item>'TextureMultithreadingTests.CreateTexturesParallel()'</Item>
               </Issue>
              </Message>
             </Messages>
            </Member>
            <Member Name="#CreateTexturesSequential()">
             <Messages>
-             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-06-16 16:11:42Z" FixCategory="DependsOnFix">
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-06-16 16:39:59Z" FixCategory="DependsOnFix">
               <Issue>
-               <Item>'TextureMultiThreadingTests.CreateTexturesSequential()'</Item>
+               <Item>'TextureMultithreadingTests.CreateTexturesSequential()'</Item>
               </Issue>
              </Message>
             </Messages>
            </Member>
           </Members>
          </Type>
-         <Type Name="VertexBufferMultiThreadingTests">
-          <Messages>
-           <Message Id="MultiThreading" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Created="2010-06-16 16:11:42Z">
-            <Issue Name="TypeShouldBeDiscreteTerm">
-             <Item>MultiThreading</Item>
-             <Item>'VertexBufferMultiThreadingTests'</Item>
-             <Item>Multithreading</Item>
-            </Issue>
-           </Message>
-           <Message Id="Multi" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-06-16 16:11:42Z">
-            <Issue Name="Type">
-             <Item>Multi</Item>
-             <Item>'VertexBufferMultiThreadingTests'</Item>
-            </Issue>
-           </Message>
-          </Messages>
+         <Type Name="VertexBufferMultithreadingTests">
           <Members>
            <Member Name="#CreateVertexBuffer()">
             <Messages>
-             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-06-16 16:11:42Z" FixCategory="DependsOnFix">
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-06-16 16:39:59Z" FixCategory="DependsOnFix">
               <Issue>
-               <Item>'VertexBufferMultiThreadingTests.CreateVertexBuffer()'</Item>
+               <Item>'VertexBufferMultithreadingTests.CreateVertexBuffer()'</Item>
               </Issue>
              </Message>
             </Messages>
            </Member>
            <Member Name="#CreateVertexBuffersParallel()">
             <Messages>
-             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-06-16 16:11:42Z" FixCategory="DependsOnFix">
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-06-16 16:39:59Z" FixCategory="DependsOnFix">
               <Issue>
-               <Item>'VertexBufferMultiThreadingTests.CreateVertexBuffersParallel()'</Item>
+               <Item>'VertexBufferMultithreadingTests.CreateVertexBuffersParallel()'</Item>
               </Issue>
              </Message>
             </Messages>
            </Member>
            <Member Name="#CreateVertexBuffersSequential()">
             <Messages>
-             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-06-16 16:11:42Z" FixCategory="DependsOnFix">
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Excluded" Created="2010-06-16 16:39:59Z" FixCategory="DependsOnFix">
               <Issue>
-               <Item>'VertexBufferMultiThreadingTests.CreateVertexBuffersSequential()'</Item>
+               <Item>'VertexBufferMultithreadingTests.CreateVertexBuffersSequential()'</Item>
               </Issue>
              </Message>
             </Messages>
@@ -5839,23 +5745,6 @@
               </Issue>
              </Message>
             </Messages>
-           </Member>
-          </Members>
-         </Type>
-         <Type Name="BillboardCollectionTests+BillboardCollectionTest">
-          <Members>
-           <Member Name="#Context">
-            <Accessors>
-             <Accessor Name="#get_Context()">
-              <Messages>
-               <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Created="2010-06-16 16:11:42Z">
-                <Issue>
-                 <Item>'BillboardCollectionTests.BillboardCollectionTest.Context.get()'</Item>
-                </Issue>
-               </Message>
-              </Messages>
-             </Accessor>
-            </Accessors>
            </Member>
           </Members>
          </Type>
@@ -5959,8 +5848,6 @@
     <Resolution Name="MemberParameterShouldBeCompoundWord">In member {0}, the discrete term '{1}' in parameter name {2} should be expressed as a compound word, '{3}'.</Resolution>
     <Resolution Name="MemberShouldBeCompoundWord">The discrete term '{0}' in member name {1} should be expressed as a compound word, '{2}'.</Resolution>
     <Resolution Name="MemberShouldBeDiscreteTerm">The compound word '{0}' in member name {1} exists as a discrete term. If your usage is intended to be single word, case it as '{2}' or strip the first token entirely if it represents any sort of Hungarian notation.</Resolution>
-    <Resolution Name="NamespaceShouldBeDiscreteTerm">The compound word '{0}' in namespace name '{1}' exists as a discrete term. If your usage is intended to be single word, case it as '{2}'.</Resolution>
-    <Resolution Name="TypeShouldBeDiscreteTerm">The compound word '{0}' in type name {1} exists as a discrete term. If your usage is intended to be single word, case it as '{2}'.</Resolution>
    </Rule>
    <Rule TypeName="DeclareEventHandlersCorrectly" Category="Microsoft.Design" CheckId="CA1009">
     <Resolution Name="First">Declare the first parameter of {0} as an object named 'sender'.</Resolution>
@@ -6002,7 +5889,6 @@
     <Resolution Name="MemberMoreMeaningfulName">Consider providing a more meaningful name than member name {0}.</Resolution>
     <Resolution Name="MemberParameter">In method {0}, correct the spelling of '{1}' in parameter name {2} or remove it entirely if it represents any sort of Hungarian notation.</Resolution>
     <Resolution Name="MemberParameterMoreMeaningfulName">In method {0}, consider providing a more meaningful name than parameter name {1}.</Resolution>
-    <Resolution Name="Namespace">Correct the spelling of '{0}' in namespace name '{1}'.</Resolution>
     <Resolution Name="Type">Correct the spelling of '{0}' in type name {1}.</Resolution>
    </Rule>
    <Rule TypeName="IdentifiersShouldHaveCorrectSuffix" Category="Microsoft.Naming" CheckId="CA1710">

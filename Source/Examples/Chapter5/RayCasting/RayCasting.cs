@@ -33,7 +33,7 @@ namespace OpenGlobe.Examples.Chapter5
             ///////////////////////////////////////////////////////////////////
 
             TerrainTile terrainTile = TerrainTile.FromBitmap(new Bitmap(@"ps-e.lg.jpg"));
-            _tile = new RayCastedTerrainTile(_window.Context, terrainTile);
+            _tile = new RayCastedTerrainTile(terrainTile);
             _tile.HeightExaggeration = 30;
 
             ///////////////////////////////////////////////////////////////////

@@ -469,7 +469,7 @@ namespace OpenGlobe.Renderer.GL3x
             }
         }
 
-        private void VerifyDraw(DrawState drawState, SceneState sceneState)
+        private static void VerifyDraw(DrawState drawState, SceneState sceneState)
         {
             if (drawState == null)
             {

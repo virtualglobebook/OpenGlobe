@@ -13,10 +13,10 @@ using NUnit.Framework;
 using OpenGlobe.Core.Geometry;
 using OpenGlobe.Core;
 
-namespace OpenGlobe.Renderer.MultiThreading
+namespace OpenGlobe.Renderer.Multithreading
 {
     [TestFixture]
-    public class VertexBufferMultiThreadingTests
+    public class VertexBufferMultithreadingTests
     {
         /// <summary>
         /// Creates the rendering context, then creates a vertex buffer on a

@@ -26,7 +26,7 @@ namespace OpenGlobe.Terrain
 
     public sealed class RayCastedTerrainTile : IDisposable
     {
-        public RayCastedTerrainTile(Context context, TerrainTile tile)
+        public RayCastedTerrainTile(TerrainTile tile)
         {
             ShaderProgram sp = Device.CreateShaderProgram(
                 EmbeddedResources.GetText("OpenGlobe.Scene.Terrain.RayCastedTerrainTile.TerrainVS.glsl"),

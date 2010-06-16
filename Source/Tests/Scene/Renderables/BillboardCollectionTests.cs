@@ -113,11 +113,6 @@ namespace OpenGlobe.Scene
                 _group = new BillboardCollection(_window.Context);
             }
 
-            public Context Context
-            {
-                get { return _window.Context; }
-            }
-
             public BillboardCollection Group
             {
                 get { return _group; }

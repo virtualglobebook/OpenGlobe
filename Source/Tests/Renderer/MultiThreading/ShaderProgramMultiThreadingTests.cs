@@ -12,10 +12,10 @@ using System.Drawing;
 using NUnit.Framework;
 using OpenGlobe.Core.Geometry;
 
-namespace OpenGlobe.Renderer.MultiThreading
+namespace OpenGlobe.Renderer.Multithreading
 {
     [TestFixture]
-    public class ShaderProgramMultiThreadingTests
+    public class ShaderProgramMultithreadingTests
     {
         /// <summary>
         /// Creates the rendering context, then creates a shader program on a

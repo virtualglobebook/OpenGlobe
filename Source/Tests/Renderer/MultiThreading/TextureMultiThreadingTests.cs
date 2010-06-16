@@ -12,10 +12,10 @@ using System.Drawing;
 using NUnit.Framework;
 using OpenGlobe.Core.Geometry;
 
-namespace OpenGlobe.Renderer.MultiThreading
+namespace OpenGlobe.Renderer.Multithreading
 {
     [TestFixture]
-    public class TextureMultiThreadingTests
+    public class TextureMultithreadingTests
     {
         /// <summary>
         /// Creates the rendering context, then creates a texture on a
