@@ -13,18 +13,18 @@ namespace OpenGlobe.Renderer
 {
     public abstract class GraphicsWindow : Disposable
     {
-        public delegate void MiniGlobeHandler();
+        public delegate void GraphicsHandler();
 
-        public event MiniGlobeHandler Resize;
-        public event MiniGlobeHandler UpdateFrame;
+        public event GraphicsHandler Resize;
+        public event GraphicsHandler UpdateFrame;
 
-        public event MiniGlobeHandler PreRenderFrame;
-        public event MiniGlobeHandler RenderFrame;
-        public event MiniGlobeHandler PostRenderFrame;
+        public event GraphicsHandler PreRenderFrame;
+        public event GraphicsHandler RenderFrame;
+        public event GraphicsHandler PostRenderFrame;
 
         protected virtual void OnResize()
         {
-            MiniGlobeHandler handler = Resize;
+            GraphicsHandler handler = Resize;
             if (handler != null)
             {
                 handler();
@@ -33,7 +33,7 @@ namespace OpenGlobe.Renderer
 
         protected virtual void OnUpdateFrame()
         {
-            MiniGlobeHandler handler = UpdateFrame;
+            GraphicsHandler handler = UpdateFrame;
             if (handler != null)
             {
                 handler();
@@ -42,7 +42,7 @@ namespace OpenGlobe.Renderer
 
         protected virtual void OnPreRenderFrame()
         {
-            MiniGlobeHandler handler = PreRenderFrame;
+            GraphicsHandler handler = PreRenderFrame;
             if (handler != null)
             {
                 handler();
@@ -51,7 +51,7 @@ namespace OpenGlobe.Renderer
 
         protected virtual void OnRenderFrame()
         {
-            MiniGlobeHandler handler = RenderFrame;
+            GraphicsHandler handler = RenderFrame;
             if (handler != null)
             {
                 handler();
@@ -60,7 +60,7 @@ namespace OpenGlobe.Renderer
 
         protected virtual void OnPostRenderFrame()
         {
-            MiniGlobeHandler handler = PostRenderFrame;
+            GraphicsHandler handler = PostRenderFrame;
             if (handler != null)
             {
                 handler();
