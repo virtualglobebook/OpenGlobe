@@ -1,8 +1,11 @@
 <Dictionary>
     <Words>
         <Recognized>
+          <Word>A</Word>
+          <Word>B</Word>
           <Word>Casted</Word>
           <Word>Detic</Word>
+          <Word>G</Word>
           <Word>Minification</Word>
           <Word>Mipmap</Word>
           <Word>Mipmaps</Word>
@@ -12,6 +15,7 @@
           <Word>Polyline</Word>
           <Word>Rasterization</Word>
           <Word>Renderable</Word>
+          <Word>R</Word>
           <Word>rgba</Word>
           <Word>Renderer</Word>
           <Word>Shader</Word>
@@ -19,6 +23,11 @@
           <Word>Specular</Word>
           <Word>Tessellator</Word>
           <Word>Wgs</Word>
+          <Word>W</Word>
+          <Word>X</Word>
+          <Word>XYZ</Word>
+          <Word>Y</Word>
+          <Word>Z</Word>
         </Recognized>
     </Words>
 </Dictionary>
