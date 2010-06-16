@@ -22,26 +22,26 @@
  </ProjectOptions>
  <Targets>
   <AssemblyReferenceDirectories>
-   <Directory>$(ProjectDir)/../../Source/Examples/Chapter3/SubdivisionEllipsoid/bin/Release/</Directory>
-   <Directory>$(ProjectDir)/../../Source/Examples/Research/RayCasting/bin/Release/</Directory>
+   <Directory>$(ProjectDir)/../../Source/Examples/Chapter3/SubdivisionEllipsoid/bin/Debug/</Directory>
+   <Directory>$(ProjectDir)/../../Source/Examples/Research/RayCasting/bin/Debug/</Directory>
   </AssemblyReferenceDirectories>
-  <Target Name="$(ProjectDir)/../../Source/Examples/Chapter2/EllipsoidSurfaceNormals/bin/Release/Chapter2EllipsoidSurfaceNormals.exe" Analyze="True" AnalyzeAllChildren="True" />
-  <Target Name="$(ProjectDir)/../../Source/Examples/Chapter3/LatitudeLongitudeGrid/bin/Release/Chapter3LatitudeLongitudeGrid.exe" Analyze="True" AnalyzeAllChildren="True" />
-  <Target Name="$(ProjectDir)/../../Source/Examples/Chapter3/NightLights/bin/Release/Chapter3NightLights.exe" Analyze="True" AnalyzeAllChildren="True" />
-  <Target Name="$(ProjectDir)/../../Source/Examples/Chapter3/RayCasting/bin/Release/Chapter3RayCasting.exe" Analyze="True" AnalyzeAllChildren="True" />
-  <Target Name="$(ProjectDir)/../../Source/Examples/Chapter3/SubdivisionSphere1/bin/Release/Chapter3SubdivisionSphere1.exe" Analyze="True" AnalyzeAllChildren="True" />
-  <Target Name="$(ProjectDir)/../../Source/Examples/Chapter3/SubdivisionSphere2/bin/Release/Chapter3SubdivisionSphere2.exe" Analyze="True" AnalyzeAllChildren="True" />
-  <Target Name="$(ProjectDir)/../../Source/Examples/Chapter4/DepthBufferPrecision/bin/Release/Chapter4DepthBufferPrecision.exe" Analyze="True" AnalyzeAllChildren="True" />
-  <Target Name="$(ProjectDir)/../../Source/Examples/Chapter4/NumberPrecision/bin/Release/Chapter4NumberPrecision.exe" Analyze="True" AnalyzeAllChildren="True" />
-  <Target Name="$(ProjectDir)/../../Source/Examples/Chapter5/RayCasting/bin/Release/Chapter5RayCasting.exe" Analyze="True" AnalyzeAllChildren="True" />
-  <Target Name="$(ProjectDir)/../../Source/Examples/Chapter5/TriangleMesh/bin/Release/Chapter5TriangleMesh.exe" Analyze="True" AnalyzeAllChildren="True" />
-  <Target Name="$(ProjectDir)/../../Source/Examples/Chapter5/VertexDisplacementMap/bin/Release/Chapter5VertexDisplacementMap.exe" Analyze="True" AnalyzeAllChildren="True" />
-  <Target Name="$(ProjectDir)/../../Source/Examples/Chapter7/Billboards/bin/Release/Chapter7Billboards.exe" Analyze="True" AnalyzeAllChildren="True" />
-  <Target Name="$(ProjectDir)/../../Source/Examples/Chapter8/LinesOnTerrain/bin/Release/Chapter8LinesOnTerrain.exe" Analyze="True" AnalyzeAllChildren="True" />
-  <Target Name="$(ProjectDir)/../../Source/Tests/bin/Release/OpenGlobe.Core.dll" Analyze="True" AnalyzeAllChildren="True" />
-  <Target Name="$(ProjectDir)/../../Source/Tests/bin/Release/OpenGlobe.Renderer.dll" Analyze="True" AnalyzeAllChildren="True" />
-  <Target Name="$(ProjectDir)/../../Source/Tests/bin/Release/OpenGlobe.Scene.dll" Analyze="True" AnalyzeAllChildren="True" />
-  <Target Name="$(ProjectDir)/../../Source/Tests/bin/Release/OpenGlobe.Tests.dll" Analyze="True" AnalyzeAllChildren="True" />
+  <Target Name="$(ProjectDir)/../../Source/Examples/Chapter2/EllipsoidSurfaceNormals/bin/Debug/Chapter2EllipsoidSurfaceNormals.exe" Analyze="True" AnalyzeAllChildren="True" />
+  <Target Name="$(ProjectDir)/../../Source/Examples/Chapter3/LatitudeLongitudeGrid/bin/Debug/Chapter3LatitudeLongitudeGrid.exe" Analyze="True" AnalyzeAllChildren="True" />
+  <Target Name="$(ProjectDir)/../../Source/Examples/Chapter3/NightLights/bin/Debug/Chapter3NightLights.exe" Analyze="True" AnalyzeAllChildren="True" />
+  <Target Name="$(ProjectDir)/../../Source/Examples/Chapter3/RayCasting/bin/Debug/Chapter3RayCasting.exe" Analyze="True" AnalyzeAllChildren="True" />
+  <Target Name="$(ProjectDir)/../../Source/Examples/Chapter3/SubdivisionSphere1/bin/Debug/Chapter3SubdivisionSphere1.exe" Analyze="True" AnalyzeAllChildren="True" />
+  <Target Name="$(ProjectDir)/../../Source/Examples/Chapter3/SubdivisionSphere2/bin/Debug/Chapter3SubdivisionSphere2.exe" Analyze="True" AnalyzeAllChildren="True" />
+  <Target Name="$(ProjectDir)/../../Source/Examples/Chapter4/DepthBufferPrecision/bin/Debug/Chapter4DepthBufferPrecision.exe" Analyze="True" AnalyzeAllChildren="True" />
+  <Target Name="$(ProjectDir)/../../Source/Examples/Chapter4/NumberPrecision/bin/Debug/Chapter4NumberPrecision.exe" Analyze="True" AnalyzeAllChildren="True" />
+  <Target Name="$(ProjectDir)/../../Source/Examples/Chapter5/RayCasting/bin/Debug/Chapter5RayCasting.exe" Analyze="True" AnalyzeAllChildren="True" />
+  <Target Name="$(ProjectDir)/../../Source/Examples/Chapter5/TriangleMesh/bin/Debug/Chapter5TriangleMesh.exe" Analyze="True" AnalyzeAllChildren="True" />
+  <Target Name="$(ProjectDir)/../../Source/Examples/Chapter5/VertexDisplacementMap/bin/Debug/Chapter5VertexDisplacementMap.exe" Analyze="True" AnalyzeAllChildren="True" />
+  <Target Name="$(ProjectDir)/../../Source/Examples/Chapter7/Billboards/bin/Debug/Chapter7Billboards.exe" Analyze="True" AnalyzeAllChildren="True" />
+  <Target Name="$(ProjectDir)/../../Source/Examples/Chapter8/LinesOnTerrain/bin/Debug/Chapter8LinesOnTerrain.exe" Analyze="True" AnalyzeAllChildren="True" />
+  <Target Name="$(ProjectDir)/../../Source/Tests/bin/Debug/OpenGlobe.Core.dll" Analyze="True" AnalyzeAllChildren="True" />
+  <Target Name="$(ProjectDir)/../../Source/Tests/bin/Debug/OpenGlobe.Renderer.dll" Analyze="True" AnalyzeAllChildren="True" />
+  <Target Name="$(ProjectDir)/../../Source/Tests/bin/Debug/OpenGlobe.Scene.dll" Analyze="True" AnalyzeAllChildren="True" />
+  <Target Name="$(ProjectDir)/../../Source/Tests/bin/Debug/OpenGlobe.Tests.dll" Analyze="True" AnalyzeAllChildren="True" />
  </Targets>
  <Rules>
   <RuleFiles>
@@ -132,7 +132,7 @@
    </Namespace>
   </Namespaces>
   <Targets>
-   <Target Name="$(ProjectDir)/../../Source/Examples/Chapter2/EllipsoidSurfaceNormals/bin/Release/Chapter2EllipsoidSurfaceNormals.exe">
+   <Target Name="$(ProjectDir)/../../Source/Examples/Chapter2/EllipsoidSurfaceNormals/bin/Debug/Chapter2EllipsoidSurfaceNormals.exe">
     <Modules>
      <Module Name="chapter2ellipsoidsurfacenormals.exe">
       <Messages>
@@ -145,7 +145,7 @@
      </Module>
     </Modules>
    </Target>
-   <Target Name="$(ProjectDir)/../../Source/Examples/Chapter3/LatitudeLongitudeGrid/bin/Release/Chapter3LatitudeLongitudeGrid.exe">
+   <Target Name="$(ProjectDir)/../../Source/Examples/Chapter3/LatitudeLongitudeGrid/bin/Debug/Chapter3LatitudeLongitudeGrid.exe">
     <Modules>
      <Module Name="chapter3latitudelongitudegrid.exe">
       <Messages>
@@ -158,7 +158,7 @@
      </Module>
     </Modules>
    </Target>
-   <Target Name="$(ProjectDir)/../../Source/Examples/Chapter3/NightLights/bin/Release/Chapter3NightLights.exe">
+   <Target Name="$(ProjectDir)/../../Source/Examples/Chapter3/NightLights/bin/Debug/Chapter3NightLights.exe">
     <Modules>
      <Module Name="chapter3nightlights.exe">
       <Messages>
@@ -171,7 +171,7 @@
      </Module>
     </Modules>
    </Target>
-   <Target Name="$(ProjectDir)/../../Source/Examples/Chapter3/RayCasting/bin/Release/Chapter3RayCasting.exe">
+   <Target Name="$(ProjectDir)/../../Source/Examples/Chapter3/RayCasting/bin/Debug/Chapter3RayCasting.exe">
     <Modules>
      <Module Name="chapter3raycasting.exe">
       <Messages>
@@ -184,7 +184,7 @@
      </Module>
     </Modules>
    </Target>
-   <Target Name="$(ProjectDir)/../../Source/Examples/Chapter3/SubdivisionSphere1/bin/Release/Chapter3SubdivisionSphere1.exe">
+   <Target Name="$(ProjectDir)/../../Source/Examples/Chapter3/SubdivisionSphere1/bin/Debug/Chapter3SubdivisionSphere1.exe">
     <Modules>
      <Module Name="chapter3subdivisionsphere1.exe">
       <Messages>
@@ -197,7 +197,7 @@
      </Module>
     </Modules>
    </Target>
-   <Target Name="$(ProjectDir)/../../Source/Examples/Chapter3/SubdivisionSphere2/bin/Release/Chapter3SubdivisionSphere2.exe">
+   <Target Name="$(ProjectDir)/../../Source/Examples/Chapter3/SubdivisionSphere2/bin/Debug/Chapter3SubdivisionSphere2.exe">
     <Modules>
      <Module Name="chapter3subdivisionsphere2.exe">
       <Messages>
@@ -210,7 +210,7 @@
      </Module>
     </Modules>
    </Target>
-   <Target Name="$(ProjectDir)/../../Source/Examples/Chapter4/DepthBufferPrecision/bin/Release/Chapter4DepthBufferPrecision.exe">
+   <Target Name="$(ProjectDir)/../../Source/Examples/Chapter4/DepthBufferPrecision/bin/Debug/Chapter4DepthBufferPrecision.exe">
     <Modules>
      <Module Name="chapter4depthbufferprecision.exe">
       <Messages>
@@ -223,7 +223,7 @@
      </Module>
     </Modules>
    </Target>
-   <Target Name="$(ProjectDir)/../../Source/Examples/Chapter4/NumberPrecision/bin/Release/Chapter4NumberPrecision.exe">
+   <Target Name="$(ProjectDir)/../../Source/Examples/Chapter4/NumberPrecision/bin/Debug/Chapter4NumberPrecision.exe">
     <Modules>
      <Module Name="chapter4numberprecision.exe">
       <Messages>
@@ -236,7 +236,7 @@
      </Module>
     </Modules>
    </Target>
-   <Target Name="$(ProjectDir)/../../Source/Examples/Chapter5/RayCasting/bin/Release/Chapter5RayCasting.exe">
+   <Target Name="$(ProjectDir)/../../Source/Examples/Chapter5/RayCasting/bin/Debug/Chapter5RayCasting.exe">
     <Modules>
      <Module Name="chapter5raycasting.exe">
       <Messages>
@@ -249,7 +249,7 @@
      </Module>
     </Modules>
    </Target>
-   <Target Name="$(ProjectDir)/../../Source/Examples/Chapter5/TriangleMesh/bin/Release/Chapter5TriangleMesh.exe">
+   <Target Name="$(ProjectDir)/../../Source/Examples/Chapter5/TriangleMesh/bin/Debug/Chapter5TriangleMesh.exe">
     <Modules>
      <Module Name="chapter5trianglemesh.exe">
       <Messages>
@@ -262,7 +262,7 @@
      </Module>
     </Modules>
    </Target>
-   <Target Name="$(ProjectDir)/../../Source/Examples/Chapter5/VertexDisplacementMap/bin/Release/Chapter5VertexDisplacementMap.exe">
+   <Target Name="$(ProjectDir)/../../Source/Examples/Chapter5/VertexDisplacementMap/bin/Debug/Chapter5VertexDisplacementMap.exe">
     <Modules>
      <Module Name="chapter5vertexdisplacementmap.exe">
       <Messages>
@@ -275,7 +275,7 @@
      </Module>
     </Modules>
    </Target>
-   <Target Name="$(ProjectDir)/../../Source/Examples/Chapter7/Billboards/bin/Release/Chapter7Billboards.exe">
+   <Target Name="$(ProjectDir)/../../Source/Examples/Chapter7/Billboards/bin/Debug/Chapter7Billboards.exe">
     <Modules>
      <Module Name="chapter7billboards.exe">
       <Messages>
@@ -288,7 +288,7 @@
      </Module>
     </Modules>
    </Target>
-   <Target Name="$(ProjectDir)/../../Source/Examples/Chapter8/LinesOnTerrain/bin/Release/Chapter8LinesOnTerrain.exe">
+   <Target Name="$(ProjectDir)/../../Source/Examples/Chapter8/LinesOnTerrain/bin/Debug/Chapter8LinesOnTerrain.exe">
     <Modules>
      <Module Name="chapter8linesonterrain.exe">
       <Messages>
@@ -301,7 +301,7 @@
      </Module>
     </Modules>
    </Target>
-   <Target Name="$(ProjectDir)/../../Source/Tests/bin/Release/OpenGlobe.Core.dll">
+   <Target Name="$(ProjectDir)/../../Source/Tests/bin/Debug/OpenGlobe.Core.dll">
     <Modules>
      <Module Name="OpenGlobe.core.dll">
       <Messages>
@@ -1937,7 +1937,7 @@
      </Module>
     </Modules>
    </Target>
-   <Target Name="$(ProjectDir)/../../Source/Tests/bin/Release/OpenGlobe.Renderer.dll">
+   <Target Name="$(ProjectDir)/../../Source/Tests/bin/Debug/OpenGlobe.Renderer.dll">
     <Modules>
      <Module Name="OpenGlobe.renderer.dll">
       <Messages>
@@ -4921,7 +4921,7 @@
      </Module>
     </Modules>
    </Target>
-   <Target Name="$(ProjectDir)/../../Source/Tests/bin/Release/OpenGlobe.Scene.dll">
+   <Target Name="$(ProjectDir)/../../Source/Tests/bin/Debug/OpenGlobe.Scene.dll">
     <Modules>
      <Module Name="OpenGlobe.scene.dll">
       <Messages>
@@ -5088,7 +5088,7 @@
      </Module>
     </Modules>
    </Target>
-   <Target Name="$(ProjectDir)/../../Source/Tests/bin/Release/OpenGlobe.Tests.dll">
+   <Target Name="$(ProjectDir)/../../Source/Tests/bin/Debug/OpenGlobe.Tests.dll">
     <Modules>
      <Module Name="OpenGlobe.tests.dll">
       <Messages>
