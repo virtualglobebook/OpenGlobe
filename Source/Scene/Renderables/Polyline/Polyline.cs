@@ -49,9 +49,9 @@ namespace OpenGlobe.Scene
             if (_drawState.ShaderProgram == null)
             {
                 _drawState.ShaderProgram = Device.CreateShaderProgram(
-                    EmbeddedResources.GetText("MiniGlobe.Scene.Renderables.Polyline.Polyline.PolylineVS.glsl"),
-                    EmbeddedResources.GetText("MiniGlobe.Scene.Renderables.Polyline.Polyline.PolylineGS.glsl"),
-                    EmbeddedResources.GetText("MiniGlobe.Scene.Renderables.Polyline.Polyline.PolylineFS.glsl"));
+                    EmbeddedResources.GetText("OpenGlobe.Scene.Renderables.Polyline.Polyline.PolylineVS.glsl"),
+                    EmbeddedResources.GetText("OpenGlobe.Scene.Renderables.Polyline.Polyline.PolylineGS.glsl"),
+                    EmbeddedResources.GetText("OpenGlobe.Scene.Renderables.Polyline.Polyline.PolylineFS.glsl"));
                 _fillDistance = _drawState.ShaderProgram.Uniforms["u_fillDistance"] as Uniform<float>;
             }
             

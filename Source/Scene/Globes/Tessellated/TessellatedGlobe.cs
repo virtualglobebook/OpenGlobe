@@ -21,8 +21,8 @@ namespace OpenGlobe.Scene
             Verify.ThrowIfNull(context);
 
             ShaderProgram sp = Device.CreateShaderProgram(
-                EmbeddedResources.GetText("MiniGlobe.Scene.Globes.Tessellated.Shaders.GlobeVS.glsl"),
-                EmbeddedResources.GetText("MiniGlobe.Scene.Globes.Tessellated.Shaders.GlobeFS.glsl"));
+                EmbeddedResources.GetText("OpenGlobe.Scene.Globes.Tessellated.Shaders.GlobeVS.glsl"),
+                EmbeddedResources.GetText("OpenGlobe.Scene.Globes.Tessellated.Shaders.GlobeFS.glsl"));
             _textured = sp.Uniforms["u_Textured"] as Uniform<bool>;
             _logarithmicDepth = sp.Uniforms["u_logarithmicDepth"] as Uniform<bool>;
             _logarithmicDepthConstant = sp.Uniforms["u_logarithmicDepthConstant"] as Uniform<float>;

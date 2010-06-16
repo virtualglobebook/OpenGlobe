@@ -8,7 +8,7 @@
     <ProjectGuid>{51502B9C-1A97-4F2C-8541-7D9D61ED6C6D}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MiniGlobe.Core</RootNamespace>
+    <RootNamespace>OpenGlobe.Core</RootNamespace>
     <AssemblyName>MiniGlobe.Core</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

@@ -8,7 +8,7 @@
     <ProjectGuid>{C0198B9E-97B8-4075-912E-70D231EE9D8E}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MiniGlobe.Examples.Chapter2</RootNamespace>
+    <RootNamespace>OpenGlobe.Examples.Chapter2</RootNamespace>
     <AssemblyName>Chapter2EllipsoidSurfaceNormals</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

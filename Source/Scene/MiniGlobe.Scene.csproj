@@ -8,7 +8,7 @@
     <ProjectGuid>{71ABD41E-1545-45DF-B016-58E89111A4F3}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MiniGlobe.Scene</RootNamespace>
+    <RootNamespace>OpenGlobe.Scene</RootNamespace>
     <AssemblyName>MiniGlobe.Scene</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

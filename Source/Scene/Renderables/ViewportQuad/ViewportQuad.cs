@@ -26,8 +26,8 @@ namespace OpenGlobe.Scene
             _drawState = new DrawState();
             _drawState.RenderState = renderState;
             _drawState.ShaderProgram = Device.CreateShaderProgram(
-                EmbeddedResources.GetText("MiniGlobe.Scene.Renderables.ViewportQuad.Shaders.ViewportQuadVS.glsl"),
-                EmbeddedResources.GetText("MiniGlobe.Scene.Renderables.ViewportQuad.Shaders.ViewportQuadFS.glsl"));
+                EmbeddedResources.GetText("OpenGlobe.Scene.Renderables.ViewportQuad.Shaders.ViewportQuadVS.glsl"),
+                EmbeddedResources.GetText("OpenGlobe.Scene.Renderables.ViewportQuad.Shaders.ViewportQuadFS.glsl"));
 
             _geometry = new ViewportQuadGeometry();
         }

@@ -22,8 +22,8 @@ namespace OpenGlobe.Scene
             Verify.ThrowIfNull(context);
 
             ShaderProgram sp = Device.CreateShaderProgram(
-                EmbeddedResources.GetText("MiniGlobe.Scene.Globes.DayNight.Shaders.GlobeVS.glsl"),
-                EmbeddedResources.GetText("MiniGlobe.Scene.Globes.DayNight.Shaders.GlobeFS.glsl"));
+                EmbeddedResources.GetText("OpenGlobe.Scene.Globes.DayNight.Shaders.GlobeVS.glsl"),
+                EmbeddedResources.GetText("OpenGlobe.Scene.Globes.DayNight.Shaders.GlobeFS.glsl"));
             _cameraEyeSquaredSP = sp.Uniforms["u_cameraEyeSquared"] as Uniform<Vector3S>;
             _useAverageDepth = sp.Uniforms["u_useAverageDepth"] as Uniform<bool>;
 

@@ -23,8 +23,8 @@ namespace OpenGlobe.Terrain
         public TriangleMeshTerrainTile(Context context, TerrainTile tile)
         {
             ShaderProgram sp = Device.CreateShaderProgram(
-                EmbeddedResources.GetText("MiniGlobe.Scene.Terrain.TriangleMeshTerrainTile.TerrainVS.glsl"),
-                EmbeddedResources.GetText("MiniGlobe.Scene.Terrain.TriangleMeshTerrainTile.TerrainFS.glsl"));
+                EmbeddedResources.GetText("OpenGlobe.Scene.Terrain.TriangleMeshTerrainTile.TerrainVS.glsl"),
+                EmbeddedResources.GetText("OpenGlobe.Scene.Terrain.TriangleMeshTerrainTile.TerrainFS.glsl"));
 
             _tileMinimumHeight = tile.MinimumHeight;
             _tileMaximumHeight = tile.MaximumHeight;

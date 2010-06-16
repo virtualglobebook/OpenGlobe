@@ -29,8 +29,8 @@ namespace OpenGlobe.Terrain
         public RayCastedTerrainTile(Context context, TerrainTile tile)
         {
             ShaderProgram sp = Device.CreateShaderProgram(
-                EmbeddedResources.GetText("MiniGlobe.Scene.Terrain.RayCastedTerrainTile.TerrainVS.glsl"),
-                EmbeddedResources.GetText("MiniGlobe.Scene.Terrain.RayCastedTerrainTile.TerrainFS.glsl"));
+                EmbeddedResources.GetText("OpenGlobe.Scene.Terrain.RayCastedTerrainTile.TerrainVS.glsl"),
+                EmbeddedResources.GetText("OpenGlobe.Scene.Terrain.RayCastedTerrainTile.TerrainFS.glsl"));
 
             _tileSize = tile.Size;
             _tileMinimumHeight = tile.MinimumHeight;

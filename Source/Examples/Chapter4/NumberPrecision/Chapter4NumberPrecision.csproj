@@ -8,7 +8,7 @@
     <ProjectGuid>{F5438C0E-87EB-41C3-8403-220164D58E4A}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MiniGlobe.Examples.Chapter4</RootNamespace>
+    <RootNamespace>OpenGlobe.Examples.Chapter4</RootNamespace>
     <AssemblyName>Chapter4NumberPrecision</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

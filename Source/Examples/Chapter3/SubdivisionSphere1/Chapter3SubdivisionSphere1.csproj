@@ -8,7 +8,7 @@
     <ProjectGuid>{2665F0CA-8D86-4486-916C-2E49799C244B}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MiniGlobe.Examples.Chapter3</RootNamespace>
+    <RootNamespace>OpenGlobe.Examples.Chapter3</RootNamespace>
     <AssemblyName>Chapter3SubdivisionSphere1</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

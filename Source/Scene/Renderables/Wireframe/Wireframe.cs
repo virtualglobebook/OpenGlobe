@@ -45,9 +45,9 @@ namespace OpenGlobe.Scene
             //    http://orbit.dtu.dk/getResource?recordId=219956&objectId=1&versionId=1
             //
             ShaderProgram sp = Device.CreateShaderProgram(
-                EmbeddedResources.GetText("MiniGlobe.Scene.Renderables.Wireframe.Shaders.WireframeVS.glsl"),
-                EmbeddedResources.GetText("MiniGlobe.Scene.Renderables.Wireframe.Shaders.WireframeGS.glsl"),
-                EmbeddedResources.GetText("MiniGlobe.Scene.Renderables.Wireframe.Shaders.WireframeFS.glsl"));
+                EmbeddedResources.GetText("OpenGlobe.Scene.Renderables.Wireframe.Shaders.WireframeVS.glsl"),
+                EmbeddedResources.GetText("OpenGlobe.Scene.Renderables.Wireframe.Shaders.WireframeGS.glsl"),
+                EmbeddedResources.GetText("OpenGlobe.Scene.Renderables.Wireframe.Shaders.WireframeFS.glsl"));
             _lineWidth = sp.Uniforms["u_halfLineWidth"] as Uniform<float>;
             Width = 1;
 

@@ -23,8 +23,8 @@ namespace OpenGlobe.Scene
             Verify.ThrowIfNull(context);
 
             ShaderProgram sp = Device.CreateShaderProgram(
-                EmbeddedResources.GetText("MiniGlobe.Scene.Globes.LatitudeLongitudeGrid.Shaders.GlobeVS.glsl"),
-                EmbeddedResources.GetText("MiniGlobe.Scene.Globes.LatitudeLongitudeGrid.Shaders.GlobeFS.glsl"));
+                EmbeddedResources.GetText("OpenGlobe.Scene.Globes.LatitudeLongitudeGrid.Shaders.GlobeVS.glsl"),
+                EmbeddedResources.GetText("OpenGlobe.Scene.Globes.LatitudeLongitudeGrid.Shaders.GlobeFS.glsl"));
             _gridWidth = sp.Uniforms["u_gridLineWidth"] as Uniform<Vector2S>;
             _gridResolution = sp.Uniforms["u_gridResolution"] as Uniform<Vector2S>;
             _globeOneOverRadiiSquared = sp.Uniforms["u_globeOneOverRadiiSquared"] as Uniform<Vector3S>;

@@ -23,12 +23,12 @@ namespace OpenGlobe.Scene
 
             _renderState = new RenderState();
             _renderState.FacetCulling.Face = CullFace.Front;
-            string vs = EmbeddedResources.GetText("MiniGlobe.Scene.Globes.RayCasted.Shaders.GlobeVS.glsl");
+            string vs = EmbeddedResources.GetText("OpenGlobe.Scene.Globes.RayCasted.Shaders.GlobeVS.glsl");
 
-            ShaderProgram sp = Device.CreateShaderProgram(vs, EmbeddedResources.GetText("MiniGlobe.Scene.Globes.RayCasted.Shaders.GlobeFS.glsl"));
+            ShaderProgram sp = Device.CreateShaderProgram(vs, EmbeddedResources.GetText("OpenGlobe.Scene.Globes.RayCasted.Shaders.GlobeFS.glsl"));
             _cameraEyeSquared = sp.Uniforms["u_cameraEyeSquared"] as Uniform<Vector3S>;
 
-            ShaderProgram solidSP = Device.CreateShaderProgram(vs, EmbeddedResources.GetText("MiniGlobe.Scene.Globes.RayCasted.Shaders.SolidShadedGlobeFS.glsl"));
+            ShaderProgram solidSP = Device.CreateShaderProgram(vs, EmbeddedResources.GetText("OpenGlobe.Scene.Globes.RayCasted.Shaders.SolidShadedGlobeFS.glsl"));
             _cameraEyeSquaredSolid = solidSP.Uniforms["u_cameraEyeSquared"] as Uniform<Vector3S>;
 
             _drawState = new DrawState(_renderState, sp, null);

@@ -31,9 +31,9 @@ namespace OpenGlobe.Scene
             renderState.Blending.DestinationAlphaFactor = DestinationBlendingFactor.OneMinusSourceAlpha;
 
             ShaderProgram sp = Device.CreateShaderProgram(
-                EmbeddedResources.GetText("MiniGlobe.Scene.Renderables.HeadsUpDisplay.Shaders.HeadsUpDisplayVS.glsl"),
-                EmbeddedResources.GetText("MiniGlobe.Scene.Renderables.HeadsUpDisplay.Shaders.HeadsUpDisplayGS.glsl"),
-                EmbeddedResources.GetText("MiniGlobe.Scene.Renderables.HeadsUpDisplay.Shaders.HeadsUpDisplayFS.glsl"));
+                EmbeddedResources.GetText("OpenGlobe.Scene.Renderables.HeadsUpDisplay.Shaders.HeadsUpDisplayVS.glsl"),
+                EmbeddedResources.GetText("OpenGlobe.Scene.Renderables.HeadsUpDisplay.Shaders.HeadsUpDisplayGS.glsl"),
+                EmbeddedResources.GetText("OpenGlobe.Scene.Renderables.HeadsUpDisplay.Shaders.HeadsUpDisplayFS.glsl"));
             _colorUniform = sp.Uniforms["u_color"] as Uniform<Vector3S>;
             _originScaleUniform = sp.Uniforms["u_originScale"] as Uniform<Vector2S>;
 

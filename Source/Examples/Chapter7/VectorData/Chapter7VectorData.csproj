@@ -8,7 +8,7 @@
     <ProjectGuid>{A13EB11D-AA8D-4CB0-9822-56A20A431CE6}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MiniGlobe.Examples.Chapter7</RootNamespace>
+    <RootNamespace>OpenGlobe.Examples.Chapter7</RootNamespace>
     <AssemblyName>Chapter7VectorData</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

@@ -25,9 +25,9 @@ namespace OpenGlobe.Scene
             lineRS.FacetCulling.Enabled = false;
 
             ShaderProgram lineSP = Device.CreateShaderProgram(
-                EmbeddedResources.GetText("MiniGlobe.Scene.Renderables.Plane.Shaders.LineVS.glsl"),
-                EmbeddedResources.GetText("MiniGlobe.Scene.Renderables.Plane.Shaders.LineGS.glsl"),
-                EmbeddedResources.GetText("MiniGlobe.Scene.Renderables.Plane.Shaders.LineFS.glsl"));
+                EmbeddedResources.GetText("OpenGlobe.Scene.Renderables.Plane.Shaders.LineVS.glsl"),
+                EmbeddedResources.GetText("OpenGlobe.Scene.Renderables.Plane.Shaders.LineGS.glsl"),
+                EmbeddedResources.GetText("OpenGlobe.Scene.Renderables.Plane.Shaders.LineFS.glsl"));
             _lineLogarithmicDepth = lineSP.Uniforms["u_logarithmicDepth"] as Uniform<bool>;
             _lineLogarithmicDepthConstant = lineSP.Uniforms["u_logarithmicDepthConstant"] as Uniform<float>;
             _lineFillDistance = lineSP.Uniforms["u_fillDistance"] as Uniform<float>;
@@ -47,8 +47,8 @@ namespace OpenGlobe.Scene
             fillRS.Blending.DestinationAlphaFactor = DestinationBlendingFactor.OneMinusSourceAlpha;
             
             ShaderProgram fillSP = Device.CreateShaderProgram(
-                EmbeddedResources.GetText("MiniGlobe.Scene.Renderables.Plane.Shaders.FillVS.glsl"),
-                EmbeddedResources.GetText("MiniGlobe.Scene.Renderables.Plane.Shaders.FillFS.glsl"));
+                EmbeddedResources.GetText("OpenGlobe.Scene.Renderables.Plane.Shaders.FillVS.glsl"),
+                EmbeddedResources.GetText("OpenGlobe.Scene.Renderables.Plane.Shaders.FillFS.glsl"));
             _fillLogarithmicDepth = fillSP.Uniforms["u_logarithmicDepth"] as Uniform<bool>;
             _fillLogarithmicDepthConstant = fillSP.Uniforms["u_logarithmicDepthConstant"] as Uniform<float>;
             _fillColorUniform = fillSP.Uniforms["u_color"] as Uniform<Vector3S>;

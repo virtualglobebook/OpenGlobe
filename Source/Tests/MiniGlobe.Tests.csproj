@@ -10,7 +10,7 @@
     <ProjectGuid>{2B3E6147-B17C-4C96-B710-5257620CE911}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MiniGlobe.Tests</RootNamespace>
+    <RootNamespace>OpenGlobe.Tests</RootNamespace>
     <AssemblyName>MiniGlobe.Tests</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

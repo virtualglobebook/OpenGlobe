@@ -32,8 +32,8 @@ namespace OpenGlobe.Scene
             renderState.DepthTest.Enabled = false;
 
             ShaderProgram sp = Device.CreateShaderProgram(
-                EmbeddedResources.GetText("MiniGlobe.Scene.Globes.DayNight.Shaders.ViewportQuadVS.glsl"),
-                EmbeddedResources.GetText("MiniGlobe.Scene.Globes.DayNight.Shaders.ViewportQuadFS.glsl"));
+                EmbeddedResources.GetText("OpenGlobe.Scene.Globes.DayNight.Shaders.ViewportQuadVS.glsl"),
+                EmbeddedResources.GetText("OpenGlobe.Scene.Globes.DayNight.Shaders.ViewportQuadFS.glsl"));
             _dayNightOutput = sp.Uniforms["u_DayNightOutput"] as Uniform<int>;
 
             _drawState = new DrawState();

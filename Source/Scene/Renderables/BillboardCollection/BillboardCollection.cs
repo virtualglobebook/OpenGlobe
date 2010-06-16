@@ -49,9 +49,9 @@ namespace OpenGlobe.Scene
             renderState.Blending.DestinationAlphaFactor = DestinationBlendingFactor.OneMinusSourceAlpha;
 
             ShaderProgram sp = Device.CreateShaderProgram(
-                EmbeddedResources.GetText("MiniGlobe.Scene.Renderables.BillboardCollection.Shaders.BillboardsVS.glsl"),
-                EmbeddedResources.GetText("MiniGlobe.Scene.Renderables.BillboardCollection.Shaders.BillboardsGS.glsl"),
-                EmbeddedResources.GetText("MiniGlobe.Scene.Renderables.BillboardCollection.Shaders.BillboardsFS.glsl"));
+                EmbeddedResources.GetText("OpenGlobe.Scene.Renderables.BillboardCollection.Shaders.BillboardsVS.glsl"),
+                EmbeddedResources.GetText("OpenGlobe.Scene.Renderables.BillboardCollection.Shaders.BillboardsGS.glsl"),
+                EmbeddedResources.GetText("OpenGlobe.Scene.Renderables.BillboardCollection.Shaders.BillboardsFS.glsl"));
 
             _drawState = new DrawState(renderState, sp, null);
         }
