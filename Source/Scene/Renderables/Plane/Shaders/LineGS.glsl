@@ -9,11 +9,11 @@
 layout(lines) in;
 layout(triangle_strip, max_vertices = 4) out;
 
-uniform mat4 mg_modelViewPerspectiveProjectionMatrix;
-uniform mat4 mg_viewportTransformationMatrix;
-uniform mat4 mg_viewportOrthographicProjectionMatrix;
-uniform float mg_perspectiveNearPlaneDistance;
-uniform float mg_perspectiveFarPlaneDistance;
+uniform mat4 og_modelViewPerspectiveProjectionMatrix;
+uniform mat4 og_viewportTransformationMatrix;
+uniform mat4 og_viewportOrthographicProjectionMatrix;
+uniform float og_perspectiveNearPlaneDistance;
+uniform float og_perspectiveFarPlaneDistance;
 uniform bool u_logarithmicDepth;
 uniform float u_logarithmicDepthConstant;
 uniform float u_fillDistance;
@@ -86,13 +86,13 @@ void main()
     vec4 clipP0;
     vec4 clipP1;
     ClipLineSegmentToNearPlane(
-    mg_perspectiveNearPlaneDistance, mg_perspectiveFarPlaneDistance,
-    mg_modelViewPerspectiveProjectionMatrix, 
+    og_perspectiveNearPlaneDistance, og_perspectiveFarPlaneDistance,
+    og_modelViewPerspectiveProjectionMatrix, 
     u_logarithmicDepth, u_logarithmicDepthConstant,
     gl_in[0].gl_Position, gl_in[1].gl_Position, clipP0, clipP1);
 
-    vec4 windowP0 = ClipToWindowCoordinates(clipP0, mg_viewportTransformationMatrix);
-    vec4 windowP1 = ClipToWindowCoordinates(clipP1, mg_viewportTransformationMatrix);
+    vec4 windowP0 = ClipToWindowCoordinates(clipP0, og_viewportTransformationMatrix);
+    vec4 windowP1 = ClipToWindowCoordinates(clipP1, og_viewportTransformationMatrix);
 
     vec2 direction = windowP1.xy - windowP0.xy;
     vec2 normal = normalize(vec2(direction.y, -direction.x));
@@ -102,15 +102,15 @@ void main()
     vec4 v2 = vec4(windowP0.xy + (normal * u_fillDistance), windowP0.z, 1.0);
     vec4 v3 = vec4(windowP1.xy + (normal * u_fillDistance), windowP1.z, 1.0);
 
-    gl_Position = mg_viewportOrthographicProjectionMatrix * v0;
+    gl_Position = og_viewportOrthographicProjectionMatrix * v0;
     EmitVertex();
 
-    gl_Position = mg_viewportOrthographicProjectionMatrix * v1;
+    gl_Position = og_viewportOrthographicProjectionMatrix * v1;
     EmitVertex();
 
-    gl_Position = mg_viewportOrthographicProjectionMatrix * v2;
+    gl_Position = og_viewportOrthographicProjectionMatrix * v2;
     EmitVertex();
 
-    gl_Position = mg_viewportOrthographicProjectionMatrix * v3;
+    gl_Position = og_viewportOrthographicProjectionMatrix * v3;
     EmitVertex();
 }

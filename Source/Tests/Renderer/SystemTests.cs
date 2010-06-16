@@ -307,20 +307,20 @@ namespace MiniGlobe.Renderer
                 @"#version 150
 
                   in vec4 position;
-                  uniform mat4 mg_modelViewMatrix;
-                  uniform mat4 mg_perspectiveProjectionMatrix;
-                  uniform mat4 mg_modelViewPerspectiveProjectionMatrix;
+                  uniform mat4 og_modelViewMatrix;
+                  uniform mat4 og_perspectiveProjectionMatrix;
+                  uniform mat4 og_modelViewPerspectiveProjectionMatrix;
 
                   void main()
                   {
                         if (position.x > 0)
                         {
-                            mat4 modelViewProjectionMatrix = mg_perspectiveProjectionMatrix * mg_modelViewMatrix;
+                            mat4 modelViewProjectionMatrix = og_perspectiveProjectionMatrix * og_modelViewMatrix;
                             gl_Position = modelViewProjectionMatrix * position; 
                         }
                         else
                         {
-                            gl_Position = mg_modelViewPerspectiveProjectionMatrix * position; 
+                            gl_Position = og_modelViewPerspectiveProjectionMatrix * position; 
                         }
                   }";
             ShaderProgram sp = Device.CreateShaderProgram(vs, ShaderSources.PassThroughFragmentShader());

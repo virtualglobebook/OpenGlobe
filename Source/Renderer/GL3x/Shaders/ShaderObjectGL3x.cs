@@ -21,18 +21,18 @@ namespace MiniGlobe.Renderer.GL3x
         {
             string builtInConstants =
                 "#version 150                                                   \n" +
-                "const float mg_E =                " + Math.E + "; \n" +
-                "const float mg_pi =               " + Math.PI + "; \n" +
-                "const float mg_oneOverPi =        " + 1.0 / Math.PI + "; \n" +
-                "const float mg_piOverTwo =        " + Math.PI * 0.5 + "; \n" +
-                "const float mg_piOverThree =      " + Math.PI / 3.0 + "; \n" +
-                "const float mg_piOverFour =       " + Math.PI / 4.0 + "; \n" +
-                "const float mg_piOverSix =        " + Math.PI / 6.0 + "; \n" +
-                "const float mg_threePiOver2 =     " + (3.0 * Math.PI) * 0.5 + "; \n" +
-                "const float mg_twoPi =            " + Trig.TwoPI + "; \n" +
-                "const float mg_oneOverTwoPi =     " + 1.0 / Trig.TwoPI + "; \n" +
-                "const float mg_halfPi =           " + Trig.HalfPI + "; \n" +
-                "const float mg_radiansPerDegree = " + Trig.RadiansPerDegree + "; \n";
+                "const float og_E =                " + Math.E + "; \n" +
+                "const float og_pi =               " + Math.PI + "; \n" +
+                "const float og_oneOverPi =        " + 1.0 / Math.PI + "; \n" +
+                "const float og_piOverTwo =        " + Math.PI * 0.5 + "; \n" +
+                "const float og_piOverThree =      " + Math.PI / 3.0 + "; \n" +
+                "const float og_piOverFour =       " + Math.PI / 4.0 + "; \n" +
+                "const float og_piOverSix =        " + Math.PI / 6.0 + "; \n" +
+                "const float og_threePiOver2 =     " + (3.0 * Math.PI) * 0.5 + "; \n" +
+                "const float og_twoPi =            " + Trig.TwoPI + "; \n" +
+                "const float og_oneOverTwoPi =     " + 1.0 / Trig.TwoPI + "; \n" +
+                "const float og_halfPi =           " + Trig.HalfPI + "; \n" +
+                "const float og_radiansPerDegree = " + Trig.RadiansPerDegree + "; \n";
 
             string modifiedSource;
 

@@ -15,7 +15,7 @@ namespace MiniGlobe.Renderer
 
         public override string Name
         {
-            get { return "mg_diffuseSpecularAmbientShininess"; }
+            get { return "og_diffuseSpecularAmbientShininess"; }
         }
 
         public override DrawAutomaticUniform Create(Uniform uniform)

@@ -11,10 +11,10 @@ out vec3 worldPosition;
 out vec3 positionToLight;
 out vec3 positionToEye;
 
-uniform mat4 mg_modelViewPerspectiveProjectionMatrix;
-uniform float mg_perspectiveFarPlaneDistance;
-uniform vec3 mg_cameraEye;
-uniform vec3 mg_cameraLightPosition;
+uniform mat4 og_modelViewPerspectiveProjectionMatrix;
+uniform float og_perspectiveFarPlaneDistance;
+uniform vec3 og_cameraEye;
+uniform vec3 og_cameraLightPosition;
 uniform bool u_logarithmicDepth;
 uniform float u_logarithmicDepthConstant;
 
@@ -38,10 +38,10 @@ vec4 ModelToClipCoordinates(
 
 void main()                     
 {
-    gl_Position = ModelToClipCoordinates(position, mg_modelViewPerspectiveProjectionMatrix,
-        u_logarithmicDepth, u_logarithmicDepthConstant, mg_perspectiveFarPlaneDistance);
+    gl_Position = ModelToClipCoordinates(position, og_modelViewPerspectiveProjectionMatrix,
+        u_logarithmicDepth, u_logarithmicDepthConstant, og_perspectiveFarPlaneDistance);
 
     worldPosition = position.xyz;
-    positionToLight = mg_cameraLightPosition - worldPosition;
-    positionToEye = mg_cameraEye - worldPosition;
+    positionToLight = og_cameraLightPosition - worldPosition;
+    positionToEye = og_cameraEye - worldPosition;
 }

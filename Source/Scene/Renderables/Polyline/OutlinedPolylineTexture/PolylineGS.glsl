@@ -16,10 +16,10 @@ flat out vec4 fsColor;
 flat out vec4 fsOutlineColor;
 out vec2 fsTextureCoordinate;
 
-uniform mat4 mg_modelViewPerspectiveProjectionMatrix;
-uniform mat4 mg_viewportTransformationMatrix;
-uniform mat4 mg_viewportOrthographicProjectionMatrix;
-uniform float mg_perspectiveNearPlaneDistance;
+uniform mat4 og_modelViewPerspectiveProjectionMatrix;
+uniform mat4 og_viewportTransformationMatrix;
+uniform mat4 og_viewportOrthographicProjectionMatrix;
+uniform float og_perspectiveNearPlaneDistance;
 uniform float u_distance;
 
 vec4 ClipToWindowCoordinates(vec4 v, mat4 viewportTransformationMatrix)
@@ -64,12 +64,12 @@ void main()
 {
     vec4 clipP0;
     vec4 clipP1;
-    ClipLineSegmentToNearPlane(mg_perspectiveNearPlaneDistance, 
-    mg_modelViewPerspectiveProjectionMatrix,
+    ClipLineSegmentToNearPlane(og_perspectiveNearPlaneDistance, 
+    og_modelViewPerspectiveProjectionMatrix,
     gl_in[0].gl_Position, gl_in[1].gl_Position, clipP0, clipP1);
 
-    vec4 windowP0 = ClipToWindowCoordinates(clipP0, mg_viewportTransformationMatrix);
-    vec4 windowP1 = ClipToWindowCoordinates(clipP1, mg_viewportTransformationMatrix);
+    vec4 windowP0 = ClipToWindowCoordinates(clipP0, og_viewportTransformationMatrix);
+    vec4 windowP1 = ClipToWindowCoordinates(clipP1, og_viewportTransformationMatrix);
 
     vec2 direction = windowP1.xy - windowP0.xy;
     vec2 normal = normalize(vec2(direction.y, -direction.x));
@@ -79,25 +79,25 @@ void main()
     vec4 v2 = vec4(windowP0.xy + (normal * u_distance), windowP0.z, 1.0);
     vec4 v3 = vec4(windowP1.xy + (normal * u_distance), windowP1.z, 1.0);
 
-    gl_Position = mg_viewportOrthographicProjectionMatrix * v0;
+    gl_Position = og_viewportOrthographicProjectionMatrix * v0;
     fsColor = gsColor[0];
     fsOutlineColor = gsOutlineColor[0];
     fsTextureCoordinate = vec2(0.0, 0.0);
     EmitVertex();
 
-    gl_Position = mg_viewportOrthographicProjectionMatrix * v1;
+    gl_Position = og_viewportOrthographicProjectionMatrix * v1;
     fsColor = gsColor[0];
     fsOutlineColor = gsOutlineColor[0];
     fsTextureCoordinate = vec2(0.0, 1.0);
     EmitVertex();
 
-    gl_Position = mg_viewportOrthographicProjectionMatrix * v2;
+    gl_Position = og_viewportOrthographicProjectionMatrix * v2;
     fsColor = gsColor[0];
     fsOutlineColor = gsOutlineColor[0];
     fsTextureCoordinate = vec2(1.0, 0.0);
     EmitVertex();
 
-    gl_Position = mg_viewportOrthographicProjectionMatrix * v3;
+    gl_Position = og_viewportOrthographicProjectionMatrix * v3;
     fsColor = gsColor[0];
     fsOutlineColor = gsOutlineColor[0];
     fsTextureCoordinate = vec2(1.0, 1.0);

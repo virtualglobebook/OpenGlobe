@@ -39,12 +39,12 @@ namespace MiniGlobe.Examples.Chapter3.NumberPrecision
                  @"#version 150
 
                   in vec4 position;
-                  uniform mat4 mg_modelViewOrthographicProjectionMatrix;
+                  uniform mat4 og_modelViewOrthographicProjectionMatrix;
 
                   void main()                     
                   {
                         gl_PointSize = 4.0;
-                        gl_Position = mg_modelViewOrthographicProjectionMatrix * position;
+                        gl_Position = og_modelViewOrthographicProjectionMatrix * position;
                   }";
             string fs =
                 @"#version 150

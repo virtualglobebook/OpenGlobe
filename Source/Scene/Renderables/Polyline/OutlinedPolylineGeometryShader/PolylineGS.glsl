@@ -14,10 +14,10 @@ in vec4 gsOutlineColor[];
 
 flat out vec4 fsColor;
 
-uniform mat4 mg_modelViewPerspectiveProjectionMatrix;
-uniform mat4 mg_viewportTransformationMatrix;
-uniform mat4 mg_viewportOrthographicProjectionMatrix;
-uniform float mg_perspectiveNearPlaneDistance;
+uniform mat4 og_modelViewPerspectiveProjectionMatrix;
+uniform mat4 og_viewportTransformationMatrix;
+uniform mat4 og_viewportOrthographicProjectionMatrix;
+uniform float og_perspectiveNearPlaneDistance;
 uniform float u_fillDistance;
 uniform float u_outlineDistance;
 
@@ -63,12 +63,12 @@ void main()
 {
     vec4 clipP0;
     vec4 clipP1;
-    ClipLineSegmentToNearPlane(mg_perspectiveNearPlaneDistance, 
-    mg_modelViewPerspectiveProjectionMatrix,
+    ClipLineSegmentToNearPlane(og_perspectiveNearPlaneDistance, 
+    og_modelViewPerspectiveProjectionMatrix,
     gl_in[0].gl_Position, gl_in[1].gl_Position, clipP0, clipP1);
 
-    vec4 windowP0 = ClipToWindowCoordinates(clipP0, mg_viewportTransformationMatrix);
-    vec4 windowP1 = ClipToWindowCoordinates(clipP1, mg_viewportTransformationMatrix);
+    vec4 windowP0 = ClipToWindowCoordinates(clipP0, og_viewportTransformationMatrix);
+    vec4 windowP1 = ClipToWindowCoordinates(clipP1, og_viewportTransformationMatrix);
 
     vec2 direction = windowP1.xy - windowP0.xy;
     vec2 normal = normalize(vec2(direction.y, -direction.x));
@@ -82,35 +82,35 @@ void main()
     vec4 v6 = vec4(windowP0.xy + (normal * u_outlineDistance), windowP0.z, 1.0);
     vec4 v7 = vec4(windowP1.xy + (normal * u_outlineDistance), windowP1.z, 1.0);
 
-    gl_Position = mg_viewportOrthographicProjectionMatrix * v0;
+    gl_Position = og_viewportOrthographicProjectionMatrix * v0;
     fsColor = gsOutlineColor[0];
     EmitVertex();
 
-    gl_Position = mg_viewportOrthographicProjectionMatrix * v1;
+    gl_Position = og_viewportOrthographicProjectionMatrix * v1;
     fsColor = gsOutlineColor[0];
     EmitVertex();
 
-    gl_Position = mg_viewportOrthographicProjectionMatrix * v2;
+    gl_Position = og_viewportOrthographicProjectionMatrix * v2;
     fsColor = gsOutlineColor[0];
     EmitVertex();
 
-    gl_Position = mg_viewportOrthographicProjectionMatrix * v3;
+    gl_Position = og_viewportOrthographicProjectionMatrix * v3;
     fsColor = gsOutlineColor[0];
     EmitVertex();
 
-    gl_Position = mg_viewportOrthographicProjectionMatrix * v4;
+    gl_Position = og_viewportOrthographicProjectionMatrix * v4;
     fsColor = gsColor[0];
     EmitVertex();
 
-    gl_Position = mg_viewportOrthographicProjectionMatrix * v5;
+    gl_Position = og_viewportOrthographicProjectionMatrix * v5;
     fsColor = gsColor[0];
     EmitVertex();
 
-    gl_Position = mg_viewportOrthographicProjectionMatrix * v6;
+    gl_Position = og_viewportOrthographicProjectionMatrix * v6;
     fsColor = gsOutlineColor[0];
     EmitVertex();
 
-    gl_Position = mg_viewportOrthographicProjectionMatrix * v7;
+    gl_Position = og_viewportOrthographicProjectionMatrix * v7;
     fsColor = gsOutlineColor[0];
     EmitVertex();
 }

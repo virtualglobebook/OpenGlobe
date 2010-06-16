@@ -15,7 +15,7 @@ namespace MiniGlobe.Renderer
 
         public override string Name
         {
-            get { return "mg_highResolutionSnapScale"; }
+            get { return "og_highResolutionSnapScale"; }
         }
 
         public override DrawAutomaticUniform Create(Uniform uniform)

@@ -36,17 +36,17 @@ namespace MiniGlobe.Examples.Chapter3
                   out vec3 positionToLight;
                   out vec3 positionToEye;
 
-                  uniform mat4 mg_modelViewPerspectiveProjectionMatrix;
-                  uniform vec3 mg_cameraEye;
-                  uniform vec3 mg_sunPosition;
+                  uniform mat4 og_modelViewPerspectiveProjectionMatrix;
+                  uniform vec3 og_cameraEye;
+                  uniform vec3 og_sunPosition;
 
                   void main()                     
                   {
-                        gl_Position = mg_modelViewPerspectiveProjectionMatrix * position; 
+                        gl_Position = og_modelViewPerspectiveProjectionMatrix * position; 
 
                         worldPosition = position.xyz;
-                        positionToLight = mg_sunPosition - worldPosition;
-                        positionToEye = mg_cameraEye - worldPosition;
+                        positionToLight = og_sunPosition - worldPosition;
+                        positionToEye = og_cameraEye - worldPosition;
                   }";
 
             string fs =
@@ -57,9 +57,9 @@ namespace MiniGlobe.Examples.Chapter3
                   in vec3 positionToEye;
                   out vec3 fragmentColor;
 
-                  uniform vec4 mg_diffuseSpecularAmbientShininess;
-                  uniform sampler2D mg_texture0;                    // Day
-                  uniform sampler2D mg_texture1;                    // Night
+                  uniform vec4 og_diffuseSpecularAmbientShininess;
+                  uniform sampler2D og_texture0;                    // Day
+                  uniform sampler2D og_texture1;                    // Night
 
                   uniform float u_blendDuration;
                   uniform float u_blendDurationScale;
@@ -79,18 +79,18 @@ namespace MiniGlobe.Examples.Chapter3
 
                   vec2 ComputeTextureCoordinates(vec3 normal)
                   {
-                      return vec2(atan(normal.y, normal.x) * mg_oneOverTwoPi + 0.5, asin(normal.z) * mg_oneOverPi + 0.5);
+                      return vec2(atan(normal.y, normal.x) * og_oneOverTwoPi + 0.5, asin(normal.z) * og_oneOverPi + 0.5);
                   }
 
                   vec3 NightColor(vec3 normal)
                   {
-                      return texture(mg_texture1, ComputeTextureCoordinates(normal)).rgb;
+                      return texture(og_texture1, ComputeTextureCoordinates(normal)).rgb;
                   }
 
                   vec3 DayColor(vec3 normal, vec3 toLight, vec3 toEye, float diffuseDot, vec4 diffuseSpecularAmbientShininess)
                   {
                       float intensity = LightIntensity(normal, toLight, toEye, diffuseDot, diffuseSpecularAmbientShininess);
-                      return intensity * texture(mg_texture0, ComputeTextureCoordinates(normal)).rgb;
+                      return intensity * texture(og_texture0, ComputeTextureCoordinates(normal)).rgb;
                   }
 
                   void main()
@@ -101,7 +101,7 @@ namespace MiniGlobe.Examples.Chapter3
 
                       if (diffuse > u_blendDuration)
                       {
-                          fragmentColor = DayColor(normal, toLight, normalize(positionToEye), diffuse, mg_diffuseSpecularAmbientShininess);
+                          fragmentColor = DayColor(normal, toLight, normalize(positionToEye), diffuse, og_diffuseSpecularAmbientShininess);
                       }
                       else if (diffuse < -u_blendDuration)
                       {
@@ -110,7 +110,7 @@ namespace MiniGlobe.Examples.Chapter3
                       else
                       {
                           vec3 night = NightColor(normal);
-                          vec3 day = DayColor(normal, toLight, normalize(positionToEye), diffuse, mg_diffuseSpecularAmbientShininess);
+                          vec3 day = DayColor(normal, toLight, normalize(positionToEye), diffuse, og_diffuseSpecularAmbientShininess);
                           fragmentColor = mix(night, day, (diffuse + u_blendDuration) * u_blendDurationScale);
                       }
                   }";

@@ -36,17 +36,17 @@ namespace MiniGlobe.Examples.Chapter3
                   out vec3 positionToLight;
                   out vec3 positionToEye;
 
-                  uniform mat4 mg_modelViewPerspectiveProjectionMatrix;
-                  uniform vec3 mg_cameraEye;
-                  uniform vec3 mg_cameraLightPosition;
+                  uniform mat4 og_modelViewPerspectiveProjectionMatrix;
+                  uniform vec3 og_cameraEye;
+                  uniform vec3 og_cameraLightPosition;
 
                   void main()                     
                   {
-                        gl_Position = mg_modelViewPerspectiveProjectionMatrix * position; 
+                        gl_Position = og_modelViewPerspectiveProjectionMatrix * position; 
 
                         worldPosition = position.xyz;
-                        positionToLight = mg_cameraLightPosition - worldPosition;
-                        positionToEye = mg_cameraEye - worldPosition;
+                        positionToLight = og_cameraLightPosition - worldPosition;
+                        positionToEye = og_cameraEye - worldPosition;
                   }";
 
             string fs =
@@ -57,8 +57,8 @@ namespace MiniGlobe.Examples.Chapter3
                   in vec3 positionToEye;
                   out vec3 fragmentColor;
 
-                  uniform vec4 mg_diffuseSpecularAmbientShininess;
-                  uniform sampler2D mg_texture0;
+                  uniform vec4 og_diffuseSpecularAmbientShininess;
+                  uniform sampler2D og_texture0;
 
                   float LightIntensity(vec3 normal, vec3 toLight, vec3 toEye, vec4 diffuseSpecularAmbientShininess)
                   {
@@ -75,14 +75,14 @@ namespace MiniGlobe.Examples.Chapter3
 
                   vec2 ComputeTextureCoordinates(vec3 normal)
                   {
-                      return vec2(atan(normal.y, normal.x) * mg_oneOverTwoPi + 0.5, asin(normal.z) * mg_oneOverPi + 0.5);
+                      return vec2(atan(normal.y, normal.x) * og_oneOverTwoPi + 0.5, asin(normal.z) * og_oneOverPi + 0.5);
                   }
 
                   void main()
                   {
                       vec3 normal = normalize(worldPosition);
-                      float intensity = LightIntensity(normal,  normalize(positionToLight), normalize(positionToEye), mg_diffuseSpecularAmbientShininess);
-                      fragmentColor = intensity * texture(mg_texture0, ComputeTextureCoordinates(normal)).rgb;
+                      float intensity = LightIntensity(normal,  normalize(positionToLight), normalize(positionToEye), og_diffuseSpecularAmbientShininess);
+                      fragmentColor = intensity * texture(og_texture0, ComputeTextureCoordinates(normal)).rgb;
                   }";
             ShaderProgram sp = Device.CreateShaderProgram(vs, fs);
 

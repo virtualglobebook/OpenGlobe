@@ -40,16 +40,16 @@ namespace MiniGlobe.Examples.Chapter3
                   out vec3 surfaceNormal;
                   out vec2 surfaceTextureCoordinate;
 
-                  uniform mat4 mg_modelViewPerspectiveProjectionMatrix;
-                  uniform vec3 mg_cameraEye;
-                  uniform vec3 mg_cameraLightPosition;
+                  uniform mat4 og_modelViewPerspectiveProjectionMatrix;
+                  uniform vec3 og_cameraEye;
+                  uniform vec3 og_cameraLightPosition;
 
                   void main()                     
                   {
-                        gl_Position = mg_modelViewPerspectiveProjectionMatrix * position; 
+                        gl_Position = og_modelViewPerspectiveProjectionMatrix * position; 
 
-                        positionToLight = mg_cameraLightPosition - position.xyz;
-                        positionToEye = mg_cameraEye - position.xyz;
+                        positionToLight = og_cameraLightPosition - position.xyz;
+                        positionToEye = og_cameraEye - position.xyz;
 
                         surfaceNormal = normal;
                         surfaceTextureCoordinate = textureCoordinate;
@@ -64,8 +64,8 @@ namespace MiniGlobe.Examples.Chapter3
 
                   out vec3 fragmentColor;
 
-                  uniform vec4 mg_diffuseSpecularAmbientShininess;
-                  uniform sampler2D mg_texture0;
+                  uniform vec4 og_diffuseSpecularAmbientShininess;
+                  uniform sampler2D og_texture0;
 
                   float LightIntensity(vec3 normal, vec3 toLight, vec3 toEye, vec4 diffuseSpecularAmbientShininess)
                   {
@@ -83,8 +83,8 @@ namespace MiniGlobe.Examples.Chapter3
                   void main()
                   {
                       vec3 normal = normalize(surfaceNormal);
-                      float intensity = LightIntensity(normal,  normalize(positionToLight), normalize(positionToEye), mg_diffuseSpecularAmbientShininess);
-                      fragmentColor = intensity * texture(mg_texture0, surfaceTextureCoordinate).rgb;
+                      float intensity = LightIntensity(normal,  normalize(positionToLight), normalize(positionToEye), og_diffuseSpecularAmbientShininess);
+                      fragmentColor = intensity * texture(og_texture0, surfaceTextureCoordinate).rgb;
                   }";
             ShaderProgram sp = Device.CreateShaderProgram(vs, fs);
 

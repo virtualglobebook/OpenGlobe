@@ -9,9 +9,9 @@
 in vec3 worldPosition;
 out vec3 fragmentColor;
 
-uniform mat4x2 mg_modelZToClipCoordinates;
-uniform vec4 mg_diffuseSpecularAmbientShininess;
-uniform vec3 mg_cameraEye;
+uniform mat4x2 og_modelZToClipCoordinates;
+uniform vec4 og_diffuseSpecularAmbientShininess;
+uniform vec3 og_cameraEye;
 uniform vec3 u_cameraEyeSquared;
 uniform vec3 u_globeOneOverRadiiSquared;
 
@@ -57,15 +57,15 @@ float ComputeWorldPositionDepth(vec3 position, mat4x2 modelZToClipCoordinates)
 
 void main()
 {
-    vec3 rayDirection = normalize(worldPosition - mg_cameraEye);
-    Intersection i = RayIntersectEllipsoid(mg_cameraEye, u_cameraEyeSquared, rayDirection, u_globeOneOverRadiiSquared);
+    vec3 rayDirection = normalize(worldPosition - og_cameraEye);
+    Intersection i = RayIntersectEllipsoid(og_cameraEye, u_cameraEyeSquared, rayDirection, u_globeOneOverRadiiSquared);
 
     if (i.Intersects)
     {
-        vec3 position = mg_cameraEye + (i.Time * rayDirection);
+        vec3 position = og_cameraEye + (i.Time * rayDirection);
 
         fragmentColor = vec3(0.0, 1.0, 1.0);
-        gl_FragDepth = ComputeWorldPositionDepth(position, mg_modelZToClipCoordinates);
+        gl_FragDepth = ComputeWorldPositionDepth(position, og_modelZToClipCoordinates);
     }
     else
     {

@@ -12,11 +12,11 @@ layout(triangle_strip, max_vertices = 4) out;
 in float distanceToEyeGS[];
 out float distanceToEyeFS;
 
-uniform mat4 mg_modelViewPerspectiveProjectionMatrix;
-uniform mat4 mg_viewportTransformationMatrix;
-uniform mat4 mg_viewportOrthographicProjectionMatrix;
-uniform float mg_perspectiveNearPlaneDistance;
-uniform sampler2DRect mg_texture0;    // Height map
+uniform mat4 og_modelViewPerspectiveProjectionMatrix;
+uniform mat4 og_viewportTransformationMatrix;
+uniform mat4 og_viewportOrthographicProjectionMatrix;
+uniform float og_perspectiveNearPlaneDistance;
+uniform sampler2DRect og_texture0;    // Height map
 uniform float u_heightExaggeration;
 uniform float u_fillDistance;
 uniform int u_normalAlgorithm;
@@ -109,27 +109,27 @@ void main()
 
     if (u_normalAlgorithm == 1)       // TerrainNormalsAlgorithm.ForwardDifference
     {
-        terrainNormal = ComputeNormalForwardDifference(gl_in[0].gl_Position.xyz, mg_texture0, u_heightExaggeration);
+        terrainNormal = ComputeNormalForwardDifference(gl_in[0].gl_Position.xyz, og_texture0, u_heightExaggeration);
     }
     else if (u_normalAlgorithm == 2)  // TerrainNormalsAlgorithm.CentralDifference
     {
-        terrainNormal = ComputeNormalCentralDifference(gl_in[0].gl_Position.xyz, mg_texture0, u_heightExaggeration);
+        terrainNormal = ComputeNormalCentralDifference(gl_in[0].gl_Position.xyz, og_texture0, u_heightExaggeration);
     }
     else if (u_normalAlgorithm == 3)  // TerrainNormalsAlgorithm.SobelFilter
     {
-        terrainNormal = ComputeNormalSobelFilter(gl_in[0].gl_Position.xyz, mg_texture0, u_heightExaggeration);
+        terrainNormal = ComputeNormalSobelFilter(gl_in[0].gl_Position.xyz, og_texture0, u_heightExaggeration);
     }
 
     vec4 clipP0;
     vec4 clipP1;
-    ClipLineSegmentToNearPlane(mg_perspectiveNearPlaneDistance, 
-        mg_modelViewPerspectiveProjectionMatrix,
+    ClipLineSegmentToNearPlane(og_perspectiveNearPlaneDistance, 
+        og_modelViewPerspectiveProjectionMatrix,
         gl_in[0].gl_Position, 
         gl_in[0].gl_Position + vec4(normalize(terrainNormal), 0.0),
         clipP0, clipP1);
 
-    vec4 windowP0 = ClipToWindowCoordinates(clipP0, mg_viewportTransformationMatrix);
-    vec4 windowP1 = ClipToWindowCoordinates(clipP1, mg_viewportTransformationMatrix);
+    vec4 windowP0 = ClipToWindowCoordinates(clipP0, og_viewportTransformationMatrix);
+    vec4 windowP1 = ClipToWindowCoordinates(clipP1, og_viewportTransformationMatrix);
 
     vec2 direction = windowP1.xy - windowP0.xy;
     vec2 normal = normalize(vec2(direction.y, -direction.x));
@@ -139,19 +139,19 @@ void main()
     vec4 v2 = vec4(windowP0.xy + (normal * u_fillDistance), windowP0.z, 1.0);
     vec4 v3 = vec4(windowP1.xy + (normal * u_fillDistance), windowP1.z, 1.0);
 
-    gl_Position = mg_viewportOrthographicProjectionMatrix * v0;
+    gl_Position = og_viewportOrthographicProjectionMatrix * v0;
     distanceToEyeFS = distanceToEyeGS[0];
     EmitVertex();
 
-    gl_Position = mg_viewportOrthographicProjectionMatrix * v1;
+    gl_Position = og_viewportOrthographicProjectionMatrix * v1;
     distanceToEyeFS = distanceToEyeGS[0];
     EmitVertex();
 
-    gl_Position = mg_viewportOrthographicProjectionMatrix * v2;
+    gl_Position = og_viewportOrthographicProjectionMatrix * v2;
     distanceToEyeFS = distanceToEyeGS[0];
     EmitVertex();
 
-    gl_Position = mg_viewportOrthographicProjectionMatrix * v3;
+    gl_Position = og_viewportOrthographicProjectionMatrix * v3;
     distanceToEyeFS = distanceToEyeGS[0];
     EmitVertex();
 }

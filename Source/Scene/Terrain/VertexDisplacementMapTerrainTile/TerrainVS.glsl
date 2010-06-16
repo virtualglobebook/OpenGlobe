@@ -15,10 +15,10 @@ out vec2 textureCoordinate;
 out vec2 repeatTextureCoordinate;
 out float height;
 
-uniform mat4 mg_modelViewPerspectiveProjectionMatrix;
-uniform vec3 mg_cameraEye;
-uniform vec3 mg_cameraLightPosition;
-uniform sampler2DRect mg_texture0;    // Height map
+uniform mat4 og_modelViewPerspectiveProjectionMatrix;
+uniform vec3 og_cameraEye;
+uniform vec3 og_cameraLightPosition;
+uniform sampler2DRect og_texture0;    // Height map
 uniform float u_heightExaggeration;
 uniform int u_normalAlgorithm;
 uniform vec2 u_positionToTextureCoordinate;
@@ -119,32 +119,32 @@ vec3 ComputeNormalSobelFilter(
 
 void main()
 {
-    vec3 displacedPosition = vec3(position, texture(mg_texture0, position).r * u_heightExaggeration);
+    vec3 displacedPosition = vec3(position, texture(og_texture0, position).r * u_heightExaggeration);
 
-    gl_Position = mg_modelViewPerspectiveProjectionMatrix * vec4(displacedPosition, 1.0);
+    gl_Position = og_modelViewPerspectiveProjectionMatrix * vec4(displacedPosition, 1.0);
 
     if (u_normalAlgorithm == 1)       // TerrainNormalsAlgorithm.ThreeForward
     {
-        normalFS = ComputeNormalForwardDifference(displacedPosition, mg_texture0, u_heightExaggeration);
+        normalFS = ComputeNormalForwardDifference(displacedPosition, og_texture0, u_heightExaggeration);
     }
     else if (u_normalAlgorithm == 2)  // TerrainNormalsAlgorithm.FourSamples
     {
-        normalFS = ComputeNormalCentralDifference(displacedPosition, mg_texture0, u_heightExaggeration);
+        normalFS = ComputeNormalCentralDifference(displacedPosition, og_texture0, u_heightExaggeration);
     }
     else if (u_normalAlgorithm == 3)  // TerrainNormalsAlgorithm.SobelFilter
     {
-        normalFS = ComputeNormalSobelFilter(displacedPosition, mg_texture0, u_heightExaggeration);
+        normalFS = ComputeNormalSobelFilter(displacedPosition, og_texture0, u_heightExaggeration);
     }
     else
     {
 	    //
         // Even if lighting isn't used, shading algorithms based on terrain slope require the normal.
 		//
-        normalFS = ComputeNormalForwardDifference(displacedPosition, mg_texture0, u_heightExaggeration);
+        normalFS = ComputeNormalForwardDifference(displacedPosition, og_texture0, u_heightExaggeration);
     }
 
-    positionToLightFS = mg_cameraLightPosition - displacedPosition;
-    positionToEyeFS = mg_cameraEye - displacedPosition;
+    positionToLightFS = og_cameraLightPosition - displacedPosition;
+    positionToEyeFS = og_cameraEye - displacedPosition;
 
     textureCoordinate = position * u_positionToTextureCoordinate;
     repeatTextureCoordinate = position * u_positionToRepeatTextureCoordinate;

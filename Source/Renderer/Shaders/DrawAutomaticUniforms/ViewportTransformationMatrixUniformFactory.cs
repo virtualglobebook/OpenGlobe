@@ -15,7 +15,7 @@ namespace MiniGlobe.Renderer
 
         public override string Name
         {
-            get { return "mg_viewportTransformationMatrix"; }
+            get { return "og_viewportTransformationMatrix"; }
         }
 
         public override DrawAutomaticUniform Create(Uniform uniform)

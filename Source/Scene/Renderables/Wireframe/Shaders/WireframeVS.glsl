@@ -8,8 +8,8 @@
 
 in vec4 position;
 out vec2 windowPosition;
-uniform mat4 mg_modelViewPerspectiveProjectionMatrix;
-uniform mat4 mg_viewportTransformationMatrix;
+uniform mat4 og_modelViewPerspectiveProjectionMatrix;
+uniform mat4 og_viewportTransformationMatrix;
 
 vec4 ClipToWindowCoordinates(vec4 v, mat4 viewportTransformationMatrix)
 {
@@ -20,6 +20,6 @@ vec4 ClipToWindowCoordinates(vec4 v, mat4 viewportTransformationMatrix)
 
 void main()                     
 {
-    gl_Position = mg_modelViewPerspectiveProjectionMatrix * position;
-    windowPosition = ClipToWindowCoordinates(gl_Position, mg_viewportTransformationMatrix).xy;
+    gl_Position = og_modelViewPerspectiveProjectionMatrix * position;
+    windowPosition = ClipToWindowCoordinates(gl_Position, og_viewportTransformationMatrix).xy;
 }

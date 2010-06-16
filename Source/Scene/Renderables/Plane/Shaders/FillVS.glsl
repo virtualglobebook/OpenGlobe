@@ -7,8 +7,8 @@
 //
 
 in vec4 position;
-uniform mat4 mg_modelViewPerspectiveProjectionMatrix;
-uniform float mg_perspectiveFarPlaneDistance;
+uniform mat4 og_modelViewPerspectiveProjectionMatrix;
+uniform float og_perspectiveFarPlaneDistance;
 uniform bool u_logarithmicDepth;
 uniform float u_logarithmicDepthConstant;
 
@@ -32,6 +32,6 @@ vec4 ModelToClipCoordinates(
 
 void main()                     
 {
-    gl_Position = ModelToClipCoordinates(position, mg_modelViewPerspectiveProjectionMatrix,
-        u_logarithmicDepth, u_logarithmicDepthConstant, mg_perspectiveFarPlaneDistance);
+    gl_Position = ModelToClipCoordinates(position, og_modelViewPerspectiveProjectionMatrix,
+        u_logarithmicDepth, u_logarithmicDepthConstant, og_perspectiveFarPlaneDistance);
 }

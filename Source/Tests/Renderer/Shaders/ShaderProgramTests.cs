@@ -372,25 +372,25 @@ namespace MiniGlobe.Renderer
             string fs =
                 @"#version 150
                  
-                  uniform sampler2D mg_texture0;
-                  uniform sampler2D mg_texture1;
-                  uniform sampler2D mg_texture2;
-                  uniform sampler2D mg_texture3;
+                  uniform sampler2D og_texture0;
+                  uniform sampler2D og_texture1;
+                  uniform sampler2D og_texture2;
+                  uniform sampler2D og_texture3;
                   out vec4 FragColor;
 
                   void main()
                   {
                       FragColor = 
-                          texture(mg_texture0, vec2(0, 0)) + 
-                          texture(mg_texture1, vec2(0, 0)) + 
-                          texture(mg_texture2, vec2(0, 0)) + 
-                          texture(mg_texture3, vec2(0, 0));
+                          texture(og_texture0, vec2(0, 0)) + 
+                          texture(og_texture1, vec2(0, 0)) + 
+                          texture(og_texture2, vec2(0, 0)) + 
+                          texture(og_texture3, vec2(0, 0));
                   }";
             ShaderProgram sp = Device.CreateShaderProgram(ShaderSources.PassThroughVertexShader(), fs);
-            Assert.AreEqual(0, (sp.Uniforms["mg_texture0"] as Uniform<int>).Value);
-            Assert.AreEqual(1, (sp.Uniforms["mg_texture1"] as Uniform<int>).Value);
-            Assert.AreEqual(2, (sp.Uniforms["mg_texture2"] as Uniform<int>).Value);
-            Assert.AreEqual(3, (sp.Uniforms["mg_texture3"] as Uniform<int>).Value);
+            Assert.AreEqual(0, (sp.Uniforms["og_texture0"] as Uniform<int>).Value);
+            Assert.AreEqual(1, (sp.Uniforms["og_texture1"] as Uniform<int>).Value);
+            Assert.AreEqual(2, (sp.Uniforms["og_texture2"] as Uniform<int>).Value);
+            Assert.AreEqual(3, (sp.Uniforms["og_texture3"] as Uniform<int>).Value);
 
             sp.Dispose();
             window.Dispose();

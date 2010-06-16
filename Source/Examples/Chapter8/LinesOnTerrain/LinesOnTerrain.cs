@@ -66,24 +66,24 @@ namespace MiniGlobe.Examples.Chapter8
             string vs =
                 @"#version 150
 
-                uniform mat4 mg_modelViewPerspectiveProjectionMatrix;
+                uniform mat4 og_modelViewPerspectiveProjectionMatrix;
                 in vec3 position;
 
                 void main()
                 {
-                    gl_Position = mg_modelViewPerspectiveProjectionMatrix * vec4(position, 1.0);
+                    gl_Position = og_modelViewPerspectiveProjectionMatrix * vec4(position, 1.0);
                 }";
             string fs =
                 @"#version 150
                  
-                uniform sampler2D mg_texture0;
-                uniform vec2 mg_inverseViewportDimensions;
+                uniform sampler2D og_texture0;
+                uniform vec2 og_inverseViewportDimensions;
                 out vec3 fragmentColor;
 
                 void main()
                 {
-                    vec2 of = mg_inverseViewportDimensions * gl_FragCoord.xy;
-                    float center = texture(mg_texture0, of).r;
+                    vec2 of = og_inverseViewportDimensions * gl_FragCoord.xy;
+                    float center = texture(og_texture0, of).r;
                     if (gl_FragCoord.z < center)
                     {
                         fragmentColor = vec3(1.0, 1.0, 0.0);
@@ -102,17 +102,17 @@ namespace MiniGlobe.Examples.Chapter8
                 @"#version 150
 
                 in vec3 position;
-                uniform mat4 mg_modelViewPerspectiveProjectionMatrix;
+                uniform mat4 og_modelViewPerspectiveProjectionMatrix;
 
                 void main()
                 {
-                    gl_Position = mg_modelViewPerspectiveProjectionMatrix * vec4(position, 1.0);
+                    gl_Position = og_modelViewPerspectiveProjectionMatrix * vec4(position, 1.0);
                 }";
             fs =
                 @"#version 150
                 
-                uniform sampler2D mg_texture0;
-                uniform vec2 mg_inverseViewportDimensions;
+                uniform sampler2D og_texture0;
+                uniform vec2 og_inverseViewportDimensions;
                 out vec3 fragmentColor;
 
                 void main()
@@ -120,21 +120,21 @@ namespace MiniGlobe.Examples.Chapter8
                     float invDepth = 1.0 / gl_FragCoord.z;
                     vec2 dInvDepth = vec2(dFdx(invDepth), dFdy(invDepth));
 
-                    vec2 of = mg_inverseViewportDimensions * gl_FragCoord.xy;
-                    float center = texture(mg_texture0, of).r;
+                    vec2 of = og_inverseViewportDimensions * gl_FragCoord.xy;
+                    float center = texture(og_texture0, of).r;
                     if (gl_FragCoord.z < center)
                     {
                         //
                         // Fragment is above the terrain
                         //
-                        float upperLeft = textureOffset(mg_texture0, of, ivec2(-1.0, 1.0)).r;
-                        float upperCenter = textureOffset(mg_texture0, of, ivec2(0.0, 1.0)).r;
-                        float upperRight = textureOffset(mg_texture0, of, ivec2(1.0, 1.0)).r;
-                        float left = textureOffset(mg_texture0, of, ivec2(-1.0, 0.0)).r;
-                        float right = textureOffset(mg_texture0, of, ivec2(1.0, 0.0)).r;
-                        float lowerLeft = textureOffset(mg_texture0, of, ivec2(-1.0, -1.0)).r;
-                        float lowerCenter = textureOffset(mg_texture0, of, ivec2(0.0, -1.0)).r;
-                        float lowerRight = textureOffset(mg_texture0, of, ivec2(1.0, -1.0)).r;
+                        float upperLeft = textureOffset(og_texture0, of, ivec2(-1.0, 1.0)).r;
+                        float upperCenter = textureOffset(og_texture0, of, ivec2(0.0, 1.0)).r;
+                        float upperRight = textureOffset(og_texture0, of, ivec2(1.0, 1.0)).r;
+                        float left = textureOffset(og_texture0, of, ivec2(-1.0, 0.0)).r;
+                        float right = textureOffset(og_texture0, of, ivec2(1.0, 0.0)).r;
+                        float lowerLeft = textureOffset(og_texture0, of, ivec2(-1.0, -1.0)).r;
+                        float lowerCenter = textureOffset(og_texture0, of, ivec2(0.0, -1.0)).r;
+                        float lowerRight = textureOffset(og_texture0, of, ivec2(1.0, -1.0)).r;
 
                         float upperLeftM = 1.0 / (invDepth - dInvDepth.x + dInvDepth.y);
                         float upperCenterM = 1.0 / (invDepth + dInvDepth.y);
@@ -188,10 +188,10 @@ namespace MiniGlobe.Examples.Chapter8
 
                 flat out vec4 fsColor;
 
-                uniform mat4 mg_modelViewPerspectiveProjectionMatrix;
-                uniform mat4 mg_viewportTransformationMatrix;
-                uniform mat4 mg_viewportOrthographicProjectionMatrix;
-                uniform float mg_perspectiveNearPlaneDistance;
+                uniform mat4 og_modelViewPerspectiveProjectionMatrix;
+                uniform mat4 og_viewportTransformationMatrix;
+                uniform mat4 og_viewportOrthographicProjectionMatrix;
+                uniform float og_perspectiveNearPlaneDistance;
                 uniform float u_fillDistance;
 
                 vec4 ClipToWindowCoordinates(vec4 v, mat4 viewportTransformationMatrix)
@@ -236,12 +236,12 @@ namespace MiniGlobe.Examples.Chapter8
                 {
                     vec4 clipP0;
                     vec4 clipP1;
-                    ClipLineSegmentToNearPlane(mg_perspectiveNearPlaneDistance, 
-                        mg_modelViewPerspectiveProjectionMatrix,
+                    ClipLineSegmentToNearPlane(og_perspectiveNearPlaneDistance, 
+                        og_modelViewPerspectiveProjectionMatrix,
                         gl_in[1].gl_Position, gl_in[2].gl_Position, clipP0, clipP1);
 
-                    vec4 windowP0 = ClipToWindowCoordinates(clipP0, mg_viewportTransformationMatrix);
-                    vec4 windowP1 = ClipToWindowCoordinates(clipP1, mg_viewportTransformationMatrix);
+                    vec4 windowP0 = ClipToWindowCoordinates(clipP0, og_viewportTransformationMatrix);
+                    vec4 windowP1 = ClipToWindowCoordinates(clipP1, og_viewportTransformationMatrix);
 
                     vec2 direction = windowP1.xy - windowP0.xy;
                     vec2 normal = normalize(vec2(direction.y, -direction.x));
@@ -253,10 +253,10 @@ namespace MiniGlobe.Examples.Chapter8
 
 
 
-                    vec4 clipS = mg_modelViewPerspectiveProjectionMatrix * gl_in[0].gl_Position;
-                    vec4 clipE = mg_modelViewPerspectiveProjectionMatrix * gl_in[3].gl_Position;
-                    vec4 windowPS = ClipToWindowCoordinates(clipS, mg_viewportTransformationMatrix);
-                    vec4 windowPE = ClipToWindowCoordinates(clipE, mg_viewportTransformationMatrix);
+                    vec4 clipS = og_modelViewPerspectiveProjectionMatrix * gl_in[0].gl_Position;
+                    vec4 clipE = og_modelViewPerspectiveProjectionMatrix * gl_in[3].gl_Position;
+                    vec4 windowPS = ClipToWindowCoordinates(clipS, og_viewportTransformationMatrix);
+                    vec4 windowPE = ClipToWindowCoordinates(clipE, og_viewportTransformationMatrix);
 
            //         float area = (windowPS.x * windowP0.y - windowP0.x * windowPS.y) +
              //                    (windowP0.x * windowP1.y - windowP1.x * windowP0.y) +
@@ -277,16 +277,16 @@ namespace MiniGlobe.Examples.Chapter8
                     {
 
 
-                    gl_Position = mg_viewportOrthographicProjectionMatrix * v0;
+                    gl_Position = og_viewportOrthographicProjectionMatrix * v0;
                     EmitVertex();
 
-                    gl_Position = mg_viewportOrthographicProjectionMatrix * v1;
+                    gl_Position = og_viewportOrthographicProjectionMatrix * v1;
                     EmitVertex();
 
-                    gl_Position = mg_viewportOrthographicProjectionMatrix * v2;
+                    gl_Position = og_viewportOrthographicProjectionMatrix * v2;
                     EmitVertex();
 
-                    gl_Position = mg_viewportOrthographicProjectionMatrix * v3;
+                    gl_Position = og_viewportOrthographicProjectionMatrix * v3;
                     EmitVertex();
                     }
                 }";

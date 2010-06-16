@@ -15,8 +15,8 @@ uniform vec2 u_gridLineWidth;
 uniform vec2 u_gridResolution;
 uniform vec3 u_globeOneOverRadiiSquared;
 
-uniform vec4 mg_diffuseSpecularAmbientShininess;
-uniform sampler2D mg_texture0;
+uniform vec4 og_diffuseSpecularAmbientShininess;
+uniform sampler2D og_texture0;
 
 float LightIntensity(vec3 normal, vec3 toLight, vec3 toEye, vec4 diffuseSpecularAmbientShininess)
 {
@@ -38,7 +38,7 @@ vec3 ComputeDeticSurfaceNormal(vec3 positionOnEllipsoid, vec3 oneOverEllipsoidRa
 
 vec2 ComputeTextureCoordinates(vec3 normal)
 {
-    return vec2(atan(normal.y, normal.x) * mg_oneOverTwoPi + 0.5, asin(normal.z) * mg_oneOverPi + 0.5);
+    return vec2(atan(normal.y, normal.x) * og_oneOverTwoPi + 0.5, asin(normal.z) * og_oneOverPi + 0.5);
 }
 
 void main()
@@ -76,7 +76,7 @@ void main()
     }
     else
     {
-        float intensity = LightIntensity(normal,  normalize(positionToLight), normalize(positionToEye), mg_diffuseSpecularAmbientShininess);
-        fragmentColor = intensity * texture(mg_texture0, textureCoordinate).rgb;
+        float intensity = LightIntensity(normal,  normalize(positionToLight), normalize(positionToEye), og_diffuseSpecularAmbientShininess);
+        fragmentColor = intensity * texture(og_texture0, textureCoordinate).rgb;
     }
 }

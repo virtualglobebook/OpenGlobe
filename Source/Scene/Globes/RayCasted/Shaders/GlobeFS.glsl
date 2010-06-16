@@ -9,11 +9,11 @@
 in vec3 worldPosition;
 out vec3 fragmentColor;
 
-uniform mat4x2 mg_modelZToClipCoordinates;
-uniform vec4 mg_diffuseSpecularAmbientShininess;
-uniform sampler2D mg_texture0;
-uniform vec3 mg_cameraLightPosition;
-uniform vec3 mg_cameraEye;
+uniform mat4x2 og_modelZToClipCoordinates;
+uniform vec4 og_diffuseSpecularAmbientShininess;
+uniform sampler2D og_texture0;
+uniform vec3 og_cameraLightPosition;
+uniform vec3 og_cameraEye;
 uniform vec3 u_cameraEyeSquared;
 uniform vec3 u_globeOneOverRadiiSquared;
 
@@ -77,25 +77,25 @@ float LightIntensity(vec3 normal, vec3 toLight, vec3 toEye, vec4 diffuseSpecular
 
 vec2 ComputeTextureCoordinates(vec3 normal)
 {
-    return vec2(atan(normal.y, normal.x) * mg_oneOverTwoPi + 0.5, asin(normal.z) * mg_oneOverPi + 0.5);
+    return vec2(atan(normal.y, normal.x) * og_oneOverTwoPi + 0.5, asin(normal.z) * og_oneOverPi + 0.5);
 }
 
 void main()
 {
-    vec3 rayDirection = normalize(worldPosition - mg_cameraEye);
-    Intersection i = RayIntersectEllipsoid(mg_cameraEye, u_cameraEyeSquared, rayDirection, u_globeOneOverRadiiSquared);
+    vec3 rayDirection = normalize(worldPosition - og_cameraEye);
+    Intersection i = RayIntersectEllipsoid(og_cameraEye, u_cameraEyeSquared, rayDirection, u_globeOneOverRadiiSquared);
 
     if (i.Intersects)
     {
-        vec3 position = mg_cameraEye + (i.Time * rayDirection);
+        vec3 position = og_cameraEye + (i.Time * rayDirection);
         vec3 normal = ComputeDeticSurfaceNormal(position, u_globeOneOverRadiiSquared);
 
-        vec3 toLight = normalize(mg_cameraLightPosition - position);
-        vec3 toEye = normalize(mg_cameraEye - position);
-        float intensity = LightIntensity(normal, toLight, toEye, mg_diffuseSpecularAmbientShininess);
+        vec3 toLight = normalize(og_cameraLightPosition - position);
+        vec3 toEye = normalize(og_cameraEye - position);
+        float intensity = LightIntensity(normal, toLight, toEye, og_diffuseSpecularAmbientShininess);
 
-        fragmentColor = intensity * texture(mg_texture0, ComputeTextureCoordinates(normal)).rgb;
-        gl_FragDepth = ComputeWorldPositionDepth(position, mg_modelZToClipCoordinates);
+        fragmentColor = intensity * texture(og_texture0, ComputeTextureCoordinates(normal)).rgb;
+        gl_FragDepth = ComputeWorldPositionDepth(position, og_modelZToClipCoordinates);
     }
     else
     {

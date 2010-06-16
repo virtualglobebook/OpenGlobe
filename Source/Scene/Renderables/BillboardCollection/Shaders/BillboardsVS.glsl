@@ -17,8 +17,8 @@ out vec4 gsColor;
 out float gsOrigin;
 out vec2 gsPixelOffset;
 
-uniform mat4 mg_modelViewPerspectiveProjectionMatrix;
-uniform mat4 mg_viewportTransformationMatrix;
+uniform mat4 og_modelViewPerspectiveProjectionMatrix;
+uniform mat4 og_viewportTransformationMatrix;
 
 vec4 WorldToWindowCoordinates(
     vec4 v, 
@@ -34,7 +34,7 @@ vec4 WorldToWindowCoordinates(
 void main()                     
 {
     gl_Position = WorldToWindowCoordinates(position, 
-        mg_modelViewPerspectiveProjectionMatrix, mg_viewportTransformationMatrix);
+        og_modelViewPerspectiveProjectionMatrix, og_viewportTransformationMatrix);
     gsTextureCoordinates = textureCoordinates;
     gsColor = color;
     gsOrigin = origin;

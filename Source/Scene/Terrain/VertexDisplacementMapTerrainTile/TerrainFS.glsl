@@ -15,15 +15,15 @@ in float height;
 
 out vec3 fragmentColor;
 
-uniform vec4 mg_diffuseSpecularAmbientShininess;
-uniform sampler2D mg_texture6;    // Color map
-uniform sampler2D mg_texture1;    // Color ramp for height
-uniform sampler2D mg_texture7;    // Color ramp for slope
-uniform sampler2D mg_texture2;    // Blend ramp for grass and stone
-uniform sampler2D mg_texture3;    // Grass
-uniform sampler2D mg_texture4;    // Stone
-uniform sampler2D mg_texture5;    // Blend map
-uniform float mg_highResolutionSnapScale;
+uniform vec4 og_diffuseSpecularAmbientShininess;
+uniform sampler2D og_texture6;    // Color map
+uniform sampler2D og_texture1;    // Color ramp for height
+uniform sampler2D og_texture7;    // Color ramp for slope
+uniform sampler2D og_texture2;    // Blend ramp for grass and stone
+uniform sampler2D og_texture3;    // Grass
+uniform sampler2D og_texture4;    // Stone
+uniform sampler2D og_texture5;    // Blend map
+uniform float og_highResolutionSnapScale;
 uniform float u_minimumHeight;
 uniform float u_maximumHeight;
 uniform int u_normalAlgorithm;
@@ -67,12 +67,12 @@ void main()
     float intensity = 1.0;
     if (u_normalAlgorithm != 0)   // TerrainNormalsAlgorithm.None
     {
-        intensity = LightIntensity(normal,  positionToLight, positionToEye, mg_diffuseSpecularAmbientShininess);
+        intensity = LightIntensity(normal,  positionToLight, positionToEye, og_diffuseSpecularAmbientShininess);
     }
 
     if (u_shadingAlgorithm == 0)  // TerrainShadingAlgorithm.ColorMap
     {
-        fragmentColor = intensity * texture(mg_texture6, textureCoordinate).rgb;
+        fragmentColor = intensity * texture(og_texture6, textureCoordinate).rgb;
     }
     if (u_shadingAlgorithm == 1)  // TerrainShadingAlgorithm.Solid
     {
@@ -87,21 +87,21 @@ void main()
         float distanceToContour = mod(height, 5.0);  // Contour every 5 meters 
         float dx = abs(dFdx(height));
         float dy = abs(dFdy(height));
-        float dF = max(dx, dy) * mg_highResolutionSnapScale * 2.0;  // Line width
+        float dF = max(dx, dy) * og_highResolutionSnapScale * 2.0;  // Line width
 
         fragmentColor = mix(vec3(0.0, intensity, 0.0), vec3(intensity, 0.0, 0.0), (distanceToContour < dF));
     }
     else if (u_shadingAlgorithm == 4)  // TerrainShadingAlgorithm.ColorRampByHeight
     {
-        fragmentColor = intensity * texture(mg_texture1, vec2(0.5, ((height - u_minimumHeight) / (u_maximumHeight - u_minimumHeight)))).rgb;
+        fragmentColor = intensity * texture(og_texture1, vec2(0.5, ((height - u_minimumHeight) / (u_maximumHeight - u_minimumHeight)))).rgb;
     }
     else if (u_shadingAlgorithm == 5)  // TerrainShadingAlgorithm.BlendRampByHeight
     {
         float normalizedHeight = (height - u_minimumHeight) / (u_maximumHeight - u_minimumHeight);
         fragmentColor = intensity * mix(
-            texture(mg_texture3, repeatTextureCoordinate).rgb,    // Grass
-            texture(mg_texture4, repeatTextureCoordinate).rgb,    // Stone
-            texture(mg_texture2, vec2(0.5, normalizedHeight)).r); // Blend Ramp
+            texture(og_texture3, repeatTextureCoordinate).rgb,    // Grass
+            texture(og_texture4, repeatTextureCoordinate).rgb,    // Stone
+            texture(og_texture2, vec2(0.5, normalizedHeight)).r); // Blend Ramp
     }
     else if (u_shadingAlgorithm == 6)  // TerrainShadingAlgorithm.BySlope
     {
@@ -113,26 +113,26 @@ void main()
         float distanceToContour = mod(slopeAngle, radians(15.0));  // Contour every 15 degrees
         float dx = abs(dFdx(slopeAngle));
         float dy = abs(dFdy(slopeAngle));
-        float dF = max(dx, dy) * mg_highResolutionSnapScale * 2.0;  // Line width
+        float dF = max(dx, dy) * og_highResolutionSnapScale * 2.0;  // Line width
 
         fragmentColor = mix(vec3(0.0, intensity, 0.0), vec3(intensity, 0.0, 0.0), (distanceToContour < dF));
     }
     else if (u_shadingAlgorithm == 8)  // TerrainShadingAlgorithm.ColorRampBySlope
     {
-        fragmentColor = intensity * texture(mg_texture7, vec2(0.5, normal.z)).rgb;
+        fragmentColor = intensity * texture(og_texture7, vec2(0.5, normal.z)).rgb;
     }
     else if (u_shadingAlgorithm == 9)  // TerrainShadingAlgorithm.BlendRampBySlope
     {
         fragmentColor = intensity * mix(
-            texture(mg_texture4, repeatTextureCoordinate).rgb, // Stone
-            texture(mg_texture3, repeatTextureCoordinate).rgb, // Grass
-            texture(mg_texture2, vec2(0.5, normal.z)).r);
+            texture(og_texture4, repeatTextureCoordinate).rgb, // Stone
+            texture(og_texture3, repeatTextureCoordinate).rgb, // Grass
+            texture(og_texture2, vec2(0.5, normal.z)).r);
     }
     else if (u_shadingAlgorithm == 10)  // TerrainShadingAlgorithm.BlendMask
     {
         fragmentColor = intensity * mix(
-            texture(mg_texture3, repeatTextureCoordinate).rgb, // Grass
-            texture(mg_texture4, repeatTextureCoordinate).rgb, // Stone
-            texture(mg_texture5, textureCoordinate).r);        // Blend mask
+            texture(og_texture3, repeatTextureCoordinate).rgb, // Grass
+            texture(og_texture4, repeatTextureCoordinate).rgb, // Stone
+            texture(og_texture5, textureCoordinate).r);        // Blend mask
     }
 }

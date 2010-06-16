@@ -10,12 +10,12 @@ in vec2 fsTextureCoordinates;
 
 out vec4 fragmentColor;
 
-uniform sampler2D mg_texture0;
+uniform sampler2D og_texture0;
 uniform vec3 u_color;
 
 void main()
 {
-    vec4 color = texture(mg_texture0, fsTextureCoordinates);
+    vec4 color = texture(og_texture0, fsTextureCoordinates);
 
     if (color.a == 0.0)
     {

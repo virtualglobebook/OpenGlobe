@@ -15,7 +15,7 @@ namespace MiniGlobe.Renderer
 
         public override string Name
         {
-            get { return "mg_perspectiveNearPlaneDistance"; }
+            get { return "og_perspectiveNearPlaneDistance"; }
         }
 
         public override DrawAutomaticUniform Create(Uniform uniform)

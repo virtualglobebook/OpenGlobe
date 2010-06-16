@@ -11,10 +11,10 @@ in vec2 textureCoordinates;
 
 out vec2 fsTextureCoordinates;
 
-uniform mat4 mg_viewportOrthographicProjectionMatrix;
+uniform mat4 og_viewportOrthographicProjectionMatrix;
 
 void main()                     
 {
-    gl_Position = mg_viewportOrthographicProjectionMatrix * position;
+    gl_Position = og_viewportOrthographicProjectionMatrix * position;
     fsTextureCoordinates = textureCoordinates;
 }

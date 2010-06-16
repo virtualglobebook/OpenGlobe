@@ -12,11 +12,11 @@ in vec2 fsTextureCoordinate;
 
 out vec4 fragmentColor;
 
-uniform sampler2D mg_texture0;
+uniform sampler2D og_texture0;
 
 void main()
 {
-    vec2 texel = texture(mg_texture0, fsTextureCoordinate).rg;
+    vec2 texel = texture(og_texture0, fsTextureCoordinate).rg;
     float fill = texel.r;
     float alpha = texel.g;
 

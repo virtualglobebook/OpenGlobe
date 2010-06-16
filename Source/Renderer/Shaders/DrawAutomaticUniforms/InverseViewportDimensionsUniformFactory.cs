@@ -15,7 +15,7 @@ namespace MiniGlobe.Renderer
 
         public override string Name
         {
-            get { return "mg_inverseViewportDimensions"; }
+            get { return "og_inverseViewportDimensions"; }
         }
 
         public override DrawAutomaticUniform Create(Uniform uniform)

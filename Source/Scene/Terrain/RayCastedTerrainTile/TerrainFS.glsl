@@ -10,9 +10,9 @@ in vec3 boxExit;
 
 out vec3 fragmentColor;
 
-uniform sampler2DRect mg_texture0;    // Height map
-uniform vec3 mg_cameraEye;
-uniform mat4x2 mg_modelZToClipCoordinates;
+uniform sampler2DRect og_texture0;    // Height map
+uniform vec3 og_cameraEye;
+uniform mat4x2 og_modelZToClipCoordinates;
 
 uniform vec3 u_aabbLowerLeft;
 uniform vec3 u_aabbUpperRight;
@@ -134,7 +134,7 @@ bool StepRay(
     out vec3 intersectionPoint)
 {
     vec2 floorTexEntry = floor(texEntry.xy);
-    float height = texture(mg_texture0, MirrorRepeat(floorTexEntry, mirrorTextureCoordinates)).r;
+    float height = texture(og_texture0, MirrorRepeat(floorTexEntry, mirrorTextureCoordinates)).r;
     height *= u_heightExaggeration;
 
     vec2 delta = ((floorTexEntry + vec2(1.0)) - texEntry.xy) * oneOverDirectionXY;
@@ -188,23 +188,23 @@ float ComputeWorldPositionDepth(vec3 position, mat4x2 modelZToClipCoordinates)
 
 void main()
 {
-    vec3 direction = boxExit - mg_cameraEye;
+    vec3 direction = boxExit - og_cameraEye;
 
     vec3 boxEntry;
-    if (PointInsideAxisAlignedBoundingBox(mg_cameraEye, u_aabbLowerLeft, u_aabbUpperRight))
+    if (PointInsideAxisAlignedBoundingBox(og_cameraEye, u_aabbLowerLeft, u_aabbUpperRight))
     {
-        boxEntry = mg_cameraEye;
+        boxEntry = og_cameraEye;
     }
     else
     {
-        Intersection i = RayIntersectsAABB(mg_cameraEye, direction, u_aabbLowerLeft, u_aabbUpperRight);
+        Intersection i = RayIntersectsAABB(og_cameraEye, direction, u_aabbLowerLeft, u_aabbUpperRight);
         boxEntry = i.IntersectionPoint;
     }
 
 	//
 	// Mirror such that ray always steps in positive x and y direction
 	//
-    vec2 heightMapSize = vec2(textureSize(mg_texture0));
+    vec2 heightMapSize = vec2(textureSize(og_texture0));
     bvec2 mirror = lessThan(direction.xy, vec2(0.0));
     vec2 mirrorTextureCoordinates = vec2(0.0);
 
@@ -247,7 +247,7 @@ void main()
 			intersectionPoint.y = heightMapSize.y - intersectionPoint.y;
 		}
 
-        gl_FragDepth = ComputeWorldPositionDepth(intersectionPoint, mg_modelZToClipCoordinates);
+        gl_FragDepth = ComputeWorldPositionDepth(intersectionPoint, og_modelZToClipCoordinates);
 
 		if (u_shadingAlgorithm == 0)      // RayCastedTerrainShadingAlgorithm.ByHeight
 		{
