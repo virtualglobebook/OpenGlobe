@@ -153,6 +153,11 @@ namespace OpenGlobe.Renderer
             return bitmap;
         }
 
+        public static Fence CreateFence()
+        {
+            return new FenceGL3x();
+        }
+
         public static Extensions Extensions
         {
             get { return s_extensions; }

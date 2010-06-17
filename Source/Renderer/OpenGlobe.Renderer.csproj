@@ -54,6 +54,7 @@
     <Compile Include="FrameBuffer\HighResolutionSnapFrameBuffer.cs" />
     <Compile Include="GL3x\ExtensionsGL3x.cs" />
     <Compile Include="GL3x\Handles\BufferHandleGL3x.cs" />
+    <Compile Include="GL3x\Handles\FenceHandleGL3x.cs" />
     <Compile Include="GL3x\Handles\TextureHandleGL3x.cs" />
     <Compile Include="GL3x\Handles\ShaderProgramHandleGL3x.cs" />
     <Compile Include="GL3x\Handles\FinalizerThreadContextGL3x.cs" />
@@ -64,6 +65,7 @@
     <Compile Include="GL3x\Input\MouseGL3x.cs" />
     <Compile Include="GL3x\Handles\VertexArrayHandleGL3x.cs" />
     <Compile Include="GL3x\Shaders\FragmentOutputsGL3x.cs" />
+    <Compile Include="GL3x\Synchronization\FenceGL3x.cs" />
     <Compile Include="Input\Keyboard.cs" />
     <Compile Include="Input\KeyboardKey.cs" />
     <Compile Include="Input\KeyboardKeyEvent.cs" />
@@ -124,6 +126,7 @@
     <Compile Include="Shaders\LinkAutomaticUniforms\LinkAutomaticUniform.cs" />
     <Compile Include="Shaders\LinkAutomaticUniforms\LinkAutomaticUniformCollection.cs" />
     <Compile Include="Shaders\LinkAutomaticUniforms\TextureUniform.cs" />
+    <Compile Include="Synchronization\Fence.cs" />
     <Compile Include="Textures\TextureUtility.cs" />
     <Compile Include="Tools\TextureAtlas.cs" />
     <Compile Include="Tools\TextureCoordinateCollection.cs" />
@@ -232,6 +235,7 @@
       <Name>OpenGlobe.Core</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
