@@ -21,8 +21,9 @@ namespace OpenGlobe.Renderer.GL3x
 
         public override void Wait()
         {
-            //GL.WaitSync(_handle.Value, 0, (long)ArbSync.TimeoutIgnored);
-            GL.ClientWaitSync(_handle.Value, 0, (long)ArbSync.TimeoutIgnored);
+            GL.WaitSync(_handle.Value, 0, (long)ArbSync.TimeoutIgnored);
+            GL.Flush();
+            //GL.ClientWaitSync(_handle.Value, 0, (long)ArbSync.TimeoutIgnored);
         }
 
         public override SynchronizationStatus Status()
