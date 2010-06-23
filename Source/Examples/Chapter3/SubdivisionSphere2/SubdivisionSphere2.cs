@@ -29,7 +29,7 @@ namespace OpenGlobe.Examples.Chapter3
             _clearState = new ClearState();
 
             string vs =
-                @"#version 150
+                @"#version 330
 
                   in vec4 position;
                   in vec3 normal;
@@ -55,7 +55,7 @@ namespace OpenGlobe.Examples.Chapter3
                         surfaceTextureCoordinate = textureCoordinate;
                   }";
             string fs =
-                @"#version 150
+                @"#version 330
                  
                   in vec3 positionToLight;
                   in vec3 positionToEye;

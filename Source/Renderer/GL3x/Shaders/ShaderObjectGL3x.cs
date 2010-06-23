@@ -20,7 +20,7 @@ namespace OpenGlobe.Renderer.GL3x
         public ShaderObjectGL3x(ShaderType shaderType, string source)
         {
             string builtInConstants =
-                "#version 150                                                   \n" +
+                "#version 330                                                   \n" +
                 "const float og_E =                " + Math.E + "; \n" +
                 "const float og_pi =               " + Math.PI + "; \n" +
                 "const float og_oneOverPi =        " + 1.0 / Math.PI + "; \n" +
@@ -43,7 +43,7 @@ namespace OpenGlobe.Renderer.GL3x
             //
             if (source.StartsWith("#version", StringComparison.CurrentCulture))
             {
-                Debug.Assert(source.StartsWith("#version 150", StringComparison.CurrentCulture));
+                Debug.Assert(source.StartsWith("#version 330", StringComparison.CurrentCulture));
                 modifiedSource = "//" + source;
             }
             else

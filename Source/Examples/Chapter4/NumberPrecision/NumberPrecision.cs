@@ -36,7 +36,7 @@ namespace OpenGlobe.Examples.Chapter3.NumberPrecision
             // Point shader
             //
             string vs =
-                 @"#version 150
+                 @"#version 330
 
                   in vec4 position;
                   uniform mat4 og_modelViewOrthographicProjectionMatrix;
@@ -47,7 +47,7 @@ namespace OpenGlobe.Examples.Chapter3.NumberPrecision
                         gl_Position = og_modelViewOrthographicProjectionMatrix * position;
                   }";
             string fs =
-                @"#version 150
+                @"#version 330
                  
                   out vec4 FragColor;
 

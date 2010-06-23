@@ -14,7 +14,7 @@ namespace OpenGlobe.Renderer
         public static string PassThroughVertexShader()
         {
             return
-                @"#version 150
+                @"#version 330
 
                   in vec4 position;               
 
@@ -32,7 +32,7 @@ namespace OpenGlobe.Renderer
             // See http://www.opengl.org/discussion_boards/ubbthreads.php?ubb=showflat&Number=267989#Post267989
             //
             return
-                @"#version 150 
+                @"#version 330 
 
                   layout(triangles) in;
                   layout(triangle_strip, max_vertices = 3) out;
@@ -53,7 +53,7 @@ namespace OpenGlobe.Renderer
         public static string PassThroughFragmentShader()
         {
             return
-                @"#version 150
+                @"#version 330
                  
                   out vec4 FragColor;
 
@@ -66,7 +66,7 @@ namespace OpenGlobe.Renderer
         public static string RedUniformBlockFragmentShader()
         {
             return
-                @"#version 150
+                @"#version 330
                  
                   layout(std140) uniform RedBlock
                   {
@@ -84,7 +84,7 @@ namespace OpenGlobe.Renderer
         public static string MultitextureFragmentShader()
         {
             return
-                @"#version 150
+                @"#version 330
                  
                   uniform sampler2D og_texture0;
                   uniform sampler2D og_texture1;

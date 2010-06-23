@@ -77,7 +77,7 @@ namespace OpenGlobe.Renderer
             //    http://www.opengl.org/discussion_boards/ubbthreads.php?ubb=showflat&Main=52018&Number=268866#Post268866
             //
             string fs =
-                @"#version 150
+                @"#version 330
                   #extension GL_EXT_gpu_shader4 : enable        // for texture1DArray
 
                   uniform float exampleFloat;
@@ -370,7 +370,7 @@ namespace OpenGlobe.Renderer
             GraphicsWindow window = Device.CreateWindow(1, 1);
 
             string fs =
-                @"#version 150
+                @"#version 330
                  
                   uniform sampler2D og_texture0;
                   uniform sampler2D og_texture1;

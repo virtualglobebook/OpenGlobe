@@ -29,7 +29,7 @@ namespace OpenGlobe.Examples.Chapter3
             _clearState = new ClearState();
 
             string vs =
-                @"#version 150
+                @"#version 330
 
                   in vec4 position;
                   out vec3 worldPosition;
@@ -50,7 +50,7 @@ namespace OpenGlobe.Examples.Chapter3
                   }";
 
             string fs =
-                @"#version 150
+                @"#version 330
                  
                   in vec3 worldPosition;
                   in vec3 positionToLight;

@@ -64,7 +64,7 @@ namespace OpenGlobe.Examples.Chapter8
             // Pass-thru shader
             //
             string vs =
-                @"#version 150
+                @"#version 330
 
                 uniform mat4 og_modelViewPerspectiveProjectionMatrix;
                 in vec3 position;
@@ -74,7 +74,7 @@ namespace OpenGlobe.Examples.Chapter8
                     gl_Position = og_modelViewPerspectiveProjectionMatrix * vec4(position, 1.0);
                 }";
             string fs =
-                @"#version 150
+                @"#version 330
                  
                 uniform sampler2D og_texture0;
                 uniform vec2 og_inverseViewportDimensions;
@@ -99,7 +99,7 @@ namespace OpenGlobe.Examples.Chapter8
             // Line on terrain wall
             //
             vs =
-                @"#version 150
+                @"#version 330
 
                 in vec3 position;
                 uniform mat4 og_modelViewPerspectiveProjectionMatrix;
@@ -109,7 +109,7 @@ namespace OpenGlobe.Examples.Chapter8
                     gl_Position = og_modelViewPerspectiveProjectionMatrix * vec4(position, 1.0);
                 }";
             fs =
-                @"#version 150
+                @"#version 330
                 
                 uniform sampler2D og_texture0;
                 uniform vec2 og_inverseViewportDimensions;
@@ -172,7 +172,7 @@ namespace OpenGlobe.Examples.Chapter8
             // Lines on terrain line
             //
             vs =
-                @"#version 150
+                @"#version 330
             
                 in vec4 position;
 
@@ -181,7 +181,7 @@ namespace OpenGlobe.Examples.Chapter8
 	                gl_Position = position;
                 }";
             string gs =
-                @"#version 150 
+                @"#version 330 
 
                 layout(lines_adjacency) in;
                 layout(triangle_strip, max_vertices = 4) out;
@@ -291,7 +291,7 @@ namespace OpenGlobe.Examples.Chapter8
                     }
                 }";
             fs =
-                @"#version 150
+                @"#version 330
 
                 flat in vec4 fsColor;
                 out vec4 fragmentColor;

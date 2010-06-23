@@ -141,7 +141,7 @@ namespace OpenGlobe.Renderer
             FrameBuffer frameBuffer = TestUtility.CreateFrameBuffer(window.Context);
 
             string fs =
-                @"#version 150
+                @"#version 330
                  
                   uniform sampler2D textureUnit;
                   out vec4 FragColor;
@@ -189,7 +189,7 @@ namespace OpenGlobe.Renderer
             window.Context.Viewport = new Rectangle(0, 0, 1, 1);
 
             string fs =
-                @"#version 150
+                @"#version 330
                  
                   out vec3 RedColor;
                   out vec3 GreenColor;
@@ -304,7 +304,7 @@ namespace OpenGlobe.Renderer
             FrameBuffer frameBuffer = TestUtility.CreateFrameBuffer(window.Context);
 
             string vs =
-                @"#version 150
+                @"#version 330
 
                   in vec4 position;
                   uniform mat4 og_modelViewMatrix;
