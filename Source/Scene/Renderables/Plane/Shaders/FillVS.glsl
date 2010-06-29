@@ -23,8 +23,8 @@ vec4 ModelToClipCoordinates(
 
     if (logarithmicDepth)
     {
-        clip.z = (log((logarithmicDepthConstant * clip.z) + 1.0) / 
-                log((logarithmicDepthConstant * perspectiveFarPlaneDistance) + 1.0)) * clip.w;
+        clip.z = ((2.0 * log((logarithmicDepthConstant * clip.z) + 1.0) / 
+                   log((logarithmicDepthConstant * perspectiveFarPlaneDistance) + 1.0)) - 1.0) * clip.w;
     }
 
     return clip;
