@@ -32,16 +32,22 @@ namespace OpenGlobe.Examples.Chapter4
             _window.Keyboard.KeyUp += OnKeyUp;
             _window.Keyboard.KeyDown += OnKeyDown;
             _sceneState = new SceneState();
+            _sceneState.DiffuseIntensity = 0.45f;
+            _sceneState.SpecularIntensity = 0.05f;
+            _sceneState.AmbientIntensity = 0.5f;
+
             _camera = new CameraLookAtPoint(_sceneState.Camera, _window, _globeShape);
 
             _sceneState.Camera.ZoomToTarget(_globeShape.MaximumRadius);
-            PersistentView.Execute(@"E:\Manuscript\DepthBufferPrecision\Figures\DepthBufferPrecisionNear.xml", _window, _sceneState.Camera);
+            PersistentView.Execute(@"E:\Manuscript\DepthBufferPrecision\Figures\DepthBufferFormat.xml", _window, _sceneState.Camera);
 
             ///////////////////////////////////////////////////////////////////
 
             _globe = new TessellatedGlobe(_window.Context);
             _globe.Shape = _globeShape;
-            _globe.Texture = Device.CreateTexture2D(new Bitmap("MapperWDB.jpg"), TextureFormat.RedGreenBlue8, false);
+            _globe.NumberOfSlicePartitions = 64;
+            _globe.NumberOfStackPartitions = 32;
+            _globe.Texture = Device.CreateTexture2D(new Bitmap("world_topo_bathy_200411_3x5400x2700.jpg"), TextureFormat.RedGreenBlue8, false);
             _globe.Textured = true;
 
             _plane = new Plane(_window.Context);
@@ -251,13 +257,12 @@ namespace OpenGlobe.Examples.Chapter4
             _globe.Render(context, _sceneState);
             _plane.Render(context, _sceneState);
 
-            _hud.Render(context, _sceneState);
-
             //
             // Render viewport quad to show contents of frame buffer's color buffer
             //
             context.FrameBuffer = null;
             _viewportQuad.Render(context, _sceneState);
+            //_hud.Render(context, _sceneState);
         }
 
         #region IDisposable Members

@@ -68,7 +68,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\..\..\..\Data\Imagery\NASA\DavePape\MapperWDB.jpg">
+    <Content Include="..\..\..\..\Data\Imagery\NASA\world_topo_bathy_200411_3x5400x2700.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
