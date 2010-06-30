@@ -7,6 +7,7 @@
 //
 #endregion
 
+using System.Threading;
 using OpenGlobe.Core;
 
 namespace OpenGlobe.Renderer
@@ -24,17 +25,17 @@ namespace OpenGlobe.Renderer
             _window.MakeCurrent();
 
             _texture = TestUtility.CreateTexture(_rgba);
-            _fence = Device.CreateFence();
+
+            Fence fence = Device.CreateFence();
+            while (fence.ClientWait(0) == ClientWaitResult.TimeoutExpired)
+            {
+                Thread.Sleep(10);
+            }
         }
 
         public Texture2D Texture
         {
             get { return _texture; }
-        }
-
-        public Fence Fence
-        {
-            get { return _fence; }
         }
 
         #region Disposable Members
@@ -43,7 +44,6 @@ namespace OpenGlobe.Renderer
         {
             if (disposing)
             {
-                _fence.Dispose();
                 _texture.Dispose();
                 _window.Dispose();
             }
@@ -55,6 +55,5 @@ namespace OpenGlobe.Renderer
         private readonly GraphicsWindow _window;
         private readonly BlittableRGBA _rgba;
         private Texture2D _texture;
-        private Fence _fence;
     }
 }

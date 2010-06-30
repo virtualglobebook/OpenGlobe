@@ -7,6 +7,7 @@
 //
 #endregion
 
+using System;
 using OpenGlobe.Renderer;
 using OpenTK.Graphics.OpenGL;
 
@@ -17,13 +18,39 @@ namespace OpenGlobe.Renderer.GL3x
         public FenceGL3x()
         {
             _handle = new FenceHandleGL3x();
-            GL.Flush();
+            //TODO:  When/where to GL.Fush?  If at all.  Or use SYNC_FLUSH_COMMANDS_BIT with ClientWait?
         }
 
-        public override void Wait()
+        public override void ServerWait()
         {
             GL.WaitSync(_handle.Value, 0, (long)ArbSync.TimeoutIgnored);
-            //GL.ClientWaitSync(_handle.Value, 0, (long)ArbSync.TimeoutIgnored);
+        }
+
+        public override ClientWaitResult ClientWait()
+        {
+            return ClientWait((int)ArbSync.TimeoutIgnored);
+        }
+
+        public override ClientWaitResult ClientWait(int timeoutInNanoseconds)
+        {
+            if ((timeoutInNanoseconds < 0) && (timeoutInNanoseconds != (int)ArbSync.TimeoutIgnored))
+            {
+                throw new ArgumentOutOfRangeException("timeoutInNanoseconds");
+            }
+
+            ArbSync result = GL.ClientWaitSync(_handle.Value, 0, timeoutInNanoseconds);
+
+            switch (result)
+            {
+                case ArbSync.AlreadySignaled:
+                    return ClientWaitResult.AlreadySignaled;
+                case ArbSync.ConditionSatisfied:
+                    return ClientWaitResult.Signaled;
+                case ArbSync.TimeoutExpired:
+                    return ClientWaitResult.TimeoutExpired;
+            }
+
+            return ClientWaitResult.TimeoutExpired;     // ArbSync.WaitFailed
         }
 
         public override SynchronizationStatus Status()

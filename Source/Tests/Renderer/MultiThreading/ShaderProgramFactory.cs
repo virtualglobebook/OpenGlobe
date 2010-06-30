@@ -7,6 +7,7 @@
 //
 #endregion
 
+using System.Threading;
 using OpenGlobe.Core;
 
 namespace OpenGlobe.Renderer
@@ -25,17 +26,17 @@ namespace OpenGlobe.Renderer
             _window.MakeCurrent();
 
             _sp = Device.CreateShaderProgram(_vs, _fs);
-            _fence = Device.CreateFence();
+
+            Fence fence = Device.CreateFence();
+            while (fence.ClientWait(0) == ClientWaitResult.TimeoutExpired)
+            {
+                Thread.Sleep(10);
+            }
         }
 
         public ShaderProgram ShaderProgram
         {
             get { return _sp; }
-        }
-
-        public Fence Fence
-        {
-            get { return _fence; }
         }
 
         #region Disposable Members
@@ -44,7 +45,6 @@ namespace OpenGlobe.Renderer
         {
             if (disposing)
             {
-                _fence.Dispose();
                 _sp.Dispose();
                 _window.Dispose();
             }
@@ -57,6 +57,5 @@ namespace OpenGlobe.Renderer
         private readonly string _vs;
         private readonly string _fs;
         private ShaderProgram _sp;
-        private Fence _fence;
     }
 }

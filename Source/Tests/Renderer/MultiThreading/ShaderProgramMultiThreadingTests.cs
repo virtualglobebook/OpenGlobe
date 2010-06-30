@@ -33,7 +33,6 @@ namespace OpenGlobe.Renderer.Multithreading
             Thread t = new Thread(factory.Create);
             t.Start();
             t.Join();
-            factory.Fence.Wait();
 
             ///////////////////////////////////////////////////////////////////
 
@@ -70,13 +69,11 @@ namespace OpenGlobe.Renderer.Multithreading
             Thread t0 = new Thread(factory0.Create);
             t0.Start();
             t0.Join();
-            factory0.Fence.Wait();
 
             ShaderProgramFactory factory1 = new ShaderProgramFactory(thread1Window, ShaderSources.PassThroughVertexShader(), ShaderSources.PassThroughFragmentShader());
             Thread t1 = new Thread(factory1.Create);
             t1.Start();
             t1.Join();
-            factory1.Fence.Wait();
 
             ///////////////////////////////////////////////////////////////////
 
@@ -122,9 +119,6 @@ namespace OpenGlobe.Renderer.Multithreading
 
             t0.Join();
             t1.Join();
-
-            factory0.Fence.Wait();
-            factory1.Fence.Wait();
 
             ///////////////////////////////////////////////////////////////////
 

@@ -225,11 +225,6 @@ namespace OpenGlobe.Renderer.GL3x
             }
         }
 
-        public override void Finish()
-        {
-            GL.Finish();
-        }
-
         #endregion
 
         private void ApplyPrimitiveRestart(PrimitiveRestart primitiveRestart)

@@ -250,7 +250,5 @@ namespace OpenGlobe.Renderer
         public abstract void Clear(ClearState clearState);
         public abstract void Draw(PrimitiveType primitiveType, int offset, int count, DrawState drawState, SceneState sceneState);
         public abstract void Draw(PrimitiveType primitiveType, DrawState drawState, SceneState sceneState);
-
-        public abstract void Finish();
     }
 }

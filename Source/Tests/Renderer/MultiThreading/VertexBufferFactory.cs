@@ -7,6 +7,7 @@
 //
 #endregion
 
+using System.Threading;
 using OpenGlobe.Core;
 
 namespace OpenGlobe.Renderer
@@ -28,17 +29,16 @@ namespace OpenGlobe.Renderer
             _vertexBuffer.CopyFromSystemMemory(_positions);
             _positions = null;
 
-            _fence = Device.CreateFence();
+            Fence fence = Device.CreateFence();
+            while (fence.ClientWait(0) == ClientWaitResult.TimeoutExpired)
+            {
+                Thread.Sleep(10);
+            }
         }
 
         public VertexBuffer VertexBuffer
         {
             get { return _vertexBuffer; }
-        }
-
-        public Fence Fence
-        {
-            get { return _fence; }
         }
 
         #region Disposable Members
@@ -47,7 +47,6 @@ namespace OpenGlobe.Renderer
         {
             if (disposing)
             {
-                _fence.Dispose();
                 _vertexBuffer.Dispose();
                 _window.Dispose();
             }
@@ -59,6 +58,5 @@ namespace OpenGlobe.Renderer
         private readonly GraphicsWindow _window;
         private Vector3S[] _positions;
         private VertexBuffer _vertexBuffer;
-        private Fence _fence;
     }
 }

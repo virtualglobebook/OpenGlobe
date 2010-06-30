@@ -34,7 +34,6 @@ namespace OpenGlobe.Renderer.Multithreading
             Thread t = new Thread(factory.Create);
             t.Start();
             t.Join();
-            factory.Fence.Wait();
             ///////////////////////////////////////////////////////////////////
 
             TestUtility.ValidateColor(factory.Texture, 1, 2, 3);
@@ -62,12 +61,10 @@ namespace OpenGlobe.Renderer.Multithreading
             Thread t0 = new Thread(factory0.Create);
             t0.Start();
             t0.Join();
-            factory0.Fence.Wait();
 
             Thread t1 = new Thread(factory1.Create);
             t1.Start();
             t1.Join();
-            factory1.Fence.Wait();
 
             ///////////////////////////////////////////////////////////////////
 
@@ -117,9 +114,6 @@ namespace OpenGlobe.Renderer.Multithreading
 
             t0.Join();
             t1.Join();
-
-            factory0.Fence.Wait();
-            factory1.Fence.Wait();
 
             ///////////////////////////////////////////////////////////////////
 
