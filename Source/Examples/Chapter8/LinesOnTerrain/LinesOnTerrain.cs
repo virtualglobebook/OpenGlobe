@@ -40,9 +40,9 @@ namespace OpenGlobe.Examples.Chapter8
 
             ///////////////////////////////////////////////////////////////////
 
-            double tileRadius = Math.Max(terrainTile.Size.X, terrainTile.Size.Y) * 0.5;
+            double tileRadius = Math.Max(terrainTile.Resolution.X, terrainTile.Resolution.Y) * 0.5;
             _camera = new CameraLookAtPoint(_sceneState.Camera, _window, Ellipsoid.UnitSphere);
-            _camera.CenterPoint = new Vector3D(terrainTile.Size.X * 0.5, terrainTile.Size.Y * 0.5, 0.0);
+            _camera.CenterPoint = new Vector3D(terrainTile.Resolution.X * 0.5, terrainTile.Resolution.Y * 0.5, 0.0);
             _sceneState.Camera.ZoomToTarget(tileRadius);
             
             HighResolutionSnap snap = new HighResolutionSnap(_window, _sceneState);

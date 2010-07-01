@@ -32,11 +32,11 @@ namespace OpenGlobe.Terrain
                 EmbeddedResources.GetText("OpenGlobe.Scene.Terrain.RayCastedTerrainTile.TerrainVS.glsl"),
                 EmbeddedResources.GetText("OpenGlobe.Scene.Terrain.RayCastedTerrainTile.TerrainFS.glsl"));
 
-            _tileSize = tile.Size;
+            _tileResolution = tile.Resolution;
             _tileMinimumHeight = tile.MinimumHeight;
             _tileMaximumHeight = tile.MaximumHeight;
             _tileAABBLowerLeft = Vector3D.Zero;             // TEXEL_SPACE_TODO
-            _tileAABBUpperRight = new Vector3D(tile.Size.X, tile.Size.Y,
+            _tileAABBUpperRight = new Vector3D(tile.Resolution.X, tile.Resolution.Y,
                 tile.MaximumHeight - tile.MinimumHeight);
 
             _heightExaggeration = sp.Uniforms["u_heightExaggeration"] as Uniform<float>;
@@ -62,7 +62,7 @@ namespace OpenGlobe.Terrain
             pixelBuffer.CopyFromSystemMemory(tile.Heights);
 
             _texture = Device.CreateTexture2DRectangle(new Texture2DDescription(
-                tile.Size.X, tile.Size.Y, TextureFormat.Red32f));
+                tile.Resolution.X, tile.Resolution.Y, TextureFormat.Red32f));
             _texture.CopyFromBuffer(pixelBuffer, ImageFormat.Red, ImageDataType.Float);
             _texture.Filter = Texture2DFilter.NearestClampToEdge;
 
@@ -73,7 +73,7 @@ namespace OpenGlobe.Terrain
         {
             if (_dirtyVA)
             {
-                Vector3D radii = new Vector3D(_tileSize.X, _tileSize.Y,
+                Vector3D radii = new Vector3D(_tileResolution.X, _tileResolution.Y,
                     (_tileMaximumHeight - _tileMinimumHeight) * _heightExaggeration.Value);
                 Vector3D halfRadii = 0.5 * radii;
 
@@ -184,7 +184,7 @@ namespace OpenGlobe.Terrain
         private readonly Uniform<Vector3S> _aabbUpperRight;
         private readonly Uniform<int> _shadingAlgorithm;
 
-        private readonly Vector2I _tileSize;
+        private readonly Vector2I _tileResolution;
         private readonly float _tileMinimumHeight;
         private readonly float _tileMaximumHeight;
         private readonly Vector3D _tileAABBLowerLeft;

@@ -18,7 +18,7 @@ uniform vec2 u_originScale;
 
 void main()
 {
-    vec2 halfSize = vec2(textureSize(og_texture0, 0)) * 0.5 * og_highResolutionSnapScale;
+    vec2 halfSize = vec2(textureResolution(og_texture0, 0)) * 0.5 * og_highResolutionSnapScale;
     vec4 center = gl_in[0].gl_Position;
     center.xy += (u_originScale * halfSize);
 

@@ -40,13 +40,13 @@ namespace OpenGlobe.Terrain
             mesh.PrimitiveType = PrimitiveType.Triangles;
             mesh.FrontFaceWindingOrder = WindingOrder.Counterclockwise;
 
-            int numberOfPositions = tile.Size.X * tile.Size.Y;
+            int numberOfPositions = tile.Resolution.X * tile.Resolution.Y;
             VertexAttributeDoubleVector3 positionsAttribute = new VertexAttributeDoubleVector3("position", numberOfPositions);
             IList<Vector3D> positions = positionsAttribute.Values;
             mesh.Attributes.Add(positionsAttribute);
 
-            int numberOfPartitionsX = tile.Size.X - 1;
-            int numberOfPartitionsY = tile.Size.Y - 1;
+            int numberOfPartitionsX = tile.Resolution.X - 1;
+            int numberOfPartitionsY = tile.Resolution.Y - 1;
             int numberOfIndices = (numberOfPartitionsX * numberOfPartitionsY) * 6;
             IndicesInt32 indices = new IndicesInt32(numberOfIndices);
             mesh.Indices = indices;

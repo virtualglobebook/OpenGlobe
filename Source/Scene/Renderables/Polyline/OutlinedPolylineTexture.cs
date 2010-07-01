@@ -79,9 +79,9 @@ namespace OpenGlobe.Scene
 
             if ((_texture == null) || (_texture.Description.Width != textureWidth))
             {
-                int textureSize = textureWidth * 2;
+                int textureResolution = textureWidth * 2;
 
-                float[] texels = new float[textureSize];
+                float[] texels = new float[textureResolution];
 
                 int k = 3;
                 for (int i = 1; i < textureWidth - 1; ++i)
@@ -98,7 +98,7 @@ namespace OpenGlobe.Scene
                 }
 
                 WritePixelBuffer pixelBuffer = Device.CreateWritePixelBuffer(WritePixelBufferHint.StreamDraw,
-                    sizeof(float) * textureSize);
+                    sizeof(float) * textureResolution);
                 pixelBuffer.CopyFromSystemMemory(texels);
 
                 if (_texture != null)

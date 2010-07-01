@@ -53,7 +53,7 @@ namespace OpenGlobe.Terrain
             pixelBuffer.CopyFromSystemMemory(tile.Heights);
 
             _texture = Device.CreateTexture2DRectangle(new Texture2DDescription(
-                tile.Size.X, tile.Size.Y, TextureFormat.Red32f));
+                tile.Resolution.X, tile.Resolution.Y, TextureFormat.Red32f));
             _texture.CopyFromBuffer(pixelBuffer, ImageFormat.Red, ImageDataType.Float);
             _texture.Filter = Texture2DFilter.NearestClampToEdge;
             
@@ -64,11 +64,11 @@ namespace OpenGlobe.Terrain
                 EmbeddedResources.GetText("OpenGlobe.Scene.Terrain.VertexDisplacementMapTerrainTile.TerrainFS.glsl"));
             _heightExaggerationUniform = spTerrain.Uniforms["u_heightExaggeration"] as Uniform<float>;
             (spTerrain.Uniforms["u_positionToTextureCoordinate"] as Uniform<Vector2S>).Value = new Vector2S(
-                (float)(1.0 / (double)(tile.Size.X)), 
-                (float)( 1.0 / (double)(tile.Size.Y)));
+                (float)(1.0 / (double)(tile.Resolution.X)), 
+                (float)( 1.0 / (double)(tile.Resolution.Y)));
             (spTerrain.Uniforms["u_positionToRepeatTextureCoordinate"] as Uniform<Vector2S>).Value = new Vector2S(
-                (float)(4.0 / (double)tile.Size.X),
-                (float)(4.0 / (double)tile.Size.Y));
+                (float)(4.0 / (double)tile.Resolution.X),
+                (float)(4.0 / (double)tile.Resolution.Y));
             
             ///////////////////////////////////////////////////////////////////
 
@@ -93,8 +93,8 @@ namespace OpenGlobe.Terrain
             ///////////////////////////////////////////////////////////////////
 
             Mesh mesh = RectangleTessellator.Compute(new RectangleD(new Vector2D(0.5, 0.5),
-                new Vector2D((double)tile.Size.X - 0.5, (double)tile.Size.Y - 0.5)),
-                tile.Size.X - 1, tile.Size.Y - 1);
+                new Vector2D((double)tile.Resolution.X - 0.5, (double)tile.Resolution.Y - 0.5)),
+                tile.Resolution.X - 1, tile.Resolution.Y - 1);
             _va = context.CreateVertexArray(mesh, spWireframe.VertexAttributes, BufferHint.StaticDraw);
             _primitiveType = mesh.PrimitiveType;
 

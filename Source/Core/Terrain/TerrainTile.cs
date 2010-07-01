@@ -46,7 +46,7 @@ namespace OpenGlobe.Terrain
 
         public TerrainTile(
             RectangleD extent,
-            Vector2I size,
+            Vector2I resolution,
             float[] heights,
             float minimumHeight,
             float maximumHeight)
@@ -57,9 +57,9 @@ namespace OpenGlobe.Terrain
                 throw new ArgumentOutOfRangeException("extent");
             }
 
-            if (size.X < 0 || size.Y < 0)
+            if (resolution.X < 0 || resolution.Y < 0)
             {
-                throw new ArgumentOutOfRangeException("size");
+                throw new ArgumentOutOfRangeException("resolution");
             }
 
             if (heights == null)
@@ -67,9 +67,9 @@ namespace OpenGlobe.Terrain
                 throw new ArgumentNullException("heights");
             }
 
-            if (heights.Length != size.X * size.Y)
+            if (heights.Length != resolution.X * resolution.Y)
             {
-                throw new ArgumentException("heights.Length != size.Width * size.Height");
+                throw new ArgumentException("heights.Length != resolution.Width * resolution.Height");
             }
 
             if (minimumHeight > maximumHeight)
@@ -78,7 +78,7 @@ namespace OpenGlobe.Terrain
             }
 
             _extent = extent;
-            _size = size;
+            _resolution = resolution;
             _heights = heights;
             _minimumHeight = minimumHeight;
             _maximumHeight = maximumHeight;
@@ -89,9 +89,9 @@ namespace OpenGlobe.Terrain
             get { return _extent; }
         }
 
-        public Vector2I Size
+        public Vector2I Resolution
         {
-            get { return _size; }
+            get { return _resolution; }
         }
 
         public float[] Heights
@@ -110,7 +110,7 @@ namespace OpenGlobe.Terrain
         }
 
         private readonly RectangleD _extent;
-        private readonly Vector2I _size;
+        private readonly Vector2I _resolution;
         private readonly float[] _heights;
         private readonly float _minimumHeight;
         private readonly float _maximumHeight;
