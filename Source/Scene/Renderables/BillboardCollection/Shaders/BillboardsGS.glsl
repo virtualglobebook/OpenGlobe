@@ -27,7 +27,7 @@ void main()
     float originScales[3] = float[](0.0, 1.0, -1.0);
 
     vec4 textureCoordinate = gsTextureCoordinates[0];
-    vec2 atlasSize = vec2(textureResolution(og_texture0, 0));
+    vec2 atlasSize = vec2(textureSize(og_texture0, 0));
     vec2 subTextureSize = vec2(
         atlasSize.x * (textureCoordinate.p - textureCoordinate.s), 
         atlasSize.y * (textureCoordinate.q - textureCoordinate.t));

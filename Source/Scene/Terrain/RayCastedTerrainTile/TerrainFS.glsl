@@ -204,7 +204,7 @@ void main()
 	//
 	// Mirror such that ray always steps in positive x and y direction
 	//
-    vec2 heightMapSize = vec2(textureResolution(og_texture0));
+    vec2 heightMapSize = vec2(textureSize(og_texture0));
     bvec2 mirror = lessThan(direction.xy, vec2(0.0));
     vec2 mirrorTextureCoordinates = vec2(0.0);
 
