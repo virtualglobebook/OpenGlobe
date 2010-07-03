@@ -45,7 +45,7 @@ namespace OpenGlobe.Renderer
         {
             double halfWidth = viewport.Width * 0.5;
             double halfHeight = viewport.Height * 0.5;
-            double halfDepth = (farDepthRange - nearDepthRange) * 0.5; // should be near far depth range value. // Camera.OrthographicDepth * 0.5;
+            double halfDepth = (farDepthRange - nearDepthRange) * 0.5;
 
             //
             // Bottom and top swapped:  MS -> OpenGL

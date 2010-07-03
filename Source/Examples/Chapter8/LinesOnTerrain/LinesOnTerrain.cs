@@ -19,8 +19,6 @@ using OpenGlobe.Scene;
 using OpenGlobe.Core;
 using OpenGlobe.Terrain;
 
-// junk deron todo using OpenTK;
-
 namespace OpenGlobe.Examples.Chapter8
 {
     sealed class LinesOnTerrain : IDisposable
