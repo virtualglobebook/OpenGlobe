@@ -41,11 +41,11 @@ namespace OpenGlobe.Renderer
             get { return Camera.Eye; }
         }
 
-        public Matrix4d ComputeViewportTransformationMatrix(Rectangle viewport)
+        public Matrix4d ComputeViewportTransformationMatrix(Rectangle viewport, double nearDepthRange, double farDepthRange)
         {
             double halfWidth = viewport.Width * 0.5;
             double halfHeight = viewport.Height * 0.5;
-            double halfDepth = Camera.OrthographicDepth * 0.5;
+            double halfDepth = (farDepthRange - nearDepthRange) * 0.5; // should be near far depth range value. // Camera.OrthographicDepth * 0.5;
 
             //
             // Bottom and top swapped:  MS -> OpenGL
@@ -53,8 +53,8 @@ namespace OpenGlobe.Renderer
             return new Matrix4d(
                 halfWidth, 0, 0, 0,
                 0, halfHeight, 0, 0,
-                0, 0, -halfDepth, 0,
-                viewport.Left, viewport.Top, Camera.OrthographicNearPlaneDistance, 1);
+                0, 0, halfDepth, 0,
+                viewport.Left + halfWidth, viewport.Top + halfHeight, nearDepthRange + halfDepth, 1);
         }
 
         public static Matrix4d ComputeViewportOrthographicProjectionMatrix(Rectangle viewport)

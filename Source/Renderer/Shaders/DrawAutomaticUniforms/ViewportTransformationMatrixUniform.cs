@@ -22,7 +22,8 @@ namespace OpenGlobe.Renderer
 
         public override void Set(Context context, DrawState drawState, SceneState sceneState)
         {
-            _uniform.Value = Conversion.ToMatrix4(sceneState.ComputeViewportTransformationMatrix(context.Viewport));
+            _uniform.Value = Conversion.ToMatrix4(sceneState.ComputeViewportTransformationMatrix(context.Viewport,
+                drawState.RenderState.DepthRange.Near, drawState.RenderState.DepthRange.Far));
         }
 
         #endregion

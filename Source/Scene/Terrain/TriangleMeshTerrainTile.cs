@@ -101,6 +101,15 @@ namespace OpenGlobe.Terrain
             context.Draw(_primitiveType, _drawState, sceneState);
         }
 
+        public void RenderCustom(Context context, SceneState sceneState, DrawState drawState)
+        {
+            Verify.ThrowIfNull(context);
+            Verify.ThrowIfNull(sceneState);
+
+            drawState.VertexArray = _drawState.VertexArray;
+            context.Draw(_primitiveType, drawState, sceneState);
+        }
+
         public float HeightExaggeration
         {
             get { return _heightExaggeration.Value; }

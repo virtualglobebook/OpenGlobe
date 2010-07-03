@@ -24,7 +24,7 @@ uniform float u_outlineDistance;
 vec4 ClipToWindowCoordinates(vec4 v, mat4 viewportTransformationMatrix)
 {
     v.xyz /= v.w;                                                        // normalized device coordinates
-    v.xyz = (viewportTransformationMatrix * vec4(v.xyz + 1.0, 1.0)).xyz; // windows coordinates
+    v.xyz = (viewportTransformationMatrix * vec4(v.xyz, 1.0)).xyz; // windows coordinates
     return v;
 }
 
@@ -73,14 +73,14 @@ void main()
     vec2 direction = windowP1.xy - windowP0.xy;
     vec2 normal = normalize(vec2(direction.y, -direction.x));
 
-    vec4 v0 = vec4(windowP0.xy - (normal * u_outlineDistance), windowP0.z, 1.0);
-    vec4 v1 = vec4(windowP1.xy - (normal * u_outlineDistance), windowP1.z, 1.0);
-    vec4 v2 = vec4(windowP0.xy - (normal * u_fillDistance), windowP0.z, 1.0);
-    vec4 v3 = vec4(windowP1.xy - (normal * u_fillDistance), windowP1.z, 1.0);
-    vec4 v4 = vec4(windowP0.xy + (normal * u_fillDistance), windowP0.z, 1.0);
-    vec4 v5 = vec4(windowP1.xy + (normal * u_fillDistance), windowP1.z, 1.0);
-    vec4 v6 = vec4(windowP0.xy + (normal * u_outlineDistance), windowP0.z, 1.0);
-    vec4 v7 = vec4(windowP1.xy + (normal * u_outlineDistance), windowP1.z, 1.0);
+    vec4 v0 = vec4(windowP0.xy - (normal * u_outlineDistance), -windowP0.z, 1.0);
+    vec4 v1 = vec4(windowP1.xy - (normal * u_outlineDistance), -windowP1.z, 1.0);
+    vec4 v2 = vec4(windowP0.xy - (normal * u_fillDistance), -windowP0.z, 1.0);
+    vec4 v3 = vec4(windowP1.xy - (normal * u_fillDistance), -windowP1.z, 1.0);
+    vec4 v4 = vec4(windowP0.xy + (normal * u_fillDistance), -windowP0.z, 1.0);
+    vec4 v5 = vec4(windowP1.xy + (normal * u_fillDistance), -windowP1.z, 1.0);
+    vec4 v6 = vec4(windowP0.xy + (normal * u_outlineDistance), -windowP0.z, 1.0);
+    vec4 v7 = vec4(windowP1.xy + (normal * u_outlineDistance), -windowP1.z, 1.0);
 
     gl_Position = og_viewportOrthographicProjectionMatrix * v0;
     fsColor = gsOutlineColor[0];

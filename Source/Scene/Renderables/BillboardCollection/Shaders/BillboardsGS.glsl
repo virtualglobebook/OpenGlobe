@@ -40,10 +40,10 @@ void main()
 
     center.xy += (gsPixelOffset[0] * og_highResolutionSnapScale);
 
-    vec4 v0 = vec4(center.xy - halfSize, center.z, 1.0);
-    vec4 v1 = vec4(center.xy + vec2(halfSize.x, -halfSize.y), center.z, 1.0);
-    vec4 v2 = vec4(center.xy + vec2(-halfSize.x, halfSize.y), center.z, 1.0);
-    vec4 v3 = vec4(center.xy + halfSize, center.z, 1.0);
+    vec4 v0 = vec4(center.xy - halfSize, -center.z, 1.0);
+    vec4 v1 = vec4(center.xy + vec2(halfSize.x, -halfSize.y), -center.z, 1.0);
+    vec4 v2 = vec4(center.xy + vec2(-halfSize.x, halfSize.y), -center.z, 1.0);
+    vec4 v3 = vec4(center.xy + halfSize, -center.z, 1.0);
 
     //
     // Cull - could also cull in z.
