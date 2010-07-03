@@ -431,9 +431,9 @@ namespace OpenGlobe.Renderer.GL3x
             GL.UseProgram(_program.Value);
         }
 
-        internal void Clean(Context context, SceneState sceneState)
+        internal void Clean(Context context, DrawState drawState, SceneState sceneState)
         {
-            SetDrawAutomaticUniforms(context, sceneState);
+            SetDrawAutomaticUniforms(context, drawState, sceneState);
 
             for (int i = 0; i < _dirtyUniforms.Count; ++i)
             {

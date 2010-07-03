@@ -35,11 +35,11 @@ namespace OpenGlobe.Renderer
             }
         }
 
-        protected void SetDrawAutomaticUniforms(Context context, SceneState sceneState)
+        protected void SetDrawAutomaticUniforms(Context context, DrawState drawState, SceneState sceneState)
         {
             for (int i = 0; i < _drawAutomaticUniforms.Count; ++i)
             {
-                _drawAutomaticUniforms[i].Set(context, sceneState);
+                _drawAutomaticUniforms[i].Set(context, drawState, sceneState);
             }
         }
 

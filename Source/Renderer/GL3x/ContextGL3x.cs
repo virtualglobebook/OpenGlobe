@@ -496,7 +496,7 @@ namespace OpenGlobe.Renderer.GL3x
         {
             ApplyRenderState(drawState.RenderState);
             ApplyVertexArray(drawState.VertexArray);
-            ApplyShaderProgram(drawState.ShaderProgram, sceneState);
+            ApplyShaderProgram(drawState, sceneState);
 
             CleanTextureUnits();
             CleanFrameBuffer();
@@ -531,16 +531,16 @@ namespace OpenGlobe.Renderer.GL3x
             _boundIndexBuffer = _boundVertexArray.IndexBuffer as IndexBufferGL3x;
         }
 
-        private void ApplyShaderProgram(ShaderProgram shaderProgram, SceneState sceneState)
+        private void ApplyShaderProgram(DrawState drawState, SceneState sceneState)
         {
-            ShaderProgramGL3x shaderProgramGL3x = shaderProgram as ShaderProgramGL3x;
+            ShaderProgramGL3x shaderProgramGL3x = drawState.ShaderProgram as ShaderProgramGL3x;
 
             if (_boundShaderProgram != shaderProgramGL3x)
             {
                 shaderProgramGL3x.Bind();
                 _boundShaderProgram = shaderProgramGL3x;
             }
-            _boundShaderProgram.Clean(this, sceneState);
+            _boundShaderProgram.Clean(this, drawState, sceneState);
 
 #if DEBUG
             GL.ValidateProgram(_boundShaderProgram.Handle.Value);

@@ -22,7 +22,7 @@ namespace OpenGlobe.Renderer
 
         #region DrawAutomaticUniform Members
 
-        public override void Set(Context context, SceneState sceneState)
+        public override void Set(Context context, DrawState drawState, SceneState sceneState)
         {
             Camera camera = sceneState.Camera;
             double theta = camera.FieldOfViewX * 0.5;

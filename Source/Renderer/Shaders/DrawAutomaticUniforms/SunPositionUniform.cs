@@ -20,7 +20,7 @@ namespace OpenGlobe.Renderer
 
         #region DrawAutomaticUniform Members
 
-        public override void Set(Context context, SceneState sceneState)
+        public override void Set(Context context, DrawState drawState, SceneState sceneState)
         {
             _uniform.Value = sceneState.SunPosition.ToVector3S();
         }

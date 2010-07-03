@@ -11,6 +11,6 @@ namespace OpenGlobe.Renderer
 {
     internal abstract class DrawAutomaticUniform
     {
-        public abstract void Set(Context context, SceneState sceneState);
+        public abstract void Set(Context context, DrawState drawState, SceneState sceneState);
     }
 }
