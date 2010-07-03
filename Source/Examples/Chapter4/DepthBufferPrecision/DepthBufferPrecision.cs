@@ -262,7 +262,7 @@ namespace OpenGlobe.Examples.Chapter4
             //
             context.FrameBuffer = null;
             _viewportQuad.Render(context, _sceneState);
-            //_hud.Render(context, _sceneState);
+            _hud.Render(context, _sceneState);
         }
 
         #region IDisposable Members
