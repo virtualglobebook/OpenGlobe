@@ -38,7 +38,7 @@ namespace OpenGlobe.Renderer
         public StencilTestFace()
         {
             StencilFailOperation = StencilOperation.Keep;
-            DepthPassStencilFailOperation = StencilOperation.Keep;
+            DepthFailStencilPassOperation = StencilOperation.Keep;
             DepthPassStencilPassOperation = StencilOperation.Keep;
             Function = StencilTestFunction.Always;
             ReferenceValue = 0;
@@ -46,7 +46,7 @@ namespace OpenGlobe.Renderer
         }
 
         public StencilOperation StencilFailOperation { get; set; }
-        public StencilOperation DepthPassStencilFailOperation { get; set; }
+        public StencilOperation DepthFailStencilPassOperation { get; set; }
         public StencilOperation DepthPassStencilPassOperation { get; set; }
         
         public StencilTestFunction Function { get; set; }

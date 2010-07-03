@@ -275,7 +275,7 @@ namespace OpenGlobe.Renderer
 
             StencilTest stencilTest = new StencilTest();
             stencilTest.Enabled = true;
-            stencilTest.FrontFace.DepthPassStencilFailOperation = StencilOperation.Replace;
+            stencilTest.FrontFace.DepthFailStencilPassOperation = StencilOperation.Replace;
             stencilTest.FrontFace.DepthPassStencilPassOperation = StencilOperation.Replace;
             stencilTest.FrontFace.StencilFailOperation = StencilOperation.Replace;
             stencilTest.FrontFace.ReferenceValue = 1;

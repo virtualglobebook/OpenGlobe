@@ -79,14 +79,14 @@ namespace OpenGlobe.Renderer
             stencilTest.Enabled = true;
 
             frontStencil.StencilFailOperation = StencilOperation.Keep;
-            frontStencil.DepthPassStencilFailOperation = StencilOperation.Keep;
+            frontStencil.DepthFailStencilPassOperation = StencilOperation.Keep;
             frontStencil.DepthPassStencilPassOperation = StencilOperation.Increment;
             frontStencil.Function = StencilTestFunction.Always;
             frontStencil.ReferenceValue = 0;
             frontStencil.Mask = 0xFF;
 
             backStencil.StencilFailOperation = StencilOperation.Zero;
-            backStencil.DepthPassStencilFailOperation = StencilOperation.Zero;
+            backStencil.DepthFailStencilPassOperation = StencilOperation.Zero;
             backStencil.DepthPassStencilPassOperation = StencilOperation.Decrement;
             backStencil.Function = StencilTestFunction.Equal;
             backStencil.ReferenceValue = 1;
@@ -95,14 +95,14 @@ namespace OpenGlobe.Renderer
             Assert.IsTrue(stencilTest.Enabled);
 
             Assert.AreEqual(StencilOperation.Keep, frontStencil.StencilFailOperation);
-            Assert.AreEqual(StencilOperation.Keep, frontStencil.DepthPassStencilFailOperation);
+            Assert.AreEqual(StencilOperation.Keep, frontStencil.DepthFailStencilPassOperation);
             Assert.AreEqual(StencilOperation.Increment, frontStencil.DepthPassStencilPassOperation);
             Assert.AreEqual(StencilTestFunction.Always, frontStencil.Function);
             Assert.AreEqual(0, frontStencil.ReferenceValue);
             Assert.AreEqual(0xFF, frontStencil.Mask);
 
             Assert.AreEqual(StencilOperation.Zero, backStencil.StencilFailOperation);
-            Assert.AreEqual(StencilOperation.Zero, backStencil.DepthPassStencilFailOperation);
+            Assert.AreEqual(StencilOperation.Zero, backStencil.DepthFailStencilPassOperation);
             Assert.AreEqual(StencilOperation.Decrement, backStencil.DepthPassStencilPassOperation);
             Assert.AreEqual(StencilTestFunction.Equal, backStencil.Function);
             Assert.AreEqual(1, backStencil.ReferenceValue);

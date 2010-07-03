@@ -677,12 +677,12 @@ namespace OpenGlobe.Examples.Chapter8
             StencilTest stencilTest = new StencilTest();
             stencilTest.Enabled = true;
 
-            stencilTest.FrontFace.DepthPassStencilFailOperation = StencilOperation.Keep;
+            stencilTest.FrontFace.DepthFailStencilPassOperation = StencilOperation.Keep;
             stencilTest.FrontFace.DepthPassStencilPassOperation = StencilOperation.Invert;
             stencilTest.FrontFace.StencilFailOperation = StencilOperation.Keep;
             stencilTest.FrontFace.Function = StencilTestFunction.Always;
 
-            stencilTest.BackFace.DepthPassStencilFailOperation = StencilOperation.Keep;
+            stencilTest.BackFace.DepthFailStencilPassOperation = StencilOperation.Keep;
             stencilTest.BackFace.DepthPassStencilPassOperation = StencilOperation.Invert;
             stencilTest.BackFace.StencilFailOperation = StencilOperation.Keep;
             stencilTest.BackFace.Function = StencilTestFunction.Always;
@@ -698,13 +698,13 @@ namespace OpenGlobe.Examples.Chapter8
 
             // draw where stencil is set
 
-            stencilTest.FrontFace.DepthPassStencilFailOperation = StencilOperation.Keep;
+            stencilTest.FrontFace.DepthFailStencilPassOperation = StencilOperation.Keep;
             stencilTest.FrontFace.DepthPassStencilPassOperation = StencilOperation.Keep;
             stencilTest.FrontFace.StencilFailOperation = StencilOperation.Keep;
             stencilTest.FrontFace.Function = StencilTestFunction.NotEqual;
             stencilTest.FrontFace.ReferenceValue = 0;
 
-            stencilTest.BackFace.DepthPassStencilFailOperation = StencilOperation.Keep;
+            stencilTest.BackFace.DepthFailStencilPassOperation = StencilOperation.Keep;
             stencilTest.BackFace.DepthPassStencilPassOperation = StencilOperation.Keep;
             stencilTest.BackFace.StencilFailOperation = StencilOperation.Keep;
             stencilTest.BackFace.Function = StencilTestFunction.NotEqual;

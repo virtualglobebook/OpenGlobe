@@ -88,7 +88,7 @@ namespace OpenGlobe.Renderer.GL3x
         {
             GL.StencilOpSeparate(face,
                 TypeConverterGL3x.To(test.StencilFailOperation),
-                TypeConverterGL3x.To(test.DepthPassStencilFailOperation),
+                TypeConverterGL3x.To(test.DepthFailStencilPassOperation),
                 TypeConverterGL3x.To(test.DepthPassStencilPassOperation));
 
             GL.StencilFuncSeparate(face,
@@ -327,16 +327,16 @@ namespace OpenGlobe.Renderer.GL3x
         private static void ApplyStencil(StencilFace face, StencilTestFace currentTest, StencilTestFace test)
         {
             if ((currentTest.StencilFailOperation != test.StencilFailOperation) ||
-                (currentTest.DepthPassStencilFailOperation != test.DepthPassStencilFailOperation) ||
+                (currentTest.DepthFailStencilPassOperation != test.DepthFailStencilPassOperation) ||
                 (currentTest.DepthPassStencilPassOperation != test.DepthPassStencilPassOperation))
             {
                 GL.StencilOpSeparate(face,
                     TypeConverterGL3x.To(test.StencilFailOperation),
-                    TypeConverterGL3x.To(test.DepthPassStencilFailOperation),
+                    TypeConverterGL3x.To(test.DepthFailStencilPassOperation),
                     TypeConverterGL3x.To(test.DepthPassStencilPassOperation));
 
                 currentTest.StencilFailOperation = test.StencilFailOperation;
-                currentTest.DepthPassStencilFailOperation = test.DepthPassStencilFailOperation;
+                currentTest.DepthFailStencilPassOperation = test.DepthFailStencilPassOperation;
                 currentTest.DepthPassStencilPassOperation = test.DepthPassStencilPassOperation;
             }
 
