@@ -18,7 +18,7 @@ uniform float u_heightExaggeration;
 
 vec4 ClipToWindowCoordinates(vec4 v, mat4 viewportTransformationMatrix)
 {
-    v.xyz /= v.w;                                                        // normalized device coordinates
+    v.xyz /= v.w;                                                  // normalized device coordinates
     v.xyz = (viewportTransformationMatrix * vec4(v.xyz, 1.0)).xyz; // windows coordinates
     return v;
 }

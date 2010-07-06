@@ -23,7 +23,7 @@ uniform float u_outlineDistance;
 
 vec4 ClipToWindowCoordinates(vec4 v, mat4 viewportTransformationMatrix)
 {
-    v.xyz /= v.w;                                                        // normalized device coordinates
+    v.xyz /= v.w;                                                  // normalized device coordinates
     v.xyz = (viewportTransformationMatrix * vec4(v.xyz, 1.0)).xyz; // windows coordinates
     return v;
 }
@@ -64,8 +64,8 @@ void main()
     vec4 clipP0;
     vec4 clipP1;
     ClipLineSegmentToNearPlane(og_perspectiveNearPlaneDistance, 
-    og_modelViewPerspectiveProjectionMatrix,
-    gl_in[0].gl_Position, gl_in[1].gl_Position, clipP0, clipP1);
+		og_modelViewPerspectiveProjectionMatrix,
+		gl_in[0].gl_Position, gl_in[1].gl_Position, clipP0, clipP1);
 
     vec4 windowP0 = ClipToWindowCoordinates(clipP0, og_viewportTransformationMatrix);
     vec4 windowP1 = ClipToWindowCoordinates(clipP1, og_viewportTransformationMatrix);
