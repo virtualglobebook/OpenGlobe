@@ -17,9 +17,9 @@ uniform sampler2D og_texture0;
 void main()
 {
     vec2 texel = texture(og_texture0, vec2(fsTextureCoordinate, 0.5)).rg;
-    float fill = texel.r;
+    float interior = texel.r;
     float alpha = texel.g;
 
-    vec4 color = mix(fsOutlineColor, fsColor, fill);
+    vec4 color = mix(fsOutlineColor, fsColor, interior);
     fragmentColor = vec4(color.rgb, color.a * alpha);
 }
