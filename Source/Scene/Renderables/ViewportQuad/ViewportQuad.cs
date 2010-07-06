@@ -15,7 +15,7 @@ namespace OpenGlobe.Scene
 {
     public sealed class ViewportQuad : IDisposable
     {
-        public ViewportQuad(Context context)
+        public ViewportQuad(Context context, string fs)
         {
             Verify.ThrowIfNull(context);
 
@@ -27,7 +27,7 @@ namespace OpenGlobe.Scene
             _drawState.RenderState = renderState;
             _drawState.ShaderProgram = Device.CreateShaderProgram(
                 EmbeddedResources.GetText("OpenGlobe.Scene.Renderables.ViewportQuad.Shaders.ViewportQuadVS.glsl"),
-                EmbeddedResources.GetText("OpenGlobe.Scene.Renderables.ViewportQuad.Shaders.ViewportQuadFS.glsl"));
+                fs == null ? EmbeddedResources.GetText("OpenGlobe.Scene.Renderables.ViewportQuad.Shaders.ViewportQuadFS.glsl") : fs);
 
             _geometry = new ViewportQuadGeometry();
         }

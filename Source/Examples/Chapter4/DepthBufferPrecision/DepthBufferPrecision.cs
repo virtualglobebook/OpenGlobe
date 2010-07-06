@@ -57,7 +57,7 @@ namespace OpenGlobe.Examples.Chapter4
             _cubeRootPlaneHeight = 100.0;
             UpdatePlaneOrigin();
 
-            _viewportQuad = new ViewportQuad(_window.Context);
+            _viewportQuad = new ViewportQuad(_window.Context, null);
 
             _frameBuffer = _window.Context.CreateFrameBuffer();
             _depthFormatIndex = 1;

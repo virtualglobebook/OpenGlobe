@@ -19,6 +19,12 @@ using OpenGlobe.Scene;
 using OpenGlobe.Core;
 using OpenGlobe.Terrain;
 
+// deron junk todo
+//
+// clipping to wall shader
+// wall normal angle is not a good way to determine which shader to use
+//
+
 namespace OpenGlobe.Examples.Chapter8
 {
     sealed class LinesOnTerrain : IDisposable
@@ -28,9 +34,17 @@ namespace OpenGlobe.Examples.Chapter8
             _window = Device.CreateWindow(800, 600, "Chapter 8:  Lines on Terrain");
             _window.Resize += OnResize;
             _window.RenderFrame += OnRenderFrame;
+            _window.Keyboard.KeyDown += OnKeyDown;
             _sceneState = new SceneState();
             _sceneState.Camera.PerspectiveFarPlaneDistance = 4096;
             _sceneState.Camera.PerspectiveNearPlaneDistance = 10;
+            
+            _instructions = new HeadsUpDisplay(_window.Context);
+            _instructions.Texture = Device.CreateTexture2D(
+                Device.CreateBitmapFromText("s - Show silhouette",
+                    new Font("Arial", 24)),
+                TextureFormat.RedGreenBlueAlpha8, false);
+            _instructions.Color = Color.LightBlue;
 
             ///////////////////////////////////////////////////////////////////
 
@@ -208,6 +222,14 @@ namespace OpenGlobe.Examples.Chapter8
                     fsColor = vec4(0.0, 0.0, 0.0, 1.0);
                 }";
             _silhouetteSP = Device.CreateShaderProgram(vs, gs, fs);
+
+
+            //_silhouetteSP = Device.CreateShaderProgram(
+            //    EmbeddedResources.GetText("OpenGlobe.Examples.Chapter8.LinesOnTerrain.Shaders.SilhouetteVS.glsl"),
+            //    EmbeddedResources.GetText("OpenGlobe.Examples.Chapter8.LinesOnTerrain.Shaders.SilhouetteGS.glsl"),
+            //    EmbeddedResources.GetText("OpenGlobe.Examples.Chapter8.LinesOnTerrain.Shaders.SilhouetteFS.glsl"));
+
+
             Uniform<float> fillDistance = _silhouetteSP.Uniforms["u_fillDistance"] as Uniform<float>;
             fillDistance.Value = 2.0f;
             Uniform<float> heightExaggeration = _silhouetteSP.Uniforms["u_heightExaggeration"] as Uniform<float>;
@@ -327,7 +349,7 @@ namespace OpenGlobe.Examples.Chapter8
                     }
 
                 }";
-            _lotWallAlternativeSP = Device.CreateShaderProgram(vs, gs, fs);
+            _lotWallSP = Device.CreateShaderProgram(vs, gs, fs);
 
             //
             // Lines on terrain box
@@ -349,7 +371,7 @@ namespace OpenGlobe.Examples.Chapter8
                 layout(triangle_strip, max_vertices = 18) out;
 
                 uniform mat4 og_perspectiveProjectionMatrix;
-                uniform float u_pixelSizePerDistance;
+                uniform float u_halfPixelSizePerDistance;
 
                 void main()
                 {
@@ -362,7 +384,7 @@ namespace OpenGlobe.Examples.Chapter8
                     if (abs(cr.z) <= 0.017452406437283512819418978516316)
                     {
                         // vertex
-                        vec3 norm = cr * (u_pixelSizePerDistance * 1.0); // junk
+                        vec3 norm = cr * u_halfPixelSizePerDistance;
                         vec4 vertices[8];
 
                         vec3 n = norm * abs(gl_in[1].gl_Position.z);
@@ -434,7 +456,7 @@ namespace OpenGlobe.Examples.Chapter8
                     vec2 of = og_inverseViewportDimensions * gl_FragCoord.xy;
                     if (texture(og_texture0, of).r != 0.0)
                     {
-                        fragmentColor = vec4(1.0, 1.0, 0.0, 1.0);
+                        fragmentColor = vec4(0.0, 0.0, 1.0, 1.0);
                     }
                 }";
             _lotLineBoxSP = Device.CreateShaderProgram(vs, gs, fs);
@@ -477,7 +499,7 @@ namespace OpenGlobe.Examples.Chapter8
             //
             // Vertex array
             //
-            _wallVA = _window.Context.CreateVertexArray(wallMesh, _lotWallAlternativeSP.VertexAttributes, BufferHint.StaticDraw);
+            _wallVA = _window.Context.CreateVertexArray(wallMesh, _lotWallSP.VertexAttributes, BufferHint.StaticDraw);
 
             //
             // Line mesh
@@ -519,7 +541,7 @@ namespace OpenGlobe.Examples.Chapter8
             //
             // Vertex array
             //
-            _lineVA = _window.Context.CreateVertexArray(lineMesh, _lotWallAlternativeSP.VertexAttributes, BufferHint.StaticDraw);
+            _lineVA = _window.Context.CreateVertexArray(lineMesh, _lotWallSP.VertexAttributes, BufferHint.StaticDraw);
             _lineVA.IndexBuffer = indexBuffer;
 
             //
@@ -531,16 +553,19 @@ namespace OpenGlobe.Examples.Chapter8
             _silhouetteDrawState.RenderState.DepthWrite = false;
             _silhouetteDrawState.ShaderProgram = _silhouetteSP;
 
-            _lineOnTerrainWallDrawState = new DrawState();
-            _lineOnTerrainWallDrawState.RenderState.FacetCulling.Enabled = false;
-            _lineOnTerrainWallDrawState.RenderState.DepthTest.Enabled = false;
-            _lineOnTerrainWallDrawState.RenderState.DepthWrite = false;
-            _lineOnTerrainWallDrawState.VertexArray = _lineVA;
-            _lineOnTerrainWallDrawState.ShaderProgram = _lotWallAlternativeSP;
+            _lotWallDrawState = new DrawState();
+            _lotWallDrawState.RenderState.FacetCulling.Enabled = false;
+            _lotWallDrawState.RenderState.DepthTest.Enabled = false;
+            _lotWallDrawState.RenderState.DepthWrite = false;
+            _lotWallDrawState.VertexArray = _lineVA;
+            _lotWallDrawState.ShaderProgram = _lotWallSP;
 
             _lotLineBoxDrawState = new DrawState();
             _lotLineBoxDrawState.RenderState.FacetCulling.Enabled = true;
             _lotLineBoxDrawState.RenderState.DepthWrite = false;
+            StencilTest stencilTest = new StencilTest();
+            stencilTest.Enabled = true;
+            _lotLineBoxDrawState.RenderState.StencilTest = stencilTest;
             _lotLineBoxDrawState.VertexArray = _lineVA;
             _lotLineBoxDrawState.ShaderProgram = _lotLineBoxSP;
 
@@ -553,6 +578,28 @@ namespace OpenGlobe.Examples.Chapter8
             // Depth
             //
             CreateDepth();
+
+            // junk
+            fs =
+                @"#version 330
+
+                uniform sampler2D og_texture0;
+                in vec2 fsTextureCoordinates;
+                out vec4 fragmentColor;
+
+                void main()
+                {
+                    if (texture(og_texture0, fsTextureCoordinates).r == 0.0)
+                    {
+                        fragmentColor = vec4(0.0, 0.0, 0.0, 1.0);
+                    }
+                    else
+                    {
+                        discard;
+                    }
+                }";
+
+            _viewportQuad = new ViewportQuad(_window.Context, fs);
         }
 
         private void OnResize()
@@ -564,9 +611,6 @@ namespace OpenGlobe.Examples.Chapter8
 
         private void OnRenderFrame()
         {
-            // 
-            // TODO: change this to render the terrain and then copy over the framebuffer into
-            //       a depth texture.
             //
             // Terrain depth to texture
             //
@@ -587,100 +631,89 @@ namespace OpenGlobe.Examples.Chapter8
             // Terrain to framebuffer
             //
             _window.Context.FrameBuffer = null;
-            _clearState.Buffers = ClearBuffers.DepthBuffer | ClearBuffers.ColorBuffer | ClearBuffers.StencilBuffer;
+            _clearState.Buffers = ClearBuffers.DepthBuffer | ClearBuffers.ColorBuffer | ClearBuffers.StencilBuffer; // junk can't you get rid of the stencil clear?
              _window.Context.Clear(_clearState);
             _tile.Render(_window.Context, _sceneState);
 
             //
-            // Silhouette to framebuffer
+            // Overlay the silhouette texture over the framebuffer
             //
-            _silhouetteDrawState.RenderState.FacetCulling.Enabled = true;
-            _silhouetteDrawState.RenderState.FacetCulling.Face = CullFace.Front;
-            _silhouetteDrawState.RenderState.FacetCulling.FrontFaceWindingOrder = WindingOrder.Clockwise;
-            _tile.RenderCustom(_window.Context, _sceneState, _silhouetteDrawState);
-            _silhouetteDrawState.RenderState.FacetCulling.Enabled = false;
+            if (_showSilhouette)
+            {
+                _viewportQuad.Texture = _silhouetteTexture;
+                _viewportQuad.Render(_window.Context, _sceneState);
+            }
 
             //
-            // Line on terrain wall
+            // Render the line on terrain using the wall method
             //
             _window.Context.TextureUnits[0].Texture2D = _silhouetteTexture;
             _window.Context.TextureUnits[1].Texture2D = _depthTexture;
-            _window.Context.Draw(PrimitiveType.LinesAdjacency, _lineOnTerrainWallDrawState, _sceneState);
+            _window.Context.Draw(PrimitiveType.LinesAdjacency, _lotWallDrawState, _sceneState);
 
             //
-            // Line on terrain line
+            // Render the line on terrain using the depth-fail shadow volume method
             //
-
-
+            // Compute the size of a half a pixel at a distance
             //
-            // Using the stencil for line on terrain BOX
-            //
-
-            // pixel size per distance - pretend square pixels
-            float psd = (float)(Math.Tan(0.5 * _sceneState.Camera.FieldOfViewY) * 2.0 / _window.Context.Viewport.Height);
-            Uniform<float> upsd = _lotLineBoxSP.Uniforms["u_pixelSizePerDistance"] as Uniform<float>;
-            upsd.Value = 0.5f * psd;
+            float halfPixelSizePerDistance = (float)(0.5 * Math.Tan(0.5 * _sceneState.Camera.FieldOfViewY) * 2.0 / _window.Context.Viewport.Height);
+            Uniform<float> uHalfPixelSizePerDistance = _lotLineBoxSP.Uniforms["u_halfPixelSizePerDistance"] as Uniform<float>;
+            uHalfPixelSizePerDistance.Value = halfPixelSizePerDistance;
 
             //
-            //  front face cull
+            //  Render the back faces
             //
-            StencilTest stencilTest = new StencilTest();
-            _lotLineBoxDrawState.RenderState.StencilTest = stencilTest;
-
-            stencilTest.Enabled = true;
-
+            StencilTest stencilTest = _lotLineBoxDrawState.RenderState.StencilTest;
             stencilTest.FrontFace.DepthFailStencilPassOperation = StencilOperation.Increment;
             stencilTest.FrontFace.DepthPassStencilPassOperation = StencilOperation.Keep;
             stencilTest.FrontFace.StencilFailOperation = StencilOperation.Keep;
             stencilTest.FrontFace.Function = StencilTestFunction.Always;
-
             stencilTest.BackFace.DepthFailStencilPassOperation = StencilOperation.Increment;
             stencilTest.BackFace.DepthPassStencilPassOperation = StencilOperation.Keep;
             stencilTest.BackFace.StencilFailOperation = StencilOperation.Keep;
             stencilTest.BackFace.Function = StencilTestFunction.Always;
-
             _lotLineBoxDrawState.RenderState.ColorMask = new ColorMask(false, false, false, false);
             _lotLineBoxDrawState.RenderState.FacetCulling.Face = CullFace.Front;
-
             _window.Context.TextureUnits[0].Texture2D = _silhouetteTexture;
             _window.Context.Draw(PrimitiveType.LinesAdjacency, _lotLineBoxDrawState, _sceneState);
 
             //
-            //  back face cull
+            // Render the front faces
             //
             stencilTest.FrontFace.DepthFailStencilPassOperation = StencilOperation.Decrement;
             stencilTest.BackFace.DepthFailStencilPassOperation = StencilOperation.Decrement;
-
             _lotLineBoxDrawState.RenderState.FacetCulling.Face = CullFace.Back;
-
             _window.Context.Draw(PrimitiveType.LinesAdjacency, _lotLineBoxDrawState, _sceneState);
 
             //
-            // draw where stencil is set
+            // Render where the stencil is set; note that the stencil is also cleared where it is
+            // set.
             //
-
-            // junk deron todo - clear the stencil at the same time
-
-            stencilTest.FrontFace.DepthFailStencilPassOperation = StencilOperation.Keep;
-            stencilTest.FrontFace.DepthPassStencilPassOperation = StencilOperation.Keep;
+            stencilTest.FrontFace.DepthFailStencilPassOperation = StencilOperation.Zero; // junk StencilOperation.Keep;
+            stencilTest.FrontFace.DepthPassStencilPassOperation = StencilOperation.Zero;
             stencilTest.FrontFace.StencilFailOperation = StencilOperation.Keep;
             stencilTest.FrontFace.Function = StencilTestFunction.NotEqual;
             stencilTest.FrontFace.ReferenceValue = 0;
-
-            stencilTest.BackFace.DepthFailStencilPassOperation = StencilOperation.Keep;
-            stencilTest.BackFace.DepthPassStencilPassOperation = StencilOperation.Keep;
+            stencilTest.BackFace.DepthFailStencilPassOperation = StencilOperation.Zero;
+            stencilTest.BackFace.DepthPassStencilPassOperation = StencilOperation.Zero;
             stencilTest.BackFace.StencilFailOperation = StencilOperation.Keep;
             stencilTest.BackFace.Function = StencilTestFunction.NotEqual;
             stencilTest.BackFace.ReferenceValue = 0;
-
             _lotLineBoxDrawState.RenderState.ColorMask = new ColorMask(true, true, true, true);
-
             _window.Context.Draw(PrimitiveType.LinesAdjacency, _lotLineBoxDrawState, _sceneState);
 
-            _lotLineBoxDrawState.RenderState.StencilTest = null;
+            //
+            // Render the instructions
+            //
+            _instructions.Render(_window.Context, _sceneState);
+        }
 
-
-            _lotLineBoxDrawState.RenderState.DepthTest.Function = DepthTestFunction.Less;
+        private void OnKeyDown(object sender, KeyboardKeyEventArgs e)
+        {
+            if (e.Key == KeyboardKey.S)
+            {
+                _showSilhouette = !_showSilhouette;
+            }
         }
 
         #region IDisposable Members
@@ -688,6 +721,7 @@ namespace OpenGlobe.Examples.Chapter8
         public void Dispose()
         {
             _camera.Dispose();
+            _instructions.Dispose();
             _tile.Dispose();
             _window.Dispose();
 
@@ -702,10 +736,7 @@ namespace OpenGlobe.Examples.Chapter8
             // Textures
             //
             _depthTexture = Device.CreateTexture2D(new Texture2DDescription(_window.Width, _window.Height, TextureFormat.Depth24));
-
-            // TODO change to Red8
-           _silhouetteTexture = Device.CreateTexture2D(new Texture2DDescription(_window.Width, _window.Height, TextureFormat.Red8));
- //           _silhouetteTexture = Device.CreateTexture2D(new Texture2DDescription(_window.Width, _window.Height, TextureFormat.RedGreenBlue8));
+            _silhouetteTexture = Device.CreateTexture2D(new Texture2DDescription(_window.Width, _window.Height, TextureFormat.Red8));
             _colorTexture = Device.CreateTexture2D(new Texture2DDescription(_window.Width, _window.Height, TextureFormat.RedGreenBlue8));
             
             //
@@ -727,15 +758,6 @@ namespace OpenGlobe.Examples.Chapter8
             }
             _silhouetteFrameBuffer.DepthAttachment = _depthTexture;
             _silhouetteFrameBuffer.ColorAttachments[0] = _silhouetteTexture;
-
-            //
-            // Line on terrain FBO
-            //
-            if (_lineOnTerrainFramebuffer == null)
-            {
-                _lineOnTerrainFramebuffer = _window.Context.CreateFrameBuffer();
-            }
-            _lineOnTerrainFramebuffer.ColorAttachments[0] = _colorTexture;
         }
 
         private void Run(double updateRate)
@@ -754,26 +776,25 @@ namespace OpenGlobe.Examples.Chapter8
         private readonly GraphicsWindow _window;
         private  SceneState _sceneState;
         private readonly CameraLookAtPoint _camera;
+        private readonly HeadsUpDisplay _instructions;
         private readonly TriangleMeshTerrainTile _tile;
-        private Texture2D _depthTexture;
         private Texture2D _silhouetteTexture;
+        private Texture2D _depthTexture;
         private Texture2D _colorTexture;
         private FrameBuffer _terrainFrameBuffer;
         private FrameBuffer _silhouetteFrameBuffer;
-        private FrameBuffer _lineOnTerrainFramebuffer;
         private readonly VertexArray _wallVA;
         private readonly VertexArray _lineVA;
-        private readonly DrawState _silhouetteDrawState;
-        private readonly DrawState _lineOnTerrainWallDrawState;
-        private readonly DrawState _lotLineBoxDrawState;
         private readonly ShaderProgram _silhouetteSP;
-        private readonly ShaderProgram _lotWallAlternativeSP;
+        private readonly ShaderProgram _lotWallSP;
         private readonly ShaderProgram _lotLineBoxSP;
+        private readonly DrawState _silhouetteDrawState;
+        private readonly DrawState _lotWallDrawState;
+        private readonly DrawState _lotLineBoxDrawState;
         private readonly ClearState _clearState;
+        private readonly ViewportQuad _viewportQuad;
+        private bool _showSilhouette = false;
 
-        // TODO - should you keep this here?
-        private float _width = 1.0f;
-
-        private double _xPos = 448;
+        private double _xPos = 448; // junk deron todo use this still?
     }
 }
