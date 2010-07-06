@@ -142,14 +142,14 @@ namespace OpenGlobe.Scene
 
         public double Width 
         {
-            get { return _polyline.OutlineWidth;  }
-            set { _polyline.OutlineWidth = value;  }
+            get { return _polyline.Width;  }
+            set { _polyline.Width = value;  }
         }
         
         public double OutlineWidth 
         {
-            get { return _polyline.Width;  }
-            set { _polyline.Width = value;  }
+            get { return _polyline.OutlineWidth; }
+            set { _polyline.OutlineWidth = value; }
         }
         
         public bool DepthWrite 
