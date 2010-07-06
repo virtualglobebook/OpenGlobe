@@ -8,7 +8,7 @@
 
 flat in vec4 fsColor;
 flat in vec4 fsOutlineColor;
-in vec2 fsTextureCoordinate;
+in float fsTextureCoordinate;
 
 out vec4 fragmentColor;
 
@@ -16,7 +16,7 @@ uniform sampler2D og_texture0;
 
 void main()
 {
-    vec2 texel = texture(og_texture0, fsTextureCoordinate).rg;
+    vec2 texel = texture(og_texture0, vec2(fsTextureCoordinate, 0.5)).rg;
     float fill = texel.r;
     float alpha = texel.g;
 

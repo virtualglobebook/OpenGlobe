@@ -14,7 +14,7 @@ in vec4 gsOutlineColor[];
 
 flat out vec4 fsColor;
 flat out vec4 fsOutlineColor;
-out vec2 fsTextureCoordinate;
+out float fsTextureCoordinate;
 
 uniform mat4 og_modelViewPerspectiveProjectionMatrix;
 uniform mat4 og_viewportTransformationMatrix;
@@ -82,24 +82,24 @@ void main()
     gl_Position = og_viewportOrthographicProjectionMatrix * v0;
     fsColor = gsColor[0];
     fsOutlineColor = gsOutlineColor[0];
-    fsTextureCoordinate = vec2(0.0, 0.0);
+    fsTextureCoordinate = 0.0;
     EmitVertex();
 
     gl_Position = og_viewportOrthographicProjectionMatrix * v1;
     fsColor = gsColor[0];
     fsOutlineColor = gsOutlineColor[0];
-    fsTextureCoordinate = vec2(0.0, 1.0);
+    fsTextureCoordinate = 0.0;
     EmitVertex();
 
     gl_Position = og_viewportOrthographicProjectionMatrix * v2;
     fsColor = gsColor[0];
     fsOutlineColor = gsOutlineColor[0];
-    fsTextureCoordinate = vec2(1.0, 0.0);
+    fsTextureCoordinate = 1.0;
     EmitVertex();
 
     gl_Position = og_viewportOrthographicProjectionMatrix * v3;
     fsColor = gsColor[0];
     fsOutlineColor = gsOutlineColor[0];
-    fsTextureCoordinate = vec2(1.0, 1.0);
+    fsTextureCoordinate = 1.0;
     EmitVertex();
 }
