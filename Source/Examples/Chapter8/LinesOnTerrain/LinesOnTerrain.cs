@@ -66,185 +66,9 @@ namespace OpenGlobe.Examples.Chapter8
             snap.DotsPerInch = 600;
 
             //
-            // Line on terrain
-            //
-
-            //
-            // Silhouette
-            //
-            string vs =
-                @"#version 330
-            
-                uniform mat4 og_modelViewPerspectiveProjectionMatrix;
-                uniform float u_heightExaggeration;
-                in vec4 position;
-
-                void main()                     
-                {
-                    vec4 exaggeratedPosition = vec4(position.xy, position.z * u_heightExaggeration, 1.0);
-	                gl_Position = og_modelViewPerspectiveProjectionMatrix * exaggeratedPosition;
-                }";
-
-            string gs =
-                @"#version 330 
-
-                layout(triangles) in;
-                layout(triangle_strip, max_vertices = 15) out;
-
-                uniform mat4 og_viewportTransformationMatrix;
-                uniform mat4 og_viewportOrthographicProjectionMatrix;
-                uniform float og_perspectiveNearPlaneDistance;
-                uniform float u_fillDistance;
-
-                vec4 ClipToWindowCoordinates(vec4 v)
-                {
-                    v.xyz /= v.w;
-                    return vec4((og_viewportTransformationMatrix * vec4(v.xyz, 1.0)).xyz, 1.0);
-                }
-
-                void ClipLineSegmentToNearPlane(
-                    vec4 modelP0, 
-                    vec4 modelP1, 
-                    out vec4 window0, 
-                    out vec4 window1,
-                    out bool lineSegmentAtLeastPartlyInFrontOfNearPlane)
-                {
-                    float distanceToP0 = modelP0.z + og_perspectiveNearPlaneDistance;
-                    float distanceToP1 = modelP1.z + og_perspectiveNearPlaneDistance;
-                    if ((distanceToP0 * distanceToP1) < 0.0)
-                    {
-                        float t = distanceToP0 / (distanceToP0 - distanceToP1);
-                        vec4 clipV = modelP0 + (t * (modelP1 - modelP0));
-                        if (distanceToP0 < 0.0)
-                        {
-                            window0 = ClipToWindowCoordinates(clipV);
-                            window1 = ClipToWindowCoordinates(modelP1);
-                        }
-                        else
-                        {
-                            window0 = ClipToWindowCoordinates(modelP0);
-                            window1 = ClipToWindowCoordinates(clipV);
-                        }
-                    }
-                    else
-                    {
-                        window0 = ClipToWindowCoordinates(modelP0);
-                        window1 = ClipToWindowCoordinates(modelP1);
-                    }
-                    lineSegmentAtLeastPartlyInFrontOfNearPlane = (distanceToP0 >= 0.0) || (distanceToP1 >= 0.0);
-                }
-
-                void main()
-                {
-                    vec4 window[6];
-                    int index = 0;
-                    bool lineSegmentAtLeastPartlyInFrontOfNearPlane;
-
-                    ClipLineSegmentToNearPlane(gl_in[0].gl_Position, gl_in[1].gl_Position, window[index], window[index + 1],
-                        lineSegmentAtLeastPartlyInFrontOfNearPlane);
-                    if (lineSegmentAtLeastPartlyInFrontOfNearPlane)
-                    {
-                        index += 2;
-                    }
-
-                    ClipLineSegmentToNearPlane(gl_in[1].gl_Position, gl_in[2].gl_Position, window[index], window[index + 1],
-                        lineSegmentAtLeastPartlyInFrontOfNearPlane);
-                    if (lineSegmentAtLeastPartlyInFrontOfNearPlane)
-                    {
-                        index += 2;
-                    }
-
-                    ClipLineSegmentToNearPlane(gl_in[2].gl_Position, gl_in[0].gl_Position, window[index], window[index + 1],
-                        lineSegmentAtLeastPartlyInFrontOfNearPlane);
-                    if (lineSegmentAtLeastPartlyInFrontOfNearPlane)
-                    {
-                        index += 2;
-                    }
-
-                    if (index > 0)
-                    {
-                        float area = 0.0;
-                        int limit = index - 1;
-                        for (int i = 0; i < limit; ++i)
-                        {
-                            area += (window[i].x * window[i + 1].y) - (window[i + 1].x * window[i].y);
-                        }
-                        area += (window[limit].x * window[0].y) - (window[0].x * window[limit].y);
-
-                        if (area < 0.0)
-                        {
-                            for (int i = 0; i < index; i += 2)
-                            {
-                                vec4 window0 = window[i];
-                                vec4 window1 = window[i + 1];
-
-                                vec2 direction = window1.xy - window0.xy;
-                    
-                                if (dot(direction, direction) > 0.0)
-                                {
-                                    direction = normalize(direction) * u_fillDistance;
-                                    vec2 cross = vec2(direction.y, -direction.x);
-
-                                    vec4 v0 = vec4(window0.xy - cross, -window0.z, 1.0);
-                                    vec4 v1 = vec4(window0.xy + cross, -window0.z, 1.0);
-                                    vec4 v2 = vec4(window1.xy - cross, -window1.z, 1.0);
-                                    vec4 v3 = vec4(window1.xy + cross, -window1.z, 1.0);
-                                    vec4 v4 = vec4(window1.xy + direction, -window1.z, 1.0);
- 
-                                    gl_Position = og_viewportOrthographicProjectionMatrix * v0;
-                                    EmitVertex();
-
-                                    gl_Position = og_viewportOrthographicProjectionMatrix * v1;
-                                    EmitVertex();
-
-                                    gl_Position = og_viewportOrthographicProjectionMatrix * v2;
-                                    EmitVertex();
-
-                                    gl_Position = og_viewportOrthographicProjectionMatrix * v3;
-                                    EmitVertex();
-
-                                    gl_Position = og_viewportOrthographicProjectionMatrix * v4;
-                                    EmitVertex();
-
-                                    EndPrimitive();
-                                }
-                            }
-                        }
-                    }
-                }";
-            string fs =
-                @"#version 330
-
-                out vec4 fsColor;
-
-                void main()
-                {
-                    fsColor = vec4(0.0, 0.0, 0.0, 1.0);
-                }";
-            _silhouetteSP = Device.CreateShaderProgram(vs, gs, fs);
-
-
-            //_silhouetteSP = Device.CreateShaderProgram(
-            //    EmbeddedResources.GetText("OpenGlobe.Examples.Chapter8.LinesOnTerrain.Shaders.SilhouetteVS.glsl"),
-            //    EmbeddedResources.GetText("OpenGlobe.Examples.Chapter8.LinesOnTerrain.Shaders.SilhouetteGS.glsl"),
-            //    EmbeddedResources.GetText("OpenGlobe.Examples.Chapter8.LinesOnTerrain.Shaders.SilhouetteFS.glsl"));
-
-
-            Uniform<float> fillDistance = _silhouetteSP.Uniforms["u_fillDistance"] as Uniform<float>;
-            fillDistance.Value = 2.0f;
-            Uniform<float> heightExaggeration = _silhouetteSP.Uniforms["u_heightExaggeration"] as Uniform<float>;
-            heightExaggeration.Value = _tile.HeightExaggeration;
-
-            //
             // Line on terrain wall
             //
-
-
-
-            //
-            // Line on terrain wall alternative
-            //
-            vs =
+            string vs =
                 @"#version 330
             
                 uniform mat4 og_modelViewMatrix;
@@ -254,7 +78,7 @@ namespace OpenGlobe.Examples.Chapter8
                 {
 	                gl_Position = og_modelViewMatrix * position;
                 }";
-            gs =
+            string gs =
                 @"#version 330 
 
                 layout(lines_adjacency) in;
@@ -284,8 +108,7 @@ namespace OpenGlobe.Examples.Chapter8
                     }
 
                 }";
-
-            fs =
+            string fs =
                  @"#version 330
                 
                 uniform sampler2D og_texture0;
@@ -442,7 +265,6 @@ namespace OpenGlobe.Examples.Chapter8
                         EmitVertex();
                         EndPrimitive();
                     }
-
                 }";
             fs =
                 @"#version 330
@@ -547,12 +369,6 @@ namespace OpenGlobe.Examples.Chapter8
             //
             // State
             //
-            
-            _silhouetteDrawState = new DrawState();
-            _silhouetteDrawState.RenderState.FacetCulling.Enabled = false;
-            _silhouetteDrawState.RenderState.DepthWrite = false;
-            _silhouetteDrawState.ShaderProgram = _silhouetteSP;
-
             _lotWallDrawState = new DrawState();
             _lotWallDrawState.RenderState.FacetCulling.Enabled = false;
             _lotWallDrawState.RenderState.DepthTest.Enabled = false;
@@ -573,11 +389,6 @@ namespace OpenGlobe.Examples.Chapter8
             _clearState.Color = Color.White;
             _clearState.Stencil = 0;
             _clearState.Depth = 1;
-
-            //
-            // Depth
-            //
-            CreateDepth();
 
             // junk
             fs =
@@ -606,26 +417,14 @@ namespace OpenGlobe.Examples.Chapter8
         {
             _window.Context.Viewport = new Rectangle(0, 0, _window.Width, _window.Height);
             _sceneState.Camera.AspectRatio = _window.Width / (double)_window.Height;
-            CreateDepth();
         }
 
         private void OnRenderFrame()
         {
             //
-            // Terrain depth to texture
+            // Terrain and silhouette textures
             //
-            _window.Context.FrameBuffer = _terrainFrameBuffer;
-            _clearState.Buffers = ClearBuffers.DepthBuffer;
-            _window.Context.Clear(_clearState);
-            _tile.Render(_window.Context, _sceneState);
-
-            //
-            // Silhouette to texture
-            //
-            _window.Context.FrameBuffer = _silhouetteFrameBuffer;
-            _clearState.Buffers = ClearBuffers.ColorBuffer;
-            _window.Context.Clear(_clearState);
-            _tile.RenderCustom(_window.Context, _sceneState, _silhouetteDrawState);
+            _tile.RenderDepthAndSilhouetteTextures(_window.Context, _sceneState);
 
             //
             // Terrain to framebuffer
@@ -640,15 +439,15 @@ namespace OpenGlobe.Examples.Chapter8
             //
             if (_showSilhouette)
             {
-                _viewportQuad.Texture = _silhouetteTexture;
+                _viewportQuad.Texture = _tile.SilhouetteTexture;
                 _viewportQuad.Render(_window.Context, _sceneState);
             }
 
             //
             // Render the line on terrain using the wall method
             //
-            _window.Context.TextureUnits[0].Texture2D = _silhouetteTexture;
-            _window.Context.TextureUnits[1].Texture2D = _depthTexture;
+            _window.Context.TextureUnits[0].Texture2D = _tile.SilhouetteTexture;
+            _window.Context.TextureUnits[1].Texture2D = _tile.DepthTexture;
             _window.Context.Draw(PrimitiveType.LinesAdjacency, _lotWallDrawState, _sceneState);
 
             //
@@ -674,7 +473,7 @@ namespace OpenGlobe.Examples.Chapter8
             stencilTest.BackFace.Function = StencilTestFunction.Always;
             _lotLineBoxDrawState.RenderState.ColorMask = new ColorMask(false, false, false, false);
             _lotLineBoxDrawState.RenderState.FacetCulling.Face = CullFace.Front;
-            _window.Context.TextureUnits[0].Texture2D = _silhouetteTexture;
+            _window.Context.TextureUnits[0].Texture2D = _tile.SilhouetteTexture;
             _window.Context.Draw(PrimitiveType.LinesAdjacency, _lotLineBoxDrawState, _sceneState);
 
             //
@@ -689,7 +488,7 @@ namespace OpenGlobe.Examples.Chapter8
             // Render where the stencil is set; note that the stencil is also cleared where it is
             // set.
             //
-            stencilTest.FrontFace.DepthFailStencilPassOperation = StencilOperation.Zero; // junk StencilOperation.Keep;
+            stencilTest.FrontFace.DepthFailStencilPassOperation = StencilOperation.Zero;
             stencilTest.FrontFace.DepthPassStencilPassOperation = StencilOperation.Zero;
             stencilTest.FrontFace.StencilFailOperation = StencilOperation.Keep;
             stencilTest.FrontFace.Function = StencilTestFunction.NotEqual;
@@ -730,36 +529,6 @@ namespace OpenGlobe.Examples.Chapter8
 
         #endregion
 
-        private void CreateDepth()
-        {
-            //
-            // Textures
-            //
-            _depthTexture = Device.CreateTexture2D(new Texture2DDescription(_window.Width, _window.Height, TextureFormat.Depth24));
-            _silhouetteTexture = Device.CreateTexture2D(new Texture2DDescription(_window.Width, _window.Height, TextureFormat.Red8));
-            _colorTexture = Device.CreateTexture2D(new Texture2DDescription(_window.Width, _window.Height, TextureFormat.RedGreenBlue8));
-            
-            //
-            // Terrain FBO
-            //
-            if (_terrainFrameBuffer == null)
-            {
-                _terrainFrameBuffer = _window.Context.CreateFrameBuffer();
-            }
-            _terrainFrameBuffer.DepthAttachment = _depthTexture;
-            _terrainFrameBuffer.ColorAttachments[0] = _colorTexture;
-
-            //
-            // Silhouette FBO
-            //
-            if (_silhouetteFrameBuffer == null)
-            {
-                _silhouetteFrameBuffer = _window.Context.CreateFrameBuffer();
-            }
-            _silhouetteFrameBuffer.DepthAttachment = _depthTexture;
-            _silhouetteFrameBuffer.ColorAttachments[0] = _silhouetteTexture;
-        }
-
         private void Run(double updateRate)
         {
             _window.Run(updateRate);
@@ -778,17 +547,10 @@ namespace OpenGlobe.Examples.Chapter8
         private readonly CameraLookAtPoint _camera;
         private readonly HeadsUpDisplay _instructions;
         private readonly TriangleMeshTerrainTile _tile;
-        private Texture2D _silhouetteTexture;
-        private Texture2D _depthTexture;
-        private Texture2D _colorTexture;
-        private FrameBuffer _terrainFrameBuffer;
-        private FrameBuffer _silhouetteFrameBuffer;
         private readonly VertexArray _wallVA;
         private readonly VertexArray _lineVA;
-        private readonly ShaderProgram _silhouetteSP;
         private readonly ShaderProgram _lotWallSP;
         private readonly ShaderProgram _lotLineBoxSP;
-        private readonly DrawState _silhouetteDrawState;
         private readonly DrawState _lotWallDrawState;
         private readonly DrawState _lotLineBoxDrawState;
         private readonly ClearState _clearState;

@@ -22,6 +22,15 @@ namespace OpenGlobe.Terrain
     {
         public TriangleMeshTerrainTile(Context context, TerrainTile tile)
         {
+            ShaderProgram silhouetteSP = Device.CreateShaderProgram(
+                EmbeddedResources.GetText("OpenGlobe.Scene.Terrain.TriangleMeshTerrainTile.SilhouetteVS.glsl"),
+                EmbeddedResources.GetText("OpenGlobe.Scene.Terrain.TriangleMeshTerrainTile.SilhouetteGS.glsl"),
+                EmbeddedResources.GetText("OpenGlobe.Scene.Terrain.TriangleMeshTerrainTile.SilhouetteFS.glsl"));
+
+            Uniform<float> fillDistance = silhouetteSP.Uniforms["u_fillDistance"] as Uniform<float>;
+            fillDistance.Value = 2.0f;
+            _silhouetteHeightExaggeration = silhouetteSP.Uniforms["u_heightExaggeration"] as Uniform<float>;
+
             ShaderProgram sp = Device.CreateShaderProgram(
                 EmbeddedResources.GetText("OpenGlobe.Scene.Terrain.TriangleMeshTerrainTile.TerrainVS.glsl"),
                 EmbeddedResources.GetText("OpenGlobe.Scene.Terrain.TriangleMeshTerrainTile.TerrainFS.glsl"));
@@ -91,7 +100,19 @@ namespace OpenGlobe.Terrain
             _drawState.RenderState.FacetCulling.FrontFaceWindingOrder = mesh.FrontFaceWindingOrder;
             _drawState.ShaderProgram = sp;
             _drawState.VertexArray = context.CreateVertexArray(mesh, sp.VertexAttributes, BufferHint.StaticDraw);
+
+            _silhouetteDrawState = new DrawState();
+            _silhouetteDrawState.RenderState.FacetCulling.Enabled = false;
+            _silhouetteDrawState.RenderState.DepthWrite = false;
+            _silhouetteDrawState.VertexArray = _drawState.VertexArray;
+            _silhouetteDrawState.ShaderProgram = silhouetteSP;
+
             _primitiveType = mesh.PrimitiveType;
+
+            _clearState = new ClearState();
+            _clearState.Color = Color.White;
+            _clearState.Stencil = 0;
+            _clearState.Depth = 1;
         }
 
         public void Render(Context context, SceneState sceneState)
@@ -101,13 +122,78 @@ namespace OpenGlobe.Terrain
             context.Draw(_primitiveType, _drawState, sceneState);
         }
 
-        public void RenderCustom(Context context, SceneState sceneState, DrawState drawState)
+        public void RenderDepthAndSilhouetteTextures(Context context, SceneState sceneState)
         {
             Verify.ThrowIfNull(context);
             Verify.ThrowIfNull(sceneState);
+            
+            CreateDepthAndSilhouetteData(context);
 
-            drawState.VertexArray = _drawState.VertexArray;
-            context.Draw(_primitiveType, drawState, sceneState);
+            //
+            // Depth texture
+            //
+            context.FrameBuffer =_terrainFrameBuffer;
+            _clearState.Buffers = ClearBuffers.DepthBuffer;
+            context.Clear(_clearState);
+            Render(context, sceneState);
+
+            //
+            // Silhouette texture
+            //
+            context.FrameBuffer = _silhouetteFrameBuffer;
+            _clearState.Buffers = ClearBuffers.ColorBuffer;
+            context.Clear(_clearState);
+            context.Draw(_primitiveType, _silhouetteDrawState, sceneState);
+        }
+
+        private void CreateDepthAndSilhouetteData(Context context)
+        {
+            if ((_depthTexture == null) || (_depthTexture.Description.Width != context.Viewport.Width) ||
+                (_depthTexture.Description.Height != context.Viewport.Height))
+            {
+                //
+                // Dispose as necessary
+                //
+                if (_depthTexture != null)
+                {
+                    _depthTexture.Dispose();
+                }
+                if (_silhouetteTexture != null)
+                {
+                    _silhouetteTexture.Dispose();
+                }
+                if (_colorTexture != null)
+                {
+                    _colorTexture.Dispose();
+                }
+
+                //
+                // Textures
+                //
+                _depthTexture = Device.CreateTexture2D(new Texture2DDescription(context.Viewport.Width, context.Viewport.Height, TextureFormat.Depth24));
+                _silhouetteTexture = Device.CreateTexture2D(new Texture2DDescription(context.Viewport.Width, context.Viewport.Height, TextureFormat.Red8));
+                _colorTexture = Device.CreateTexture2D(new Texture2DDescription(context.Viewport.Width, context.Viewport.Height, TextureFormat.RedGreenBlue8));
+
+                //
+                // Terrain FBO
+                //
+                if (_terrainFrameBuffer == null)
+                {
+                    _terrainFrameBuffer = context.CreateFrameBuffer();
+                }
+                _terrainFrameBuffer.DepthAttachment = _depthTexture;
+                _terrainFrameBuffer.ColorAttachments[0] = _colorTexture;
+
+                //
+                // Silhouette FBO
+                //
+                if (_silhouetteFrameBuffer == null)
+                {
+                    _silhouetteFrameBuffer = context.CreateFrameBuffer();
+                }
+                _silhouetteFrameBuffer.DepthAttachment = _depthTexture;
+                _silhouetteFrameBuffer.ColorAttachments[0] = _silhouetteTexture;
+            }
         }
 
         public float HeightExaggeration
@@ -129,6 +215,7 @@ namespace OpenGlobe.Terrain
                     _heightExaggeration.Value = value;
                     _minimumHeight.Value = _tileMinimumHeight * value;
                     _maximumHeight.Value = _tileMaximumHeight * value;
+                    _silhouetteHeightExaggeration.Value = value;
                 }
             }
         }
@@ -139,18 +226,61 @@ namespace OpenGlobe.Terrain
         {
             _drawState.ShaderProgram.Dispose();
             _drawState.VertexArray.Dispose();
+            _silhouetteDrawState.ShaderProgram.Dispose();
+            _silhouetteDrawState.VertexArray.Dispose();
+            if (_depthTexture != null)
+            {
+                _depthTexture.Dispose();
+            }
+            if (_silhouetteTexture != null)
+            {
+                _silhouetteTexture.Dispose();
+            }
+            if (_colorTexture != null)
+            {
+                _colorTexture.Dispose();
+            }
+            if (_silhouetteFrameBuffer != null)
+            {
+                _silhouetteFrameBuffer.Dispose();
+            }
+            if (_terrainFrameBuffer != null)
+            {
+                _terrainFrameBuffer.Dispose();
+            }
         }
 
         #endregion
 
+        public Texture2D DepthTexture
+        {
+            get { return _depthTexture; }
+        }
+
+        public Texture2D SilhouetteTexture
+        {
+            get { return _silhouetteTexture; }
+        }
+
         private readonly DrawState _drawState;
+        private readonly DrawState _silhouetteDrawState;
+
+        private FrameBuffer _silhouetteFrameBuffer;
+        private FrameBuffer _terrainFrameBuffer;
 
         private readonly Uniform<float> _heightExaggeration;
         private readonly Uniform<float> _minimumHeight;
         private readonly Uniform<float> _maximumHeight;
+        private readonly Uniform<float> _silhouetteHeightExaggeration;
 
         private readonly float _tileMinimumHeight;
         private readonly float _tileMaximumHeight;
+
+        private Texture2D _depthTexture;
+        private Texture2D _silhouetteTexture;
+        private Texture2D _colorTexture;
+
+        private readonly ClearState _clearState;
 
         private readonly PrimitiveType _primitiveType;
     }

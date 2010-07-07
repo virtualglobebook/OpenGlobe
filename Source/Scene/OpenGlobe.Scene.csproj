@@ -161,7 +161,11 @@
     <EmbeddedResource Include="Renderables\Plane\Shaders\LineGS.glsl" />
     <EmbeddedResource Include="Renderables\Plane\Shaders\LineVS.glsl" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Terrain\TriangleMeshTerrainTile\SilhouetteFS.glsl" />
+    <EmbeddedResource Include="Terrain\TriangleMeshTerrainTile\SilhouetteGS.glsl" />
+    <EmbeddedResource Include="Terrain\TriangleMeshTerrainTile\SilhouetteVS.glsl" />
+  </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Renderables\HeadsUpDisplay\Shaders\HeadsUpDisplayFS.glsl" />
     <EmbeddedResource Include="Renderables\HeadsUpDisplay\Shaders\HeadsUpDisplayGS.glsl" />
