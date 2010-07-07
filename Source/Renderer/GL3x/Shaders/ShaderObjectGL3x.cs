@@ -9,6 +9,7 @@
 
 using System;
 using System.Diagnostics;
+using System.Globalization;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
 using OpenGlobe.Core;
@@ -20,19 +21,19 @@ namespace OpenGlobe.Renderer.GL3x
         public ShaderObjectGL3x(ShaderType shaderType, string source)
         {
             string builtInConstants =
-                "#version 330                                                   \n" +
-                "const float og_E =                " + Math.E + "; \n" +
-                "const float og_pi =               " + Math.PI + "; \n" +
-                "const float og_oneOverPi =        " + 1.0 / Math.PI + "; \n" +
-                "const float og_piOverTwo =        " + Math.PI * 0.5 + "; \n" +
-                "const float og_piOverThree =      " + Math.PI / 3.0 + "; \n" +
-                "const float og_piOverFour =       " + Math.PI / 4.0 + "; \n" +
-                "const float og_piOverSix =        " + Math.PI / 6.0 + "; \n" +
-                "const float og_threePiOver2 =     " + (3.0 * Math.PI) * 0.5 + "; \n" +
-                "const float og_twoPi =            " + Trig.TwoPI + "; \n" +
-                "const float og_oneOverTwoPi =     " + 1.0 / Trig.TwoPI + "; \n" +
-                "const float og_halfPi =           " + Trig.HalfPI + "; \n" +
-                "const float og_radiansPerDegree = " + Trig.RadiansPerDegree + "; \n";
+                "#version 330 \n" +
+                "const float og_E =                " + Math.E.ToString(NumberFormatInfo.InvariantInfo) + "; \n" +
+                "const float og_pi =               " + Math.PI.ToString(NumberFormatInfo.InvariantInfo) + "; \n" +
+                "const float og_oneOverPi =        " + (1.0 / Math.PI).ToString(NumberFormatInfo.InvariantInfo) + "; \n" +
+                "const float og_piOverTwo =        " + (Math.PI * 0.5).ToString(NumberFormatInfo.InvariantInfo) + "; \n" +
+                "const float og_piOverThree =      " + (Math.PI / 3.0).ToString(NumberFormatInfo.InvariantInfo) + "; \n" +
+                "const float og_piOverFour =       " + (Math.PI / 4.0).ToString(NumberFormatInfo.InvariantInfo) + "; \n" +
+                "const float og_piOverSix =        " + (Math.PI / 6.0).ToString(NumberFormatInfo.InvariantInfo) + "; \n" +
+                "const float og_threePiOver2 =     " + ((3.0 * Math.PI) * 0.5).ToString(NumberFormatInfo.InvariantInfo) + "; \n" +
+                "const float og_twoPi =            " + (Trig.TwoPI).ToString(NumberFormatInfo.InvariantInfo) + "; \n" +
+                "const float og_oneOverTwoPi =     " + (1.0 / Trig.TwoPI).ToString(NumberFormatInfo.InvariantInfo) + "; \n" +
+                "const float og_halfPi =           " + (Trig.HalfPI).ToString(NumberFormatInfo.InvariantInfo) + "; \n" +
+                "const float og_radiansPerDegree = " + (Trig.RadiansPerDegree).ToString(NumberFormatInfo.InvariantInfo) + "; \n";
 
             string modifiedSource;
 
