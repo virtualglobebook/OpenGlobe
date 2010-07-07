@@ -68,7 +68,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\..\..\..\Data\Terrain\ps-e.lg.jpg">
+    <Content Include="..\..\..\..\Data\Terrain\ps-e.lg.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\..\..\..\Data\Imagery\USGS\ps_texture_1k.png">

@@ -32,7 +32,7 @@ namespace OpenGlobe.Examples.Chapter5
 
             ///////////////////////////////////////////////////////////////////
 
-            TerrainTile terrainTile = TerrainTile.FromBitmap(new Bitmap(@"ps-e.lg.jpg"));
+            TerrainTile terrainTile = TerrainTile.FromBitmap(new Bitmap(@"ps-e.lg.png"));
             _tile = new TriangleMeshTerrainTile(_window.Context, terrainTile);
             _tile.HeightExaggeration = 30;
 
