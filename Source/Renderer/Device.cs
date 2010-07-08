@@ -224,6 +224,7 @@ namespace OpenGlobe.Renderer
             drawAutomaticUniformFactories.Add(new PerspectiveNearPlaneDistanceUniformFactory());
             drawAutomaticUniformFactories.Add(new PerspectiveFarPlaneDistanceUniformFactory());
             drawAutomaticUniformFactories.Add(new HighResolutionSnapScaleUniformFactory());
+            drawAutomaticUniformFactories.Add(new PixelSizePerDistanceUniformFactory());
                                     
             return drawAutomaticUniformFactories;
         }

@@ -109,6 +109,8 @@
     <Compile Include="Shaders\DrawAutomaticUniforms\PerspectiveNearPlaneDistanceUniformFactory.cs" />
     <Compile Include="Shaders\DrawAutomaticUniforms\PerspectiveProjectionMatrixUniform.cs" />
     <Compile Include="Shaders\DrawAutomaticUniforms\PerspectiveProjectionMatrixUniformFactory.cs" />
+    <Compile Include="Shaders\DrawAutomaticUniforms\PixelSizePerDistanceUniform.cs" />
+    <Compile Include="Shaders\DrawAutomaticUniforms\PixelSizePerDistanceUniformFactory.cs" />
     <Compile Include="Shaders\DrawAutomaticUniforms\SunPositionUniform.cs" />
     <Compile Include="Shaders\DrawAutomaticUniforms\SunPositionUniformFactory.cs" />
     <Compile Include="Shaders\DrawAutomaticUniforms\ViewportOrthographicProjectionMatrixUniform.cs" />
