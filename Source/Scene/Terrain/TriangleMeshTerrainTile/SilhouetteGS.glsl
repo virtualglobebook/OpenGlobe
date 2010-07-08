@@ -21,35 +21,35 @@ vec4 ClipToWindowCoordinates(vec4 v)
 }
 
 void ClipLineSegmentToNearPlane(
-    vec4 modelP0, 
-    vec4 modelP1, 
+    vec4 clip0, 
+    vec4 clip1, 
     out vec4 window0, 
     out vec4 window1,
     out bool lineSegmentAtLeastPartlyInFrontOfNearPlane)
 {
-    float distanceToP0 = modelP0.z + og_perspectiveNearPlaneDistance;
-    float distanceToP1 = modelP1.z + og_perspectiveNearPlaneDistance;
-    if ((distanceToP0 * distanceToP1) < 0.0)
+    float distanceTo0 = clip0.z + og_perspectiveNearPlaneDistance;
+    float distanceTo1 = clip1.z + og_perspectiveNearPlaneDistance;
+    if ((distanceTo0 * distanceTo1) < 0.0)
     {
-        float t = distanceToP0 / (distanceToP0 - distanceToP1);
-        vec4 clipV = modelP0 + (t * (modelP1 - modelP0));
-        if (distanceToP0 < 0.0)
+        float t = distanceTo0 / (distanceTo0 - distanceTo1);
+        vec4 clipV = clip0 + (t * (clip1 - clip0));
+        if (distanceTo0 < 0.0)
         {
             window0 = ClipToWindowCoordinates(clipV);
-            window1 = ClipToWindowCoordinates(modelP1);
+            window1 = ClipToWindowCoordinates(clip1);
         }
         else
         {
-            window0 = ClipToWindowCoordinates(modelP0);
+            window0 = ClipToWindowCoordinates(clip0);
             window1 = ClipToWindowCoordinates(clipV);
         }
     }
     else
     {
-        window0 = ClipToWindowCoordinates(modelP0);
-        window1 = ClipToWindowCoordinates(modelP1);
+        window0 = ClipToWindowCoordinates(clip0);
+        window1 = ClipToWindowCoordinates(clip1);
     }
-    lineSegmentAtLeastPartlyInFrontOfNearPlane = (distanceToP0 >= 0.0) || (distanceToP1 >= 0.0);
+    lineSegmentAtLeastPartlyInFrontOfNearPlane = (distanceTo0 >= 0.0) || (distanceTo1 >= 0.0);
 }
 
 void main()
