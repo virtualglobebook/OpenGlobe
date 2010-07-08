@@ -59,6 +59,7 @@
     <Compile Include="Renderables\BillboardCollection\BillboardCollection.cs" />
     <Compile Include="Renderables\HeadsUpDisplay\HeadsUpDisplay.cs" />
     <Compile Include="Renderables\Plane\Plane.cs" />
+    <Compile Include="Renderables\PolylineOnTerrain\PolylineOnTerrain.cs" />
     <Compile Include="Renderables\Polyline\Polyline.cs" />
     <Compile Include="Renderables\Polyline\OutlinedPolylineGeometryShader.cs" />
     <Compile Include="Renderables\Polyline\OutlinedPolylineTexture.cs" />
@@ -174,6 +175,15 @@
   <ItemGroup>
     <EmbeddedResource Include="Globes\LatitudeLongitudeGrid\Shaders\GlobeFS.glsl" />
     <EmbeddedResource Include="Globes\LatitudeLongitudeGrid\Shaders\GlobeVS.glsl" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Renderables\PolylineOnTerrain\Shaders\PolylineOnTerrainShadowVolumeFS.glsl" />
+    <EmbeddedResource Include="Renderables\PolylineOnTerrain\Shaders\PolylineOnTerrainShadowVolumeGS.glsl" />
+    <EmbeddedResource Include="Renderables\PolylineOnTerrain\Shaders\PolylineOnTerrainShadowVolumeVS.glsl" />
+    <EmbeddedResource Include="Renderables\PolylineOnTerrain\Shaders\PolylineOnTerrainWallFS.glsl" />
+    <EmbeddedResource Include="Renderables\PolylineOnTerrain\Shaders\PolylineOnTerrainWallGS.glsl" />
+    <EmbeddedResource Include="Renderables\PolylineOnTerrain\Shaders\PolylineOnTerrainWallVS.glsl" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

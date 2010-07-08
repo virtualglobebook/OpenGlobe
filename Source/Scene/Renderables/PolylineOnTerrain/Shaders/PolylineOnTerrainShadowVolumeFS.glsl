@@ -1,0 +1,20 @@
+#version 330
+//
+// (C) Copyright 2010 Patrick Cozzi and Deron Ohlarik
+//
+// Distributed under the Boost Software License, Version 1.0.
+// See License.txt or http://www.boost.org/LICENSE_1_0.txt.
+//
+
+uniform sampler2D og_texture0;
+uniform vec2 og_inverseViewportDimensions;
+out vec4 fragmentColor;
+
+void main()
+{
+    vec2 of = og_inverseViewportDimensions * gl_FragCoord.xy;
+    if (texture(og_texture0, of).r != 0.0)
+    {
+        fragmentColor = vec4(0.0, 0.0, 1.0, 1.0);
+    }
+}
