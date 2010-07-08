@@ -42,9 +42,9 @@ namespace OpenGlobe.Renderer.GL3x
             // doesn't follow the spec exactly, which allows whitespace and
             // comments to come beforehand.
             //
-            if (source.StartsWith("#version", StringComparison.CurrentCulture))
+            if (source.StartsWith("#version", StringComparison.InvariantCulture))
             {
-                Debug.Assert(source.StartsWith("#version 330", StringComparison.CurrentCulture));
+                Debug.Assert(source.StartsWith("#version 330", StringComparison.InvariantCulture));
                 modifiedSource = "//" + source;
             }
             else

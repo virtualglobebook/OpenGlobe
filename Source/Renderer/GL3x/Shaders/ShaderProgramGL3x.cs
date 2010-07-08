@@ -89,7 +89,7 @@ namespace OpenGlobe.Renderer.GL3x
 
                 string attributeName = attributeNameBuilder.ToString();
 
-                if (attributeName.StartsWith("gl_", StringComparison.CurrentCulture))
+                if (attributeName.StartsWith("gl_", StringComparison.InvariantCulture))
                 {
                     //
                     // Names starting with the reserved prefix of "gl_" have a location of -1.
@@ -129,7 +129,7 @@ namespace OpenGlobe.Renderer.GL3x
 
                 string uniformName = CorrectUniformName(uniformNameBuilder.ToString());
 
-                if (uniformName.StartsWith("gl_", StringComparison.CurrentCulture))
+                if (uniformName.StartsWith("gl_", StringComparison.InvariantCulture))
                 {
                     //
                     // Names starting with the reserved prefix of "gl_" have a location of -1.
@@ -413,7 +413,7 @@ namespace OpenGlobe.Renderer.GL3x
             //
             // On ATI, array uniforms have a [0] suffix
             //
-            if (name.EndsWith("[0]", StringComparison.CurrentCulture))
+            if (name.EndsWith("[0]", StringComparison.InvariantCulture))
             {
                 return name.Remove(name.Length - 3);
             }
