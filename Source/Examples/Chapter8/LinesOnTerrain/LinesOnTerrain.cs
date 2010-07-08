@@ -83,8 +83,8 @@ namespace OpenGlobe.Examples.Chapter8
 
             //
             // junk 
-            _lineOnTerrain = new PolylineOnTerrain();
-            _lineOnTerrain.Set(_window.Context, positions);
+            _polylineOnTerrain = new PolylineOnTerrain();
+            _polylineOnTerrain.Set(_window.Context, positions);
 
 
             _clearState = new ClearState();
@@ -148,7 +148,7 @@ namespace OpenGlobe.Examples.Chapter8
             //
             // Render the line on terrain
             //
-            _lineOnTerrain.Render(_window.Context, _sceneState, _tile.SilhouetteTexture, _tile.DepthTexture);
+            _polylineOnTerrain.Render(_window.Context, _sceneState, _tile.SilhouetteTexture, _tile.DepthTexture);
 
             //
             // Render the instructions
@@ -171,7 +171,7 @@ namespace OpenGlobe.Examples.Chapter8
             _camera.Dispose();
             _instructions.Dispose();
             _tile.Dispose();
-            _lineOnTerrain.Dispose();
+            _polylineOnTerrain.Dispose();
             _viewportQuad.Dispose();
             _window.Dispose();
         }
@@ -196,7 +196,7 @@ namespace OpenGlobe.Examples.Chapter8
         private readonly CameraLookAtPoint _camera;
         private readonly HeadsUpDisplay _instructions;
         private readonly TriangleMeshTerrainTile _tile;
-        private readonly PolylineOnTerrain _lineOnTerrain;
+        private readonly PolylineOnTerrain _polylineOnTerrain;
         private readonly ViewportQuad _viewportQuad;
         private readonly ClearState _clearState;
         private bool _showSilhouette = false;
