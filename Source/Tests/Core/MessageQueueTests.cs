@@ -9,8 +9,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using NUnit.Framework;
 using OpenGlobe.Core;
 using System.Threading;
@@ -23,99 +21,103 @@ namespace OpenGlobe.Core
         [Test]
         public void TestPostBeforeStartInCurrentThread()
         {
-            MessageQueue queue = new MessageQueue();
-
-            object received = null;
-            queue.MessageReceived += delegate(object sender, MessageQueueEventArgs e)
+            using (MessageQueue queue = new MessageQueue())
             {
-                received = e.Message;
-                queue.Terminate();
-            };
+                object received = null;
+                queue.MessageReceived += delegate(object sender, MessageQueueEventArgs e)
+                {
+                    received = e.Message;
+                    queue.Terminate();
+                };
 
-            object message = new object();
-            queue.Post(message);
-            queue.StartInCurrentThread();
+                object message = new object();
+                queue.Post(message);
+                queue.StartInCurrentThread();
 
-            Assert.AreSame(message, received);
+                Assert.AreSame(message, received);
+            }
         }
 
         [Test]
         public void TestPostAfterStartInAnotherThread()
         {
-            MessageQueue queue = new MessageQueue();
-
-            object received = null;
-            queue.MessageReceived += delegate(object sender, MessageQueueEventArgs e)
+            using (MessageQueue queue = new MessageQueue())
             {
-                received = e.Message;
-            };
+                object received = null;
+                queue.MessageReceived += delegate(object sender, MessageQueueEventArgs e)
+                {
+                    received = e.Message;
+                };
 
-            object message = new object();
-            queue.StartInAnotherThread();
-            queue.Post(message);
-            queue.TerminateAndWait();
+                object message = new object();
+                queue.StartInAnotherThread();
+                queue.Post(message);
+                queue.TerminateAndWait();
 
-            Assert.AreSame(message, received);
+                Assert.AreSame(message, received);
+            }
         }
 
         [Test]
         public void TestSendAfterStartInAnotherThread()
         {
-            MessageQueue queue = new MessageQueue();
-
-            object received = null;
-            queue.MessageReceived += delegate(object sender, MessageQueueEventArgs e)
+            using (MessageQueue queue = new MessageQueue())
             {
-                received = e.Message;
-            };
+                object received = null;
+                queue.MessageReceived += delegate(object sender, MessageQueueEventArgs e)
+                {
+                    received = e.Message;
+                };
 
-            object message = new object();
-            queue.StartInAnotherThread();
-            queue.Send(message);
+                object message = new object();
+                queue.StartInAnotherThread();
+                queue.Send(message);
 
-            Assert.AreSame(message, received);
+                Assert.AreSame(message, received);
 
-            queue.TerminateAndWait();
+                queue.TerminateAndWait();
+            }
         }
 
         [Test]
         public void TestContinueQueueAfterTerminate()
         {
-            MessageQueue queue = new MessageQueue();
-
-            object received = null;
-            queue.MessageReceived += delegate(object sender, MessageQueueEventArgs e)
+            using (MessageQueue queue = new MessageQueue())
             {
-                received = e.Message;
-            };
+                object received = null;
+                queue.MessageReceived += delegate(object sender, MessageQueueEventArgs e)
+                {
+                    received = e.Message;
+                };
 
-            queue.StartInAnotherThread();
+                queue.StartInAnotherThread();
 
-            // Keep the queue busy for 100 ms
-            queue.Post(x => Thread.Sleep(100), null);
+                // Keep the queue busy for 100 ms
+                queue.Post(x => Thread.Sleep(100), null);
 
-            // Post a message that will be quickly handled as soon as the above sleep finishes
-            object message1 = new object();
-            queue.Post(message1);
+                // Post a message that will be quickly handled as soon as the above sleep finishes
+                object message1 = new object();
+                queue.Post(message1);
 
-            // Post a termination request to the queue.
-            queue.Terminate();
-            
-            // Post a second message - because this is after the Terminate it will not be
-            // processed until the queue is restarted.
-            object message2 = new object();
-            queue.Post(message2);
+                // Post a termination request to the queue.
+                queue.Terminate();
 
-            // Allow time for the messages processes so far (up to the terminate) to be processed.
-            Thread.Sleep(500);
+                // Post a second message - because this is after the Terminate it will not be
+                // processed until the queue is restarted.
+                object message2 = new object();
+                queue.Post(message2);
 
-            // message1 should have been processed, but not message2.
-            Assert.AreSame(message1, received);
+                // Allow time for the messages processes so far (up to the terminate) to be processed.
+                Thread.Sleep(500);
 
-            // Once we restart the queue, message2 should be processed.
-            queue.StartInAnotherThread();
-            queue.TerminateAndWait();
-            Assert.AreSame(message2, received);
+                // message1 should have been processed, but not message2.
+                Assert.AreSame(message1, received);
+
+                // Once we restart the queue, message2 should be processed.
+                queue.StartInAnotherThread();
+                queue.TerminateAndWait();
+                Assert.AreSame(message2, received);
+            }
         }
 
         [Test]
