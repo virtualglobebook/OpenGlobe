@@ -41,7 +41,8 @@ namespace OpenGlobe.Examples.Chapter8
             
             _instructions = new HeadsUpDisplay(_window.Context);
             _instructions.Texture = Device.CreateTexture2D(
-                Device.CreateBitmapFromText("s - Show silhouette",
+                Device.CreateBitmapFromText(
+                    "u - Use silhouette\ns - Show silhouette\n",
                     new Font("Arial", 24)),
                 TextureFormat.RedGreenBlueAlpha8, false);
             _instructions.Color = Color.LightBlue;
@@ -126,7 +127,7 @@ namespace OpenGlobe.Examples.Chapter8
             //
             // Terrain and silhouette textures
             //
-            _tile.RenderDepthAndSilhouetteTextures(_window.Context, _sceneState);
+            _tile.RenderDepthAndSilhouetteTextures(_window.Context, _sceneState, _silhouette);
 
             //
             // Terrain to framebuffer
@@ -158,7 +159,11 @@ namespace OpenGlobe.Examples.Chapter8
 
         private void OnKeyDown(object sender, KeyboardKeyEventArgs e)
         {
-            if (e.Key == KeyboardKey.S)
+            if (e.Key == KeyboardKey.U)
+            {
+                _silhouette = !_silhouette;
+            }
+            else if (e.Key == KeyboardKey.S)
             {
                 _showSilhouette = !_showSilhouette;
             }
@@ -199,6 +204,7 @@ namespace OpenGlobe.Examples.Chapter8
         private readonly PolylineOnTerrain _polylineOnTerrain;
         private readonly ViewportQuad _viewportQuad;
         private readonly ClearState _clearState;
+        private bool _silhouette = true;
         private bool _showSilhouette = false;
 
         private double _xPos = 448; // junk deron todo use this still?

@@ -122,7 +122,7 @@ namespace OpenGlobe.Terrain
             context.Draw(_primitiveType, _drawState, sceneState);
         }
 
-        public void RenderDepthAndSilhouetteTextures(Context context, SceneState sceneState)
+        public void RenderDepthAndSilhouetteTextures(Context context, SceneState sceneState, bool silhouette)
         {
             Verify.ThrowIfNull(context);
             Verify.ThrowIfNull(sceneState);
@@ -143,7 +143,10 @@ namespace OpenGlobe.Terrain
             context.FrameBuffer = _silhouetteFrameBuffer;
             _clearState.Buffers = ClearBuffers.ColorBuffer;
             context.Clear(_clearState);
-            context.Draw(_primitiveType, _silhouetteDrawState, sceneState);
+            if (silhouette)
+            {
+                context.Draw(_primitiveType, _silhouetteDrawState, sceneState);
+            }
         }
 
         private void CreateDepthAndSilhouetteData(Context context)
