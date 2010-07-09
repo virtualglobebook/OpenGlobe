@@ -34,13 +34,15 @@ void ClipLineSegmentToNearPlane(
     vec4 modelP0, 
     vec4 modelP1, 
     out vec4 clipP0, 
-    out vec4 clipP1)
+    out vec4 clipP1,
+	out bool culledByNearPlane)
 {
     clipP0 = modelViewPerspectiveProjectionMatrix * modelP0;
     clipP1 = modelViewPerspectiveProjectionMatrix * modelP1;
+	culledByNearPlane = false;
 
-    float distanceToP0 = clipP0.z - nearPlaneDistance;
-    float distanceToP1 = clipP1.z - nearPlaneDistance;
+    float distanceToP0 = clipP0.z + nearPlaneDistance;
+    float distanceToP1 = clipP1.z + nearPlaneDistance;
 
     if ((distanceToP0 * distanceToP1) < 0.0)
     {
@@ -57,6 +59,10 @@ void ClipLineSegmentToNearPlane(
             clipP1 = clipV;
         }
     }
+	else if (distanceToP0 < 0.0)
+	{
+	    culledByNearPlane = true;
+	}
 }
 
 vec3 ComputeNormalForwardDifference(
@@ -122,11 +128,17 @@ void main()
 
     vec4 clipP0;
     vec4 clipP1;
+	bool culledByNearPlane;
     ClipLineSegmentToNearPlane(og_perspectiveNearPlaneDistance, 
         og_modelViewPerspectiveProjectionMatrix,
         gl_in[0].gl_Position, 
         gl_in[0].gl_Position + vec4(normalize(terrainNormal), 0.0),
-        clipP0, clipP1);
+        clipP0, clipP1, culledByNearPlane);
+
+	if (culledByNearPlane)
+	{
+		return;
+	}
 
     vec4 windowP0 = ClipToWindowCoordinates(clipP0, og_viewportTransformationMatrix);
     vec4 windowP1 = ClipToWindowCoordinates(clipP1, og_viewportTransformationMatrix);

@@ -52,12 +52,14 @@ void ClipLineSegmentToNearPlane(
     vec4 modelP0, 
     vec4 modelP1, 
     out vec4 clipP0, 
-    out vec4 clipP1)
+    out vec4 clipP1,
+	out bool culledByNearPlane)
 {
     clipP0 = ModelToClipCoordinates(modelP0, modelViewPerspectiveProjectionMatrix,
         logarithmicDepth, logarithmicDepthConstant, perspectiveFarPlaneDistance);
     clipP1 = ModelToClipCoordinates(modelP1, modelViewPerspectiveProjectionMatrix,
         logarithmicDepth, logarithmicDepthConstant, perspectiveFarPlaneDistance);
+	culledByNearPlane = false;
 
     float distanceToP0 = clipP0.z - nearPlaneDistance;
     float distanceToP1 = clipP1.z - nearPlaneDistance;
@@ -79,17 +81,27 @@ void ClipLineSegmentToNearPlane(
             clipP1 = clipV;
         }
     }
+	else if (distanceToP0 < 0.0)
+	{
+	    culledByNearPlane = true;
+	}
 }
 
 void main()
 {
     vec4 clipP0;
     vec4 clipP1;
+	bool culledByNearPlane;
     ClipLineSegmentToNearPlane(
 		og_perspectiveNearPlaneDistance, og_perspectiveFarPlaneDistance,
 		og_modelViewPerspectiveProjectionMatrix, 
 		u_logarithmicDepth, u_logarithmicDepthConstant,
-		gl_in[0].gl_Position, gl_in[1].gl_Position, clipP0, clipP1);
+		gl_in[0].gl_Position, gl_in[1].gl_Position, clipP0, clipP1, culledByNearPlane);
+
+	if (culledByNearPlane)
+	{
+		return;
+	}
 
     vec4 windowP0 = ClipToWindowCoordinates(clipP0, og_viewportTransformationMatrix);
     vec4 windowP1 = ClipToWindowCoordinates(clipP1, og_viewportTransformationMatrix);
