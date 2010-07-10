@@ -10,6 +10,7 @@
 using System;
 using System.Drawing;
 
+using OpenGlobe.Core;
 using OpenGlobe.Core.Geometry;
 using OpenGlobe.Core.Tessellation;
 using OpenGlobe.Renderer;
@@ -37,6 +38,27 @@ namespace OpenGlobe.Examples.Chapter9
             _globe.Shape = globeShape;
             _globe.Texture = _texture;
 
+            ///////////////////////////////////////////////////////////////////
+
+            _requestQueue = new MessageQueue();
+            _requestQueue.MessageReceived += delegate(object sender, MessageQueueEventArgs e)
+            {
+                int valueToSquare = (int)e.Message;
+                valueToSquare *= valueToSquare;
+
+                _doneQueue.Post(valueToSquare);
+            };
+            _requestQueue.StartInAnotherThread();
+
+            _doneQueue = new MessageQueue();
+            _doneQueue.MessageReceived += delegate(object sender, MessageQueueEventArgs e)
+            {
+                int squaredValue = (int)e.Message;
+                System.Diagnostics.Debug.Assert(squaredValue == 25);
+            };
+
+            ///////////////////////////////////////////////////////////////////
+
             _sceneState.Camera.ZoomToTarget(globeShape.MaximumRadius);
         }
 
@@ -48,15 +70,29 @@ namespace OpenGlobe.Examples.Chapter9
 
         private void OnRenderFrame()
         {
+            _doneQueue.ProcessQueue();
+
             Context context = _window.Context;
             context.Clear(_clearState);
             _globe.Render(context, _sceneState);
+
+            if (_haveRequest)
+            {
+                int value = 5;
+                _requestQueue.Post(value);
+
+                _haveRequest = false;
+            }
         }
+
+        private bool _haveRequest = true;   // TODO:  remove temp
 
         #region IDisposable Members
 
         public void Dispose()
         {
+            _doneQueue.Dispose();
+            _requestQueue.Dispose();
             _texture.Dispose();
             _globe.Dispose();
             _camera.Dispose();
@@ -85,5 +121,7 @@ namespace OpenGlobe.Examples.Chapter9
         private readonly RayCastedGlobe _globe;
         private readonly Texture2D _texture;
 
+        private readonly MessageQueue _requestQueue;
+        private readonly MessageQueue _doneQueue;
     }
 }
