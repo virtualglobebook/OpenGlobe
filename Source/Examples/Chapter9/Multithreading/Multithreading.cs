@@ -18,6 +18,24 @@ using OpenGlobe.Scene;
 
 namespace OpenGlobe.Examples.Chapter9
 {
+    internal class ShapefileWorker
+    {
+        public ShapefileWorker(MessageQueue doneQueue)
+        {
+            _doneQueue = doneQueue;
+        }
+
+        public void Process(object sender, MessageQueueEventArgs e)
+        {
+            int value = (int)e.Message;
+            value *= value;
+
+            _doneQueue.Post(value);
+        }
+
+        private readonly MessageQueue _doneQueue;
+    }
+    
     sealed class Multithreading : IDisposable
     {
         public Multithreading()
@@ -39,23 +57,15 @@ namespace OpenGlobe.Examples.Chapter9
             _globe.Texture = _texture;
 
             ///////////////////////////////////////////////////////////////////
+            
+            _doneQueue = new MessageQueue();
+            _doneQueue.MessageReceived += ProcessNewShapefile;
+
+            _worker = new ShapefileWorker(_doneQueue);
 
             _requestQueue = new MessageQueue();
-            _requestQueue.MessageReceived += delegate(object sender, MessageQueueEventArgs e)
-            {
-                int valueToSquare = (int)e.Message;
-                valueToSquare *= valueToSquare;
-
-                _doneQueue.Post(valueToSquare);
-            };
+            _requestQueue.MessageReceived += _worker.Process;
             _requestQueue.StartInAnotherThread();
-
-            _doneQueue = new MessageQueue();
-            _doneQueue.MessageReceived += delegate(object sender, MessageQueueEventArgs e)
-            {
-                int squaredValue = (int)e.Message;
-                System.Diagnostics.Debug.Assert(squaredValue == 25);
-            };
 
             ///////////////////////////////////////////////////////////////////
 
@@ -83,6 +93,12 @@ namespace OpenGlobe.Examples.Chapter9
 
                 _haveRequest = false;
             }
+        }
+
+        public void ProcessNewShapefile(object sender, MessageQueueEventArgs e)
+        {
+            int squaredValue = (int)e.Message;
+            System.Diagnostics.Debug.Assert(squaredValue == 25);
         }
 
         private bool _haveRequest = true;   // TODO:  remove temp
@@ -123,5 +139,6 @@ namespace OpenGlobe.Examples.Chapter9
 
         private readonly MessageQueue _requestQueue;
         private readonly MessageQueue _doneQueue;
+        private readonly ShapefileWorker _worker;
     }
 }
