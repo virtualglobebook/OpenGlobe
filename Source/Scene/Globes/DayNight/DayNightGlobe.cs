@@ -34,7 +34,7 @@ namespace OpenGlobe.Scene
             _drawState = new DrawState();
             _drawState.ShaderProgram = sp;
 
-            Shape = Ellipsoid.UnitSphere;
+            Shape = Ellipsoid.ScaledWgs84;
             ShowGlobe = true;
         }
 

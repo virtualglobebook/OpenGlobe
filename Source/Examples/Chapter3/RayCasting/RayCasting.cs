@@ -21,7 +21,7 @@ namespace OpenGlobe.Examples.Chapter3
     {
         public RayCasting()
         {
-            Ellipsoid globeShape = Ellipsoid.UnitSphere;
+            Ellipsoid globeShape = Ellipsoid.ScaledWgs84;
 
             _window = Device.CreateWindow(800, 600, "Chapter 3:  Ray Casting");
             _window.Resize += OnResize;

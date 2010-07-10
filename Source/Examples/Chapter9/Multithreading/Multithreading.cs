@@ -21,7 +21,7 @@ namespace OpenGlobe.Examples.Chapter9
     {
         public Multithreading()
         {
-            Ellipsoid globeShape = Ellipsoid.UnitSphere;
+            Ellipsoid globeShape = Ellipsoid.ScaledWgs84;
                         
             _window = Device.CreateWindow(800, 600, "Chapter 9:  Multithreading");
             _window.Resize += OnResize;

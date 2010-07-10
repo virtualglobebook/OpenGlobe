@@ -25,7 +25,7 @@ namespace OpenGlobe.Examples.Chapter3
             _window.Resize += OnResize;
             _window.RenderFrame += OnRenderFrame;
             _sceneState = new SceneState();
-            _camera = new CameraLookAtPoint(_sceneState.Camera, _window, Ellipsoid.UnitSphere);
+            _camera = new CameraLookAtPoint(_sceneState.Camera, _window, Ellipsoid.ScaledWgs84);
             _clearState = new ClearState();
 
             string vs =
@@ -120,7 +120,7 @@ namespace OpenGlobe.Examples.Chapter3
             (sp.Uniforms["u_blendDuration"] as Uniform<float>).Value = blendDurationScale;
             (sp.Uniforms["u_blendDurationScale"] as Uniform<float>).Value = 1 / (2 * blendDurationScale);
 
-            Mesh mesh = SubdivisionSphereTessellatorSimple.Compute(5);
+            Mesh mesh = SubdivisionEllipsoidTessellator.Compute(Ellipsoid.ScaledWgs84, 5, SubdivisionEllipsoidVertexAttributes.Position);
             VertexArray va = _window.Context.CreateVertexArray(mesh, sp.VertexAttributes, BufferHint.StaticDraw);
             _primitiveType = mesh.PrimitiveType;
 

@@ -15,6 +15,7 @@ namespace OpenGlobe.Core.Geometry
     public class Ellipsoid
     {
         public static readonly Ellipsoid Wgs84 = new Ellipsoid(6378137.0, 6378137.0, 6356752.314245);
+        public static readonly Ellipsoid ScaledWgs84 = new Ellipsoid(1, 1, 6356752.314245 / 6378137.0);
         public static readonly Ellipsoid UnitSphere = new Ellipsoid(1, 1, 1);
 
         public Ellipsoid(double x, double y, double z)
