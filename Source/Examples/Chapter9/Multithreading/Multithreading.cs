@@ -21,98 +21,23 @@ namespace OpenGlobe.Examples.Chapter9
     {
         public Multithreading()
         {
+            Ellipsoid globeShape = Ellipsoid.UnitSphere;
+                        
             _window = Device.CreateWindow(800, 600, "Chapter 9:  Multithreading");
             _window.Resize += OnResize;
             _window.RenderFrame += OnRenderFrame;
             _sceneState = new SceneState();
-            _camera = new CameraLookAtPoint(_sceneState.Camera, _window, Ellipsoid.UnitSphere);
+            _camera = new CameraLookAtPoint(_sceneState.Camera, _window, globeShape);
             _clearState = new ClearState();
 
-            string vs =
-                @"#version 330
-
-                  in vec4 position;
-                  out vec3 worldPosition;
-                  out vec3 positionToLight;
-                  out vec3 positionToEye;
-
-                  uniform mat4 og_modelViewPerspectiveProjectionMatrix;
-                  uniform vec3 og_cameraEye;
-                  uniform vec3 og_cameraLightPosition;
-
-                  void main()                     
-                  {
-                        gl_Position = og_modelViewPerspectiveProjectionMatrix * position; 
-
-                        worldPosition = position.xyz;
-                        positionToLight = og_cameraLightPosition - worldPosition;
-                        positionToEye = og_cameraEye - worldPosition;
-                  }";
-
-            string fs =
-                @"#version 330
-                 
-                  in vec3 worldPosition;
-                  in vec3 positionToLight;
-                  in vec3 positionToEye;
-                  out vec3 fragmentColor;
-
-                  uniform vec4 og_diffuseSpecularAmbientShininess;
-                  uniform sampler2D og_texture0;
-
-                  float LightIntensity(vec3 normal, vec3 toLight, vec3 toEye, vec4 diffuseSpecularAmbientShininess)
-                  {
-                      vec3 toReflectedLight = reflect(-toLight, normal);
-
-                      float diffuse = max(dot(toLight, normal), 0.0);
-                      float specular = max(dot(toReflectedLight, toEye), 0.0);
-                      specular = pow(specular, diffuseSpecularAmbientShininess.w);
-
-                      return (diffuseSpecularAmbientShininess.x * diffuse) +
-                             (diffuseSpecularAmbientShininess.y * specular) +
-                              diffuseSpecularAmbientShininess.z;
-                  }
-
-                  vec2 ComputeTextureCoordinates(vec3 normal)
-                  {
-                      return vec2(atan(normal.y, normal.x) * og_oneOverTwoPi + 0.5, asin(normal.z) * og_oneOverPi + 0.5);
-                  }
-
-                  void main()
-                  {
-                      vec3 normal = normalize(worldPosition);
-                      float intensity = LightIntensity(normal,  normalize(positionToLight), normalize(positionToEye), og_diffuseSpecularAmbientShininess);
-                      fragmentColor = intensity * texture(og_texture0, ComputeTextureCoordinates(normal)).rgb;
-                  }";
-            ShaderProgram sp = Device.CreateShaderProgram(vs, fs);
-
-            ///////////////////////////////////////////////////////////////////
-
-            Mesh mesh = SubdivisionSphereTessellatorSimple.Compute(5);
-            VertexArray va = _window.Context.CreateVertexArray(mesh, sp.VertexAttributes, BufferHint.StaticDraw);
-            _primitiveType = mesh.PrimitiveType;
-
-            ///////////////////////////////////////////////////////////////////
-
-            RenderState renderState = new RenderState();
-            //_renderState.RasterizationMode = RasterizationMode.Line;
-            renderState.FacetCulling.FrontFaceWindingOrder = mesh.FrontFaceWindingOrder;
-
-            _drawState = new DrawState(renderState, sp, va);
-
-            ///////////////////////////////////////////////////////////////////
-
             Bitmap bitmap = new Bitmap("NE2_50M_SR_W_4096.jpg");
-            //Bitmap bitmap = new Bitmap("world_topo_bathy_200411_3x5400x2700.jpg");
-            //Bitmap bitmap = new Bitmap("world.topo.200412.3x5400x2700.jpg");
             _texture = Device.CreateTexture2D(bitmap, TextureFormat.RedGreenBlue8, false);
 
-            _sceneState.Camera.ZoomToTarget(1);
+            _globe = new RayCastedGlobe(_window.Context);
+            _globe.Shape = globeShape;
+            _globe.Texture = _texture;
 
-            HighResolutionSnap snap = new HighResolutionSnap(_window, _sceneState);
-            snap.ColorFilename = @"E:\Manuscript\GlobeRendering\Figures\GeographicGridEllipsoidTessellationPol.png";
-            snap.WidthInInches = 3;
-            snap.DotsPerInch = 600;
+            _sceneState.Camera.ZoomToTarget(globeShape.MaximumRadius);
         }
 
         private void OnResize()
@@ -125,8 +50,7 @@ namespace OpenGlobe.Examples.Chapter9
         {
             Context context = _window.Context;
             context.Clear(_clearState);
-            context.TextureUnits[0].Texture2D = _texture;
-            context.Draw(_primitiveType, _drawState, _sceneState);
+            _globe.Render(context, _sceneState);
         }
 
         #region IDisposable Members
@@ -134,8 +58,7 @@ namespace OpenGlobe.Examples.Chapter9
         public void Dispose()
         {
             _texture.Dispose();
-            _drawState.VertexArray.Dispose();
-            _drawState.ShaderProgram.Dispose();
+            _globe.Dispose();
             _camera.Dispose();
             _window.Dispose();
         }
@@ -159,8 +82,8 @@ namespace OpenGlobe.Examples.Chapter9
         private readonly SceneState _sceneState;
         private readonly CameraLookAtPoint _camera;
         private readonly ClearState _clearState;
-        private readonly DrawState _drawState;
+        private readonly RayCastedGlobe _globe;
         private readonly Texture2D _texture;
-        private readonly PrimitiveType _primitiveType;
+
     }
 }
