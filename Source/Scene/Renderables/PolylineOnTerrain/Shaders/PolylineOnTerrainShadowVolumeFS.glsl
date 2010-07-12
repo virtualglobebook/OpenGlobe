@@ -15,6 +15,6 @@ void main()
     vec2 of = og_inverseViewportDimensions * gl_FragCoord.xy;
     if (texture(og_texture0, of).r != 0.0)
     {
-        fragmentColor = vec4(0.0, 0.0, 1.0, 1.0);
+        fragmentColor = vec4(1.0, 1.0, 0.0, 1.0);
     }
 }

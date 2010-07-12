@@ -85,7 +85,8 @@ void main()
         }
 		float maxLength = 0.0;
 		float temp;
-		for (int i = 0; i < numPositions - 1; ++i)
+        int limit = numPositions - 1;
+		for (int i = 0; i < limit; ++i)
 		{
 		    for (int j = i + 1; j < numPositions; ++j)
 			{
@@ -103,7 +104,6 @@ void main()
         // Compute area
         //
         float area = 0.0;
-        int limit = numPositions - 1;
         for (int i = 0; i < limit; ++i)
         {
             area += (window[i].x * window[i + 1].y) - (window[i + 1].x * window[i].y);
