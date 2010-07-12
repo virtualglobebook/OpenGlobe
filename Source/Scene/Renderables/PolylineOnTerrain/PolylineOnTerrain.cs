@@ -158,16 +158,9 @@ namespace OpenGlobe.Scene
             //
             // Render the front faces
             //
-
-//stencilTest.Enabled = false;
-
             stencilTest.FrontFace.DepthFailStencilPassOperation = StencilOperation.Decrement;
             stencilTest.BackFace.DepthFailStencilPassOperation = StencilOperation.Decrement;
             _shadowVolumeDrawState.RenderState.FacetCulling.Face = CullFace.Back;
-
-//_shadowVolumeDrawState.RenderState.FacetCulling.Enabled = true;
-//_shadowVolumeDrawState.RenderState.FacetCulling.Face = CullFace.Back;
-
             context.Draw(PrimitiveType.LinesAdjacency, _shadowVolumeDrawState, sceneState);
 
             //

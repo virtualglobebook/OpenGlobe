@@ -97,35 +97,31 @@ void main()
                 vec4 window1 = window[i + 1];
 
                 vec2 direction = window1.xy - window0.xy;
-                    
-                if (dot(direction, direction) > 0.0)
-                {
-                    direction = normalize(direction) * u_fillDistance;
-                    vec2 cross = vec2(direction.y, -direction.x);
+                direction = normalize(direction) * u_fillDistance;
+                vec2 cross = vec2(direction.y, -direction.x);
 
-                    vec4 v0 = vec4(window0.xy - cross, -window0.z, 1.0);
-                    vec4 v1 = vec4(window0.xy + cross, -window0.z, 1.0);
-                    vec4 v2 = vec4(window1.xy - cross, -window1.z, 1.0);
-                    vec4 v3 = vec4(window1.xy + cross, -window1.z, 1.0);
-                    vec4 v4 = vec4(window1.xy + direction, -window1.z, 1.0);
+                vec4 v0 = vec4(window0.xy - cross, -window0.z, 1.0);
+                vec4 v1 = vec4(window0.xy + cross, -window0.z, 1.0);
+                vec4 v2 = vec4(window1.xy - cross, -window1.z, 1.0);
+                vec4 v3 = vec4(window1.xy + cross, -window1.z, 1.0);
+                vec4 v4 = vec4(window1.xy + direction, -window1.z, 1.0);
  
-                    gl_Position = og_viewportOrthographicProjectionMatrix * v0;
-                    EmitVertex();
+                gl_Position = og_viewportOrthographicProjectionMatrix * v0;
+                EmitVertex();
 
-                    gl_Position = og_viewportOrthographicProjectionMatrix * v1;
-                    EmitVertex();
+                gl_Position = og_viewportOrthographicProjectionMatrix * v1;
+                EmitVertex();
 
-                    gl_Position = og_viewportOrthographicProjectionMatrix * v2;
-                    EmitVertex();
+                gl_Position = og_viewportOrthographicProjectionMatrix * v2;
+                EmitVertex();
 
-                    gl_Position = og_viewportOrthographicProjectionMatrix * v3;
-                    EmitVertex();
+                gl_Position = og_viewportOrthographicProjectionMatrix * v3;
+                EmitVertex();
 
-                    gl_Position = og_viewportOrthographicProjectionMatrix * v4;
-                    EmitVertex();
+                gl_Position = og_viewportOrthographicProjectionMatrix * v4;
+                EmitVertex();
 
-                    EndPrimitive();
-                }
+                EndPrimitive();
             }
         }
     }

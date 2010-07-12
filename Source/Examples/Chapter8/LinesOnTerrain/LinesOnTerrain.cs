@@ -71,16 +71,16 @@ namespace OpenGlobe.Examples.Chapter8
             //
             IList<Vector3D> positions = new List<Vector3D>();
             double temp = 1.2 * _tile.HeightExaggeration;
-            //positions.Add(new Vector3D(0.0, 0.0, -temp));
-            //positions.Add(new Vector3D(0.0, 0.0, temp));
-            //positions.Add(new Vector3D(100.0, 100.0, -temp));
-            //positions.Add(new Vector3D(100.0, 100.0, temp));
+            positions.Add(new Vector3D(0.0, 0.0, -temp));
+            positions.Add(new Vector3D(0.0, 0.0, temp));
+            positions.Add(new Vector3D(100.0, 100.0, -temp));
+            positions.Add(new Vector3D(100.0, 100.0, temp));
             positions.Add(new Vector3D(200.0, 100.0, -temp));
             positions.Add(new Vector3D(200.0, 100.0, temp));
             positions.Add(new Vector3D(256.0, 256.0, -temp));
             positions.Add(new Vector3D(256.0, 256.0, temp));
-            //positions.Add(new Vector3D(512.0, 512.0, -temp));
-            //positions.Add(new Vector3D(512.0, 512.0, temp));
+            positions.Add(new Vector3D(512.0, 512.0, -temp));
+            positions.Add(new Vector3D(512.0, 512.0, temp));
 
             //
             // junk 
