@@ -82,33 +82,62 @@ void main()
 		    vec2 v01 = window[1].xy - window[0].xy;
 		    vec2 v12 = window[2].xy - window[1].xy;
 		    vec2 v20 = window[0].xy - window[2].xy;
+
 			v01 = normalize(v01);
 			v12 = normalize(v12);
 			v20 = normalize(v20);
+			
 			vec2 v0Expand = v20 - v01;
 			vec2 v1Expand = v01 - v12;
 			vec2 v2Expand = v12 - v20;
+			
 			v0Expand = u_fillDistance * normalize(v0Expand); 
 			v1Expand = u_fillDistance * normalize(v1Expand); 
 			v2Expand = u_fillDistance * normalize(v2Expand); 
 
+			vec2 v01Expand = u_fillDistance * vec2(-v01.y, v01.x);
+			vec2 v12Expand = u_fillDistance * vec2(-v12.y, v12.x);
+			vec2 v20Expand = u_fillDistance * vec2(-v20.y, v20.x);
+
+			vec4 v[9];
 			
-
-			vec4 v0 = vec4(window[0].xy + v0Expand, -window[0].z, 1.0);
-			vec4 v1 = vec4(window[1].xy + v1Expand, -window[1].z, 1.0);
-			vec4 v2 = vec4(window[2].xy + v2Expand, -window[2].z, 1.0);
-			if (v0.x == 0.12323)
-			{
-			    v0.x += u_fillDistance;
-			}
-
-            gl_Position = og_viewportOrthographicProjectionMatrix * v0;
+			v[0] = vec4(window[0].xy + v20Expand, -window[0].z, 1.0);
+			v[1] = vec4(window[0].xy + v0Expand, -window[0].z, 1.0);
+			v[2] = vec4(window[0].xy + v01Expand, -window[0].z, 1.0);
+			
+			v[3] = vec4(window[1].xy + v01Expand, -window[1].z, 1.0);
+			v[4] = vec4(window[1].xy + v1Expand, -window[1].z, 1.0);
+			v[5] = vec4(window[1].xy + v12Expand, -window[1].z, 1.0);
+			
+			v[6] = vec4(window[2].xy + v12Expand, -window[2].z, 1.0);
+			v[7] = vec4(window[2].xy + v2Expand, -window[2].z, 1.0);
+			v[8] = vec4(window[2].xy + v20Expand, -window[2].z, 1.0);
+			
+            gl_Position = og_viewportOrthographicProjectionMatrix * v[1];
+            EmitVertex();			
+            gl_Position = og_viewportOrthographicProjectionMatrix * v[2];
+            EmitVertex();			
+            gl_Position = og_viewportOrthographicProjectionMatrix * v[0];
+            EmitVertex();			
+            gl_Position = og_viewportOrthographicProjectionMatrix * v[3];
+            EmitVertex();			
+            gl_Position = og_viewportOrthographicProjectionMatrix * v[8];
+            EmitVertex();			
+            gl_Position = og_viewportOrthographicProjectionMatrix * v[4];
+            EmitVertex();			
+            gl_Position = og_viewportOrthographicProjectionMatrix * v[7];
+            EmitVertex();			
+            gl_Position = og_viewportOrthographicProjectionMatrix * v[5];
+            EmitVertex();			
+            gl_Position = og_viewportOrthographicProjectionMatrix * v[6];
             EmitVertex();
-            gl_Position = og_viewportOrthographicProjectionMatrix * v1;
-            EmitVertex();
-            gl_Position = og_viewportOrthographicProjectionMatrix * v2;
-            EmitVertex();	
-	        EndPrimitive();
+
+        //    gl_Position = og_viewportOrthographicProjectionMatrix * v0;
+        //    EmitVertex();
+        //    gl_Position = og_viewportOrthographicProjectionMatrix * v1;
+        //    EmitVertex();
+        //    gl_Position = og_viewportOrthographicProjectionMatrix * v2;
+        //    EmitVertex();
 
         }
     }
