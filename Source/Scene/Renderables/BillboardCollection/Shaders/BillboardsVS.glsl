@@ -20,20 +20,20 @@ out vec2 gsPixelOffset;
 uniform mat4 og_modelViewPerspectiveProjectionMatrix;
 uniform mat4 og_viewportTransformationMatrix;
 
-vec4 WorldToWindowCoordinates(
+vec4 ModelToWindowCoordinates(
     vec4 v, 
     mat4 modelViewPerspectiveProjectionMatrix, 
     mat4 viewportTransformationMatrix)
 {
-    v = modelViewPerspectiveProjectionMatrix * v;                        // clip coordinates
-    v.xyz /= v.w;                                                           // normalized device coordinates
+    v = modelViewPerspectiveProjectionMatrix * v;                  // clip coordinates
+    v.xyz /= v.w;                                                  // normalized device coordinates
     v.xyz = (viewportTransformationMatrix * vec4(v.xyz, 1.0)).xyz; // windows coordinates
     return v;
 }
 
 void main()                     
 {
-    gl_Position = WorldToWindowCoordinates(position, 
+    gl_Position = ModelToWindowCoordinates(position, 
         og_modelViewPerspectiveProjectionMatrix, og_viewportTransformationMatrix);
     gsTextureCoordinates = textureCoordinates;
     gsColor = color;
