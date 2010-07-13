@@ -28,7 +28,7 @@ namespace OpenGlobe.Terrain
                 EmbeddedResources.GetText("OpenGlobe.Scene.Terrain.TriangleMeshTerrainTile.SilhouetteFS.glsl"));
 
             Uniform<float> fillDistance = silhouetteSP.Uniforms["u_fillDistance"] as Uniform<float>;
-            fillDistance.Value = 2.0f;
+            fillDistance.Value = 1.5f;
             _silhouetteHeightExaggeration = silhouetteSP.Uniforms["u_heightExaggeration"] as Uniform<float>;
 
             ShaderProgram sp = Device.CreateShaderProgram(
