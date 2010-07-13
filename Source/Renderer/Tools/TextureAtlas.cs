@@ -72,13 +72,13 @@ namespace OpenGlobe.Renderer
 
             ///////////////////////////////////////////////////////////////////
 
-            annotatedBitmaps.Sort(new BitmapMaximumToMinimumHeight());
-
-            IList<Point> offsets = new List<Point>(annotatedBitmaps.Count);
-            int width = ComputeAtlasWidth(annotatedBitmaps, borderWidthInPixels);
+            IList<Point> offsets = new List<Point>(numberOfBitmaps);
+            int width = ComputeAtlasWidth(bitmaps, borderWidthInPixels);
             int xOffset = 0;
             int yOffset = 0;
             int rowHeight = 0;
+
+            annotatedBitmaps.Sort(new BitmapMaximumToMinimumHeight());
 
             //
             // TODO:  Pack more tightly based on algorithm in
@@ -157,13 +157,12 @@ namespace OpenGlobe.Renderer
             get { return _borderWidth; }
         }
 
-        private static int ComputeAtlasWidth(IList<AnnotatedBitmap> bitmaps, int borderWidthInPixels)
+        private static int ComputeAtlasWidth(IEnumerable<Bitmap> bitmaps, int borderWidthInPixels)
         {
             int maxWidth = 0;
             int area = 0;
-            for (int i = 0; i < bitmaps.Count; ++i)
+            foreach (Bitmap b in bitmaps)
             {
-                Bitmap b = bitmaps[i].Bitmap;
                 area += (b.Width + borderWidthInPixels) * (b.Height + borderWidthInPixels);
                 maxWidth = Math.Max(maxWidth, b.Width);
             }
