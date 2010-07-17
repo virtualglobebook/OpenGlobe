@@ -11,16 +11,16 @@ using System;
 using OpenGlobe.Core.Geometry;
 using OpenGlobe.Renderer;
 
-public enum DayNightOutput
-{
-    Composite,
-    DayBuffer,
-    NightBuffer,
-    BlendBuffer
-}
-
 namespace OpenGlobe.Scene
 {
+    public enum DayNightOutput
+    {
+        Composite,
+        DayBuffer,
+        NightBuffer,
+        BlendBuffer
+    }
+
     public sealed class DayNightViewportQuad : IDisposable
     {
         public DayNightViewportQuad(Context context)
