@@ -53,6 +53,7 @@
     <Compile Include="Core\Geometry\GeometryTests.cs" />
     <Compile Include="Core\HalfTests.cs" />
     <Compile Include="Core\MessageQueueTests.cs" />
+    <Compile Include="Core\Polygons\EarClippingTests.cs" />
     <Compile Include="Core\Polygons\SimplePolygonAlgorithms.cs" />
     <Compile Include="Core\SystemTests.cs" />
     <Compile Include="Core\Tessellation\TessellationTests.cs" />

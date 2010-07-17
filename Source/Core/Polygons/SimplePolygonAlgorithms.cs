@@ -7,8 +7,8 @@
 //
 #endregion
 
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
 
 namespace OpenGlobe.Core
 {
@@ -94,7 +94,7 @@ namespace OpenGlobe.Core
             return (ComputeArea(positions) >= 0.0) ? PolygonWindingOrder.Counterclockwise : PolygonWindingOrder.Clockwise;
         }
 
-        private static int PolygonCount(IEnumerable<Vector2D> positions)
+        public static int PolygonCount(IEnumerable<Vector2D> positions)
         {
             if (positions == null)
             {
