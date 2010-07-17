@@ -20,19 +20,47 @@ namespace OpenGlobe.Core
 
     public static class SimplePolygonAlgorithms
     {
+        /// <summary>
+        /// Cleans up a simple polygon by removing duplicate adjacent positions and making
+        /// the first position not equal the last position
+        /// </summary>
+        public static IList<Vector2D> Cleanup(IEnumerable<Vector2D> positions)
+        {
+            int count = PolygonCount(positions);
+
+            List<Vector2D> cleanedPositions = new List<Vector2D>(count);
+
+            bool first = true;
+            Vector2D firstPosition = Vector2D.Zero;
+            Vector2D previousPosition = Vector2D.Zero;
+
+            foreach (Vector2D position in positions)
+            {
+                if (first)
+                {
+                    firstPosition = position;
+                    first = false;
+                }
+                else if (previousPosition != position)
+                {
+                    cleanedPositions.Add(previousPosition);
+                }
+
+                previousPosition = position;
+            }
+
+            if (previousPosition != firstPosition)
+            {
+                cleanedPositions.Add(previousPosition);
+            }
+
+            cleanedPositions.TrimExcess();
+            return cleanedPositions;
+        }
+
         public static double ComputeArea(IEnumerable<Vector2D> positions)
         {
-            if (positions == null)
-            {
-                throw new ArgumentNullException("positions");
-            }
-
-            int count = CollectionAlgorithms.EnumerableCount(positions);
-
-            if (count < 3)
-            {
-                throw new ArgumentOutOfRangeException("positions", "At least three positions are required.");
-            }
+            int count = PolygonCount(positions);
 
             //
             // Compute the area of the polygon.  The sign of the area determines the winding order.
@@ -64,6 +92,23 @@ namespace OpenGlobe.Core
         public static PolygonWindingOrder ComputeWindingOrder(IEnumerable<Vector2D> positions)
         {
             return (ComputeArea(positions) >= 0.0) ? PolygonWindingOrder.Counterclockwise : PolygonWindingOrder.Clockwise;
+        }
+
+        private static int PolygonCount(IEnumerable<Vector2D> positions)
+        {
+            if (positions == null)
+            {
+                throw new ArgumentNullException("positions");
+            }
+
+            int count = CollectionAlgorithms.EnumerableCount(positions);
+
+            if (count < 3)
+            {
+                throw new ArgumentOutOfRangeException("positions", "At least three positions are required.");
+            }
+
+            return count;
         }
     }
 }

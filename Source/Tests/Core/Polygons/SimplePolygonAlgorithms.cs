@@ -29,8 +29,7 @@ namespace OpenGlobe.Core
         {
             SimplePolygonAlgorithms.ComputeWindingOrder(new List<Vector2D>());
         }
-
-        
+                
         [Test]
         public void WindingOrderCounterclockwiseTriangle()
         {
@@ -80,5 +79,49 @@ namespace OpenGlobe.Core
             Assert.AreEqual(PolygonWindingOrder.Clockwise, SimplePolygonAlgorithms.ComputeWindingOrder(positions));
             Assert.AreEqual(-0.5, SimplePolygonAlgorithms.ComputeArea(positions));
         }
+
+        [Test]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void CleanupOrderNull()
+        {
+            SimplePolygonAlgorithms.Cleanup(null);
+        }
+
+        [Test]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void CleanupOrderEmpty()
+        {
+            SimplePolygonAlgorithms.Cleanup(new List<Vector2D>());
+        }
+
+        [Test]
+        public void CleanupNotRequired()
+        {
+            IList<Vector2D> positions = new List<Vector2D>();
+            positions.Add(new Vector2D(0, 0));
+            positions.Add(new Vector2D(1, 1));
+            positions.Add(new Vector2D(1, 0));
+
+            GraphicsAssert.ListsAreEqual(positions, SimplePolygonAlgorithms.Cleanup(positions));
+        }
+
+        [Test]
+        public void CleanupRequired()
+        {
+            IList<Vector2D> positions = new List<Vector2D>();
+            positions.Add(new Vector2D(0, 0));
+            positions.Add(new Vector2D(0, 0));
+            positions.Add(new Vector2D(1, 0));
+            positions.Add(new Vector2D(1, 1));
+            positions.Add(new Vector2D(0, 0));
+
+            IList<Vector2D> cleanedPositions = SimplePolygonAlgorithms.Cleanup(positions);
+
+            Assert.AreEqual(3, cleanedPositions.Count);
+            Assert.AreEqual(new Vector2D(0, 0), cleanedPositions[0]);
+            Assert.AreEqual(new Vector2D(1, 0), cleanedPositions[1]);
+            Assert.AreEqual(new Vector2D(1, 1), cleanedPositions[2]);
+        }
+
     }
 }
