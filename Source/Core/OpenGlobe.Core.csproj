@@ -32,6 +32,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="CollectionAlgorithms.cs" />
+    <Compile Include="CollisionDetection\ContainmentTests.cs" />
     <Compile Include="Geodetic2D.cs" />
     <Compile Include="Geodetic3D.cs" />
     <Compile Include="Disposable.cs" />
@@ -94,8 +95,10 @@
     <Compile Include="Vector4S.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="System" />
     <Reference Include="System.Drawing" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
