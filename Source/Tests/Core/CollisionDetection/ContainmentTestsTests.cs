@@ -58,7 +58,7 @@ namespace OpenGlobe.Core
         [Test]
         public void OnCorner()
         {
-            Assert.IsTrue(ContainmentTests.PointInsideTriangle(
+            Assert.IsFalse(ContainmentTests.PointInsideTriangle(
                 new Vector2D(0, 0),
                 new Vector2D(0, 0),
                 new Vector2D(1, 0),
@@ -68,7 +68,7 @@ namespace OpenGlobe.Core
         [Test]
         public void OnEdge()
         {
-            Assert.IsTrue(ContainmentTests.PointInsideTriangle(
+            Assert.IsFalse(ContainmentTests.PointInsideTriangle(
                 new Vector2D(0.5, 0),
                 new Vector2D(0, 0),
                 new Vector2D(1, 0),

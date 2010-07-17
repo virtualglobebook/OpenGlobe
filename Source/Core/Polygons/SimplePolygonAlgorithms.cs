@@ -94,7 +94,7 @@ namespace OpenGlobe.Core
             return (ComputeArea(positions) >= 0.0) ? PolygonWindingOrder.Counterclockwise : PolygonWindingOrder.Clockwise;
         }
 
-        public static int PolygonCount(IEnumerable<Vector2D> positions)
+        private static int PolygonCount(IEnumerable<Vector2D> positions)
         {
             if (positions == null)
             {

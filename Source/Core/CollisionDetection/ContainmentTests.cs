@@ -30,7 +30,7 @@ namespace OpenGlobe.Core
             double u = (dot11 * dot02 - dot01 * dot12) * q;
             double v = (dot00 * dot12 - dot01 * dot02) * q;
 
-            return (u >= 0) && (v >= 0) && (u + v <= 1);
+            return (u > 0) && (v > 0) && (u + v < 1);
         }
     }
 }
