@@ -24,5 +24,55 @@ namespace OpenGlobe.Core
                 new Vector2D(1, 0),
                 new Vector2D(0, 1)));
         }
+
+        [Test]
+        public void Outside()
+        {
+            Assert.IsFalse(ContainmentTests.PointInsideTriangle(
+                new Vector2D(1, 1),
+                new Vector2D(0, 0),
+                new Vector2D(1, 0),
+                new Vector2D(0, 1)));
+        }
+
+        [Test]
+        public void Outside2()
+        {
+            Assert.IsFalse(ContainmentTests.PointInsideTriangle(
+                new Vector2D(0.5, -0.5),
+                new Vector2D(0, 0),
+                new Vector2D(1, 0),
+                new Vector2D(0, 1)));
+        }
+
+        [Test]
+        public void Outside3()
+        {
+            Assert.IsFalse(ContainmentTests.PointInsideTriangle(
+                new Vector2D(-0.5, 0.5),
+                new Vector2D(0, 0),
+                new Vector2D(1, 0),
+                new Vector2D(0, 1)));
+        }
+
+        [Test]
+        public void OnCorner()
+        {
+            Assert.IsTrue(ContainmentTests.PointInsideTriangle(
+                new Vector2D(0, 0),
+                new Vector2D(0, 0),
+                new Vector2D(1, 0),
+                new Vector2D(0, 1)));
+        }
+
+        [Test]
+        public void OnEdge()
+        {
+            Assert.IsTrue(ContainmentTests.PointInsideTriangle(
+                new Vector2D(0.5, 0),
+                new Vector2D(0, 0),
+                new Vector2D(1, 0),
+                new Vector2D(0, 1)));
+        }
     }
 }
