@@ -8,13 +8,15 @@
 #endregion
 
 using System;
+using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.Diagnostics;
 using OpenGlobe.Core;
+using OpenGlobe.Core.Geometry;
 using OpenGlobe.Renderer.GL3x;
 using OpenTK.Graphics.OpenGL;
 using ImagingPixelFormat = System.Drawing.Imaging.PixelFormat;
-using System.Drawing.Imaging;
 
 namespace OpenGlobe.Renderer
 {
@@ -64,6 +66,217 @@ namespace OpenGlobe.Renderer
         public static IndexBuffer CreateIndexBuffer(BufferHint usageHint, int sizeInBytes)
         {
             return new IndexBufferGL3x(usageHint, sizeInBytes);
+        }
+
+        public static MeshBuffers CreateMeshBuffers(Mesh mesh, ShaderVertexAttributeCollection shaderAttributes, BufferHint usageHint)
+        {
+            MeshBuffers meshBuffers = new MeshBuffers();
+
+            if (mesh.Indices != null)
+            {
+                if (mesh.Indices.DataType == IndicesType.Byte)
+                {
+                    IList<byte> meshIndices = (mesh.Indices as IndicesByte).Values;
+
+                    byte[] indices = new byte[meshIndices.Count];
+                    meshIndices.CopyTo(indices, 0);
+
+                    IndexBuffer indexBuffer = Device.CreateIndexBuffer(usageHint, indices.Length * sizeof(byte));
+                    indexBuffer.CopyFromSystemMemory(indices);
+                    meshBuffers.IndexBuffer = indexBuffer;
+                }
+                else if (mesh.Indices.DataType == IndicesType.Int16)
+                {
+                    IList<short> meshIndices = (mesh.Indices as IndicesInt16).Values;
+
+                    ushort[] indices = new ushort[meshIndices.Count];
+                    for (int j = 0; j < meshIndices.Count; ++j)
+                    {
+                        indices[j] = (ushort)meshIndices[j];
+                    }
+
+                    IndexBuffer indexBuffer = Device.CreateIndexBuffer(usageHint, indices.Length * sizeof(ushort));
+                    indexBuffer.CopyFromSystemMemory(indices);
+                    meshBuffers.IndexBuffer = indexBuffer;
+                }
+                else
+                {
+                    Debug.Assert(mesh.Indices.DataType == IndicesType.Int32);
+
+                    IList<int> meshIndices = (mesh.Indices as IndicesInt32).Values;
+
+                    uint[] indices = new uint[meshIndices.Count];
+                    for (int j = 0; j < meshIndices.Count; ++j)
+                    {
+                        indices[j] = (uint)meshIndices[j];
+                    }
+
+                    IndexBuffer indexBuffer = Device.CreateIndexBuffer(usageHint, indices.Length * sizeof(uint));
+                    indexBuffer.CopyFromSystemMemory(indices);
+                    meshBuffers.IndexBuffer = indexBuffer;
+                }
+            }
+
+            // TODO:  Not tested exhaustively
+            foreach (ShaderVertexAttribute shaderAttribute in shaderAttributes)
+            {
+                if (!mesh.Attributes.Contains(shaderAttribute.Name))
+                {
+                    throw new ArgumentException("Shader requires vertex attribute \"" + shaderAttribute.Name + "\", which is not present in mesh.");
+                }
+
+                VertexAttribute attribute = mesh.Attributes[shaderAttribute.Name];
+
+                if (attribute.DataType == VertexAttributeType.Double)
+                {
+                    IList<double> values = (attribute as VertexAttribute<double>).Values;
+
+                    float[] valuesArray = new float[values.Count];
+                    for (int i = 0; i < values.Count; ++i)
+                    {
+                        valuesArray[i] = (float)values[i];
+                    }
+
+                    VertexBuffer vertexBuffer = Device.CreateVertexBuffer(usageHint, valuesArray.Length * sizeof(float));
+                    vertexBuffer.CopyFromSystemMemory(valuesArray);
+                    meshBuffers.VertexBuffers[shaderAttribute.Location] =
+                        new AttachedVertexBuffer(vertexBuffer, VertexAttributeComponentType.Float, 1);
+                }
+                else if (attribute.DataType == VertexAttributeType.DoubleVector2)
+                {
+                    IList<Vector2D> values = (attribute as VertexAttribute<Vector2D>).Values;
+
+                    Vector2S[] valuesArray = new Vector2S[values.Count];
+                    for (int i = 0; i < values.Count; ++i)
+                    {
+                        valuesArray[i] = values[i].ToVector2S();
+                    }
+
+                    VertexBuffer vertexBuffer = Device.CreateVertexBuffer(usageHint, valuesArray.Length * SizeInBytes<Vector2S>.Value);
+                    vertexBuffer.CopyFromSystemMemory(valuesArray);
+                    meshBuffers.VertexBuffers[shaderAttribute.Location] =
+                        new AttachedVertexBuffer(vertexBuffer, VertexAttributeComponentType.Float, 2);
+                }
+                else if (attribute.DataType == VertexAttributeType.DoubleVector3)
+                {
+                    IList<Vector3D> values = (attribute as VertexAttribute<Vector3D>).Values;
+
+                    Vector3S[] valuesArray = new Vector3S[values.Count];
+                    for (int i = 0; i < values.Count; ++i)
+                    {
+                        valuesArray[i] = values[i].ToVector3S();
+                    }
+
+                    VertexBuffer vertexBuffer = Device.CreateVertexBuffer(usageHint, valuesArray.Length * SizeInBytes<Vector3S>.Value);
+                    vertexBuffer.CopyFromSystemMemory(valuesArray);
+                    meshBuffers.VertexBuffers[shaderAttribute.Location] =
+                        new AttachedVertexBuffer(vertexBuffer, VertexAttributeComponentType.Float, 3);
+                }
+                else if (attribute.DataType == VertexAttributeType.DoubleVector4)
+                {
+                    IList<Vector4D> values = (attribute as VertexAttribute<Vector4D>).Values;
+
+                    Vector4S[] valuesArray = new Vector4S[values.Count];
+                    for (int i = 0; i < values.Count; ++i)
+                    {
+                        valuesArray[i] = values[i].ToVector4S();
+                    }
+
+                    VertexBuffer vertexBuffer = Device.CreateVertexBuffer(usageHint, valuesArray.Length * SizeInBytes<Vector4S>.Value);
+                    vertexBuffer.CopyFromSystemMemory(valuesArray);
+                    meshBuffers.VertexBuffers[shaderAttribute.Location] =
+                        new AttachedVertexBuffer(vertexBuffer, VertexAttributeComponentType.Float, 4);
+                }
+                else if (attribute.DataType == VertexAttributeType.HalfFloat)
+                {
+                    VertexBuffer vertexBuffer = CreateVertexBuffer((attribute as VertexAttribute<Half>).Values, SizeInBytes<Half>.Value, usageHint);
+
+                    meshBuffers.VertexBuffers[shaderAttribute.Location] =
+                        new AttachedVertexBuffer(vertexBuffer, VertexAttributeComponentType.HalfFloat, 1);
+                }
+                else if (attribute.DataType == VertexAttributeType.HalfFloatVector2)
+                {
+                    VertexBuffer vertexBuffer = CreateVertexBuffer((attribute as VertexAttribute<Vector2H>).Values, SizeInBytes<Vector2H>.Value, usageHint);
+
+                    meshBuffers.VertexBuffers[shaderAttribute.Location] =
+                        new AttachedVertexBuffer(vertexBuffer, VertexAttributeComponentType.HalfFloat, 2);
+                }
+                else if (attribute.DataType == VertexAttributeType.HalfFloatVector3)
+                {
+                    VertexBuffer vertexBuffer = CreateVertexBuffer((attribute as VertexAttribute<Vector3H>).Values, SizeInBytes<Vector3H>.Value, usageHint);
+
+                    meshBuffers.VertexBuffers[shaderAttribute.Location] =
+                        new AttachedVertexBuffer(vertexBuffer, VertexAttributeComponentType.HalfFloat, 3);
+                }
+                else if (attribute.DataType == VertexAttributeType.HalfFloatVector4)
+                {
+                    VertexBuffer vertexBuffer = CreateVertexBuffer((attribute as VertexAttribute<Vector4H>).Values, SizeInBytes<Vector4H>.Value, usageHint);
+
+                    meshBuffers.VertexBuffers[shaderAttribute.Location] =
+                        new AttachedVertexBuffer(vertexBuffer, VertexAttributeComponentType.HalfFloat, 4);
+                }
+                else if (attribute.DataType == VertexAttributeType.Float)
+                {
+                    VertexBuffer vertexBuffer = CreateVertexBuffer((attribute as VertexAttribute<float>).Values, sizeof(float), usageHint);
+
+                    meshBuffers.VertexBuffers[shaderAttribute.Location] =
+                        new AttachedVertexBuffer(vertexBuffer, VertexAttributeComponentType.Float, 1);
+                }
+                else if (attribute.DataType == VertexAttributeType.FloatVector2)
+                {
+                    VertexBuffer vertexBuffer = CreateVertexBuffer((attribute as VertexAttribute<Vector2S>).Values, SizeInBytes<Vector2S>.Value, usageHint);
+
+                    meshBuffers.VertexBuffers[shaderAttribute.Location] =
+                        new AttachedVertexBuffer(vertexBuffer, VertexAttributeComponentType.Float, 2);
+                }
+                else if (attribute.DataType == VertexAttributeType.FloatVector3)
+                {
+                    VertexBuffer vertexBuffer = CreateVertexBuffer((attribute as VertexAttribute<Vector3S>).Values, SizeInBytes<Vector3S>.Value, usageHint);
+
+                    meshBuffers.VertexBuffers[shaderAttribute.Location] =
+                        new AttachedVertexBuffer(vertexBuffer, VertexAttributeComponentType.Float, 3);
+                }
+                else if (attribute.DataType == VertexAttributeType.FloatVector4)
+                {
+                    VertexBuffer vertexBuffer = CreateVertexBuffer((attribute as VertexAttribute<Vector4S>).Values, SizeInBytes<Vector4S>.Value, usageHint);
+
+                    meshBuffers.VertexBuffers[shaderAttribute.Location] =
+                        new AttachedVertexBuffer(vertexBuffer, VertexAttributeComponentType.Float, 4);
+                }
+                else if (attribute.DataType == VertexAttributeType.UnsignedByte)
+                {
+                    if (attribute is VertexAttributeRGBA)
+                    {
+                        VertexBuffer vertexBuffer = CreateVertexBuffer((attribute as VertexAttribute<byte>).Values, sizeof(byte), usageHint);
+
+                        meshBuffers.VertexBuffers[shaderAttribute.Location] =
+                            new AttachedVertexBuffer(vertexBuffer, VertexAttributeComponentType.UnsignedByte, 4, true);
+                    }
+                    else
+                    {
+                        VertexBuffer vertexBuffer = CreateVertexBuffer((attribute as VertexAttribute<byte>).Values, sizeof(byte), usageHint);
+
+                        meshBuffers.VertexBuffers[shaderAttribute.Location] =
+                            new AttachedVertexBuffer(vertexBuffer, VertexAttributeComponentType.UnsignedByte, 1);
+                    }
+                }
+                else
+                {
+                    Debug.Fail("attribute.DataType");
+                }
+            }
+
+            return meshBuffers;
+        }
+
+        private static VertexBuffer CreateVertexBuffer<T>(IList<T> values, int SizeOfT, BufferHint usageHint) where T : struct
+        {
+            T[] valuesArray = new T[values.Count];
+            values.CopyTo(valuesArray, 0);
+
+            VertexBuffer vertexBuffer = Device.CreateVertexBuffer(usageHint, valuesArray.Length * SizeOfT);
+            vertexBuffer.CopyFromSystemMemory(valuesArray);
+            return vertexBuffer;
         }
 
         public static UniformBuffer CreateUniformBuffer(BufferHint usageHint, int sizeInBytes)

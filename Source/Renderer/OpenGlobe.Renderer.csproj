@@ -75,6 +75,8 @@
     <Compile Include="Input\MouseButtonEvent.cs" />
     <Compile Include="Input\MouseButtonEventArgs.cs" />
     <Compile Include="Input\MouseMoveEventArgs.cs" />
+    <Compile Include="Mesh\MeshAttachedVertexBuffers.cs" />
+    <Compile Include="Mesh\MeshBuffers.cs" />
     <Compile Include="OpenTK\Matrix3d.cs" />
     <Compile Include="RenderState\ColorMask.cs" />
     <Compile Include="RenderState\DepthRange.cs" />
