@@ -28,7 +28,7 @@ namespace OpenGlobe.Core
             }
 
             //
-            // Doubly linked list.  I wish it were also circular.
+            // Doubly linked list.  This would be a tad cleaner if it were also circular.
             //
             LinkedList<IndexedVector2D> remainingPositions = new LinkedList<IndexedVector2D>(); ;
 
@@ -57,31 +57,34 @@ namespace OpenGlobe.Core
                 Vector2D p1 = node.Value.Vector;
                 Vector2D p2 = nextNode.Value.Vector;
 
-                bool isEar = true;
-                for (LinkedListNode<IndexedVector2D> n = nextNode.Next; n != previousNode; n = ((n.Next != null) ? n.Next : remainingPositions.First))
+                if (IsPossibleEar(p0, p1, p2))
                 {
-                    if (ContainmentTests.PointInsideTriangle(n.Value.Vector, p0, p1, p2))
+                    bool isEar = true;
+                    for (LinkedListNode<IndexedVector2D> n = ((nextNode.Next != null) ? nextNode.Next : remainingPositions.First);
+                        n != previousNode;
+                        n = ((n.Next != null) ? n.Next : remainingPositions.First))
                     {
-                        isEar = false;
-                        break;
+                        if (ContainmentTests.PointInsideTriangle(n.Value.Vector, p0, p1, p2))
+                        {
+                            isEar = false;
+                            break;
+                        }
+                    }
+
+                    if (isEar)
+                    {
+                        indices.AddTriangle(new TriangleIndicesInt32(previousNode.Value.Index, node.Value.Index, nextNode.Value.Index));
+                        remainingPositions.Remove(node);
+
+                        node = nextNode;
+                        nextNode = (nextNode.Next != null) ? nextNode.Next : remainingPositions.First;
+                        continue;
                     }
                 }
 
-                if (isEar)
-                {
-                    indices.AddTriangle(new TriangleIndicesInt32(previousNode.Value.Index, node.Value.Index, nextNode.Value.Index));
-                    remainingPositions.Remove(node);
-
-                    previousNode = nextNode;
-                    node = (previousNode.Next != null) ? previousNode.Next : remainingPositions.First;
-                    nextNode = (node.Next != null) ? node.Next : remainingPositions.First;
-                }
-                else
-                {
-                    previousNode = (previousNode.Next != null) ? previousNode.Next : remainingPositions.First;
-                    node = (node.Next != null) ? node.Next : remainingPositions.First;
-                    nextNode = (nextNode.Next != null) ? nextNode.Next : remainingPositions.First;
-                }
+                previousNode = (previousNode.Next != null) ? previousNode.Next : remainingPositions.First;
+                node = (node.Next != null) ? node.Next : remainingPositions.First;
+                nextNode = (nextNode.Next != null) ? nextNode.Next : remainingPositions.First;
             }
 
             LinkedListNode<IndexedVector2D> n0 = remainingPositions.First;
@@ -90,6 +93,17 @@ namespace OpenGlobe.Core
             indices.AddTriangle(new TriangleIndicesInt32(n0.Value.Index, n1.Value.Index, n2.Value.Index));
 
             return indices;
+        }
+
+        private static bool IsPossibleEar(Vector2D p0, Vector2D p1, Vector2D p2)
+        {
+            Vector2D u = p1 - p0;
+            Vector2D v = p2 - p1;
+
+            //
+            // Use the sign of the z component of the cross product
+            //
+            return ((u.X * v.Y) - (u.Y * v.X)) >= 0.0;
         }
    }
 }

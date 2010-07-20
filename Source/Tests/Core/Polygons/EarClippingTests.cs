@@ -93,5 +93,47 @@ namespace OpenGlobe.Core
             Assert.AreEqual(1, indices.Values[7]);
             Assert.AreEqual(3, indices.Values[8]);
         }
+
+        [Test]
+        public void ComplexConcave()
+        {
+            IList<Vector2D> positions = new List<Vector2D>();
+
+            positions.Add(new Vector2D(0, 0));
+            positions.Add(new Vector2D(2, 0));
+            positions.Add(new Vector2D(2, 1));
+            positions.Add(new Vector2D(0.1, 1.5));
+            positions.Add(new Vector2D(2, 2));
+            positions.Add(new Vector2D(0, 2));
+            positions.Add(new Vector2D(0, 1));
+            positions.Add(new Vector2D(1.9, 0.5));
+
+            IndicesInt32 indices = EarClipping.Triangulate(positions);
+
+            Assert.AreEqual(18, indices.Values.Count);
+            Assert.AreEqual(3, indices.Values[0]);
+            Assert.AreEqual(4, indices.Values[1]);
+            Assert.AreEqual(5, indices.Values[2]);
+
+            Assert.AreEqual(3, indices.Values[3]);
+            Assert.AreEqual(5, indices.Values[4]);
+            Assert.AreEqual(6, indices.Values[5]);
+
+            Assert.AreEqual(3, indices.Values[6]);
+            Assert.AreEqual(6, indices.Values[7]);
+            Assert.AreEqual(7, indices.Values[8]);
+
+            Assert.AreEqual(7, indices.Values[9]);
+            Assert.AreEqual(0, indices.Values[10]);
+            Assert.AreEqual(1, indices.Values[11]);
+
+            Assert.AreEqual(7, indices.Values[12]);
+            Assert.AreEqual(1, indices.Values[13]);
+            Assert.AreEqual(2, indices.Values[14]);
+
+            Assert.AreEqual(2, indices.Values[15]);
+            Assert.AreEqual(3, indices.Values[16]);
+            Assert.AreEqual(7, indices.Values[17]);
+        }
     }
 }
