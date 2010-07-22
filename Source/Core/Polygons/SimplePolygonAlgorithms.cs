@@ -26,32 +26,24 @@ namespace OpenGlobe.Core
         /// </summary>
         public static IList<T> Cleanup<T>(IEnumerable<T> positions)
         {
-            int count = PolygonCount(positions);
+            IList<T> positionsList = CollectionAlgorithms.EnumerableToList(positions);
 
-            List<T> cleanedPositions = new List<T>(count);
-
-            bool first = true;
-            T firstPosition = default(T);
-            T previousPosition = default(T);
-
-            foreach (T position in positions)
+            if (positionsList.Count < 3)
             {
-                if (first)
-                {
-                    firstPosition = position;
-                    first = false;
-                }
-                else if (!previousPosition.Equals(position))
-                {
-                    cleanedPositions.Add(previousPosition);
-                }
-
-                previousPosition = position;
+                throw new ArgumentOutOfRangeException("positions", "At least three positions are required.");
             }
 
-            if (!previousPosition.Equals(firstPosition))
+            List<T> cleanedPositions = new List<T>(positionsList.Count);
+
+            for (int i0 = positionsList.Count - 1, i1 = 0; i1 < positionsList.Count; i0 = i1++)
             {
-                cleanedPositions.Add(previousPosition);
+                T v0 = positionsList[i0];
+                T v1 = positionsList[i1];
+
+                if (!v0.Equals(v1))
+                {
+                    cleanedPositions.Add(v1);
+                }
             }
 
             cleanedPositions.TrimExcess();
@@ -60,31 +52,25 @@ namespace OpenGlobe.Core
 
         public static double ComputeArea(IEnumerable<Vector2D> positions)
         {
-            int count = PolygonCount(positions);
+            IList<Vector2D> positionsList = CollectionAlgorithms.EnumerableToList(positions);
+
+            if (positionsList.Count < 3)
+            {
+                throw new ArgumentOutOfRangeException("positions", "At least three positions are required.");
+            }
+
+            double area = 0.0;
 
             //
             // Compute the area of the polygon.  The sign of the area determines the winding order.
             //
-            double area = 0.0;
-            bool first = true;
-            Vector2D firstPosition = Vector2D.Zero;
-            Vector2D previousPosition = Vector2D.Zero;
-
-            foreach (Vector2D position in positions)
+            for (int i0 = positionsList.Count - 1, i1 = 0; i1 < positionsList.Count; i0 = i1++)
             {
-                if (first)
-                {
-                    firstPosition = position;
-                    first = false;
-                }
-                else
-                {
-                    area += (previousPosition.X * position.Y) - (position.X * previousPosition.Y);
-                }
+                Vector2D v0 = positionsList[i0];
+                Vector2D v1 = positionsList[i1];
 
-                previousPosition = position;
+                area += (v0.X * v1.Y) - (v1.X * v0.Y);
             }
-            area += (previousPosition.X * firstPosition.Y) - (firstPosition.X * previousPosition.Y);
 
             return area * 0.5;
         }
@@ -92,23 +78,6 @@ namespace OpenGlobe.Core
         public static PolygonWindingOrder ComputeWindingOrder(IEnumerable<Vector2D> positions)
         {
             return (ComputeArea(positions) >= 0.0) ? PolygonWindingOrder.Counterclockwise : PolygonWindingOrder.Clockwise;
-        }
-
-        private static int PolygonCount<T>(IEnumerable<T> positions)
-        {
-            if (positions == null)
-            {
-                throw new ArgumentNullException("positions");
-            }
-
-            int count = CollectionAlgorithms.EnumerableCount(positions);
-
-            if (count < 3)
-            {
-                throw new ArgumentOutOfRangeException("positions", "At least three positions are required.");
-            }
-
-            return count;
         }
     }
 }

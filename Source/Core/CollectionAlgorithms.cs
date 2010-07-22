@@ -36,5 +36,33 @@ namespace OpenGlobe.Core
 
             return count;
         }
+
+        public static IList<T> EnumerableToList<T>(IEnumerable<T> enumerable)
+        {
+            if (enumerable == null)
+            {
+                throw new ArgumentNullException("enumerable");
+            }
+
+            IList<T> list = enumerable as IList<T>;
+
+            if (list != null)
+            {
+                return list;
+            }
+            else
+            {
+                int count = EnumerableCount(enumerable);
+                IList<T> newList = new List<T>(count);
+
+                foreach (T t in enumerable)
+                {
+                    newList.Add(t);
+                }
+
+                return newList;
+            }
+        }
+
     }
 }

@@ -118,9 +118,9 @@ namespace OpenGlobe.Core
             IList<Vector2D> cleanedPositions = SimplePolygonAlgorithms.Cleanup(positions);
 
             Assert.AreEqual(3, cleanedPositions.Count);
-            Assert.AreEqual(new Vector2D(0, 0), cleanedPositions[0]);
-            Assert.AreEqual(new Vector2D(1, 0), cleanedPositions[1]);
-            Assert.AreEqual(new Vector2D(1, 1), cleanedPositions[2]);
+            Assert.AreEqual(new Vector2D(1, 0), cleanedPositions[0]);
+            Assert.AreEqual(new Vector2D(1, 1), cleanedPositions[1]);
+            Assert.AreEqual(new Vector2D(0, 0), cleanedPositions[2]);
         }
 
     }
