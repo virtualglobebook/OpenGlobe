@@ -24,24 +24,24 @@ namespace OpenGlobe.Core
         /// Cleans up a simple polygon by removing duplicate adjacent positions and making
         /// the first position not equal the last position
         /// </summary>
-        public static IList<Vector2D> Cleanup(IEnumerable<Vector2D> positions)
+        public static IList<T> Cleanup<T>(IEnumerable<T> positions)
         {
             int count = PolygonCount(positions);
 
-            List<Vector2D> cleanedPositions = new List<Vector2D>(count);
+            List<T> cleanedPositions = new List<T>(count);
 
             bool first = true;
-            Vector2D firstPosition = Vector2D.Zero;
-            Vector2D previousPosition = Vector2D.Zero;
+            T firstPosition = default(T);
+            T previousPosition = default(T);
 
-            foreach (Vector2D position in positions)
+            foreach (T position in positions)
             {
                 if (first)
                 {
                     firstPosition = position;
                     first = false;
                 }
-                else if (previousPosition != position)
+                else if (!previousPosition.Equals(position))
                 {
                     cleanedPositions.Add(previousPosition);
                 }
@@ -49,7 +49,7 @@ namespace OpenGlobe.Core
                 previousPosition = position;
             }
 
-            if (previousPosition != firstPosition)
+            if (!previousPosition.Equals(firstPosition))
             {
                 cleanedPositions.Add(previousPosition);
             }
@@ -94,7 +94,7 @@ namespace OpenGlobe.Core
             return (ComputeArea(positions) >= 0.0) ? PolygonWindingOrder.Counterclockwise : PolygonWindingOrder.Clockwise;
         }
 
-        private static int PolygonCount(IEnumerable<Vector2D> positions)
+        private static int PolygonCount<T>(IEnumerable<T> positions)
         {
             if (positions == null)
             {

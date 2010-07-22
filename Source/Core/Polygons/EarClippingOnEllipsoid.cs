@@ -46,6 +46,8 @@ namespace OpenGlobe.Core
             LinkedListNode<IndexedVector<Vector3D>> node = previousNode.Next;
             LinkedListNode<IndexedVector<Vector3D>> nextNode = node.Next;
 
+            int bailCount = 2 * remainingPositions.Count * remainingPositions.Count;
+
             while (remainingPositions.Count > 3)
             {
                 Vector3D p0 = previousNode.Value.Vector;
@@ -80,6 +82,11 @@ namespace OpenGlobe.Core
                 previousNode = (previousNode.Next != null) ? previousNode.Next : remainingPositions.First;
                 node = (node.Next != null) ? node.Next : remainingPositions.First;
                 nextNode = (nextNode.Next != null) ? nextNode.Next : remainingPositions.First;
+
+                if (--bailCount == 0)
+                {
+                    break;
+                }
             }
 
             LinkedListNode<IndexedVector<Vector3D>> n0 = remainingPositions.First;

@@ -59,6 +59,7 @@
     <Compile Include="Renderables\BillboardCollection\BillboardCollection.cs" />
     <Compile Include="Renderables\HeadsUpDisplay\HeadsUpDisplay.cs" />
     <Compile Include="Renderables\Plane\Plane.cs" />
+    <Compile Include="Renderables\Polygon\Polygon.cs" />
     <Compile Include="Renderables\PolylineOnTerrain\PolylineOnTerrain.cs" />
     <Compile Include="Renderables\Polyline\Polyline.cs" />
     <Compile Include="Renderables\Polyline\OutlinedPolylineGeometryShader.cs" />
@@ -176,7 +177,10 @@
     <EmbeddedResource Include="Globes\LatitudeLongitudeGrid\Shaders\GlobeFS.glsl" />
     <EmbeddedResource Include="Globes\LatitudeLongitudeGrid\Shaders\GlobeVS.glsl" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Renderables\Polygon\Shaders\PolygonFS.glsl" />
+    <EmbeddedResource Include="Renderables\Polygon\Shaders\PolygonVS.glsl" />
+  </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Renderables\PolylineOnTerrain\Shaders\PolylineOnTerrainShadowVolumeFS.glsl" />
     <EmbeddedResource Include="Renderables\PolylineOnTerrain\Shaders\PolylineOnTerrainShadowVolumeGS.glsl" />

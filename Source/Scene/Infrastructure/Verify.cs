@@ -8,6 +8,7 @@
 #endregion
 
 using System;
+using OpenGlobe.Core.Geometry;
 using OpenGlobe.Renderer;
 
 namespace OpenGlobe.Scene
@@ -35,6 +36,14 @@ namespace OpenGlobe.Scene
             if (sceneState == null)
             {
                 throw new ArgumentNullException("sceneState");
+            }
+        }
+
+        public static void ThrowIfNull(Ellipsoid globeShape)
+        {
+            if (globeShape == null)
+            {
+                throw new ArgumentNullException("globeShape");
             }
         }
     }

@@ -84,7 +84,7 @@ namespace OpenGlobe.Core
         [ExpectedException(typeof(ArgumentNullException))]
         public void CleanupOrderNull()
         {
-            SimplePolygonAlgorithms.Cleanup(null);
+            SimplePolygonAlgorithms.Cleanup<Vector2D>(null);
         }
 
         [Test]

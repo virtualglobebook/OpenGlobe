@@ -47,8 +47,8 @@ namespace OpenGlobe.Core.Geometry
             get { return _type; }
         }
 
-        private string _name;
-        private VertexAttributeType _type;
+        private readonly string _name;
+        private readonly VertexAttributeType _type;
     }
 
     public class VertexAttribute<T> : VertexAttribute
@@ -70,6 +70,6 @@ namespace OpenGlobe.Core.Geometry
             get { return _values; }
         }
 
-        private List<T> _values;
+        private readonly List<T> _values;
     }
 }
