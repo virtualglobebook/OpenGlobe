@@ -68,7 +68,8 @@
     <Compile Include="MessageQueue.cs" />
     <Compile Include="MessageQueueEventArgs.cs" />
     <Compile Include="Polygons\EarClipping.cs" />
-    <Compile Include="Polygons\IndexedVector2D.cs" />
+    <Compile Include="Polygons\EarClippingOnEllipsoid.cs" />
+    <Compile Include="Polygons\IndexedVector.cs" />
     <Compile Include="Polygons\SimplePolygonAlgorithms.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RectangleD.cs" />

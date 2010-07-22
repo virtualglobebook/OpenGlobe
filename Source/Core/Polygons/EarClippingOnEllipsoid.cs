@@ -13,15 +13,10 @@ using OpenGlobe.Core.Geometry;
 
 namespace OpenGlobe.Core
 {
-    public static class EarClipping
+    public static class EarClippingOnEllipsoid
     {
-        public static IndicesInt32 Triangulate(IEnumerable<Vector2D> positions)
+        public static IndicesInt32 Triangulate(IEnumerable<Vector3D> positions)
         {
-            //
-            // Implementation based on http://www.geometrictools.com/Documentation/TriangulationByEarClipping.pdf.
-            // O(n^2)
-            //
-
             if (positions == null)
             {
                 throw new ArgumentNullException("positions");
@@ -30,41 +25,41 @@ namespace OpenGlobe.Core
             //
             // Doubly linked list.  This would be a tad cleaner if it were also circular.
             //
-            LinkedList<IndexedVector<Vector2D>> remainingPositions = new LinkedList<IndexedVector<Vector2D>>(); ;
+            LinkedList<IndexedVector<Vector3D>> remainingPositions = new LinkedList<IndexedVector<Vector3D>>(); ;
 
             int index = 0;
-            foreach (Vector2D position in positions)
+            foreach (Vector3D position in positions)
             {
-                remainingPositions.AddLast(new IndexedVector<Vector2D>(position, index++));
+                remainingPositions.AddLast(new IndexedVector<Vector3D>(position, index++));
             }
 
             if (remainingPositions.Count < 3)
             {
                 throw new ArgumentOutOfRangeException("positions", "At least three positions are required.");
             }
-            
+
             IndicesInt32 indices = new IndicesInt32(3 * (remainingPositions.Count - 2));
 
             ///////////////////////////////////////////////////////////////////
 
-            LinkedListNode<IndexedVector<Vector2D>> previousNode = remainingPositions.First;
-            LinkedListNode<IndexedVector<Vector2D>> node = previousNode.Next;
-            LinkedListNode<IndexedVector<Vector2D>> nextNode = node.Next;
+            LinkedListNode<IndexedVector<Vector3D>> previousNode = remainingPositions.First;
+            LinkedListNode<IndexedVector<Vector3D>> node = previousNode.Next;
+            LinkedListNode<IndexedVector<Vector3D>> nextNode = node.Next;
 
             while (remainingPositions.Count > 3)
             {
-                Vector2D p0 = previousNode.Value.Vector;
-                Vector2D p1 = node.Value.Vector;
-                Vector2D p2 = nextNode.Value.Vector;
+                Vector3D p0 = previousNode.Value.Vector;
+                Vector3D p1 = node.Value.Vector;
+                Vector3D p2 = nextNode.Value.Vector;
 
                 if (IsPossibleEar(p0, p1, p2))
                 {
                     bool isEar = true;
-                    for (LinkedListNode<IndexedVector<Vector2D>> n = ((nextNode.Next != null) ? nextNode.Next : remainingPositions.First);
+                    for (LinkedListNode<IndexedVector<Vector3D>> n = ((nextNode.Next != null) ? nextNode.Next : remainingPositions.First);
                         n != previousNode;
                         n = ((n.Next != null) ? n.Next : remainingPositions.First))
                     {
-                        if (ContainmentTests.PointInsideTriangle(n.Value.Vector, p0, p1, p2))
+                        if (ContainmentTests.PointInsideThreeSidedInfinitePyramid(n.Value.Vector, Vector3D.Zero, p0, p1, p2))
                         {
                             isEar = false;
                             break;
@@ -87,23 +82,20 @@ namespace OpenGlobe.Core
                 nextNode = (nextNode.Next != null) ? nextNode.Next : remainingPositions.First;
             }
 
-            LinkedListNode<IndexedVector<Vector2D>> n0 = remainingPositions.First;
-            LinkedListNode<IndexedVector<Vector2D>> n1 = n0.Next;
-            LinkedListNode<IndexedVector<Vector2D>> n2 = n1.Next;
+            LinkedListNode<IndexedVector<Vector3D>> n0 = remainingPositions.First;
+            LinkedListNode<IndexedVector<Vector3D>> n1 = n0.Next;
+            LinkedListNode<IndexedVector<Vector3D>> n2 = n1.Next;
             indices.AddTriangle(new TriangleIndicesInt32(n0.Value.Index, n1.Value.Index, n2.Value.Index));
 
             return indices;
         }
 
-        private static bool IsPossibleEar(Vector2D p0, Vector2D p1, Vector2D p2)
+        private static bool IsPossibleEar(Vector3D p0, Vector3D p1, Vector3D p2)
         {
-            Vector2D u = p1 - p0;
-            Vector2D v = p2 - p1;
+            Vector3D u = p1 - p0;
+            Vector3D v = p2 - p1;
 
-            //
-            // Use the sign of the z component of the cross product
-            //
-            return ((u.X * v.Y) - (u.Y * v.X)) >= 0.0;
+            return u.Cross(v).Dot(p1) >= 0.0;
         }
-   }
+    }
 }

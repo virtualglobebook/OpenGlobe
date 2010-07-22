@@ -12,15 +12,15 @@ using System.Globalization;
 
 namespace OpenGlobe.Core
 {
-    internal struct IndexedVector2D : IEquatable<IndexedVector2D>
+    internal struct IndexedVector<T> : IEquatable<IndexedVector<T>>
     {
-        public IndexedVector2D(Vector2D vector, int index)
+        public IndexedVector(T vector, int index)
         {
             _vector = vector;
             _index = index;
         }
 
-        public Vector2D Vector
+        public T Vector
         {
             get { return _vector; }
         }
@@ -30,12 +30,12 @@ namespace OpenGlobe.Core
             get { return _index; }
         }
 
-        public static bool operator ==(IndexedVector2D left, IndexedVector2D right)
+        public static bool operator ==(IndexedVector<T> left, IndexedVector<T> right)
         {
             return left.Equals(right);
         }
 
-        public static bool operator !=(IndexedVector2D left, IndexedVector2D right)
+        public static bool operator !=(IndexedVector<T> left, IndexedVector<T> right)
         {
             return !left.Equals(right);
         }
@@ -52,22 +52,22 @@ namespace OpenGlobe.Core
 
         public override bool Equals(object obj)
         {
-            if (!(obj is IndexedVector2D))
+            if (!(obj is IndexedVector<T>))
                 return false;
 
-            return this.Equals((IndexedVector2D)obj);
+            return this.Equals((IndexedVector<T>)obj);
         }
 
-        #region IEquatable<IndexedVector2D> Members
+        #region IEquatable<IndexedVector<T>> Members
 
-        public bool Equals(IndexedVector2D other)
+        public bool Equals(IndexedVector<T> other)
         {
-            return (_vector == other._vector) && (_index == other._index);
+            return (_vector.Equals(other._vector)) && (_index == other._index);
         }
 
         #endregion
 
-        private Vector2D _vector;
+        private T _vector;
         private int _index;
     }
 }
