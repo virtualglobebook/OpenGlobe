@@ -31,6 +31,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="BoundingVolumes\AxisAlignedBoundingBox.cs" />
     <Compile Include="CollectionAlgorithms.cs" />
     <Compile Include="CollisionDetection\ContainmentTests.cs" />
     <Compile Include="Geodetic2D.cs" />
@@ -85,6 +86,7 @@
     <Compile Include="Tessellation\SubdivisionSphereTessellatorSimple.cs" />
     <Compile Include="Tessellation\SubdivisionUtility.cs" />
     <Compile Include="Trig.cs" />
+    <Compile Include="Utility.cs" />
     <Compile Include="Vector2D.cs" />
     <Compile Include="Vector2H.cs" />
     <Compile Include="Vector2I.cs" />

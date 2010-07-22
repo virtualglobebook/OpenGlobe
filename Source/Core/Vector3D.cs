@@ -211,6 +211,26 @@ namespace OpenGlobe.Core
             return new Vector3D(left._x / right, left._y / right, left._z / right);
         }
 
+        public static bool operator >(Vector3D left, Vector3D right)
+        {
+            return (left.X > right.X) && (left.Y > right.Y) && (left.Y > right.Y);
+        }
+
+        public static bool operator >=(Vector3D left, Vector3D right)
+        {
+            return (left.X >= right.X) && (left.Y >= right.Y) && (left.Y >= right.Y);
+        }
+
+        public static bool operator <(Vector3D left, Vector3D right)
+        {
+            return (left.X < right.X) && (left.Y < right.Y) && (left.Y < right.Y);
+        }
+
+        public static bool operator <=(Vector3D left, Vector3D right)
+        {
+            return (left.X <= right.X) && (left.Y <= right.Y) && (left.Y <= right.Y);
+        }
+
         public static bool operator ==(Vector3D left, Vector3D right)
         {
             return left.Equals(right);

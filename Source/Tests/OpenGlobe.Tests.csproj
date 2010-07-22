@@ -45,6 +45,7 @@
     <Reference Include="System.Drawing" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Core\BoundingVolumes\AxisAlignedBoundingBoxTests.cs" />
     <Compile Include="Core\CollectionAlgorithmsTests.cs" />
     <Compile Include="Core\CollisionDetection\ContainmentTestsTests.cs" />
     <Compile Include="Core\Geodetic2DTests.cs" />
