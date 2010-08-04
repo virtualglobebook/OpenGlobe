@@ -58,6 +58,7 @@
     <Compile Include="Core\Polygons\EarClippingOnEllipsoidTests.cs" />
     <Compile Include="Core\Polygons\EarClippingTests.cs" />
     <Compile Include="Core\Polygons\SimplePolygonAlgorithms.cs" />
+    <Compile Include="Core\Polygons\TriangleMeshSubdivisionTests.cs" />
     <Compile Include="Core\SystemTests.cs" />
     <Compile Include="Core\Tessellation\TessellationTests.cs" />
     <Compile Include="Core\Vector2DTests.cs" />
