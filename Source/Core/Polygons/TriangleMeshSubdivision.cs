@@ -61,6 +61,11 @@ namespace OpenGlobe.Core
             IList<Vector3D> subdividedPositions = CollectionAlgorithms.CopyEnumerableToList(positions);
 
             //
+            // Used to make sure shared edges are not split more than once.
+            //
+            Dictionary<Edge, int> edges = new Dictionary<Edge, int>();
+
+            //
             // Subdivide triangles until we run out
             //
             while (triangles.Count != 0)
@@ -81,24 +86,42 @@ namespace OpenGlobe.Core
                 {
                     if (g0 == max)
                     {
-                        subdividedPositions.Add((v0 + v1) * 0.5);
-                        int i = subdividedPositions.Count - 1;
+                        Edge edge = new Edge(Math.Min(triangle.I0, triangle.I1), Math.Max(triangle.I0, triangle.I1));
+                        int i;
+                        if (!edges.TryGetValue(edge, out i))
+                        {
+                            subdividedPositions.Add((v0 + v1) * 0.5);
+                            i = subdividedPositions.Count - 1;
+                            edges.Add(edge, i);
+                        }
 
                         triangles.Enqueue(new TriangleIndicesInt32(triangle.I0, i, triangle.I2));
                         triangles.Enqueue(new TriangleIndicesInt32(i, triangle.I1, triangle.I2));
                     }
                     else if (g1 == max)
                     {
-                        subdividedPositions.Add((v1 + v2) * 0.5);
-                        int i = subdividedPositions.Count - 1;
+                        Edge edge = new Edge(Math.Min(triangle.I1, triangle.I2), Math.Max(triangle.I1, triangle.I2));
+                        int i;
+                        if (!edges.TryGetValue(edge, out i))
+                        {
+                            subdividedPositions.Add((v1 + v2) * 0.5);
+                            i = subdividedPositions.Count - 1;
+                            edges.Add(edge, i);
+                        }
 
                         triangles.Enqueue(new TriangleIndicesInt32(triangle.I1, i, triangle.I0));
                         triangles.Enqueue(new TriangleIndicesInt32(i, triangle.I2, triangle.I0));
                     }
                     else if (g2 == max)
                     {
-                        subdividedPositions.Add((v2 + v0) * 0.5);
-                        int i = subdividedPositions.Count - 1;
+                        Edge edge = new Edge(Math.Min(triangle.I2, triangle.I0), Math.Max(triangle.I2, triangle.I0));
+                        int i;
+                        if (!edges.TryGetValue(edge, out i))
+                        {
+                            subdividedPositions.Add((v2 + v0) * 0.5);
+                            i = subdividedPositions.Count - 1;
+                            edges.Add(edge, i);
+                        }
 
                         triangles.Enqueue(new TriangleIndicesInt32(triangle.I2, i, triangle.I1));
                         triangles.Enqueue(new TriangleIndicesInt32(i, triangle.I0, triangle.I1));

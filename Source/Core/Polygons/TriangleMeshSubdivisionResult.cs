@@ -14,13 +14,13 @@ namespace OpenGlobe.Core
 {
     public class TriangleMeshSubdivisionResult
     {
-        internal TriangleMeshSubdivisionResult(IEnumerable<Vector3D> positions, IndicesInt32 indices)
+        internal TriangleMeshSubdivisionResult(ICollection<Vector3D> positions, IndicesInt32 indices)
         {
             _positions = positions;
             _indices = indices;
         }
 
-        public IEnumerable<Vector3D> Positions 
+        public ICollection<Vector3D> Positions 
         {
             get { return _positions;  }
         }
@@ -30,7 +30,7 @@ namespace OpenGlobe.Core
             get { return _indices;  }
         }
 
-        private readonly IEnumerable<Vector3D> _positions;
+        private readonly ICollection<Vector3D> _positions;
         private readonly IndicesInt32 _indices;
     }
 }
