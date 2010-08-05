@@ -163,6 +163,11 @@ namespace OpenGlobe.Core
             }
         }
 
+        public double AngleBetween(Vector3D other)
+        {
+            return Math.Acos(Normalize().Dot(other.Normalize()));
+        }
+
         public Vector3D Negate()
         {
             return -this;

@@ -71,19 +71,15 @@ namespace OpenGlobe.Core
                 Vector3D v1 = subdividedPositions[triangle.I1];
                 Vector3D v2 = subdividedPositions[triangle.I2];
 
-                Vector3D nv0 = v0.Normalize();
-                Vector3D nv1 = v1.Normalize();
-                Vector3D nv2 = v2.Normalize();
-
-                double d0 = Math.Acos(nv0.Dot(nv1));
-                double d1 = Math.Acos(nv1.Dot(nv2));
-                double d2 = Math.Acos(nv2.Dot(nv0));
+                double g0 = v0.AngleBetween(v1);
+                double g1 = v1.AngleBetween(v2);
+                double g2 = v2.AngleBetween(v0);
              
-                double max = Math.Max(d0, Math.Max(d1, d2));
+                double max = Math.Max(g0, Math.Max(g1, g2));
 
                 if (max > granularity)
                 {
-                    if (d0 == max)
+                    if (g0 == max)
                     {
                         subdividedPositions.Add((v0 + v1) * 0.5);
                         int i = subdividedPositions.Count - 1;
@@ -91,7 +87,7 @@ namespace OpenGlobe.Core
                         triangles.Enqueue(new TriangleIndicesInt32(triangle.I0, i, triangle.I2));
                         triangles.Enqueue(new TriangleIndicesInt32(i, triangle.I1, triangle.I2));
                     }
-                    else if (d1 == max)
+                    else if (g1 == max)
                     {
                         subdividedPositions.Add((v1 + v2) * 0.5);
                         int i = subdividedPositions.Count - 1;
@@ -99,7 +95,7 @@ namespace OpenGlobe.Core
                         triangles.Enqueue(new TriangleIndicesInt32(triangle.I1, i, triangle.I0));
                         triangles.Enqueue(new TriangleIndicesInt32(i, triangle.I2, triangle.I0));
                     }
-                    else if (d2 == max)
+                    else if (g2 == max)
                     {
                         subdividedPositions.Add((v2 + v0) * 0.5);
                         int i = subdividedPositions.Count - 1;
