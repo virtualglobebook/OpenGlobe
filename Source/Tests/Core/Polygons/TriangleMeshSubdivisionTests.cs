@@ -21,21 +21,21 @@ namespace OpenGlobe.Core
         [ExpectedException(typeof(ArgumentNullException))]
         public void Null()
         {
-            TriangleMeshSubdivision.Compute(null, new IndicesInt32());
+            TriangleMeshSubdivision.Compute(null, new IndicesInt32(), Trig.ToRadians(1));
         }
 
         [Test]
         [ExpectedException(typeof(ArgumentNullException))]
         public void Null2()
         {
-            TriangleMeshSubdivision.Compute( new Vector3D[] { }, null);
+            TriangleMeshSubdivision.Compute(new Vector3D[] { }, null, Trig.ToRadians(1));
         }
 
         [Test]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
-        public void RangeException()
+        public void OutOfRangeException()
         {
-            TriangleMeshSubdivision.Compute(new Vector3D[] { }, new IndicesInt32());
+            TriangleMeshSubdivision.Compute(new Vector3D[] { }, new IndicesInt32(), Trig.ToRadians(1));
         }
 
         [Test]
@@ -48,7 +48,26 @@ namespace OpenGlobe.Core
             indices.Values.Add(2);
             indices.Values.Add(3);
 
-            TriangleMeshSubdivision.Compute(new Vector3D[] { }, indices);
+            TriangleMeshSubdivision.Compute(new Vector3D[] { }, indices, Trig.ToRadians(1));
+        }
+
+        [Test]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void OutOfRangeException2()
+        {
+            Vector3D[] positions = new Vector3D[]
+            {
+                Vector3D.Zero,
+                new Vector3D(0.5, 0, 0),
+                new Vector3D(0.5, 0.5, 0)
+            };
+
+            IndicesInt32 indices = new IndicesInt32();
+            indices.Values.Add(0);
+            indices.Values.Add(1);
+            indices.Values.Add(2);
+
+            TriangleMeshSubdivision.Compute(positions, indices, 0);
         }
 
         [Test]
@@ -66,7 +85,7 @@ namespace OpenGlobe.Core
             indices.Values.Add(1);
             indices.Values.Add(2);
 
-            TriangleMeshSubdivisionResult result = TriangleMeshSubdivision.Compute(positions, indices);
+            TriangleMeshSubdivisionResult result = TriangleMeshSubdivision.Compute(positions, indices, Trig.ToRadians(1));
 
             Assert.AreEqual(0, result.Indices.Values[0]);
             Assert.AreEqual(1, result.Indices.Values[1]);
@@ -88,7 +107,7 @@ namespace OpenGlobe.Core
             indices.Values.Add(1);
             indices.Values.Add(2);
 
-            TriangleMeshSubdivisionResult result = TriangleMeshSubdivision.Compute(positions, indices);
+            TriangleMeshSubdivisionResult result = TriangleMeshSubdivision.Compute(positions, indices, Trig.ToRadians(1));
 
             //Assert.AreEqual(0, result.Indices.Values[0]);
             //Assert.AreEqual(1, result.Indices.Values[1]);
@@ -114,7 +133,7 @@ namespace OpenGlobe.Core
             indices.Values.Add(2);
             indices.Values.Add(1);
 
-            TriangleMeshSubdivisionResult result = TriangleMeshSubdivision.Compute(positions, indices);
+            TriangleMeshSubdivisionResult result = TriangleMeshSubdivision.Compute(positions, indices, Trig.ToRadians(90));
 
             Assert.AreEqual(0, result.Indices.Values[0]);
             Assert.AreEqual(1, result.Indices.Values[1]);
@@ -144,7 +163,7 @@ namespace OpenGlobe.Core
             indices.Values.Add(1);
             indices.Values.Add(3);
 
-            TriangleMeshSubdivisionResult result = TriangleMeshSubdivision.Compute(positions, indices);
+            TriangleMeshSubdivisionResult result = TriangleMeshSubdivision.Compute(positions, indices, Trig.ToRadians(90));
 
             Assert.AreEqual(1, result.Indices.Values[0]);
             Assert.AreEqual(2, result.Indices.Values[1]);

@@ -15,11 +15,8 @@ namespace OpenGlobe.Core
 {
     public static class TriangleMeshSubdivision
     {
-        public static TriangleMeshSubdivisionResult Compute(IEnumerable<Vector3D> positions, IndicesInt32 indices)
+        public static TriangleMeshSubdivisionResult Compute(IEnumerable<Vector3D> positions, IndicesInt32 indices, double granularity)
         {
-            // TODO
-            double granularity = Trig.ToRadians(1);
-            
             if (positions == null)
             {
                 throw new ArgumentNullException("positions");
@@ -38,6 +35,11 @@ namespace OpenGlobe.Core
             if (indices.Values.Count % 3 != 0)
             {
                 throw new ArgumentException("indices", "The number of indices must be divisable by three.");
+            }
+
+            if (granularity <= 0.0)
+            {
+                throw new ArgumentOutOfRangeException("granularity", "Granularity must be greater than zero.");
             }
 
             //
