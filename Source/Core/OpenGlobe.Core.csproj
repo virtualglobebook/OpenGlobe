@@ -71,11 +71,8 @@
     <Compile Include="Polygons\EarClipping.cs" />
     <Compile Include="Polygons\EarClippingOnEllipsoid.cs" />
     <Compile Include="Geometry\Edge.cs" />
-    <Compile Include="Polygons\SubdivisionEdge.cs" />
     <Compile Include="Polygons\IndexedVector.cs" />
     <Compile Include="Polygons\SimplePolygonAlgorithms.cs" />
-    <Compile Include="Polygons\SubdivisionTriangle.cs" />
-    <Compile Include="Polygons\SubdivisionTriangleEdge.cs" />
     <Compile Include="Polygons\TriangleMeshSubdivision.cs" />
     <Compile Include="Polygons\TriangleMeshSubdivisionResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
