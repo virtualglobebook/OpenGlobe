@@ -21,6 +21,11 @@ namespace OpenGlobe.Core
         public SubdivisionEdge LeftSplit { get; set; }
         public SubdivisionEdge RightSplit { get; set; }
 
+        public bool IsSplit
+        {
+            get { return (LeftSplit != null) && (RightSplit != null); }
+        }
+
         private readonly Edge _edge;
     }
 }

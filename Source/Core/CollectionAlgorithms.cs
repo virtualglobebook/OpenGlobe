@@ -64,5 +64,22 @@ namespace OpenGlobe.Core
             }
         }
 
+        public static IList<T> CopyEnumerableToList<T>(IEnumerable<T> enumerable)
+        {
+            if (enumerable == null)
+            {
+                throw new ArgumentNullException("enumerable");
+            }
+
+            int count = EnumerableCount(enumerable);
+            IList<T> newList = new List<T>(count);
+
+            foreach (T t in enumerable)
+            {
+                newList.Add(t);
+            }
+
+            return newList;
+        }
     }
 }

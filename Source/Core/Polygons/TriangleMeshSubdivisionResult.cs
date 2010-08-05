@@ -16,7 +16,7 @@ namespace OpenGlobe.Core
     {
         internal TriangleMeshSubdivisionResult(IEnumerable<Vector3D> positions, IndicesInt32 indices)
         {
-            _positions = Positions;
+            _positions = positions;
             _indices = indices;
         }
 
