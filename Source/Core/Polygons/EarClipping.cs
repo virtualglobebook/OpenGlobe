@@ -57,7 +57,7 @@ namespace OpenGlobe.Core
                 Vector2D p1 = node.Value.Vector;
                 Vector2D p2 = nextNode.Value.Vector;
 
-                if (IsPossibleEar(p0, p1, p2))
+                if (IsTipConcave(p0, p1, p2))
                 {
                     bool isEar = true;
                     for (LinkedListNode<IndexedVector<Vector2D>> n = ((nextNode.Next != null) ? nextNode.Next : remainingPositions.First);
@@ -95,7 +95,7 @@ namespace OpenGlobe.Core
             return indices;
         }
 
-        private static bool IsPossibleEar(Vector2D p0, Vector2D p1, Vector2D p2)
+        private static bool IsTipConcave(Vector2D p0, Vector2D p1, Vector2D p2)
         {
             Vector2D u = p1 - p0;
             Vector2D v = p2 - p1;
