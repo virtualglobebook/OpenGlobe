@@ -122,6 +122,11 @@ namespace OpenGlobe.Core.Geometry
             }
         }
 
+        public Vector3D ToVector3D(Geodetic2D geodetic)
+        {
+            return ToVector3D(new Geodetic3D(geodetic.Longitude, geodetic.Latitude, 0));
+        }
+
         public Vector3D ToVector3D(Geodetic3D geodetic)
         {
             double cosLon = Math.Cos(geodetic.Longitude);
