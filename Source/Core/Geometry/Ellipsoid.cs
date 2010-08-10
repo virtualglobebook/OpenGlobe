@@ -188,6 +188,13 @@ namespace OpenGlobe.Core.Geometry
             return new Geodetic3D(longitude, latitude, height);
         }
 
+        public Vector3D ScaleToGeodeticSurface(Vector3D position)
+        {
+            Geodetic3D geodetic = ToGeodetic3D(position);
+            Geodetic3D onSurface = new Geodetic3D(geodetic.Longitude, geodetic.Latitude, 0);
+            return ToVector3D(onSurface);
+        }
+
         private readonly Vector3D _radii;
         private readonly Vector3D _oneOverRadii;
         private readonly Vector3D _oneOverRadiiSquared;

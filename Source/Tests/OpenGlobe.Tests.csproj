@@ -48,9 +48,11 @@
     <Compile Include="Core\BoundingVolumes\AxisAlignedBoundingBoxTests.cs" />
     <Compile Include="Core\CollectionAlgorithmsTests.cs" />
     <Compile Include="Core\CollisionDetection\ContainmentTestsTests.cs" />
+    <Compile Include="Core\CollisionDetection\IntersectionTestsTests.cs" />
     <Compile Include="Core\Geodetic2DTests.cs" />
     <Compile Include="Core\Geodetic3DTests.cs" />
     <Compile Include="Core\GeodeticExtentTests.cs" />
+    <Compile Include="Core\Geometry\EllipsoidTangentPlaneTests.cs" />
     <Compile Include="Core\Geometry\EllipsoidTests.cs" />
     <Compile Include="Core\Geometry\GeometryTests.cs" />
     <Compile Include="Core\HalfTests.cs" />

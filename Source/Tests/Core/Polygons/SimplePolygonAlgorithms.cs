@@ -10,6 +10,7 @@
 using System;
 using System.Collections.Generic;
 using NUnit.Framework;
+using OpenGlobe.Core.Geometry;
 
 namespace OpenGlobe.Core
 {
@@ -79,6 +80,33 @@ namespace OpenGlobe.Core
             Assert.AreEqual(PolygonWindingOrder.Clockwise, SimplePolygonAlgorithms.ComputeWindingOrder(positions));
             Assert.AreEqual(-0.5, SimplePolygonAlgorithms.ComputeArea(positions));
         }
+
+        [Test]
+        public void WindingOrderOnEllipsoid()
+        {
+            IList<Vector3D> positions = new List<Vector3D>();
+            positions.Add(Ellipsoid.UnitSphere.ToVector3D(Trig.ToRadians(new Geodetic3D(0, 0))));
+            positions.Add(Ellipsoid.UnitSphere.ToVector3D(Trig.ToRadians(new Geodetic3D(1, 0))));
+            positions.Add(Ellipsoid.UnitSphere.ToVector3D(Trig.ToRadians(new Geodetic3D(1, 1))));
+
+            EllipsoidTangentPlane plane = new EllipsoidTangentPlane(Ellipsoid.UnitSphere, positions);
+            ICollection<Vector2D> positionsOnPlane = plane.ComputePositionsOnPlane(positions);
+            Assert.AreEqual(PolygonWindingOrder.Counterclockwise, SimplePolygonAlgorithms.ComputeWindingOrder(positionsOnPlane));
+        }
+
+        [Test]
+        public void WindingOrderOnEllipsoid2()
+        {
+            IList<Vector3D> positions = new List<Vector3D>();
+            positions.Add(Ellipsoid.UnitSphere.ToVector3D(Trig.ToRadians(new Geodetic3D(1, 1))));
+            positions.Add(Ellipsoid.UnitSphere.ToVector3D(Trig.ToRadians(new Geodetic3D(1, 0))));
+            positions.Add(Ellipsoid.UnitSphere.ToVector3D(Trig.ToRadians(new Geodetic3D(0, 0))));
+
+            EllipsoidTangentPlane plane = new EllipsoidTangentPlane(Ellipsoid.UnitSphere, positions);
+            ICollection<Vector2D> positionsOnPlane = plane.ComputePositionsOnPlane(positions);
+            Assert.AreEqual(PolygonWindingOrder.Clockwise, SimplePolygonAlgorithms.ComputeWindingOrder(positionsOnPlane));
+        }
+
 
         [Test]
         [ExpectedException(typeof(ArgumentNullException))]

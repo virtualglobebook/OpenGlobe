@@ -34,11 +34,13 @@
     <Compile Include="BoundingVolumes\AxisAlignedBoundingBox.cs" />
     <Compile Include="CollectionAlgorithms.cs" />
     <Compile Include="CollisionDetection\ContainmentTests.cs" />
+    <Compile Include="CollisionDetection\IntersectionTests.cs" />
     <Compile Include="Geodetic2D.cs" />
     <Compile Include="Geodetic3D.cs" />
     <Compile Include="Disposable.cs" />
     <Compile Include="GeodeticExtent.cs" />
     <Compile Include="Geometry\Ellipsoid.cs" />
+    <Compile Include="Geometry\EllipsoidTangentPlane.cs" />
     <Compile Include="Geometry\Indices\IndicesBase.cs" />
     <Compile Include="Geometry\Indices\IndicesByte.cs" />
     <Compile Include="Geometry\Indices\IndicesInt32.cs" />

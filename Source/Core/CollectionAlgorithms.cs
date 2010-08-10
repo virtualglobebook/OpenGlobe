@@ -37,6 +37,37 @@ namespace OpenGlobe.Core
             return count;
         }
 
+        public static bool EnumerableCountGreaterThanOrEqual<T>(IEnumerable<T> enumerable, int minimumCount)
+        {
+            if (enumerable == null)
+            {
+                throw new ArgumentNullException("enumerable");
+            }
+
+            if (minimumCount < 0)
+            {
+                throw new ArgumentOutOfRangeException("minimumCount");
+            }
+
+            IList<T> list = enumerable as IList<T>;
+
+            if (list != null)
+            {
+                return list.Count >= minimumCount;
+            }
+
+            int count = 0;
+            foreach (T t in enumerable)
+            {
+                if (++count >= minimumCount)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         public static IList<T> EnumerableToList<T>(IEnumerable<T> enumerable)
         {
             if (enumerable == null)
