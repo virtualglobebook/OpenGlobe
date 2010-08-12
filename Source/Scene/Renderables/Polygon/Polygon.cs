@@ -23,23 +23,48 @@ namespace OpenGlobe.Scene
             Verify.ThrowIfNull(context);
             Verify.ThrowIfNull(globeShape);
 
+            //
+            // Pipeline Stage 1a:  Clean up - Remove duplicate positions
+            //
             List<Vector3D> cleanPositions = SimplePolygonAlgorithms.Cleanup(positions) as List<Vector3D>;
-            cleanPositions.Reverse();
 
-            IndicesInt32 indices = EarClippingOnEllipsoid.Triangulate(cleanPositions);
-
-            VertexAttributeDoubleVector3 positionsAttribute = new VertexAttributeDoubleVector3(
-                "position", (indices.Values.Count / 3) + 2);
-            foreach (Vector3D position in cleanPositions)
+            //
+            // Pipeline Stage 1b:  Clean up - Swap winding order
+            //
+            EllipsoidTangentPlane plane = new EllipsoidTangentPlane(globeShape, cleanPositions);
+            ICollection<Vector2D> positionsOnPlane = plane.ComputePositionsOnPlane(cleanPositions);
+            if (SimplePolygonAlgorithms.ComputeWindingOrder(positionsOnPlane) == PolygonWindingOrder.Clockwise)
             {
-                positionsAttribute.Values.Add(position);
+                cleanPositions.Reverse();
+                //(positionsOnPlane as List<Vector2D>).Reverse();
+            }
+            
+            //
+            // Pipeline Stage 2:  Triangulate
+            //
+            IndicesInt32 indices = EarClippingOnEllipsoid.Triangulate(cleanPositions);
+            //IndicesInt32 indices = EarClipping.Triangulate(positionsOnPlane);
+
+            //
+            // Pipeline Stage 3:  Subdivide
+            //
+            TriangleMeshSubdivisionResult result = TriangleMeshSubdivision.Compute(cleanPositions, indices, Trig.ToRadians(1));
+            
+            //
+            // Pipeline Stage 4:  Set height
+            //
+            VertexAttributeDoubleVector3 positionsAttribute = new VertexAttributeDoubleVector3(
+                "position", (result.Indices.Values.Count / 3) + 2);
+            foreach (Vector3D position in result.Positions)
+            {
+                positionsAttribute.Values.Add(globeShape.ScaleToGeodeticSurface(position));
             }
 
             Mesh mesh = new Mesh();
             mesh.PrimitiveType = PrimitiveType.Triangles;
             mesh.FrontFaceWindingOrder = WindingOrder.Counterclockwise;
             mesh.Attributes.Add(positionsAttribute);
-            mesh.Indices = indices;
+            mesh.Indices = result.Indices;
 
             ShaderProgram sp = Device.CreateShaderProgram(
                 EmbeddedResources.GetText("OpenGlobe.Scene.Renderables.Polygon.Shaders.PolygonVS.glsl"),
@@ -48,7 +73,11 @@ namespace OpenGlobe.Scene
             _colorUniform = sp.Uniforms["u_color"] as Uniform<Vector3S>;
 
             _drawState = new DrawState();
-            _drawState.RenderState.FacetCulling.Enabled = false;
+            _drawState.RenderState.Blending.Enabled = true;
+            _drawState.RenderState.Blending.SourceRGBFactor = SourceBlendingFactor.SourceAlpha;
+            _drawState.RenderState.Blending.SourceAlphaFactor = SourceBlendingFactor.SourceAlpha;
+            _drawState.RenderState.Blending.DestinationRGBFactor = DestinationBlendingFactor.OneMinusSourceAlpha;
+            _drawState.RenderState.Blending.DestinationAlphaFactor = DestinationBlendingFactor.OneMinusSourceAlpha;
             _drawState.ShaderProgram = sp;
             _drawState.VertexArray = context.CreateVertexArray(mesh, _drawState.ShaderProgram.VertexAttributes, BufferHint.StaticDraw);
 
@@ -80,6 +109,12 @@ namespace OpenGlobe.Scene
         {
             get { return _drawState.RenderState.RasterizationMode == RasterizationMode.Line; }
             set { _drawState.RenderState.RasterizationMode = value ? RasterizationMode.Line : RasterizationMode.Fill; }
+        }
+
+        public bool BackfaceCulling
+        {
+            get { return _drawState.RenderState.FacetCulling.Enabled; }
+            set { _drawState.RenderState.FacetCulling.Enabled = value; }
         }
 
         public bool DepthWrite
