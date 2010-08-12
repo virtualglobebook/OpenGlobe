@@ -9,6 +9,7 @@
 
 using System;
 using System.Globalization;
+using System.Collections.Generic;
 
 namespace OpenGlobe.Core.Geometry
 {
@@ -148,6 +149,45 @@ namespace OpenGlobe.Core.Geometry
             double z = (normal * (1.0 - firstEccentricitySquared) + geodetic.Height) * sinLat;
 
             return new Vector3D(x, y, z);
+        }
+
+        public ICollection<Geodetic3D> ToGeodetic3D(IEnumerable<Vector3D> positions)
+        {
+            if (positions == null)
+            {
+                throw new ArgumentNullException("positions");
+            }
+
+            IList<Geodetic3D> geodetics = new List<Geodetic3D>(CollectionAlgorithms.EnumerableCount(positions));
+
+            foreach (Vector3D position in positions)
+            {
+                geodetics.Add(ToGeodetic3D(position));
+            }
+
+            return geodetics;
+        }
+
+        public ICollection<Geodetic2D> ToGeodetic2D(IEnumerable<Vector3D> positions)
+        {
+            if (positions == null)
+            {
+                throw new ArgumentNullException("positions");
+            }
+
+            IList<Geodetic2D> geodetics = new List<Geodetic2D>(CollectionAlgorithms.EnumerableCount(positions));
+
+            foreach (Vector3D position in positions)
+            {
+                geodetics.Add(ToGeodetic2D(position));
+            }
+
+            return geodetics;
+        }
+
+        public Geodetic2D ToGeodetic2D(Vector3D vector)
+        {
+            return new Geodetic2D(ToGeodetic3D(vector));
         }
 
         public Geodetic3D ToGeodetic3D(Vector3D vector)
