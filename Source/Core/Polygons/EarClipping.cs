@@ -18,8 +18,12 @@ namespace OpenGlobe.Core
         public static IndicesInt32 Triangulate(IEnumerable<Vector2D> positions)
         {
             //
-            // Implementation based on http://www.geometrictools.com/Documentation/TriangulationByEarClipping.pdf.
-            // O(n^2)
+            // O(n^3)
+            //
+            // There are several optimization opportunities:
+            //   * http://www.geometrictools.com/Documentation/TriangulationByEarClipping.pdf
+            //   * http://cgm.cs.mcgill.ca/~godfried/publications/triangulation.held.ps.gz
+            //   * http://blogs.agi.com/insight3d/index.php/2008/03/20/triangulation-rhymes-with-strangulation/
             //
 
             if (positions == null)
@@ -51,7 +55,7 @@ namespace OpenGlobe.Core
             LinkedListNode<IndexedVector<Vector2D>> node = previousNode.Next;
             LinkedListNode<IndexedVector<Vector2D>> nextNode = node.Next;
 
-            int bailCount = 2 * remainingPositions.Count * remainingPositions.Count;
+            int bailCount = remainingPositions.Count * remainingPositions.Count * remainingPositions.Count;
 
             while (remainingPositions.Count > 3)
             {
