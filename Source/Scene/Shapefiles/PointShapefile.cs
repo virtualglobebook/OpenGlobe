@@ -19,21 +19,17 @@ namespace OpenGlobe.Scene
 {
     public class PointShapefile : IDisposable
     {
-        public PointShapefile(string filename, Context context, Ellipsoid globeShape, Bitmap icon)
+        public PointShapefile(string filename, string labelName, Context context, Ellipsoid globeShape, Bitmap icon)
         {
             Verify.ThrowIfNull(context);
-
-            if (globeShape == null)
-            {
-                throw new ArgumentNullException("globeShape");
-            }
+            Verify.ThrowIfNull(globeShape);
 
             using (Shapefile shapefile = new Shapefile(filename))
             {
                 if (shapefile.Type == ShapeType.Point)
                 {
                     _billboards = new BillboardCollection(context);
-                    CreateBillboards(globeShape, shapefile, icon);
+                    CreateBillboards(labelName, globeShape, shapefile, icon);
                 }
                 else
                 {
@@ -42,7 +38,7 @@ namespace OpenGlobe.Scene
             }
         }
 
-        private void CreateBillboards(Ellipsoid globeShape, Shapefile shapefile, Bitmap iconBitmap)
+        private void CreateBillboards(string labelName, Ellipsoid globeShape, Shapefile shapefile, Bitmap iconBitmap)
         {
             Font font = new Font("Arial", 16);
             IList<Bitmap> bitmaps = new List<Bitmap>();
@@ -61,10 +57,6 @@ namespace OpenGlobe.Scene
                     throw new NotSupportedException("The type of an individual shape does not match the Shapefile type.");
                 }
 
-                //
-                // TODO: This function is obviously way too hard coded
-                //
-                bitmaps.Add(Device.CreateBitmapFromText(shape.GetMetadata("nameascii"), font));
                 PointD point = (shape as ShapePoint).Point;
                 Vector3D position = globeShape.ToVector3D(Trig.ToRadians(new Geodetic3D(point.X, point.Y))); ;
 
@@ -72,22 +64,36 @@ namespace OpenGlobe.Scene
                 icon.Position = position;
                 _billboards.Add(icon);
 
-                Billboard label = new Billboard();
-                label.Position = position;
-                label.HorizontalOrigin = HorizontalOrigin.Left;
-                label.PixelOffset = new Vector2H(labelPixelOffset, 0);
-                _billboards.Add(label);
+                if (labelName != null)
+                {
+                    string labelText = shape.GetMetadata(labelName);
+
+                    bitmaps.Add(Device.CreateBitmapFromText(labelText, font));
+
+                    Billboard label = new Billboard();
+                    label.Position = position;
+                    label.HorizontalOrigin = HorizontalOrigin.Left;
+                    label.PixelOffset = new Vector2H(labelPixelOffset, 0);
+                    _billboards.Add(label);
+                }
             }
 
-            TextureAtlas labelAtlas = new TextureAtlas(bitmaps);
-            int j = 1;
-            for (int i = 0; i < _billboards.Count; i += 2)
+            if (labelName != null)
             {
-                _billboards[i].TextureCoordinates = labelAtlas.TextureCoordinates[0];
-                _billboards[i + 1].TextureCoordinates = labelAtlas.TextureCoordinates[j];
-                ++j;
+                TextureAtlas labelAtlas = new TextureAtlas(bitmaps);
+                int j = 1;
+                for (int i = 0; i < _billboards.Count; i += 2)
+                {
+                    _billboards[i].TextureCoordinates = labelAtlas.TextureCoordinates[0];
+                    _billboards[i + 1].TextureCoordinates = labelAtlas.TextureCoordinates[j];
+                    ++j;
+                }
+                _billboards.Texture = Device.CreateTexture2D(labelAtlas.Bitmap, TextureFormat.RedGreenBlueAlpha8, false);
             }
-            _billboards.Texture = Device.CreateTexture2D(labelAtlas.Bitmap, TextureFormat.RedGreenBlueAlpha8, false);
+            else
+            {
+                _billboards.Texture = Device.CreateTexture2D(iconBitmap, TextureFormat.RedGreenBlueAlpha8, false);
+            }
 
             for (int i = 1; i < bitmaps.Count; ++i)
             {

@@ -27,11 +27,7 @@ namespace OpenGlobe.Scene
         public PolylineShapefile(string filename, Context context, Ellipsoid globeShape, Color color, Color outlineColor)
         {
             Verify.ThrowIfNull(context);
-
-            if (globeShape == null)
-            {
-                throw new ArgumentNullException("globeShape");
-            }
+            Verify.ThrowIfNull(globeShape);
 
             using (Shapefile shapefile = new Shapefile(filename))
             {

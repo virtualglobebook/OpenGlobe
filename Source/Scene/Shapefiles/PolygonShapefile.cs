@@ -20,25 +20,18 @@ namespace OpenGlobe.Scene
     public class PolygonShapefile : IDisposable
     {
         public PolygonShapefile(string filename, Context context, Ellipsoid globeShape)
-            : this(filename, context, globeShape, Color.Yellow, Color.Black)
-        {
-        }
-
-        public PolygonShapefile(string filename, Context context, Ellipsoid globeShape, Color color, Color outlineColor)
         {
             Verify.ThrowIfNull(context);
-
-            if (globeShape == null)
-            {
-                throw new ArgumentNullException("globeShape");
-            }
+            Verify.ThrowIfNull(globeShape);
 
             using (Shapefile shapefile = new Shapefile(filename))
             {
                 if (shapefile.Type == ShapeType.Polygon)
                 {
                     _polyline = new OutlinedPolylineTexture();
-                    CreatePolygons(context, globeShape, shapefile, color, outlineColor);
+                    _polygons = new List<Polygon>();
+
+                    CreatePolygons(context, globeShape, shapefile);
                 }
                 else
                 {
@@ -47,16 +40,15 @@ namespace OpenGlobe.Scene
             }
         }
 
-        private void CreatePolygons(Context context, Ellipsoid globeShape, Shapefile shapefile, Color color, Color outlineColor)
+        private void CreatePolygons(Context context, Ellipsoid globeShape, Shapefile shapefile)
         {
-            //
-            // TODO:  This is temporary.  Since polygon tessellation is not supported yet,
-            // polylines are created instead of polygons.
-            //
             VertexAttributeDoubleVector3 positionAttribute = new VertexAttributeDoubleVector3("position");
             VertexAttributeRGBA colorAttribute = new VertexAttributeRGBA("color");
             VertexAttributeRGBA outlineColorAttribute = new VertexAttributeRGBA("outlineColor");
             IndicesInt32 indices = new IndicesInt32();
+
+            Random r = new Random(3);
+            IList<Vector3D> positions = new List<Vector3D>();
 
             foreach (Shape shape in shapefile)
             {
@@ -74,21 +66,40 @@ namespace OpenGlobe.Scene
 
                 for (int j = 0; j < parts.Count; ++j)
                 {
+                    Color color = Color.FromArgb(127, r.Next(256), r.Next(256), r.Next(256));
+
+                    positions.Clear();
+
                     PointD[] part = parts[j];
 
                     for (int i = 0; i < part.Length; ++i)
                     {
                         PointD point = part[i];
 
+                        positions.Add(globeShape.ToVector3D(Trig.ToRadians(new Geodetic3D(point.X, point.Y))));
+
+                        //
+                        // For polyline
+                        //
                         positionAttribute.Values.Add(globeShape.ToVector3D(Trig.ToRadians(new Geodetic3D(point.X, point.Y))));
                         colorAttribute.AddColor(color);
-                        outlineColorAttribute.AddColor(outlineColor);
+                        outlineColorAttribute.AddColor(Color.Black);
 
                         if (i != 0)
                         {
                             indices.Values.Add(positionAttribute.Values.Count - 2);
                             indices.Values.Add(positionAttribute.Values.Count - 1);
                         }
+                    }
+
+                    try
+                    {
+                        Polygon p = new Polygon(context, globeShape, positions);
+                        p.Color = color;
+                        _polygons.Add(p);
+                    }
+                    catch (ArgumentOutOfRangeException) // Not enough positions after cleaning
+                    {
                     }
                 }
             }
@@ -100,14 +111,16 @@ namespace OpenGlobe.Scene
             mesh.Attributes.Add(outlineColorAttribute);
             mesh.Indices = indices;
             _polyline.Set(context, mesh);
-
-            Width = _polyline.Width;
-            OutlineWidth = _polyline.OutlineWidth;
         }
 
         public void Render(Context context, SceneState sceneState)
         {
             _polyline.Render(context, sceneState);
+
+            foreach (Polygon polygon in _polygons)
+            {
+                polygon.Render(context, sceneState);
+            }
         }
 
         public double Width 
@@ -125,7 +138,15 @@ namespace OpenGlobe.Scene
         public bool DepthWrite 
         {
             get { return _polyline.DepthWrite;  }
-            set { _polyline.DepthWrite = value;  }
+            set 
+            { 
+                _polyline.DepthWrite = value;  
+
+                foreach (Polygon polygon in _polygons)
+                {
+                    polygon.DepthWrite = value;
+                }
+            }
         }
 
         #region IDisposable Members
@@ -136,10 +157,16 @@ namespace OpenGlobe.Scene
             {
                 _polyline.Dispose();
             }
+
+            foreach (Polygon polygon in _polygons)
+            {
+                polygon.Dispose();
+            }
         }
 
         #endregion
 
         private readonly OutlinedPolylineTexture _polyline;
+        private readonly IList<Polygon> _polygons;
     }
 }
