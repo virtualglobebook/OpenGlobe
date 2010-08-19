@@ -14,6 +14,7 @@ using OpenGlobe.Core.Geometry;
 using OpenGlobe.Core;
 using OpenGlobe.Renderer;
 using OpenGlobe.Scene;
+using System.IO;
 
 namespace OpenGlobe.Examples.Chapter7
 {
@@ -21,7 +22,7 @@ namespace OpenGlobe.Examples.Chapter7
     {
         public VectorData()
         {
-            Ellipsoid globeShape = Ellipsoid.UnitSphere;
+            Ellipsoid globeShape = Ellipsoid.ScaledWgs84;
 
             _window = Device.CreateWindow(800, 600, "Chapter 7:  Vector Data");
             _window.Resize += OnResize;
@@ -61,8 +62,13 @@ namespace OpenGlobe.Examples.Chapter7
             _rivers.Width = 1;
             _rivers.OutlineWidth = 0;
             _rivers.DepthWrite = false;
-            _cities = new PointShapefile("110m_populated_places_simple.shp", context, globeShape, new Bitmap("032.png"));
-            _cities.DepthWrite = false;
+
+            _populatedPlaces = new PointShapefile("110m_populated_places_simple.shp", /*"nameascii"*/null, context, globeShape, new Bitmap(@"E:\MiniGlobe2\Data\Icons\YusukeKamiyamane\032.png"));
+            _populatedPlaces.DepthWrite = false;
+            _airports = new PointShapefile(@"airprtx020.shp", /*"name"*/null, context, globeShape, new Bitmap("car-red.png"));
+            _airports.DepthWrite = false;
+            _amtrakStations = new PointShapefile(@"amtrakx020.shp", /*"descript"*/null, context, globeShape, new Bitmap("paper-plane--arrow.png"));
+            _amtrakStations.DepthWrite = false;
 
             _hudFont = new Font("Arial", 16);
             _hud = new HeadsUpDisplay(context);
@@ -74,7 +80,12 @@ namespace OpenGlobe.Examples.Chapter7
             _sceneState.AmbientIntensity = 0.4f;
             _sceneState.Camera.ZoomToTarget(globeShape.MaximumRadius);
 
-            PersistentView.Execute(@"E:\Test.xml", _window, _sceneState.Camera);
+            //PersistentView.Execute(@"E:\Manuscript\RenderingVectorData\Figures\WithVectorData.xml", _window, _sceneState.Camera);
+            
+            //HighResolutionSnap snap = new HighResolutionSnap(_window, _sceneState);
+            //snap.ColorFilename = @"E:\Manuscript\RenderingVectorData\Figures\WithoutVectorData.png";
+            //snap.WidthInInches = 4;
+            //snap.DotsPerInch = 600;
 
             UpdateHUD();
         }
@@ -171,6 +182,19 @@ namespace OpenGlobe.Examples.Chapter7
         {
             Context context = _window.Context;
 
+            /////////////////////////////////////
+            //_window.Context.Clear(_clearWhite);
+            //_globe.Render(context, _sceneState);
+
+            //_countries.Render(context, _sceneState);
+            //_rivers.Render(context, _sceneState);
+            //_states.Render(context, _sceneState);
+            //_populatedPlaces.Render(context, _sceneState);
+            //_airports.Render(context, _sceneState);
+            //_amtrakStations.Render(context, _sceneState); 
+            //return;
+            /////////////////////////////////////
+
             //
             // Render to frame buffer
             //
@@ -195,10 +219,12 @@ namespace OpenGlobe.Examples.Chapter7
                 //
                 // Render vector data, layered bottom to top, to the day buffer only
                 //
+                _countries.Render(context, _sceneState);
                 _rivers.Render(context, _sceneState);
                 _states.Render(context, _sceneState);
-                _countries.Render(context, _sceneState);
-                _cities.Render(context, _sceneState);
+                _populatedPlaces.Render(context, _sceneState);
+                _airports.Render(context, _sceneState);
+                _amtrakStations.Render(context, _sceneState);
             }
 
             //
@@ -231,7 +257,9 @@ namespace OpenGlobe.Examples.Chapter7
             _countries.Dispose();
             _states.Dispose();
             _rivers.Dispose();
-            _cities.Dispose();
+            _populatedPlaces.Dispose();
+            _airports.Dispose();
+            _amtrakStations.Dispose();
             _hudFont.Dispose();
             _hud.Texture.Dispose();
             _hud.Dispose();
@@ -297,7 +325,9 @@ namespace OpenGlobe.Examples.Chapter7
         private readonly PolygonShapefile _countries;
         private readonly PolylineShapefile _states;
         private readonly PolylineShapefile _rivers;
-        private readonly PointShapefile _cities;
+        private readonly PointShapefile _populatedPlaces;
+        private readonly PointShapefile _airports;
+        private readonly PointShapefile _amtrakStations;
         
         private readonly Font _hudFont;
         private readonly HeadsUpDisplay _hud;

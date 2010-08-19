@@ -1,0 +1,1099 @@
+Identification_Information:
+  Citation:
+    Citation_Information:
+      Originator: National Atlas of the United States
+      Publication_Date: 200509
+      Title: Amtrak Stations 
+      Publication_Information:
+        Publication_Place: Reston, VA
+        Publisher: National Atlas of the United States
+      Online_Linkage: <http://nationalatlas.gov/atlasftp.html>
+
+  Description:
+    Abstract:
+      This map layer shows Amtrak intercity railroad passenger terminals in the 
+      United States and Canada.  It includes train stations and thruway bus 
+      stations.  There are no Amtrak stations in Alaska or Hawaii.  The data are 
+      a subset of data available from the Research and Innovative Technology 
+      Administration's Bureau of Transportation Statistics (RITA/BTS) 
+      <http://www.bts.gov/gis/>.
+    Purpose: 
+      These data are intended for geographic display and analysis at the 
+      national level, and for large regional areas.  The data should be 
+      displayed and analyzed at scales appropriate for 1:2,000,000-scale data.  
+      No responsibility is assumed by the National Atlas of the United States in 
+      the use of these data. 
+
+  Time_Period_of_Content:
+    Time_Period_Information:
+        Single_Date/Time:
+          Calendar_Date: 200509
+    Currentness_Reference: Publication date
+  Status:
+    Progress: Complete
+    Maintenance_and_Update_Frequency: Irregular
+  Spatial_Domain:
+    Bounding_Coordinates:
+      West_Bounding_Coordinate: 125
+      East_Bounding_Coordinate: -70
+      North_Bounding_Coordinate: 51
+      South_Bounding_Coordinate: 24
+  Keywords:
+    Theme:
+      Theme_Keyword_Thesaurus: ISO 19115 Topic Category
+      Theme_Keyword: Transportation
+    Theme:
+      Theme_Keyword_Thesaurus: None
+      Theme_Keyword: Transportation
+      Theme_Keyword: Railroad
+      Theme_Keyword: Passenger Terminal
+      Theme_Keyword: Amtrak
+      Theme_Keyword: Train
+      Theme_Keyword: Bus
+      Theme_Keyword: Thruway Bus
+      Theme_Keyword: Station
+
+    Place:
+      Place_Keyword_Thesaurus:
+        U.S. Department of Commerce, 1995, Countries, Dependencies, Areas of 
+        Special Sovereignty, and Their Principal Administrative Divisions 
+        (Federal Information Processing Standard (FIPS) 10-4): Washington, DC, 
+        National Institute of Standards and Technology.
+      Place_Keyword: United States
+      Place_Keyword: Canada
+      Place_Keyword: Ontario
+      Place_Keyword: British Columbia
+      Place_Keyword: Quebec
+    Place: 
+      Place_Keyword_Thesaurus: None
+      Place_Keyword: USA
+    Place:
+      Place_Keyword_Thesaurus: 
+        U.S. Department of Commerce, 1987, Codes for the Identification of the 
+        States, the District of Columbia and the Outlying Areas of The United 
+        States, and Associated Areas (FIPS 5-2):  Washington, DC, National 
+        Institute of Standards and Technology.
+      Place_Keyword: Alabama
+      Place_Keyword: Alaska
+      Place_Keyword: Arizona
+      Place_Keyword: Arkansas
+      Place_Keyword: California
+      Place_Keyword: Colorado
+      Place_Keyword: Connecticut
+      Place_Keyword: Delaware
+      Place_Keyword: District of Columbia
+      Place_Keyword: Florida
+      Place_Keyword: Georgia
+      Place_Keyword: Hawaii
+      Place_Keyword: Idaho
+      Place_Keyword: Illinois
+      Place_Keyword: Indiana
+      Place_Keyword: Iowa
+      Place_Keyword: Kansas
+      Place_Keyword: Kentucky
+      Place_Keyword: Louisiana
+      Place_Keyword: Maine
+      Place_Keyword: Maryland
+      Place_Keyword: Massachusetts
+      Place_Keyword: Michigan
+      Place_Keyword: Minnesota
+      Place_Keyword: Mississippi
+      Place_Keyword: Missouri
+      Place_Keyword: Montana
+      Place_Keyword: Nebraska
+      Place_Keyword: Nevada
+      Place_Keyword: New Hampshire
+      Place_Keyword: New Jersey
+      Place_Keyword: New Mexico
+      Place_Keyword: New York
+      Place_Keyword: North Carolina
+      Place_Keyword: North Dakota
+      Place_Keyword: Ohio
+      Place_Keyword: Oklahoma
+      Place_Keyword: Oregon
+      Place_Keyword: Pennsylvania
+      Place_Keyword: Rhode Island
+      Place_Keyword: South Carolina
+      Place_Keyword: South Dakota
+      Place_Keyword: Tennessee
+      Place_Keyword: Texas
+      Place_Keyword: Utah
+      Place_Keyword: Vermont
+      Place_Keyword: Virginia
+      Place_Keyword: Washington
+      Place_Keyword: West Virginia
+      Place_Keyword: Wisconsin
+      Place_Keyword: Wyoming
+  Access_Constraints: None
+  Use_Constraints: 
+    None.  Acknowledgment of the Research and Innovative Technology 
+    Administration's Bureau of Transportation Statistics (RITA/BTS) National 
+    Transportation Atlas Databases (NTAD) 2005 and (or) the National Atlas of 
+    the United States of America would be appreciated in products derived from 
+    these data.
+  Point_of_Contact:
+    Contact_Information:
+      Contact_Person_Primary:
+        Contact_Person: Gita Urban-Mathieux
+        Contact_Organization: National Atlas of the United States
+      Contact_Address:
+        Address_Type: Mailing and physical address
+        Address: 12201 Sunrise Valley Drive
+        Address: MS 561
+        City: Reston
+        State_or_Province: VA
+        Postal_Code: 20192
+      Contact_Voice_Telephone: 703-648-5175
+      Contact_Electronic_Mail_Address: atlasmail@usgs.gov
+Data_Quality_Information:
+  Attribute_Accuracy:
+    Attribute_Accuracy_Report:
+      Attribute data were extracted from the station listings in the 
+      Spring/Summer 2000 Amtrak National and Summer/Fall 2000 Amtrak Northeast 
+      Timetables, and reflect station characteristics as of July 9, 2000.  
+      Additional data, as required, were obtained from earlier year timetables.
+  Logical_Consistency_Report: 
+    No checks for topological consistency were performed on this map layer. 
+  Completeness_Report:
+    The database includes all Amtrak railroad and thruway bus stations listed in 
+    the Amtrak timetables mentioned above.  Regional commuter railroad stations
+    that are not also served by Amtrak are not included in this version; those   
+    stations are currently included in the Fixed-Guideway Transit Network  
+    database.  The database does not include information on passenger boardings; 
+    those data are considered to be proprietary by Amtrak.  
+  Lineage:
+    Source_Information:
+      Source_Citation:
+        Citation_Information:
+          Originator: 
+            Research and Innovative Technology Administration's Bureau of 
+            Transportation Statistics (RITA/BTS)
+          Publication_Date: 2005
+          Title: 
+            Amtrak Stations - National Transportation Atlas Database (NTAD) 2005
+          Publication_Information:
+            Publication_Place: Washington, DC
+            Publisher: 
+              Research and Innovative Technology Administration's Bureau of 
+              Transportation Statistics (RITA/BTS)
+          Online_Linkage: <http://www.bts.gov/gis/>
+      Type_of_Source_Media: CD-ROM
+      Source_Time_Period_of_Content:
+        Time_Period_Information:
+          Single_Date/Time:
+            Calendar_Date: 2005
+        Source_Currentness_Reference: Publication date
+      Source_Citation_Abbreviation: Amtrak
+      Source_Contribution: Spatial and attribute information
+
+    Process_Step:
+      Process_Description:
+        The Amtrak Stations point shapefile was downloaded from the National 
+        Transportation Atlas Database CD-ROM.  The shapefile was projected to 
+        geographic coordinates.  Stations with a status of closed, future, or 
+        future/bus were deleted.  Minor edits were performed.
+      Source_Used_Citation_Abbreviation: Amtrak
+      Process_Date: 200508
+
+Spatial_Data_Organization_Information:
+  Direct_Spatial_Reference_Method: Vector
+  Point_and_Vector_Object_Information:
+    SDTS_Terms_Description:
+      SDTS_Point_and_Vector_Object_Type: Point
+      Point_and_Vector_Object_Count: 823
+
+Spatial_Reference_Information:
+  Horizontal_Coordinate_System_Definition:
+    Geographic:
+      Latitude_Resolution: 0.000278
+      Longitude_Resolution: 0.000278
+      Geographic_Coordinate_Units: Decimal degrees
+    Geodetic_Model:
+      Horizontal_Datum_Name: North American Datum of 1983
+      Ellipsoid_Name: GRS1980
+      Semi-major_Axis: 6378137
+      Denominator_of_Flattening_Ratio: 298.257222
+
+Entity_and_Attribute_Information:
+  Detailed_Description:
+    Entity_Type:
+      Entity_Type_Label: Amtrak Station (described by amtrakx020.dbf)
+      Entity_Type_Definition: 
+        A location where Amtrak offers train and bus services.
+      Entity_Type_Definition_Source: National Atlas of the United States
+    Attribute:
+      Attribute_Label: Shape
+      Attribute_Definition: The representation of the entity in the data.
+      Attribute_Definition_Source: National Atlas of the United States
+      Attribute_Domain_Values:
+        Enumerated_Domain:
+          Enumerated_Domain_Value: Point
+          Enumerated_Domain_Value_Definition: 0-dimensional element.
+          Enumerated_Domain_Value_Definition_Source: ESRI GIS software
+    Attribute:
+      Attribute_Label: Amtrakx020
+      Attribute_Definition: Internal feature number.
+      Attribute_Definition_Source: National Atlas of the United States
+      Attribute_Domain_Values:
+        Range_Domain:
+          Range_Domain_Minimum: 1
+          Range_Domain_Maximum: 823
+    Attribute:
+      Attribute_Label: Longitude
+      Attribute_Definition: 
+        The longitude of the point in decimal degrees, with six implied decimal 
+        places.
+      Attribute_Definition_Source: Amtrak
+      Attribute_Domain_Values:
+        Range_Domain:
+          Range_Domain_Minimum: -124211990.000
+          Range_Domain_Maximum: -70290493.000
+    Attribute:
+      Attribute_Label: Latitude
+      Attribute_Definition: 
+        The latitude of the point in decimal degrees, with six implied decimal
+        places.
+      Attribute_Definition_Source: Amtrak
+      Attribute_Domain_Values:
+        Range_Domain:
+          Range_Domain_Minimum: 24555935.000
+          Range_Domain_Maximum: 50331532.000
+    Attribute:
+      Attribute_Label: Pointid
+      Attribute_Definition: A unique number assigned to each record by Amtrak.
+      Attribute_Definition_Source: National Atlas of the United States
+      Attribute_Domain_Values:
+        Range_Domain:
+          Range_Domain_Minimum: 1.000
+          Range_Domain_Maximum: 937.00
+    Attribute:
+      Attribute_Label: Featid
+      Attribute_Definition: 
+        The Amtrak station code, a unique, three-character identifier assigned 
+        to the Amtrak station.
+      Attribute_Definition_Source: National Atlas of the United States
+      Attribute_Domain_Values:
+        Codeset_Domain:
+          Codeset_Name: Amtrak City Code List
+          Codeset_Source: Amtrak
+    Attribute:
+      Attribute_Label: Descript
+      Attribute_Definition: The Amtrak station name.
+      Attribute_Definition_Source: Amtrak
+      Attribute_Domain_Values:
+        Unrepresentable_Domain: 
+          There is no predefined set of valid station names.
+    Attribute: 
+      Attribute_Label: Stfips 
+      Attribute_Definition: 
+        The 2-digit FIPS code of the State or State equivalent in which the 
+        station is located. 
+      Attribute_Definition_Source: National Atlas of the United States 
+      Attribute_Domain_Values: 
+        Enumerated_Domain:
+          Enumerated_Domain_Value: <blank>
+          Enumerated_Domain_Value_Definition: 
+            The station is located outside of the United States.
+          Enumerated_Domain_Value_Definition_Source: 
+            National Atlas of the United States 
+        Codeset_Domain: 
+          Codeset_Name: 
+            Codes for the Identification of the States, the District of 
+            Columbia and the Outlying Areas of the United States, and 
+            Associated Areas, FIPS 5-2. 
+          Codeset_Source: 
+            U.S. Department of Commerce, National Institute of Standards and 
+            Technology
+    Attribute:
+      Attribute_Label: Str_Addres
+      Attribute_Definition: The street address of the station.
+      Attribute_Definition_Source: Amtrak
+      Attribute_Domain_Values:
+        Unrepresentable_Domain: There is no predefined set of valid addresses.
+    Attribute:
+      Attribute_Label: City
+      Attribute_Definition: The name of the city where the station is located.
+      Attribute_Definition_Source: Amtrak
+      Attribute_Domain_Values:
+        Unrepresentable_Domain: There is no predefined set of valid city names.
+    Attribute: 
+      Attribute_Label: State 
+      Attribute_Definition: 
+        The 2-character FIPS code of the State or State equivalent in which the 
+        station is located, or the two-character abbreviation for the Canadian 
+        province in which the station is located. 
+      Attribute_Definition_Source: National Atlas of the United States 
+      Attribute_Domain_Values: 
+        Codeset_Domain: 
+          Codeset_Name: 
+            Codes for the Identification of the States, the District of 
+            Columbia and the Outlying Areas of the United States, and 
+            Associated Areas, FIPS 5-2. 
+          Codeset_Source: 
+            U.S. Department of Commerce, National Institute of Standards and 
+            Technology 
+        Enumerated_Domain:
+          Enumerated_Domain_Value: BC
+          Enumerated_Domain_Value_Definition: British Columbia
+          Enumerated_Domain_Value_Definition_Source: 
+            National Atlas of the United States
+        Enumerated_Domain:
+          Enumerated_Domain_Value: ON
+          Enumerated_Domain_Value_Definition: Ontario
+          Enumerated_Domain_Value_Definition_Source: 
+            National Atlas of the United States
+        Enumerated_Domain:
+          Enumerated_Domain_Value: QC
+          Enumerated_Domain_Value_Definition: Quebec
+          Enumerated_Domain_Value_Definition_Source: 
+            National Atlas of the United States
+    Attribute:
+      Attribute_Label: Zipcode
+      Attribute_Definition: 
+        The U.S. Postal Service ZIP Code for the station, or the Canadian postal 
+        code for the station.
+      Attribute_Definition_Source: National Atlas of the United States
+      Attribute_Domain_Values:
+        Enumerated_Domain:
+          Enumerated_Domain_Value: <blank>
+          Enumerated_Domain_Value_Definition: 
+            The ZIP code or postal code is unknown.
+          Enumerated_Domain_Value_Definition_Source: 
+            National Atlas of the United States 
+      Attribute_Domain_Values:
+        Codeset_Domain: 
+          Codeset_Name: Address Information Systems Viewer
+          Codeset_Source: U.S. Postal Service
+      Attribute_Domain_Values:
+        Codeset_Domain: 
+          Codeset_Name: Canadian Postal Code Directory
+          Codeset_Source: Canada Post
+    Attribute:
+      Attribute_Label: Status
+      Attribute_Definition: The station status in 2000.
+      Attribute_Definition_Source: Federal Railroad Administration
+      Attribute_Domain_Values:
+        Enumerated_Domain:
+          Enumerated_Domain_Value: ACTIVE
+          Enumerated_Domain_Value_Definition: The station is open.
+          Enumerated_Domain_Value_Definition_Source: 
+            Federal Railroad Administration
+        Enumerated_Domain:
+          Enumerated_Domain_Value: BUS
+          Enumerated_Domain_Value_Definition: 
+            The station is served by a thruway bus, not by a train.
+          Enumerated_Domain_Value_Definition_Source: 
+            Federal Railroad Administration
+        Enumerated_Domain:
+          Enumerated_Domain_Value: BUS/SEASON
+          Enumerated_Domain_Value_Definition: 
+            The station is served by a thruway bus in certain seasons only.
+          Enumerated_Domain_Value_Definition_Source: 
+            Federal Railroad Administration
+        Enumerated_Domain:
+          Enumerated_Domain_Value: CONNECTING
+          Enumerated_Domain_Value_Definition: 
+            The service offered by the station consists of a VIA Rail Canada 
+            Service operated train connecting with an Amtrak train.
+          Enumerated_Domain_Value_Definition_Source: 
+            Federal Railroad Administration
+        Enumerated_Domain:
+          Enumerated_Domain_Value: FERRY/BUS
+          Enumerated_Domain_Value_Definition:
+            Service at the station is provided by a combination of ferry and 
+            bus.
+          Enumerated_Domain_Value_Definition_Source: 
+            Federal Railroad Administration
+        Enumerated_Domain:
+          Enumerated_Domain_Value: SEASONAL
+          Enumerated_Domain_Value_Definition: 
+            Service at the station is available on a seasonal basis. 
+          Enumerated_Domain_Value_Definition_Source: 
+            Federal Railroad Administration
+    Attribute:
+      Attribute_Label: Rr1
+      Attribute_Definition: 
+        The primary or only operator of service at the station, indicated by the 
+        Association of American Railroads' Rule 260 reporting/identification 
+        mark for the railroad line providing operations for Amtrak at that 
+        station.  The reporting/identification mark may be two, three, or four 
+        characters long. 
+      Attribute_Definition_Source: 
+            Federal Railroad Administration
+      Attribute_Domain_Values:
+        Enumerated_Domain:
+          Enumerated_Domain_Value: BUS
+          Enumerated_Domain_Value_Definition: 
+            Service is provided by a thruway bus.
+          Enumerated_Domain_Value_Definition_Source: 
+            Federal Railroad Administration
+      Attribute_Domain_Values:
+        Codeset_Domain:
+          Codeset_Name: Rule 260 reporting/identification marks 
+          Codeset_Source: Association of American Railroads
+    Attribute:
+      Attribute_Label: Rr2
+      Attribute_Definition: 
+        The first additional provider of service at the station, indicated by 
+        the Association of American Railroads' Rule 260 reporting/identification 
+        mark for the railroad line providing operations for Amtrak at that 
+        station.  The reporting/identification mark may be two, three, or four 
+        characters long.
+      Attribute_Definition_Source: Federal Railroad Administration
+      Attribute_Domain_Values:
+        Enumerated_Domain:
+          Enumerated_Domain_Value: <Blank>
+          Enumerated_Domain_Value_Definition: 
+            There is no additional provider at the station.
+          Enumerated_Domain_Value_Definition_Source: 
+            Federal Railroad Administration
+      Attribute_Domain_Values:
+        Codeset_Domain: 
+          Codeset_Name: Rule 260 reporting/identification marks 
+          Codeset_Source: Association of American Railroads
+    Attribute:
+      Attribute_Label: Rr3
+      Attribute_Definition: 
+        Second additional provider of Amtrak service at that station, indicated 
+        by the Association of American Railroads' Rule 260 reporting/
+        identification mark for the railroad line providing operations for 
+        Amtrak at that station.  The reporting/identification mark may be two, 
+        three, or four characters long.
+      Attribute_Definition_Source: Federal Railroad Administration
+      Attribute_Domain_Values:
+        Enumerated_Domain:
+          Enumerated_Domain_Value: <Blank>
+          Enumerated_Domain_Value_Definition: 
+            There is no additional provider at the station.
+          Enumerated_Domain_Value_Definition_Source: 
+            Federal Railroad Administration
+      Attribute_Domain_Values:
+        Codeset_Domain: 
+          Codeset_Name: Rule 260 reporting/identification marks 
+          Codeset_Source: Association of American Railroads
+    Attribute:
+      Attribute_Label: Rr4
+      Attribute_Definition: 
+        Third additional provider of Amtrak service at that station, indicated 
+        by the Association of American Railroads' Rule 260 reporting/
+        identification mark for the railroad line providing operations for 
+        Amtrak at that station.  The reporting/identification mark may be two, 
+        three, or four characters long.
+      Attribute_Definition_Source: Federal Railroad Administration
+      Attribute_Domain_Values:
+        Enumerated_Domain:
+          Enumerated_Domain_Value: <Blank>
+          Enumerated_Domain_Value_Definition: 
+            There is no additional provider at the station.
+          Enumerated_Domain_Value_Definition_Source: 
+            Federal Railroad Administration
+      Attribute_Domain_Values:
+        Codeset_Domain: 
+          Codeset_Name: Rule 260 reporting/identification marks 
+          Codeset_Source: Association of American Railroads
+    Attribute:
+      Attribute_Label: Rr5
+      Attribute_Definition: 
+        Fourth additional provider of Amtrak service at that station, indicated 
+        by the Association of American Railroads' Rule 260 reporting/
+        identification mark for the railroad line providing operations for 
+        Amtrak at that station.  The reporting/identification mark may be two, 
+        three, or four characters long.
+      Attribute_Definition_Source: Federal Railroad Administration
+      Attribute_Domain_Values:
+        Enumerated_Domain:
+          Enumerated_Domain_Value: <Blank>
+          Enumerated_Domain_Value_Definition: 
+            There is no additional provider at the station.
+          Enumerated_Domain_Value_Definition_Source: 
+            Federal Railroad Administration
+      Attribute_Domain_Values:
+        Codeset_Domain: 
+          Codeset_Name: Rule 260 reporting/identification marks 
+          Codeset_Source: Association of American Railroads
+    Attribute:
+      Attribute_Label: Rr6
+      Attribute_Definition: 
+        Fifth additional provider of Amtrak service at that station, indicated 
+        by the Association of American Railroads' Rule 260 reporting/
+        identification mark for the railroad line providing operations for 
+        Amtrak at that station.  The reporting/identification mark may be two, 
+        three, or four characters long.
+      Attribute_Definition_Source: Federal Railroad Administration
+      Attribute_Domain_Values:
+        Enumerated_Domain:
+          Enumerated_Domain_Value: <Blank>
+          Enumerated_Domain_Value_Definition: 
+            There is no additional provider at the station.
+          Enumerated_Domain_Value_Definition_Source: 
+            Federal Railroad Administration
+      Attribute_Domain_Values:
+        Codeset_Domain: 
+          Codeset_Name: Rule 260 reporting/identification marks 
+          Codeset_Source: Association of American Railroads
+    Attribute:
+      Attribute_Label: Ticket_off
+      Attribute_Definition: Whether there is a ticket office in the station.
+      Attribute_Definition_Source: National Atlas of the United States
+      Attribute_Domain_Values:
+        Enumerated_Domain:
+          Enumerated_Domain_Value: <Blank>
+          Enumerated_Domain_Value_Definition: Unknown
+          Enumerated_Domain_Value_Definition_Source: 
+            National Atlas of the United States
+        Enumerated_Domain:
+          Enumerated_Domain_Value: N
+          Enumerated_Domain_Value_Definition: No
+          Enumerated_Domain_Value_Definition_Source: Amtrak
+        Enumerated_Domain:
+          Enumerated_Domain_Value: Y
+          Enumerated_Domain_Value_Definition: Yes
+          Enumerated_Domain_Value_Definition_Source: Amtrak
+    Attribute:
+      Attribute_Label: Checked_ba
+      Attribute_Definition: Whether the station handles checked baggage.
+      Attribute_Definition_Source: National Atlas of the United States
+      Attribute_Domain_Values:
+        Enumerated_Domain:
+          Enumerated_Domain_Value: <Blank>
+          Enumerated_Domain_Value_Definition: Unknown
+          Enumerated_Domain_Value_Definition_Source: 
+            National Atlas of the United States
+        Enumerated_Domain:
+          Enumerated_Domain_Value: N
+          Enumerated_Domain_Value_Definition: No
+          Enumerated_Domain_Value_Definition_Source: Amtrak
+        Enumerated_Domain:
+          Enumerated_Domain_Value: Y
+          Enumerated_Domain_Value_Definition: Yes
+          Enumerated_Domain_Value_Definition_Source: Amtrak
+    Attribute:
+      Attribute_Label: Bag_help
+      Attribute_Definition: 
+        Whether assistance with luggage is available at the station.
+      Attribute_Definition_Source: National Atlas of the United States
+      Attribute_Domain_Values:
+        Enumerated_Domain:
+          Enumerated_Domain_Value: <Blank>
+          Enumerated_Domain_Value_Definition: Unknown
+          Enumerated_Domain_Value_Definition_Source: 
+            National Atlas of the United States
+        Enumerated_Domain:
+          Enumerated_Domain_Value: N
+          Enumerated_Domain_Value_Definition: No
+          Enumerated_Domain_Value_Definition_Source: Amtrak
+        Enumerated_Domain:
+          Enumerated_Domain_Value: Y
+          Enumerated_Domain_Value_Definition: Yes
+          Enumerated_Domain_Value_Definition_Source: Amtrak
+    Attribute:
+      Attribute_Label: Hp_access
+      Attribute_Definition: 
+        The wheelchair-accessibility of the station.
+      Attribute_Definition_Source: National Atlas of the United States
+      Attribute_Domain_Values:
+        Enumerated_Domain:
+          Enumerated_Domain_Value: <Blank>
+          Enumerated_Domain_Value_Definition: Unknown
+          Enumerated_Domain_Value_Definition_Source: 
+            National Atlas of the United States
+        Enumerated_Domain:
+          Enumerated_Domain_Value: F
+          Enumerated_Domain_Value_Definition: 
+            Full.  All station facilities are wheelchair accessible.
+          Enumerated_Domain_Value_Definition_Source: Amtrak
+        Enumerated_Domain:
+          Enumerated_Domain_Value: N
+          Enumerated_Domain_Value_Definition: Not wheelchair accessible
+          Enumerated_Domain_Value_Definition_Source: Amtrak
+        Enumerated_Domain:
+          Enumerated_Domain_Value: P
+          Enumerated_Domain_Value_Definition: 
+            Partial.  A wheelchair-accessible path exists between the street and 
+            the train platform.
+          Enumerated_Domain_Value_Definition_Source: Amtrak
+    Attribute:
+      Attribute_Label: Enclosed_w
+      Attribute_Definition: 
+        Whether the station has an enclosed waiting area.
+      Attribute_Definition_Source: National Atlas of the United States
+      Attribute_Domain_Values:
+        Enumerated_Domain:
+          Enumerated_Domain_Value: <Blank>
+          Enumerated_Domain_Value_Definition: Unknown
+          Enumerated_Domain_Value_Definition_Source: 
+            National Atlas of the United States
+        Enumerated_Domain:
+          Enumerated_Domain_Value: N
+          Enumerated_Domain_Value_Definition: No
+          Enumerated_Domain_Value_Definition_Source: Amtrak
+        Enumerated_Domain:
+          Enumerated_Domain_Value: Y
+          Enumerated_Domain_Value_Definition: Yes
+          Enumerated_Domain_Value_Definition_Source: Amtrak
+    Attribute:
+      Attribute_Label: Restrooms
+      Attribute_Definition: 
+        Whether there are public restrooms in the station.
+      Attribute_Definition_Source: National Atlas of the United States
+      Attribute_Domain_Values:
+        Enumerated_Domain:
+          Enumerated_Domain_Value: N
+          Enumerated_Domain_Value_Definition: No
+          Enumerated_Domain_Value_Definition_Source: Amtrak
+        Enumerated_Domain:
+          Enumerated_Domain_Value: Y
+          Enumerated_Domain_Value_Definition: Yes
+          Enumerated_Domain_Value_Definition_Source: Amtrak
+    Attribute:
+      Attribute_Label: Pay_phones
+      Attribute_Definition: 
+        Whether there are public telephones in the station.
+      Attribute_Definition_Source: National Atlas of the United States
+      Attribute_Domain_Values:
+        Enumerated_Domain:
+          Enumerated_Domain_Value: N
+          Enumerated_Domain_Value_Definition: No
+          Enumerated_Domain_Value_Definition_Source: Amtrak
+        Enumerated_Domain:
+          Enumerated_Domain_Value: Y
+          Enumerated_Domain_Value_Definition: Yes
+          Enumerated_Domain_Value_Definition_Source: Amtrak
+    Attribute:
+      Attribute_Label: Food
+      Attribute_Definition: The kind of food service facilities in the station.
+      Attribute_Definition_Source: National Atlas of the United States
+      Attribute_Domain_Values:
+        Enumerated_Domain:
+          Enumerated_Domain_Value: <Blank>
+          Enumerated_Domain_Value_Definition: Unknown
+          Enumerated_Domain_Value_Definition_Source: 
+            National Atlas of the United States
+        Enumerated_Domain:
+          Enumerated_Domain_Value: N
+          Enumerated_Domain_Value_Definition: No food service facilities.
+          Enumerated_Domain_Value_Definition_Source: 
+            National Atlas of the United States
+        Enumerated_Domain:
+          Enumerated_Domain_Value: R
+          Enumerated_Domain_Value_Definition: Full service.
+          Enumerated_Domain_Value_Definition_Source: Amtrak
+        Enumerated_Domain:
+          Enumerated_Domain_Value: RS
+          Enumerated_Domain_Value_Definition: Full service and snack bar.
+          Enumerated_Domain_Value_Definition_Source: Amtrak
+        Enumerated_Domain:
+          Enumerated_Domain_Value: RSV
+          Enumerated_Domain_Value_Definition: 
+            Full service, snack bar, and vending machines.
+          Enumerated_Domain_Value_Definition_Source: Amtrak
+        Enumerated_Domain:
+          Enumerated_Domain_Value: RV
+          Enumerated_Domain_Value_Definition: Full service and vending machines.
+          Enumerated_Domain_Value_Definition_Source: Amtrak
+        Enumerated_Domain:
+          Enumerated_Domain_Value: S
+          Enumerated_Domain_Value_Definition: Snack bar.
+          Enumerated_Domain_Value_Definition_Source: Amtrak
+        Enumerated_Domain:
+          Enumerated_Domain_Value: SV
+          Enumerated_Domain_Value_Definition: Snack bar and vending machines.
+          Enumerated_Domain_Value_Definition_Source: Amtrak
+        Enumerated_Domain:
+          Enumerated_Domain_Value: V
+          Enumerated_Domain_Value_Definition: Food vending machines.
+          Enumerated_Domain_Value_Definition_Source: Amtrak
+    Attribute:
+      Attribute_Label: Atm
+      Attribute_Definition: 
+        Whether there is an automated teller machine in the station.
+      Attribute_Definition_Source: National Atlas of the United States
+      Attribute_Domain_Values:
+        Enumerated_Domain:
+          Enumerated_Domain_Value: N
+          Enumerated_Domain_Value_Definition: No
+          Enumerated_Domain_Value_Definition_Source: Amtrak
+        Enumerated_Domain:
+          Enumerated_Domain_Value: Y
+          Enumerated_Domain_Value_Definition: Yes
+          Enumerated_Domain_Value_Definition_Source: Amtrak
+    Attribute:
+      Attribute_Label: Short_park
+      Attribute_Definition: 
+        The type of short-term parking available at the station.
+      Attribute_Definition_Source: National Atlas of the United States
+      Attribute_Domain_Values:
+        Enumerated_Domain:
+          Enumerated_Domain_Value: <Blank>
+          Enumerated_Domain_Value_Definition: Unknown
+          Enumerated_Domain_Value_Definition_Source: 
+            National Atlas of the United States
+        Enumerated_Domain:
+          Enumerated_Domain_Value: $
+          Enumerated_Domain_Value_Definition: Paid parking.
+          Enumerated_Domain_Value_Definition_Source: Amtrak
+        Enumerated_Domain:
+          Enumerated_Domain_Value: F
+          Enumerated_Domain_Value_Definition: Free parking.
+          Enumerated_Domain_Value_Definition_Source: Amtrak
+        Enumerated_Domain:
+          Enumerated_Domain_Value: N
+          Enumerated_Domain_Value_Definition: No parking.
+          Enumerated_Domain_Value_Definition_Source: Amtrak
+    Attribute:
+      Attribute_Label: Long_park
+      Attribute_Definition: 
+        The type of long-term parking available at the station.
+      Attribute_Definition_Source: National Atlas of the United States
+      Attribute_Domain_Values:
+        Enumerated_Domain:
+          Enumerated_Domain_Value: <Blank>
+          Enumerated_Domain_Value_Definition: Unknown
+          Enumerated_Domain_Value_Definition_Source: 
+            National Atlas of the United States
+        Enumerated_Domain:
+          Enumerated_Domain_Value: $
+          Enumerated_Domain_Value_Definition: Paid parking.
+          Enumerated_Domain_Value_Definition_Source: Amtrak
+        Enumerated_Domain:
+          Enumerated_Domain_Value: F
+          Enumerated_Domain_Value_Definition: Free parking.
+          Enumerated_Domain_Value_Definition_Source: Amtrak
+        Enumerated_Domain:
+          Enumerated_Domain_Value: N
+          Enumerated_Domain_Value_Definition: No parking.
+          Enumerated_Domain_Value_Definition_Source: Amtrak
+    Attribute:
+      Attribute_Label: Car_rental
+      Attribute_Definition: Whether car rental is available at the station.
+      Attribute_Definition_Source: National Atlas of the United States
+      Attribute_Domain_Values:
+        Enumerated_Domain:
+          Enumerated_Domain_Value: <Blank>
+          Enumerated_Domain_Value_Definition: Unknown
+          Enumerated_Domain_Value_Definition_Source: 
+            National Atlas of the United States
+        Enumerated_Domain:
+          Enumerated_Domain_Value: N
+          Enumerated_Domain_Value_Definition: Car rental is not available.
+          Enumerated_Domain_Value_Definition_Source: Amtrak
+        Enumerated_Domain:
+          Enumerated_Domain_Value: OC
+          Enumerated_Domain_Value_Definition: Call for service.
+          Enumerated_Domain_Value_Definition_Source: Amtrak
+        Enumerated_Domain:
+          Enumerated_Domain_Value: Y
+          Enumerated_Domain_Value_Definition: 
+            A car rental agency is available at the station.
+          Enumerated_Domain_Value_Definition_Source: Amtrak
+    Attribute:
+      Attribute_Label: Taxi
+      Attribute_Definition: Whether taxi service available at the station.
+      Attribute_Definition_Source: National Atlas of the United States
+      Attribute_Domain_Values:
+        Enumerated_Domain:
+          Enumerated_Domain_Value: <Blank>
+          Enumerated_Domain_Value_Definition: Unknown
+          Enumerated_Domain_Value_Definition_Source: 
+            National Atlas of the United States
+        Enumerated_Domain:
+          Enumerated_Domain_Value: N
+          Enumerated_Domain_Value_Definition: No taxi service is available.
+          Enumerated_Domain_Value_Definition_Source: Amtrak
+        Enumerated_Domain:
+          Enumerated_Domain_Value: OC
+          Enumerated_Domain_Value_Definition: Call for service
+          Enumerated_Domain_Value_Definition_Source: Amtrak
+        Enumerated_Domain:
+          Enumerated_Domain_Value: Y
+          Enumerated_Domain_Value_Definition: 
+            There is a taxi stand at the station.
+          Enumerated_Domain_Value_Definition_Source: Amtrak
+    Attribute:
+      Attribute_Label: Inter_bus
+      Attribute_Definition: 
+        Whether intercity bus service is available within two blocks of the 
+        station.
+      Attribute_Definition_Source: National Atlas of the United States
+      Attribute_Domain_Values:
+        Enumerated_Domain:
+          Enumerated_Domain_Value: <Blank>
+          Enumerated_Domain_Value_Definition: Unknown
+          Enumerated_Domain_Value_Definition_Source: 
+            National Atlas of the United States
+        Enumerated_Domain:
+          Enumerated_Domain_Value: N
+          Enumerated_Domain_Value_Definition: No
+          Enumerated_Domain_Value_Definition_Source: Amtrak
+        Enumerated_Domain:
+          Enumerated_Domain_Value: Y
+          Enumerated_Domain_Value_Definition: Yes
+          Enumerated_Domain_Value_Definition_Source: Amtrak
+    Attribute:
+      Attribute_Label: Transit
+      Attribute_Definition: 
+        Whether there is a public transit connection at the station.
+      Attribute_Definition_Source: National Atlas of the United States
+      Attribute_Domain_Values:
+        Enumerated_Domain:
+          Enumerated_Domain_Value: <Blank>
+          Enumerated_Domain_Value_Definition: Unknown
+          Enumerated_Domain_Value_Definition_Source: 
+            National Atlas of the United States
+        Enumerated_Domain:
+          Enumerated_Domain_Value: N
+          Enumerated_Domain_Value_Definition: No
+          Enumerated_Domain_Value_Definition_Source: Amtrak
+        Enumerated_Domain:
+          Enumerated_Domain_Value: Y
+          Enumerated_Domain_Value_Definition: Yes
+          Enumerated_Domain_Value_Definition_Source: Amtrak
+    Attribute:
+      Attribute_Label: Customs
+      Attribute_Definition: 
+        Whether there is a customs checkpoint at the station.
+      Attribute_Definition_Source: National Atlas of the United States
+      Attribute_Domain_Values:
+        Enumerated_Domain:
+          Enumerated_Domain_Value: <Blank>
+          Enumerated_Domain_Value_Definition: Unknown
+          Enumerated_Domain_Value_Definition_Source: 
+            National Atlas of the United States
+        Enumerated_Domain:
+          Enumerated_Domain_Value: N
+          Enumerated_Domain_Value_Definition: No
+          Enumerated_Domain_Value_Definition_Source: Amtrak
+        Enumerated_Domain:
+          Enumerated_Domain_Value: Y
+          Enumerated_Domain_Value_Definition: Yes
+          Enumerated_Domain_Value_Definition_Source: Amtrak
+    Attribute:
+      Attribute_Label: Amtkexp
+      Attribute_Definition: 
+        Whether Amtrak Package Express service is available at the station.
+      Attribute_Definition_Source: National Atlas of the United States
+      Attribute_Domain_Values:
+        Enumerated_Domain:
+          Enumerated_Domain_Value: <Blank>
+          Enumerated_Domain_Value_Definition: Unknown
+          Enumerated_Domain_Value_Definition_Source: 
+            National Atlas of the United States
+        Enumerated_Domain:
+          Enumerated_Domain_Value: N
+          Enumerated_Domain_Value_Definition: No
+          Enumerated_Domain_Value_Definition_Source: Amtrak
+        Enumerated_Domain:
+          Enumerated_Domain_Value: Y
+          Enumerated_Domain_Value_Definition: Yes
+          Enumerated_Domain_Value_Definition_Source: Amtrak
+    Attribute:
+      Attribute_Label: Great_vac
+      Attribute_Definition: 
+        Whether Amtrak Great Vacations package(s) are available at the station.
+      Attribute_Definition_Source: Amtrak
+      Attribute_Domain_Values:
+        Enumerated_Domain:
+          Enumerated_Domain_Value: <Blank>
+          Enumerated_Domain_Value_Definition: Unknown
+          Enumerated_Domain_Value_Definition_Source: 
+            National Atlas of the United States
+        Enumerated_Domain:
+          Enumerated_Domain_Value: N
+          Enumerated_Domain_Value_Definition: No
+          Enumerated_Domain_Value_Definition_Source: Amtrak
+        Enumerated_Domain:
+          Enumerated_Domain_Value: Y
+          Enumerated_Domain_Value_Definition: Yes
+          Enumerated_Domain_Value_Definition_Source: Amtrak
+    Attribute:
+      Attribute_Label: Self_tix
+      Attribute_Definition: 
+        Whether a Quik-Trak ticket machine is available at the station for 
+        credit/debit ticket sales.
+      Attribute_Definition_Source: National Atlas of the United States
+      Attribute_Domain_Values:
+        Enumerated_Domain:
+          Enumerated_Domain_Value: <Blank>
+          Enumerated_Domain_Value_Definition: Unknown
+          Enumerated_Domain_Value_Definition_Source: 
+            National Atlas of the United States
+        Enumerated_Domain:
+          Enumerated_Domain_Value: N
+          Enumerated_Domain_Value_Definition: No
+          Enumerated_Domain_Value_Definition_Source: Amtrak
+        Enumerated_Domain:
+          Enumerated_Domain_Value: Y
+          Enumerated_Domain_Value_Definition: Yes
+          Enumerated_Domain_Value_Definition_Source: Amtrak
+    Attribute:
+      Attribute_Label: Splc
+      Attribute_Definition: 
+        The six-digit Standard Point Location Code of the station/city.  The 
+        first two digits of the code identify the province, State, or part of a 
+        State in which the station is located.  The first four digits identify 
+        the county or part of a county in which the station is located (the 
+        province or State identifier followed by a county identifier for that 
+        area.)  The final two digits identify a specific place within the 
+        province or State and the county.
+      Attribute_Definition_Source: National Atlas of the United States
+      Attribute_Domain_Values:
+        Enumerated_Domain:
+          Enumerated_Domain_Value: 000000 
+          Enumerated_Domain_Value_Definition: 
+            A place holder used for stations where no Standard Point Location 
+            Code has been determined.
+          Enumerated_Domain_Value_Definition_Source: 
+            Official Railroad Station List, OPSL 6000-U, Federal Railroad 
+            Administration
+      Attribute_Domain_Values:
+        Range_Domain:
+          Range_Domain_Minimum: 026600
+          Range_Domain_Maximum: 889547
+    Attribute:
+      Attribute_Label: NODE
+      Attribute_Definition: 
+        In the Federal Railroad Administration's 1:2,000,000-scale rail network, 
+        the identification number of the node for the station/city.
+      Attribute_Definition_Source: National Atlas of the United States
+      Attribute_Domain_Values:
+        Enumerated_Domain:
+          Enumerated_Domain_Value: 0.000 
+          Enumerated_Domain_Value_Definition: 
+            The station or city does not correspond to a node in the FRA 
+            1:2,000,000-scale rail network.
+          Enumerated_Domain_Value_Definition_Source: 
+            National Atlas of the United States
+      Attribute_Domain_Values:
+        Range_Domain:
+          Range_Domain_Minimum: 43.000
+          Range_Domain_Maximum: 99997.000
+    Attribute:
+      Attribute_Label: Pa
+      Attribute_Definition: 
+        An indication of the positional accuracy of the station location.
+      Attribute_Definition_Source: National Atlas of the United States
+      Attribute_Domain_Values:
+        Enumerated_Domain:
+          Enumerated_Domain_Value: 100K
+          Enumerated_Domain_Value_Definition: 
+            The longitude and latitude were either taken from the previous 
+            version of the BTS database or were located manually at the correct 
+            street address, using the TIGER/line (TM) 95 street and the FRA 
+            1:100,000-scale rail networks.
+          Enumerated_Domain_Value_Definition_Source: 
+            National Atlas of the United States
+        Enumerated_Domain:
+          Enumerated_Domain_Value: 2MIL
+          Enumerated_Domain_Value_Definition: 
+            The location of the station was outside the area covered by the 
+            TIGER/line(TM) 95 street and the FRA 1:100,000-scale rail networks.  
+            The station longitude and latitude were determined using the Federal 
+            Railroad Administration 1:2,000,000-scale networks.
+          Enumerated_Domain_Value_Definition_Source: 
+            National Atlas of the United States
+        Enumerated_Domain:
+          Enumerated_Domain_Value: E100
+          Enumerated_Domain_Value_Definition: 
+            The longitude and latitude were determined manually using the 
+            TIGER/line(TM) 95 street and the FRA 1:100,000-scale rail networks, 
+            but because the station did not have a specific street address, the 
+            location is an estimated or educated guess.
+          Enumerated_Domain_Value_Definition_Source: 
+            National Atlas of the United States
+    Attribute:
+      Attribute_Label: Version
+      Attribute_Definition: 
+        The version of the data in the National Transportation Atlas Database.             
+      Attribute_Definition_Source: National Atlas of the United States
+      Attribute_Domain_Values:
+        Enumerated_Domain:
+          Enumerated_Domain_Value: 5
+          Enumerated_Domain_Value_Definition: 
+            The data are Version 5 of the Amtrak Station data from the National 
+            Transportation Atlas Databases (NTAD).
+          Enumerated_Domain_Value_Definition_Source: 
+            National Atlas of the United States
+    Attribute:
+      Attribute_Label: Revison
+      Attribute_Definition: 
+        A 2-digit number that will be incremented individually for each record 
+        whenever a change is made to one of its fields. 
+      Attribute_Definition_Source: 
+        Research and Innovative Technology Administration's Bureau of 
+        Transportation Statistics
+      Attribute_Domain_Values:
+        Enumerated_Domain:
+          Enumerated_Domain_Value: 00
+          Enumerated_Domain_Value_Definition: 
+            No changes have been made to the fields.
+          Enumerated_Domain_Value_Definition_Source: 
+            Research and Innovative Technology Administration's Bureau of 
+            Transportation Statistics
+
+Distribution_Information:
+  Distributor:
+    Contact_Information:
+      Contact_Organization_Primary:
+        Contact_Organization: 
+          Earth Science Information Center, U.S. Geological Survey
+      Contact_Address:
+        Address_Type: Mailing address
+        Address: 507 National Center
+        City: Reston
+        State_or_Province: VA
+        Postal_Code: 20192
+      Contact_Voice_Telephone: 1-888-ASK-USGS (1-888-275-8747)
+      Contact_Voice_Telephone: 703-648-5920
+      Contact_Instructions: 
+        In addition to the address above there are other ESIC offices throughout 
+        the country.  A full list of these offices is at
+        <http://geography.usgs.gov/esic/esic_index.html>.
+  Distribution_Liability:  
+    Although these data have been processed successfully on a computer system at 
+    the U.S. Geological Survey, no warranty expressed or implied is made by the 
+    U.S. Geological Survey regarding the utility of the data on any other  
+    system, nor shall the act of distribution constitute any such warranty.  No 
+    responsibility is assumed by the U.S. Geological Survey in the use of these 
+    data.  
+  Standard_Order_Process:
+    Digital_Form:
+      Digital_Transfer_Information:
+        Format_Name: ESRI Shapefile
+      Digital_Transfer_Option:
+        Online_Option:
+          Computer_Contact_Information:
+            Network_Address:
+              Network_Resource_Name: <http://nationalatlas.gov/atlasftp.html>
+    Digital_Form: 
+      Digital_Transfer_Information: 
+        Format_Name: SDTS 
+      Digital_Transfer_Option: 
+        Online_Option: 
+          Computer_Contact_Information:
+            Network_Address: 
+              Network_Resource_Name: <http://nationalatlas.gov/atlasftp.html>
+    Fees: There is no charge for the map layer.
+
+Metadata_Reference_Information:
+  Metadata_Date: 20050908
+  Metadata_Contact:
+    Contact_Information:
+      Contact_Person_Primary:
+        Contact_Person: Peg Rawson
+        Contact_Organization: National Atlas of the United States
+      Contact_Address:
+        Address_Type: Mailing address
+        Address: 12201 Sunrise Valley Drive
+        Address: MS-561 
+        City: Reston
+        State_or_Province: VA
+        Postal_Code: 20192
+      Contact_Voice_Telephone: 703-648-4183
+      Contact_Electronic_Mail_Address: atlasmail@usgs.gov
+  Metadata_Standard_Name: 
+    FGDC Content Standards for Digital Geospatial Metadata 
+  Metadata_Standard_Version: FGDC-STD-001-1998
+  Metadata_Security_Information: 
+    Metadata_Security_Classification_System: None
+    Metadata_Security_Classification: Unclassified
+    Metadata_Security_Handling_Description: None

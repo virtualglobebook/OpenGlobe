@@ -88,7 +88,31 @@
     <None Include="..\..\..\..\Data\Vector\NaturalEarth\110m-populated-places-simple\110m_populated_places_simple.shx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\..\..\..\Data\Icons\YusukeKamiyamane\032.png">
+    <None Include="..\..\..\..\Data\Vector\NationalAtlasOfTheUnitedStatesOfAmerica\amtrakx020\amtrakx020.dbf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\..\..\Data\Vector\NationalAtlasOfTheUnitedStatesOfAmerica\amtrakx020\amtrakx020.shp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\..\..\Data\Vector\NationalAtlasOfTheUnitedStatesOfAmerica\amtrakx020\amtrakx020.shx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\..\..\Data\Vector\NationalAtlasOfTheUnitedStatesOfAmerica\airprtx020\airprtx020.dbf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\..\..\Data\Vector\NationalAtlasOfTheUnitedStatesOfAmerica\airprtx020\airprtx020.shp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\..\..\Data\Vector\NationalAtlasOfTheUnitedStatesOfAmerica\airprtx020\airprtx020.shx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\..\..\Data\Icons\YusukeKamiyamane\045.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\..\..\Data\Icons\YusukeKamiyamane\car-red.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\..\..\Data\Icons\YusukeKamiyamane\paper-plane--arrow.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

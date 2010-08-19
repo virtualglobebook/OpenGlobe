@@ -180,6 +180,7 @@ at NASA/GSFC:
    Terms of use: http://www.nasa.gov/audience/formedia/features/
       MP_Photo_Guidelines.html
 
+
 MiniGlobe uses data from Natural Earth:
 
    Free vector and raster map data @ naturalearthdata.com.
@@ -205,6 +206,18 @@ MiniGlobe uses data from Natural Earth:
       110m-populated-places/
 
    Terms of use:  http://www.naturalearthdata.com/about/terms-of-use/
+
+
+MiniGlobe uses data from the National Atlas of the United States of America:
+
+   Data\Vector\NationalAtlasOfTheUnitedStatesOfAmerica\airprtx020
+
+   Data\Vector\NationalAtlasOfTheUnitedStatesOfAmerica\amtrakx020
+      Research and Innovative Technology Administration's Bureau of 
+      Transportation Statistics (RITA/BTS) National Transportation 
+      Atlas Databases (NTAD) 2005
+
+   http://www.nationalatlas.gov/atlasftp.html
 
 
 MiniGlobe uses data from USGS and The University of Washington:

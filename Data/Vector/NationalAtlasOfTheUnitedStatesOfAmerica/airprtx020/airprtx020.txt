@@ -1,0 +1,565 @@
+Identification_Information:
+  Citation:
+    Citation_Information:
+      Originator: U.S. Geological Survey
+      Publication_Date: 200110
+      Title: 
+        Airports of the United States, Puerto Rico and the U.S. Virgin Islands
+      Publication_Information:
+        Publication_Place: Reston, Virginia
+        Publisher: U.S. Geological Survey
+      Online_Linkage: <http://nationalatlas.gov/atlasftp.html>
+  Description:
+    Abstract:
+      This data set includes airports in the United States, Puerto Rico and the
+      U.S. Virgin Islands.  The data were derived from an extract of The Public-
+      Use Airports database of the National Transportation Atlas Databases-2001
+      (NTAD-2001), published by the Bureau of Transportation Statistics,
+      Department of Transportation.
+    Purpose:
+      These data are intended for geographic display and analysis at the
+      national level, and for large regional areas.  The data should be
+      displayed and analyzed at scales appropriate for 1:2,000,000-scale data.
+      No responsibility is assumed by the U.S. Geological Survey in the use of
+      these data.
+  Time_Period_of_Content:
+    Time_Period_Information:
+      Single_Date/Time:
+        Calendar_Date: 200110
+    Currentness_Reference: publication date
+  Status:
+    Progress: Complete
+    Maintenance_and_Update_Frequency: Irregular
+  Spatial_Domain:
+    Bounding_Coordinates:
+      West_Bounding_Coordinate: 170
+      East_Bounding_Coordinate: -64
+      North_Bounding_Coordinate: 72
+      South_Bounding_Coordinate: 17
+  Keywords:
+    Theme:
+      Theme_Keyword_Thesaurus: None
+      Theme_Keyword: Airports
+    Place:
+      Place_Keyword_Thesaurus:
+        U.S. Department of Commerce, 1995, Countries, Dependencies, Areas of
+        Special Sovereignty, and Their Principal Administrative Divisions
+        (Federal Information Processing Standard (FIPS) 10-4): Washington, DC,
+        National Institute of Standards and Technology.
+      Place_Keyword: United States
+    Place: 
+      Place_Keyword_Thesaurus: None
+      Place_Keyword: USA
+    Place:
+      Place_Keyword_Thesaurus:
+        U.S. Department of Commerce, 1987, Codes for the Identification of the
+        States, the District of Columbia and the Outlying Areas of the United
+        States, and Associated Areas (Federal Information Processing Standard
+        (FIPS) 5-2): Washington, DC, National Institute of Standards and
+        Technology.
+      Place_Keyword: Alabama
+      Place_Keyword: Alaska
+      Place_Keyword: Arizona
+      Place_Keyword: Arkansas
+      Place_Keyword: California
+      Place_Keyword: Colorado
+      Place_Keyword: Connecticut
+      Place_Keyword: Delaware
+      Place_Keyword: District of Columbia
+      Place_Keyword: Florida
+      Place_Keyword: Georgia
+      Place_Keyword: Hawaii
+      Place_Keyword: Idaho
+      Place_Keyword: Illinois
+      Place_Keyword: Indiana
+      Place_Keyword: Iowa
+      Place_Keyword: Kansas
+      Place_Keyword: Kentucky
+      Place_Keyword: Louisiana
+      Place_Keyword: Maine
+      Place_Keyword: Maryland
+      Place_Keyword: Massachusetts
+      Place_Keyword: Michigan
+      Place_Keyword: Minnesota
+      Place_Keyword: Mississippi
+      Place_Keyword: Missouri
+      Place_Keyword: Montana
+      Place_Keyword: Nebraska
+      Place_Keyword: Nevada
+      Place_Keyword: New Hampshire
+      Place_Keyword: New Jersey
+      Place_Keyword: New Mexico
+      Place_Keyword: New York
+      Place_Keyword: North Carolina
+      Place_Keyword: North Dakota
+      Place_Keyword: Ohio
+      Place_Keyword: Oklahoma
+      Place_Keyword: Oregon
+      Place_Keyword: Pennsylvania
+      Place_Keyword: Rhode Island
+      Place_Keyword: South Carolina
+      Place_Keyword: South Dakota
+      Place_Keyword: Tennessee
+      Place_Keyword: Texas
+      Place_Keyword: Utah
+      Place_Keyword: Vermont
+      Place_Keyword: Virginia
+      Place_Keyword: Washington
+      Place_Keyword: West Virginia
+      Place_Keyword: Wisconsin
+      Place_Keyword: Wyoming
+      Place_Keyword: Puerto Rico
+      Place_Keyword: U.S. Virgin Islands
+  Access_Constraints: None
+  Use_Constraints:
+    None.  Acknowledgment of the National Atlas of the United States of America
+    would be appreciated in products derived from these data.
+  Point_of_Contact:
+    Contact_Information:
+      Contact_Person_Primary:
+        Contact_Person: Steve Kambly
+        Contact_Organization: U.S. Geological Survey
+      Contact_Address:
+        Address_Type: mailing address
+        Address: 561 National Center
+        City: Reston
+        State_or_Province: VA
+        Postal_Code: 20192
+      Contact_Voice_Telephone: 703-648-5094
+      Contact_Electronic_Mail_Address: skambly@usgs.gov
+
+Data_Quality_Information:
+  Logical_Consistency_Report: 
+    No tests for logical consistency were performed on this data set.
+  Completeness_Report:
+    This category includes airports in the 50 United States, Puerto Rico, and
+    the U.S. Virgin Islands with enplanements greater than or equal to 250
+    passengers per year.
+  Lineage:
+    Source_Information:
+      Source_Citation:
+        Citation_Information:
+          Originator: U.S. Department of Transportation (DOT)
+          Publication_Date: 1997
+          Title: National Transportation Atlas Databases 1997 (NTAD97)
+          Geospatial_Data_Presentation_Form: atlas
+          Publication_Information:
+            Publication_Place: Washington, DC
+            Publisher: Bureau of Transportation Statistics, DOT
+      Type_of_Source_Media: CD-ROM
+      Source_Time_Period_of_Content:
+        Time_Period_Information:
+          Range_of_Dates/Times:
+            Beginning_Date: 1994
+            Ending_Date: 1996
+        Source_Currentness_Reference: ground condition
+      Source_Contribution: spatial and attribute information
+      Source_Citation_Abbreviation: NTAD97
+
+    Source_Information:
+      Source_Citation:
+        Citation_Information:
+          Originator: U.S. Department of Transportation (DOT)
+          Publication_Date: 2001
+          Title: National Transportation Atlas Databases 2001 (NTAD-2001)
+          Geospatial_Data_Presentation_Form: atlas
+          Publication_Information:
+            Publication_Place: Washington, DC
+            Publisher: Bureau of Transportation Statistics, DOT
+      Type_of_Source_Media: CD-ROM
+      Source_Time_Period_of_Content:
+        Time_Period_Information:
+          Range_of_Dates/Times:
+            Beginning_Date: 1994
+            Ending_Date: 2000
+        Source_Currentness_Reference: ground condition
+      Source_Contribution: spatial and attribute information
+      Source_Citation_Abbreviation: NTAD-2001
+
+    Source_Information:
+      Source_Citation:
+        Citation_Information:
+          Originator: U.S. Geological Survey
+          Publication_Date: 19980316
+          Title: Airports of the U.S.
+          Geospatial_Data_Presentation_Form: map
+          Publication_Information:
+            Publication_Place: Reston, VA
+            Publisher: U.S. Geological Survey
+      Type_of_Source_Media: online
+      Source_Time_Period_of_Content:
+        Time_Period_Information:
+          Single_Date/Time:
+            Calendar_Date: 19980316
+        Source_Currentness_Reference: publication date
+      Source_Contribution: attribute information
+      Source_Citation_Abbreviation: ATLAS_AP98
+
+    Source_Information:
+      Source_Citation:
+        Citation_Information:
+          Originator: U.S. Department of Transportation (DOT)
+          Publication_Date: 2000
+          Title: Extract from Air Carrier Activity Information System
+          Geospatial_Data_Presentation_Form: Excel Spreadsheet
+          Publication_Information:
+            Publication_Place: Washington, DC
+            Publisher: Federal Aviation Administration, DOT
+      Type_of_Source_Media: computer file
+      Source_Time_Period_of_Content:
+        Time_Period_Information:
+          Single_Date/Time:
+            Calendar_Date: 1999
+        Source_Currentness_Reference: ground condition
+      Source_Contribution: spatial and attribute information
+      Source_Citation_Abbreviation: ACAIS
+
+    Source_Information:
+      Source_Citation:
+        Citation_Information:
+          Originator: U.S. Geological Survey
+          Publication_Date: 19990216
+          Title: 
+            Airports of the United States, Puerto Rico and the U.S. Virgin
+            Islands
+          Geospatial_Data_Presentation_Form: map
+          Publication_Information:
+            Publication_Place: Reston, VA
+            Publisher: U.S. Geological Survey
+      Type_of_Source_Media: online
+      Source_Time_Period_of_Content:
+        Time_Period_Information:
+          Single_Date/Time:
+            Calendar_Date: 19990216
+        Source_Currentness_Reference: publication date
+      Source_Contribution: spatial and attribute information 
+      Source_Citation_Abbreviation: ATLAS_AP99
+
+    Source_Information:
+      Source_Citation:
+        Citation_Information:
+          Originator: U.S. Geological Survey
+          Publication_Date: 200102
+          Title: County Boundaries of the United States
+          Geospatial_Data_Presentation_Form: map
+          Publication_Information:
+            Publication_Place: Reston, VA
+            Publisher: U.S. Geological Survey
+      Type_of_Source_Media: online
+      Source_Time_Period_of_Content:
+        Time_Period_Information:
+          Range_of_Dates/Times:
+            Beginning_Date: 1972
+            Ending_Date: 1999
+        Source_Currentness_Reference: Ground condition
+      Source_Contribution: spatial and attribute information 
+      Source_Citation_Abbreviation: ATLAS_COUNTY
+
+    Process_Step:
+      Process_Description:
+        Data from the NTAD97 CD-ROM were obtained from the Department of
+        Transportation.  Using the airport.pnt and airport.t01 files on the
+        CD-ROM, airports with passenger enplanement of greater than or equal to
+        250 passengers per year were selected to create a point coverage to
+        which the following attributes were attached: airport location
+        identifier, name of airport, name of State, State FIPS code, Air Carrier
+        Activity Information System airports, and Total Enplanement. The data
+        were converted to shapefile format for use in National Atlas
+        applications and for distribution to the public.
+      Source_Used_Citation_Abbreviation: NTAD97
+      Process_Date: 1998
+      Source_Produced_Citation_Abbreviation: ATLAS_AP98
+
+    Process_Step:
+      Process_Description: 
+        Airports for Puerto Rico and the U.S. Virgin Islands were added.
+        Airport names were changed from all upper case and no period after
+        initials to lower case and period after initials.  For example, LYNDON B
+        JOHNSON is now Lyndon B. Johnson.
+      Source_Used_Citation_Abbreviation: ATLAS_AP98
+      Process_Date: 19990216
+      Source_Produced_Citation_Abbreviation: ATLAS_AP99
+
+    Process_Step:
+      Process_Description: 
+        ATLAS_AP99 was updated with enplanement data from NTAD-2001.  Existing
+        airports, heliports, and seaplane bases with enplanements of 250 or
+        greater were kept in the data set, while those below 250 enplanements
+        were deleted.  Sixty-five airports, heliports, and seaplane bases that
+        had 250 or greater enplanements were added.  The following attributes
+        were added to ATLAS_AP99: Feature, indicating the type of facility, name
+        of County, and County FIPS code.
+      Source_Used_Citation_Abbreviation: ATLAS_AP99
+      Source_Used_Citation_Abbreviation: NTAD-2001
+      Source_Used_Citation_Abbreviation: ACAIS
+      Source_Used_Citation_Abbreviation: ATLAS_COUNTY
+      Process_Date: 20010805
+
+Spatial_Data_Organization_Information:
+  Indirect_Spatial_Reference:
+    U.S. Department of Commerce, 1987, Codes for the Identification of the
+    States, the District of Columbia and the Outlying Areas of The United
+    States, and Associated Areas (Federal Information Processing Standard (FIPS)
+    5-2): Washington, DC, National Institute of Standards and Technology.
+
+    U.S. Department of Commerce, 1990, Counties and Equivalent Entities of the 
+    United States, Its Possessions, and Associated Areas (FIPS 6-4): Washington, 
+    DC, National Institute of Standards and Technology.
+
+  Direct_Spatial_Reference_Method: Vector
+  Point_and_Vector_Object_Information:
+    SDTS_Terms_Description:
+      SDTS_Point_and_Vector_Object_Type: Point
+      Point_and_Vector_Object_Count: 901
+
+Spatial_Reference_Information:
+  Horizontal_Coordinate_System_Definition:
+    Geographic:
+      Latitude_Resolution: 0.000278
+      Longitude_Resolution: 0.000278
+      Geographic_Coordinate_Units: Decimal degrees
+    Geodetic_Model:
+      Horizontal_Datum_Name: North American Datum of 1983
+      Ellipsoid_Name: GRS1980
+      Semi-major_Axis: 6378137
+      Denominator_of_Flattening_Ratio: 298.257222
+
+Entity_and_Attribute_Information:
+  Detailed_Description:
+    Entity_Type:
+      Entity_Type_Label: Airports (described by airprtx020.dbf)
+      Entity_Type_Definition: An area where aircraft take off and land. 
+      Entity_Type_Definition_Source: U.S. Geological Survey 
+    Attribute:
+      Attribute_Label: Shape
+      Attribute_Definition: The representation of the entity in the data.
+      Attribute_Definition_Source: U.S. Geological Survey
+      Attribute_Domain_Values:
+        Enumerated_Domain:
+          Enumerated_Domain_Value: Point
+          Enumerated_Domain_Value_Definition: 0-dimensional element
+          Enumerated_Domain_Value_Definition_Source: ESRI GIS software
+    Attribute:
+      Attribute_Label: Area
+      Attribute_Definition: The size of the shape in coverage units.
+      Attribute_Definition_Source: U.S. Geological Survey
+      Attribute_Domain_Values:
+        Range_Domain:
+          Range_Domain_Minimum: 0.000
+          Range_Domain_Maximum: 0.000
+    Attribute:
+      Attribute_Label: Perimeter
+      Attribute_Definition: The perimeter of the shape in coverage units. 
+      Attribute_Definition_Source: U.S. Geological Survey 
+      Attribute_Domain_Values:
+        Range_Domain:
+          Range_Domain_Minimum: 0.000
+          Range_Domain_Maximum: 0.000
+    Attribute:
+      Attribute_Label: Airprtx020
+      Attribute_Definition: Internal feature number.
+      Attribute_Definition_Source: U.S. Geological Survey 
+      Attribute_Domain_Values:
+        Range_Domain:
+          Range_Domain_Minimum: 1 
+          Range_Domain_Maximum: 901
+    Attribute:
+      Attribute_Label: Locid
+      Attribute_Definition: 
+        Unique 3-4 character identifier assigned to the landing facility.
+      Attribute_Definition_Source: Federal Aviation Administration
+      Attribute_Domain_Values:
+        Codeset_Domain:
+          Codeset_Name: Air Carrier Activity Information System (ACAIS)
+          Codeset_Source: 
+            U.S. Department of Transportation, Federal Aviation Administration
+    Attribute:
+      Attribute_Label: Feature
+      Attribute_Definition: The type of landing facility.
+      Attribute_Definition_Source: 
+        National Transportation Atlas Databases-2000, Bureau of Transportation 
+        Statistics
+      Attribute_Domain_Values:
+        Enumerated_Domain:
+          Enumerated_Domain_Value: Airport
+          Enumerated_Domain_Value_Definition: 
+            An area where aircraft can take off and land, usually equipped with 
+            associated buildings and facilities, and used primarily by 
+            conventional, fixed-wing aircraft.
+          Enumerated_Domain_Value_Definition_Source: U.S. Geological Survey
+        Enumerated_Domain:
+          Enumerated_Domain_Value: Heliport
+          Enumerated_Domain_Value_Definition: 
+            An area where aircraft can take off and land, usually equipped with 
+            associated buildings and facilities, and used primarily by rotary-
+            wing aircraft.
+          Enumerated_Domain_Value_Definition_Source: U.S. Geological Survey
+        Enumerated_Domain:
+          Enumerated_Domain_Value: Seaplane Base
+          Enumerated_Domain_Value_Definition: 
+            An area where aircraft can take off and land, usually equipped with 
+            associated buildings and facilities, and used primarily by 
+            seaplanes.
+          Enumerated_Domain_Value_Definition_Source: U.S. Geological Survey
+    Attribute:
+      Attribute_Label: Name
+      Attribute_Definition: Name or identification for the airport.
+      Attribute_Definition_Source: Federal Aviation Administration
+      Attribute_Domain_Values:
+        Codeset_Domain:
+          Codeset_Name: Air Carrier Activity Information System (ACAIS)
+          Codeset_Source: 
+            U.S. Department of Transportation, Federal Aviation Administration
+    Attribute:
+      Attribute_Label: Tot_enp
+      Attribute_Definition: 
+        The total enplanements during calendar year 2000 (the sum of large 
+        certified, commuter, air taxi, foreign, and in-transit enplanements).
+      Attribute_Definition_Source: 
+        Air Carrier Activity Information System, Federal Aviation Administration
+      Attribute_Domain_Values:
+        Range_Domain:
+          Range_Domain_Minimum: 250
+          Range_Domain_Maximum: 38136866
+    Attribute:
+      Attribute_Label: State
+      Attribute_Definition: 
+        The 2-character abbreviation for the name of the State in which the 
+        airport or landing facility is located.
+      Attribute_Definition_Source: U.S. Geological Survey
+      Attribute_Domain_Values:
+        Codeset_Domain:
+          Codeset_Name:
+            Codes for the Identification of the States, the District of Columbia
+            and the Outlying Areas of the United States, and Associated Areas; 
+            FIPS 5-2.
+          Codeset_Source: 
+            U.S. Department of Commerce, Washington, DC, National Institute of
+            Standards and Technology
+    Attribute:
+      Attribute_Label: County
+      Attribute_Definition: 
+        The name of the county or county equivalent in which the airport or 
+        landing facility is located.
+      Attribute_Definition_Source: U.S. Geological Survey
+      Attribute_Domain_Values:
+        Codeset_Domain:
+          Codeset_Name:
+            Counties and Equivalent Entities of the United States, Its
+            Possessions, and Associated Areas; FIPS 6-4 
+          Codeset_Source: 
+            U.S. Department of Commerce, Washington, DC, National Institute of
+            Standards and Technology
+    Attribute:
+      Attribute_Label: Fips
+      Attribute_Definition: 
+        The 5-digit FIPS code of the county or county equivalent.
+      Attribute_Definition_Source: U.S. Geological Survey
+      Attribute_Domain_Values:
+        Codeset_Domain:
+          Codeset_Name:
+            Counties and Equivalent Entities of the United States, Its
+            Possessions, and Associated Areas; FIPS 6-4 
+          Codeset_Source: 
+            U.S. Department of Commerce, Washington, DC, National Institute of
+            Standards and Technology
+    Attribute:
+      Attribute_Label: State_fips
+      Attribute_Definition: 
+        The 2-digit FIPS code for the State in which the airport or landing 
+        facility is located.
+      Attribute_Definition_Source: U.S. Geological Survey
+      Attribute_Domain_Values:
+        Codeset_Domain:
+          Codeset_Name:
+            Codes for the Identification of the States, the District of Columbia
+            and the Outlying Areas of the United States, and Associated Areas; 
+            FIPS 5-2.
+          Codeset_Source: 
+            U.S. Department of Commerce, Washington, DC, National Institute of 
+            Standards and Technology
+
+Distribution_Information:
+  Distributor:
+    Contact_Information:
+      Contact_Organization_Primary:
+        Contact_Organization: 
+          Earth Science Information Center, U.S. Geological Survey
+      Contact_Address:
+        Address_Type: mailing address
+        Address: 507 National Center
+        City: Reston
+        State_or_Province: VA
+        Postal_Code: 20192
+      Contact_Voice_Telephone: 1-888-ASK-USGS (1-888-275-8747) 
+      Contact_Voice_Telephone: 703-648-5920
+      Contact_Instructions:  
+        In addition to the address above, there are other ESIC offices 
+        throughout the country.  A full list of these offices is at
+        <http://mapping.usgs.gov/esic/esic_index.html>.
+  Distribution_Liability:
+    Although these data have been processed successfully on a computer system at 
+    the U.S. Geological Survey, no warranty expressed or implied is made by the 
+    U.S. Geological Survey regarding the utility of the data on any other 
+    system, nor shall the act of distribution constitute any  such warranty. 
+    No responsibility is assumed by the U.S. Geological Survey in the use of 
+    these data.
+
+  Standard_Order_Process: 
+    Digital_Form: 
+      Digital_Transfer_Information: 
+        Format_Name: ESRI Shapefile 
+      Digital_Transfer_Option: 
+        Online_Option: 
+          Computer_Contact_Information: 
+            Network_Address: 
+              Network_Resource_Name: <http://nationalatlas.gov/atlasftp.html> 
+      Digital_Transfer_Option: 
+        Offline_Option: 
+          Offline_Media: CD-ROM 
+          Recording_Format: tar 
+    Digital_Form: 
+      Digital_Transfer_Information: 
+        Format_Name: SDTS 
+      Digital_Transfer_Option: 
+        Online_Option: 
+          Computer_Contact_Information: 
+            Network_Address: 
+              Network_Resource_Name: <http://nationalatlas.gov/atlasftp.html> 
+      Digital_Transfer_Option: 
+        Offline_Option: 
+          Offline_Media: CD-ROM 
+          Recording_Format: tar 
+    Fees: 
+      There is no charge for the online option. For National Atlas files
+      ordered on CD-ROM there is a base price of $45.00 per disc, a handling fee
+      of $5.00, and a per-file charge based on file size. The charge for files
+      less than 10 megabytes in size is $1.00. The charge for files that range
+      in size from 10 to 150 megabytes is $7.50. The charge for files of 150
+      megabytes or larger is $15.00.  The charge is $1.00 for the Airports of
+      the United States, Puerto Rico and the U.S. Virgin Islands. 
+    Ordering_Instructions: 
+      To order files on CD-ROM, please see
+      <http://nationalatlas.gov/atlasftp.html#q12>
+
+Metadata_Reference_Information:
+  Metadata_Date: 20011018
+  Metadata_Contact:
+    Contact_Information:
+      Contact_Person_Primary:
+        Contact_Person: Peg Rawson
+        Contact_Organization: U.S. Geological Survey
+      Contact_Address:
+        Address_Type: mailing address
+        Address: 521 National Center
+        City: Reston
+        State_or_Province: VA
+        Postal_Code: 20192
+      Contact_Voice_Telephone: 703-648-4183
+      Contact_Electronic_Mail_Address: atlasmail@usgs.gov
+  Metadata_Standard_Name: FGDC Content Standards for Digital Geospatial Metadata
+  Metadata_Standard_Version: FGDC-STD-001-1998
+  Metadata_Security_Information:
+    Metadata_Security_Classification_System: None
+    Metadata_Security_Classification: Unclassified
+    Metadata_Security_Handling_Description: None 
