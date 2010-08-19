@@ -149,6 +149,20 @@ namespace OpenGlobe.Scene
             }
         }
 
+        public bool Wireframe
+        {
+            get { return _polyline.Wireframe; }
+            set 
+            {
+                _polyline.Wireframe = value;
+
+                foreach (Polygon polygon in _polygons)
+                {
+                    polygon.Wireframe = value;
+                }
+            }
+        }
+
         #region IDisposable Members
 
         public void Dispose()

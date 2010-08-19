@@ -154,6 +154,12 @@ namespace OpenGlobe.Scene
             set { _polyline.DepthWrite = value;  }
         }
 
+        public bool Wireframe
+        {
+            get { return _polyline.Wireframe; }
+            set { _polyline.Wireframe = value; }
+        }
+
         #region IDisposable Members
 
         public void Dispose()

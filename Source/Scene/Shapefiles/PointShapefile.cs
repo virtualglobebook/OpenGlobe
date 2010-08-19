@@ -113,6 +113,12 @@ namespace OpenGlobe.Scene
             set { _billboards.DepthWrite = value; }
         }
 
+        public bool Wireframe
+        {
+            get { return _billboards.Wireframe; }
+            set { _billboards.Wireframe = value; }
+        }
+
         #region IDisposable Members
 
         public void Dispose()

@@ -111,6 +111,7 @@ namespace OpenGlobe.Examples.Chapter7
         {
             string text = "Output: " + DayNightOutputToString(_quad.DayNightOutput) + " ('o' + left/right)\n";
             text += "Vector Data: " + (_showVectorData ? "on" : "off") + " ('v')\n";
+            text += "Wireframe: " + (_wireframe ? "on" : "off") + " ('w')\n";
 
             if (_hud.Texture != null)
             {
@@ -144,6 +145,17 @@ namespace OpenGlobe.Examples.Chapter7
             else if (e.Key == KeyboardKey.V)
             {
                 _showVectorData = !_showVectorData;
+            }
+            else if (e.Key == KeyboardKey.W)
+            {
+                _wireframe = !_wireframe;
+
+                _countries.Wireframe = _wireframe;
+                _states.Wireframe = _wireframe;
+                _rivers.Wireframe = _wireframe;
+                _populatedPlaces.Wireframe = _wireframe;
+                _airports.Wireframe = _wireframe;
+                _amtrakStations.Wireframe = _wireframe;
             }
 
             UpdateHUD();
@@ -333,6 +345,7 @@ namespace OpenGlobe.Examples.Chapter7
         private readonly HeadsUpDisplay _hud;
 
         private bool _showVectorData;
+        private bool _wireframe;
 
         private bool _oKeyDown;
     }
