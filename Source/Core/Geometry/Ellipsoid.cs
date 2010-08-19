@@ -230,8 +230,13 @@ namespace OpenGlobe.Core.Geometry
 
         public Vector3D ScaleToGeodeticSurface(Vector3D position)
         {
+            return ScaleToGeodeticHeight(position, 0);
+        }
+
+        public Vector3D ScaleToGeodeticHeight(Vector3D position, double height)
+        {
             Geodetic3D geodetic = ToGeodetic3D(position);
-            Geodetic3D onSurface = new Geodetic3D(geodetic.Longitude, geodetic.Latitude, 0);
+            Geodetic3D onSurface = new Geodetic3D(geodetic.Longitude, geodetic.Latitude, height);
             return ToVector3D(onSurface);
         }
 

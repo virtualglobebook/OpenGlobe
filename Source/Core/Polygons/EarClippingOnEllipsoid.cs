@@ -46,7 +46,7 @@ namespace OpenGlobe.Core
             LinkedListNode<IndexedVector<Vector3D>> node = previousNode.Next;
             LinkedListNode<IndexedVector<Vector3D>> nextNode = node.Next;
 
-            int bailCount = remainingPositions.Count * remainingPositions.Count * remainingPositions.Count;
+            int bailCount = remainingPositions.Count * remainingPositions.Count;
 
             while (remainingPositions.Count > 3)
             {
