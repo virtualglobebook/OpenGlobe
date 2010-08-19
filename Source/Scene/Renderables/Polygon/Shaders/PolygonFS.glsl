@@ -9,11 +9,11 @@
 in vec3 worldPosition;
 in vec3 positionToLight;
 in vec3 positionToEye;
-out vec3 fragmentColor;
+out vec4 fragmentColor;
 
 uniform vec4 og_diffuseSpecularAmbientShininess;
 uniform vec3 u_globeOneOverRadiiSquared;
-uniform vec3 u_color;
+uniform vec4 u_color;
 
 float LightIntensity(vec3 normal, vec3 toLight, vec3 toEye, vec4 diffuseSpecularAmbientShininess)
 {
@@ -38,5 +38,5 @@ void main()
 	vec3 normal = ComputeDeticSurfaceNormal(worldPosition, u_globeOneOverRadiiSquared);
     float intensity = LightIntensity(normal,  normalize(positionToLight), normalize(positionToEye), og_diffuseSpecularAmbientShininess);
 
-	fragmentColor = intensity * u_color;
+	fragmentColor = vec4(intensity * u_color.rgb, u_color.a);
 }

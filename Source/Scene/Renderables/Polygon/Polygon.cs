@@ -70,7 +70,7 @@ namespace OpenGlobe.Scene
                 EmbeddedResources.GetText("OpenGlobe.Scene.Renderables.Polygon.Shaders.PolygonVS.glsl"),
                 EmbeddedResources.GetText("OpenGlobe.Scene.Renderables.Polygon.Shaders.PolygonFS.glsl"));
             (sp.Uniforms["u_globeOneOverRadiiSquared"] as Uniform<Vector3S>).Value = globeShape.OneOverRadiiSquared.ToVector3S();
-            _colorUniform = sp.Uniforms["u_color"] as Uniform<Vector3S>;
+            _colorUniform = sp.Uniforms["u_color"] as Uniform<Vector4S>;
 
             _drawState = new DrawState();
             _drawState.RenderState.Blending.Enabled = true;
@@ -101,7 +101,7 @@ namespace OpenGlobe.Scene
             set
             {
                 _color = value;
-                _colorUniform.Value = new Vector3S(_color.R / 255.0f, _color.G / 255.0f, _color.B / 255.0f);
+                _colorUniform.Value = new Vector4S(_color.R / 255.0f, _color.G / 255.0f, _color.B / 255.0f, _color.A / 255.0f);
             }
         }
 
@@ -134,7 +134,7 @@ namespace OpenGlobe.Scene
         #endregion
 
         private Color _color;
-        private readonly Uniform<Vector3S> _colorUniform;
+        private readonly Uniform<Vector4S> _colorUniform;
         private readonly DrawState _drawState;
         private readonly PrimitiveType _primitiveType;
     }
