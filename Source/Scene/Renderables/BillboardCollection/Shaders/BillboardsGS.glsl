@@ -28,10 +28,10 @@ void main()
 
     vec4 textureCoordinate = gsTextureCoordinates[0];
     vec2 atlasSize = vec2(textureSize(og_texture0, 0));
-    vec2 subTextureSize = vec2(
+    vec2 subRectangleSize = vec2(
         atlasSize.x * (textureCoordinate.p - textureCoordinate.s), 
         atlasSize.y * (textureCoordinate.q - textureCoordinate.t));
-    vec2 halfSize = subTextureSize * 0.5 * og_highResolutionSnapScale;
+    vec2 halfSize = subRectangleSize * 0.5 * og_highResolutionSnapScale;
 
     vec4 center = gl_in[0].gl_Position;
     int horizontalOrigin = int(gsOrigin[0]) & 3;         // bits 0-1
