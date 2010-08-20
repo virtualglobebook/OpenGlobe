@@ -133,7 +133,7 @@ namespace OpenGlobe.Renderer
                         (double)(upperLeft.X + b.Bitmap.Width) / widthD,
                         (heightD - (double)upperLeft.Y) / heightD));
 
-                graphics.DrawImageUnscaled(b.Bitmap, upperLeft);
+                graphics.DrawImage(b.Bitmap, upperLeft.X, upperLeft.Y, b.Bitmap.Width, b.Bitmap.Height);
             }
             graphics.Dispose();
 
