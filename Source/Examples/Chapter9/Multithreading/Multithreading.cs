@@ -1,4 +1,6 @@
-﻿#region License
+﻿//#define SINGLE_THREADED
+
+#region License
 //
 // (C) Copyright 2010 Patrick Cozzi and Deron Ohlarik
 //
@@ -8,7 +10,9 @@
 #endregion
 
 using System;
+using System.Threading;
 using System.Drawing;
+using System.Collections.Generic;
 
 using OpenGlobe.Core;
 using OpenGlobe.Core.Geometry;
@@ -18,21 +22,78 @@ using OpenGlobe.Scene;
 
 namespace OpenGlobe.Examples.Chapter9
 {
+    internal class ShapefileRequest
+    {
+        public ShapefileRequest(string filename, string bitmapFilename, ShapefileType type)
+        {
+            _filename = filename;
+            _bitmapFilename = bitmapFilename;
+            _type = type;
+        }
+
+        public string Filename { get { return _filename; } }
+        public string BitmapFilename { get { return _bitmapFilename; } }
+        public ShapefileType Type { get { return _type; } }
+
+        private string _filename;
+        private string _bitmapFilename;
+        private ShapefileType _type;
+    }
+
     internal class ShapefileWorker
     {
-        public ShapefileWorker(MessageQueue doneQueue)
+        public ShapefileWorker(GraphicsWindow window, Ellipsoid globeShape, MessageQueue doneQueue)
         {
+            _window = window;
+            _globeShape = globeShape;
             _doneQueue = doneQueue;
         }
 
         public void Process(object sender, MessageQueueEventArgs e)
         {
-            int value = (int)e.Message;
-            value *= value;
+#if !SINGLE_THREADED
+            _window.MakeCurrent();
+#endif
 
-            _doneQueue.Post(value);
+            ShapefileRequest request = (ShapefileRequest)e.Message;
+            IRenderable shapefile = null;
+
+            if (request.Type == ShapefileType.Polyline)
+            {
+                PolylineShapefile polylineShapefile = new PolylineShapefile(request.Filename, _window.Context, _globeShape);
+                polylineShapefile.DepthWrite = false;
+                shapefile = polylineShapefile;
+            }
+            else if (request.Type == ShapefileType.Polygon)
+            {
+                PolygonShapefile polygonShapefile = new PolygonShapefile(request.Filename, _window.Context, _globeShape);
+                polygonShapefile.DepthWrite = false;
+                shapefile = polygonShapefile;
+            }
+            else if (request.Type == ShapefileType.Point)
+            {
+                PointShapefile pointShapefile = new PointShapefile(request.Filename, null, _window.Context, _globeShape, new Bitmap(request.BitmapFilename));
+                pointShapefile.DepthWrite = false;
+                shapefile = pointShapefile;
+            }
+            else
+            {
+                throw new ArgumentException("request.Type");
+            }
+
+#if !SINGLE_THREADED
+            Fence fence = Device.CreateFence();
+            while (fence.ClientWait(0) == ClientWaitResult.TimeoutExpired)
+            {
+                Thread.Sleep(10);   // TODO:  Other work
+            }
+#endif
+
+            _doneQueue.Post(shapefile);
         }
 
+        private readonly GraphicsWindow _window;
+        private readonly Ellipsoid _globeShape;
         private readonly MessageQueue _doneQueue;
     }
     
@@ -41,7 +102,8 @@ namespace OpenGlobe.Examples.Chapter9
         public Multithreading()
         {
             Ellipsoid globeShape = Ellipsoid.ScaledWgs84;
-                        
+
+            _workerWindow = Device.CreateWindow(1, 1);                                  // Needs to be created first for whatever reason
             _window = Device.CreateWindow(800, 600, "Chapter 9:  Multithreading");
             _window.Resize += OnResize;
             _window.RenderFrame += OnRenderFrame;
@@ -55,17 +117,31 @@ namespace OpenGlobe.Examples.Chapter9
             _globe = new RayCastedGlobe(_window.Context);
             _globe.Shape = globeShape;
             _globe.Texture = _texture;
+            _globe.UseAverageDepth = true;
 
             ///////////////////////////////////////////////////////////////////
-            
+
+            // TODO:  Draw order
+            _requestedFiles = new List<ShapefileRequest>();
+            _requestedFiles.Add(new ShapefileRequest("110m_admin_0_countries.shp", "", ShapefileType.Polygon));
+            _requestedFiles.Add(new ShapefileRequest("110m_admin_1_states_provinces_lines_shp.shp", "", ShapefileType.Polyline));
+            _requestedFiles.Add(new ShapefileRequest("airprtx020.shp", "paper-plane--arrow.png", ShapefileType.Point));
+            _requestedFiles.Add(new ShapefileRequest("amtrakx020.shp", "car-red.png", ShapefileType.Point));
+            _requestedFiles.Add(new ShapefileRequest("110m_populated_places_simple.shp", "032.png", ShapefileType.Point));
+
+            _shapefiles = new List<IRenderable>();
+
             _doneQueue = new MessageQueue();
             _doneQueue.MessageReceived += ProcessNewShapefile;
 
-            _worker = new ShapefileWorker(_doneQueue);
+            _worker = new ShapefileWorker(_workerWindow, globeShape, _doneQueue);
 
             _requestQueue = new MessageQueue();
             _requestQueue.MessageReceived += _worker.Process;
+
+#if !SINGLE_THREADED
             _requestQueue.StartInAnotherThread();
+#endif
 
             ///////////////////////////////////////////////////////////////////
 
@@ -82,37 +158,52 @@ namespace OpenGlobe.Examples.Chapter9
         {
             _doneQueue.ProcessQueue();
 
+            ///////////////////////////////////////////////////////////////////
+
             Context context = _window.Context;
             context.Clear(_clearState);
             _globe.Render(context, _sceneState);
 
-            if (_haveRequest)
+            foreach (IRenderable shapefile in _shapefiles)
             {
-                int value = 5;
-                _requestQueue.Post(value);
-
-                _haveRequest = false;
+                shapefile.Render(context, _sceneState);
             }
+
+            ///////////////////////////////////////////////////////////////////
+
+            foreach (ShapefileRequest request in _requestedFiles)
+            {
+                _requestQueue.Post(request);
+            }
+
+#if SINGLE_THREADED
+            _requestQueue.ProcessQueue();
+#endif
+
+            _requestedFiles.Clear();
         }
 
         public void ProcessNewShapefile(object sender, MessageQueueEventArgs e)
         {
-            int squaredValue = (int)e.Message;
-            System.Diagnostics.Debug.Assert(squaredValue == 25);
+            _shapefiles.Add((IRenderable)e.Message);
         }
-
-        private bool _haveRequest = true;   // TODO:  remove temp
 
         #region IDisposable Members
 
         public void Dispose()
         {
+            foreach (IRenderable shapefile in _shapefiles)
+            {
+                (shapefile as IDisposable).Dispose();
+            }
+
             _doneQueue.Dispose();
             _requestQueue.Dispose();
             _texture.Dispose();
             _globe.Dispose();
             _camera.Dispose();
             _window.Dispose();
+            _workerWindow.Dispose();
         }
 
         #endregion
@@ -137,8 +228,12 @@ namespace OpenGlobe.Examples.Chapter9
         private readonly RayCastedGlobe _globe;
         private readonly Texture2D _texture;
 
+        private readonly IList<ShapefileRequest> _requestedFiles;
+        private readonly IList<IRenderable> _shapefiles;
+
         private readonly MessageQueue _requestQueue;
         private readonly MessageQueue _doneQueue;
         private readonly ShapefileWorker _worker;
+        private readonly GraphicsWindow _workerWindow;
     }
 }

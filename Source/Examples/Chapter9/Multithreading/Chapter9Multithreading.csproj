@@ -54,6 +54,68 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\..\..\ThirdParty\opentk-1.0.0-rc1\Source\OpenTK\OpenTK.dll.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\..\..\Data\Vector\NaturalEarth\110m-admin-0-countries\110m_admin_0_countries.dbf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\..\..\Data\Vector\NaturalEarth\110m-admin-0-countries\110m_admin_0_countries.shx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\..\..\Data\Vector\NaturalEarth\110m-admin-0-countries\110m_admin_0_countries.shp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\..\..\Data\Vector\NaturalEarth\110m-admin-1-states-provinces-lines-shp\110m_admin_1_states_provinces_lines_shp.dbf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\..\..\Data\Vector\NaturalEarth\110m-admin-1-states-provinces-lines-shp\110m_admin_1_states_provinces_lines_shp.shp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\..\..\Data\Vector\NaturalEarth\110m-admin-1-states-provinces-lines-shp\110m_admin_1_states_provinces_lines_shp.shx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\..\..\Data\Vector\NaturalEarth\110m-populated-places-simple\110m_populated_places_simple.dbf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\..\..\Data\Vector\NaturalEarth\110m-populated-places-simple\110m_populated_places_simple.shp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\..\..\Data\Vector\NaturalEarth\110m-populated-places-simple\110m_populated_places_simple.shx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\..\..\Data\Vector\NationalAtlasOfTheUnitedStatesOfAmerica\amtrakx020\amtrakx020.dbf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\..\..\Data\Vector\NationalAtlasOfTheUnitedStatesOfAmerica\amtrakx020\amtrakx020.shp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\..\..\Data\Vector\NationalAtlasOfTheUnitedStatesOfAmerica\amtrakx020\amtrakx020.shx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\..\..\Data\Vector\NationalAtlasOfTheUnitedStatesOfAmerica\airprtx020\airprtx020.dbf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\..\..\Data\Vector\NationalAtlasOfTheUnitedStatesOfAmerica\airprtx020\airprtx020.shp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\..\..\Data\Vector\NationalAtlasOfTheUnitedStatesOfAmerica\airprtx020\airprtx020.shx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\..\..\Data\Icons\YusukeKamiyamane\045.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\..\..\Data\Icons\YusukeKamiyamane\032.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\..\..\Data\Icons\YusukeKamiyamane\car-red.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\..\..\Data\Icons\YusukeKamiyamane\paper-plane--arrow.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\..\..\Core\OpenGlobe.Core.csproj">
       <Project>{51502B9C-1A97-4F2C-8541-7D9D61ED6C6D}</Project>
       <Name>OpenGlobe.Core</Name>
