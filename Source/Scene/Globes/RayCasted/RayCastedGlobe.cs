@@ -27,9 +27,11 @@ namespace OpenGlobe.Scene
 
             ShaderProgram sp = Device.CreateShaderProgram(vs, EmbeddedResources.GetText("OpenGlobe.Scene.Globes.RayCasted.Shaders.GlobeFS.glsl"));
             _cameraEyeSquared = sp.Uniforms["u_cameraEyeSquared"] as Uniform<Vector3S>;
+            _useAverageDepth = sp.Uniforms["u_useAverageDepth"] as Uniform<bool>;
 
             ShaderProgram solidSP = Device.CreateShaderProgram(vs, EmbeddedResources.GetText("OpenGlobe.Scene.Globes.RayCasted.Shaders.SolidShadedGlobeFS.glsl"));
             _cameraEyeSquaredSolid = solidSP.Uniforms["u_cameraEyeSquared"] as Uniform<Vector3S>;
+            _useAverageDepthSolid = solidSP.Uniforms["u_useAverageDepth"] as Uniform<bool>;
 
             _drawState = new DrawState(_renderState, sp, null);
             _drawStateSolid = new DrawState(_renderState, solidSP, null);
@@ -107,6 +109,16 @@ namespace OpenGlobe.Scene
             }
         }
 
+        public bool UseAverageDepth
+        {
+            get { return _useAverageDepth.Value; }
+            set 
+            { 
+                _useAverageDepth.Value = value;
+                _useAverageDepthSolid.Value = value;
+            }
+        }
+
         public Ellipsoid Shape
         {
             get { return _shape; }
@@ -147,6 +159,9 @@ namespace OpenGlobe.Scene
         private readonly DrawState _drawStateSolid;
         private readonly Uniform<Vector3S> _cameraEyeSquaredSolid;
 
+        private readonly Uniform<bool> _useAverageDepth;
+        private readonly Uniform<bool> _useAverageDepthSolid;
+        
         private readonly RenderState _renderState;
         private VertexArray _va;
         private PrimitiveType _primitiveType;

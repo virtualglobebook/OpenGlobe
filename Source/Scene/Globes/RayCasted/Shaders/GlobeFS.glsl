@@ -16,11 +16,13 @@ uniform vec3 og_cameraLightPosition;
 uniform vec3 og_cameraEye;
 uniform vec3 u_cameraEyeSquared;
 uniform vec3 u_globeOneOverRadiiSquared;
+uniform bool u_useAverageDepth;
 
 struct Intersection
 {
     bool  Intersects;
-    float Time;         // Along ray
+    float NearTime;         // Along ray
+    float FarTime;          // Along ray
 };
 
 //
@@ -35,18 +37,19 @@ Intersection RayIntersectEllipsoid(vec3 rayOrigin, vec3 rayOriginSquared, vec3 r
 
     if (discriminant < 0.0)
     {
-        return Intersection(false, 0.0);
+        return Intersection(false, 0.0, 0.0);
     }
     else if (discriminant == 0.0)
     {
-        return Intersection(true, -0.5 * b / a);
+        float time = -0.5 * b / a;
+        return Intersection(true, time, time);
     }
 
     float t = -0.5 * (b + (b > 0.0 ? 1.0 : -1.0) * sqrt(discriminant));
     float root1 = t / a;
     float root2 = c / t;
 
-    return Intersection(true, min(root1, root2));
+    return Intersection(true, min(root1, root2), max(root1, root2));
 }
 
 float ComputeWorldPositionDepth(vec3 position, mat4x2 modelZToClipCoordinates)
@@ -87,7 +90,7 @@ void main()
 
     if (i.Intersects)
     {
-        vec3 position = og_cameraEye + (i.Time * rayDirection);
+        vec3 position = og_cameraEye + (i.NearTime * rayDirection);
         vec3 normal = ComputeDeticSurfaceNormal(position, u_globeOneOverRadiiSquared);
 
         vec3 toLight = normalize(og_cameraLightPosition - position);
@@ -95,6 +98,12 @@ void main()
         float intensity = LightIntensity(normal, toLight, toEye, og_diffuseSpecularAmbientShininess);
 
         fragmentColor = intensity * texture(og_texture0, ComputeTextureCoordinates(normal)).rgb;
+
+        if (u_useAverageDepth)
+        {
+            position = og_cameraEye + (mix(i.NearTime, i.FarTime, 0.5) * rayDirection);
+        }
+
         gl_FragDepth = ComputeWorldPositionDepth(position, og_modelZToClipCoordinates);
     }
     else
