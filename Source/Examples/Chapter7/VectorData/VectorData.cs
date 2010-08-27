@@ -63,7 +63,7 @@ namespace OpenGlobe.Examples.Chapter7
             _rivers.OutlineWidth = 0;
             _rivers.DepthWrite = false;
 
-            _populatedPlaces = new PointShapefile("110m_populated_places_simple.shp", /*"nameascii"*/null, context, globeShape, new Bitmap(@"E:\MiniGlobe2\Data\Icons\YusukeKamiyamane\032.png"));
+            _populatedPlaces = new PointShapefile("110m_populated_places_simple.shp", /*"nameascii"*/null, context, globeShape, new Bitmap(@"032.png"));
             _populatedPlaces.DepthWrite = false;
             _airports = new PointShapefile(@"airprtx020.shp", /*"name"*/null, context, globeShape, new Bitmap("car-red.png"));
             _airports.DepthWrite = false;

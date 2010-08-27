@@ -109,6 +109,9 @@
     <None Include="..\..\..\..\Data\Icons\YusukeKamiyamane\045.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="..\..\..\..\Data\Icons\YusukeKamiyamane\032.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="..\..\..\..\Data\Icons\YusukeKamiyamane\car-red.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
