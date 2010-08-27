@@ -17,7 +17,7 @@ using Catfood.Shapefile;
 
 namespace OpenGlobe.Scene
 {
-    public class PointShapefile : IDisposable
+    public class PointShapefile : IRenderable, IDisposable
     {
         public PointShapefile(string filename, string labelName, Context context, Ellipsoid globeShape, Bitmap icon)
         {
@@ -102,10 +102,14 @@ namespace OpenGlobe.Scene
             font.Dispose();
         }
 
+        #region IRenderable Members
+
         public void Render(Context context, SceneState sceneState)
         {
             _billboards.Render(context, sceneState);
         }
+
+        #endregion
 
         public bool DepthWrite 
         {

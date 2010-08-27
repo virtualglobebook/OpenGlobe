@@ -17,7 +17,7 @@ using Catfood.Shapefile;
 
 namespace OpenGlobe.Scene
 {
-    public class PolylineShapefile : IDisposable
+    public class PolylineShapefile : IRenderable, IDisposable
     {
         public PolylineShapefile(string filename, Context context, Ellipsoid globeShape)
             : this(filename, context, globeShape, Color.Yellow, Color.Black)
@@ -131,10 +131,14 @@ namespace OpenGlobe.Scene
             indicesCount = numberOfIndices;
         }
 
+        #region IRenderable Members
+
         public void Render(Context context, SceneState sceneState)
         {
             _polyline.Render(context, sceneState);
         }
+
+        #endregion
 
         public double Width 
         {

@@ -17,7 +17,7 @@ using Catfood.Shapefile;
 
 namespace OpenGlobe.Scene
 {
-    public class PolygonShapefile : IDisposable
+    public class PolygonShapefile : IRenderable, IDisposable
     {
         public PolygonShapefile(string filename, Context context, Ellipsoid globeShape)
         {
@@ -113,6 +113,8 @@ namespace OpenGlobe.Scene
             _polyline.Set(context, mesh);
         }
 
+        #region IRenderable Members
+
         public void Render(Context context, SceneState sceneState)
         {
             _polyline.Render(context, sceneState);
@@ -122,6 +124,8 @@ namespace OpenGlobe.Scene
                 polygon.Render(context, sceneState);
             }
         }
+
+        #endregion
 
         public double Width 
         {

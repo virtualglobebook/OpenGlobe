@@ -64,12 +64,14 @@
     <Compile Include="Renderables\Polyline\Polyline.cs" />
     <Compile Include="Renderables\Polyline\OutlinedPolylineGeometryShader.cs" />
     <Compile Include="Renderables\Polyline\OutlinedPolylineTexture.cs" />
+    <Compile Include="Renderables\Renderable.cs" />
     <Compile Include="Renderables\ViewportQuad\ViewportQuad.cs" />
     <Compile Include="Renderables\ViewportQuad\ViewportQuadGeometry.cs" />
     <Compile Include="Renderables\Wireframe\Wireframe.cs" />
     <Compile Include="Shapefiles\PointShapefile.cs" />
     <Compile Include="Shapefiles\PolygonShapefile.cs" />
     <Compile Include="Shapefiles\PolylineShapefile.cs" />
+    <Compile Include="Shapefiles\ShapefileType.cs" />
     <Compile Include="Terrain\RayCastedTerrainTile.cs" />
     <Compile Include="Terrain\TriangleMeshTerrainTile.cs" />
     <Compile Include="Terrain\VertexDisplacementMapTerrainTile.cs" />
