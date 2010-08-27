@@ -42,6 +42,7 @@ namespace OpenGlobe.Renderer.GL3x
             // Alternately, we can delay GL.BufferData until the first
             // CopyFromSystemMemory() call.
             //
+            GL.BindVertexArray(0);  // TODO:  Only needed for vertex and index buffers
             Bind();
             GL.BufferData(_type, new IntPtr(sizeInBytes), new IntPtr(), _usageHint);
         }
@@ -57,6 +58,7 @@ namespace OpenGlobe.Renderer.GL3x
             Debug.Assert(lengthInBytes >= 0);
             Debug.Assert(lengthInBytes <= bufferInSystemMemory.Length * SizeInBytes<T>.Value);
 
+            GL.BindVertexArray(0);  // TODO:  Only needed for vertex and index buffers
             Bind();
             GL.BufferSubData<T>(_type,
                 new IntPtr(destinationOffsetInBytes),
@@ -107,6 +109,7 @@ namespace OpenGlobe.Renderer.GL3x
 
             T[] bufferInSystemMemory = new T[lengthInBytes / SizeInBytes<T>.Value];
 
+            GL.BindVertexArray(0);  // TODO:  Only needed for vertex and index buffers
             Bind();
             GL.GetBufferSubData(_type, new IntPtr(offsetInBytes), new IntPtr(lengthInBytes), bufferInSystemMemory);
             return bufferInSystemMemory;
@@ -127,6 +130,7 @@ namespace OpenGlobe.Renderer.GL3x
 
             // TODO:  If sizeInBytes is wrong because of either the format or row padding 
             // (above), GetBufferSubData will throw InvalidEnum.
+            GL.BindVertexArray(0);  // TODO:  Only needed for vertex and index buffers
             Bind();
             GL.GetBufferSubData(_type, new IntPtr(), new IntPtr(sizeInBytes), lockedPixels.Scan0);
 

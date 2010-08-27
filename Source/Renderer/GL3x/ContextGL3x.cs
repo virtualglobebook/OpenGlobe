@@ -520,13 +520,9 @@ namespace OpenGlobe.Renderer.GL3x
         private void ApplyVertexArray(VertexArray vertexArray)
         {
             VertexArrayGL3x vertexArrayGL3x = vertexArray as VertexArrayGL3x;
+            vertexArrayGL3x.Bind();
 
-            if (_boundVertexArray != vertexArrayGL3x)
-            {
-                vertexArrayGL3x.Bind();
-                _boundVertexArray = vertexArrayGL3x;
-            }
-
+            _boundVertexArray = vertexArrayGL3x;
             _boundVertexArray.Clean();
             _boundIndexBuffer = _boundVertexArray.IndexBuffer as IndexBufferGL3x;
         }
