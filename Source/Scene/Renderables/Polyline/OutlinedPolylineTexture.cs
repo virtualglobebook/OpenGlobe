@@ -66,12 +66,27 @@ namespace OpenGlobe.Scene
             }
 
             ///////////////////////////////////////////////////////////////////
-            _drawState.VertexArray = context.CreateVertexArray(mesh, _drawState.ShaderProgram.VertexAttributes, BufferHint.StaticDraw);
+            _meshBuffers = Device.CreateMeshBuffers(mesh, _drawState.ShaderProgram.VertexAttributes, BufferHint.StaticDraw);
             _primitiveType = mesh.PrimitiveType;
         }
 
-        private void Update(SceneState sceneState)
+        private void Update(Context context, SceneState sceneState)
         {
+            if (_meshBuffers != null)
+            {
+                if (_drawState.VertexArray != null)
+                {
+                    _drawState.VertexArray.Dispose();
+                    _drawState.VertexArray = null;
+                }
+
+                _drawState.VertexArray = context.CreateVertexArray(_meshBuffers);
+                _meshBuffers.Dispose();
+                _meshBuffers = null;
+            }
+
+            ///////////////////////////////////////////////////////////////////
+
             int width = (int)Math.Ceiling(Width * sceneState.HighResolutionSnapScale);
             int outlineWidth = (int)Math.Ceiling(OutlineWidth * sceneState.HighResolutionSnapScale);
 
@@ -104,6 +119,7 @@ namespace OpenGlobe.Scene
                 if (_texture != null)
                 {
                     _texture.Dispose();
+                    _texture = null;
                 }
 
                 // TODO:  Why does only Float or HalfFloat work here?
@@ -120,7 +136,7 @@ namespace OpenGlobe.Scene
 
             if (_drawState.ShaderProgram != null)
             {
-                Update(sceneState);
+                Update(context, sceneState);
 
                 _distance.Value = (float)(((Width * 0.5) + OutlineWidth + 1) * sceneState.HighResolutionSnapScale);
 
@@ -171,5 +187,6 @@ namespace OpenGlobe.Scene
         private Uniform<float> _distance;
         private PrimitiveType _primitiveType;
         private Texture2D _texture;
+        private MeshBuffers _meshBuffers;       // For passing between threads
     }
 }

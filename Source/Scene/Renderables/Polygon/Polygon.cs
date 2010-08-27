@@ -79,11 +79,27 @@ namespace OpenGlobe.Scene
             _drawState.RenderState.Blending.DestinationRGBFactor = DestinationBlendingFactor.OneMinusSourceAlpha;
             _drawState.RenderState.Blending.DestinationAlphaFactor = DestinationBlendingFactor.OneMinusSourceAlpha;
             _drawState.ShaderProgram = sp;
-            _drawState.VertexArray = context.CreateVertexArray(mesh, _drawState.ShaderProgram.VertexAttributes, BufferHint.StaticDraw);
+            _meshBuffers = Device.CreateMeshBuffers(mesh, _drawState.ShaderProgram.VertexAttributes, BufferHint.StaticDraw);
 
             _primitiveType = mesh.PrimitiveType;
 
             Color = Color.White;
+        }
+
+        private void Update(Context context)
+        {
+            if (_meshBuffers != null)
+            {
+                if (_drawState.VertexArray != null)
+                {
+                    _drawState.VertexArray.Dispose();
+                    _drawState.VertexArray = null;
+                }
+
+                _drawState.VertexArray = context.CreateVertexArray(_meshBuffers);
+                _meshBuffers.Dispose();
+                _meshBuffers = null;
+            }
         }
 
         public void Render(Context context, SceneState sceneState)
@@ -91,6 +107,7 @@ namespace OpenGlobe.Scene
             Verify.ThrowIfNull(context);
             Verify.ThrowIfNull(sceneState);
 
+            Update(context);
             context.Draw(_primitiveType, _drawState, sceneState);
         }
 
@@ -137,5 +154,6 @@ namespace OpenGlobe.Scene
         private readonly Uniform<Vector4S> _colorUniform;
         private readonly DrawState _drawState;
         private readonly PrimitiveType _primitiveType;
+        private MeshBuffers _meshBuffers;       // For passing between threads
     }
 }
