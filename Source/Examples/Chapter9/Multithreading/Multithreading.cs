@@ -121,25 +121,20 @@ namespace OpenGlobe.Examples.Chapter9
 
             ///////////////////////////////////////////////////////////////////
 
-            // TODO:  Draw order
-            _requestedFiles = new List<ShapefileRequest>();
-            _requestedFiles.Add(new ShapefileRequest("110m_admin_0_countries.shp", "", ShapefileType.Polygon));
-            _requestedFiles.Add(new ShapefileRequest("110m_admin_1_states_provinces_lines_shp.shp", "", ShapefileType.Polyline));
-            _requestedFiles.Add(new ShapefileRequest("airprtx020.shp", "paper-plane--arrow.png", ShapefileType.Point));
-            _requestedFiles.Add(new ShapefileRequest("amtrakx020.shp", "car-red.png", ShapefileType.Point));
-            _requestedFiles.Add(new ShapefileRequest("110m_populated_places_simple.shp", "032.png", ShapefileType.Point));
-
-            _shapefiles = new List<IRenderable>();
-
-            _doneQueue = new MessageQueue();
             _doneQueue.MessageReceived += ProcessNewShapefile;
 
-            _worker = new ShapefileWorker(_workerWindow, globeShape, _doneQueue);
+            _requestQueue.MessageReceived += new ShapefileWorker(_workerWindow, globeShape, _doneQueue).Process;
 
-            _requestQueue = new MessageQueue();
-            _requestQueue.MessageReceived += _worker.Process;
+            // TODO:  Draw order
+            _requestQueue.Post(new ShapefileRequest("110m_admin_0_countries.shp", "", ShapefileType.Polygon));
+            _requestQueue.Post(new ShapefileRequest("110m_admin_1_states_provinces_lines_shp.shp", "", ShapefileType.Polyline));
+            _requestQueue.Post(new ShapefileRequest("airprtx020.shp", "paper-plane--arrow.png", ShapefileType.Point));
+            _requestQueue.Post(new ShapefileRequest("amtrakx020.shp", "car-red.png", ShapefileType.Point));
+            _requestQueue.Post(new ShapefileRequest("110m_populated_places_simple.shp", "032.png", ShapefileType.Point));
 
-#if !SINGLE_THREADED
+#if SINGLE_THREADED
+            _requestQueue.ProcessQueue();
+#else
             _requestQueue.StartInAnotherThread();
 #endif
 
@@ -158,8 +153,6 @@ namespace OpenGlobe.Examples.Chapter9
         {
             _doneQueue.ProcessQueue();
 
-            ///////////////////////////////////////////////////////////////////
-
             Context context = _window.Context;
             context.Clear(_clearState);
             _globe.Render(context, _sceneState);
@@ -168,19 +161,6 @@ namespace OpenGlobe.Examples.Chapter9
             {
                 shapefile.Render(context, _sceneState);
             }
-
-            ///////////////////////////////////////////////////////////////////
-
-            foreach (ShapefileRequest request in _requestedFiles)
-            {
-                _requestQueue.Post(request);
-            }
-
-#if SINGLE_THREADED
-            _requestQueue.ProcessQueue();
-#endif
-
-            _requestedFiles.Clear();
         }
 
         public void ProcessNewShapefile(object sender, MessageQueueEventArgs e)
@@ -228,12 +208,10 @@ namespace OpenGlobe.Examples.Chapter9
         private readonly RayCastedGlobe _globe;
         private readonly Texture2D _texture;
 
-        private readonly IList<ShapefileRequest> _requestedFiles;
-        private readonly IList<IRenderable> _shapefiles;
+        private readonly IList<IRenderable> _shapefiles = new List<IRenderable>();
 
-        private readonly MessageQueue _requestQueue;
-        private readonly MessageQueue _doneQueue;
-        private readonly ShapefileWorker _worker;
+        private readonly MessageQueue _requestQueue = new MessageQueue();
+        private readonly MessageQueue _doneQueue = new MessageQueue();
         private readonly GraphicsWindow _workerWindow;
     }
 }

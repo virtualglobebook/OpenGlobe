@@ -65,9 +65,9 @@ namespace OpenGlobe.Examples.Chapter7
 
             _populatedPlaces = new PointShapefile("110m_populated_places_simple.shp", /*"nameascii"*/null, context, globeShape, new Bitmap(@"032.png"));
             _populatedPlaces.DepthWrite = false;
-            _airports = new PointShapefile(@"airprtx020.shp", /*"name"*/null, context, globeShape, new Bitmap("car-red.png"));
+            _airports = new PointShapefile("airprtx020.shp", /*"name"*/null, context, globeShape, new Bitmap("car-red.png"));
             _airports.DepthWrite = false;
-            _amtrakStations = new PointShapefile(@"amtrakx020.shp", /*"descript"*/null, context, globeShape, new Bitmap("paper-plane--arrow.png"));
+            _amtrakStations = new PointShapefile("amtrakx020.shp", /*"descript"*/null, context, globeShape, new Bitmap("paper-plane--arrow.png"));
             _amtrakStations.DepthWrite = false;
 
             _hudFont = new Font("Arial", 16);

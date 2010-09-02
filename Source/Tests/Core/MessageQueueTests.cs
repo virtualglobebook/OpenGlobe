@@ -175,5 +175,26 @@ namespace OpenGlobe.Core
                 }
             }
         }
+
+        [Test]
+        public void BookExample()
+        {
+            using (MessageQueue queue = new MessageQueue())
+            {
+                queue.StartInAnotherThread();
+
+                double square = 0;
+                queue.MessageReceived += delegate(object sender, MessageQueueEventArgs e)
+                {
+                    double value = (double)e.Message;
+                    square = value * value;
+                };
+
+                queue.Post(5.0);
+                queue.TerminateAndWait();
+
+                Assert.AreEqual(25.0, square);
+            }
+        }
     }
 }
