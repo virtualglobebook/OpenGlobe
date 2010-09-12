@@ -371,6 +371,16 @@ namespace OpenGlobe.Renderer
             return new FenceGL3x();
         }
 
+        public static void Finish()
+        {
+            GL.Finish();
+        }
+
+        public static void Flush()
+        {
+            GL.Flush();
+        }
+
         public static Extensions Extensions
         {
             get { return s_extensions; }
