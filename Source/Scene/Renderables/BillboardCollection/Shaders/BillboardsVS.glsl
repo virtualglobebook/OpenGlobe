@@ -27,7 +27,7 @@ vec4 ModelToWindowCoordinates(
 {
     v = modelViewPerspectiveProjectionMatrix * v;                  // clip coordinates
     v.xyz /= v.w;                                                  // normalized device coordinates
-    v.xyz = (viewportTransformationMatrix * vec4(v.xyz, 1.0)).xyz; // windows coordinates
+    v.xyz = (viewportTransformationMatrix * vec4(v.xyz, 1.0)).xyz; // window coordinates
     return v;
 }
 
