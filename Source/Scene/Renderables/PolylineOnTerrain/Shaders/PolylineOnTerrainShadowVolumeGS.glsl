@@ -9,7 +9,7 @@
 layout(lines_adjacency) in;
 layout(triangle_strip, max_vertices = 22) out;
 
-uniform mat4 og_perspectiveProjectionMatrix;
+uniform mat4 og_perspectiveMatrix;
 uniform mat4 og_viewportTransformationMatrix;
 uniform float og_pixelSizePerDistance;
 uniform float og_perspectiveNearPlaneDistance;
@@ -80,7 +80,7 @@ void main()
 		vec4 tempVec4;
         for (int i = 0; i < numPositions; ++i)
         {
-		    tempVec4 = og_perspectiveProjectionMatrix * vec4(clippedModel[i].xyz, 1.0);
+		    tempVec4 = og_perspectiveMatrix * vec4(clippedModel[i].xyz, 1.0);
             window[i] = ClipToWindowCoordinates(tempVec4);
         }
 		float maxLength = 0.0;
@@ -132,8 +132,8 @@ void main()
             for (int i = 0; i < numPositions; ++i, j += 2)
             {
                 n = norm * abs(clippedModel[i].z);
-                positions[j] = og_perspectiveProjectionMatrix * vec4(clippedModel[i].xyz - n, 1.0);
-                positions[j + 1] = og_perspectiveProjectionMatrix * vec4(clippedModel[i].xyz + n, 1.0);
+                positions[j] = og_perspectiveMatrix * vec4(clippedModel[i].xyz - n, 1.0);
+                positions[j + 1] = og_perspectiveMatrix * vec4(clippedModel[i].xyz + n, 1.0);
             }
 
             //

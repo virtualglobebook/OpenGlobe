@@ -40,13 +40,13 @@ namespace OpenGlobe.Examples.Chapter3
                   out vec3 surfaceNormal;
                   out vec2 surfaceTextureCoordinate;
 
-                  uniform mat4 og_modelViewPerspectiveProjectionMatrix;
+                  uniform mat4 og_modelViewPerspectiveMatrix;
                   uniform vec3 og_cameraEye;
                   uniform vec3 og_cameraLightPosition;
 
                   void main()                     
                   {
-                        gl_Position = og_modelViewPerspectiveProjectionMatrix * position; 
+                        gl_Position = og_modelViewPerspectiveMatrix * position; 
 
                         positionToLight = og_cameraLightPosition - position.xyz;
                         positionToEye = og_cameraEye - position.xyz;

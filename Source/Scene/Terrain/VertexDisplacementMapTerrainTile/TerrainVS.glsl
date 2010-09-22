@@ -15,7 +15,7 @@ out vec2 textureCoordinate;
 out vec2 repeatTextureCoordinate;
 out float height;
 
-uniform mat4 og_modelViewPerspectiveProjectionMatrix;
+uniform mat4 og_modelViewPerspectiveMatrix;
 uniform vec3 og_cameraEye;
 uniform vec3 og_cameraLightPosition;
 uniform sampler2DRect og_texture0;    // Height map
@@ -121,7 +121,7 @@ void main()
 {
     vec3 displacedPosition = vec3(position, texture(og_texture0, position).r * u_heightExaggeration);
 
-    gl_Position = og_modelViewPerspectiveProjectionMatrix * vec4(displacedPosition, 1.0);
+    gl_Position = og_modelViewPerspectiveMatrix * vec4(displacedPosition, 1.0);
 
     if (u_normalAlgorithm == 1)       // TerrainNormalsAlgorithm.ThreeForward
     {

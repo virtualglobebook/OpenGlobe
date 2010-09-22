@@ -10,7 +10,7 @@ in vec2 position;
 out vec2 windowPosition;
 out float distanceToEyeGS;
 
-uniform mat4 og_modelViewPerspectiveProjectionMatrix;
+uniform mat4 og_modelViewPerspectiveMatrix;
 uniform mat4 og_viewportTransformationMatrix;
 uniform vec3 og_cameraEye;
 uniform sampler2DRect og_texture0;    // Height map
@@ -27,7 +27,7 @@ void main()
 {
     vec4 displacedPosition = vec4(position, texture(og_texture0, position).r * u_heightExaggeration, 1.0);
 
-    gl_Position = og_modelViewPerspectiveProjectionMatrix * displacedPosition;
+    gl_Position = og_modelViewPerspectiveMatrix * displacedPosition;
     windowPosition = ClipToWindowCoordinates(gl_Position, og_viewportTransformationMatrix).xy;
     distanceToEyeGS = distance(displacedPosition.xyz, og_cameraEye);
 }

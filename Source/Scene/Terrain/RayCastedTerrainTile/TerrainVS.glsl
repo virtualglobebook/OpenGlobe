@@ -8,10 +8,10 @@
 
 in vec4 position;
 out vec3 boxExit;
-uniform mat4 og_modelViewPerspectiveProjectionMatrix;
+uniform mat4 og_modelViewPerspectiveMatrix;
 
 void main()
 {
-    gl_Position = og_modelViewPerspectiveProjectionMatrix * position;
+    gl_Position = og_modelViewPerspectiveMatrix * position;
     boxExit = position.xyz;
 }

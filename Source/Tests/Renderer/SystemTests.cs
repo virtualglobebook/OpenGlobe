@@ -308,19 +308,19 @@ namespace OpenGlobe.Renderer
 
                   in vec4 position;
                   uniform mat4 og_modelViewMatrix;
-                  uniform mat4 og_perspectiveProjectionMatrix;
-                  uniform mat4 og_modelViewPerspectiveProjectionMatrix;
+                  uniform mat4 og_perspectiveMatrix;
+                  uniform mat4 og_modelViewPerspectiveMatrix;
 
                   void main()
                   {
                         if (position.x > 0)
                         {
-                            mat4 modelViewProjectionMatrix = og_perspectiveProjectionMatrix * og_modelViewMatrix;
-                            gl_Position = modelViewProjectionMatrix * position; 
+                            mat4 modelViewMatrix = og_perspectiveMatrix * og_modelViewMatrix;
+                            gl_Position = modelViewMatrix * position; 
                         }
                         else
                         {
-                            gl_Position = og_modelViewPerspectiveProjectionMatrix * position; 
+                            gl_Position = og_modelViewPerspectiveMatrix * position; 
                         }
                   }";
             ShaderProgram sp = Device.CreateShaderProgram(vs, ShaderSources.PassThroughFragmentShader());

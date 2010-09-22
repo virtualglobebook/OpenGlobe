@@ -57,7 +57,7 @@ namespace OpenGlobe.Renderer
                 viewport.Left + halfWidth, viewport.Top + halfHeight, nearDepthRange + halfDepth, 1);
         }
 
-        public static Matrix4d ComputeViewportOrthographicProjectionMatrix(Rectangle viewport)
+        public static Matrix4d ComputeViewportOrthographicMatrix(Rectangle viewport)
         {
             //
             // Bottom and top swapped:  MS -> OpenGL
@@ -66,7 +66,7 @@ namespace OpenGlobe.Renderer
                 viewport.Bottom, 0, 1);
         }
 
-        public Matrix4d OrthographicProjectionMatrix
+        public Matrix4d OrthographicMatrix
         {
             //
             // Bottom and top swapped:  MS -> OpenGL
@@ -79,7 +79,7 @@ namespace OpenGlobe.Renderer
             }
         }
 
-        public Matrix4d PerspectiveProjectionMatrix 
+        public Matrix4d PerspectiveMatrix 
         {
             get
             {
@@ -135,14 +135,14 @@ namespace OpenGlobe.Renderer
             get { return ModelMatrix * ViewMatrix; }
         }
 
-        public Matrix4d ModelViewPerspectiveProjectionMatrix
+        public Matrix4d ModelViewPerspectiveMatrix
         {
-            get { return ModelViewMatrix * PerspectiveProjectionMatrix; }
+            get { return ModelViewMatrix * PerspectiveMatrix; }
         }
 
-        public Matrix4d ModelViewOrthographicProjectionMatrix
+        public Matrix4d ModelViewOrthographicMatrix
         {
-            get { return ModelViewMatrix * OrthographicProjectionMatrix; }
+            get { return ModelViewMatrix * OrthographicMatrix; }
         }
 
         // TODO:  Should return matrix in double precision
@@ -153,7 +153,7 @@ namespace OpenGlobe.Renderer
                 //
                 // Bottom two rows of model-view-projection matrix
                 //
-                Matrix4d m = ModelViewPerspectiveProjectionMatrix;
+                Matrix4d m = ModelViewPerspectiveMatrix;
                 return new Matrix42(
                     (float)m.M13, (float)m.M23, (float)m.M33, (float)m.M43,
                     (float)m.M14, (float)m.M24, (float)m.M34, (float)m.M44);

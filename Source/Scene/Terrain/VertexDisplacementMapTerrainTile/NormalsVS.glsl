@@ -10,7 +10,7 @@ in vec2 position;
                   
 out float distanceToEyeGS;
 
-uniform mat4 og_modelViewPerspectiveProjectionMatrix;
+uniform mat4 og_modelViewPerspectiveMatrix;
 uniform vec3 og_cameraEye;
 uniform sampler2DRect og_texture0;    // Height map
 uniform float u_heightExaggeration;

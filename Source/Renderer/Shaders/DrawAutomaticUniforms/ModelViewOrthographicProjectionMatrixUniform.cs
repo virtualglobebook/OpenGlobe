@@ -11,9 +11,9 @@ using OpenTK;
 
 namespace OpenGlobe.Renderer
 {
-    internal class ModelViewOrthographicProjectionMatrixUniform : DrawAutomaticUniform
+    internal class ModelViewOrthographicMatrixUniform : DrawAutomaticUniform
     {
-        public ModelViewOrthographicProjectionMatrixUniform(Uniform uniform)
+        public ModelViewOrthographicMatrixUniform(Uniform uniform)
         {
             _uniform = uniform as Uniform<Matrix4>;
         }
@@ -22,7 +22,7 @@ namespace OpenGlobe.Renderer
 
         public override void Set(Context context, DrawState drawState, SceneState sceneState)
         {
-            _uniform.Value = Conversion.ToMatrix4(sceneState.ModelViewOrthographicProjectionMatrix);
+            _uniform.Value = Conversion.ToMatrix4(sceneState.ModelViewOrthographicMatrix);
         }
 
         #endregion

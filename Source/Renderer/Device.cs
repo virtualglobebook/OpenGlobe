@@ -432,12 +432,12 @@ namespace OpenGlobe.Renderer
             drawAutomaticUniformFactories.Add(new LightPropertiesUniformFactory());
             drawAutomaticUniformFactories.Add(new CameraLightPositionUniformFactory());
             drawAutomaticUniformFactories.Add(new CameraEyeUniformFactory());
-            drawAutomaticUniformFactories.Add(new ModelViewPerspectiveProjectionMatrixUniformFactory());
-            drawAutomaticUniformFactories.Add(new ModelViewOrthographicProjectionMatrixUniformFactory());
+            drawAutomaticUniformFactories.Add(new ModelViewPerspectiveMatrixUniformFactory());
+            drawAutomaticUniformFactories.Add(new ModelViewOrthographicMatrixUniformFactory());
             drawAutomaticUniformFactories.Add(new ModelViewMatrixUniformFactory());
-            drawAutomaticUniformFactories.Add(new PerspectiveProjectionMatrixUniformFactory());
-            drawAutomaticUniformFactories.Add(new OrthographicProjectionMatrixUniformFactory());
-            drawAutomaticUniformFactories.Add(new ViewportOrthographicProjectionMatrixUniformFactory());
+            drawAutomaticUniformFactories.Add(new PerspectiveMatrixUniformFactory());
+            drawAutomaticUniformFactories.Add(new OrthographicMatrixUniformFactory());
+            drawAutomaticUniformFactories.Add(new ViewportOrthographicMatrixUniformFactory());
             drawAutomaticUniformFactories.Add(new ViewportUniformFactory());
             drawAutomaticUniformFactories.Add(new InverseViewportDimensionsUniformFactory());
             drawAutomaticUniformFactories.Add(new ViewportTransformationMatrixUniformFactory());

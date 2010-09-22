@@ -11,7 +11,7 @@ layout(triangle_strip, max_vertices = 4) out;
 
 out vec2 fsTextureCoordinates;
 
-uniform mat4 og_viewportOrthographicProjectionMatrix;
+uniform mat4 og_viewportOrthographicMatrix;
 uniform sampler2D og_texture0;
 uniform float og_highResolutionSnapScale;
 uniform vec2 u_originScale;
@@ -27,19 +27,19 @@ void main()
     vec4 v2 = vec4(center.xy + vec2(-halfSize.x, halfSize.y), center.z, 1.0);
     vec4 v3 = vec4(center.xy + halfSize, center.z, 1.0);
 
-    gl_Position = og_viewportOrthographicProjectionMatrix * v0;
+    gl_Position = og_viewportOrthographicMatrix * v0;
     fsTextureCoordinates = vec2(0.0, 0.0);
     EmitVertex();
 
-    gl_Position = og_viewportOrthographicProjectionMatrix * v1;
+    gl_Position = og_viewportOrthographicMatrix * v1;
     fsTextureCoordinates = vec2(1.0, 0.0);
     EmitVertex();
 
-    gl_Position = og_viewportOrthographicProjectionMatrix * v2;
+    gl_Position = og_viewportOrthographicMatrix * v2;
     fsTextureCoordinates = vec2(0.0, 1.0);
     EmitVertex();
 
-    gl_Position = og_viewportOrthographicProjectionMatrix * v3;
+    gl_Position = og_viewportOrthographicMatrix * v3;
     fsTextureCoordinates = vec2(1.0, 1.0);
     EmitVertex();
 }

@@ -17,7 +17,7 @@ in vec2 gsPixelOffset[];
 out vec2 fsTextureCoordinates;
 out vec4 fsColor;
 
-uniform mat4 og_viewportOrthographicProjectionMatrix;
+uniform mat4 og_viewportOrthographicMatrix;
 uniform sampler2D og_texture0;
 uniform float og_highResolutionSnapScale;
 uniform vec4 og_viewport;
@@ -54,22 +54,22 @@ void main()
         return;
     }
 
-    gl_Position = og_viewportOrthographicProjectionMatrix * v0;
+    gl_Position = og_viewportOrthographicMatrix * v0;
     fsTextureCoordinates = textureCoordinate.st;
     fsColor = gsColor[0];
     EmitVertex();
 
-    gl_Position = og_viewportOrthographicProjectionMatrix * v1;
+    gl_Position = og_viewportOrthographicMatrix * v1;
     fsTextureCoordinates = textureCoordinate.pt;
     fsColor = gsColor[0];
     EmitVertex();
 
-    gl_Position = og_viewportOrthographicProjectionMatrix * v2;
+    gl_Position = og_viewportOrthographicMatrix * v2;
     fsTextureCoordinates = textureCoordinate.sq;
     fsColor = gsColor[0];
     EmitVertex();
 
-    gl_Position = og_viewportOrthographicProjectionMatrix * v3;
+    gl_Position = og_viewportOrthographicMatrix * v3;
     fsTextureCoordinates = textureCoordinate.pq;
     fsColor = gsColor[0];
     EmitVertex();

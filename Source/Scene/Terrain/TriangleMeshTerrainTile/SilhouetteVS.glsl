@@ -8,11 +8,11 @@
 
 in vec4 position;
 
-uniform mat4 og_modelViewPerspectiveProjectionMatrix;
+uniform mat4 og_modelViewPerspectiveMatrix;
 uniform float u_heightExaggeration;
 
 void main()                     
 {
     vec4 exaggeratedPosition = vec4(position.xy, position.z * u_heightExaggeration, 1.0);
-    gl_Position = og_modelViewPerspectiveProjectionMatrix * exaggeratedPosition;
+    gl_Position = og_modelViewPerspectiveMatrix * exaggeratedPosition;
 }

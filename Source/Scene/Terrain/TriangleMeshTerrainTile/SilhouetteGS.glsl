@@ -10,7 +10,7 @@ layout(triangles) in;
 layout(triangle_strip, max_vertices = 8) out;
 
 uniform mat4 og_viewportTransformationMatrix;
-uniform mat4 og_viewportOrthographicProjectionMatrix;
+uniform mat4 og_viewportOrthographicMatrix;
 uniform float og_perspectiveNearPlaneDistance;
 uniform float u_fillDistance;
 
@@ -108,17 +108,17 @@ void main()
 				c = u_fillDistance / sqrt(0.5 * (1.0 + abs(dot(v2Expand, v20Expand))));
 				v[5] = vec4(window[2].xy + c * normalize(v2Expand + v20Expand), -window[2].z, 1.0);
 				
-				gl_Position = og_viewportOrthographicProjectionMatrix * v[0];
+				gl_Position = og_viewportOrthographicMatrix * v[0];
 				EmitVertex();			
-				gl_Position = og_viewportOrthographicProjectionMatrix * v[1];
+				gl_Position = og_viewportOrthographicMatrix * v[1];
 				EmitVertex();			
-				gl_Position = og_viewportOrthographicProjectionMatrix * v[5];
+				gl_Position = og_viewportOrthographicMatrix * v[5];
 				EmitVertex();			
-				gl_Position = og_viewportOrthographicProjectionMatrix * v[2];
+				gl_Position = og_viewportOrthographicMatrix * v[2];
 				EmitVertex();			
-				gl_Position = og_viewportOrthographicProjectionMatrix * v[4];
+				gl_Position = og_viewportOrthographicMatrix * v[4];
 				EmitVertex();		
-				gl_Position = og_viewportOrthographicProjectionMatrix * v[3];
+				gl_Position = og_viewportOrthographicMatrix * v[3];
 				EmitVertex();			
 			}
 			else // if (numPositions == 4)
@@ -160,21 +160,21 @@ void main()
 				c = u_fillDistance / sqrt(0.5 * (1.0 + abs(dot(v3Expand, v30Expand))));
 				v[7] = vec4(window[3].xy + c * normalize(v3Expand + v30Expand), -window[3].z, 1.0);
 		
-				gl_Position = og_viewportOrthographicProjectionMatrix * v[0];
+				gl_Position = og_viewportOrthographicMatrix * v[0];
 				EmitVertex();			
-				gl_Position = og_viewportOrthographicProjectionMatrix * v[1];
+				gl_Position = og_viewportOrthographicMatrix * v[1];
 				EmitVertex();			
-				gl_Position = og_viewportOrthographicProjectionMatrix * v[7];
+				gl_Position = og_viewportOrthographicMatrix * v[7];
 				EmitVertex();			
-				gl_Position = og_viewportOrthographicProjectionMatrix * v[2];
+				gl_Position = og_viewportOrthographicMatrix * v[2];
 				EmitVertex();			
-				gl_Position = og_viewportOrthographicProjectionMatrix * v[6];
+				gl_Position = og_viewportOrthographicMatrix * v[6];
 				EmitVertex();			
-				gl_Position = og_viewportOrthographicProjectionMatrix * v[3];
+				gl_Position = og_viewportOrthographicMatrix * v[3];
 				EmitVertex();			
-				gl_Position = og_viewportOrthographicProjectionMatrix * v[5];
+				gl_Position = og_viewportOrthographicMatrix * v[5];
 				EmitVertex();			
-				gl_Position = og_viewportOrthographicProjectionMatrix * v[4];
+				gl_Position = og_viewportOrthographicMatrix * v[4];
 				EmitVertex();			
 			}
         }

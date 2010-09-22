@@ -9,18 +9,18 @@
 
 namespace OpenGlobe.Renderer
 {
-    internal class ModelViewOrthographicProjectionMatrixUniformFactory : DrawAutomaticUniformFactory
+    internal class ModelViewOrthographicMatrixUniformFactory : DrawAutomaticUniformFactory
     {
         #region DrawAutomaticUniformFactory Members
 
         public override string Name
         {
-            get { return "og_modelViewOrthographicProjectionMatrix"; }
+            get { return "og_modelViewOrthographicnMatrix"; }
         }
 
         public override DrawAutomaticUniform Create(Uniform uniform)
         {
-            return new ModelViewOrthographicProjectionMatrixUniform(uniform);
+            return new ModelViewOrthographicMatrixUniform(uniform);
         }
 
         #endregion
