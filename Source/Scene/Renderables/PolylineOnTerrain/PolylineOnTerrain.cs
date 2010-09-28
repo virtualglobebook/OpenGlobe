@@ -117,14 +117,29 @@ namespace OpenGlobe.Scene
             _wallDrawState.VertexArray = _lineVA;
             _wallDrawState.ShaderProgram = _wallSP;
 
-            _shadowVolumeDrawState = new DrawState();
-            _shadowVolumeDrawState.RenderState.FacetCulling.Enabled = true;
-            _shadowVolumeDrawState.RenderState.DepthWrite = false;
-            StencilTest stencilTest = new StencilTest();
-            stencilTest.Enabled = true;
-            _shadowVolumeDrawState.RenderState.StencilTest = stencilTest;
-            _shadowVolumeDrawState.VertexArray = _lineVA;
-            _shadowVolumeDrawState.ShaderProgram = _shadowVolumeSP;
+            _shadowVolumePassOne = new DrawState();
+            _shadowVolumePassOne.VertexArray = _lineVA;
+            _shadowVolumePassOne.ShaderProgram = _shadowVolumeSP;
+            _shadowVolumePassOne.RenderState.FacetCulling.Enabled = false;
+            _shadowVolumePassOne.RenderState.DepthWrite = false;
+            _shadowVolumePassOne.RenderState.ColorMask = new ColorMask(false, false, false, false);
+            StencilTest stOne = _shadowVolumePassOne.RenderState.StencilTest;
+            stOne.Enabled = true;
+            stOne.FrontFace.DepthFailStencilPassOperation = StencilOperation.Decrement;
+            stOne.BackFace.DepthFailStencilPassOperation = StencilOperation.Increment;
+
+            _shadowVolumePassTwo = new DrawState();
+            _shadowVolumePassTwo.VertexArray = _lineVA;
+            _shadowVolumePassTwo.ShaderProgram = _shadowVolumeSP;
+            _shadowVolumePassTwo.RenderState.DepthWrite = false;
+            StencilTest stTwo = _shadowVolumePassTwo.RenderState.StencilTest;
+            stTwo.Enabled = true;
+            stTwo.FrontFace.DepthFailStencilPassOperation = StencilOperation.Zero;
+            stTwo.FrontFace.DepthPassStencilPassOperation = StencilOperation.Zero;
+            stTwo.FrontFace.Function = StencilTestFunction.NotEqual;
+            stTwo.BackFace.DepthFailStencilPassOperation = StencilOperation.Zero;
+            stTwo.BackFace.DepthPassStencilPassOperation = StencilOperation.Zero;
+            stTwo.BackFace.Function = StencilTestFunction.NotEqual;
         }
 
         public void Render(Context context, SceneState sceneState, Texture2D silhouetteTexture, Texture2D depthTexture)
@@ -139,46 +154,14 @@ namespace OpenGlobe.Scene
             //
             // Render the line on terrain using the depth-fail shadow volume method
             //
-            // Render the back faces
-            //
-            StencilTest stencilTest = _shadowVolumeDrawState.RenderState.StencilTest;
-            stencilTest.FrontFace.DepthFailStencilPassOperation = StencilOperation.Increment;
-            stencilTest.FrontFace.DepthPassStencilPassOperation = StencilOperation.Keep;
-            stencilTest.FrontFace.StencilFailOperation = StencilOperation.Keep;
-            stencilTest.FrontFace.Function = StencilTestFunction.Always;
-            stencilTest.BackFace.DepthFailStencilPassOperation = StencilOperation.Increment;
-            stencilTest.BackFace.DepthPassStencilPassOperation = StencilOperation.Keep;
-            stencilTest.BackFace.StencilFailOperation = StencilOperation.Keep;
-            stencilTest.BackFace.Function = StencilTestFunction.Always;
-            _shadowVolumeDrawState.RenderState.ColorMask = new ColorMask(false, false, false, false);
-            _shadowVolumeDrawState.RenderState.FacetCulling.Face = CullFace.Front;
             context.TextureUnits[0].Texture2D = silhouetteTexture;
-            context.Draw(PrimitiveType.LinesAdjacency, _shadowVolumeDrawState, sceneState);
-
+            context.Draw(PrimitiveType.LinesAdjacency, _shadowVolumePassOne, sceneState);
+            
             //
-            // Render the front faces
+            // Render where the stencil is set; note that the stencil is also cleared 
+            // where it is set.
             //
-            stencilTest.FrontFace.DepthFailStencilPassOperation = StencilOperation.Decrement;
-            stencilTest.BackFace.DepthFailStencilPassOperation = StencilOperation.Decrement;
-            _shadowVolumeDrawState.RenderState.FacetCulling.Face = CullFace.Back;
-            context.Draw(PrimitiveType.LinesAdjacency, _shadowVolumeDrawState, sceneState);
-
-            //
-            // Render where the stencil is set; note that the stencil is also cleared where it is
-            // set.
-            //
-            stencilTest.FrontFace.DepthFailStencilPassOperation = StencilOperation.Zero;
-            stencilTest.FrontFace.DepthPassStencilPassOperation = StencilOperation.Zero;
-            stencilTest.FrontFace.StencilFailOperation = StencilOperation.Keep;
-            stencilTest.FrontFace.Function = StencilTestFunction.NotEqual;
-            stencilTest.FrontFace.ReferenceValue = 0;
-            stencilTest.BackFace.DepthFailStencilPassOperation = StencilOperation.Zero;
-            stencilTest.BackFace.DepthPassStencilPassOperation = StencilOperation.Zero;
-            stencilTest.BackFace.StencilFailOperation = StencilOperation.Keep;
-            stencilTest.BackFace.Function = StencilTestFunction.NotEqual;
-            stencilTest.BackFace.ReferenceValue = 0;
-            _shadowVolumeDrawState.RenderState.ColorMask = new ColorMask(true, true, true, true);
-            context.Draw(PrimitiveType.LinesAdjacency, _shadowVolumeDrawState, sceneState);
+            context.Draw(PrimitiveType.LinesAdjacency, _shadowVolumePassTwo, sceneState);
         }
 
         #region IDisposable Members
@@ -210,6 +193,7 @@ namespace OpenGlobe.Scene
         private readonly ShaderProgram _wallSP;
         private readonly ShaderProgram _shadowVolumeSP;
         private DrawState _wallDrawState;
-        private DrawState _shadowVolumeDrawState;
+        private DrawState _shadowVolumePassOne;
+        private DrawState _shadowVolumePassTwo;
     }
 }
