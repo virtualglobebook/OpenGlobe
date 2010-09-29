@@ -77,8 +77,6 @@ namespace OpenGlobe.Core
             }
 
             Run();
-
-            _state = State.Stopped;
         }
 
         /// <summary>
@@ -182,48 +180,54 @@ namespace OpenGlobe.Core
 
         private void Run()
         {
-            do
+            try
             {
-                List<MessageInfo> current = null;
-
-                lock (_queue)
+                do
                 {
-                    if (_queue.Count > 0)
-                    {
-                        current = new List<MessageInfo>(_queue);
-                        _queue.Clear();
-                    }
-                    else if (_state == State.Running)
-                    {
-                        Monitor.Wait(_queue);
+                    List<MessageInfo> current = null;
 
+                    lock (_queue)
+                    {
                         if (_queue.Count > 0)
                         {
                             current = new List<MessageInfo>(_queue);
                             _queue.Clear();
                         }
-                    }
-                }
-
-                if (current != null)
-                {
-                    for (int i = 0; i < current.Count; ++i)
-                    {
-                        if (_state == State.Stopped)
+                        else if (_state == State.Running)
                         {
-                            // Push the remainder of 'current' back into '_queue'.
-                            lock (_queue)
-                            {
-                                current.RemoveRange(0, i);
-                                _queue.InsertRange(0, current);
-                            }
-                            break;
+                            Monitor.Wait(_queue);
+
+                            current = new List<MessageInfo>(_queue);
+                            _queue.Clear();
                         }
-                        MessageInfo cbi = current[i];
-                        ProcessMessage(cbi);
                     }
+
+                    if (current != null)
+                    {
+                        for (int i = 0; i < current.Count; ++i)
+                        {
+                            if (_state == State.Stopping)
+                            {
+                                // Push the remainder of 'current' back into '_queue'.
+                                lock (_queue)
+                                {
+                                    current.RemoveRange(0, i);
+                                    _queue.InsertRange(0, current);
+                                }
+                                break;
+                            }
+                            ProcessMessage(current[i]);
+                        }
+                    }
+                } while (_state == State.Running);
+            }
+            finally
+            {
+                lock (_queue)
+                {
+                    _state = State.Stopped;
                 }
-            } while (_state == State.Running);
+            }
         }
 
         private void ProcessMessage(MessageInfo message)
@@ -252,7 +256,7 @@ namespace OpenGlobe.Core
 
         private void StopQueue(object userData)
         {
-            _state = State.Stopped;
+            _state = State.Stopping;
         }
 
         private struct MessageInfo
@@ -273,9 +277,10 @@ namespace OpenGlobe.Core
             Stopped,
             Running,
             Processing,
+            Stopping,
         }
 
         private List<MessageInfo> _queue = new List<MessageInfo>();
-        private volatile State _state;
+        private State _state;
     }
 }
