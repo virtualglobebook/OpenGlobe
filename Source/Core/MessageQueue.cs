@@ -69,14 +69,35 @@ namespace OpenGlobe.Core
         /// </summary>
         public void ProcessQueue()
         {
+            List<MessageInfo> current = null;
+
             lock (_queue)
             {
                 if (_state != State.Stopped)
                     throw new InvalidOperationException("The MessageQueue is already running.");
-                _state = State.Processing;
+
+                if (_queue.Count > 0)
+                {
+                    _state = State.Running;
+                    current = new List<MessageInfo>(_queue);
+                    _queue.Clear();
+                }
             }
 
-            Run();
+            if (current != null)
+            {
+                try
+                {
+                    ProcessCurrentQueue(current);
+                }
+                finally
+                {
+                    lock (_queue)
+                    {
+                        _state = State.Stopped;
+                    }
+                }
+            }
         }
 
         /// <summary>
@@ -182,43 +203,28 @@ namespace OpenGlobe.Core
         {
             try
             {
+                List<MessageInfo> current = new List<MessageInfo>();
+
                 do
                 {
-                    List<MessageInfo> current = null;
-
                     lock (_queue)
                     {
                         if (_queue.Count > 0)
                         {
-                            current = new List<MessageInfo>(_queue);
+                            current.AddRange(_queue);
                             _queue.Clear();
                         }
-                        else if (_state == State.Running)
+                        else
                         {
                             Monitor.Wait(_queue);
 
-                            current = new List<MessageInfo>(_queue);
+                            current.AddRange(_queue);
                             _queue.Clear();
                         }
                     }
 
-                    if (current != null)
-                    {
-                        for (int i = 0; i < current.Count; ++i)
-                        {
-                            if (_state == State.Stopping)
-                            {
-                                // Push the remainder of 'current' back into '_queue'.
-                                lock (_queue)
-                                {
-                                    current.RemoveRange(0, i);
-                                    _queue.InsertRange(0, current);
-                                }
-                                break;
-                            }
-                            ProcessMessage(current[i]);
-                        }
-                    }
+                    ProcessCurrentQueue(current);
+                    current.Clear();
                 } while (_state == State.Running);
             }
             finally
@@ -227,6 +233,24 @@ namespace OpenGlobe.Core
                 {
                     _state = State.Stopped;
                 }
+            }
+        }
+
+        private void ProcessCurrentQueue(List<MessageInfo> currentQueue)
+        {
+            for (int i = 0; i < currentQueue.Count; ++i)
+            {
+                if (_state == State.Stopping)
+                {
+                    // Push the remainder of 'current' back into '_queue'.
+                    lock (_queue)
+                    {
+                        currentQueue.RemoveRange(0, i);
+                        _queue.InsertRange(0, currentQueue);
+                    }
+                    break;
+                }
+                ProcessMessage(currentQueue[i]);
             }
         }
 
@@ -276,7 +300,6 @@ namespace OpenGlobe.Core
         {
             Stopped,
             Running,
-            Processing,
             Stopping,
         }
 
