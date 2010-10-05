@@ -38,12 +38,12 @@ namespace OpenGlobe.Renderer.GL3x
             //
             // Sync GL state with default render state.
             //
-            ForceApply(_renderState);
+            ForceApplyRenderState(_renderState);
         }
 
-        #region ForceApply
+        #region ForceApplyRenderState
 
-        private static void ForceApply(RenderState renderState)
+        private static void ForceApplyRenderState(RenderState renderState)
         {
             Enable(EnableCap.PrimitiveRestart, renderState.PrimitiveRestart.Enabled);
             GL.PrimitiveRestartIndex(renderState.PrimitiveRestart.Index);
@@ -60,8 +60,8 @@ namespace OpenGlobe.Renderer.GL3x
             GL.Scissor(rectangle.Left, rectangle.Bottom, rectangle.Width, rectangle.Height);
 
             Enable(EnableCap.StencilTest, renderState.StencilTest.Enabled);
-            ForceApplyStencil(StencilFace.Front, renderState.StencilTest.FrontFace);
-            ForceApplyStencil(StencilFace.Back, renderState.StencilTest.BackFace);
+            ForceApplyRenderStateStencil(StencilFace.Front, renderState.StencilTest.FrontFace);
+            ForceApplyRenderStateStencil(StencilFace.Back, renderState.StencilTest.BackFace);
 
             Enable(EnableCap.DepthTest, renderState.DepthTest.Enabled);
             GL.DepthFunc(TypeConverterGL3x.To(renderState.DepthTest.Function));
@@ -84,7 +84,7 @@ namespace OpenGlobe.Renderer.GL3x
                 renderState.ColorMask.Blue, renderState.ColorMask.Alpha);
         }
 
-        private static void ForceApplyStencil(StencilFace face, StencilTestFace test)
+        private static void ForceApplyRenderStateStencil(StencilFace face, StencilTestFace test)
         {
             GL.StencilOpSeparate(face,
                 TypeConverterGL3x.To(test.StencilFailOperation),
