@@ -252,8 +252,8 @@ namespace OpenGlobe.Scene
 
         public bool DepthWrite
         {
-            get { return _drawState.RenderState.DepthWrite; }
-            set { _drawState.RenderState.DepthWrite = value; }
+            get { return _drawState.RenderState.DepthMask; }
+            set { _drawState.RenderState.DepthMask = value; }
         }
 
         #region IList<Billboard> Members

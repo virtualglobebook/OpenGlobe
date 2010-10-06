@@ -176,12 +176,12 @@ namespace OpenGlobe.Renderer
         }
 
         [Test]
-        public void DepthWrite()
+        public void DepthMask()
         {
             RenderState renderState = new RenderState();
-            renderState.DepthWrite = false;
+            renderState.DepthMask = false;
 
-            Assert.IsFalse(renderState.DepthWrite);
+            Assert.IsFalse(renderState.DepthMask);
         }
     }
 }

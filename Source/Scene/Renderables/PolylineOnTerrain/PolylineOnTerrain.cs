@@ -113,7 +113,7 @@ namespace OpenGlobe.Scene
             _wallDrawState = new DrawState();
             _wallDrawState.RenderState.FacetCulling.Enabled = false;
             _wallDrawState.RenderState.DepthTest.Enabled = false;
-            _wallDrawState.RenderState.DepthWrite = false;
+            _wallDrawState.RenderState.DepthMask = false;
             _wallDrawState.VertexArray = _lineVA;
             _wallDrawState.ShaderProgram = _wallSP;
 
@@ -121,7 +121,7 @@ namespace OpenGlobe.Scene
             _shadowVolumePassOne.VertexArray = _lineVA;
             _shadowVolumePassOne.ShaderProgram = _shadowVolumeSP;
             _shadowVolumePassOne.RenderState.FacetCulling.Enabled = false;
-            _shadowVolumePassOne.RenderState.DepthWrite = false;
+            _shadowVolumePassOne.RenderState.DepthMask = false;
             _shadowVolumePassOne.RenderState.ColorMask = new ColorMask(false, false, false, false);
             StencilTest stOne = _shadowVolumePassOne.RenderState.StencilTest;
             stOne.Enabled = true;
@@ -131,7 +131,7 @@ namespace OpenGlobe.Scene
             _shadowVolumePassTwo = new DrawState();
             _shadowVolumePassTwo.VertexArray = _lineVA;
             _shadowVolumePassTwo.ShaderProgram = _shadowVolumeSP;
-            _shadowVolumePassTwo.RenderState.DepthWrite = false;
+            _shadowVolumePassTwo.RenderState.DepthMask = false;
             StencilTest stTwo = _shadowVolumePassTwo.RenderState.StencilTest;
             stTwo.Enabled = true;
             stTwo.FrontFace.DepthFailStencilPassOperation = StencilOperation.Zero;

@@ -103,7 +103,7 @@ namespace OpenGlobe.Terrain
 
             _silhouetteDrawState = new DrawState();
             _silhouetteDrawState.RenderState.FacetCulling.Enabled = false;
-            _silhouetteDrawState.RenderState.DepthWrite = false;
+            _silhouetteDrawState.RenderState.DepthMask = false;
             _silhouetteDrawState.VertexArray = _drawState.VertexArray;
             _silhouetteDrawState.ShaderProgram = silhouetteSP;
 

@@ -17,7 +17,7 @@ namespace OpenGlobe.Renderer
         {
             ScissorTest = new ScissorTest();
             ColorMask = new ColorMask(true, true, true, true);
-            DepthWrite = true;
+            DepthMask = true;
             FrontStencilMask = ~0;
             BackStencilMask = ~0;
 
@@ -29,7 +29,7 @@ namespace OpenGlobe.Renderer
 
         public ScissorTest ScissorTest { get; set; }
         public ColorMask ColorMask { get; set; }
-        public bool DepthWrite { get; set; }
+        public bool DepthMask { get; set; }
         public int FrontStencilMask { get; set; }
         public int BackStencilMask { get; set; }
         

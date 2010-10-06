@@ -79,7 +79,7 @@ namespace OpenGlobe.Renderer.GL3x
                 TypeConverterGL3x.To(renderState.Blending.AlphaEquation));
             GL.BlendColor(renderState.Blending.Color);
 
-            GL.DepthMask(renderState.DepthWrite);
+            GL.DepthMask(renderState.DepthMask);
             GL.ColorMask(renderState.ColorMask.Red, renderState.ColorMask.Green, 
                 renderState.ColorMask.Blue, renderState.ColorMask.Alpha);
         }
@@ -165,7 +165,7 @@ namespace OpenGlobe.Renderer.GL3x
 
             ApplyScissorTest(clearState.ScissorTest);
             ApplyColorMask(clearState.ColorMask);
-            ApplyDepthWrite(clearState.DepthWrite);
+            ApplyDepthMask(clearState.DepthMask);
             // TODO: StencilMaskSeparate
 
             if (_clearColor != clearState.Color)
@@ -443,12 +443,12 @@ namespace OpenGlobe.Renderer.GL3x
             }
         }
 
-        private void ApplyDepthWrite(bool depthWrite)
+        private void ApplyDepthMask(bool depthMask)
         {
-            if (_renderState.DepthWrite != depthWrite)
+            if (_renderState.DepthMask != depthMask)
             {
-                GL.DepthMask(depthWrite);
-                _renderState.DepthWrite = depthWrite;
+                GL.DepthMask(depthMask);
+                _renderState.DepthMask = depthMask;
             }
         }
 
@@ -514,7 +514,7 @@ namespace OpenGlobe.Renderer.GL3x
             ApplyDepthRange(renderState.DepthRange);
             ApplyBlending(renderState.Blending);
             ApplyColorMask(renderState.ColorMask);
-            ApplyDepthWrite(renderState.DepthWrite);
+            ApplyDepthMask(renderState.DepthMask);
         }
 
         private void ApplyVertexArray(VertexArray vertexArray)

@@ -38,7 +38,7 @@ namespace OpenGlobe.Renderer
             DepthRange = new DepthRange();
             Blending = new Blending();
             ColorMask = new ColorMask(true, true, true, true);
-            DepthWrite = true;
+            DepthMask = true;
         }
 
         public PrimitiveRestart PrimitiveRestart { get; set; }
@@ -51,6 +51,6 @@ namespace OpenGlobe.Renderer
         public DepthRange DepthRange { get; set; }
         public Blending Blending { get; set; }
         public ColorMask ColorMask { get; set; }
-        public bool DepthWrite { get; set; }
+        public bool DepthMask { get; set; }
     }
 }
