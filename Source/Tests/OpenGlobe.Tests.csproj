@@ -76,6 +76,7 @@
     <Compile Include="IntervalTests.cs" />
     <Compile Include="GraphicsAssert.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Renderer\DrawStateTests.cs" />
     <Compile Include="Renderer\MultiThreading\TextureMultiThreadingTests.cs" />
     <Compile Include="Renderer\MultiThreading\ShaderProgramFactory.cs" />
     <Compile Include="Renderer\MultiThreading\ShaderProgramMultiThreadingTests.cs" />
