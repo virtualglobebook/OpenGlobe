@@ -49,7 +49,7 @@
     <Compile Include="LatitudeLongitudeGrid.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\..\..\ThirdParty\opentk-1.0.0-rc1\Source\OpenTK\OpenTK.dll.config">
+    <None Include="..\..\..\..\ThirdParty\OpenTK.1.0\Source\OpenTK\OpenTK.dll.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

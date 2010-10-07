@@ -36,7 +36,7 @@
     </Reference>
     <Reference Include="OpenTK, Version=1.0.0.201, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\ThirdParty\opentk-1.0.0-rc1\Binaries\OpenTK\Release\OpenTK.dll</HintPath>
+      <HintPath>..\..\ThirdParty\OpenTK.1.0\Binaries\OpenTK\Release\OpenTK.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Drawing" />
