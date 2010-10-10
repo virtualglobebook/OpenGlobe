@@ -6,9 +6,9 @@
 // See License.txt or http://www.boost.org/LICENSE_1_0.txt.
 //
 
-in vec4 position;
-in vec4 color;
-in vec4 outlineColor;
+layout(location = og_positionVertexLocation) in vec4 position;
+layout(location = og_colorVertexLocation) in vec4 color;
+layout(location = 4) in vec4 outlineColor;
 
 out vec4 gsColor;
 out vec4 gsOutlineColor;

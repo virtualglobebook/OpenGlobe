@@ -6,7 +6,7 @@
 // See License.txt or http://www.boost.org/LICENSE_1_0.txt.
 //
 
-in vec4 position;
+layout(location = og_positionVertexLocation) in vec4 position;
 
 uniform mat4 og_modelViewPerspectiveMatrix;
 uniform float u_heightExaggeration;

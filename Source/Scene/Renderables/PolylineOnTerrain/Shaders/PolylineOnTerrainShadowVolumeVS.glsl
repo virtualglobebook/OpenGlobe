@@ -7,7 +7,7 @@
 //
    
 uniform mat4 og_modelViewMatrix;
-in vec4 position;
+layout(location = og_positionVertexLocation) in vec4 position;
 
 void main()                     
 {

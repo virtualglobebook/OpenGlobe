@@ -22,6 +22,12 @@ namespace OpenGlobe.Renderer.GL3x
         {
             string builtInConstants =
                 "#version 330 \n" +
+
+                "#define og_positionVertexLocation          0 \n" +
+                "#define og_normalVertexLocation            1 \n" +
+                "#define og_textureCoordinateVertexLocation 2 \n" +
+                "#define og_colorVertexLocation             3 \n" +
+
                 "const float og_E =                " + Math.E.ToString(NumberFormatInfo.InvariantInfo) + "; \n" +
                 "const float og_pi =               " + Math.PI.ToString(NumberFormatInfo.InvariantInfo) + "; \n" +
                 "const float og_oneOverPi =        " + (1.0 / Math.PI).ToString(NumberFormatInfo.InvariantInfo) + "; \n" +

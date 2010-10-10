@@ -6,7 +6,7 @@
 // See License.txt or http://www.boost.org/LICENSE_1_0.txt.
 //
 
-in vec3 position;
+layout(location = og_positionVertexLocation) in vec3 position;
                   
 out float height;
 

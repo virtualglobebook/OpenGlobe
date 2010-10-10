@@ -52,6 +52,11 @@ namespace OpenGlobe.Renderer
             get { return _count; }
         }
 
+        public override int MaximumCount
+        {
+            get { return _attachedBuffers.Length; }
+        }
+
         public override IEnumerator GetEnumerator()
         {
             foreach (AttachedVertexBuffer vb in _attachedBuffers)

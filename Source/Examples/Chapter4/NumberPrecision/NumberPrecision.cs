@@ -38,7 +38,7 @@ namespace OpenGlobe.Examples.Chapter3.NumberPrecision
             string vs =
                  @"#version 330
 
-                  in vec4 position;
+                  layout(location = og_positionVertexLocation) in vec4 position;
                   uniform mat4 og_modelViewOrthographicnMatrix;
 
                   void main()                     

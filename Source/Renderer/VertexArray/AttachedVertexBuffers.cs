@@ -16,6 +16,7 @@ namespace OpenGlobe.Renderer
     {
         public abstract AttachedVertexBuffer this[int index] { get; set; }
         public abstract int Count { get; }
+        public abstract int MaximumCount { get; }
         public abstract IEnumerator GetEnumerator();
     }
 }

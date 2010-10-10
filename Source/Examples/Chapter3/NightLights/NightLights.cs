@@ -31,7 +31,7 @@ namespace OpenGlobe.Examples.Chapter3
             string vs =
                 @"#version 330
 
-                  in vec4 position;
+                  layout(location = og_positionVertexLocation) in vec4 position;
                   out vec3 worldPosition;
                   out vec3 positionToLight;
                   out vec3 positionToEye;

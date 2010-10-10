@@ -31,9 +31,9 @@ namespace OpenGlobe.Examples.Chapter3
             string vs =
                 @"#version 330
 
-                  in vec4 position;
-                  in vec3 normal;
-                  in vec2 textureCoordinate;
+                  layout(location = og_positionVertexLocation) in vec4 position;
+                  layout(location = og_normalVertexLocation) in vec3 normal;
+                  layout(location = og_textureCoordinateVertexLocation) in vec2 textureCoordinate;
 
                   out vec3 positionToLight;
                   out vec3 positionToEye;

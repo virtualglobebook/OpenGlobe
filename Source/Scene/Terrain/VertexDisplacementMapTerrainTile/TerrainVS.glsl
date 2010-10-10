@@ -6,7 +6,7 @@
 // See License.txt or http://www.boost.org/LICENSE_1_0.txt.
 //
 
-in vec2 position;
+layout(location = og_positionVertexLocation) in vec2 position;
                   
 out vec3 normalFS;
 out vec3 positionToLightFS;

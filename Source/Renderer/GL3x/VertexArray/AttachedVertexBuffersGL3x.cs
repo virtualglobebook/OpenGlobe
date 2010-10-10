@@ -54,9 +54,14 @@ namespace OpenGlobe.Renderer.GL3x
             }
         }
 
-        public override int Count 
+        public override int Count
         {
             get { return _count; }
+        }
+
+        public override int MaximumCount 
+        {
+            get { return _attachedBuffers.Length; }
         }
 
         public override IEnumerator GetEnumerator()

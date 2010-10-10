@@ -6,8 +6,8 @@
 // See License.txt or http://www.boost.org/LICENSE_1_0.txt.
 //
 
-in vec4 position;
-in vec2 textureCoordinates;
+layout(location = og_positionVertexLocation) in vec4 position;
+layout(location = og_textureCoordinateVertexLocation) in vec2 textureCoordinates;
 
 out vec2 fsTextureCoordinates;
 
