@@ -40,7 +40,6 @@ namespace OpenGlobe.Renderer.GL3x
                 ColorAttachmentGL3x[] colorAttachments = _colorAttachments.Attachments;
                 
                 DrawBuffersEnum[] drawBuffers = new DrawBuffersEnum[colorAttachments.Length];
-                int drawBuffersIndex = 0;
 
                 for (int i = 0; i < colorAttachments.Length; ++i)
                 {
@@ -52,10 +51,10 @@ namespace OpenGlobe.Renderer.GL3x
 
                     if (colorAttachments[i].Texture != null)
                     {
-                        drawBuffers[drawBuffersIndex++] = DrawBuffersEnum.ColorAttachment0 + i;
+                        drawBuffers[i] = DrawBuffersEnum.ColorAttachment0 + i;
                     }
                 }
-                GL.DrawBuffers(drawBuffersIndex, drawBuffers);
+                GL.DrawBuffers(drawBuffers.Length, drawBuffers);
 
                 _colorAttachments.Dirty = false;
             }

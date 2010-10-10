@@ -59,6 +59,11 @@ namespace OpenGlobe.Renderer.GL3x
             get { return _count; }
         }
 
+        public override int MaximumCount
+        {
+            get { return _colorAttachments.Length; }
+        }
+
         public override IEnumerator GetEnumerator()
         {
             foreach (ColorAttachmentGL3x attachment in _colorAttachments)
