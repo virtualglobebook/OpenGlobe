@@ -26,7 +26,7 @@ namespace OpenGlobe.Renderer
 
     public class ShaderVertexAttribute
     {
-        internal ShaderVertexAttribute(
+        public ShaderVertexAttribute(
             string name, 
             int location,
             ShaderVertexAttributeType type,
