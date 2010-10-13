@@ -223,18 +223,6 @@ namespace OpenGlobe.Renderer.GL3x
             {
                 return UniformType.SamplerCubeShadow;
             }
-            else if (type == ActiveUniformType.UnsignedIntVec2)
-            {
-                return UniformType.UnsignedIntVector2;
-            }
-            else if (type == ActiveUniformType.UnsignedIntVec3)
-            {
-                return UniformType.UnsignedIntVector3;
-            }
-            else if (type == ActiveUniformType.UnsignedIntVec4)
-            {
-                return UniformType.UnsignedIntVector4;
-            }
             else if (type == ActiveUniformType.IntSampler1D)
             {
                 return UniformType.IntSampler1D;
