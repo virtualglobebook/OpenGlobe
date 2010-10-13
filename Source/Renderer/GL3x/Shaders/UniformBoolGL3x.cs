@@ -22,22 +22,21 @@ namespace OpenGlobe.Renderer.GL3x
             _observer.NotifyDirty(this);
         }
 
-        private void Set(bool value)
-        {
-            if (!_dirty && (_value != value))
-            {
-                _dirty = true;
-                _observer.NotifyDirty(this);
-            }
-
-            _value = value;
-        }
-
         #region Uniform<> Members
 
         public override bool Value 
         {
-            set { Set(value); }
+            set 
+            {
+                if (!_dirty && (_value != value))
+                {
+                    _dirty = true;
+                    _observer.NotifyDirty(this);
+                }
+
+                _value = value;
+            }
+
             get { return _value; }
         }
 
