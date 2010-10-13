@@ -15,8 +15,9 @@ namespace OpenGlobe.Renderer.GL3x
     internal class UniformIntGL3x : Uniform<int>, ICleanable
     {
         internal UniformIntGL3x(string name, int location, UniformType type, ICleanableObserver observer)
-            : base(name, location, type)
+            : base(name, type)
         {
+            _location = location;
             _dirty = true;
             _observer = observer;
             _observer.NotifyDirty(this);
@@ -47,12 +48,13 @@ namespace OpenGlobe.Renderer.GL3x
 
         public void Clean()
         {
-            GL.Uniform1(Location, _value);
+            GL.Uniform1(_location, _value);
             _dirty = false;
         }
 
         #endregion
 
+        private int _location;
         private int _value;
         private bool _dirty;
         private readonly ICleanableObserver _observer;

@@ -16,8 +16,9 @@ namespace OpenGlobe.Renderer.GL3x
     internal class UniformFloatMatrix33GL3x : Uniform<Matrix3>, ICleanable
     {
         internal UniformFloatMatrix33GL3x(string name, int location, ICleanableObserver observer)
-            : base(name, location, UniformType.FloatMatrix33)
+            : base(name, UniformType.FloatMatrix33)
         {
+            _location = location;
             _dirty = true;
             _observer = observer;
             _observer.NotifyDirty(this);
@@ -56,13 +57,14 @@ namespace OpenGlobe.Renderer.GL3x
             column1.X, column1.Y, column1.Z,
             column2.X, column2.Y, column2.Z };
 
-            GL.UniformMatrix3(Location, 1, false, columnMajorElements);
+            GL.UniformMatrix3(_location, 1, false, columnMajorElements);
 
             _dirty = false;
         }
 
         #endregion
 
+        private int _location;
         private Matrix3 _value;
         private bool _dirty;
         private readonly ICleanableObserver _observer;

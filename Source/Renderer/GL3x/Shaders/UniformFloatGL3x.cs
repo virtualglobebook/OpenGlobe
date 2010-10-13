@@ -15,8 +15,9 @@ namespace OpenGlobe.Renderer.GL3x
     internal class UniformFloatGL3x : Uniform<float>, ICleanable
     {
         internal UniformFloatGL3x(string name, int location, ICleanableObserver observer)
-            : base(name, location, UniformType.Float)
+            : base(name, UniformType.Float)
         {
+            _location = location;
             _dirty = true;
             _observer = observer;
             _observer.NotifyDirty(this);
@@ -46,12 +47,13 @@ namespace OpenGlobe.Renderer.GL3x
 
         public void Clean()
         {
-            GL.Uniform1(Location, _value);
+            GL.Uniform1(_location, _value);
             _dirty = false;
         }
 
         #endregion
 
+        private int _location;
         private float _value;
         private bool _dirty;
         private readonly ICleanableObserver _observer;

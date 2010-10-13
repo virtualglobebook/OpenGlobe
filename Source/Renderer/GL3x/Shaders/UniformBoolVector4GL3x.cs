@@ -16,8 +16,9 @@ namespace OpenGlobe.Renderer.GL3x
     internal class UniformBoolVector4GL3x : Uniform<Vector4b>, ICleanable
     {
         internal UniformBoolVector4GL3x(string name, int location, ICleanableObserver observer)
-            : base(name, location, UniformType.BoolVector4)
+            : base(name, UniformType.BoolVector4)
         {
+            _location = location;
             _dirty = true;
             _observer = observer;
             _observer.NotifyDirty(this);
@@ -47,12 +48,13 @@ namespace OpenGlobe.Renderer.GL3x
 
         public void Clean()
         {
-            GL.Uniform4(Location, _value.X ? 1 : 0, _value.Y ? 1 : 0, _value.Z ? 1 : 0, _value.Y ? 1 : 0);
+            GL.Uniform4(_location, _value.X ? 1 : 0, _value.Y ? 1 : 0, _value.Z ? 1 : 0, _value.Y ? 1 : 0);
             _dirty = false;
         }
 
         #endregion
 
+        private int _location;
         private Vector4b _value;
         private bool _dirty;
         private readonly ICleanableObserver _observer;

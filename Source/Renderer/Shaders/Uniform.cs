@@ -63,13 +63,9 @@ namespace OpenGlobe.Renderer
 
     public class Uniform
     {
-        protected Uniform(
-            string name,
-            int location,
-            UniformType type)
+        protected Uniform(string name, UniformType type)
         {
             _name = name;
-            _location = location;
             _type = type;
         }
 
@@ -78,25 +74,19 @@ namespace OpenGlobe.Renderer
             get { return _name; }
         }
 
-        public int Location
-        {
-            get { return _location; }
-        }
-
         public UniformType DataType
         {
             get { return _type; }
         }
 
         private string _name;
-        private int _location;
         private UniformType _type;
     }
 
     public abstract class Uniform<T> : Uniform
     {
-        protected Uniform(string name, int location, UniformType type)
-            : base(name, location, type)
+        protected Uniform(string name, UniformType type)
+            : base(name, type)
         {
         }
 
