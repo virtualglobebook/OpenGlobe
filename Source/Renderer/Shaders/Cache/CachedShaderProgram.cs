@@ -7,8 +7,6 @@
 //
 #endregion
 
-using System.Collections.Generic;
-
 namespace OpenGlobe.Renderer
 {
     internal class CachedShaderProgram
