@@ -83,6 +83,8 @@
     <Compile Include="Scene\Camera.cs" />
     <Compile Include="Scene\PersistentView.cs" />
     <Compile Include="Scene\SceneState.cs" />
+    <Compile Include="Shaders\Cache\CachedShaderProgram.cs" />
+    <Compile Include="Shaders\Cache\ShaderCache.cs" />
     <Compile Include="Shaders\DrawAutomaticUniforms\CameraEyeUniform.cs" />
     <Compile Include="Shaders\DrawAutomaticUniforms\CameraEyeUniformFactory.cs" />
     <Compile Include="Shaders\DrawAutomaticUniforms\DrawAutomaticUniform.cs" />
@@ -200,7 +202,6 @@
     <Compile Include="RenderState\ScissorTest.cs" />
     <Compile Include="RenderState\StencilTest.cs" />
     <Compile Include="RenderState\StencilTestFace.cs" />
-    <Compile Include="Shaders\ShaderCache.cs" />
     <Compile Include="Shaders\ShaderProgram.cs" />
     <Compile Include="Shaders\Uniform.cs" />
     <Compile Include="Shaders\UniformBlock.cs" />

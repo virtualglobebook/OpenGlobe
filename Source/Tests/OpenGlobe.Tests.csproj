@@ -84,6 +84,7 @@
     <Compile Include="Renderer\MultiThreading\VertexBufferFactory.cs" />
     <Compile Include="Renderer\MultiThreading\VertexBufferMultiThreadingTests.cs" />
     <Compile Include="Renderer\Scene\CameraTest.cs" />
+    <Compile Include="Renderer\Shaders\ShaderCacheTests.cs" />
     <Compile Include="Renderer\VertexArray\VertexArrayTests.cs" />
     <Compile Include="Renderer\Buffers\BufferObjectTests.cs" />
     <Compile Include="Renderer\FrameBuffer\FrameBufferTests.cs" />

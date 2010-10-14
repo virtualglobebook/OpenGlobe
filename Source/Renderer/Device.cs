@@ -386,11 +386,6 @@ namespace OpenGlobe.Renderer
             get { return s_extensions; }
         }
 
-        public static ShaderCache ShaderCache
-        {
-            get { return _shaderCache; }
-        }
-
         internal static LinkAutomaticUniformCollection LinkAutomaticUniforms
         {
             get { return s_linkAutomaticUniforms; }
@@ -452,9 +447,7 @@ namespace OpenGlobe.Renderer
             return drawAutomaticUniformFactories;
         }
 
-        // TODO:  Protect shader cache with lock?
         private static Extensions s_extensions = CreateExtensions();
-        private static ShaderCache _shaderCache = new ShaderCache();
         private static LinkAutomaticUniformCollection s_linkAutomaticUniforms = CreateLinkAutomaticUniforms();
         private static DrawAutomaticUniformFactoryCollection s_drawAutomaticUniformFactories = CreateDrawAutomaticUniforms();
     }
