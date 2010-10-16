@@ -15,7 +15,7 @@ namespace OpenGlobe.Renderer
 
         public override string Name
         {
-            get { return "og_modelViewOrthographicnMatrix"; }
+            get { return "og_modelViewOrthographicMatrix"; }
         }
 
         public override DrawAutomaticUniform Create(Uniform uniform)

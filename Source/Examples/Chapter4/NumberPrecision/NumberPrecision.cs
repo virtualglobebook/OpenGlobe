@@ -39,12 +39,12 @@ namespace OpenGlobe.Examples.Chapter3.NumberPrecision
                  @"#version 330
 
                   layout(location = og_positionVertexLocation) in vec4 position;
-                  uniform mat4 og_modelViewOrthographicnMatrix;
+                  uniform mat4 og_modelViewOrthographicMatrix;
 
                   void main()                     
                   {
                         gl_PointSize = 4.0;
-                        gl_Position = og_modelViewOrthographicnMatrix * position;
+                        gl_Position = og_modelViewOrthographicMatrix * position;
                   }";
             string fs =
                 @"#version 330
