@@ -45,11 +45,13 @@ namespace OpenGlobe.Renderer
             // Create and verify attached vertex buffer
             //
             AttachedVertexBuffer attachedVertexBuffer = new AttachedVertexBuffer(
-                vertexBuffer, VertexAttributeComponentType.Float, 3, false);
+                vertexBuffer, VertexAttributeComponentType.Float, 3, false, 0, 0);
             Assert.AreEqual(vertexBuffer, attachedVertexBuffer.VertexBuffer);
             Assert.AreEqual(VertexAttributeComponentType.Float, attachedVertexBuffer.ComponentType);
             Assert.AreEqual(3, attachedVertexBuffer.NumberOfComponents);
             Assert.IsFalse(attachedVertexBuffer.Normalize);
+            Assert.AreEqual(0, attachedVertexBuffer.OffsetInBytes);
+            Assert.AreEqual(SizeInBytes<Vector3S>.Value, attachedVertexBuffer.Stride);
 
             //
             // Create and verify vertex array

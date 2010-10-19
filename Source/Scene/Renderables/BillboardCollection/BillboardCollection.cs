@@ -68,7 +68,7 @@ namespace OpenGlobe.Scene
             AttachedVertexBuffer attachedPositionBuffer = new AttachedVertexBuffer(
                 _positionBuffer, VertexAttributeComponentType.Float, 3);
             AttachedVertexBuffer attachedColorBuffer = new AttachedVertexBuffer(
-                _colorBuffer, VertexAttributeComponentType.UnsignedByte, 4, true);
+                _colorBuffer, VertexAttributeComponentType.UnsignedByte, 4, true, 0, 0);
             AttachedVertexBuffer attachedOriginBuffer = new AttachedVertexBuffer(
                 _originBuffer, VertexAttributeComponentType.UnsignedByte, 1);
             AttachedVertexBuffer attachedPixelOffsetBuffer = new AttachedVertexBuffer(

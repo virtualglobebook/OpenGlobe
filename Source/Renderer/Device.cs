@@ -300,7 +300,7 @@ namespace OpenGlobe.Renderer
                         VertexBuffer vertexBuffer = CreateVertexBuffer((attribute as VertexAttribute<byte>).Values, sizeof(byte), usageHint);
 
                         meshBuffers.VertexBuffers[shaderAttribute.Location] =
-                            new AttachedVertexBuffer(vertexBuffer, VertexAttributeComponentType.UnsignedByte, 4, true);
+                            new AttachedVertexBuffer(vertexBuffer, VertexAttributeComponentType.UnsignedByte, 4, true, 0, 0);
                     }
                     else
                     {

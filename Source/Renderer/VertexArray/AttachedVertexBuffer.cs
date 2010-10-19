@@ -9,6 +9,7 @@
 
 using System.Diagnostics;
 using OpenGlobe.Core;
+using System;
 
 namespace OpenGlobe.Renderer
 {
@@ -18,7 +19,7 @@ namespace OpenGlobe.Renderer
             VertexBuffer vertexBuffer,
             VertexAttributeComponentType componentType,
             int numberOfComponents)
-            : this(vertexBuffer, componentType, numberOfComponents, false)
+            : this(vertexBuffer, componentType, numberOfComponents, false, 0, 0)
         {
         }
 
@@ -26,12 +27,42 @@ namespace OpenGlobe.Renderer
             VertexBuffer vertexBuffer,
             VertexAttributeComponentType componentType,
             int numberOfComponents,
-            bool normalize)
+            bool normalize,
+            int offsetInBytes,
+            int stride)
         {
+            if (numberOfComponents <= 0)
+            {
+                throw new ArgumentOutOfRangeException("numberOfComponents", "numberOfComponents must be greater than zero.");
+            }
+
+            if (offsetInBytes < 0)
+            {
+                throw new ArgumentOutOfRangeException("offsetInBytes", "offsetInBytes must be greater than or equal to zero.");
+            }
+
+            if (stride < 0)
+            {
+                throw new ArgumentOutOfRangeException("stride", "stride must be greater than or equal to zero.");
+            }
+
             _vertexBuffer = vertexBuffer;
             _componentType = componentType;
             _numberOfComponents = numberOfComponents;
             _normalize = normalize;
+            _offsetInBytes = offsetInBytes;
+
+            if (stride == 0)
+            {
+                //
+                // Tightly packed
+                //
+                _stride = numberOfComponents * VertexArraySizes.SizeOf(componentType);
+            }
+            else
+            {
+                _stride = stride;
+            }
         }
 
         public VertexBuffer VertexBuffer
@@ -54,6 +85,16 @@ namespace OpenGlobe.Renderer
             get { return _normalize; }
         }
 
+        public int OffsetInBytes
+        {
+            get { return _offsetInBytes; }
+        }
+
+        public int Stride
+        {
+            get { return _stride; }
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)
@@ -70,5 +111,7 @@ namespace OpenGlobe.Renderer
         private VertexAttributeComponentType _componentType;
         private int _numberOfComponents;
         private bool _normalize;
+        private int _offsetInBytes;
+        private int _stride;
     }
 }

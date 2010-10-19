@@ -8,6 +8,7 @@
 #endregion
 
 using System.Drawing;
+using System.Runtime.InteropServices;
 using NUnit.Framework;
 using OpenGlobe.Core;
 using OpenGlobe.Core.Geometry;
@@ -334,6 +335,138 @@ namespace OpenGlobe.Renderer
             window.Context.FrameBuffer = frameBuffer;
             window.Context.Draw(PrimitiveType.Points, new DrawState(new RenderState(), sp, va), sceneState);
             TestUtility.ValidateColor(frameBuffer.ColorAttachments[0], 255, 0, 0);
+
+            va.Dispose();
+            sp.Dispose();
+            frameBuffer.Dispose();
+            window.Dispose();
+        }
+
+        [Test]
+        public void RenderNonInterleavedVertexBuffer()
+        {
+            GraphicsWindow window = Device.CreateWindow(1, 1);
+            FrameBuffer frameBuffer = TestUtility.CreateFrameBuffer(window.Context);
+
+            ShaderProgram sp = Device.CreateShaderProgram(
+                @"#version 330
+
+                  layout(location = og_positionVertexLocation) in vec4 position;               
+                  layout(location = og_colorVertexLocation) in vec4 color;
+
+                  out vec4 fsColor;
+
+                  void main()                     
+                  {
+                      gl_Position = position; 
+                      fsColor = color;
+                  }",
+                @"#version 330
+                 
+                  in vec4 fsColor;
+                  out vec4 FragColor;
+
+                  void main()
+                  {
+                      FragColor = fsColor;
+                  }");
+
+            Vector4S[] positions = new[] { new Vector4S(0, 0, 0, 1) };
+            BlittableRGBA[] colors = new[] { new BlittableRGBA(Color.Red) };
+            int colorsOffset = positions.Length * SizeInBytes<Vector4S>.Value;
+
+            VertexBuffer vertexBuffer = Device.CreateVertexBuffer(BufferHint.StaticDraw, 
+                (positions.Length * SizeInBytes<Vector4S>.Value) + 
+                (colors.Length * SizeInBytes<BlittableRGBA>.Value));
+            vertexBuffer.CopyFromSystemMemory(positions);
+            vertexBuffer.CopyFromSystemMemory(colors, colorsOffset);
+
+            VertexArray va = window.Context.CreateVertexArray();
+            va.VertexBuffers[sp.VertexAttributes["position"].Location] =
+                new AttachedVertexBuffer(vertexBuffer, VertexAttributeComponentType.Float, 4);
+            va.VertexBuffers[sp.VertexAttributes["color"].Location] =
+                new AttachedVertexBuffer(vertexBuffer, VertexAttributeComponentType.UnsignedByte, 4, true, colorsOffset, 0);
+            
+            window.Context.FrameBuffer = frameBuffer;
+            window.Context.Draw(PrimitiveType.Points, 0, 1, new DrawState(new RenderState(), sp, va), new SceneState());
+
+            TestUtility.ValidateColor(frameBuffer.ColorAttachments[0], 255, 0, 0);
+
+            va.Dispose();
+            sp.Dispose();
+            frameBuffer.Dispose();
+            window.Dispose();
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        public struct InterleavedVertex
+        {
+            public Vector4S Position { get; set; }
+            public BlittableRGBA Color { get; set; }
+        }
+
+        [Test]
+        public void RenderInterleavedVertexBuffer()
+        {
+            GraphicsWindow window = Device.CreateWindow(1, 1);
+            FrameBuffer frameBuffer = TestUtility.CreateFrameBuffer(window.Context);
+
+            ShaderProgram sp = Device.CreateShaderProgram(
+                @"#version 330
+
+                  layout(location = og_positionVertexLocation) in vec4 position;               
+                  layout(location = og_colorVertexLocation) in vec4 color;
+
+                  out vec4 fsColor;
+
+                  void main()                     
+                  {
+                      gl_Position = position; 
+                      fsColor = color;
+                  }",
+                @"#version 330
+                 
+                  in vec4 fsColor;
+                  out vec4 FragColor;
+
+                  void main()
+                  {
+                      FragColor = fsColor;
+                  }");
+
+            InterleavedVertex[] vertices = new InterleavedVertex[]
+            {
+                new InterleavedVertex()
+                {
+                    Position = new Vector4S(0, 0, 0, 1),
+                    Color = new BlittableRGBA(Color.Red)
+                },
+                new InterleavedVertex()
+                {
+                    Position = new Vector4S(0, 0, 0, 1),
+                    Color = new BlittableRGBA(Color.FromArgb(255, 0, 255, 0))
+                }
+            };
+            int colorOffset = SizeInBytes<Vector4S>.Value;
+
+            VertexBuffer vertexBuffer = Device.CreateVertexBuffer(BufferHint.StaticDraw, vertices.Length * SizeInBytes<InterleavedVertex>.Value);
+            vertexBuffer.CopyFromSystemMemory(vertices);
+
+            VertexArray va = window.Context.CreateVertexArray();
+            va.VertexBuffers[sp.VertexAttributes["position"].Location] =
+                new AttachedVertexBuffer(vertexBuffer, VertexAttributeComponentType.Float, 4, false, 0, SizeInBytes<InterleavedVertex>.Value);
+            va.VertexBuffers[sp.VertexAttributes["color"].Location] =
+                new AttachedVertexBuffer(vertexBuffer, VertexAttributeComponentType.UnsignedByte, 4, true, colorOffset, SizeInBytes<InterleavedVertex>.Value);
+
+            window.Context.FrameBuffer = frameBuffer;
+
+            window.Context.Draw(PrimitiveType.Points, 0, 1, new DrawState(new RenderState(), sp, va), new SceneState());
+            TestUtility.ValidateColor(frameBuffer.ColorAttachments[0], 255, 0, 0);
+
+            RenderState rs = new RenderState();
+            rs.DepthTest.Enabled = false;
+            window.Context.Draw(PrimitiveType.Points, 1, 1, new DrawState(rs, sp, va), new SceneState());
+            TestUtility.ValidateColor(frameBuffer.ColorAttachments[0], 0, 255, 0);
 
             va.Dispose();
             sp.Dispose();

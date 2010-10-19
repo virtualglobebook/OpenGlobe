@@ -199,7 +199,7 @@ namespace OpenGlobe.Renderer.GL3x
                 GL.DrawRangeElements(TypeConverterGL3x.To(primitiveType),
                     0, _boundVertexArray.MaximumArrayIndex(), count,
                     TypeConverterGL3x.To(_boundIndexBuffer.DataType), new
-                    IntPtr(offset * SizesGL3x.SizeOf(_boundIndexBuffer.DataType)));
+                    IntPtr(offset * VertexArraySizes.SizeOf(_boundIndexBuffer.DataType)));
             }
             else
             {

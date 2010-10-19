@@ -132,16 +132,14 @@ namespace OpenGlobe.Renderer.GL3x
             GL.EnableVertexAttribArray(index);
 
             VertexBufferGL3x bufferObjectGL = vb.VertexBuffer as VertexBufferGL3x;
-            VertexAttribPointerType vertexDataType = TypeConverterGL3x.To(vb.ComponentType);
-            int stride = vb.NumberOfComponents * SizesGL3x.SizeOf(vb.ComponentType);
-
+            
             bufferObjectGL.Bind();
             GL.VertexAttribPointer(index,
                 vb.NumberOfComponents,
-                vertexDataType,
+                TypeConverterGL3x.To(vb.ComponentType),
                 vb.Normalize,
-                stride, 
-                0);
+                vb.Stride,
+                vb.OffsetInBytes);
         }
 
         private static void Detach(int index)
@@ -162,7 +160,7 @@ namespace OpenGlobe.Renderer.GL3x
 
         private static int NumberOfVertices(AttachedVertexBuffer vb)
         {
-            return vb.VertexBuffer.SizeInBytes / (vb.NumberOfComponents * SizesGL3x.SizeOf(vb.ComponentType));
+            return vb.VertexBuffer.SizeInBytes / vb.Stride;
         }
 
         protected override void Dispose(bool disposing)

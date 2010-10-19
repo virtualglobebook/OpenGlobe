@@ -12,19 +12,18 @@ using System.Diagnostics;
 using OpenGlobe.Renderer;
 using OpenTK;
 
-namespace OpenGlobe.Renderer.GL3x
+namespace OpenGlobe.Renderer
 {
-    internal static class SizesGL3x
+    internal static class VertexArraySizes
     {
         public static int SizeOf(IndexBufferDataType type)
         {
-            if (type == IndexBufferDataType.UnsignedByte)
+            switch (type)
             {
-                return sizeof(byte);
-            }
-            else if (type == IndexBufferDataType.UnsignedShort)
-            {
-                return sizeof(ushort);
+                case IndexBufferDataType.UnsignedByte:
+                    return sizeof(byte);
+                case IndexBufferDataType.UnsignedShort:
+                    return sizeof(ushort);
             }
 
             Debug.Assert(type == IndexBufferDataType.UnsignedInt);
@@ -33,37 +32,25 @@ namespace OpenGlobe.Renderer.GL3x
 
         public static int SizeOf(VertexAttributeComponentType type)
         {
-            if ((type == VertexAttributeComponentType.Byte) ||
-                (type == VertexAttributeComponentType.UnsignedByte))
+            switch (type)
             {
-                return sizeof(byte);
-            }
-            else if (type == VertexAttributeComponentType.Short)
-            {
-                return sizeof(short);
-            }
-            else if (type == VertexAttributeComponentType.UnsignedShort)
-            {
-                return sizeof(ushort);
-            }
-            else if (type == VertexAttributeComponentType.Int)
-            {
-                return sizeof(int);
-            }
-            else if (type == VertexAttributeComponentType.UnsignedInt)
-            {
-                return sizeof(uint);
-            }
-            else if (type == VertexAttributeComponentType.Float)
-            {
-                return sizeof(float);
-            }
-            else if (type == VertexAttributeComponentType.Double)
-            {
-                return sizeof(double);
+                case VertexAttributeComponentType.Byte:
+                case VertexAttributeComponentType.UnsignedByte:
+                    return sizeof(byte);
+                case VertexAttributeComponentType.Short:
+                    return sizeof(short);
+                case VertexAttributeComponentType.UnsignedShort:
+                    return sizeof(ushort);
+                case VertexAttributeComponentType.Int:
+                    return sizeof(int);
+                case VertexAttributeComponentType.UnsignedInt:
+                    return sizeof(uint);
+                case VertexAttributeComponentType.Float:
+                    return sizeof(float);
+                case VertexAttributeComponentType.Double:
+                    return sizeof(double);
             }
 
-            
             Debug.Assert(type == VertexAttributeComponentType.HalfFloat);
             return OpenGlobe.Core.SizeInBytes<Half>.Value;
         }
