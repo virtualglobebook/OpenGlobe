@@ -444,18 +444,18 @@ namespace OpenGlobe.Renderer.GL3x
             return BeginMode.TriangleFan;
         }
 
-        public static DrawElementsType To(IndexBufferDataType type)
+        public static DrawElementsType To(IndexBufferDatatype type)
         {
-            if (type == IndexBufferDataType.UnsignedByte)
+            if (type == IndexBufferDatatype.UnsignedByte)
             {
                 return DrawElementsType.UnsignedByte;
             }
-            else if (type == IndexBufferDataType.UnsignedShort)
+            else if (type == IndexBufferDatatype.UnsignedShort)
             {
                 return DrawElementsType.UnsignedShort;
             }
 
-            Debug.Assert(type == IndexBufferDataType.UnsignedInt);
+            Debug.Assert(type == IndexBufferDatatype.UnsignedInt);
             return DrawElementsType.UnsignedInt;
         }
 
@@ -689,33 +689,33 @@ namespace OpenGlobe.Renderer.GL3x
             return _pixelFormat[(int)format];
         }
 
-        public static PixelType To(ImageDataType type)
+        public static PixelType To(ImageDatatype type)
         {
             Debug.Assert(
-                (type == ImageDataType.Byte) ||
-                (type == ImageDataType.UnsignedByte) ||
-                (type == ImageDataType.Short) ||
-                (type == ImageDataType.UnsignedShort) ||
-                (type == ImageDataType.Int) ||
-                (type == ImageDataType.UnsignedInt) ||
-                (type == ImageDataType.Float) ||
-                (type == ImageDataType.HalfFloat) ||
-                (type == ImageDataType.UnsignedByte332) ||
-                (type == ImageDataType.UnsignedShort4444) ||
-                (type == ImageDataType.UnsignedShort5551) ||
-                (type == ImageDataType.UnsignedInt8888) ||
-                (type == ImageDataType.UnsignedInt1010102) ||
-                (type == ImageDataType.UnsignedByte233Reversed) ||
-                (type == ImageDataType.UnsignedShort565) ||
-                (type == ImageDataType.UnsignedShort565Reversed) ||
-                (type == ImageDataType.UnsignedShort4444Reversed) ||
-                (type == ImageDataType.UnsignedShort1555Reversed) ||
-                (type == ImageDataType.UnsignedInt8888Reversed) ||
-                (type == ImageDataType.UnsignedInt2101010Reversed) ||
-                (type == ImageDataType.UnsignedInt248) ||
-                (type == ImageDataType.UnsignedInt10F11F11FReversed) ||
-                (type == ImageDataType.UnsignedInt5999Reversed) ||
-                (type == ImageDataType.Float32UnsignedInt248Reversed));
+                (type == ImageDatatype.Byte) ||
+                (type == ImageDatatype.UnsignedByte) ||
+                (type == ImageDatatype.Short) ||
+                (type == ImageDatatype.UnsignedShort) ||
+                (type == ImageDatatype.Int) ||
+                (type == ImageDatatype.UnsignedInt) ||
+                (type == ImageDatatype.Float) ||
+                (type == ImageDatatype.HalfFloat) ||
+                (type == ImageDatatype.UnsignedByte332) ||
+                (type == ImageDatatype.UnsignedShort4444) ||
+                (type == ImageDatatype.UnsignedShort5551) ||
+                (type == ImageDatatype.UnsignedInt8888) ||
+                (type == ImageDatatype.UnsignedInt1010102) ||
+                (type == ImageDatatype.UnsignedByte233Reversed) ||
+                (type == ImageDatatype.UnsignedShort565) ||
+                (type == ImageDatatype.UnsignedShort565Reversed) ||
+                (type == ImageDatatype.UnsignedShort4444Reversed) ||
+                (type == ImageDatatype.UnsignedShort1555Reversed) ||
+                (type == ImageDatatype.UnsignedInt8888Reversed) ||
+                (type == ImageDatatype.UnsignedInt2101010Reversed) ||
+                (type == ImageDatatype.UnsignedInt248) ||
+                (type == ImageDatatype.UnsignedInt10F11F11FReversed) ||
+                (type == ImageDatatype.UnsignedInt5999Reversed) ||
+                (type == ImageDatatype.Float32UnsignedInt248Reversed));
 
             return _pixelType[(int)type];
         }

@@ -42,7 +42,7 @@ namespace OpenGlobe.Core.Geometry
             get { return _name; }
         }
 
-        public VertexAttributeType DataType
+        public VertexAttributeType Datatype
         {
             get { return _type; }
         }

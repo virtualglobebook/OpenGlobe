@@ -48,7 +48,7 @@ namespace OpenGlobe.Renderer
             get { return _location; }
         }
 
-        public ShaderVertexAttributeType DataType
+        public ShaderVertexAttributeType Datatype
         {
             get { return _type; }
         }

@@ -20,12 +20,12 @@ namespace OpenGlobe.Core.Tessellation
         public void SubdivisionSphereTessellatorTest()
         {
             Mesh simpleSphere = SubdivisionSphereTessellatorSimple.Compute(1);
-            Assert.AreEqual(IndicesType.Int32, simpleSphere.Indices.DataType);
+            Assert.AreEqual(IndicesType.Int32, simpleSphere.Indices.Datatype);
             Assert.AreEqual(1, simpleSphere.Attributes.Count);
             Assert.IsNotNull(simpleSphere.Attributes["position"] as VertexAttributeDoubleVector3);
 
             Mesh sphere = SubdivisionSphereTessellator.Compute(1, SubdivisionSphereVertexAttributes.All);
-            Assert.AreEqual(IndicesType.Int32, sphere.Indices.DataType);
+            Assert.AreEqual(IndicesType.Int32, sphere.Indices.Datatype);
             Assert.AreEqual(3, sphere.Attributes.Count);
             Assert.IsNotNull(sphere.Attributes["position"] as VertexAttributeDoubleVector3);
             Assert.IsNotNull(sphere.Attributes["normal"] as VertexAttributeHalfFloatVector3);

@@ -198,8 +198,8 @@ namespace OpenGlobe.Renderer.GL3x
             {
                 GL.DrawRangeElements(TypeConverterGL3x.To(primitiveType),
                     0, _boundVertexArray.MaximumArrayIndex(), count,
-                    TypeConverterGL3x.To(_boundIndexBuffer.DataType), new
-                    IntPtr(offset * VertexArraySizes.SizeOf(_boundIndexBuffer.DataType)));
+                    TypeConverterGL3x.To(_boundIndexBuffer.Datatype), new
+                    IntPtr(offset * VertexArraySizes.SizeOf(_boundIndexBuffer.Datatype)));
             }
             else
             {
@@ -216,7 +216,7 @@ namespace OpenGlobe.Renderer.GL3x
             {
                 GL.DrawRangeElements(TypeConverterGL3x.To(primitiveType),
                     0, _boundVertexArray.MaximumArrayIndex(), _boundIndexBuffer.Count,
-                    TypeConverterGL3x.To(_boundIndexBuffer.DataType), new IntPtr());
+                    TypeConverterGL3x.To(_boundIndexBuffer.Datatype), new IntPtr());
             }
             else
             {

@@ -38,7 +38,7 @@ namespace OpenGlobe.Renderer
         BlueGreenRedAlphaInteger
     }
 
-    public enum ImageDataType
+    public enum ImageDatatype
     {
         Byte,
         UnsignedByte,
@@ -71,7 +71,7 @@ namespace OpenGlobe.Renderer
         public virtual void CopyFromBuffer(
             WritePixelBuffer pixelBuffer,
             ImageFormat format,
-            ImageDataType dataType)
+            ImageDatatype dataType)
         {
             CopyFromBuffer(pixelBuffer, 0, 0, Description.Width, Description.Height, format, dataType, 4);
         }
@@ -79,7 +79,7 @@ namespace OpenGlobe.Renderer
         public virtual void CopyFromBuffer(
             WritePixelBuffer pixelBuffer,
             ImageFormat format,
-            ImageDataType dataType,
+            ImageDatatype dataType,
             int rowAlignment)
         {
             CopyFromBuffer(pixelBuffer, 0, 0, Description.Width, Description.Height, format, dataType, rowAlignment);
@@ -92,17 +92,17 @@ namespace OpenGlobe.Renderer
             int width,
             int height,
             ImageFormat format,
-            ImageDataType dataType,
+            ImageDatatype dataType,
             int rowAlignment);
 
-        public virtual ReadPixelBuffer CopyToBuffer(ImageFormat format, ImageDataType dataType)
+        public virtual ReadPixelBuffer CopyToBuffer(ImageFormat format, ImageDatatype dataType)
         {
             return CopyToBuffer(format, dataType, 4);
         }
         
         public abstract ReadPixelBuffer CopyToBuffer(
             ImageFormat format, 
-            ImageDataType dataType,
+            ImageDatatype dataType,
             int rowAlignment);
 
         public abstract Texture2DDescription Description { get; }
@@ -128,7 +128,7 @@ namespace OpenGlobe.Renderer
 
         private void SaveColor(string filename)
         {
-            using (ReadPixelBuffer pixelBuffer = CopyToBuffer(ImageFormat.BlueGreenRed, ImageDataType.UnsignedByte, 1))
+            using (ReadPixelBuffer pixelBuffer = CopyToBuffer(ImageFormat.BlueGreenRed, ImageDatatype.UnsignedByte, 1))
             {
                 Bitmap bitmap = pixelBuffer.CopyToBitmap(Description.Width, Description.Height, PixelFormat.Format24bppRgb);
                 bitmap.Save(filename);
@@ -137,7 +137,7 @@ namespace OpenGlobe.Renderer
 
         private void SaveDepth(string filename)
         {
-            using (ReadPixelBuffer pixelBuffer = CopyToBuffer(ImageFormat.DepthComponent, ImageDataType.Float, 1))
+            using (ReadPixelBuffer pixelBuffer = CopyToBuffer(ImageFormat.DepthComponent, ImageDatatype.Float, 1))
             {
                 float[] depths = pixelBuffer.CopyToSystemMemory<float>();
 

@@ -12,7 +12,7 @@ using OpenGlobe.Core;
 
 namespace OpenGlobe.Renderer
 {
-    public enum IndexBufferDataType
+    public enum IndexBufferDatatype
     {
         UnsignedByte,
         UnsignedShort,
@@ -46,7 +46,7 @@ namespace OpenGlobe.Renderer
         public abstract T[] CopyToSystemMemory<T>(int offsetInBytes, int sizeInBytes) where T : struct;
 
         public abstract int SizeInBytes { get; }
-        public abstract IndexBufferDataType DataType { get; }
+        public abstract IndexBufferDatatype Datatype { get; }
         public abstract BufferHint UsageHint { get; }
     }
 }

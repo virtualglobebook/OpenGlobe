@@ -92,7 +92,7 @@ namespace OpenGlobe.Renderer.GL3x
             int width,
             int height,
             ImageFormat format,
-            ImageDataType dataType,
+            ImageDatatype dataType,
             int rowAlignment)
         {
             Debug.Assert(xOffset >= 0);
@@ -121,7 +121,7 @@ namespace OpenGlobe.Renderer.GL3x
 
         public override ReadPixelBuffer CopyToBuffer(
             ImageFormat format, 
-            ImageDataType dataType,
+            ImageDatatype dataType,
             int rowAlignment)
         {
             Debug.Assert((rowAlignment == 1) || (rowAlignment == 2) || (rowAlignment == 4) || (rowAlignment == 8));

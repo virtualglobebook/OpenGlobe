@@ -24,7 +24,7 @@ namespace OpenGlobe.Renderer
         public byte A { get; set; }
 
         public static readonly ImageFormat Format = ImageFormat.BlueGreenRedAlpha;
-        public static readonly ImageDataType DataType = ImageDataType.UnsignedByte;
+        public static readonly ImageDatatype Datatype = ImageDatatype.UnsignedByte;
 
         public BlittableBGRA(Color color)
             : this()

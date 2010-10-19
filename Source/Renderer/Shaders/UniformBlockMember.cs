@@ -26,7 +26,7 @@ namespace OpenGlobe.Renderer
             get { return _name; }
         }
 
-        public UniformType DataType
+        public UniformType Datatype
         {
             get { return _type; }
         }

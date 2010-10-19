@@ -87,7 +87,7 @@ namespace OpenGlobe.Renderer
             // Verify copying entire buffer between system memory and index buffer
             //
             indexBuffer.CopyFromSystemMemory(indicies);
-            Assert.AreEqual(IndexBufferDataType.UnsignedInt, indexBuffer.DataType);
+            Assert.AreEqual(IndexBufferDatatype.UnsignedInt, indexBuffer.Datatype);
 
             uint[] indicies2 = indexBuffer.CopyToSystemMemory<uint>(0, indexBuffer.SizeInBytes);
             Assert.AreEqual(indicies[0], indicies2[0]);

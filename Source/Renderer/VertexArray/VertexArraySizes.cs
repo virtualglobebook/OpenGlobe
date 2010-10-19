@@ -16,17 +16,17 @@ namespace OpenGlobe.Renderer
 {
     internal static class VertexArraySizes
     {
-        public static int SizeOf(IndexBufferDataType type)
+        public static int SizeOf(IndexBufferDatatype type)
         {
             switch (type)
             {
-                case IndexBufferDataType.UnsignedByte:
+                case IndexBufferDatatype.UnsignedByte:
                     return sizeof(byte);
-                case IndexBufferDataType.UnsignedShort:
+                case IndexBufferDatatype.UnsignedShort:
                     return sizeof(ushort);
             }
 
-            Debug.Assert(type == IndexBufferDataType.UnsignedInt);
+            Debug.Assert(type == IndexBufferDatatype.UnsignedInt);
             return sizeof(uint);
         }
 

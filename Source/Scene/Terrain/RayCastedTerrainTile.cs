@@ -63,7 +63,7 @@ namespace OpenGlobe.Terrain
 
             _texture = Device.CreateTexture2DRectangle(new Texture2DDescription(
                 tile.Resolution.X, tile.Resolution.Y, TextureFormat.Red32f));
-            _texture.CopyFromBuffer(pixelBuffer, ImageFormat.Red, ImageDataType.Float);
+            _texture.CopyFromBuffer(pixelBuffer, ImageFormat.Red, ImageDatatype.Float);
             _texture.Filter = Texture2DFilter.NearestClampToEdge;
 
             ShowTerrain = true;

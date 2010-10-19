@@ -16,37 +16,37 @@ namespace OpenGlobe.Renderer
 {
     internal static class TextureUtility
     {
-        public static ImageDataType ImagingPixelFormatToDataType(ImagingPixelFormat pixelFormat)
+        public static ImageDatatype ImagingPixelFormatToDatatype(ImagingPixelFormat pixelFormat)
         {
             // TODO:  Not tested exhaustively
             Debug.Assert(Supported(pixelFormat));
 
             if (pixelFormat == ImagingPixelFormat.Format16bppRgb555)
             {
-                return ImageDataType.UnsignedShort5551;
+                return ImageDatatype.UnsignedShort5551;
             }
             else if (pixelFormat == ImagingPixelFormat.Format16bppRgb565)
             {
-                return ImageDataType.UnsignedShort565;
+                return ImageDatatype.UnsignedShort565;
             }
             else if ((pixelFormat == ImagingPixelFormat.Format24bppRgb) ||
                      (pixelFormat == ImagingPixelFormat.Format32bppRgb) ||
                      (pixelFormat == ImagingPixelFormat.Format32bppArgb))
             {
-                return ImageDataType.UnsignedByte;
+                return ImageDatatype.UnsignedByte;
             }
             else if ((pixelFormat == ImagingPixelFormat.Format48bppRgb) ||
                      (pixelFormat == ImagingPixelFormat.Format64bppArgb))
             {
-                return ImageDataType.UnsignedShort;
+                return ImageDatatype.UnsignedShort;
             }
             else if (pixelFormat == ImagingPixelFormat.Format16bppArgb1555)
             {
-                return ImageDataType.UnsignedShort1555Reversed;
+                return ImageDatatype.UnsignedShort1555Reversed;
             }
 
             Debug.Fail("pixelFormat");
-            return ImageDataType.UnsignedByte;
+            return ImageDatatype.UnsignedByte;
         }
 
         public static ImageFormat ImagingPixelFormatToImageFormat(ImagingPixelFormat pixelFormat)
@@ -101,7 +101,7 @@ namespace OpenGlobe.Renderer
             int width, 
             int height, 
             ImageFormat format, 
-            ImageDataType dataType, 
+            ImageDatatype dataType, 
             int rowAlignment)
         {
             int rowSize = width * NumberOfChannels(format) * SizeInBytes(dataType);
@@ -145,33 +145,33 @@ namespace OpenGlobe.Renderer
             return _numberOfChannels[(int)format];
         }
 
-        public static int SizeInBytes(ImageDataType dataType)
+        public static int SizeInBytes(ImageDatatype dataType)
         {
             Debug.Assert(
-                (dataType == ImageDataType.Byte) ||
-                (dataType == ImageDataType.UnsignedByte) ||
-                (dataType == ImageDataType.Short) ||
-                (dataType == ImageDataType.UnsignedShort) ||
-                (dataType == ImageDataType.Int) ||
-                (dataType == ImageDataType.UnsignedInt) ||
-                (dataType == ImageDataType.Float) ||
-                (dataType == ImageDataType.HalfFloat) ||
-                (dataType == ImageDataType.UnsignedByte332) ||
-                (dataType == ImageDataType.UnsignedShort4444) ||
-                (dataType == ImageDataType.UnsignedShort5551) ||
-                (dataType == ImageDataType.UnsignedInt8888) ||
-                (dataType == ImageDataType.UnsignedInt1010102) ||
-                (dataType == ImageDataType.UnsignedByte233Reversed) ||
-                (dataType == ImageDataType.UnsignedShort565) ||
-                (dataType == ImageDataType.UnsignedShort565Reversed) ||
-                (dataType == ImageDataType.UnsignedShort4444Reversed) ||
-                (dataType == ImageDataType.UnsignedShort1555Reversed) ||
-                (dataType == ImageDataType.UnsignedInt8888Reversed) ||
-                (dataType == ImageDataType.UnsignedInt2101010Reversed) ||
-                (dataType == ImageDataType.UnsignedInt248) ||
-                (dataType == ImageDataType.UnsignedInt10F11F11FReversed) ||
-                (dataType == ImageDataType.UnsignedInt5999Reversed) ||
-                (dataType == ImageDataType.Float32UnsignedInt248Reversed));
+                (dataType == ImageDatatype.Byte) ||
+                (dataType == ImageDatatype.UnsignedByte) ||
+                (dataType == ImageDatatype.Short) ||
+                (dataType == ImageDatatype.UnsignedShort) ||
+                (dataType == ImageDatatype.Int) ||
+                (dataType == ImageDatatype.UnsignedInt) ||
+                (dataType == ImageDatatype.Float) ||
+                (dataType == ImageDatatype.HalfFloat) ||
+                (dataType == ImageDatatype.UnsignedByte332) ||
+                (dataType == ImageDatatype.UnsignedShort4444) ||
+                (dataType == ImageDatatype.UnsignedShort5551) ||
+                (dataType == ImageDatatype.UnsignedInt8888) ||
+                (dataType == ImageDatatype.UnsignedInt1010102) ||
+                (dataType == ImageDatatype.UnsignedByte233Reversed) ||
+                (dataType == ImageDatatype.UnsignedShort565) ||
+                (dataType == ImageDatatype.UnsignedShort565Reversed) ||
+                (dataType == ImageDatatype.UnsignedShort4444Reversed) ||
+                (dataType == ImageDatatype.UnsignedShort1555Reversed) ||
+                (dataType == ImageDatatype.UnsignedInt8888Reversed) ||
+                (dataType == ImageDatatype.UnsignedInt2101010Reversed) ||
+                (dataType == ImageDatatype.UnsignedInt248) ||
+                (dataType == ImageDatatype.UnsignedInt10F11F11FReversed) ||
+                (dataType == ImageDatatype.UnsignedInt5999Reversed) ||
+                (dataType == ImageDatatype.Float32UnsignedInt248Reversed));
 
             return _sizeInBytes[(int)dataType];
         }

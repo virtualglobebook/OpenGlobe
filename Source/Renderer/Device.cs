@@ -124,7 +124,7 @@ namespace OpenGlobe.Renderer
 
             if (mesh.Indices != null)
             {
-                if (mesh.Indices.DataType == IndicesType.Byte)
+                if (mesh.Indices.Datatype == IndicesType.Byte)
                 {
                     IList<byte> meshIndices = (mesh.Indices as IndicesByte).Values;
 
@@ -135,7 +135,7 @@ namespace OpenGlobe.Renderer
                     indexBuffer.CopyFromSystemMemory(indices);
                     meshBuffers.IndexBuffer = indexBuffer;
                 }
-                else if (mesh.Indices.DataType == IndicesType.Int16)
+                else if (mesh.Indices.Datatype == IndicesType.Int16)
                 {
                     IList<short> meshIndices = (mesh.Indices as IndicesInt16).Values;
 
@@ -151,7 +151,7 @@ namespace OpenGlobe.Renderer
                 }
                 else
                 {
-                    Debug.Assert(mesh.Indices.DataType == IndicesType.Int32);
+                    Debug.Assert(mesh.Indices.Datatype == IndicesType.Int32);
 
                     IList<int> meshIndices = (mesh.Indices as IndicesInt32).Values;
 
@@ -177,7 +177,7 @@ namespace OpenGlobe.Renderer
 
                 VertexAttribute attribute = mesh.Attributes[shaderAttribute.Name];
 
-                if (attribute.DataType == VertexAttributeType.Double)
+                if (attribute.Datatype == VertexAttributeType.Double)
                 {
                     IList<double> values = (attribute as VertexAttribute<double>).Values;
 
@@ -192,7 +192,7 @@ namespace OpenGlobe.Renderer
                     meshBuffers.VertexBuffers[shaderAttribute.Location] =
                         new AttachedVertexBuffer(vertexBuffer, VertexAttributeComponentType.Float, 1);
                 }
-                else if (attribute.DataType == VertexAttributeType.DoubleVector2)
+                else if (attribute.Datatype == VertexAttributeType.DoubleVector2)
                 {
                     IList<Vector2D> values = (attribute as VertexAttribute<Vector2D>).Values;
 
@@ -207,7 +207,7 @@ namespace OpenGlobe.Renderer
                     meshBuffers.VertexBuffers[shaderAttribute.Location] =
                         new AttachedVertexBuffer(vertexBuffer, VertexAttributeComponentType.Float, 2);
                 }
-                else if (attribute.DataType == VertexAttributeType.DoubleVector3)
+                else if (attribute.Datatype == VertexAttributeType.DoubleVector3)
                 {
                     IList<Vector3D> values = (attribute as VertexAttribute<Vector3D>).Values;
 
@@ -222,7 +222,7 @@ namespace OpenGlobe.Renderer
                     meshBuffers.VertexBuffers[shaderAttribute.Location] =
                         new AttachedVertexBuffer(vertexBuffer, VertexAttributeComponentType.Float, 3);
                 }
-                else if (attribute.DataType == VertexAttributeType.DoubleVector4)
+                else if (attribute.Datatype == VertexAttributeType.DoubleVector4)
                 {
                     IList<Vector4D> values = (attribute as VertexAttribute<Vector4D>).Values;
 
@@ -237,63 +237,63 @@ namespace OpenGlobe.Renderer
                     meshBuffers.VertexBuffers[shaderAttribute.Location] =
                         new AttachedVertexBuffer(vertexBuffer, VertexAttributeComponentType.Float, 4);
                 }
-                else if (attribute.DataType == VertexAttributeType.HalfFloat)
+                else if (attribute.Datatype == VertexAttributeType.HalfFloat)
                 {
                     VertexBuffer vertexBuffer = CreateVertexBuffer((attribute as VertexAttribute<Half>).Values, SizeInBytes<Half>.Value, usageHint);
 
                     meshBuffers.VertexBuffers[shaderAttribute.Location] =
                         new AttachedVertexBuffer(vertexBuffer, VertexAttributeComponentType.HalfFloat, 1);
                 }
-                else if (attribute.DataType == VertexAttributeType.HalfFloatVector2)
+                else if (attribute.Datatype == VertexAttributeType.HalfFloatVector2)
                 {
                     VertexBuffer vertexBuffer = CreateVertexBuffer((attribute as VertexAttribute<Vector2H>).Values, SizeInBytes<Vector2H>.Value, usageHint);
 
                     meshBuffers.VertexBuffers[shaderAttribute.Location] =
                         new AttachedVertexBuffer(vertexBuffer, VertexAttributeComponentType.HalfFloat, 2);
                 }
-                else if (attribute.DataType == VertexAttributeType.HalfFloatVector3)
+                else if (attribute.Datatype == VertexAttributeType.HalfFloatVector3)
                 {
                     VertexBuffer vertexBuffer = CreateVertexBuffer((attribute as VertexAttribute<Vector3H>).Values, SizeInBytes<Vector3H>.Value, usageHint);
 
                     meshBuffers.VertexBuffers[shaderAttribute.Location] =
                         new AttachedVertexBuffer(vertexBuffer, VertexAttributeComponentType.HalfFloat, 3);
                 }
-                else if (attribute.DataType == VertexAttributeType.HalfFloatVector4)
+                else if (attribute.Datatype == VertexAttributeType.HalfFloatVector4)
                 {
                     VertexBuffer vertexBuffer = CreateVertexBuffer((attribute as VertexAttribute<Vector4H>).Values, SizeInBytes<Vector4H>.Value, usageHint);
 
                     meshBuffers.VertexBuffers[shaderAttribute.Location] =
                         new AttachedVertexBuffer(vertexBuffer, VertexAttributeComponentType.HalfFloat, 4);
                 }
-                else if (attribute.DataType == VertexAttributeType.Float)
+                else if (attribute.Datatype == VertexAttributeType.Float)
                 {
                     VertexBuffer vertexBuffer = CreateVertexBuffer((attribute as VertexAttribute<float>).Values, sizeof(float), usageHint);
 
                     meshBuffers.VertexBuffers[shaderAttribute.Location] =
                         new AttachedVertexBuffer(vertexBuffer, VertexAttributeComponentType.Float, 1);
                 }
-                else if (attribute.DataType == VertexAttributeType.FloatVector2)
+                else if (attribute.Datatype == VertexAttributeType.FloatVector2)
                 {
                     VertexBuffer vertexBuffer = CreateVertexBuffer((attribute as VertexAttribute<Vector2S>).Values, SizeInBytes<Vector2S>.Value, usageHint);
 
                     meshBuffers.VertexBuffers[shaderAttribute.Location] =
                         new AttachedVertexBuffer(vertexBuffer, VertexAttributeComponentType.Float, 2);
                 }
-                else if (attribute.DataType == VertexAttributeType.FloatVector3)
+                else if (attribute.Datatype == VertexAttributeType.FloatVector3)
                 {
                     VertexBuffer vertexBuffer = CreateVertexBuffer((attribute as VertexAttribute<Vector3S>).Values, SizeInBytes<Vector3S>.Value, usageHint);
 
                     meshBuffers.VertexBuffers[shaderAttribute.Location] =
                         new AttachedVertexBuffer(vertexBuffer, VertexAttributeComponentType.Float, 3);
                 }
-                else if (attribute.DataType == VertexAttributeType.FloatVector4)
+                else if (attribute.Datatype == VertexAttributeType.FloatVector4)
                 {
                     VertexBuffer vertexBuffer = CreateVertexBuffer((attribute as VertexAttribute<Vector4S>).Values, SizeInBytes<Vector4S>.Value, usageHint);
 
                     meshBuffers.VertexBuffers[shaderAttribute.Location] =
                         new AttachedVertexBuffer(vertexBuffer, VertexAttributeComponentType.Float, 4);
                 }
-                else if (attribute.DataType == VertexAttributeType.UnsignedByte)
+                else if (attribute.Datatype == VertexAttributeType.UnsignedByte)
                 {
                     if (attribute is VertexAttributeRGBA)
                     {
@@ -312,7 +312,7 @@ namespace OpenGlobe.Renderer
                 }
                 else
                 {
-                    Debug.Fail("attribute.DataType");
+                    Debug.Fail("attribute.Datatype");
                 }
             }
 
@@ -370,7 +370,7 @@ namespace OpenGlobe.Renderer
                 Texture2D texture = new Texture2DGL3x(description, textureTarget);
                 texture.CopyFromBuffer(pixelBuffer,
                     TextureUtility.ImagingPixelFormatToImageFormat(bitmap.PixelFormat),
-                    TextureUtility.ImagingPixelFormatToDataType(bitmap.PixelFormat));
+                    TextureUtility.ImagingPixelFormatToDatatype(bitmap.PixelFormat));
 
                 return texture;
             }

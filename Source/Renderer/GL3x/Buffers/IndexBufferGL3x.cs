@@ -46,16 +46,16 @@ namespace OpenGlobe.Renderer.GL3x
         {
             if (typeof(T) == typeof(byte))
             {
-                _dataType = IndexBufferDataType.UnsignedByte;
+                _dataType = IndexBufferDatatype.UnsignedByte;
             }
             else if (typeof(T) == typeof(ushort))
             {
-                _dataType = IndexBufferDataType.UnsignedShort;
+                _dataType = IndexBufferDatatype.UnsignedShort;
             }
             else
             {
                 Debug.Assert(typeof(T) == typeof(uint));
-                _dataType = IndexBufferDataType.UnsignedInt;
+                _dataType = IndexBufferDatatype.UnsignedInt;
             }
             _count = _bufferObject.SizeInBytes / SizeInBytes<T>.Value;
             _bufferObject.CopyFromSystemMemory(bufferInSystemMemory, destinationOffsetInBytes, lengthInBytes);
@@ -76,7 +76,7 @@ namespace OpenGlobe.Renderer.GL3x
             get { return _bufferObject.UsageHint; }
         }
 
-        public override IndexBufferDataType DataType
+        public override IndexBufferDatatype Datatype
         {
             get { return _dataType; }
         }
@@ -97,7 +97,7 @@ namespace OpenGlobe.Renderer.GL3x
         #endregion
 
         BufferGL3x _bufferObject;
-        IndexBufferDataType _dataType;
+        IndexBufferDatatype _dataType;
         int _count;
     }
 }

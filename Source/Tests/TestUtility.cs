@@ -47,7 +47,7 @@ namespace OpenGlobe
             using (WritePixelBuffer writePixelBuffer = Device.CreateWritePixelBuffer(WritePixelBufferHint.StreamDraw, sizeInBytes))
             {
                 writePixelBuffer.CopyFromSystemMemory(pixels);
-                texture.CopyFromBuffer(writePixelBuffer, ImageFormat.RedGreenBlueAlpha, ImageDataType.UnsignedByte);
+                texture.CopyFromBuffer(writePixelBuffer, ImageFormat.RedGreenBlueAlpha, ImageDatatype.UnsignedByte);
             }
             texture.Filter = Texture2DFilter.NearestClampToEdge;
 
@@ -69,7 +69,7 @@ namespace OpenGlobe
 
         public static void ValidateColor(Texture2D colorTexture, byte red, byte green, byte blue)
         {
-            using (ReadPixelBuffer readPixelBuffer = colorTexture.CopyToBuffer(ImageFormat.RedGreenBlue, ImageDataType.UnsignedByte, 1))
+            using (ReadPixelBuffer readPixelBuffer = colorTexture.CopyToBuffer(ImageFormat.RedGreenBlue, ImageDatatype.UnsignedByte, 1))
             {
                 byte[] color = readPixelBuffer.CopyToSystemMemory<byte>();
                 Assert.AreEqual(red, color[0], "Red does not match");

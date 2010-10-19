@@ -23,7 +23,7 @@ namespace OpenGlobe.Core.Geometry
             _type = type;
         }
 
-        public IndicesType DataType
+        public IndicesType Datatype
         {
             get { return _type; }
         }

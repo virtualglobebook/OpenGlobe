@@ -127,7 +127,7 @@ namespace OpenGlobe.Scene.Terrain
             {
                 pixelBuffer.CopyFromSystemMemory(floatPosts);
                 Texture2D terrainTexture = _clipMapLevels[level];
-                terrainTexture.CopyFromBuffer(pixelBuffer, ImageFormat.Red, ImageDataType.Float);
+                terrainTexture.CopyFromBuffer(pixelBuffer, ImageFormat.Red, ImageDatatype.Float);
                 context.TextureUnits[0].Texture2D = terrainTexture;
 
                 DrawFieldBlock(levelData, west, south, west, south, context, sceneState);

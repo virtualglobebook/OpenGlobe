@@ -78,12 +78,12 @@ namespace OpenGlobe.Renderer
             //
             Texture2DDescription description = new Texture2DDescription(2, 1, TextureFormat.RedGreenBlueAlpha8, false);
             Texture2D texture = Device.CreateTexture2D(description);
-            texture.CopyFromBuffer(writePixelBuffer, BlittableRGBA.Format, BlittableRGBA.DataType);
+            texture.CopyFromBuffer(writePixelBuffer, BlittableRGBA.Format, BlittableRGBA.Datatype);
 
             //
             // Read back pixels
             //
-            ReadPixelBuffer readPixelBuffer = texture.CopyToBuffer(BlittableRGBA.Format, BlittableRGBA.DataType);
+            ReadPixelBuffer readPixelBuffer = texture.CopyToBuffer(BlittableRGBA.Format, BlittableRGBA.Datatype);
             BlittableRGBA[] readPixels = readPixelBuffer.CopyToSystemMemory<BlittableRGBA>();
 
             //
@@ -123,12 +123,12 @@ namespace OpenGlobe.Renderer
             //
             Texture2DDescription description = new Texture2DDescription(2, 2, TextureFormat.Red32f, true);
             Texture2D texture = Device.CreateTexture2D(description);
-            texture.CopyFromBuffer(writePixelBuffer, ImageFormat.Red, ImageDataType.Float, 1);
+            texture.CopyFromBuffer(writePixelBuffer, ImageFormat.Red, ImageDatatype.Float, 1);
 
             //
             // Read back pixels
             //
-            ReadPixelBuffer readPixelBuffer = texture.CopyToBuffer(ImageFormat.Red, ImageDataType.Float, 1);
+            ReadPixelBuffer readPixelBuffer = texture.CopyToBuffer(ImageFormat.Red, ImageDatatype.Float, 1);
             float[] readPixels = readPixelBuffer.CopyToSystemMemory<float>();
 
             //
@@ -146,8 +146,8 @@ namespace OpenGlobe.Renderer
             //
             float modifiedPixel = 9;
             writePixelBuffer.CopyFromSystemMemory(new[] { modifiedPixel });
-            texture.CopyFromBuffer(writePixelBuffer, 1, 1, 1, 1, ImageFormat.Red, ImageDataType.Float, 1);
-            ReadPixelBuffer readPixelBuffer2 = texture.CopyToBuffer(ImageFormat.Red, ImageDataType.Float, 1);
+            texture.CopyFromBuffer(writePixelBuffer, 1, 1, 1, 1, ImageFormat.Red, ImageDatatype.Float, 1);
+            ReadPixelBuffer readPixelBuffer2 = texture.CopyToBuffer(ImageFormat.Red, ImageDatatype.Float, 1);
             float[] readPixels2 = readPixelBuffer2.CopyToSystemMemory<float>();
 
             Assert.AreEqual(sizeInBytes, readPixelBuffer2.SizeInBytes);
@@ -186,12 +186,12 @@ namespace OpenGlobe.Renderer
             //
             Texture2DDescription description = new Texture2DDescription(2, 2, TextureFormat.RedGreenBlue8, false);
             Texture2D texture = Device.CreateTexture2D(description);
-            texture.CopyFromBuffer(writePixelBuffer, ImageFormat.RedGreenBlue, ImageDataType.UnsignedByte, 1);
+            texture.CopyFromBuffer(writePixelBuffer, ImageFormat.RedGreenBlue, ImageDatatype.UnsignedByte, 1);
 
             //
             // Read back pixels
             //
-            ReadPixelBuffer readPixelBuffer = texture.CopyToBuffer(ImageFormat.RedGreenBlue, ImageDataType.UnsignedByte, 1);
+            ReadPixelBuffer readPixelBuffer = texture.CopyToBuffer(ImageFormat.RedGreenBlue, ImageDatatype.UnsignedByte, 1);
             byte[] readPixels = readPixelBuffer.CopyToSystemMemory<byte>();
 
             //
@@ -234,12 +234,12 @@ namespace OpenGlobe.Renderer
             //
             Texture2DDescription description = new Texture2DDescription(1, 2, TextureFormat.RedGreenBlue8, false);
             Texture2D texture = Device.CreateTexture2D(description);
-            texture.CopyFromBuffer(writePixelBuffer, ImageFormat.RedGreenBlue, ImageDataType.UnsignedByte);
+            texture.CopyFromBuffer(writePixelBuffer, ImageFormat.RedGreenBlue, ImageDatatype.UnsignedByte);
 
             //
             // Read back pixels
             //
-            ReadPixelBuffer readPixelBuffer = texture.CopyToBuffer(ImageFormat.RedGreenBlue, ImageDataType.UnsignedByte, 1);
+            ReadPixelBuffer readPixelBuffer = texture.CopyToBuffer(ImageFormat.RedGreenBlue, ImageDatatype.UnsignedByte, 1);
             byte[] readPixels = readPixelBuffer.CopyToSystemMemory<byte>();
 
             //
