@@ -145,6 +145,14 @@ namespace OpenGlobe.Scene.Terrain
                 DrawFieldBlock(levelData, west, south, west + _fieldBlockSize - 1, north - (_fieldBlockSize - 1), context, sceneState);
                 DrawFieldBlock(levelData, west, south, east - 2 * (_fieldBlockSize - 1), north - (_fieldBlockSize - 1), context, sceneState);
                 DrawFieldBlock(levelData, west, south, east - (_fieldBlockSize - 1), north - (_fieldBlockSize - 1), context, sceneState);
+
+                if (level == _clipMapLevels.Length - 1)
+                {
+                    DrawFieldBlock(levelData, west, south, west + _fieldBlockSize - 1, south + _fieldBlockSize - 1, context, sceneState);
+                    DrawFieldBlock(levelData, west, south, east - 2 * (_fieldBlockSize - 1), south + _fieldBlockSize - 1, context, sceneState);
+                    DrawFieldBlock(levelData, west, south, west + _fieldBlockSize - 1, north - 2 * (_fieldBlockSize - 1), context, sceneState);
+                    DrawFieldBlock(levelData, west, south, east - 2 * (_fieldBlockSize - 1), north - 2 * (_fieldBlockSize - 1), context, sceneState);
+                }
             }
         }
 

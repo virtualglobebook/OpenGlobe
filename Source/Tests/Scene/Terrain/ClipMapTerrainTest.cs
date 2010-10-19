@@ -31,7 +31,7 @@ namespace OpenGlobe.Tests.Scene.Terrain
 
             CameraLookAtPoint camera = new CameraLookAtPoint(sceneState.Camera, window, Ellipsoid.UnitSphere);
             camera.ZoomRateRangeAdjustment = 0.0;
-            camera.CenterPoint = new Vector3D(0.0, 0.0, 0.0);
+            camera.CenterPoint = new Vector3D(0.0, 0.0, 0.00001 * 2700.0);
             camera.Azimuth = 0.0;
             camera.Elevation = 0.0;
             camera.Range = 30.0;
