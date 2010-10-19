@@ -72,9 +72,15 @@
     <Compile Include="Shapefiles\PolygonShapefile.cs" />
     <Compile Include="Shapefiles\PolylineShapefile.cs" />
     <Compile Include="Shapefiles\ShapefileType.cs" />
+    <Compile Include="Terrain\RasterTerrainLevel.cs" />
+    <Compile Include="Terrain\RasterTerrainLevelCollection.cs" />
+    <Compile Include="Terrain\RasterTerrainSource.cs" />
     <Compile Include="Terrain\RayCastedTerrainTile.cs" />
     <Compile Include="Terrain\TriangleMeshTerrainTile.cs" />
     <Compile Include="Terrain\VertexDisplacementMapTerrainTile.cs" />
+    <Compile Include="Terrain\ClipMapTerrain.cs" />
+    <Compile Include="Terrain\WorldWindTerrainLevel.cs" />
+    <Compile Include="Terrain\WorldWindTerrainSource.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Core\OpenGlobe.Core.csproj">
@@ -190,6 +196,12 @@
     <EmbeddedResource Include="Renderables\PolylineOnTerrain\Shaders\PolylineOnTerrainWallFS.glsl" />
     <EmbeddedResource Include="Renderables\PolylineOnTerrain\Shaders\PolylineOnTerrainWallGS.glsl" />
     <EmbeddedResource Include="Renderables\PolylineOnTerrain\Shaders\PolylineOnTerrainWallVS.glsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Terrain\ClipMapTerrain\ClipMapVS.glsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Terrain\ClipMapTerrain\ClipMapFS.glsl" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
