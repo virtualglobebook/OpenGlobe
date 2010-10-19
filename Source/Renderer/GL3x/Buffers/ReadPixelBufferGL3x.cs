@@ -19,7 +19,7 @@ namespace OpenGlobe.Renderer.GL3x
     {
         public ReadPixelBufferGL3x(ReadPixelBufferHint usageHint, int sizeInBytes)
         {
-            _bufferObject = new BufferGL3x(BufferTarget.PixelPackBuffer, ToBufferHint(usageHint), sizeInBytes);
+            _bufferObject = new PixelBufferGL3x(BufferTarget.PixelPackBuffer, ToBufferHint(usageHint), sizeInBytes);
             _usageHint = usageHint;
         }
 
@@ -88,7 +88,7 @@ namespace OpenGlobe.Renderer.GL3x
             return _bufferHints[(int)usageHint];
         }
 
-        private BufferGL3x _bufferObject;
+        private PixelBufferGL3x _bufferObject;
         private ReadPixelBufferHint _usageHint;
 
         private static readonly BufferHint[] _bufferHints = new[]

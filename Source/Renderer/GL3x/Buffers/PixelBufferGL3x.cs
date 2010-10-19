@@ -1,6 +1,6 @@
 ﻿#region License
 //
-// (C) Copyright 2009 Patrick Cozzi and Deron Ohlarik
+// (C) Copyright 2010 Patrick Cozzi and Kevin Ring
 //
 // Distributed under the Boost Software License, Version 1.0.
 // See License.txt or http://www.boost.org/LICENSE_1_0.txt.
@@ -8,17 +8,20 @@
 #endregion
 
 using System;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.Diagnostics;
 using OpenTK.Graphics.OpenGL;
 using OpenGlobe.Core;
+using ImagingPixelFormat = System.Drawing.Imaging.PixelFormat;
 
 namespace OpenGlobe.Renderer.GL3x
 {
-    internal sealed class BufferGL3x : IDisposable
+    internal sealed class PixelBufferGL3x : IDisposable
     {
-        public BufferGL3x(
-            BufferTarget type, 
-            BufferHint usageHint, 
+        public PixelBufferGL3x(
+            BufferTarget type,
+            BufferHint usageHint,
             int sizeInBytes)
         {
             Debug.Assert(sizeInBytes > 0);
@@ -38,7 +41,6 @@ namespace OpenGlobe.Renderer.GL3x
             // Alternately, we can delay GL.BufferData until the first
             // CopyFromSystemMemory() call.
             //
-            GL.BindVertexArray(0);
             Bind();
             GL.BufferData(_type, new IntPtr(sizeInBytes), new IntPtr(), _usageHint);
         }
@@ -54,12 +56,45 @@ namespace OpenGlobe.Renderer.GL3x
             Debug.Assert(lengthInBytes >= 0);
             Debug.Assert(lengthInBytes <= bufferInSystemMemory.Length * SizeInBytes<T>.Value);
 
-            GL.BindVertexArray(0);
             Bind();
             GL.BufferSubData<T>(_type,
                 new IntPtr(destinationOffsetInBytes),
                 new IntPtr(lengthInBytes),
                 bufferInSystemMemory);
+        }
+        
+        public void CopyFromBitmap(Bitmap bitmap)
+        {
+            Bitmap lockedBitmap;
+
+            if (BitmapAlgorithms.RowOrder(bitmap) == ImageRowOrder.TopToBottom)
+            {
+                //
+                // OpenGL wants rows bottom to top.
+                //
+                Bitmap flippedBitmap = bitmap.Clone() as Bitmap;
+                flippedBitmap.RotateFlip(RotateFlipType.RotateNoneFlipY);
+                lockedBitmap = flippedBitmap;
+            }
+            else
+            {
+                lockedBitmap = bitmap;
+            }
+
+            BitmapData lockedPixels = lockedBitmap.LockBits(new Rectangle(
+                0, 0, lockedBitmap.Width, lockedBitmap.Height),
+                ImageLockMode.ReadOnly, lockedBitmap.PixelFormat);
+
+            int sizeInBytes = lockedPixels.Stride * lockedPixels.Height;
+            Debug.Assert(sizeInBytes <= _sizeInBytes);
+
+            Bind();
+            GL.BufferSubData(_type,
+                new IntPtr(),
+                new IntPtr(sizeInBytes),
+                lockedPixels.Scan0);
+
+            lockedBitmap.UnlockBits(lockedPixels);
         }
 
         public T[] CopyToSystemMemory<T>(int offsetInBytes, int lengthInBytes) where T : struct
@@ -70,10 +105,37 @@ namespace OpenGlobe.Renderer.GL3x
 
             T[] bufferInSystemMemory = new T[lengthInBytes / SizeInBytes<T>.Value];
 
-            GL.BindVertexArray(0);
             Bind();
             GL.GetBufferSubData(_type, new IntPtr(offsetInBytes), new IntPtr(lengthInBytes), bufferInSystemMemory);
             return bufferInSystemMemory;
+        }
+
+        public Bitmap CopyToBitmap(int width, int height, ImagingPixelFormat pixelFormat)
+        {
+            Debug.Assert(width > 0);
+            Debug.Assert(height > 0);
+
+            Bitmap bitmap = new Bitmap(width, height, pixelFormat);
+
+            BitmapData lockedPixels = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height),
+                ImageLockMode.WriteOnly, bitmap.PixelFormat);
+
+            // TODO:  Does the row have padding?  e.g. 4 byte aligned, not tightly packed
+            int sizeInBytes = lockedPixels.Stride * lockedPixels.Height;
+
+            // TODO:  If sizeInBytes is wrong because of either the format or row padding 
+            // (above), GetBufferSubData will throw InvalidEnum.
+            Bind();
+            GL.GetBufferSubData(_type, new IntPtr(), new IntPtr(sizeInBytes), lockedPixels.Scan0);
+
+            bitmap.UnlockBits(lockedPixels);
+
+            //
+            // OpenGL had rows bottom to top.  Bitmap wants them top to bottom.
+            //
+            bitmap.RotateFlip(RotateFlipType.RotateNoneFlipY);
+
+            return bitmap;
         }
 
         public int SizeInBytes

@@ -55,6 +55,7 @@
     </Compile>
     <Compile Include="FrameBuffer\HighResolutionSnap.cs" />
     <Compile Include="FrameBuffer\HighResolutionSnapFrameBuffer.cs" />
+    <Compile Include="GL3x\Buffers\PixelBufferGL3x.cs" />
     <Compile Include="GL3x\ExtensionsGL3x.cs" />
     <Compile Include="GL3x\Handles\BufferHandleGL3x.cs" />
     <Compile Include="GL3x\Handles\FenceHandleGL3x.cs" />
