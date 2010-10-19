@@ -29,7 +29,7 @@ namespace OpenGlobe.Renderer
             int numberOfComponents,
             bool normalize,
             int offsetInBytes,
-            int stride)
+            int strideInBytes)
         {
             if (numberOfComponents <= 0)
             {
@@ -41,7 +41,7 @@ namespace OpenGlobe.Renderer
                 throw new ArgumentOutOfRangeException("offsetInBytes", "offsetInBytes must be greater than or equal to zero.");
             }
 
-            if (stride < 0)
+            if (strideInBytes < 0)
             {
                 throw new ArgumentOutOfRangeException("stride", "stride must be greater than or equal to zero.");
             }
@@ -52,16 +52,16 @@ namespace OpenGlobe.Renderer
             _normalize = normalize;
             _offsetInBytes = offsetInBytes;
 
-            if (stride == 0)
+            if (strideInBytes == 0)
             {
                 //
                 // Tightly packed
                 //
-                _stride = numberOfComponents * VertexArraySizes.SizeOf(componentType);
+                _strideInBytes = numberOfComponents * VertexArraySizes.SizeOf(componentType);
             }
             else
             {
-                _stride = stride;
+                _strideInBytes = strideInBytes;
             }
         }
 
@@ -90,9 +90,9 @@ namespace OpenGlobe.Renderer
             get { return _offsetInBytes; }
         }
 
-        public int Stride
+        public int StrideInBytes
         {
-            get { return _stride; }
+            get { return _strideInBytes; }
         }
 
         protected override void Dispose(bool disposing)
@@ -112,6 +112,6 @@ namespace OpenGlobe.Renderer
         private int _numberOfComponents;
         private bool _normalize;
         private int _offsetInBytes;
-        private int _stride;
+        private int _strideInBytes;
     }
 }

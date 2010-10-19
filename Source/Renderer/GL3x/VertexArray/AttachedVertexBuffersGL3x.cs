@@ -138,7 +138,7 @@ namespace OpenGlobe.Renderer.GL3x
                 vb.NumberOfComponents,
                 TypeConverterGL3x.To(vb.ComponentType),
                 vb.Normalize,
-                vb.Stride,
+                vb.StrideInBytes,
                 vb.OffsetInBytes);
         }
 
@@ -160,7 +160,7 @@ namespace OpenGlobe.Renderer.GL3x
 
         private static int NumberOfVertices(AttachedVertexBuffer vb)
         {
-            return vb.VertexBuffer.SizeInBytes / vb.Stride;
+            return vb.VertexBuffer.SizeInBytes / vb.StrideInBytes;
         }
 
         protected override void Dispose(bool disposing)

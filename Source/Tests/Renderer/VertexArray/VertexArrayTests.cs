@@ -51,7 +51,7 @@ namespace OpenGlobe.Renderer
             Assert.AreEqual(3, attachedVertexBuffer.NumberOfComponents);
             Assert.IsFalse(attachedVertexBuffer.Normalize);
             Assert.AreEqual(0, attachedVertexBuffer.OffsetInBytes);
-            Assert.AreEqual(SizeInBytes<Vector3S>.Value, attachedVertexBuffer.Stride);
+            Assert.AreEqual(SizeInBytes<Vector3S>.Value, attachedVertexBuffer.StrideInBytes);
 
             //
             // Create and verify vertex array
