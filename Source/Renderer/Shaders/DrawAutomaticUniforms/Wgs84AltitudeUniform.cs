@@ -11,9 +11,9 @@ using OpenGlobe.Core.Geometry;
 
 namespace OpenGlobe.Renderer
 {
-    internal class Wgs84AltitudeUniform : DrawAutomaticUniform
+    internal class Wgs84HeightUniform : DrawAutomaticUniform
     {
-        public Wgs84AltitudeUniform(Uniform uniform)
+        public Wgs84HeightUniform(Uniform uniform)
         {
             _uniform = uniform as Uniform<float>;
         }
@@ -22,7 +22,7 @@ namespace OpenGlobe.Renderer
 
         public override void Set(Context context, DrawState drawState, SceneState sceneState)
         {
-            _uniform.Value = (float)sceneState.Camera.Altitude(Ellipsoid.Wgs84);
+            _uniform.Value = (float)sceneState.Camera.Height(Ellipsoid.Wgs84);
         }
 
         #endregion

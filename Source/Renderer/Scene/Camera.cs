@@ -130,7 +130,7 @@ namespace OpenGlobe.Renderer
                 Convert.ToDouble(up[2], CultureInfo.InvariantCulture));
         }
 
-        public double Altitude(Ellipsoid shape)
+        public double Height(Ellipsoid shape)
         {
             return shape.ToGeodetic3D(Eye).Height;
         }

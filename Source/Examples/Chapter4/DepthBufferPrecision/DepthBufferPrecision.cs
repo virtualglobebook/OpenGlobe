@@ -209,7 +209,7 @@ namespace OpenGlobe.Examples.Chapter4
 
         private void UpdateViewerHeight()
         {
-            double height = _sceneState.Camera.Altitude(_globeShape);
+            double height = _sceneState.Camera.Height(_globeShape);
             if (_viewerHeight != height)
             {
                 _viewerHeight = height;

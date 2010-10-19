@@ -73,7 +73,7 @@ namespace OpenGlobe.Scene
             //
             // This could be improved to exploit temporal coherence as described in section x.x.
             //
-            double altitude = sceneState.Camera.Altitude(_shape);
+            double altitude = sceneState.Camera.Height(_shape);
             for (int i = 0; i < GridResolutions.Count; ++i)
             {
                 if (GridResolutions[i].Interval.Contains(altitude))
