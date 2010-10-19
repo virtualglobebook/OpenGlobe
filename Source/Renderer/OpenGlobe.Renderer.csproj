@@ -236,6 +236,7 @@
     <Compile Include="Textures\Texture2DFilter.cs" />
     <Compile Include="Textures\TextureUnit.cs" />
     <Compile Include="Textures\TextureUnits.cs" />
+    <Compile Include="VertexArray\VertexAttributeComponentType.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Core\OpenGlobe.Core.csproj">

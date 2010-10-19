@@ -11,19 +11,6 @@ using OpenGlobe.Core;
 
 namespace OpenGlobe.Renderer
 {
-    public enum VertexAttributeComponentType
-    {
-        Byte,
-        UnsignedByte,
-        Short,
-        UnsignedShort,
-        Int,
-        UnsignedInt,
-        Float,
-        Double,
-        HalfFloat,
-    }
-
     public abstract class VertexArray : Disposable
     {
         public virtual AttachedVertexBuffers VertexBuffers
