@@ -189,7 +189,6 @@
     <Compile Include="GL3x\Shaders\UniformIntVector2GL3x.cs" />
     <Compile Include="GL3x\Shaders\UniformIntVector3GL3x.cs" />
     <Compile Include="GL3x\Shaders\UniformIntVector4GL3x.cs" />
-    <Compile Include="GL3x\SizesGL3x.cs" />
     <Compile Include="GL3x\Textures\Texture2DGL3x.cs" />
     <Compile Include="GL3x\Textures\TextureUnitGL3x.cs" />
     <Compile Include="GL3x\Textures\TextureUnitsGL3x.cs" />
@@ -236,6 +235,7 @@
     <Compile Include="Textures\Texture2DFilter.cs" />
     <Compile Include="Textures\TextureUnit.cs" />
     <Compile Include="Textures\TextureUnits.cs" />
+    <Compile Include="VertexArray\VertexArraySizes.cs" />
     <Compile Include="VertexArray\VertexAttributeComponentType.cs" />
   </ItemGroup>
   <ItemGroup>
