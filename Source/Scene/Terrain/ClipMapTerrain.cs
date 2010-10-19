@@ -131,34 +131,35 @@ namespace OpenGlobe.Scene.Terrain
                 context.TextureUnits[0].Texture2D = terrainTexture;
 
                 DrawFieldBlock(levelData, west, south, west, south, context, sceneState);
-                DrawFieldBlock(levelData, west, south, west + _fieldBlockSize - 1, south, context, sceneState);
-                DrawFieldBlock(levelData, west, south, east - 2 * (_fieldBlockSize - 1), south, context, sceneState);
-                DrawFieldBlock(levelData, west, south, east - (_fieldBlockSize - 1), south, context, sceneState);
+                DrawFieldBlock(levelData, west, south, west + _fieldBlockSize, south, context, sceneState);
+                DrawFieldBlock(levelData, west, south, east - 2 * (_fieldBlockSize), south, context, sceneState);
+                DrawFieldBlock(levelData, west, south, east - (_fieldBlockSize), south, context, sceneState);
 
-                DrawFieldBlock(levelData, west, south, west, south + _fieldBlockSize - 1, context, sceneState);
-                DrawFieldBlock(levelData, west, south, east - (_fieldBlockSize - 1), south + _fieldBlockSize - 1, context, sceneState);
+                DrawFieldBlock(levelData, west, south, west, south + _fieldBlockSize, context, sceneState);
+                DrawFieldBlock(levelData, west, south, east - (_fieldBlockSize), south + _fieldBlockSize, context, sceneState);
 
-                DrawFieldBlock(levelData, west, south, west, north - 2 * (_fieldBlockSize - 1), context, sceneState);
-                DrawFieldBlock(levelData, west, south, east - (_fieldBlockSize - 1), north - 2 * (_fieldBlockSize - 1), context, sceneState);
+                DrawFieldBlock(levelData, west, south, west, north - 2 * (_fieldBlockSize), context, sceneState);
+                DrawFieldBlock(levelData, west, south, east - (_fieldBlockSize), north - 2 * (_fieldBlockSize), context, sceneState);
 
-                DrawFieldBlock(levelData, west, south, west, north - (_fieldBlockSize - 1), context, sceneState);
-                DrawFieldBlock(levelData, west, south, west + _fieldBlockSize - 1, north - (_fieldBlockSize - 1), context, sceneState);
-                DrawFieldBlock(levelData, west, south, east - 2 * (_fieldBlockSize - 1), north - (_fieldBlockSize - 1), context, sceneState);
-                DrawFieldBlock(levelData, west, south, east - (_fieldBlockSize - 1), north - (_fieldBlockSize - 1), context, sceneState);
+                DrawFieldBlock(levelData, west, south, west, north - (_fieldBlockSize), context, sceneState);
+                DrawFieldBlock(levelData, west, south, west + _fieldBlockSize, north - (_fieldBlockSize), context, sceneState);
+                DrawFieldBlock(levelData, west, south, east - 2 * (_fieldBlockSize), north - (_fieldBlockSize), context, sceneState);
+                DrawFieldBlock(levelData, west, south, east - (_fieldBlockSize), north - (_fieldBlockSize), context, sceneState);
 
+                DrawHorizontalFixup(levelData, west, south, west, south + 2 * (_fieldBlockSize), context, sceneState);
+                DrawHorizontalFixup(levelData, west, south, east - (_fieldBlockSize), south + 2 * (_fieldBlockSize), context, sceneState);
+
+                DrawVerticalFixup(levelData, west, south, west + 2 * (_fieldBlockSize), south, context, sceneState);
+                DrawVerticalFixup(levelData, west, south, west + 2 * (_fieldBlockSize), north - (_fieldBlockSize), context, sceneState);
+
+                // Fill the center of the highest-detail ring
                 if (level == _clipMapLevels.Length - 1)
                 {
-                    DrawFieldBlock(levelData, west, south, west + _fieldBlockSize - 1, south + _fieldBlockSize - 1, context, sceneState);
-                    DrawFieldBlock(levelData, west, south, east - 2 * (_fieldBlockSize - 1), south + _fieldBlockSize - 1, context, sceneState);
-                    DrawFieldBlock(levelData, west, south, west + _fieldBlockSize - 1, north - 2 * (_fieldBlockSize - 1), context, sceneState);
-                    DrawFieldBlock(levelData, west, south, east - 2 * (_fieldBlockSize - 1), north - 2 * (_fieldBlockSize - 1), context, sceneState);
+                    DrawFieldBlock(levelData, west, south, west + _fieldBlockSize, south + _fieldBlockSize, context, sceneState);
+                    DrawFieldBlock(levelData, west, south, east - 2 * (_fieldBlockSize), south + _fieldBlockSize, context, sceneState);
+                    DrawFieldBlock(levelData, west, south, west + _fieldBlockSize, north - 2 * (_fieldBlockSize), context, sceneState);
+                    DrawFieldBlock(levelData, west, south, east - 2 * (_fieldBlockSize), north - 2 * (_fieldBlockSize), context, sceneState);
                 }
-
-                DrawHorizontalFixup(levelData, west, south, west, south + 2 * (_fieldBlockSize - 1), context, sceneState);
-                DrawHorizontalFixup(levelData, west, south, east - (_fieldBlockSize - 1), south + 2 * (_fieldBlockSize - 1), context, sceneState);
-
-                DrawVerticalFixup(levelData, west, south, west + 2 * (_fieldBlockSize - 1), south, context, sceneState);
-                DrawVerticalFixup(levelData, west, south, west + 2 * (_fieldBlockSize - 1), north - (_fieldBlockSize - 1), context, sceneState);
             }
         }
 
