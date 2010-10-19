@@ -26,7 +26,7 @@ namespace OpenGlobe.Tests.Scene.Terrain
             SceneState sceneState = new SceneState();
             ClearState clearState = new ClearState();
 
-            sceneState.Camera.PerspectiveFarPlaneDistance = 40.0;
+            sceneState.Camera.PerspectiveFarPlaneDistance = 100.0;
             sceneState.Camera.PerspectiveNearPlaneDistance = 0.001;
 
             CameraLookAtPoint camera = new CameraLookAtPoint(sceneState.Camera, window, Ellipsoid.UnitSphere);

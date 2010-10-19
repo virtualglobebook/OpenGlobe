@@ -153,6 +153,12 @@ namespace OpenGlobe.Scene.Terrain
                     DrawFieldBlock(levelData, west, south, west + _fieldBlockSize - 1, north - 2 * (_fieldBlockSize - 1), context, sceneState);
                     DrawFieldBlock(levelData, west, south, east - 2 * (_fieldBlockSize - 1), north - 2 * (_fieldBlockSize - 1), context, sceneState);
                 }
+
+                DrawHorizontalFixup(levelData, west, south, west, south + 2 * (_fieldBlockSize - 1), context, sceneState);
+                DrawHorizontalFixup(levelData, west, south, east - (_fieldBlockSize - 1), south + 2 * (_fieldBlockSize - 1), context, sceneState);
+
+                DrawVerticalFixup(levelData, west, south, west + 2 * (_fieldBlockSize - 1), south, context, sceneState);
+                DrawVerticalFixup(levelData, west, south, west + 2 * (_fieldBlockSize - 1), north - (_fieldBlockSize - 1), context, sceneState);
             }
         }
 
@@ -165,6 +171,34 @@ namespace OpenGlobe.Scene.Terrain
             int textureSouth = blockSouth - overallSouth;
 
             DrawState drawState = new DrawState(_renderState, _shaderProgram, _fieldBlock);
+            _scaleFactor.Value = new Vector4S((float)levelData.PostDeltaLongitude, (float)levelData.PostDeltaLatitude, (float)originLongitude, (float)originLatitude);
+            _fineBlockOrigin.Value = new Vector4S((float)(1.0 / _clipMapSize), (float)(1.0 / _clipMapSize), (float)textureWest / _clipMapSize, (float)textureSouth / _clipMapSize);
+            context.Draw(_primitiveType, drawState, sceneState);
+        }
+
+        private void DrawHorizontalFixup(RasterTerrainLevel levelData, int overallWest, int overallSouth, int blockWest, int blockSouth, Context context, SceneState sceneState)
+        {
+            double originLongitude = levelData.IndexToLongitude(blockWest) - centerLongitude;
+            double originLatitude = levelData.IndexToLatitude(blockSouth) - centerLatitude;
+
+            int textureWest = blockWest - overallWest;
+            int textureSouth = blockSouth - overallSouth;
+
+            DrawState drawState = new DrawState(_renderState, _shaderProgram, _ringFixupHorizontal);
+            _scaleFactor.Value = new Vector4S((float)levelData.PostDeltaLongitude, (float)levelData.PostDeltaLatitude, (float)originLongitude, (float)originLatitude);
+            _fineBlockOrigin.Value = new Vector4S((float)(1.0 / _clipMapSize), (float)(1.0 / _clipMapSize), (float)textureWest / _clipMapSize, (float)textureSouth / _clipMapSize);
+            context.Draw(_primitiveType, drawState, sceneState);
+        }
+
+        private void DrawVerticalFixup(RasterTerrainLevel levelData, int overallWest, int overallSouth, int blockWest, int blockSouth, Context context, SceneState sceneState)
+        {
+            double originLongitude = levelData.IndexToLongitude(blockWest) - centerLongitude;
+            double originLatitude = levelData.IndexToLatitude(blockSouth) - centerLatitude;
+
+            int textureWest = blockWest - overallWest;
+            int textureSouth = blockSouth - overallSouth;
+
+            DrawState drawState = new DrawState(_renderState, _shaderProgram, _ringFixupVertical);
             _scaleFactor.Value = new Vector4S((float)levelData.PostDeltaLongitude, (float)levelData.PostDeltaLatitude, (float)originLongitude, (float)originLatitude);
             _fineBlockOrigin.Value = new Vector4S((float)(1.0 / _clipMapSize), (float)(1.0 / _clipMapSize), (float)textureWest / _clipMapSize, (float)textureSouth / _clipMapSize);
             context.Draw(_primitiveType, drawState, sceneState);
@@ -220,18 +254,16 @@ namespace OpenGlobe.Scene.Terrain
         private ShaderProgram _shaderProgram;
         private RenderState _renderState;
         private PrimitiveType _primitiveType;
-        //private VertexArray _vertexArray;
-        //private Mesh _mesh;
 
         private int _fieldBlockSize;
         private VertexArray _fieldBlock;
         private VertexArray _ringFixupHorizontal;
         private VertexArray _ringFixupVertical;
-        private VertexArray _interiorTrimTopLeft;
-        private VertexArray _interiorTrimTopRight;
-        private VertexArray _interiorTrimBottomLeft;
-        private VertexArray _interiorTrimBottomRight;
-        private VertexArray _degenerateRing;
+        //private VertexArray _interiorTrimTopLeft;
+        //private VertexArray _interiorTrimTopRight;
+        //private VertexArray _interiorTrimBottomLeft;
+        //private VertexArray _interiorTrimBottomRight;
+        //private VertexArray _degenerateRing;
 
         private Uniform<Vector4S> _scaleFactor;
         private Uniform<Vector4S> _fineBlockOrigin;
