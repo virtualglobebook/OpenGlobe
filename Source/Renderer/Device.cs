@@ -28,6 +28,56 @@ namespace OpenGlobe.Renderer
 
     public static class Device
     {
+        static Device()
+        {
+            using (GraphicsWindow window = CreateWindow(1, 1))
+            {
+                s_extensions = new ExtensionsGL3x();
+
+                ///////////////////////////////////////////////////////////////
+
+                LinkAutomaticUniformCollection linkAutomaticUniforms = new LinkAutomaticUniformCollection();
+
+                for (int i = 0; i < window.Context.TextureUnits.Count; ++i)
+                {
+                    linkAutomaticUniforms.Add(new TextureUniform(i));
+                }
+
+                s_linkAutomaticUniforms = linkAutomaticUniforms;
+
+                ///////////////////////////////////////////////////////////////
+
+                DrawAutomaticUniformFactoryCollection drawAutomaticUniformFactories = new DrawAutomaticUniformFactoryCollection();
+
+                drawAutomaticUniformFactories.Add(new SunPositionUniformFactory());
+                drawAutomaticUniformFactories.Add(new LightPropertiesUniformFactory());
+                drawAutomaticUniformFactories.Add(new CameraLightPositionUniformFactory());
+                drawAutomaticUniformFactories.Add(new CameraEyeUniformFactory());
+                drawAutomaticUniformFactories.Add(new ModelViewPerspectiveMatrixUniformFactory());
+                drawAutomaticUniformFactories.Add(new ModelViewOrthographicMatrixUniformFactory());
+                drawAutomaticUniformFactories.Add(new ModelViewMatrixUniformFactory());
+                drawAutomaticUniformFactories.Add(new PerspectiveMatrixUniformFactory());
+                drawAutomaticUniformFactories.Add(new OrthographicMatrixUniformFactory());
+                drawAutomaticUniformFactories.Add(new ViewportOrthographicMatrixUniformFactory());
+                drawAutomaticUniformFactories.Add(new ViewportUniformFactory());
+                drawAutomaticUniformFactories.Add(new InverseViewportDimensionsUniformFactory());
+                drawAutomaticUniformFactories.Add(new ViewportTransformationMatrixUniformFactory());
+                drawAutomaticUniformFactories.Add(new ModelZToClipCoordinatesUniformFactory());
+                drawAutomaticUniformFactories.Add(new WindowToWorldNearPlaneUniformFactory());
+                drawAutomaticUniformFactories.Add(new Wgs84HeightUniformFactory());
+                drawAutomaticUniformFactories.Add(new PerspectiveNearPlaneDistanceUniformFactory());
+                drawAutomaticUniformFactories.Add(new PerspectiveFarPlaneDistanceUniformFactory());
+                drawAutomaticUniformFactories.Add(new HighResolutionSnapScaleUniformFactory());
+                drawAutomaticUniformFactories.Add(new PixelSizePerDistanceUniformFactory());
+
+                s_drawAutomaticUniformFactories = drawAutomaticUniformFactories;
+
+                ///////////////////////////////////////////////////////////////
+
+                GL.GetInteger(GetPName.MaxVertexAttribs, out _maximumNumberOfVertexAttributes);
+            }
+        }
+
         public static GraphicsWindow CreateWindow(int width, int height)
         {
             return CreateWindow(width, height, "");
@@ -387,7 +437,7 @@ namespace OpenGlobe.Renderer
         }
 
         /// <summary>
-        /// Not thread safe
+        /// The collection is not thread safe.
         /// </summary>
         public static LinkAutomaticUniformCollection LinkAutomaticUniforms
         {
@@ -395,66 +445,22 @@ namespace OpenGlobe.Renderer
         }
 
         /// <summary>
-        /// Not thread safe
+        /// The collection is not thread safe.
         /// </summary>
         public static DrawAutomaticUniformFactoryCollection DrawAutomaticUniformFactories
         {
             get { return s_drawAutomaticUniformFactories; }
         }
 
-        private static Extensions CreateExtensions()
+        internal static int MaximumNumberOfVertexAttributes
         {
-            using (GraphicsWindow window = CreateWindow(1, 1))
-            {
-                return new ExtensionsGL3x();
-            }
+            get { return _maximumNumberOfVertexAttributes; }
         }
 
-        private static LinkAutomaticUniformCollection CreateLinkAutomaticUniforms()
-        {
-            LinkAutomaticUniformCollection linkAutomaticUniforms = new LinkAutomaticUniformCollection();
+        private static Extensions s_extensions;
+        private static LinkAutomaticUniformCollection s_linkAutomaticUniforms;
+        private static DrawAutomaticUniformFactoryCollection s_drawAutomaticUniformFactories;
 
-            using (GraphicsWindow window = CreateWindow(1, 1))
-            {
-                for (int i = 0; i < window.Context.TextureUnits.Count; ++i)
-                {
-                    linkAutomaticUniforms.Add(new TextureUniform(i));
-                }
-            }
-
-            return linkAutomaticUniforms;
-        }
-
-        private static DrawAutomaticUniformFactoryCollection CreateDrawAutomaticUniforms()
-        {
-            DrawAutomaticUniformFactoryCollection drawAutomaticUniformFactories = new DrawAutomaticUniformFactoryCollection();
-
-            drawAutomaticUniformFactories.Add(new SunPositionUniformFactory());
-            drawAutomaticUniformFactories.Add(new LightPropertiesUniformFactory());
-            drawAutomaticUniformFactories.Add(new CameraLightPositionUniformFactory());
-            drawAutomaticUniformFactories.Add(new CameraEyeUniformFactory());
-            drawAutomaticUniformFactories.Add(new ModelViewPerspectiveMatrixUniformFactory());
-            drawAutomaticUniformFactories.Add(new ModelViewOrthographicMatrixUniformFactory());
-            drawAutomaticUniformFactories.Add(new ModelViewMatrixUniformFactory());
-            drawAutomaticUniformFactories.Add(new PerspectiveMatrixUniformFactory());
-            drawAutomaticUniformFactories.Add(new OrthographicMatrixUniformFactory());
-            drawAutomaticUniformFactories.Add(new ViewportOrthographicMatrixUniformFactory());
-            drawAutomaticUniformFactories.Add(new ViewportUniformFactory());
-            drawAutomaticUniformFactories.Add(new InverseViewportDimensionsUniformFactory());
-            drawAutomaticUniformFactories.Add(new ViewportTransformationMatrixUniformFactory());
-            drawAutomaticUniformFactories.Add(new ModelZToClipCoordinatesUniformFactory());
-            drawAutomaticUniformFactories.Add(new WindowToWorldNearPlaneUniformFactory());
-            drawAutomaticUniformFactories.Add(new Wgs84HeightUniformFactory());
-            drawAutomaticUniformFactories.Add(new PerspectiveNearPlaneDistanceUniformFactory());
-            drawAutomaticUniformFactories.Add(new PerspectiveFarPlaneDistanceUniformFactory());
-            drawAutomaticUniformFactories.Add(new HighResolutionSnapScaleUniformFactory());
-            drawAutomaticUniformFactories.Add(new PixelSizePerDistanceUniformFactory());
-                                    
-            return drawAutomaticUniformFactories;
-        }
-
-        private static Extensions s_extensions = CreateExtensions();
-        private static LinkAutomaticUniformCollection s_linkAutomaticUniforms = CreateLinkAutomaticUniforms();
-        private static DrawAutomaticUniformFactoryCollection s_drawAutomaticUniformFactories = CreateDrawAutomaticUniforms();
+        private static int _maximumNumberOfVertexAttributes;
     }
 }

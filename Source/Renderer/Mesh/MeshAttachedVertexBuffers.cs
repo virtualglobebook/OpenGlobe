@@ -20,10 +20,7 @@ namespace OpenGlobe.Renderer
     {
         public MeshAttachedVertexBuffers()
         {
-            // TODO:  Don't call GL here
-            float numberOfAttributes;
-            GL.GetFloat(GetPName.MaxVertexAttribs, out numberOfAttributes);
-            _attachedBuffers = new AttachedVertexBuffer[Convert.ToInt32(numberOfAttributes)];
+            _attachedBuffers = new AttachedVertexBuffer[Device.MaximumNumberOfVertexAttributes];
         }
 
         #region AttachedVertexBuffers Members

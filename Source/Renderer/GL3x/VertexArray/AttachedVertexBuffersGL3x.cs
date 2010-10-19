@@ -26,9 +26,7 @@ namespace OpenGlobe.Renderer.GL3x
     {
         public AttachedVertexBuffersGL3x()
 	    {
-            float numberOfAttributes;
-            GL.GetFloat(GetPName.MaxVertexAttribs, out numberOfAttributes);
-            _attachedBuffers = new AttachedVertexBufferGL3x[Convert.ToInt32(numberOfAttributes)];
+            _attachedBuffers = new AttachedVertexBufferGL3x[Device.MaximumNumberOfVertexAttributes];
         }
 
         #region AttachedVertexBuffers Members
