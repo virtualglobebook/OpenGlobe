@@ -9,7 +9,7 @@
 
 namespace OpenGlobe.Renderer
 {
-    internal abstract class DrawAutomaticUniform
+    public abstract class DrawAutomaticUniform
     {
         public abstract void Set(Context context, DrawState drawState, SceneState sceneState);
     }

@@ -386,12 +386,18 @@ namespace OpenGlobe.Renderer
             get { return s_extensions; }
         }
 
-        internal static LinkAutomaticUniformCollection LinkAutomaticUniforms
+        /// <summary>
+        /// Not thread safe
+        /// </summary>
+        public static LinkAutomaticUniformCollection LinkAutomaticUniforms
         {
             get { return s_linkAutomaticUniforms; }
         }
 
-        internal static DrawAutomaticUniformFactoryCollection DrawAutomaticUniformFactories
+        /// <summary>
+        /// Not thread safe
+        /// </summary>
+        public static DrawAutomaticUniformFactoryCollection DrawAutomaticUniformFactories
         {
             get { return s_drawAutomaticUniformFactories; }
         }
@@ -438,7 +444,7 @@ namespace OpenGlobe.Renderer
             drawAutomaticUniformFactories.Add(new ViewportTransformationMatrixUniformFactory());
             drawAutomaticUniformFactories.Add(new ModelZToClipCoordinatesUniformFactory());
             drawAutomaticUniformFactories.Add(new WindowToWorldNearPlaneUniformFactory());
-            drawAutomaticUniformFactories.Add(new Wgs84AltitudeUniformFactory());
+            drawAutomaticUniformFactories.Add(new Wgs84HeightUniformFactory());
             drawAutomaticUniformFactories.Add(new PerspectiveNearPlaneDistanceUniformFactory());
             drawAutomaticUniformFactories.Add(new PerspectiveFarPlaneDistanceUniformFactory());
             drawAutomaticUniformFactories.Add(new HighResolutionSnapScaleUniformFactory());

@@ -11,7 +11,7 @@ using System.Collections.ObjectModel;
 
 namespace OpenGlobe.Renderer
 {
-    internal class LinkAutomaticUniformCollection : KeyedCollection<string, LinkAutomaticUniform>
+    public class LinkAutomaticUniformCollection : KeyedCollection<string, LinkAutomaticUniform>
     {
         protected override string GetKeyForItem(LinkAutomaticUniform item)
         {

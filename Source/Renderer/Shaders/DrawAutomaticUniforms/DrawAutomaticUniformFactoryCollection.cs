@@ -11,7 +11,7 @@ using System.Collections.ObjectModel;
 
 namespace OpenGlobe.Renderer
 {
-    internal class DrawAutomaticUniformFactoryCollection : KeyedCollection<string, DrawAutomaticUniformFactory>
+    public class DrawAutomaticUniformFactoryCollection : KeyedCollection<string, DrawAutomaticUniformFactory>
     {
         protected override string GetKeyForItem(DrawAutomaticUniformFactory item)
         {

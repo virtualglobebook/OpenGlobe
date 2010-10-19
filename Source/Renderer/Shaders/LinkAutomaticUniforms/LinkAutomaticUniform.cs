@@ -9,7 +9,7 @@
 
 namespace OpenGlobe.Renderer
 {
-    internal abstract class LinkAutomaticUniform
+    public abstract class LinkAutomaticUniform
     {
         public abstract string Name { get; }
         public abstract void Set(Uniform uniform);
