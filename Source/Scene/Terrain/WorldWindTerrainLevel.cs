@@ -125,16 +125,16 @@ namespace OpenGlobe.Scene.Terrain
         // is offset half a post delta north and east from the southwest corner of the bounding box.
         // The methods below take this into account.
 
-        public override int LongitudeToIndex(double longitude)
+        public override double LongitudeToIndex(double longitude)
         {
             GeodeticExtent extent = _terrainSource.Extent;
-            return (int)((longitude - extent.West - _postDeltaLongitude * 0.5) / _postDeltaLongitude);
+            return (longitude - extent.West - _postDeltaLongitude * 0.5) / _postDeltaLongitude;
         }
 
-        public override int LatitudeToIndex(double latitude)
+        public override double LatitudeToIndex(double latitude)
         {
             GeodeticExtent extent = _terrainSource.Extent;
-            return (int)((latitude - extent.South - _postDeltaLatitude * 0.5) / _postDeltaLatitude);
+            return (latitude - extent.South - _postDeltaLatitude * 0.5) / _postDeltaLatitude;
         }
 
         public override double IndexToLongitude(int longitudeIndex)

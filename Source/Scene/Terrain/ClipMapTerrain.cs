@@ -71,43 +71,92 @@ namespace OpenGlobe.Scene.Terrain
 
         public void Render(Context context, SceneState sceneState)
         {
-            for (int i = 0; i < _clipMapLevels.Length; ++i)
+            int finerWest = -1;
+            int finerSouth = -1;
+            for (int i = _clipMapLevels.Length - 1; i >= 0; --i)
             {
-                RenderLevel(i, context, sceneState);
+                int currentWest, currentSouth;
+                RenderLevel(i, context, sceneState, finerWest, finerSouth, out currentWest, out currentSouth);
+                finerWest = currentWest;
+                finerSouth = currentSouth;
             }
         }
 
-        private void RenderLevel(int level, Context context, SceneState sceneState)
+        private void RenderLevel(int level, Context context, SceneState sceneState, int finerWest, int finerSouth, out int currentWest, out int currentSouth)
         {
             RasterTerrainLevel levelData = _terrainSource.Levels[level];
 
             double centerLongitude = sceneState.Camera.Target.X;
             double centerLatitude = sceneState.Camera.Target.Y;
 
-            // Compute the post indices of this clipmap level.  LongitudeToIndex and LatitudeToIndex
-            // return the post at or immediately to the southwest of the specified coordinate.
-            // Note that the indices must be even in order to align with the next-coarser level.
-            // If they're odd, we'll bump to the northeast.
+            double longitudeIndex = levelData.LongitudeToIndex(centerLongitude);
+            double latitudeIndex = levelData.LatitudeToIndex(centerLatitude);
 
-            int longitudeIndex = levelData.LongitudeToIndex(centerLongitude);
-            int west = longitudeIndex - _clipMapSize / 2;
-            bool bumpedLongitude = false;
-            if ((west % 2) != 0)
+            int west, south;
+            bool offsetStripOnNorth;
+            bool offsetStripOnEast;
+
+            if (finerWest == -1)
             {
-                ++west;
-                bumpedLongitude = true;
+                // This is the finest level of the clipmap.
+                west = (int)longitudeIndex - _clipMapSize / 2;
+                south = (int)latitudeIndex - _clipMapSize / 2;
+
+                if ((west % 2) != 0)
+                {
+                    ++west;
+                }
+                if ((south % 2) != 0)
+                {
+                    ++south;
+                }
+
+                // Arbitrarily place the offset strips on the north and east sides.
+                offsetStripOnNorth = true;
+                offsetStripOnEast = true;
             }
+            else
+            {
+                // Place the offset strips appropriately based on the position of the finer level.
+                finerWest /= 2;
+                finerSouth /= 2;
+
+                double westDesired = longitudeIndex - _clipMapSize / 2;
+                int westOption1 = finerWest - (_fieldBlockSize - 1);
+                int westOption2 = finerWest - _fieldBlockSize;
+
+                if (Math.Abs(westDesired - westOption1) < Math.Abs(westDesired - westOption2))
+                {
+                    west = westOption1;
+                    offsetStripOnEast = true;
+                }
+                else
+                {
+                    west = westOption2;
+                    offsetStripOnEast = false;
+                }
+
+                double southDesired = latitudeIndex - _clipMapSize / 2;
+                int southOption1 = finerSouth - (_fieldBlockSize - 1);
+                int southOption2 = finerSouth - _fieldBlockSize;
+
+                if (Math.Abs(southDesired - southOption1) < Math.Abs(southDesired - southOption2))
+                {
+                    south = southOption1;
+                    offsetStripOnNorth = true;
+                }
+                else
+                {
+                    south = southOption2;
+                    offsetStripOnNorth = false;
+                }
+            }
+
             int east = west + _clipMapSize - 1;
-
-            int latitudeIndex = levelData.LatitudeToIndex(centerLatitude);
-            int south = latitudeIndex - _clipMapSize / 2;
-            bool bumpedLatitude = false;
-            if ((south % 2) != 0)
-            {
-                ++south;
-                bumpedLatitude = true;
-            }
             int north = south + _clipMapSize - 1;
+
+            currentWest = west;
+            currentSouth = south;
 
             short[] posts = new short[_clipMapSize * _clipMapSize];
             levelData.GetPosts(west, south, east, north, posts, 0, _clipMapSize);
@@ -147,27 +196,16 @@ namespace OpenGlobe.Scene.Terrain
                 DrawBlock(_ringFixupVertical, levelData, west, south, west + 2 * (_fieldBlockSize - 1), south, context, sceneState);
                 DrawBlock(_ringFixupVertical, levelData, west, south, west + 2 * (_fieldBlockSize - 1), north - (_fieldBlockSize - 1), context, sceneState);
 
-                if (!bumpedLatitude)
-                {
-                    //Console.WriteLine("top");
-                    DrawBlock(_offsetStripHorizontal, levelData, west, south, west + _fieldBlockSize - 1, south + _fieldBlockSize - 1, context, sceneState);
-                }
-                else
-                {
-                    //Console.WriteLine("bottom");
-                    DrawBlock(_offsetStripHorizontal, levelData, west, south, west + _fieldBlockSize - 1, north - _fieldBlockSize, context, sceneState);
-                }
+                int offset = offsetStripOnNorth
+                                ? north - _fieldBlockSize
+                                : south + _fieldBlockSize - 1;
+                DrawBlock(_offsetStripHorizontal, levelData, west, south, west + _fieldBlockSize - 1, offset, context, sceneState);
 
-                if (!bumpedLongitude)
-                {
-                    //Console.WriteLine("left");
-                    DrawBlock(_offsetStripVertical, levelData, west, south, west + _fieldBlockSize - 1, south + _fieldBlockSize, context, sceneState);
-                }
-                else
-                {
-                    //Console.WriteLine("right");
-                    DrawBlock(_offsetStripVertical, levelData, west, south, east - _fieldBlockSize, south + _fieldBlockSize, context, sceneState);
-                }
+                offset = offsetStripOnEast
+                                ? east - _fieldBlockSize
+                                : west + _fieldBlockSize - 1;
+
+                DrawBlock(_offsetStripVertical, levelData, west, south, offset, south + _fieldBlockSize, context, sceneState);
 
                 // Fill the center of the highest-detail ring
                 if (level == _clipMapLevels.Length - 1)
@@ -188,18 +226,10 @@ namespace OpenGlobe.Scene.Terrain
             int textureWest = blockWest - overallWest;
             int textureSouth = blockSouth - overallSouth;
 
-            //if (blockSouth == overallSouth && blockWest == overallWest)
-            //{
-            //    Console.WriteLine("({0}) {1}\t{2}", _terrainSource.Levels.IndexOf(levelData), overallWest, overallSouth);
-            //}
-
             DrawState drawState = new DrawState(_renderState, _shaderProgram, block);
             _scaleFactor.Value = new Vector4S((float)levelData.PostDeltaLongitude, (float)levelData.PostDeltaLatitude, (float)originLongitude, (float)originLatitude);
             _fineBlockOrigin.Value = new Vector4S((float)(1.0 / _clipMapSize), (float)(1.0 / _clipMapSize), (float)textureWest / _clipMapSize, (float)textureSouth / _clipMapSize);
-            if (block == _offsetStripHorizontal || block == _offsetStripVertical)
-                _color.Value = new Vector3S(1.0f, 0.0f, 0.0f);
-            else
-                _color.Value = new Vector3S(0.0f, 1.0f, 0.0f);
+            _color.Value = new Vector3S(0.0f, 1.0f, 0.0f);
             context.Draw(_primitiveType, drawState, sceneState);
         }
 
