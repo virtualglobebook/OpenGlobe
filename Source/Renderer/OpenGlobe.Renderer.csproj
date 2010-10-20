@@ -79,7 +79,7 @@
     <Compile Include="Input\MouseButtonEvent.cs" />
     <Compile Include="Input\MouseButtonEventArgs.cs" />
     <Compile Include="Input\MouseMoveEventArgs.cs" />
-    <Compile Include="Mesh\MeshAttachedVertexBuffers.cs" />
+    <Compile Include="Mesh\MeshVertexBufferAttributes.cs" />
     <Compile Include="Mesh\MeshBuffers.cs" />
     <Compile Include="OpenTK\Matrix3d.cs" />
     <Compile Include="RenderState\ColorMask.cs" />
@@ -140,8 +140,8 @@
     <Compile Include="Textures\TextureUtility.cs" />
     <Compile Include="Tools\TextureAtlas.cs" />
     <Compile Include="Tools\TextureCoordinateCollection.cs" />
-    <Compile Include="VertexArray\AttachedVertexBuffer.cs" />
-    <Compile Include="VertexArray\AttachedVertexBuffers.cs" />
+    <Compile Include="VertexArray\VertexBufferAttribute.cs" />
+    <Compile Include="VertexArray\VertexBufferAttributes.cs" />
     <Compile Include="VertexArray\VertexArray.cs" />
     <Compile Include="Buffers\IndexBuffer.cs" />
     <Compile Include="Buffers\ReadPixelBuffer.cs" />
@@ -153,7 +153,7 @@
     <Compile Include="Device.cs" />
     <Compile Include="FrameBuffer\ColorAttachments.cs" />
     <Compile Include="FrameBuffer\FrameBuffer.cs" />
-    <Compile Include="GL3x\VertexArray\AttachedVertexBuffersGL3x.cs" />
+    <Compile Include="GL3x\VertexArray\VertexBufferAttributesGL3x.cs" />
     <Compile Include="GL3x\VertexArray\VertexArrayGL3x.cs" />
     <Compile Include="GL3x\Buffers\BufferGL3x.cs" />
     <Compile Include="GL3x\Buffers\IndexBufferGL3x.cs" />
