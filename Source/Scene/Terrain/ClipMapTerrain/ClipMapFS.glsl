@@ -14,6 +14,7 @@ in vec3 positionToEyeFS;
 out vec3 fragmentColor;
 
 uniform vec4 og_diffuseSpecularAmbientShininess;
+uniform vec3 u_color;
 
 float LightIntensity(vec3 normal, vec3 toLight, vec3 toEye, vec4 diffuseSpecularAmbientShininess)
 {
@@ -36,5 +37,5 @@ void main()
 
 	float intensity = LightIntensity(normal, positionToLight, positionToEye, og_diffuseSpecularAmbientShininess);
 	
-	fragmentColor = mix(vec3(0.0, intensity, 0.0), vec3(0.0, 0.0, intensity), (height < 0.0));
+	fragmentColor = mix(vec3(u_color * intensity), vec3(0.0, 0.0, intensity), (height < 0.0));
 }

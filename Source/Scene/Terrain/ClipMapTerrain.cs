@@ -50,20 +50,24 @@ namespace OpenGlobe.Scene.Terrain
                 2, _fieldBlockSize - 1);
             _ringFixupVertical = context.CreateVertexArray(ringFixupVerticalMesh, _shaderProgram.VertexAttributes, BufferHint.StaticDraw);
 
+            Mesh offsetStripHorizontalMesh = RectangleTessellator.Compute(
+                new RectangleD(new Vector2D(0.0, 0.0), new Vector2D(2 * _fieldBlockSize + 1, 1.0)),
+                2 * _fieldBlockSize, 1);
+            _offsetStripHorizontal = context.CreateVertexArray(offsetStripHorizontalMesh, _shaderProgram.VertexAttributes, BufferHint.StaticDraw);
+
+            Mesh offsetStripVerticalMesh = RectangleTessellator.Compute(
+                new RectangleD(new Vector2D(0.0, 0.0), new Vector2D(1.0, 2 * _fieldBlockSize)),
+                1, 2 * _fieldBlockSize - 1);
+            _offsetStripVertical = context.CreateVertexArray(offsetStripVerticalMesh, _shaderProgram.VertexAttributes, BufferHint.StaticDraw);
+
             _scaleFactor = (Uniform<Vector4S>)_shaderProgram.Uniforms["u_scaleFactor"];
             _fineBlockOrigin = (Uniform<Vector4S>)_shaderProgram.Uniforms["u_fineBlockOrig"];
+            _color = (Uniform<Vector3S>)_shaderProgram.Uniforms["u_color"];
 
             _renderState = new RenderState();
             _renderState.FacetCulling.FrontFaceWindingOrder = fieldBlockMesh.FrontFaceWindingOrder;
             _primitiveType = fieldBlockMesh.PrimitiveType;
         }
-
-        double centerLongitude = -119.5326056;
-        double centerLatitude = 37.74451389;
-        //double altitude = 3112.9224;
-
-        //double centerLongitude = -115.21470277777777777777777777778;
-        //double centerLatitude = 28.164322222222222222222222222222;
 
         public void Render(Context context, SceneState sceneState)
         {
@@ -77,39 +81,32 @@ namespace OpenGlobe.Scene.Terrain
         {
             RasterTerrainLevel levelData = _terrainSource.Levels[level];
 
-            //short[] blah = new short[2700 * 1350];
+            double centerLongitude = sceneState.Camera.Target.X;
+            double centerLatitude = sceneState.Camera.Target.Y;
 
-            //levelData.GetPosts(0, 0, 2699, 1349, blah, 0, 2700);
-            //levelData.GetPosts(0, 0, 149, 159, blah, 0, 2700);
-            //levelData.GetPosts(0, 1190, 149, 1349, blah, 1190*2700, 2700);
-            //levelData.GetPosts(0, 0, 159, 149, blah, 0, 2700);
-
-            /*int j;
-            for (j = 0; (j + 254) < 1350; j += 255)
-            {
-                int i;
-                for (i = 0; (i + 254) < 2700; i += 255)
-                {
-                    levelData.GetPosts(i, j, i + 254, j + 254, blah, (1094 - j) * 2700 + i, 2700);
-                }
-                //levelData.GetPosts(i, j, 2699, j + 254, blah, (1094 - j) * 2700 + i, 2700);
-            }*/
-            /*int k;
-            for (k = 0; (k + 254) < 2700; k += 255)
-            {
-                levelData.GetPosts(k, j, k + 254, 1349, blah, k, 2700);
-            }
-            levelData.GetPosts(k, j, 2699, 1349, blah, k, 2700);*/
-
-
-            //PostsToBitmap("InParts.png", blah, 2700, 1350);
+            // Compute the post indices of this clipmap level.  LongitudeToIndex and LatitudeToIndex
+            // return the post at or immediately to the southwest of the specified coordinate.
+            // Note that the indices must be even in order to align with the next-coarser level.
+            // If they're odd, we'll bump to the northeast.
 
             int longitudeIndex = levelData.LongitudeToIndex(centerLongitude);
             int west = longitudeIndex - _clipMapSize / 2;
+            bool bumpedLongitude = false;
+            if ((west % 2) != 0)
+            {
+                ++west;
+                bumpedLongitude = true;
+            }
             int east = west + _clipMapSize - 1;
 
             int latitudeIndex = levelData.LatitudeToIndex(centerLatitude);
             int south = latitudeIndex - _clipMapSize / 2;
+            bool bumpedLatitude = false;
+            if ((south % 2) != 0)
+            {
+                ++south;
+                bumpedLatitude = true;
+            }
             int north = south + _clipMapSize - 1;
 
             short[] posts = new short[_clipMapSize * _clipMapSize];
@@ -121,8 +118,6 @@ namespace OpenGlobe.Scene.Terrain
                 floatPosts[i] = posts[i];
             }
 
-            //PostsToBitmap(level.ToString() + ".png", floatPosts, _clipMapSize, _clipMapSize);
-
             using (WritePixelBuffer pixelBuffer = Device.CreateWritePixelBuffer(WritePixelBufferHint.StreamDraw, _clipMapSize * _clipMapSize * sizeof(float)))
             {
                 pixelBuffer.CopyFromSystemMemory(floatPosts);
@@ -130,78 +125,81 @@ namespace OpenGlobe.Scene.Terrain
                 terrainTexture.CopyFromBuffer(pixelBuffer, ImageFormat.Red, ImageDatatype.Float);
                 context.TextureUnits[0].Texture2D = terrainTexture;
 
-                DrawFieldBlock(levelData, west, south, west, south, context, sceneState);
-                DrawFieldBlock(levelData, west, south, west + _fieldBlockSize, south, context, sceneState);
-                DrawFieldBlock(levelData, west, south, east - 2 * (_fieldBlockSize), south, context, sceneState);
-                DrawFieldBlock(levelData, west, south, east - (_fieldBlockSize), south, context, sceneState);
+                DrawBlock(_fieldBlock, levelData, west, south, west, south, context, sceneState);
+                DrawBlock(_fieldBlock, levelData, west, south, west + _fieldBlockSize - 1, south, context, sceneState);
+                DrawBlock(_fieldBlock, levelData, west, south, east - 2 * (_fieldBlockSize - 1), south, context, sceneState);
+                DrawBlock(_fieldBlock, levelData, west, south, east - (_fieldBlockSize - 1), south, context, sceneState);
 
-                DrawFieldBlock(levelData, west, south, west, south + _fieldBlockSize, context, sceneState);
-                DrawFieldBlock(levelData, west, south, east - (_fieldBlockSize), south + _fieldBlockSize, context, sceneState);
+                DrawBlock(_fieldBlock, levelData, west, south, west, south + _fieldBlockSize - 1, context, sceneState);
+                DrawBlock(_fieldBlock, levelData, west, south, east - (_fieldBlockSize - 1), south + _fieldBlockSize - 1, context, sceneState);
 
-                DrawFieldBlock(levelData, west, south, west, north - 2 * (_fieldBlockSize), context, sceneState);
-                DrawFieldBlock(levelData, west, south, east - (_fieldBlockSize), north - 2 * (_fieldBlockSize), context, sceneState);
+                DrawBlock(_fieldBlock, levelData, west, south, west, north - 2 * (_fieldBlockSize - 1), context, sceneState);
+                DrawBlock(_fieldBlock, levelData, west, south, east - (_fieldBlockSize - 1), north - 2 * (_fieldBlockSize - 1), context, sceneState);
 
-                DrawFieldBlock(levelData, west, south, west, north - (_fieldBlockSize), context, sceneState);
-                DrawFieldBlock(levelData, west, south, west + _fieldBlockSize, north - (_fieldBlockSize), context, sceneState);
-                DrawFieldBlock(levelData, west, south, east - 2 * (_fieldBlockSize), north - (_fieldBlockSize), context, sceneState);
-                DrawFieldBlock(levelData, west, south, east - (_fieldBlockSize), north - (_fieldBlockSize), context, sceneState);
+                DrawBlock(_fieldBlock, levelData, west, south, west, north - (_fieldBlockSize - 1), context, sceneState);
+                DrawBlock(_fieldBlock, levelData, west, south, west + _fieldBlockSize - 1, north - (_fieldBlockSize - 1), context, sceneState);
+                DrawBlock(_fieldBlock, levelData, west, south, east - 2 * (_fieldBlockSize - 1), north - (_fieldBlockSize - 1), context, sceneState);
+                DrawBlock(_fieldBlock, levelData, west, south, east - (_fieldBlockSize - 1), north - (_fieldBlockSize - 1), context, sceneState);
 
-                DrawHorizontalFixup(levelData, west, south, west, south + 2 * (_fieldBlockSize), context, sceneState);
-                DrawHorizontalFixup(levelData, west, south, east - (_fieldBlockSize), south + 2 * (_fieldBlockSize), context, sceneState);
+                DrawBlock(_ringFixupHorizontal, levelData, west, south, west, south + 2 * (_fieldBlockSize - 1), context, sceneState);
+                DrawBlock(_ringFixupHorizontal, levelData, west, south, east - (_fieldBlockSize - 1), south + 2 * (_fieldBlockSize - 1), context, sceneState);
 
-                DrawVerticalFixup(levelData, west, south, west + 2 * (_fieldBlockSize), south, context, sceneState);
-                DrawVerticalFixup(levelData, west, south, west + 2 * (_fieldBlockSize), north - (_fieldBlockSize), context, sceneState);
+                DrawBlock(_ringFixupVertical, levelData, west, south, west + 2 * (_fieldBlockSize - 1), south, context, sceneState);
+                DrawBlock(_ringFixupVertical, levelData, west, south, west + 2 * (_fieldBlockSize - 1), north - (_fieldBlockSize - 1), context, sceneState);
+
+                if (!bumpedLatitude)
+                {
+                    //Console.WriteLine("top");
+                    DrawBlock(_offsetStripHorizontal, levelData, west, south, west + _fieldBlockSize - 1, south + _fieldBlockSize - 1, context, sceneState);
+                }
+                else
+                {
+                    //Console.WriteLine("bottom");
+                    DrawBlock(_offsetStripHorizontal, levelData, west, south, west + _fieldBlockSize - 1, north - _fieldBlockSize, context, sceneState);
+                }
+
+                if (!bumpedLongitude)
+                {
+                    //Console.WriteLine("left");
+                    DrawBlock(_offsetStripVertical, levelData, west, south, west + _fieldBlockSize - 1, south + _fieldBlockSize, context, sceneState);
+                }
+                else
+                {
+                    //Console.WriteLine("right");
+                    DrawBlock(_offsetStripVertical, levelData, west, south, east - _fieldBlockSize, south + _fieldBlockSize, context, sceneState);
+                }
 
                 // Fill the center of the highest-detail ring
                 if (level == _clipMapLevels.Length - 1)
                 {
-                    DrawFieldBlock(levelData, west, south, west + _fieldBlockSize, south + _fieldBlockSize, context, sceneState);
-                    DrawFieldBlock(levelData, west, south, east - 2 * (_fieldBlockSize), south + _fieldBlockSize, context, sceneState);
-                    DrawFieldBlock(levelData, west, south, west + _fieldBlockSize, north - 2 * (_fieldBlockSize), context, sceneState);
-                    DrawFieldBlock(levelData, west, south, east - 2 * (_fieldBlockSize), north - 2 * (_fieldBlockSize), context, sceneState);
+                    DrawBlock(_fieldBlock, levelData, west, south, west + _fieldBlockSize - 1, south + _fieldBlockSize - 1, context, sceneState);
+                    DrawBlock(_fieldBlock, levelData, west, south, west + 2 * (_fieldBlockSize - 1), south + _fieldBlockSize - 1, context, sceneState);
+                    DrawBlock(_fieldBlock, levelData, west, south, west + _fieldBlockSize - 1, south + 2 * (_fieldBlockSize - 1), context, sceneState);
+                    DrawBlock(_fieldBlock, levelData, west, south, west + 2 * (_fieldBlockSize - 1), south + 2 * (_fieldBlockSize - 1), context, sceneState);
                 }
             }
         }
 
-        private void DrawFieldBlock(RasterTerrainLevel levelData, int overallWest, int overallSouth, int blockWest, int blockSouth, Context context, SceneState sceneState)
+        private void DrawBlock(VertexArray block, RasterTerrainLevel levelData, int overallWest, int overallSouth, int blockWest, int blockSouth, Context context, SceneState sceneState)
         {
-            double originLongitude = levelData.IndexToLongitude(blockWest) - centerLongitude;
-            double originLatitude = levelData.IndexToLatitude(blockSouth) - centerLatitude;
+            double originLongitude = levelData.IndexToLongitude(blockWest);
+            double originLatitude = levelData.IndexToLatitude(blockSouth);
 
             int textureWest = blockWest - overallWest;
             int textureSouth = blockSouth - overallSouth;
 
-            DrawState drawState = new DrawState(_renderState, _shaderProgram, _fieldBlock);
+            //if (blockSouth == overallSouth && blockWest == overallWest)
+            //{
+            //    Console.WriteLine("({0}) {1}\t{2}", _terrainSource.Levels.IndexOf(levelData), overallWest, overallSouth);
+            //}
+
+            DrawState drawState = new DrawState(_renderState, _shaderProgram, block);
             _scaleFactor.Value = new Vector4S((float)levelData.PostDeltaLongitude, (float)levelData.PostDeltaLatitude, (float)originLongitude, (float)originLatitude);
             _fineBlockOrigin.Value = new Vector4S((float)(1.0 / _clipMapSize), (float)(1.0 / _clipMapSize), (float)textureWest / _clipMapSize, (float)textureSouth / _clipMapSize);
-            context.Draw(_primitiveType, drawState, sceneState);
-        }
-
-        private void DrawHorizontalFixup(RasterTerrainLevel levelData, int overallWest, int overallSouth, int blockWest, int blockSouth, Context context, SceneState sceneState)
-        {
-            double originLongitude = levelData.IndexToLongitude(blockWest) - centerLongitude;
-            double originLatitude = levelData.IndexToLatitude(blockSouth) - centerLatitude;
-
-            int textureWest = blockWest - overallWest;
-            int textureSouth = blockSouth - overallSouth;
-
-            DrawState drawState = new DrawState(_renderState, _shaderProgram, _ringFixupHorizontal);
-            _scaleFactor.Value = new Vector4S((float)levelData.PostDeltaLongitude, (float)levelData.PostDeltaLatitude, (float)originLongitude, (float)originLatitude);
-            _fineBlockOrigin.Value = new Vector4S((float)(1.0 / _clipMapSize), (float)(1.0 / _clipMapSize), (float)textureWest / _clipMapSize, (float)textureSouth / _clipMapSize);
-            context.Draw(_primitiveType, drawState, sceneState);
-        }
-
-        private void DrawVerticalFixup(RasterTerrainLevel levelData, int overallWest, int overallSouth, int blockWest, int blockSouth, Context context, SceneState sceneState)
-        {
-            double originLongitude = levelData.IndexToLongitude(blockWest) - centerLongitude;
-            double originLatitude = levelData.IndexToLatitude(blockSouth) - centerLatitude;
-
-            int textureWest = blockWest - overallWest;
-            int textureSouth = blockSouth - overallSouth;
-
-            DrawState drawState = new DrawState(_renderState, _shaderProgram, _ringFixupVertical);
-            _scaleFactor.Value = new Vector4S((float)levelData.PostDeltaLongitude, (float)levelData.PostDeltaLatitude, (float)originLongitude, (float)originLatitude);
-            _fineBlockOrigin.Value = new Vector4S((float)(1.0 / _clipMapSize), (float)(1.0 / _clipMapSize), (float)textureWest / _clipMapSize, (float)textureSouth / _clipMapSize);
+            if (block == _offsetStripHorizontal || block == _offsetStripVertical)
+                _color.Value = new Vector3S(1.0f, 0.0f, 0.0f);
+            else
+                _color.Value = new Vector3S(0.0f, 1.0f, 0.0f);
             context.Draw(_primitiveType, drawState, sceneState);
         }
 
@@ -260,13 +258,11 @@ namespace OpenGlobe.Scene.Terrain
         private VertexArray _fieldBlock;
         private VertexArray _ringFixupHorizontal;
         private VertexArray _ringFixupVertical;
-        //private VertexArray _interiorTrimTopLeft;
-        //private VertexArray _interiorTrimTopRight;
-        //private VertexArray _interiorTrimBottomLeft;
-        //private VertexArray _interiorTrimBottomRight;
-        //private VertexArray _degenerateRing;
+        private VertexArray _offsetStripHorizontal;
+        private VertexArray _offsetStripVertical;
 
         private Uniform<Vector4S> _scaleFactor;
         private Uniform<Vector4S> _fineBlockOrigin;
+        private Uniform<Vector3S> _color;
     }
 }

@@ -88,49 +88,6 @@ namespace OpenGlobe.Scene.Terrain
                     GetTilePosts(tileX, tileY, currentWest, currentSouth, currentEast, currentNorth, destination, writeIndex, stride);
                 }
             }
-
-
-            /*int firstLongitudeInTile = tileLongitudeIndexStart * _terrainSource.TileLongitudePosts;
-            int tileWestIndex = west - firstLongitudeInTile;
-            int tileEastIndex = east - firstLongitudeInTile;
-
-            int firstLatitudeInTile = tileLatitudeIndexStop * _terrainSource.TileLatitudePosts;
-            int tileSouthIndex = south - firstLatitudeInTile;
-            int tileNorthIndex = north - firstLatitudeInTile;
-
-            for (int tileLatitudeIndex = tileLatitudeIndexStart; tileLatitudeIndex >= tileLatitudeIndexStop; --tileLatitudeIndex)
-            {
-                int rowStartIndex = startIndex;
-
-                int rowTileNorthIndex = tileNorthIndex;
-                if (rowTileNorthIndex >= _terrainSource.TileLatitudePosts)
-                {
-                    rowTileNorthIndex = _terrainSource.TileLatitudePosts - 1;
-                }
-
-                int rowTileEastIndex = tileEastIndex;
-                int rowTileWestIndex = tileWestIndex;
-
-                for (int tileLongitudeIndex = tileLongitudeIndexStart; tileLongitudeIndex <= tileLongitudeIndexStop; ++tileLongitudeIndex)
-                {
-                    int columnTileEastIndex = rowTileEastIndex;
-                    if (columnTileEastIndex >= _terrainSource.TileLongitudePosts)
-                    {
-                        columnTileEastIndex = _terrainSource.TileLongitudePosts - 1;
-                    }
-
-                    GetTilePosts(tileLongitudeIndex, tileLatitudeIndex, rowTileWestIndex, tileSouthIndex, columnTileEastIndex, rowTileNorthIndex, destination, rowStartIndex, stride);
-
-                    rowStartIndex += columnTileEastIndex - rowTileWestIndex + 1;
-                    rowTileEastIndex -= columnTileEastIndex + 1;
-                    rowTileWestIndex = 0;
-                }
-
-                startIndex += stride * (rowTileNorthIndex - tileSouthIndex + 1);
-
-                tileNorthIndex -= rowTileNorthIndex + 1;
-                tileSouthIndex = 0;
-            }*/
         }
 
         private void GetTilePosts(int tileLongitudeIndex, int tileLatitudeIndex, int tileWest, int tileSouth, int tileEast, int tileNorth, short[] destination, int startIndex, int stride)
@@ -144,21 +101,6 @@ namespace OpenGlobe.Scene.Terrain
                 tile.Posts = _terrainSource.DownloadTile(_level, tileLongitudeIndex, tileLatitudeIndex);
                 _cache.Add(tile);
             }
-
-            /*Bitmap b = new Bitmap(_terrainSource.TileLongitudePosts, _terrainSource.TileLatitudePosts);
-            int index = 0;
-            for (int j = 0; j < _terrainSource.TileLatitudePosts; ++j)
-            {
-                for (int i = 0; i < _terrainSource.TileLongitudePosts; ++i)
-                {
-                    if (tile.Posts[index] < 0)
-                        b.SetPixel(i, j, Color.FromArgb(0, 0, 255)); //(int)(floatPosts[index] * -255.0f / short.MaxValue)));
-                    else
-                        b.SetPixel(i, j, Color.FromArgb(0, 255, 0)); //(int)(floatPosts[index] * 255.0f / short.MaxValue), 0));
-                    ++index;
-                }
-            }
-            b.Save("tile.png", System.Drawing.Imaging.ImageFormat.Png);*/
 
             int postsIndex = tileSouth * _terrainSource.TileLongitudePosts + tileWest;
             int latitudePosts = tileNorth - tileSouth + 1;
@@ -175,42 +117,36 @@ namespace OpenGlobe.Scene.Terrain
                 }
                 writeIndex += stride - longitudePosts;
             }
-
-            /*for (int latitudeIndex = tileSouth; latitudeIndex <= tileNorth; ++latitudeIndex)
-            {
-                for (int longitudeIndex = tileWest; longitudeIndex <= tileEast; ++longitudeIndex)
-                {
-                    destination[startIndex] = tile.Posts[postsIndex];
-                    ++postsIndex;
-                    ++startIndex;
-                }
-                startIndex += stride - longitudePosts;
-                postsIndex += _terrainSource.TileLongitudePosts - longitudePosts;
-            }*/
         }
+
+        // World Wind tiles do NOT have overlapping posts at their edges.  Yet, the bounding boxes DO overlap.
+        // From that, we can conclude that the posts specify the height at the CENTER of each cell while the
+        // bounding box describes the EDGES of the cells.  Therefore, the position of the southwest post
+        // is offset half a post delta north and east from the southwest corner of the bounding box.
+        // The methods below take this into account.
 
         public override int LongitudeToIndex(double longitude)
         {
             GeodeticExtent extent = _terrainSource.Extent;
-            return (int)((longitude - extent.West) / _postDeltaLongitude);
+            return (int)((longitude - extent.West - _postDeltaLongitude * 0.5) / _postDeltaLongitude);
         }
 
         public override int LatitudeToIndex(double latitude)
         {
             GeodeticExtent extent = _terrainSource.Extent;
-            return (int)((latitude - extent.South) / _postDeltaLatitude);
+            return (int)((latitude - extent.South - _postDeltaLatitude * 0.5) / _postDeltaLatitude);
         }
 
         public override double IndexToLongitude(int longitudeIndex)
         {
             GeodeticExtent extent = _terrainSource.Extent;
-            return extent.West + longitudeIndex * _postDeltaLongitude;
+            return extent.West + _postDeltaLongitude * 0.5 + longitudeIndex * _postDeltaLongitude;
         }
 
         public override double IndexToLatitude(int latitudeIndex)
         {
             GeodeticExtent extent = _terrainSource.Extent;
-            return extent.South + latitudeIndex * _postDeltaLatitude;
+            return extent.South + _postDeltaLatitude * 0.5 + latitudeIndex * _postDeltaLatitude;
         }
 
         private class Tile
