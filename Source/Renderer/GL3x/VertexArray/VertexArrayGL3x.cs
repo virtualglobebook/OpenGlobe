@@ -19,7 +19,7 @@ namespace OpenGlobe.Renderer.GL3x
         public VertexArrayGL3x()
 	    {
             _handle = new VertexArrayNameGL3x();
-            _attachedVertexBuffers = new AttachedVertexBuffersGL3x();
+            _vertexBufferAttributes = new VertexBufferAttributesGL3x();
         }
 
         internal void Bind()
@@ -29,13 +29,13 @@ namespace OpenGlobe.Renderer.GL3x
 
         internal void Clean()
         {
-            _attachedVertexBuffers.Clean();
+            _vertexBufferAttributes.Clean();
 
             if (_dirtyIndexBuffer)
             {
-                if (_attachedIndexBuffer != null)
+                if (_indexBuffer != null)
                 {
-                    IndexBufferGL3x bufferObjectGL = _attachedIndexBuffer as IndexBufferGL3x;
+                    IndexBufferGL3x bufferObjectGL = _indexBuffer as IndexBufferGL3x;
                     bufferObjectGL.Bind();
                 }
                 else
@@ -49,23 +49,23 @@ namespace OpenGlobe.Renderer.GL3x
 
         internal int MaximumArrayIndex()
         {
-            return _attachedVertexBuffers.MaximumArrayIndex;
+            return _vertexBufferAttributes.MaximumArrayIndex;
         }
 
         #region VertexArray Members
 
-        public override AttachedVertexBuffers VertexBuffers
+        public override VertexBufferAttributes VertexBuffers
         {
-            get { return _attachedVertexBuffers; }
+            get { return _vertexBufferAttributes; }
         }
 
         public override IndexBuffer IndexBuffer
         {
-            get { return _attachedIndexBuffer; }
+            get { return _indexBuffer; }
 
             set
             {
-                _attachedIndexBuffer = value;
+                _indexBuffer = value;
                 _dirtyIndexBuffer = true;
             }
         }
@@ -78,10 +78,10 @@ namespace OpenGlobe.Renderer.GL3x
         {
             if (disposing)
             {
-                _attachedVertexBuffers.Dispose();
-                if (_attachedIndexBuffer != null)
+                _vertexBufferAttributes.Dispose();
+                if (_indexBuffer != null)
                 {
-                    _attachedIndexBuffer.Dispose();
+                    _indexBuffer.Dispose();
                 }
                 _handle.Dispose();
             }
@@ -91,8 +91,8 @@ namespace OpenGlobe.Renderer.GL3x
         #endregion
 
         private VertexArrayNameGL3x _handle;
-        private AttachedVertexBuffersGL3x _attachedVertexBuffers;
-        private IndexBuffer _attachedIndexBuffer;
+        private VertexBufferAttributesGL3x _vertexBufferAttributes;
+        private IndexBuffer _indexBuffer;
         private bool _dirtyIndexBuffer;
     }
 }

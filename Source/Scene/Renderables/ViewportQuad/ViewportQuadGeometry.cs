@@ -26,14 +26,14 @@ namespace OpenGlobe.Scene
         {
             if (_va == null)
             {
-                AttachedVertexBuffer attachedPositionBuffer = new AttachedVertexBuffer(
+                VertexBufferAttribute positionAttribute = new VertexBufferAttribute(
                     _positionBuffer, VertexAttributeComponentType.Float, 2);
-                AttachedVertexBuffer attachedTextureCoordinates = new AttachedVertexBuffer(
+                VertexBufferAttribute textureCoordinatesAttribute = new VertexBufferAttribute(
                     _textureCoordinatesBuffer, VertexAttributeComponentType.HalfFloat, 2);
 
                 _va = context.CreateVertexArray();
-                _va.VertexBuffers[sp.VertexAttributes["position"].Location] = attachedPositionBuffer;
-                _va.VertexBuffers[sp.VertexAttributes["textureCoordinates"].Location] = attachedTextureCoordinates;
+                _va.VertexBuffers[sp.VertexAttributes["position"].Location] = positionAttribute;
+                _va.VertexBuffers[sp.VertexAttributes["textureCoordinates"].Location] = textureCoordinatesAttribute;
             }
 
             if (_viewport != context.Viewport)

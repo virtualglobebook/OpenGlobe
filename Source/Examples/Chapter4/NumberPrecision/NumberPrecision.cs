@@ -90,11 +90,11 @@ namespace OpenGlobe.Examples.Chapter3.NumberPrecision
             _positionVertexBuffer = Device.CreateVertexBuffer(BufferHint.StaticCopy, sizeInBytes);
             _positionVertexBuffer.CopyFromSystemMemory(points);
 
-            AttachedVertexBuffer attachedPositionVertexBuffer = new AttachedVertexBuffer(
+            VertexBufferAttribute positionAttribute = new VertexBufferAttribute(
                 _positionVertexBuffer, VertexAttributeComponentType.Float, 3);
 
             int location = sp.VertexAttributes["position"].Location;
-            va.VertexBuffers[location] = attachedPositionVertexBuffer;
+            va.VertexBuffers[location] = positionAttribute;
 
             _camera.Camera.PerspectiveNearPlaneDistance = 0.005;
             _camera.Camera.PerspectiveFarPlaneDistance = 5.0;

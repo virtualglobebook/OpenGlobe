@@ -190,7 +190,7 @@ namespace OpenGlobe.Renderer
                     VertexBuffer vertexBuffer = Device.CreateVertexBuffer(usageHint, valuesArray.Length * sizeof(float));
                     vertexBuffer.CopyFromSystemMemory(valuesArray);
                     meshBuffers.VertexBuffers[shaderAttribute.Location] =
-                        new AttachedVertexBuffer(vertexBuffer, VertexAttributeComponentType.Float, 1);
+                        new VertexBufferAttribute(vertexBuffer, VertexAttributeComponentType.Float, 1);
                 }
                 else if (attribute.Datatype == VertexAttributeType.DoubleVector2)
                 {
@@ -205,7 +205,7 @@ namespace OpenGlobe.Renderer
                     VertexBuffer vertexBuffer = Device.CreateVertexBuffer(usageHint, valuesArray.Length * SizeInBytes<Vector2S>.Value);
                     vertexBuffer.CopyFromSystemMemory(valuesArray);
                     meshBuffers.VertexBuffers[shaderAttribute.Location] =
-                        new AttachedVertexBuffer(vertexBuffer, VertexAttributeComponentType.Float, 2);
+                        new VertexBufferAttribute(vertexBuffer, VertexAttributeComponentType.Float, 2);
                 }
                 else if (attribute.Datatype == VertexAttributeType.DoubleVector3)
                 {
@@ -220,7 +220,7 @@ namespace OpenGlobe.Renderer
                     VertexBuffer vertexBuffer = Device.CreateVertexBuffer(usageHint, valuesArray.Length * SizeInBytes<Vector3S>.Value);
                     vertexBuffer.CopyFromSystemMemory(valuesArray);
                     meshBuffers.VertexBuffers[shaderAttribute.Location] =
-                        new AttachedVertexBuffer(vertexBuffer, VertexAttributeComponentType.Float, 3);
+                        new VertexBufferAttribute(vertexBuffer, VertexAttributeComponentType.Float, 3);
                 }
                 else if (attribute.Datatype == VertexAttributeType.DoubleVector4)
                 {
@@ -235,63 +235,63 @@ namespace OpenGlobe.Renderer
                     VertexBuffer vertexBuffer = Device.CreateVertexBuffer(usageHint, valuesArray.Length * SizeInBytes<Vector4S>.Value);
                     vertexBuffer.CopyFromSystemMemory(valuesArray);
                     meshBuffers.VertexBuffers[shaderAttribute.Location] =
-                        new AttachedVertexBuffer(vertexBuffer, VertexAttributeComponentType.Float, 4);
+                        new VertexBufferAttribute(vertexBuffer, VertexAttributeComponentType.Float, 4);
                 }
                 else if (attribute.Datatype == VertexAttributeType.HalfFloat)
                 {
                     VertexBuffer vertexBuffer = CreateVertexBuffer((attribute as VertexAttribute<Half>).Values, SizeInBytes<Half>.Value, usageHint);
 
                     meshBuffers.VertexBuffers[shaderAttribute.Location] =
-                        new AttachedVertexBuffer(vertexBuffer, VertexAttributeComponentType.HalfFloat, 1);
+                        new VertexBufferAttribute(vertexBuffer, VertexAttributeComponentType.HalfFloat, 1);
                 }
                 else if (attribute.Datatype == VertexAttributeType.HalfFloatVector2)
                 {
                     VertexBuffer vertexBuffer = CreateVertexBuffer((attribute as VertexAttribute<Vector2H>).Values, SizeInBytes<Vector2H>.Value, usageHint);
 
                     meshBuffers.VertexBuffers[shaderAttribute.Location] =
-                        new AttachedVertexBuffer(vertexBuffer, VertexAttributeComponentType.HalfFloat, 2);
+                        new VertexBufferAttribute(vertexBuffer, VertexAttributeComponentType.HalfFloat, 2);
                 }
                 else if (attribute.Datatype == VertexAttributeType.HalfFloatVector3)
                 {
                     VertexBuffer vertexBuffer = CreateVertexBuffer((attribute as VertexAttribute<Vector3H>).Values, SizeInBytes<Vector3H>.Value, usageHint);
 
                     meshBuffers.VertexBuffers[shaderAttribute.Location] =
-                        new AttachedVertexBuffer(vertexBuffer, VertexAttributeComponentType.HalfFloat, 3);
+                        new VertexBufferAttribute(vertexBuffer, VertexAttributeComponentType.HalfFloat, 3);
                 }
                 else if (attribute.Datatype == VertexAttributeType.HalfFloatVector4)
                 {
                     VertexBuffer vertexBuffer = CreateVertexBuffer((attribute as VertexAttribute<Vector4H>).Values, SizeInBytes<Vector4H>.Value, usageHint);
 
                     meshBuffers.VertexBuffers[shaderAttribute.Location] =
-                        new AttachedVertexBuffer(vertexBuffer, VertexAttributeComponentType.HalfFloat, 4);
+                        new VertexBufferAttribute(vertexBuffer, VertexAttributeComponentType.HalfFloat, 4);
                 }
                 else if (attribute.Datatype == VertexAttributeType.Float)
                 {
                     VertexBuffer vertexBuffer = CreateVertexBuffer((attribute as VertexAttribute<float>).Values, sizeof(float), usageHint);
 
                     meshBuffers.VertexBuffers[shaderAttribute.Location] =
-                        new AttachedVertexBuffer(vertexBuffer, VertexAttributeComponentType.Float, 1);
+                        new VertexBufferAttribute(vertexBuffer, VertexAttributeComponentType.Float, 1);
                 }
                 else if (attribute.Datatype == VertexAttributeType.FloatVector2)
                 {
                     VertexBuffer vertexBuffer = CreateVertexBuffer((attribute as VertexAttribute<Vector2S>).Values, SizeInBytes<Vector2S>.Value, usageHint);
 
                     meshBuffers.VertexBuffers[shaderAttribute.Location] =
-                        new AttachedVertexBuffer(vertexBuffer, VertexAttributeComponentType.Float, 2);
+                        new VertexBufferAttribute(vertexBuffer, VertexAttributeComponentType.Float, 2);
                 }
                 else if (attribute.Datatype == VertexAttributeType.FloatVector3)
                 {
                     VertexBuffer vertexBuffer = CreateVertexBuffer((attribute as VertexAttribute<Vector3S>).Values, SizeInBytes<Vector3S>.Value, usageHint);
 
                     meshBuffers.VertexBuffers[shaderAttribute.Location] =
-                        new AttachedVertexBuffer(vertexBuffer, VertexAttributeComponentType.Float, 3);
+                        new VertexBufferAttribute(vertexBuffer, VertexAttributeComponentType.Float, 3);
                 }
                 else if (attribute.Datatype == VertexAttributeType.FloatVector4)
                 {
                     VertexBuffer vertexBuffer = CreateVertexBuffer((attribute as VertexAttribute<Vector4S>).Values, SizeInBytes<Vector4S>.Value, usageHint);
 
                     meshBuffers.VertexBuffers[shaderAttribute.Location] =
-                        new AttachedVertexBuffer(vertexBuffer, VertexAttributeComponentType.Float, 4);
+                        new VertexBufferAttribute(vertexBuffer, VertexAttributeComponentType.Float, 4);
                 }
                 else if (attribute.Datatype == VertexAttributeType.UnsignedByte)
                 {
@@ -300,14 +300,14 @@ namespace OpenGlobe.Renderer
                         VertexBuffer vertexBuffer = CreateVertexBuffer((attribute as VertexAttribute<byte>).Values, sizeof(byte), usageHint);
 
                         meshBuffers.VertexBuffers[shaderAttribute.Location] =
-                            new AttachedVertexBuffer(vertexBuffer, VertexAttributeComponentType.UnsignedByte, 4, true, 0, 0);
+                            new VertexBufferAttribute(vertexBuffer, VertexAttributeComponentType.UnsignedByte, 4, true, 0, 0);
                     }
                     else
                     {
                         VertexBuffer vertexBuffer = CreateVertexBuffer((attribute as VertexAttribute<byte>).Values, sizeof(byte), usageHint);
 
                         meshBuffers.VertexBuffers[shaderAttribute.Location] =
-                            new AttachedVertexBuffer(vertexBuffer, VertexAttributeComponentType.UnsignedByte, 1);
+                            new VertexBufferAttribute(vertexBuffer, VertexAttributeComponentType.UnsignedByte, 1);
                     }
                 }
                 else

@@ -16,38 +16,38 @@ using OpenGlobe.Core;
 
 namespace OpenGlobe.Renderer.GL3x
 {
-    internal struct AttachedVertexBufferGL3x
+    internal struct VertexBufferAttributeGL3x
     {
-        public AttachedVertexBuffer AttachedVertexBuffer { get; set; }
+        public VertexBufferAttribute VertexBufferAttribute { get; set; }
         public bool Dirty { get; set; }
     }
 
-    internal class AttachedVertexBuffersGL3x : AttachedVertexBuffers
+    internal class VertexBufferAttributesGL3x : VertexBufferAttributes
     {
-        public AttachedVertexBuffersGL3x()
+        public VertexBufferAttributesGL3x()
 	    {
-            _attachedBuffers = new AttachedVertexBufferGL3x[Device.MaximumNumberOfVertexAttributes];
+            _attributes = new VertexBufferAttributeGL3x[Device.MaximumNumberOfVertexAttributes];
         }
 
-        #region AttachedVertexBuffers Members
+        #region VertexBufferAttributes Members
 
-        public override AttachedVertexBuffer this[int index]
+        public override VertexBufferAttribute this[int index]
         {
-            get { return _attachedBuffers[index].AttachedVertexBuffer; }
+            get { return _attributes[index].VertexBufferAttribute; }
 
             set
             {
-                if ((_attachedBuffers[index].AttachedVertexBuffer != null) && (value == null))
+                if ((_attributes[index].VertexBufferAttribute != null) && (value == null))
                 {
                     --_count;
                 }
-                else if ((_attachedBuffers[index].AttachedVertexBuffer == null) && (value != null))
+                else if ((_attributes[index].VertexBufferAttribute == null) && (value != null))
                 {
                     ++_count;
                 }
 
-                _attachedBuffers[index].AttachedVertexBuffer = value;
-                _attachedBuffers[index].Dirty = true;
+                _attributes[index].VertexBufferAttribute = value;
+                _attributes[index].Dirty = true;
                 _dirty = true;
             }
         }
@@ -59,16 +59,16 @@ namespace OpenGlobe.Renderer.GL3x
 
         public override int MaximumCount 
         {
-            get { return _attachedBuffers.Length; }
+            get { return _attributes.Length; }
         }
 
         public override IEnumerator GetEnumerator()
         {
-            foreach (AttachedVertexBufferGL3x vb in _attachedBuffers)
+            foreach (VertexBufferAttributeGL3x vb in _attributes)
             {
-                if (vb.AttachedVertexBuffer != null)
+                if (vb.VertexBufferAttribute != null)
                 {
-                    yield return vb.AttachedVertexBuffer;
+                    yield return vb.VertexBufferAttribute;
                 }
             }
         }
@@ -81,11 +81,11 @@ namespace OpenGlobe.Renderer.GL3x
             {
                 int maximumArrayIndex = 0;
 
-                for (int i = 0; i < _attachedBuffers.Length; ++i)
+                for (int i = 0; i < _attributes.Length; ++i)
                 {
-                    AttachedVertexBuffer vb = _attachedBuffers[i].AttachedVertexBuffer;
+                    VertexBufferAttribute vb = _attributes[i].VertexBufferAttribute;
 
-                    if (_attachedBuffers[i].Dirty)
+                    if (_attributes[i].Dirty)
                     {
                         if (vb != null)
                         {
@@ -96,7 +96,7 @@ namespace OpenGlobe.Renderer.GL3x
                             Detach(i);
                         }
 
-                        _attachedBuffers[i].Dirty = false;
+                        _attributes[i].Dirty = false;
                     }
 
                     if (vb != null)
@@ -112,7 +112,7 @@ namespace OpenGlobe.Renderer.GL3x
 
         private void Attach(int index)
         {
-            AttachedVertexBuffer vb = _attachedBuffers[index].AttachedVertexBuffer;
+            VertexBufferAttribute vb = _attributes[index].VertexBufferAttribute;
 
             Debug.Assert(vb.NumberOfComponents >= 1);
             Debug.Assert(vb.NumberOfComponents <= 4);
@@ -158,7 +158,7 @@ namespace OpenGlobe.Renderer.GL3x
             }
         }
 
-        private static int NumberOfVertices(AttachedVertexBuffer vb)
+        private static int NumberOfVertices(VertexBufferAttribute vb)
         {
             return vb.VertexBuffer.SizeInBytes / vb.StrideInBytes;
         }
@@ -167,18 +167,18 @@ namespace OpenGlobe.Renderer.GL3x
         {
             if (disposing)
             {
-                foreach (AttachedVertexBufferGL3x attachedBuffer in _attachedBuffers)
+                foreach (VertexBufferAttributeGL3x attribute in _attributes)
                 {
-                    if (attachedBuffer.AttachedVertexBuffer != null)
+                    if (attribute.VertexBufferAttribute != null)
                     {
-                        attachedBuffer.AttachedVertexBuffer.Dispose();
+                        attribute.VertexBufferAttribute.Dispose();
                     }
                 }
             }
             base.Dispose(disposing);
         }
 
-        private AttachedVertexBufferGL3x[] _attachedBuffers;
+        private VertexBufferAttributeGL3x[] _attributes;
         private int _count;
         private int _maximumArrayIndex;
         private bool _dirty;

@@ -65,24 +65,24 @@ namespace OpenGlobe.Scene
             _pixelOffsetBuffer = Device.CreateVertexBuffer(BufferHint.StaticDraw, _billboards.Count * SizeInBytes<Vector2H>.Value);
             _textureCoordinatesBuffer = Device.CreateVertexBuffer(BufferHint.StaticDraw, _billboards.Count * SizeInBytes<Vector4H>.Value);
 
-            AttachedVertexBuffer attachedPositionBuffer = new AttachedVertexBuffer(
+            VertexBufferAttribute positionAttribute = new VertexBufferAttribute(
                 _positionBuffer, VertexAttributeComponentType.Float, 3);
-            AttachedVertexBuffer attachedColorBuffer = new AttachedVertexBuffer(
+            VertexBufferAttribute colorAttribute = new VertexBufferAttribute(
                 _colorBuffer, VertexAttributeComponentType.UnsignedByte, 4, true, 0, 0);
-            AttachedVertexBuffer attachedOriginBuffer = new AttachedVertexBuffer(
+            VertexBufferAttribute originAttribute = new VertexBufferAttribute(
                 _originBuffer, VertexAttributeComponentType.UnsignedByte, 1);
-            AttachedVertexBuffer attachedPixelOffsetBuffer = new AttachedVertexBuffer(
+            VertexBufferAttribute pixelOffsetAttribute = new VertexBufferAttribute(
                 _pixelOffsetBuffer, VertexAttributeComponentType.HalfFloat, 2);
-            AttachedVertexBuffer attachedTextureCoordinatesBuffer = new AttachedVertexBuffer(
+            VertexBufferAttribute textureCoordinatesAttribute = new VertexBufferAttribute(
                 _textureCoordinatesBuffer, VertexAttributeComponentType.HalfFloat, 4);
 
             ShaderProgram sp = _drawState.ShaderProgram;
             VertexArray va = context.CreateVertexArray();
-            va.VertexBuffers[sp.VertexAttributes["position"].Location] = attachedPositionBuffer;
-            va.VertexBuffers[sp.VertexAttributes["textureCoordinates"].Location] = attachedTextureCoordinatesBuffer;
-            va.VertexBuffers[sp.VertexAttributes["color"].Location] = attachedColorBuffer;
-            va.VertexBuffers[sp.VertexAttributes["origin"].Location] = attachedOriginBuffer;
-            va.VertexBuffers[sp.VertexAttributes["pixelOffset"].Location] = attachedPixelOffsetBuffer;
+            va.VertexBuffers[sp.VertexAttributes["position"].Location] = positionAttribute;
+            va.VertexBuffers[sp.VertexAttributes["textureCoordinates"].Location] = textureCoordinatesAttribute;
+            va.VertexBuffers[sp.VertexAttributes["color"].Location] = colorAttribute;
+            va.VertexBuffers[sp.VertexAttributes["origin"].Location] = originAttribute;
+            va.VertexBuffers[sp.VertexAttributes["pixelOffset"].Location] = pixelOffsetAttribute;
 
             _drawState.VertexArray = va;
         }

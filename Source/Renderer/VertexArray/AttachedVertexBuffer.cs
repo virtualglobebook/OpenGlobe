@@ -13,9 +13,9 @@ using System;
 
 namespace OpenGlobe.Renderer
 {
-    public class AttachedVertexBuffer : Disposable
+    public class VertexBufferAttribute : Disposable
     {
-        public AttachedVertexBuffer(
+        public VertexBufferAttribute(
             VertexBuffer vertexBuffer,
             VertexAttributeComponentType componentType,
             int numberOfComponents)
@@ -23,7 +23,7 @@ namespace OpenGlobe.Renderer
         {
         }
 
-        public AttachedVertexBuffer(
+        public VertexBufferAttribute(
             VertexBuffer vertexBuffer,
             VertexAttributeComponentType componentType,
             int numberOfComponents,

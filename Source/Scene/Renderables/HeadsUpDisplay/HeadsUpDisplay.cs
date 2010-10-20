@@ -50,11 +50,11 @@ namespace OpenGlobe.Scene
             // TODO:  Hint per buffer?  One hint?
             _positionBuffer = Device.CreateVertexBuffer(BufferHint.StaticDraw, SizeInBytes<Vector2S>.Value);
 
-            AttachedVertexBuffer attachedPositionBuffer = new AttachedVertexBuffer(
+            VertexBufferAttribute positionAttribute = new VertexBufferAttribute(
                 _positionBuffer, VertexAttributeComponentType.Float, 2);
 
             _drawState.VertexArray = context.CreateVertexArray();
-            _drawState.VertexArray.VertexBuffers[_drawState.ShaderProgram.VertexAttributes["position"].Location] = attachedPositionBuffer;
+            _drawState.VertexArray.VertexBuffers[_drawState.ShaderProgram.VertexAttributes["position"].Location] = positionAttribute;
          }
 
         private void Update(Context context)

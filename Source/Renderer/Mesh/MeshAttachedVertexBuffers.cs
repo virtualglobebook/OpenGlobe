@@ -16,31 +16,31 @@ using OpenGlobe.Core;
 
 namespace OpenGlobe.Renderer
 {
-    internal class MeshAttachedVertexBuffers : AttachedVertexBuffers
+    internal class MeshVertexBufferAttributes : VertexBufferAttributes
     {
-        public MeshAttachedVertexBuffers()
+        public MeshVertexBufferAttributes()
         {
-            _attachedBuffers = new AttachedVertexBuffer[Device.MaximumNumberOfVertexAttributes];
+            _attributes = new VertexBufferAttribute[Device.MaximumNumberOfVertexAttributes];
         }
 
-        #region AttachedVertexBuffers Members
+        #region vertexBufferAttributes Members
 
-        public override AttachedVertexBuffer this[int index]
+        public override VertexBufferAttribute this[int index]
         {
-            get { return _attachedBuffers[index]; }
+            get { return _attributes[index]; }
 
             set
             {
-                if ((_attachedBuffers[index] != null) && (value == null))
+                if ((_attributes[index] != null) && (value == null))
                 {
                     --_count;
                 }
-                else if ((_attachedBuffers[index] == null) && (value != null))
+                else if ((_attributes[index] == null) && (value != null))
                 {
                     ++_count;
                 }
 
-                _attachedBuffers[index] = value;
+                _attributes[index] = value;
             }
         }
 
@@ -51,23 +51,23 @@ namespace OpenGlobe.Renderer
 
         public override int MaximumCount
         {
-            get { return _attachedBuffers.Length; }
+            get { return _attributes.Length; }
         }
 
         public override IEnumerator GetEnumerator()
         {
-            foreach (AttachedVertexBuffer vb in _attachedBuffers)
+            foreach (VertexBufferAttribute vb in _attributes)
             {
-                if (_attachedBuffers != null)
+                if (_attributes != null)
                 {
-                    yield return _attachedBuffers;
+                    yield return _attributes;
                 }
             }
         }
 
         #endregion
 
-        private AttachedVertexBuffer[] _attachedBuffers;
+        private VertexBufferAttribute[] _attributes;
         private int _count;
     }
 }

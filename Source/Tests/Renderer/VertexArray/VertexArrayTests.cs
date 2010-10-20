@@ -42,25 +42,25 @@ namespace OpenGlobe.Renderer
             indexBuffer.CopyFromSystemMemory(indicies);
 
             //
-            // Create and verify attached vertex buffer
+            // Create and verify vertex buffer attribute
             //
-            AttachedVertexBuffer attachedVertexBuffer = new AttachedVertexBuffer(
+            VertexBufferAttribute vertexBufferAttribute = new VertexBufferAttribute(
                 vertexBuffer, VertexAttributeComponentType.Float, 3, false, 0, 0);
-            Assert.AreEqual(vertexBuffer, attachedVertexBuffer.VertexBuffer);
-            Assert.AreEqual(VertexAttributeComponentType.Float, attachedVertexBuffer.ComponentType);
-            Assert.AreEqual(3, attachedVertexBuffer.NumberOfComponents);
-            Assert.IsFalse(attachedVertexBuffer.Normalize);
-            Assert.AreEqual(0, attachedVertexBuffer.OffsetInBytes);
-            Assert.AreEqual(SizeInBytes<Vector3S>.Value, attachedVertexBuffer.StrideInBytes);
+            Assert.AreEqual(vertexBuffer, vertexBufferAttribute.VertexBuffer);
+            Assert.AreEqual(VertexAttributeComponentType.Float, vertexBufferAttribute.ComponentType);
+            Assert.AreEqual(3, vertexBufferAttribute.NumberOfComponents);
+            Assert.IsFalse(vertexBufferAttribute.Normalize);
+            Assert.AreEqual(0, vertexBufferAttribute.OffsetInBytes);
+            Assert.AreEqual(SizeInBytes<Vector3S>.Value, vertexBufferAttribute.StrideInBytes);
 
             //
             // Create and verify vertex array
             //
             VertexArray va = window.Context.CreateVertexArray();
-            va.VertexBuffers[0] = attachedVertexBuffer;
+            va.VertexBuffers[0] = vertexBufferAttribute;
             va.IndexBuffer = indexBuffer;
 
-            Assert.AreEqual(attachedVertexBuffer, va.VertexBuffers[0]);
+            Assert.AreEqual(vertexBufferAttribute, va.VertexBuffers[0]);
             Assert.AreEqual(indexBuffer, va.IndexBuffer);
 
             va.VertexBuffers[0] = null;
@@ -76,7 +76,7 @@ namespace OpenGlobe.Renderer
         }
 
         [Test]
-        public void EnumerateAttachedVertexBuffers()
+        public void EnumeratevertexBufferAttributes()
         {
             GraphicsWindow window = Device.CreateWindow(1, 1);
 
@@ -85,19 +85,19 @@ namespace OpenGlobe.Renderer
             VertexBuffer vb1 = Device.CreateVertexBuffer(BufferHint.DynamicDraw, 4);
             VertexBuffer vb2 = Device.CreateVertexBuffer(BufferHint.StreamDraw, 4);
 
-            va.VertexBuffers[0] = new AttachedVertexBuffer(vb0, VertexAttributeComponentType.Float, 1);
-            va.VertexBuffers[1] = new AttachedVertexBuffer(vb1, VertexAttributeComponentType.Float, 1);
-            va.VertexBuffers[2] = new AttachedVertexBuffer(vb2, VertexAttributeComponentType.Float, 1);
+            va.VertexBuffers[0] = new VertexBufferAttribute(vb0, VertexAttributeComponentType.Float, 1);
+            va.VertexBuffers[1] = new VertexBufferAttribute(vb1, VertexAttributeComponentType.Float, 1);
+            va.VertexBuffers[2] = new VertexBufferAttribute(vb2, VertexAttributeComponentType.Float, 1);
             Assert.AreEqual(3, va.VertexBuffers.Count);
 
             va.VertexBuffers[1] = null;
             Assert.AreEqual(2, va.VertexBuffers.Count);
 
-            va.VertexBuffers[1] = new AttachedVertexBuffer(vb1, VertexAttributeComponentType.Float, 1);
+            va.VertexBuffers[1] = new VertexBufferAttribute(vb1, VertexAttributeComponentType.Float, 1);
             Assert.AreEqual(3, va.VertexBuffers.Count);
 
             int count = 0;
-            foreach (AttachedVertexBuffer vb in va.VertexBuffers)
+            foreach (VertexBufferAttribute vb in va.VertexBuffers)
             {
                 Assert.IsNotNull(vb.VertexBuffer);
                 ++count;

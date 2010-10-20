@@ -12,9 +12,9 @@ using OpenGlobe.Core;
 
 namespace OpenGlobe.Renderer
 {
-    public abstract class AttachedVertexBuffers : Disposable
+    public abstract class VertexBufferAttributes : Disposable
     {
-        public abstract AttachedVertexBuffer this[int index] { get; set; }
+        public abstract VertexBufferAttribute this[int index] { get; set; }
         public abstract int Count { get; }
         public abstract int MaximumCount { get; }
         public abstract IEnumerator GetEnumerator();
