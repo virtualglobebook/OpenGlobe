@@ -7,10 +7,34 @@
 //
 
 in float height;
+in vec3 normalFS;
+in vec3 positionToLightFS;
+in vec3 positionToEyeFS;
                  
 out vec3 fragmentColor;
 
+uniform vec4 og_diffuseSpecularAmbientShininess;
+
+float LightIntensity(vec3 normal, vec3 toLight, vec3 toEye, vec4 diffuseSpecularAmbientShininess)
+{
+    vec3 toReflectedLight = reflect(-toLight, normal);
+
+    float diffuse = max(dot(toLight, normal), 0.0);
+    float specular = max(dot(toReflectedLight, toEye), 0.0);
+    specular = pow(specular, diffuseSpecularAmbientShininess.w);
+
+    return (diffuseSpecularAmbientShininess.x * diffuse) +
+            (diffuseSpecularAmbientShininess.y * specular) +
+            diffuseSpecularAmbientShininess.z;
+}
+
 void main()
 {
-    fragmentColor = vec3(0.0, clamp(height / 4000.0, 0.0, 1.0), clamp(-height / 5000, 0.0, 1.0));
+    vec3 normal = normalize(normalFS);
+    vec3 positionToLight = normalize(positionToLightFS);
+    vec3 positionToEye = normalize(positionToEyeFS);
+
+	float intensity = LightIntensity(normal, positionToLight, positionToEye, og_diffuseSpecularAmbientShininess);
+	
+	fragmentColor = mix(vec3(0.0, intensity, 0.0), vec3(0.0, 0.0, intensity), (height < 0.0));
 }
