@@ -21,16 +21,16 @@ using System.Drawing;
 namespace OpenGlobe.Tests.Scene.Terrain
 {
     [TestFixture]
-    public class ClipMapTerrainTest
+    public class ClipmapTerrainTest
     {
         [Test]
         [Explicit]
         public void Test()
         {
-            GraphicsWindow window = Device.CreateWindow(800, 600, "ClipMap Terrain Test");
+            GraphicsWindow window = Device.CreateWindow(800, 600, "Clipmap Terrain Test");
 
             WorldWindTerrainSource worldWind = new WorldWindTerrainSource();
-            ClipmapTerrain clipMap = new ClipmapTerrain(window.Context, worldWind, 255);
+            ClipmapTerrain clipmap = new ClipmapTerrain(window.Context, worldWind, 255);
 
             SceneState sceneState = new SceneState();
             sceneState.DiffuseIntensity = 0.9f;
@@ -67,7 +67,7 @@ namespace OpenGlobe.Tests.Scene.Terrain
             {
                 Context context = window.Context;
                 context.Clear(clearState);
-                clipMap.Render(context, sceneState);
+                clipmap.Render(context, sceneState);
             };
 
             window.Run(30.0);

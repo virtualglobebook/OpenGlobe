@@ -97,7 +97,7 @@
     <Compile Include="Scene\Renderables\BillboardCollectionTests.cs" />
     <Compile Include="Scene\Renderables\BillboardTests.cs" />
     <Compile Include="Scene\SystemTests.cs" />
-    <Compile Include="Scene\Terrain\ClipMapTerrainTest.cs" />
+    <Compile Include="Scene\Terrain\ClipmapTerrainTest.cs" />
     <Compile Include="Scene\Terrain\WorldWindTerrainSourceTest.cs" />
     <Compile Include="TestUtility.cs" />
     <Compile Include="Core\Vector3STests.cs" />
