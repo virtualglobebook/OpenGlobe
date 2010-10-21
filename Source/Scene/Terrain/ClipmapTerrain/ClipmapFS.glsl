@@ -38,5 +38,6 @@ void main()
 
 	float intensity = LightIntensity(normal, positionToLight, positionToEye, og_diffuseSpecularAmbientShininess);
 	
-	fragmentColor = mix(vec3(u_color * intensity), vec3(0.0, 0.0, intensity), alphaScalar);
+	fragmentColor = mix(vec3(u_color * intensity), vec3(0.0, 0.0, intensity), height < 0);
+	//fragmentColor = vec3(0.0, 0.0, alphaScalar * 20) + u_color * 0.0001;
 }

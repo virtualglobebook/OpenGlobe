@@ -26,15 +26,42 @@ uniform vec2 u_viewerPos;
 uniform vec2 u_alphaOffset;
 uniform float u_oneOverTransitionWidth;
 
+vec2 GridToWorld(vec2 gridPos)
+{
+	return gridPos * u_scaleFactor.xy + u_scaleFactor.zw;
+}
+
+float SampleHeight(vec2 gridPos, vec2 worldPos)
+{
+	// Compute coordinates for vertex texture
+	//  u_fineBlockOrig.xy: 1/(w, h) of texture
+	//  u_fineBlockOrig.zw: origin of block in texture
+	vec2 uvFine = gridPos * u_fineBlockOrig.xy + u_fineBlockOrig.zw;
+	vec2 uvCoarse = gridPos * u_coarseBlockOrig.xy + u_coarseBlockOrig.zw;
+
+	// compute alpha (transition parameter) and blend elevation
+	// u_viewerPos should eventually be simply og_cameraEye.
+	vec2 alpha = clamp((abs(worldPos - u_viewerPos) - u_alphaOffset) * u_oneOverTransitionWidth, 0, 1);
+	alphaScalar = max(alpha.x, alpha.y);
+
+	// sample the vertex texture
+	float heightFine = texture(og_texture0, uvFine).r;
+	float heightCoarse = texture(og_texture1, uvCoarse).r;
+	return (1.0 - alphaScalar) * heightFine + alphaScalar * heightCoarse;
+}
+
 vec3 ComputeNormalForwardDifference(
-    vec3 displacedPosition, 
-    sampler2D heightMap, 
-	vec2 textureScale, // 1/(w, h) of texture
+    vec2 gridPos, 
+	vec3 worldPos,
     float heightExaggeration)
 {
-    vec3 right = vec3(displacedPosition.xy + vec2(1.0, 0.0) * textureScale, texture(heightMap, displacedPosition.xy + vec2(1.0, 0.0) * textureScale).r * heightExaggeration);
-    vec3 top = vec3(displacedPosition.xy + vec2(0.0, 1.0) * textureScale, texture(heightMap, displacedPosition.xy + vec2(0.0, 1.0) * textureScale).r * heightExaggeration);
-    return cross(right - displacedPosition, top - displacedPosition);
+	vec2 rightGrid = gridPos.xy + vec2(1.0, 0.0);
+	vec2 rightWorld = GridToWorld(rightGrid);
+    vec3 right = vec3(rightWorld, SampleHeight(rightGrid, rightWorld) * heightExaggeration);
+	vec2 topGrid = gridPos.xy + vec2(0.0, 1.0);
+	vec2 topWorld = GridToWorld(topGrid);
+    vec3 top = vec3(topWorld, SampleHeight(topGrid, topWorld) * heightExaggeration);
+    return cross(right - worldPos, top - worldPos);
 }
 
 void main()
@@ -42,28 +69,13 @@ void main()
 	// Convert from grid xy to world xy coordinates
 	//  u_scaleFactor.xy: grid spacing of current level
 	//  u_scaleFactor.zw: origin of current block within world
-	vec2 worldPos = position * u_scaleFactor.xy + u_scaleFactor.zw;
+	vec2 worldPos = GridToWorld(position);
+	height = SampleHeight(position, worldPos);
 
-	// Compute coordinates for vertex texture
-	//  u_fineBlockOrig.xy: 1/(w, h) of texture
-	//  u_fineBlockOrig.zw: origin of block in texture
-	vec2 uvFine = position * u_fineBlockOrig.xy + u_fineBlockOrig.zw;
-	vec2 uvCoarse = position * u_coarseBlockOrig.xy + u_coarseBlockOrig.zw;
+	float heightExaggeration = 0.00001;
+	vec3 displacedPosition = vec3(worldPos, height * heightExaggeration);
+	normalFS = ComputeNormalForwardDifference(position, displacedPosition, heightExaggeration);
 
-	// compute alpha (transition parameter) and blend elevation
-	// u_viewerPos should eventually be simply og_cameraEye.
-	vec2 alpha = clamp((abs(worldPos - u_viewerPos) - u_alphaOffset) * u_oneOverTransitionWidth, 0, 1);
-	alphaScalar = max(alpha.x, alpha.y);
-	alphaScalar = 1.0;
-
-	// sample the vertex texture
-	float heightFine = texture(og_texture0, uvFine).r;
-	float heightCoarse = texture(og_texture1, uvCoarse).r;
-	height = (1.0 - alphaScalar) * heightFine + alphaScalar * heightCoarse;
-
-	normalFS = ComputeNormalForwardDifference(vec3(uvFine, height * 0.00001), og_texture0, u_fineBlockOrig.xy, 0.00001);
-
-	vec3 displacedPosition = vec3(worldPos.x, worldPos.y, height * 0.00001);
 	gl_Position = og_modelViewPerspectiveMatrix * vec4(displacedPosition, 1.0);
     positionToLightFS = og_sunPosition - displacedPosition;
     positionToEyeFS = og_cameraEye - displacedPosition;
