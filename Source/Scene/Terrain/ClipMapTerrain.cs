@@ -60,9 +60,16 @@ namespace OpenGlobe.Scene.Terrain
                 1, 2 * _fieldBlockSize - 1);
             _offsetStripVertical = context.CreateVertexArray(offsetStripVerticalMesh, _shaderProgram.VertexAttributes, BufferHint.StaticDraw);
 
+            Mesh degenerateTriangleMesh = CreateDegenerateTriangleMesh();
+            _degenerateTriangles = context.CreateVertexArray(degenerateTriangleMesh, _shaderProgram.VertexAttributes, BufferHint.StaticDraw);
+
             _scaleFactor = (Uniform<Vector4S>)_shaderProgram.Uniforms["u_scaleFactor"];
             _fineBlockOrigin = (Uniform<Vector4S>)_shaderProgram.Uniforms["u_fineBlockOrig"];
+            _coarseBlockOrigin = (Uniform<Vector4S>)_shaderProgram.Uniforms["u_coarseBlockOrig"];
             _color = (Uniform<Vector3S>)_shaderProgram.Uniforms["u_color"];
+            _viewerPos = (Uniform<Vector2S>)_shaderProgram.Uniforms["u_viewerPos"];
+            _alphaOffset = (Uniform<Vector2S>)_shaderProgram.Uniforms["u_alphaOffset"];
+            _oneOverTransitionWidth = (Uniform<float>)_shaderProgram.Uniforms["u_oneOverTransitionWidth"];
 
             _renderState = new RenderState();
             _renderState.FacetCulling.FrontFaceWindingOrder = fieldBlockMesh.FrontFaceWindingOrder;
@@ -173,6 +180,8 @@ namespace OpenGlobe.Scene.Terrain
                 Texture2D terrainTexture = _clipMapLevels[level];
                 terrainTexture.CopyFromBuffer(pixelBuffer, ImageFormat.Red, ImageDatatype.Float);
                 context.TextureUnits[0].Texture2D = terrainTexture;
+                Texture2D coarserTexture = level == 0 ? _clipMapLevels[0] : _clipMapLevels[level - 1];
+                context.TextureUnits[1].Texture2D = coarserTexture;
 
                 DrawBlock(_fieldBlock, levelData, west, south, west, south, context, sceneState);
                 DrawBlock(_fieldBlock, levelData, west, south, west + _fieldBlockSize - 1, south, context, sceneState);
@@ -204,8 +213,9 @@ namespace OpenGlobe.Scene.Terrain
                 offset = offsetStripOnEast
                                 ? east - _fieldBlockSize
                                 : west + _fieldBlockSize - 1;
-
                 DrawBlock(_offsetStripVertical, levelData, west, south, offset, south + _fieldBlockSize, context, sceneState);
+
+                DrawBlock(_degenerateTriangles, levelData, west, south, west, south, context, sceneState);
 
                 // Fill the center of the highest-detail ring
                 if (level == _clipMapLevels.Length - 1)
@@ -226,15 +236,74 @@ namespace OpenGlobe.Scene.Terrain
             int textureWest = blockWest - overallWest;
             int textureSouth = blockSouth - overallSouth;
 
+            double parentOverallWest = overallWest / 2.0;
+            double parentOverallSouth = overallSouth / 2.0;
+            double parentBlockWest = blockWest / 2.0;
+            double parentBlockSouth = blockSouth / 2.0;
+            double parentTextureWest = parentBlockWest - parentOverallWest;
+            double parentTextureSouth = parentBlockSouth - parentOverallSouth;
+
             DrawState drawState = new DrawState(_renderState, _shaderProgram, block);
             _scaleFactor.Value = new Vector4S((float)levelData.PostDeltaLongitude, (float)levelData.PostDeltaLatitude, (float)originLongitude, (float)originLatitude);
             _fineBlockOrigin.Value = new Vector4S((float)(1.0 / _clipMapSize), (float)(1.0 / _clipMapSize), (float)textureWest / _clipMapSize, (float)textureSouth / _clipMapSize);
-            _color.Value = new Vector3S(0.0f, 1.0f, 0.0f);
+            _coarseBlockOrigin.Value = new Vector4S((float)(1.0 / (2 * _clipMapSize)), (float)(1.0 / (2 * _clipMapSize)), (float)parentTextureWest / (_clipMapSize * 2), (float)parentTextureSouth / (_clipMapSize * 2));
+            _viewerPos.Value = sceneState.Camera.Target.XY.ToVector2S();
+            float w = _clipMapSize / 10.0f;
+            float alphaOffset = (_clipMapSize - 1) / 2.0f - w - 1.0f;
+            _alphaOffset.Value = new Vector2S(alphaOffset, alphaOffset);
+            _oneOverTransitionWidth.Value = 1.0f / w;
+            //if (block == _degenerateTriangles)
+            //    _color.Value = new Vector3S(1.0f, 0.0f, 0.0f);
+            //else
+                _color.Value = new Vector3S(0.0f, 1.0f, 0.0f);
             context.Draw(_primitiveType, drawState, sceneState);
         }
 
         public void Dispose()
         {
+        }
+
+        private Mesh CreateDegenerateTriangleMesh()
+        {
+            Mesh mesh = new Mesh();
+            mesh.PrimitiveType = PrimitiveType.Triangles;
+            mesh.FrontFaceWindingOrder = WindingOrder.Counterclockwise;
+
+            int numberOfPositions = (_clipMapSize - 2) * 4;
+            VertexAttributeDoubleVector2 positionsAttribute = new VertexAttributeDoubleVector2("position", numberOfPositions);
+            IList<Vector2D> positions = positionsAttribute.Values;
+            mesh.Attributes.Add(positionsAttribute);
+
+            int numberOfIndices = (_clipMapSize - 1) * 2 * 3;
+            IndicesInt16 indices = new IndicesInt16(numberOfIndices);
+            mesh.Indices = indices;
+
+            for (int i = 0; i < _clipMapSize - 1; ++i)
+            {
+                positions.Add(new Vector2D(0.0, i));
+            }
+
+            for (int i = 0; i < _clipMapSize - 1; ++i)
+            {
+                positions.Add(new Vector2D(i, _clipMapSize - 1));
+            }
+
+            for (int i = _clipMapSize - 1; i > 0; --i)
+            {
+                positions.Add(new Vector2D(_clipMapSize - 1, i));
+            }
+
+            for (int i = _clipMapSize - 1; i > 0; --i)
+            {
+                positions.Add(new Vector2D(i, _clipMapSize - 1));
+            }
+
+            for (int i = 0; i < (short)numberOfIndices; i += 2)
+            {
+                indices.AddTriangle(new TriangleIndicesInt16((short)i, (short)(i + 1), (short)(i + 2)));
+            }
+
+            return mesh;
         }
 
         private void PostsToBitmap(string filename, float[] posts, int width, int height)
@@ -290,9 +359,15 @@ namespace OpenGlobe.Scene.Terrain
         private VertexArray _ringFixupVertical;
         private VertexArray _offsetStripHorizontal;
         private VertexArray _offsetStripVertical;
+        private VertexArray _degenerateTriangles;
 
         private Uniform<Vector4S> _scaleFactor;
         private Uniform<Vector4S> _fineBlockOrigin;
+        private Uniform<Vector4S> _coarseBlockOrigin;
         private Uniform<Vector3S> _color;
+        private Uniform<Vector2S> _viewerPos;
+        private Uniform<Vector2S> _alphaOffset;
+        private Uniform<float> _oneOverTransitionWidth;
+
     }
 }
