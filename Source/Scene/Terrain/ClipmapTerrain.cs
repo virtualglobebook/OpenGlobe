@@ -1,4 +1,13 @@
-﻿using System;
+﻿#region License
+//
+// (C) Copyright 2010 Patrick Cozzi and Kevin Ring
+//
+// Distributed under the Boost Software License, Version 1.0.
+// See License.txt or http://www.boost.org/LICENSE_1_0.txt.
+//
+#endregion
+
+using System;
 using System.Collections.Generic;
 using System.Text;
 using OpenGlobe.Renderer;
@@ -10,27 +19,27 @@ using System.Drawing;
 
 namespace OpenGlobe.Scene.Terrain
 {
-    public class ClipMapTerrain : IRenderable, IDisposable
+    public class ClipmapTerrain : IRenderable, IDisposable
     {
-        public ClipMapTerrain(Context context, RasterTerrainSource terrainSource, int clipMapSize)
+        public ClipmapTerrain(Context context, RasterTerrainSource terrainSource, int clipmapSize)
         {
             _terrainSource = terrainSource;
-            _clipMapSize = clipMapSize;
+            _clipmapSize = clipmapSize;
 
-            int clipMapLevels = _terrainSource.Levels.Count;
-            _clipMapLevels = new Texture2D[clipMapLevels];
+            int clipmapLevels = _terrainSource.Levels.Count;
+            _clipmapLevels = new Texture2D[clipmapLevels];
 
-            for (int i = 0; i < _clipMapLevels.Length; ++i)
+            for (int i = 0; i < _clipmapLevels.Length; ++i)
             {
-                _clipMapLevels[i] = Device.CreateTexture2D(new Texture2DDescription(_clipMapSize, _clipMapSize, TextureFormat.Red32f));
-                _clipMapLevels[i].Filter = Texture2DFilter.NearestClampToEdge;
+                _clipmapLevels[i] = Device.CreateTexture2D(new Texture2DDescription(_clipmapSize, _clipmapSize, TextureFormat.Red32f));
+                _clipmapLevels[i].Filter = Texture2DFilter.NearestClampToEdge;
             }
 
             _shaderProgram = Device.CreateShaderProgram(
-                EmbeddedResources.GetText("OpenGlobe.Scene.Terrain.ClipMapTerrain.ClipMapVS.glsl"),
-                EmbeddedResources.GetText("OpenGlobe.Scene.Terrain.ClipMapTerrain.ClipMapFS.glsl"));
+                EmbeddedResources.GetText("OpenGlobe.Scene.Terrain.ClipmapTerrain.ClipmapVS.glsl"),
+                EmbeddedResources.GetText("OpenGlobe.Scene.Terrain.ClipmapTerrain.ClipmapFS.glsl"));
 
-            _fieldBlockSize = (clipMapSize + 1) / 4; // M
+            _fieldBlockSize = (clipmapSize + 1) / 4; // M
 
             // Create the MxM block used to fill the ring and the field.
             Mesh fieldBlockMesh = RectangleTessellator.Compute(
@@ -80,7 +89,7 @@ namespace OpenGlobe.Scene.Terrain
         {
             int finerWest = -1;
             int finerSouth = -1;
-            for (int i = _clipMapLevels.Length - 1; i >= 0; --i)
+            for (int i = _clipmapLevels.Length - 1; i >= 0; --i)
             {
                 int currentWest, currentSouth;
                 RenderLevel(i, context, sceneState, finerWest, finerSouth, out currentWest, out currentSouth);
@@ -106,8 +115,8 @@ namespace OpenGlobe.Scene.Terrain
             if (finerWest == -1)
             {
                 // This is the finest level of the clipmap.
-                west = (int)longitudeIndex - _clipMapSize / 2;
-                south = (int)latitudeIndex - _clipMapSize / 2;
+                west = (int)longitudeIndex - _clipmapSize / 2;
+                south = (int)latitudeIndex - _clipmapSize / 2;
 
                 if ((west % 2) != 0)
                 {
@@ -128,7 +137,7 @@ namespace OpenGlobe.Scene.Terrain
                 finerWest /= 2;
                 finerSouth /= 2;
 
-                double westDesired = longitudeIndex - _clipMapSize / 2;
+                double westDesired = longitudeIndex - _clipmapSize / 2;
                 int westOption1 = finerWest - (_fieldBlockSize - 1);
                 int westOption2 = finerWest - _fieldBlockSize;
 
@@ -143,7 +152,7 @@ namespace OpenGlobe.Scene.Terrain
                     offsetStripOnEast = false;
                 }
 
-                double southDesired = latitudeIndex - _clipMapSize / 2;
+                double southDesired = latitudeIndex - _clipmapSize / 2;
                 int southOption1 = finerSouth - (_fieldBlockSize - 1);
                 int southOption2 = finerSouth - _fieldBlockSize;
 
@@ -159,14 +168,14 @@ namespace OpenGlobe.Scene.Terrain
                 }
             }
 
-            int east = west + _clipMapSize - 1;
-            int north = south + _clipMapSize - 1;
+            int east = west + _clipmapSize - 1;
+            int north = south + _clipmapSize - 1;
 
             currentWest = west;
             currentSouth = south;
 
-            short[] posts = new short[_clipMapSize * _clipMapSize];
-            levelData.GetPosts(west, south, east, north, posts, 0, _clipMapSize);
+            short[] posts = new short[_clipmapSize * _clipmapSize];
+            levelData.GetPosts(west, south, east, north, posts, 0, _clipmapSize);
 
             float[] floatPosts = new float[posts.Length];
             for (int i = 0; i < floatPosts.Length; ++i)
@@ -174,13 +183,13 @@ namespace OpenGlobe.Scene.Terrain
                 floatPosts[i] = posts[i];
             }
 
-            using (WritePixelBuffer pixelBuffer = Device.CreateWritePixelBuffer(WritePixelBufferHint.StreamDraw, _clipMapSize * _clipMapSize * sizeof(float)))
+            using (WritePixelBuffer pixelBuffer = Device.CreateWritePixelBuffer(WritePixelBufferHint.StreamDraw, _clipmapSize * _clipmapSize * sizeof(float)))
             {
                 pixelBuffer.CopyFromSystemMemory(floatPosts);
-                Texture2D terrainTexture = _clipMapLevels[level];
+                Texture2D terrainTexture = _clipmapLevels[level];
                 terrainTexture.CopyFromBuffer(pixelBuffer, ImageFormat.Red, ImageDatatype.Float);
                 context.TextureUnits[0].Texture2D = terrainTexture;
-                Texture2D coarserTexture = level == 0 ? _clipMapLevels[0] : _clipMapLevels[level - 1];
+                Texture2D coarserTexture = level == 0 ? _clipmapLevels[0] : _clipmapLevels[level - 1];
                 context.TextureUnits[1].Texture2D = coarserTexture;
 
                 DrawBlock(_fieldBlock, levelData, west, south, west, south, context, sceneState);
@@ -218,7 +227,7 @@ namespace OpenGlobe.Scene.Terrain
                 DrawBlock(_degenerateTriangles, levelData, west, south, west, south, context, sceneState);
 
                 // Fill the center of the highest-detail ring
-                if (level == _clipMapLevels.Length - 1)
+                if (level == _clipmapLevels.Length - 1)
                 {
                     DrawBlock(_fieldBlock, levelData, west, south, west + _fieldBlockSize - 1, south + _fieldBlockSize - 1, context, sceneState);
                     DrawBlock(_fieldBlock, levelData, west, south, west + 2 * (_fieldBlockSize - 1), south + _fieldBlockSize - 1, context, sceneState);
@@ -245,11 +254,11 @@ namespace OpenGlobe.Scene.Terrain
 
             DrawState drawState = new DrawState(_renderState, _shaderProgram, block);
             _scaleFactor.Value = new Vector4S((float)levelData.PostDeltaLongitude, (float)levelData.PostDeltaLatitude, (float)originLongitude, (float)originLatitude);
-            _fineBlockOrigin.Value = new Vector4S((float)(1.0 / _clipMapSize), (float)(1.0 / _clipMapSize), (float)textureWest / _clipMapSize, (float)textureSouth / _clipMapSize);
-            _coarseBlockOrigin.Value = new Vector4S((float)(1.0 / (2 * _clipMapSize)), (float)(1.0 / (2 * _clipMapSize)), (float)parentTextureWest / (_clipMapSize * 2), (float)parentTextureSouth / (_clipMapSize * 2));
+            _fineBlockOrigin.Value = new Vector4S((float)(1.0 / _clipmapSize), (float)(1.0 / _clipmapSize), (float)textureWest / _clipmapSize, (float)textureSouth / _clipmapSize);
+            _coarseBlockOrigin.Value = new Vector4S((float)(1.0 / (2 * _clipmapSize)), (float)(1.0 / (2 * _clipmapSize)), (float)parentTextureWest / (_clipmapSize * 2), (float)parentTextureSouth / (_clipmapSize * 2));
             _viewerPos.Value = sceneState.Camera.Target.XY.ToVector2S();
-            float w = _clipMapSize / 10.0f;
-            float alphaOffset = (_clipMapSize - 1) / 2.0f - w - 1.0f;
+            float w = _clipmapSize / 10.0f;
+            float alphaOffset = (_clipmapSize - 1) / 2.0f - w - 1.0f;
             _alphaOffset.Value = new Vector2S(alphaOffset, alphaOffset);
             _oneOverTransitionWidth.Value = 1.0f / w;
             //if (block == _degenerateTriangles)
@@ -269,33 +278,33 @@ namespace OpenGlobe.Scene.Terrain
             mesh.PrimitiveType = PrimitiveType.Triangles;
             mesh.FrontFaceWindingOrder = WindingOrder.Counterclockwise;
 
-            int numberOfPositions = (_clipMapSize - 2) * 4;
+            int numberOfPositions = (_clipmapSize - 2) * 4;
             VertexAttributeDoubleVector2 positionsAttribute = new VertexAttributeDoubleVector2("position", numberOfPositions);
             IList<Vector2D> positions = positionsAttribute.Values;
             mesh.Attributes.Add(positionsAttribute);
 
-            int numberOfIndices = (_clipMapSize - 1) * 2 * 3;
+            int numberOfIndices = (_clipmapSize - 1) * 2 * 3;
             IndicesInt16 indices = new IndicesInt16(numberOfIndices);
             mesh.Indices = indices;
 
-            for (int i = 0; i < _clipMapSize - 1; ++i)
+            for (int i = 0; i < _clipmapSize - 1; ++i)
             {
                 positions.Add(new Vector2D(0.0, i));
             }
 
-            for (int i = 0; i < _clipMapSize - 1; ++i)
+            for (int i = 0; i < _clipmapSize - 1; ++i)
             {
-                positions.Add(new Vector2D(i, _clipMapSize - 1));
+                positions.Add(new Vector2D(i, _clipmapSize - 1));
             }
 
-            for (int i = _clipMapSize - 1; i > 0; --i)
+            for (int i = _clipmapSize - 1; i > 0; --i)
             {
-                positions.Add(new Vector2D(_clipMapSize - 1, i));
+                positions.Add(new Vector2D(_clipmapSize - 1, i));
             }
 
-            for (int i = _clipMapSize - 1; i > 0; --i)
+            for (int i = _clipmapSize - 1; i > 0; --i)
             {
-                positions.Add(new Vector2D(i, _clipMapSize - 1));
+                positions.Add(new Vector2D(i, _clipmapSize - 1));
             }
 
             for (int i = 0; i < (short)numberOfIndices; i += 2)
@@ -347,8 +356,8 @@ namespace OpenGlobe.Scene.Terrain
         }
 
         private RasterTerrainSource _terrainSource;
-        private int _clipMapSize;
-        private Texture2D[] _clipMapLevels;
+        private int _clipmapSize;
+        private Texture2D[] _clipmapLevels;
         private ShaderProgram _shaderProgram;
         private RenderState _renderState;
         private PrimitiveType _primitiveType;

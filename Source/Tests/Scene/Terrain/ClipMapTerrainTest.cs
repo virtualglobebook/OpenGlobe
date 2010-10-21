@@ -1,4 +1,13 @@
-﻿using System;
+﻿#region License
+//
+// (C) Copyright 2010 Patrick Cozzi and Kevin Ring
+//
+// Distributed under the Boost Software License, Version 1.0.
+// See License.txt or http://www.boost.org/LICENSE_1_0.txt.
+//
+#endregion
+
+using System;
 using System.Collections.Generic;
 using System.Text;
 using NUnit.Framework;
@@ -21,7 +30,7 @@ namespace OpenGlobe.Tests.Scene.Terrain
             GraphicsWindow window = Device.CreateWindow(800, 600, "ClipMap Terrain Test");
 
             WorldWindTerrainSource worldWind = new WorldWindTerrainSource();
-            ClipMapTerrain clipMap = new ClipMapTerrain(window.Context, worldWind, 255);
+            ClipmapTerrain clipMap = new ClipmapTerrain(window.Context, worldWind, 255);
 
             SceneState sceneState = new SceneState();
             sceneState.DiffuseIntensity = 0.9f;

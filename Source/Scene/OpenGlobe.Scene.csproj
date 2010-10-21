@@ -78,7 +78,7 @@
     <Compile Include="Terrain\RayCastedTerrainTile.cs" />
     <Compile Include="Terrain\TriangleMeshTerrainTile.cs" />
     <Compile Include="Terrain\VertexDisplacementMapTerrainTile.cs" />
-    <Compile Include="Terrain\ClipMapTerrain.cs" />
+    <Compile Include="Terrain\ClipmapTerrain.cs" />
     <Compile Include="Terrain\WorldWindTerrainLevel.cs" />
     <Compile Include="Terrain\WorldWindTerrainSource.cs" />
   </ItemGroup>
@@ -198,10 +198,10 @@
     <EmbeddedResource Include="Renderables\PolylineOnTerrain\Shaders\PolylineOnTerrainWallVS.glsl" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Terrain\ClipMapTerrain\ClipMapVS.glsl" />
+    <EmbeddedResource Include="Terrain\ClipmapTerrain\ClipmapVS.glsl" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Terrain\ClipMapTerrain\ClipMapFS.glsl" />
+    <EmbeddedResource Include="Terrain\ClipmapTerrain\ClipmapFS.glsl" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
