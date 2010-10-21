@@ -142,7 +142,20 @@ namespace OpenGlobe.Scene.Terrain
             int north = south + _clipmapSize - 1;
 
             short[] posts = new short[_clipmapSize * _clipmapSize];
-            level.Terrain.GetPosts(west, south, east, north, posts, 0, _clipmapSize);
+            //if (levelIndex == 11)
+            //{
+            //    for (int j = 0; j < _clipmapSize; ++j)
+            //    {
+            //        for (int i = 0; i < _clipmapSize; ++i)
+            //        {
+            //            posts[j*_clipmapSize+i] = (short)(1000.0*Math.Sin(i * Math.PI / _clipmapSize));
+            //        }
+            //    }
+            //}
+            //else
+            {
+                level.Terrain.GetPosts(west, south, east, north, posts, 0, _clipmapSize);
+            }
 
             // TODO: This is AWESOME!
             float[] floatPosts = new float[posts.Length];
@@ -190,7 +203,7 @@ namespace OpenGlobe.Scene.Terrain
                                 : west + _fieldBlockSize - 1;
                 DrawBlock(_offsetStripVertical, level, coarserLevel, west, south, offset, south + _fieldBlockSize, context, sceneState);
 
-                DrawBlock(_degenerateTriangles, level, coarserLevel, west, south, west, south, context, sceneState);
+                //DrawBlock(_degenerateTriangles, level, coarserLevel, west, south, west, south, context, sceneState);
 
                 // Fill the center of the highest-detail ring
                 if (levelIndex == _clipmapLevels.Length - 1)
@@ -205,8 +218,11 @@ namespace OpenGlobe.Scene.Terrain
 
         private void DrawBlock(VertexArray block, Level level, Level coarserLevel, int overallWest, int overallSouth, int blockWest, int blockSouth, Context context, SceneState sceneState)
         {
-            double originLongitude = level.Terrain.IndexToLongitude(blockWest);
-            double originLatitude = level.Terrain.IndexToLatitude(blockSouth);
+            double blockOriginLongitude = level.Terrain.IndexToLongitude(blockWest);
+            double blockOriginLatitude = level.Terrain.IndexToLatitude(blockSouth);
+
+            double overallOriginLongitude = level.Terrain.IndexToLongitude(overallWest);
+            double overallOriginLatitude = level.Terrain.IndexToLatitude(overallSouth);
 
             int textureWest = blockWest - overallWest;
             int textureSouth = blockSouth - overallSouth;
@@ -217,21 +233,30 @@ namespace OpenGlobe.Scene.Terrain
             double parentTextureSouth = blockSouth - parentOverallSouth;
 
             DrawState drawState = new DrawState(_renderState, _shaderProgram, block);
-            _scaleFactor.Value = new Vector4S((float)level.Terrain.PostDeltaLongitude, (float)level.Terrain.PostDeltaLatitude, (float)originLongitude, (float)originLatitude);
+            
+            _scaleFactor.Value = new Vector4S((float)level.Terrain.PostDeltaLongitude, (float)level.Terrain.PostDeltaLatitude, (float)blockOriginLongitude, (float)blockOriginLatitude);
             _fineBlockOrigin.Value = new Vector4S((float)(1.0 / _clipmapSize), (float)(1.0 / _clipmapSize), (float)textureWest / _clipmapSize, (float)textureSouth / _clipmapSize);
             _coarseBlockOrigin.Value = new Vector4S((float)(1.0 / (2 * _clipmapSize)), (float)(1.0 / (2 * _clipmapSize)), (float)(parentTextureWest / (2 * _clipmapSize)), (float)(parentTextureSouth / (2 * _clipmapSize)));
-            _viewerPos.Value = sceneState.Camera.Target.XY.ToVector2S();
+
+            // TODO: This is the same for all blocks in a level, so move it out of this method.
+            Vector2D viewerOffsetFromLevelOrigin = sceneState.Camera.Target.XY - new Vector2D(blockOriginLongitude, blockOriginLatitude);
+            Vector2D viewerOffsetFromLevelOriginGrid = viewerOffsetFromLevelOrigin / new Vector2D(level.Terrain.PostDeltaLongitude, level.Terrain.PostDeltaLatitude);
+            _viewerPos.Value = viewerOffsetFromLevelOriginGrid.ToVector2S();
+
             double w = _clipmapSize / 10.0f;
             double alphaOffset = (_clipmapSize - 1) / 2.0f - w - 1.0f;
-            _alphaOffset.Value = new Vector2S((float)(alphaOffset * level.Terrain.PostDeltaLongitude), (float)(alphaOffset * level.Terrain.PostDeltaLatitude));
+            _alphaOffset.Value = new Vector2S((float)alphaOffset, (float)alphaOffset);
             if (level != coarserLevel)
-                _oneOverTransitionWidth.Value = (float)(1.0 / (w * level.Terrain.PostDeltaLongitude));
+                _oneOverTransitionWidth.Value = (float)(1.0 / w);
             else
                 _oneOverTransitionWidth.Value = 0.0f;
-            //if (block == _degenerateTriangles)
+            //if (level != _clipmapLevels[_clipmapLevels.Length - 1])
+                _color.Value = new Vector3S(0.0f, 1.0f, 0.0f);
+            //else if (block == _fieldBlock)
             //    _color.Value = new Vector3S(1.0f, 0.0f, 0.0f);
             //else
-                _color.Value = new Vector3S(0.0f, 1.0f, 0.0f);
+            //    _color.Value = new Vector3S(0.0f, 0.0f, 1.0f);
+                
             context.Draw(_primitiveType, drawState, sceneState);
         }
 

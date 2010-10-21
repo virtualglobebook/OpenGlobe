@@ -48,7 +48,12 @@ namespace OpenGlobe.Tests.Scene.Terrain
             camera.CenterPoint = new Vector3D(-119.5326056, 37.74451389, 0.00001 * 2700.0);
             camera.Azimuth = 0.0;
             camera.Elevation = Trig.ToRadians(30.0);
-            camera.Range = 10.0;
+            camera.Range = 0.1;
+
+            //camera.Dispose();
+            //CameraFly fly = new CameraFly(sceneState.Camera, window);
+            //fly.UpdateParametersFromCamera();
+            //fly.MovementRate = 0.01;
 
             window.Keyboard.KeyDown += delegate(object sender, KeyboardKeyEventArgs e)
             {

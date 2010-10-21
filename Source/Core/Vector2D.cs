@@ -159,6 +159,11 @@ namespace OpenGlobe.Core
             return new Vector2D(left._x / right, left._y / right);
         }
 
+        public static Vector2D operator /(Vector2D left, Vector2D right)
+        {
+            return new Vector2D(left._x / right._x, left._y / right._y);
+        }
+
         public static bool operator ==(Vector2D left, Vector2D right)
         {
             return left.Equals(right);
