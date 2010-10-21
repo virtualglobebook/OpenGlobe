@@ -224,7 +224,10 @@ namespace OpenGlobe.Scene.Terrain
             double w = _clipmapSize / 10.0f;
             double alphaOffset = (_clipmapSize - 1) / 2.0f - w - 1.0f;
             _alphaOffset.Value = new Vector2S((float)(alphaOffset * level.Terrain.PostDeltaLongitude), (float)(alphaOffset * level.Terrain.PostDeltaLatitude));
-            _oneOverTransitionWidth.Value = (float)(1.0 / (w * level.Terrain.PostDeltaLongitude));
+            if (level != coarserLevel)
+                _oneOverTransitionWidth.Value = (float)(1.0 / (w * level.Terrain.PostDeltaLongitude));
+            else
+                _oneOverTransitionWidth.Value = 0.0f;
             //if (block == _degenerateTriangles)
             //    _color.Value = new Vector3S(1.0f, 0.0f, 0.0f);
             //else

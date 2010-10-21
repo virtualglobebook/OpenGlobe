@@ -40,7 +40,7 @@ float SampleHeight(vec2 gridPos, vec2 worldPos)
 	vec2 uvCoarse = gridPos * u_coarseBlockOrig.xy + u_coarseBlockOrig.zw;
 
 	// compute alpha (transition parameter) and blend elevation
-	// u_viewerPos should eventually be simply og_cameraEye.
+	// u_viewerPos should eventually be simply og_cameraEye.xy.
 	vec2 alpha = clamp((abs(worldPos - u_viewerPos) - u_alphaOffset) * u_oneOverTransitionWidth, 0, 1);
 	alphaScalar = max(alpha.x, alpha.y);
 
