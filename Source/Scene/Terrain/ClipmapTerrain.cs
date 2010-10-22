@@ -33,7 +33,7 @@ namespace OpenGlobe.Scene.Terrain
             {
                 _clipmapLevels[i] = new Level();
                 _clipmapLevels[i].Terrain = _terrainSource.Levels[i];
-                _clipmapLevels[i].Texture = Device.CreateTexture2D(new Texture2DDescription(_clipmapSize, _clipmapSize, TextureFormat.Red32f));
+                _clipmapLevels[i].Texture = Device.CreateTexture2DRectangle(new Texture2DDescription(_clipmapSize, _clipmapSize, TextureFormat.Red32f));
                 _clipmapLevels[i].Texture.Filter = Texture2DFilter.LinearClampToEdge;
             }
 
@@ -168,8 +168,8 @@ namespace OpenGlobe.Scene.Terrain
             {
                 pixelBuffer.CopyFromSystemMemory(floatPosts);
                 level.Texture.CopyFromBuffer(pixelBuffer, ImageFormat.Red, ImageDatatype.Float);
-                context.TextureUnits[0].Texture2D = level.Texture;
-                context.TextureUnits[1].Texture2D = coarserLevel.Texture;
+                context.TextureUnits[0].Texture2DRectangle = level.Texture;
+                context.TextureUnits[1].Texture2DRectangle = coarserLevel.Texture;
 
                 DrawBlock(_fieldBlock, level, coarserLevel, west, south, west, south, context, sceneState);
                 DrawBlock(_fieldBlock, level, coarserLevel, west, south, west + _fieldBlockSize - 1, south, context, sceneState);
@@ -235,8 +235,8 @@ namespace OpenGlobe.Scene.Terrain
             DrawState drawState = new DrawState(_renderState, _shaderProgram, block);
             
             _scaleFactor.Value = new Vector4S((float)level.Terrain.PostDeltaLongitude, (float)level.Terrain.PostDeltaLatitude, (float)blockOriginLongitude, (float)blockOriginLatitude);
-            _fineBlockOrigin.Value = new Vector4S((float)(1.0 / _clipmapSize), (float)(1.0 / _clipmapSize), (float)textureWest / _clipmapSize, (float)textureSouth / _clipmapSize);
-            _coarseBlockOrigin.Value = new Vector4S((float)(1.0 / (2 * _clipmapSize)), (float)(1.0 / (2 * _clipmapSize)), (float)(parentTextureWest / (2 * _clipmapSize)), (float)(parentTextureSouth / (2 * _clipmapSize)));
+            _fineBlockOrigin.Value = new Vector4S((float)(1.0 / _clipmapSize), (float)(1.0 / _clipmapSize), (float)textureWest, (float)textureSouth);
+            _coarseBlockOrigin.Value = new Vector4S((float)(1.0 / (2 * _clipmapSize)), (float)(1.0 / (2 * _clipmapSize)), (float)(parentTextureWest / 2), (float)(parentTextureSouth / 2));
 
             // TODO: This is the same for all blocks in a level, so move it out of this method.
             Vector2D viewerOffsetFromLevelOrigin = sceneState.Camera.Target.XY - new Vector2D(blockOriginLongitude, blockOriginLatitude);

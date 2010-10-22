@@ -17,8 +17,8 @@ out vec2 modulus;
 uniform mat4 og_modelViewPerspectiveMatrix;
 uniform vec3 og_cameraEye;
 uniform vec3 og_sunPosition;
-uniform sampler2D og_texture0;    // Fine height map
-uniform sampler2D og_texture1;    // Coarse height map
+uniform sampler2DRect og_texture0;    // Fine height map
+uniform sampler2DRect og_texture1;    // Coarse height map
 uniform vec4 u_scaleFactor;
 uniform vec4 u_fineBlockOrig;
 uniform vec4 u_coarseBlockOrig;
@@ -36,8 +36,8 @@ float SampleHeight(vec2 gridPos)
 	// Compute coordinates for vertex texture
 	//  u_fineBlockOrig.xy: 1/(w, h) of texture
 	//  u_fineBlockOrig.zw: origin of block in texture
-	vec2 uvFine = gridPos * u_fineBlockOrig.xy + u_fineBlockOrig.zw;
-	vec2 uvCoarse = gridPos * u_coarseBlockOrig.xy + u_coarseBlockOrig.zw;
+	vec2 uvFine = gridPos + u_fineBlockOrig.zw;
+	vec2 uvCoarse = gridPos / 2.0 + u_coarseBlockOrig.zw;
 
 	// compute alpha (transition parameter) and blend elevation
 	vec2 alpha = clamp((abs(gridPos - u_viewerPos) - u_alphaOffset) * u_oneOverTransitionWidth, 0, 1);
@@ -46,7 +46,7 @@ float SampleHeight(vec2 gridPos)
 	// sample the vertex texture
 	float heightFine = texture(og_texture0, uvFine).r;
 	float heightCoarse = texture(og_texture1, uvCoarse).r;
-	return (1.0 - alphaScalar) * heightFine + alphaScalar * heightCoarse;
+	return mix(heightFine, heightCoarse, alphaScalar);
 }
 
 vec3 ComputeNormalForwardDifference(
