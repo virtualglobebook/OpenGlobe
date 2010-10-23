@@ -134,7 +134,7 @@ namespace OpenGlobe.Core
             }
 
             //
-            // New indicies
+            // New indices
             //
             IndicesInt32 subdividedIndices = new IndicesInt32(done.Count * 3);
             foreach (TriangleIndicesInt32 t in done)

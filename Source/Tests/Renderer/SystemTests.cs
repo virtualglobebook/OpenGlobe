@@ -99,7 +99,7 @@ namespace OpenGlobe.Renderer
             indexBuffer.CopyFromSystemMemory(indices);
 
             VertexArray va = window.Context.CreateVertexArray();
-            va.VertexBuffers[sp.VertexAttributes["position"].Location] =
+            va.Attributes[sp.VertexAttributes["position"].Location] =
                 new VertexBufferAttribute(positionsBuffer, VertexAttributeComponentType.Float, 4);
             va.IndexBuffer = indexBuffer;
 
@@ -112,7 +112,7 @@ namespace OpenGlobe.Renderer
             // Verify detach
             //
             window.Context.Clear(new ClearState() { Buffers = ClearBuffers.ColorBuffer, Color = Color.FromArgb(0, 255, 0) });
-            va.VertexBuffers[sp.VertexAttributes["position"].Location] = null;
+            va.Attributes[sp.VertexAttributes["position"].Location] = null;
             va.IndexBuffer = null;
             window.Context.Draw(PrimitiveType.Triangles, 0, 0, new DrawState(new RenderState(), sp, va), new SceneState());
             TestUtility.ValidateColor(frameBuffer.ColorAttachments[0], 0, 255, 0);
@@ -120,7 +120,7 @@ namespace OpenGlobe.Renderer
             //
             // Verify rendering without indices
             //
-            va.VertexBuffers[sp.VertexAttributes["position"].Location] =
+            va.Attributes[sp.VertexAttributes["position"].Location] =
                 new VertexBufferAttribute(positionsBuffer, VertexAttributeComponentType.Float, 4);
             window.Context.Draw(PrimitiveType.Triangles, 0, 3, new DrawState(new RenderState(), sp, va), new SceneState());
             TestUtility.ValidateColor(frameBuffer.ColorAttachments[0], 255, 0, 0);
@@ -382,9 +382,9 @@ namespace OpenGlobe.Renderer
             vertexBuffer.CopyFromSystemMemory(colors, colorsOffset);
 
             VertexArray va = window.Context.CreateVertexArray();
-            va.VertexBuffers[sp.VertexAttributes["position"].Location] =
+            va.Attributes[sp.VertexAttributes["position"].Location] =
                 new VertexBufferAttribute(vertexBuffer, VertexAttributeComponentType.Float, 4);
-            va.VertexBuffers[sp.VertexAttributes["color"].Location] =
+            va.Attributes[sp.VertexAttributes["color"].Location] =
                 new VertexBufferAttribute(vertexBuffer, VertexAttributeComponentType.UnsignedByte, 4, true, colorsOffset, 0);
             
             window.Context.FrameBuffer = frameBuffer;
@@ -453,9 +453,9 @@ namespace OpenGlobe.Renderer
             vertexBuffer.CopyFromSystemMemory(vertices);
 
             VertexArray va = window.Context.CreateVertexArray();
-            va.VertexBuffers[sp.VertexAttributes["position"].Location] =
+            va.Attributes[sp.VertexAttributes["position"].Location] =
                 new VertexBufferAttribute(vertexBuffer, VertexAttributeComponentType.Float, 4, false, 0, SizeInBytes<InterleavedVertex>.Value);
-            va.VertexBuffers[sp.VertexAttributes["color"].Location] =
+            va.Attributes[sp.VertexAttributes["color"].Location] =
                 new VertexBufferAttribute(vertexBuffer, VertexAttributeComponentType.UnsignedByte, 4, true, colorOffset, SizeInBytes<InterleavedVertex>.Value);
 
             window.Context.FrameBuffer = frameBuffer;

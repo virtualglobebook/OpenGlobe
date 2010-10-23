@@ -19,7 +19,7 @@ namespace OpenGlobe.Renderer.GL3x
         public VertexArrayGL3x()
 	    {
             _handle = new VertexArrayNameGL3x();
-            _vertexBufferAttributes = new VertexBufferAttributesGL3x();
+            _attributes = new VertexBufferAttributesGL3x();
         }
 
         internal void Bind()
@@ -29,7 +29,7 @@ namespace OpenGlobe.Renderer.GL3x
 
         internal void Clean()
         {
-            _vertexBufferAttributes.Clean();
+            _attributes.Clean();
 
             if (_dirtyIndexBuffer)
             {
@@ -49,14 +49,14 @@ namespace OpenGlobe.Renderer.GL3x
 
         internal int MaximumArrayIndex()
         {
-            return _vertexBufferAttributes.MaximumArrayIndex;
+            return _attributes.MaximumArrayIndex;
         }
 
         #region VertexArray Members
 
-        public override VertexBufferAttributes VertexBuffers
+        public override VertexBufferAttributes Attributes
         {
-            get { return _vertexBufferAttributes; }
+            get { return _attributes; }
         }
 
         public override IndexBuffer IndexBuffer
@@ -78,7 +78,7 @@ namespace OpenGlobe.Renderer.GL3x
         {
             if (disposing)
             {
-                _vertexBufferAttributes.Dispose();
+                _attributes.Dispose();
                 if (_indexBuffer != null)
                 {
                     _indexBuffer.Dispose();
@@ -91,7 +91,7 @@ namespace OpenGlobe.Renderer.GL3x
         #endregion
 
         private VertexArrayNameGL3x _handle;
-        private VertexBufferAttributesGL3x _vertexBufferAttributes;
+        private VertexBufferAttributesGL3x _attributes;
         private IndexBuffer _indexBuffer;
         private bool _dirtyIndexBuffer;
     }

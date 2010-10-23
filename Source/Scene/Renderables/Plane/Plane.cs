@@ -73,7 +73,7 @@ namespace OpenGlobe.Scene
             VertexBufferAttribute positionAttribute = new VertexBufferAttribute(
                 _positionBuffer, VertexAttributeComponentType.Float, 3);
             _va = context.CreateVertexArray();
-            _va.VertexBuffers[lineSP.VertexAttributes["position"].Location] = positionAttribute;
+            _va.Attributes[lineSP.VertexAttributes["position"].Location] = positionAttribute;
             _va.IndexBuffer = indexBuffer;
 
             ShowOutline = true;

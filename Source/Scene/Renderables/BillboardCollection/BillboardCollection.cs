@@ -78,11 +78,11 @@ namespace OpenGlobe.Scene
 
             ShaderProgram sp = _drawState.ShaderProgram;
             VertexArray va = context.CreateVertexArray();
-            va.VertexBuffers[sp.VertexAttributes["position"].Location] = positionAttribute;
-            va.VertexBuffers[sp.VertexAttributes["textureCoordinates"].Location] = textureCoordinatesAttribute;
-            va.VertexBuffers[sp.VertexAttributes["color"].Location] = colorAttribute;
-            va.VertexBuffers[sp.VertexAttributes["origin"].Location] = originAttribute;
-            va.VertexBuffers[sp.VertexAttributes["pixelOffset"].Location] = pixelOffsetAttribute;
+            va.Attributes[sp.VertexAttributes["position"].Location] = positionAttribute;
+            va.Attributes[sp.VertexAttributes["textureCoordinates"].Location] = textureCoordinatesAttribute;
+            va.Attributes[sp.VertexAttributes["color"].Location] = colorAttribute;
+            va.Attributes[sp.VertexAttributes["origin"].Location] = originAttribute;
+            va.Attributes[sp.VertexAttributes["pixelOffset"].Location] = pixelOffsetAttribute;
 
             _drawState.VertexArray = va;
         }

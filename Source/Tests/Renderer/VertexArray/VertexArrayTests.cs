@@ -36,10 +36,10 @@ namespace OpenGlobe.Renderer
             //
             // Create index buffer
             //
-            uint[] indicies = new uint[] { 0, 1, 2 };
-            int ibSizeInBytes = indicies.Length * sizeof(uint);
+            uint[] indices = new uint[] { 0, 1, 2 };
+            int ibSizeInBytes = indices.Length * sizeof(uint);
             IndexBuffer indexBuffer = Device.CreateIndexBuffer(BufferHint.StreamDraw, ibSizeInBytes);
-            indexBuffer.CopyFromSystemMemory(indicies);
+            indexBuffer.CopyFromSystemMemory(indices);
 
             //
             // Create and verify vertex buffer attribute
@@ -57,16 +57,16 @@ namespace OpenGlobe.Renderer
             // Create and verify vertex array
             //
             VertexArray va = window.Context.CreateVertexArray();
-            va.VertexBuffers[0] = vertexBufferAttribute;
+            va.Attributes[0] = vertexBufferAttribute;
             va.IndexBuffer = indexBuffer;
 
-            Assert.AreEqual(vertexBufferAttribute, va.VertexBuffers[0]);
+            Assert.AreEqual(vertexBufferAttribute, va.Attributes[0]);
             Assert.AreEqual(indexBuffer, va.IndexBuffer);
 
-            va.VertexBuffers[0] = null;
+            va.Attributes[0] = null;
             va.IndexBuffer = null;
 
-            Assert.IsNull(va.VertexBuffers[0]);
+            Assert.IsNull(va.Attributes[0]);
             Assert.IsNull(va.IndexBuffer);
 
             va.Dispose();
@@ -85,24 +85,24 @@ namespace OpenGlobe.Renderer
             VertexBuffer vb1 = Device.CreateVertexBuffer(BufferHint.DynamicDraw, 4);
             VertexBuffer vb2 = Device.CreateVertexBuffer(BufferHint.StreamDraw, 4);
 
-            va.VertexBuffers[0] = new VertexBufferAttribute(vb0, VertexAttributeComponentType.Float, 1);
-            va.VertexBuffers[1] = new VertexBufferAttribute(vb1, VertexAttributeComponentType.Float, 1);
-            va.VertexBuffers[2] = new VertexBufferAttribute(vb2, VertexAttributeComponentType.Float, 1);
-            Assert.AreEqual(3, va.VertexBuffers.Count);
+            va.Attributes[0] = new VertexBufferAttribute(vb0, VertexAttributeComponentType.Float, 1);
+            va.Attributes[1] = new VertexBufferAttribute(vb1, VertexAttributeComponentType.Float, 1);
+            va.Attributes[2] = new VertexBufferAttribute(vb2, VertexAttributeComponentType.Float, 1);
+            Assert.AreEqual(3, va.Attributes.Count);
 
-            va.VertexBuffers[1] = null;
-            Assert.AreEqual(2, va.VertexBuffers.Count);
+            va.Attributes[1] = null;
+            Assert.AreEqual(2, va.Attributes.Count);
 
-            va.VertexBuffers[1] = new VertexBufferAttribute(vb1, VertexAttributeComponentType.Float, 1);
-            Assert.AreEqual(3, va.VertexBuffers.Count);
+            va.Attributes[1] = new VertexBufferAttribute(vb1, VertexAttributeComponentType.Float, 1);
+            Assert.AreEqual(3, va.Attributes.Count);
 
             int count = 0;
-            foreach (VertexBufferAttribute vb in va.VertexBuffers)
+            foreach (VertexBufferAttribute vb in va.Attributes)
             {
                 Assert.IsNotNull(vb.VertexBuffer);
                 ++count;
             }
-            Assert.AreEqual(va.VertexBuffers.Count, count);
+            Assert.AreEqual(va.Attributes.Count, count);
 
             vb2.Dispose();
             vb1.Dispose();

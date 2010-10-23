@@ -13,7 +13,7 @@ namespace OpenGlobe.Renderer
 {
     public abstract class VertexArray : Disposable
     {
-        public virtual VertexBufferAttributes VertexBuffers
+        public virtual VertexBufferAttributes Attributes
         {
             get { return null; }
         }

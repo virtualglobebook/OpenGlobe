@@ -32,8 +32,8 @@ namespace OpenGlobe.Scene
                     _textureCoordinatesBuffer, VertexAttributeComponentType.HalfFloat, 2);
 
                 _va = context.CreateVertexArray();
-                _va.VertexBuffers[sp.VertexAttributes["position"].Location] = positionAttribute;
-                _va.VertexBuffers[sp.VertexAttributes["textureCoordinates"].Location] = textureCoordinatesAttribute;
+                _va.Attributes[sp.VertexAttributes["position"].Location] = positionAttribute;
+                _va.Attributes[sp.VertexAttributes["textureCoordinates"].Location] = textureCoordinatesAttribute;
             }
 
             if (_viewport != context.Viewport)

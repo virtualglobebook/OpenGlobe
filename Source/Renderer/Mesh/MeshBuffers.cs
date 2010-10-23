@@ -13,13 +13,13 @@ namespace OpenGlobe.Renderer
 {
     public class MeshBuffers : Disposable
     {
-        public virtual VertexBufferAttributes VertexBuffers
+        public virtual VertexBufferAttributes Attributes
         {
-            get { return _vertexBufferAttributes; }
+            get { return _attributes; }
         }
 
         public IndexBuffer IndexBuffer { get; set; }
 
-        private MeshVertexBufferAttributes _vertexBufferAttributes = new MeshVertexBufferAttributes();
+        private MeshVertexBufferAttributes _attributes = new MeshVertexBufferAttributes();
     }
 }

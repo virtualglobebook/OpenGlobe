@@ -39,9 +39,9 @@ namespace OpenGlobe.Renderer
             VertexArray va = CreateVertexArray();
             
             va.IndexBuffer = meshBuffers.IndexBuffer;
-            for (int i = 0; i < meshBuffers.VertexBuffers.MaximumCount; ++i)
+            for (int i = 0; i < meshBuffers.Attributes.MaximumCount; ++i)
             {
-                va.VertexBuffers[i] = meshBuffers.VertexBuffers[i];
+                va.Attributes[i] = meshBuffers.Attributes[i];
             }
 
             return va;

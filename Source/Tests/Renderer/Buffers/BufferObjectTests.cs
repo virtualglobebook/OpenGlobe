@@ -72,12 +72,12 @@ namespace OpenGlobe.Renderer
         {
             GraphicsWindow window = Device.CreateWindow(1, 1);
 
-            uint[] indicies = new uint[] { 0, 1, 2 };
+            uint[] indices = new uint[] { 0, 1, 2 };
 
             //
             // Verify creating index buffer
             //
-            int sizeInBytes = indicies.Length * sizeof(uint);
+            int sizeInBytes = indices.Length * sizeof(uint);
             IndexBuffer indexBuffer = Device.CreateIndexBuffer(BufferHint.DynamicDraw, sizeInBytes);
             Assert.IsNotNull(indexBuffer);
             Assert.AreEqual(BufferHint.DynamicDraw, indexBuffer.UsageHint);
@@ -86,13 +86,13 @@ namespace OpenGlobe.Renderer
             //
             // Verify copying entire buffer between system memory and index buffer
             //
-            indexBuffer.CopyFromSystemMemory(indicies);
+            indexBuffer.CopyFromSystemMemory(indices);
             Assert.AreEqual(IndexBufferDatatype.UnsignedInt, indexBuffer.Datatype);
 
-            uint[] indicies2 = indexBuffer.CopyToSystemMemory<uint>(0, indexBuffer.SizeInBytes);
-            Assert.AreEqual(indicies[0], indicies2[0]);
-            Assert.AreEqual(indicies[1], indicies2[1]);
-            Assert.AreEqual(indicies[2], indicies2[2]);
+            uint[] indices2 = indexBuffer.CopyToSystemMemory<uint>(0, indexBuffer.SizeInBytes);
+            Assert.AreEqual(indices[0], indices2[0]);
+            Assert.AreEqual(indices[1], indices2[1]);
+            Assert.AreEqual(indices[2], indices2[2]);
 
             //
             // Verify modiying a subset of the index buffer
@@ -100,10 +100,10 @@ namespace OpenGlobe.Renderer
             uint modifiedIndex = 3;
             indexBuffer.CopyFromSystemMemory(new[] { modifiedIndex }, sizeof(uint));
 
-            uint[] indicies3 = indexBuffer.CopyToSystemMemory<uint>(0, indexBuffer.SizeInBytes);
-            Assert.AreEqual(indicies[0], indicies3[0]);
-            Assert.AreEqual(modifiedIndex, indicies3[1]);
-            Assert.AreEqual(indicies[2], indicies3[2]);
+            uint[] indices3 = indexBuffer.CopyToSystemMemory<uint>(0, indexBuffer.SizeInBytes);
+            Assert.AreEqual(indices[0], indices3[0]);
+            Assert.AreEqual(modifiedIndex, indices3[1]);
+            Assert.AreEqual(indices[2], indices3[2]);
 
             indexBuffer.Dispose();
             window.Dispose();
