@@ -19,7 +19,8 @@ uniform vec3 og_cameraEye;
 uniform vec3 og_sunPosition;
 uniform sampler2DRect og_texture0;    // Fine height map
 uniform sampler2DRect og_texture1;    // Coarse height map
-uniform vec4 u_scaleFactor;
+uniform vec4 u_gridScaleFactor;
+uniform vec4 u_worldScaleFactor;
 uniform vec4 u_fineBlockOrig;
 uniform vec4 u_coarseBlockOrig;
 uniform vec2 u_viewerPos;
@@ -28,7 +29,7 @@ uniform float u_oneOverTransitionWidth;
 
 vec2 GridToWorld(vec2 gridPos)
 {
-	return gridPos * u_scaleFactor.xy + u_scaleFactor.zw;
+	return (gridPos * u_gridScaleFactor.xy + u_gridScaleFactor.zw) * u_worldScaleFactor.xy + u_worldScaleFactor.zw;
 }
 
 float SampleHeight(vec2 gridPos)
@@ -44,8 +45,8 @@ float SampleHeight(vec2 gridPos)
 	float alphaScalar = max(alpha.x, alpha.y);
 
 	// sample the vertex texture
-	float heightFine = texture(og_texture0, uvFine).r;
-	float heightCoarse = texture(og_texture1, uvCoarse).r;
+	float heightFine = texture(og_texture0, uvFine + vec2(0.5, 0.5)).r;
+	float heightCoarse = texture(og_texture1, uvCoarse + vec2(0.5, 0.5)).r;
 	return mix(heightFine, heightCoarse, alphaScalar);
 }
 
@@ -55,10 +56,10 @@ vec3 ComputeNormalForwardDifference(
     float heightExaggeration)
 {
 	vec2 rightGrid = gridPos + vec2(1.0, 0.0);
-    vec3 right = vec3(rightGrid * u_scaleFactor.xy, SampleHeight(rightGrid) * heightExaggeration);
+    vec3 right = vec3(rightGrid * u_gridScaleFactor.xy * u_worldScaleFactor.xy, SampleHeight(rightGrid) * heightExaggeration);
 	vec2 topGrid = gridPos + vec2(0.0, 1.0);
-    vec3 top = vec3(topGrid * u_scaleFactor.xy, SampleHeight(topGrid) * heightExaggeration);
-	vec3 center = vec3(gridPos * u_scaleFactor.xy, worldPos.z);
+    vec3 top = vec3(topGrid * u_gridScaleFactor.xy * u_worldScaleFactor.xy, SampleHeight(topGrid) * heightExaggeration);
+	vec3 center = vec3(gridPos * u_gridScaleFactor.xy * u_worldScaleFactor.xy, worldPos.z);
     return cross(right - center, top - center);
 }
 
@@ -79,6 +80,6 @@ void main()
     positionToEyeFS = og_cameraEye - displacedPosition;
 
 	
-	modulus = fract(((worldPos + vec2(180, 90)) / u_scaleFactor.xy) / 150.0);
+	modulus = fract(((worldPos + vec2(180, 90)) / (u_gridScaleFactor.xy * u_worldScaleFactor.xy)) / 2.0);
 	//modulus = mod(worldPos + vec2(180, 90), 150.0);
 }
