@@ -129,33 +129,36 @@ namespace OpenGlobe.Scene.Terrain
         }
 
         // World Wind tiles do NOT have overlapping posts at their edges.  Yet, the bounding boxes DO overlap.
-        // From that, we can conclude that the posts specify the height at the CENTER of each cell while the
-        // bounding box describes the EDGES of the cells.  Therefore, the position of the southwest post
-        // is offset half a post delta north and east from the southwest corner of the bounding box.
-        // The methods below take this into account.
+        // Typically, this would imply that the posts specify the height at the CENTER of each cell while the
+        // bounding box describes the EDGES of the cells.  However, in a multi-resolution scheme like this,
+        // that would result in the posts at a coarser resolution not being coincident with the posts
+        // at a finer resolution, which would be incredibly inconvenient for rendering (and most other
+        // purposes).  So instead we assume that the first post is exactly on the western and southern
+        // edges of the bounding box, and that the eastern and northern coordinates actually specify
+        // the location of the next post AFTER the last past in the tile.
 
         public override double LongitudeToIndex(double longitude)
         {
             GeodeticExtent extent = _terrainSource.Extent;
-            return (longitude - extent.West - _postDeltaLongitude * 0.5) / _postDeltaLongitude;
+            return (longitude - extent.West) / _postDeltaLongitude;
         }
 
         public override double LatitudeToIndex(double latitude)
         {
             GeodeticExtent extent = _terrainSource.Extent;
-            return (latitude - extent.South - _postDeltaLatitude * 0.5) / _postDeltaLatitude;
+            return (latitude - extent.South) / _postDeltaLatitude;
         }
 
         public override double IndexToLongitude(int longitudeIndex)
         {
             GeodeticExtent extent = _terrainSource.Extent;
-            return extent.West + _postDeltaLongitude * 0.5 + longitudeIndex * _postDeltaLongitude;
+            return extent.West + longitudeIndex * _postDeltaLongitude;
         }
 
         public override double IndexToLatitude(int latitudeIndex)
         {
             GeodeticExtent extent = _terrainSource.Extent;
-            return extent.South + _postDeltaLatitude * 0.5 + latitudeIndex * _postDeltaLatitude;
+            return extent.South + latitudeIndex * _postDeltaLatitude;
         }
 
         private class Tile

@@ -73,6 +73,16 @@ namespace OpenGlobe.Scene.Terrain
                 1, 2 * _fieldBlockPosts - 1);
             _offsetStripVertical = context.CreateVertexArray(offsetStripVerticalMesh, _shaderProgram.VertexAttributes, BufferHint.StaticDraw);
 
+            Mesh finestOffsetStripHorizontalMesh = RectangleTessellator.Compute(
+                new RectangleD(new Vector2D(0.0, 0.0), new Vector2D(2 * _fieldBlockPosts, 2.0)),
+                2 * _fieldBlockPosts, 2);
+            _finestOffsetStripHorizontal = context.CreateVertexArray(finestOffsetStripHorizontalMesh, _shaderProgram.VertexAttributes, BufferHint.StaticDraw);
+
+            Mesh finestOffsetStripVerticalMesh = RectangleTessellator.Compute(
+                new RectangleD(new Vector2D(0.0, 0.0), new Vector2D(2.0, 2 * _fieldBlockPosts - 1)),
+                2, 2 * _fieldBlockPosts - 1);
+            _finestOffsetStripVertical = context.CreateVertexArray(finestOffsetStripVerticalMesh, _shaderProgram.VertexAttributes, BufferHint.StaticDraw);
+
             Mesh degenerateTriangleMesh = CreateDegenerateTriangleMesh();
             _degenerateTriangles = context.CreateVertexArray(degenerateTriangleMesh, _shaderProgram.VertexAttributes, BufferHint.StaticDraw);
 
@@ -117,14 +127,21 @@ namespace OpenGlobe.Scene.Terrain
             for (int i = _clipmapLevels.Length - 2; i >= 0; --i)
             {
                 level = _clipmapLevels[i];
-                longitudeIndex = level.Terrain.LongitudeToIndex(centerLongitude);
-                latitudeIndex = level.Terrain.LatitudeToIndex(centerLatitude);
-
                 Level finerLevel = _clipmapLevels[i + 1];
-                level.West = (int)Math.Round(longitudeIndex - _clipmapPosts / 2);
-                level.OffsetStripOnEast = west != finerLevel.West / 2 - _fieldBlockPosts;
-                level.South = (int)Math.Round(latitudeIndex - _clipmapPosts / 2);
-                level.OffsetStripOnNorth = south != finerLevel.South / 2 - _fieldBlockPosts;
+
+                level.West = finerLevel.West / 2 - _fieldBlockSegments;
+                level.OffsetStripOnEast = (level.West % 2) == 0;
+                if (!level.OffsetStripOnEast)
+                {
+                    --level.West;
+                }
+
+                level.South = finerLevel.South / 2 - _fieldBlockSegments;
+                level.OffsetStripOnNorth = (level.South % 2) == 0;
+                if (!level.OffsetStripOnNorth)
+                {
+                    --level.South;
+                }
             }
 
             for (int i = 0; i < _clipmapLevels.Length; ++i)
@@ -144,20 +161,7 @@ namespace OpenGlobe.Scene.Terrain
             int north = south + _clipmapPosts - 1;
 
             short[] posts = new short[_clipmapPosts * _clipmapPosts];
-            //if (levelIndex == 11)
-            //{
-            //    for (int j = 0; j < _clipmapSize; ++j)
-            //    {
-            //        for (int i = 0; i < _clipmapSize; ++i)
-            //        {
-            //            posts[j*_clipmapSize+i] = (short)(1000.0*Math.Sin(i * Math.PI / _clipmapSize));
-            //        }
-            //    }
-            //}
-            //else
-            {
-                level.Terrain.GetPosts(west, south, east, north, posts, 0, _clipmapPosts);
-            }
+            level.Terrain.GetPosts(west, south, east, north, posts, 0, _clipmapPosts);
 
             // TODO: This is AWESOME!
             float[] floatPosts = new float[posts.Length];
@@ -195,25 +199,41 @@ namespace OpenGlobe.Scene.Terrain
                 DrawBlock(_ringFixupVertical, level, coarserLevel, west, south, west + 2 * _fieldBlockSegments, south, context, sceneState);
                 DrawBlock(_ringFixupVertical, level, coarserLevel, west, south, west + 2 * _fieldBlockSegments, north - _fieldBlockSegments, context, sceneState);
 
-                int offset = level.OffsetStripOnNorth
-                                ? north - _fieldBlockPosts
-                                : south + _fieldBlockSegments;
-                DrawBlock(_offsetStripHorizontal, level, coarserLevel, west, south, west + _fieldBlockSegments, offset, context, sceneState);
-
-                offset = level.OffsetStripOnEast
-                                ? east - _fieldBlockPosts
-                                : west + _fieldBlockSegments;
-                DrawBlock(_offsetStripVertical, level, coarserLevel, west, south, offset, south + _fieldBlockPosts, context, sceneState);
-
                 //DrawBlock(_degenerateTriangles, level, coarserLevel, west, south, west, south, context, sceneState);
 
                 // Fill the center of the highest-detail ring
                 if (levelIndex == _clipmapLevels.Length - 1)
                 {
-                    DrawBlock(_fieldBlock, level, coarserLevel, west, south, west + _fieldBlockSegments, south + _fieldBlockSegments, context, sceneState);
-                    DrawBlock(_fieldBlock, level, coarserLevel, west, south, west + 2 * _fieldBlockSegments, south + _fieldBlockSegments, context, sceneState);
-                    DrawBlock(_fieldBlock, level, coarserLevel, west, south, west + _fieldBlockSegments, south + 2 * _fieldBlockSegments, context, sceneState);
-                    DrawBlock(_fieldBlock, level, coarserLevel, west, south, west + 2 * _fieldBlockSegments, south + 2 * _fieldBlockSegments, context, sceneState);
+                    int westOffset = level.OffsetStripOnEast ? 0 : 2;
+                    int southOffset = level.OffsetStripOnNorth ? 0 : 2;
+
+                    DrawBlock(_fieldBlock, level, coarserLevel, west, south, west + _fieldBlockSegments + westOffset, south + _fieldBlockSegments + southOffset, context, sceneState);
+                    DrawBlock(_fieldBlock, level, coarserLevel, west, south, west + 2 * _fieldBlockSegments + westOffset, south + _fieldBlockSegments + southOffset, context, sceneState);
+                    DrawBlock(_fieldBlock, level, coarserLevel, west, south, west + _fieldBlockSegments + westOffset, south + 2 * _fieldBlockSegments + southOffset, context, sceneState);
+                    DrawBlock(_fieldBlock, level, coarserLevel, west, south, west + 2 * _fieldBlockSegments + westOffset, south + 2 * _fieldBlockSegments + southOffset, context, sceneState);
+
+                    int offset = level.OffsetStripOnNorth
+                                    ? north - _fieldBlockPosts - 1
+                                    : south + _fieldBlockSegments;
+                    DrawBlock(_finestOffsetStripHorizontal, level, coarserLevel, west, south, west + _fieldBlockSegments, offset, context, sceneState);
+
+                    offset = level.OffsetStripOnEast
+                                    ? east - _fieldBlockPosts - 1
+                                    : west + _fieldBlockSegments;
+                    DrawBlock(_finestOffsetStripVertical, level, coarserLevel, west, south, offset, south + _fieldBlockSegments + southOffset, context, sceneState);
+                }
+                else
+                {
+                    int offset = level.OffsetStripOnNorth
+                                    ? north - _fieldBlockPosts
+                                    : south + _fieldBlockSegments;
+                    DrawBlock(_offsetStripHorizontal, level, coarserLevel, west, south, west + _fieldBlockSegments, offset, context, sceneState);
+
+                    int southOffset = level.OffsetStripOnNorth ? 0 : 1;
+                    offset = level.OffsetStripOnEast
+                                    ? east - _fieldBlockPosts
+                                    : west + _fieldBlockSegments;
+                    DrawBlock(_offsetStripVertical, level, coarserLevel, west, south, offset, south + _fieldBlockSegments + southOffset, context, sceneState);
                 }
             }
         }
@@ -253,9 +273,9 @@ namespace OpenGlobe.Scene.Terrain
             else
                 _oneOverTransitionWidth.Value = 0.0f;
 
-            if (block == _offsetStripVertical || block == _offsetStripHorizontal)
-                _color.Value = new Vector3S(1.0f, 0.0f, 0.0f);
-            else
+            //if (block == _offsetStripVertical || block == _offsetStripHorizontal)
+            //    _color.Value = new Vector3S(1.0f, 0.0f, 0.0f);
+            //else
                 _color.Value = new Vector3S(0.0f, 1.0f, 0.0f);
                 
             context.Draw(_primitiveType, drawState, sceneState);
@@ -375,6 +395,8 @@ namespace OpenGlobe.Scene.Terrain
         private VertexArray _ringFixupVertical;
         private VertexArray _offsetStripHorizontal;
         private VertexArray _offsetStripVertical;
+        private VertexArray _finestOffsetStripHorizontal;
+        private VertexArray _finestOffsetStripVertical;
         private VertexArray _degenerateTriangles;
 
         private Uniform<Vector4S> _scaleFactor;
