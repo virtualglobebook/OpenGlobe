@@ -17,15 +17,15 @@ namespace OpenGlobe.Renderer
     {
         public VertexBufferAttribute(
             VertexBuffer vertexBuffer,
-            VertexAttributeComponentType componentType,
+            ComponentDatatype componentDatatype,
             int numberOfComponents)
-            : this(vertexBuffer, componentType, numberOfComponents, false, 0, 0)
+            : this(vertexBuffer, componentDatatype, numberOfComponents, false, 0, 0)
         {
         }
 
         public VertexBufferAttribute(
             VertexBuffer vertexBuffer,
-            VertexAttributeComponentType componentType,
+            ComponentDatatype componentDatatype,
             int numberOfComponents,
             bool normalize,
             int offsetInBytes,
@@ -47,7 +47,7 @@ namespace OpenGlobe.Renderer
             }
 
             _vertexBuffer = vertexBuffer;
-            _componentType = componentType;
+            _componentDatatype = componentDatatype;
             _numberOfComponents = numberOfComponents;
             _normalize = normalize;
             _offsetInBytes = offsetInBytes;
@@ -57,7 +57,7 @@ namespace OpenGlobe.Renderer
                 //
                 // Tightly packed
                 //
-                _strideInBytes = numberOfComponents * VertexArraySizes.SizeOf(componentType);
+                _strideInBytes = numberOfComponents * VertexArraySizes.SizeOf(componentDatatype);
             }
             else
             {
@@ -70,9 +70,9 @@ namespace OpenGlobe.Renderer
             get { return _vertexBuffer; }
         }
 
-        public VertexAttributeComponentType ComponentType
+        public ComponentDatatype ComponentDatatype
         {
-            get { return _componentType; }
+            get { return _componentDatatype; }
         }
 
         public int NumberOfComponents
@@ -110,7 +110,7 @@ namespace OpenGlobe.Renderer
         }
 
         private VertexBuffer _vertexBuffer;
-        private VertexAttributeComponentType _componentType;
+        private ComponentDatatype _componentDatatype;
         private int _numberOfComponents;
         private bool _normalize;
         private int _offsetInBytes;

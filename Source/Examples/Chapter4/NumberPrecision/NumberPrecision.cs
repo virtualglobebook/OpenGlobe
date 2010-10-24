@@ -91,7 +91,7 @@ namespace OpenGlobe.Examples.Chapter3.NumberPrecision
             _positionVertexBuffer.CopyFromSystemMemory(points);
 
             VertexBufferAttribute positionAttribute = new VertexBufferAttribute(
-                _positionVertexBuffer, VertexAttributeComponentType.Float, 3);
+                _positionVertexBuffer, ComponentDatatype.Float, 3);
 
             int location = sp.VertexAttributes["position"].Location;
             va.Attributes[location] = positionAttribute;

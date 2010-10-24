@@ -27,9 +27,9 @@ namespace OpenGlobe.Scene
             if (_va == null)
             {
                 VertexBufferAttribute positionAttribute = new VertexBufferAttribute(
-                    _positionBuffer, VertexAttributeComponentType.Float, 2);
+                    _positionBuffer, ComponentDatatype.Float, 2);
                 VertexBufferAttribute textureCoordinatesAttribute = new VertexBufferAttribute(
-                    _textureCoordinatesBuffer, VertexAttributeComponentType.HalfFloat, 2);
+                    _textureCoordinatesBuffer, ComponentDatatype.HalfFloat, 2);
 
                 _va = context.CreateVertexArray();
                 _va.Attributes[sp.VertexAttributes["position"].Location] = positionAttribute;

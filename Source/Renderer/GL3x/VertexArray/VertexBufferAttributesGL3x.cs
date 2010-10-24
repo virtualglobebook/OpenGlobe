@@ -120,12 +120,12 @@ namespace OpenGlobe.Renderer.GL3x
             if (vb.Normalize)
             {
                 Debug.Assert(
-                    (vb.ComponentType == VertexAttributeComponentType.Byte) ||
-                    (vb.ComponentType == VertexAttributeComponentType.UnsignedByte) ||
-                    (vb.ComponentType == VertexAttributeComponentType.Short) ||
-                    (vb.ComponentType == VertexAttributeComponentType.UnsignedShort) ||
-                    (vb.ComponentType == VertexAttributeComponentType.Int) ||
-                    (vb.ComponentType == VertexAttributeComponentType.UnsignedInt));
+                    (vb.ComponentDatatype == ComponentDatatype.Byte) ||
+                    (vb.ComponentDatatype == ComponentDatatype.UnsignedByte) ||
+                    (vb.ComponentDatatype == ComponentDatatype.Short) ||
+                    (vb.ComponentDatatype == ComponentDatatype.UnsignedShort) ||
+                    (vb.ComponentDatatype == ComponentDatatype.Int) ||
+                    (vb.ComponentDatatype == ComponentDatatype.UnsignedInt));
             }
 #endif
 
@@ -136,7 +136,7 @@ namespace OpenGlobe.Renderer.GL3x
             bufferObjectGL.Bind();
             GL.VertexAttribPointer(index,
                 vb.NumberOfComponents,
-                TypeConverterGL3x.To(vb.ComponentType),
+                TypeConverterGL3x.To(vb.ComponentDatatype),
                 vb.Normalize,
                 vb.StrideInBytes,
                 vb.OffsetInBytes);

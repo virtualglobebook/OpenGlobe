@@ -358,42 +358,42 @@ namespace OpenGlobe.Renderer.GL3x
             return BufferUsageHint.DynamicCopy;
         }
 
-        public static VertexAttribPointerType To(VertexAttributeComponentType type)
+        public static VertexAttribPointerType To(ComponentDatatype type)
         {
-            if (type == VertexAttributeComponentType.Byte)
+            if (type == ComponentDatatype.Byte)
             {
                 return VertexAttribPointerType.Byte;
             }
-            else if (type == VertexAttributeComponentType.UnsignedByte)
+            else if (type == ComponentDatatype.UnsignedByte)
             {
                 return VertexAttribPointerType.UnsignedByte;
             }
-            else if (type == VertexAttributeComponentType.Short)
+            else if (type == ComponentDatatype.Short)
             {
                 return VertexAttribPointerType.Short;
             }
-            else if (type == VertexAttributeComponentType.UnsignedShort)
+            else if (type == ComponentDatatype.UnsignedShort)
             {
                 return VertexAttribPointerType.UnsignedShort;
             }
-            else if (type == VertexAttributeComponentType.Int)
+            else if (type == ComponentDatatype.Int)
             {
                 return VertexAttribPointerType.Int;
             }
-            else if (type == VertexAttributeComponentType.UnsignedInt)
+            else if (type == ComponentDatatype.UnsignedInt)
             {
                 return VertexAttribPointerType.UnsignedInt;
             }
-            else if (type == VertexAttributeComponentType.Float)
+            else if (type == ComponentDatatype.Float)
             {
                 return VertexAttribPointerType.Float;
             }
-            else if (type == VertexAttributeComponentType.Double)
+            else if (type == ComponentDatatype.Double)
             {
                 return VertexAttribPointerType.Double;
             }
 
-            Debug.Assert(type == VertexAttributeComponentType.HalfFloat);
+            Debug.Assert(type == ComponentDatatype.HalfFloat);
             return VertexAttribPointerType.HalfFloat;
         }
 

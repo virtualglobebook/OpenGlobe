@@ -62,7 +62,7 @@ namespace OpenGlobe
 
             VertexArray va = context.CreateVertexArray();
             va.Attributes[positionLocation] =
-                new VertexBufferAttribute(positionsBuffer, VertexAttributeComponentType.Float, 4);
+                new VertexBufferAttribute(positionsBuffer, ComponentDatatype.Float, 4);
 
             return va;
         }

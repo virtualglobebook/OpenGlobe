@@ -71,7 +71,7 @@ namespace OpenGlobe.Scene
             indexBuffer.CopyFromSystemMemory(indices);
 
             VertexBufferAttribute positionAttribute = new VertexBufferAttribute(
-                _positionBuffer, VertexAttributeComponentType.Float, 3);
+                _positionBuffer, ComponentDatatype.Float, 3);
             _va = context.CreateVertexArray();
             _va.Attributes[lineSP.VertexAttributes["position"].Location] = positionAttribute;
             _va.IndexBuffer = indexBuffer;

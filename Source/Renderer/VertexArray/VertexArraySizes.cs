@@ -30,28 +30,28 @@ namespace OpenGlobe.Renderer
             return sizeof(uint);
         }
 
-        public static int SizeOf(VertexAttributeComponentType type)
+        public static int SizeOf(ComponentDatatype type)
         {
             switch (type)
             {
-                case VertexAttributeComponentType.Byte:
-                case VertexAttributeComponentType.UnsignedByte:
+                case ComponentDatatype.Byte:
+                case ComponentDatatype.UnsignedByte:
                     return sizeof(byte);
-                case VertexAttributeComponentType.Short:
+                case ComponentDatatype.Short:
                     return sizeof(short);
-                case VertexAttributeComponentType.UnsignedShort:
+                case ComponentDatatype.UnsignedShort:
                     return sizeof(ushort);
-                case VertexAttributeComponentType.Int:
+                case ComponentDatatype.Int:
                     return sizeof(int);
-                case VertexAttributeComponentType.UnsignedInt:
+                case ComponentDatatype.UnsignedInt:
                     return sizeof(uint);
-                case VertexAttributeComponentType.Float:
+                case ComponentDatatype.Float:
                     return sizeof(float);
-                case VertexAttributeComponentType.Double:
+                case ComponentDatatype.Double:
                     return sizeof(double);
             }
 
-            Debug.Assert(type == VertexAttributeComponentType.HalfFloat);
+            Debug.Assert(type == ComponentDatatype.HalfFloat);
             return OpenGlobe.Core.SizeInBytes<Half>.Value;
         }
     }

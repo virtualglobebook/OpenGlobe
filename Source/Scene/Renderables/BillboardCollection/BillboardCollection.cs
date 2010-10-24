@@ -66,15 +66,15 @@ namespace OpenGlobe.Scene
             _textureCoordinatesBuffer = Device.CreateVertexBuffer(BufferHint.StaticDraw, _billboards.Count * SizeInBytes<Vector4H>.Value);
 
             VertexBufferAttribute positionAttribute = new VertexBufferAttribute(
-                _positionBuffer, VertexAttributeComponentType.Float, 3);
+                _positionBuffer, ComponentDatatype.Float, 3);
             VertexBufferAttribute colorAttribute = new VertexBufferAttribute(
-                _colorBuffer, VertexAttributeComponentType.UnsignedByte, 4, true, 0, 0);
+                _colorBuffer, ComponentDatatype.UnsignedByte, 4, true, 0, 0);
             VertexBufferAttribute originAttribute = new VertexBufferAttribute(
-                _originBuffer, VertexAttributeComponentType.UnsignedByte, 1);
+                _originBuffer, ComponentDatatype.UnsignedByte, 1);
             VertexBufferAttribute pixelOffsetAttribute = new VertexBufferAttribute(
-                _pixelOffsetBuffer, VertexAttributeComponentType.HalfFloat, 2);
+                _pixelOffsetBuffer, ComponentDatatype.HalfFloat, 2);
             VertexBufferAttribute textureCoordinatesAttribute = new VertexBufferAttribute(
-                _textureCoordinatesBuffer, VertexAttributeComponentType.HalfFloat, 4);
+                _textureCoordinatesBuffer, ComponentDatatype.HalfFloat, 4);
 
             ShaderProgram sp = _drawState.ShaderProgram;
             VertexArray va = context.CreateVertexArray();

@@ -45,9 +45,9 @@ namespace OpenGlobe.Renderer
             // Create and verify vertex buffer attribute
             //
             VertexBufferAttribute vertexBufferAttribute = new VertexBufferAttribute(
-                vertexBuffer, VertexAttributeComponentType.Float, 3, false, 0, 0);
+                vertexBuffer, ComponentDatatype.Float, 3, false, 0, 0);
             Assert.AreEqual(vertexBuffer, vertexBufferAttribute.VertexBuffer);
-            Assert.AreEqual(VertexAttributeComponentType.Float, vertexBufferAttribute.ComponentType);
+            Assert.AreEqual(ComponentDatatype.Float, vertexBufferAttribute.ComponentDatatype);
             Assert.AreEqual(3, vertexBufferAttribute.NumberOfComponents);
             Assert.IsFalse(vertexBufferAttribute.Normalize);
             Assert.AreEqual(0, vertexBufferAttribute.OffsetInBytes);
@@ -85,15 +85,15 @@ namespace OpenGlobe.Renderer
             VertexBuffer vb1 = Device.CreateVertexBuffer(BufferHint.DynamicDraw, 4);
             VertexBuffer vb2 = Device.CreateVertexBuffer(BufferHint.StreamDraw, 4);
 
-            va.Attributes[0] = new VertexBufferAttribute(vb0, VertexAttributeComponentType.Float, 1);
-            va.Attributes[1] = new VertexBufferAttribute(vb1, VertexAttributeComponentType.Float, 1);
-            va.Attributes[2] = new VertexBufferAttribute(vb2, VertexAttributeComponentType.Float, 1);
+            va.Attributes[0] = new VertexBufferAttribute(vb0, ComponentDatatype.Float, 1);
+            va.Attributes[1] = new VertexBufferAttribute(vb1, ComponentDatatype.Float, 1);
+            va.Attributes[2] = new VertexBufferAttribute(vb2, ComponentDatatype.Float, 1);
             Assert.AreEqual(3, va.Attributes.Count);
 
             va.Attributes[1] = null;
             Assert.AreEqual(2, va.Attributes.Count);
 
-            va.Attributes[1] = new VertexBufferAttribute(vb1, VertexAttributeComponentType.Float, 1);
+            va.Attributes[1] = new VertexBufferAttribute(vb1, ComponentDatatype.Float, 1);
             Assert.AreEqual(3, va.Attributes.Count);
 
             int count = 0;

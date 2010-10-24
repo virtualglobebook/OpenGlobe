@@ -9,7 +9,7 @@
 
 namespace OpenGlobe.Renderer
 {
-    public enum VertexAttributeComponentType
+    public enum ComponentDatatype
     {
         Byte,
         UnsignedByte,

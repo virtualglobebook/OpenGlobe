@@ -51,7 +51,7 @@ namespace OpenGlobe.Scene
             _positionBuffer = Device.CreateVertexBuffer(BufferHint.StaticDraw, SizeInBytes<Vector2S>.Value);
 
             VertexBufferAttribute positionAttribute = new VertexBufferAttribute(
-                _positionBuffer, VertexAttributeComponentType.Float, 2);
+                _positionBuffer, ComponentDatatype.Float, 2);
 
             _drawState.VertexArray = context.CreateVertexArray();
             _drawState.VertexArray.Attributes[_drawState.ShaderProgram.VertexAttributes["position"].Location] = positionAttribute;
