@@ -193,13 +193,16 @@ namespace OpenGlobe.Renderer.GL3x
         {
             VerifyDraw(drawState, sceneState);
             ApplyBeforeDraw(drawState, sceneState);
-
-            if (_boundIndexBuffer != null)
+            
+            VertexArrayGL3x vertexArray = drawState.VertexArray as VertexArrayGL3x;
+            IndexBufferGL3x indexBuffer = vertexArray.IndexBuffer as IndexBufferGL3x;
+            
+            if (indexBuffer != null)
             {
                 GL.DrawRangeElements(TypeConverterGL3x.To(primitiveType),
-                    0, _boundVertexArray.MaximumArrayIndex(), count,
-                    TypeConverterGL3x.To(_boundIndexBuffer.Datatype), new
-                    IntPtr(offset * VertexArraySizes.SizeOf(_boundIndexBuffer.Datatype)));
+                    0, vertexArray.MaximumArrayIndex(), count,
+                    TypeConverterGL3x.To(indexBuffer.Datatype), new
+                    IntPtr(offset * VertexArraySizes.SizeOf(indexBuffer.Datatype)));
             }
             else
             {
@@ -212,16 +215,19 @@ namespace OpenGlobe.Renderer.GL3x
             VerifyDraw(drawState, sceneState);
             ApplyBeforeDraw(drawState, sceneState);
 
-            if (_boundIndexBuffer != null)
+            VertexArrayGL3x vertexArray = drawState.VertexArray as VertexArrayGL3x;
+            IndexBufferGL3x indexBuffer = vertexArray.IndexBuffer as IndexBufferGL3x;
+
+            if (indexBuffer != null)
             {
                 GL.DrawRangeElements(TypeConverterGL3x.To(primitiveType),
-                    0, _boundVertexArray.MaximumArrayIndex(), _boundIndexBuffer.Count,
-                    TypeConverterGL3x.To(_boundIndexBuffer.Datatype), new IntPtr());
+                    0, vertexArray.MaximumArrayIndex(), indexBuffer.Count,
+                    TypeConverterGL3x.To(indexBuffer.Datatype), new IntPtr());
             }
             else
             {
                 GL.DrawArrays(TypeConverterGL3x.To(primitiveType), 0,
-                    _boundVertexArray.MaximumArrayIndex() + 1);
+                    vertexArray.MaximumArrayIndex() + 1);
             }
         }
 
@@ -521,10 +527,7 @@ namespace OpenGlobe.Renderer.GL3x
         {
             VertexArrayGL3x vertexArrayGL3x = vertexArray as VertexArrayGL3x;
             vertexArrayGL3x.Bind();
-
-            _boundVertexArray = vertexArrayGL3x;
-            _boundVertexArray.Clean();
-            _boundIndexBuffer = _boundVertexArray.IndexBuffer as IndexBufferGL3x;
+            vertexArrayGL3x.Clean();
         }
 
         private void ApplyShaderProgram(DrawState drawState, SceneState sceneState)
@@ -573,8 +576,6 @@ namespace OpenGlobe.Renderer.GL3x
         private int _clearStencil;
 
         private RenderState _renderState;
-        private VertexArrayGL3x _boundVertexArray;
-        private IndexBufferGL3x _boundIndexBuffer;
         private ShaderProgramGL3x _boundShaderProgram;
         private FrameBufferGL3x _boundFrameBuffer;
 

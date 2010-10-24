@@ -97,6 +97,8 @@ namespace OpenGlobe.Renderer
 
         protected override void Dispose(bool disposing)
         {
+            // TODO:  Should not do this because a vertex buffer can
+            // be assigned to more than one VertexBufferAttribute.
             if (disposing)
             {
                 if (_vertexBuffer != null)
