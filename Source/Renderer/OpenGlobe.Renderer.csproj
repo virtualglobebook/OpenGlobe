@@ -236,7 +236,7 @@
     <Compile Include="Textures\TextureUnit.cs" />
     <Compile Include="Textures\TextureUnits.cs" />
     <Compile Include="VertexArray\VertexArraySizes.cs" />
-    <Compile Include="VertexArray\VertexAttributeComponentType.cs" />
+    <Compile Include="VertexArray\ComponentDatatype.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Core\OpenGlobe.Core.csproj">
