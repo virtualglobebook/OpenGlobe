@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using OpenGlobe.Core;
 using System.Drawing;
 using System.IO;
 using System.Net;
+using System.Text;
+using OpenGlobe.Core;
 
 namespace OpenGlobe.Scene.Terrain
 {
