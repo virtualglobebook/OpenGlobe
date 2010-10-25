@@ -34,16 +34,31 @@ namespace OpenGlobe.Scene.Terrain
 
             for (int i = 0; i < _clipmapLevels.Length; ++i)
             {
+                RasterTerrainLevel terrainLevel = _terrainSource.Levels[i];
                 _clipmapLevels[i] = new Level();
-                _clipmapLevels[i].Terrain = _terrainSource.Levels[i];
+                _clipmapLevels[i].Terrain = terrainLevel;
                 _clipmapLevels[i].TerrainTexture = Device.CreateTexture2DRectangle(new Texture2DDescription(_clipmapPosts, _clipmapPosts, TextureFormat.Red32f));
                 _clipmapLevels[i].TerrainTexture.Filter = Texture2DFilter.LinearClampToEdge;
 
-                _clipmapLevels[i].Imagery = _imagery.Levels[i];
-                int imageWidth = 255; // (int)Math.Ceiling(_clipmapPosts * imagery.Levels[i].PostDeltaLongitude / _clipmapLevels[i].Terrain.PostDeltaLongitude);
-                int imageHeight = 255; // (int)Math.Ceiling(_clipmapPosts * imagery.Levels[i].PostDeltaLatitude / _clipmapLevels[i].Terrain.PostDeltaLatitude);
+                // Aim for roughly one imagery texel per geometry texel.
+                // Find the first imagery level that meets our resolution needs.
+                double longitudeResRequired = terrainLevel.PostDeltaLongitude;
+                double latitudeResRequired = terrainLevel.PostDeltaLatitude;
+                EsriRestImageryLevel imageryLevel = null;
+                for (int j = 0; j < _imagery.Levels.Count; ++j)
+                {
+                    imageryLevel = _imagery.Levels[j];
+                    if (imageryLevel.PostDeltaLongitude <= longitudeResRequired &&
+                        imageryLevel.PostDeltaLatitude <= latitudeResRequired)
+                    {
+                        break;
+                    }
+                }
 
-                _clipmapLevels[i].ImageryTexture = Device.CreateTexture2D(new Texture2DDescription(imageWidth, imageHeight, TextureFormat.RedGreenBlue8));
+                _clipmapLevels[i].Imagery = imageryLevel;
+                _clipmapLevels[i].ImageryWidth = (int)Math.Ceiling(_clipmapPosts * terrainLevel.PostDeltaLongitude / imageryLevel.PostDeltaLongitude);
+                _clipmapLevels[i].ImageryHeight = (int)Math.Ceiling(_clipmapPosts * terrainLevel.PostDeltaLatitude / imageryLevel.PostDeltaLatitude);
+                _clipmapLevels[i].ImageryTexture = Device.CreateTexture2D(new Texture2DDescription(_clipmapLevels[i].ImageryWidth, _clipmapLevels[i].ImageryHeight, TextureFormat.RedGreenBlue8, false));
                 _clipmapLevels[i].ImageryTexture.Filter = Texture2DFilter.LinearClampToEdge;
             }
 
@@ -107,10 +122,6 @@ namespace OpenGlobe.Scene.Terrain
             _renderState = new RenderState();
             _renderState.FacetCulling.FrontFaceWindingOrder = fieldBlockMesh.FrontFaceWindingOrder;
             _primitiveType = fieldBlockMesh.PrimitiveType;
-
-            Bitmap image = new Bitmap(_imagery.Levels[1].LongitudePosts, _imagery.Levels[1].LatitudePosts);
-            _imagery.Levels[1].GetImage(0, 0, _imagery.Levels[1].LongitudePosts - 1, _imagery.Levels[1].LatitudePosts - 1, image, 0, 0);
-            _imageryTexture = Device.CreateTexture2D(image, TextureFormat.RedGreenBlue8, false);
         }
 
         public void Render(Context context, SceneState sceneState)
@@ -160,6 +171,8 @@ namespace OpenGlobe.Scene.Terrain
 
             for (int i = _clipmapLevels.Length - 1; i >= 0; --i)
             {
+                //if (i != 0)
+                //    continue;
                 RenderLevel(i, context, sceneState);
             }
         }
@@ -184,20 +197,32 @@ namespace OpenGlobe.Scene.Terrain
                 floatPosts[i] = posts[i];
             }
 
-            Bitmap bitmap = new Bitmap(east - west + 1, north - south + 1);
-            level.Imagery.GetImage(west, south, east, north, bitmap, 0, 0);
+            // Map the terrain posts indices to imagery post indices and offsets
+            int imageryWest = (int)level.Imagery.LongitudeToIndex(level.Terrain.IndexToLongitude(level.West));
+            int imagerySouth = (int)level.Imagery.LatitudeToIndex(level.Terrain.IndexToLatitude(level.South));
+            int imageryEast = imageryWest + level.ImageryWidth - 1;
+            int imageryNorth = imagerySouth + level.ImageryHeight - 1;
+
+            double longitudeOffset = sceneState.Camera.Target.X - level.Terrain.IndexToLongitude(level.West);
+            double latitudeOffset = sceneState.Camera.Target.Y - level.Terrain.IndexToLatitude(level.South);
+            double longitudeScale = level.Terrain.PostDeltaLongitude / level.Imagery.PostDeltaLongitude;
+            double latitudeScale = level.Terrain.PostDeltaLatitude / level.Imagery.PostDeltaLatitude;
+
+            //byte[] imagery = level.Imagery.GetImage(imageryWest, imagerySouth, imageryEast, imageryNorth);
+
+            //bitmap.Save("level0.png");
 
             using (WritePixelBuffer pixelBuffer = Device.CreateWritePixelBuffer(WritePixelBufferHint.StreamDraw, _clipmapPosts * _clipmapPosts * sizeof(float)))
-            using (WritePixelBuffer imageryPixelBuffer = Device.CreateWritePixelBuffer(WritePixelBufferHint.StreamDraw, BitmapAlgorithms.SizeOfPixelsInBytes(bitmap)))
+            //using (WritePixelBuffer imageryPixelBuffer = Device.CreateWritePixelBuffer(WritePixelBufferHint.StreamDraw, imagery.Length))
             {
                 pixelBuffer.CopyFromSystemMemory(floatPosts);
                 level.TerrainTexture.CopyFromBuffer(pixelBuffer, ImageFormat.Red, ImageDatatype.Float);
                 context.TextureUnits[0].Texture2DRectangle = level.TerrainTexture;
                 context.TextureUnits[1].Texture2DRectangle = coarserLevel.TerrainTexture;
 
-                imageryPixelBuffer.CopyFromBitmap(bitmap);
-                level.ImageryTexture.CopyFromBuffer(imageryPixelBuffer, ImageFormat.RedGreenBlue, ImageDatatype.Byte);
-                context.TextureUnits[2].Texture2D = _imageryTexture;
+                //imageryPixelBuffer.CopyFromSystemMemory(imagery);
+                //level.ImageryTexture.CopyFromBuffer(imageryPixelBuffer, ImageFormat.BlueGreenRedAlpha, ImageDatatype.UnsignedByte);
+                //context.TextureUnits[2].Texture2D = level.ImageryTexture;
 
                 DrawBlock(_fieldBlock, level, coarserLevel, west, south, west, south, context, sceneState);
                 DrawBlock(_fieldBlock, level, coarserLevel, west, south, west + _fieldBlockSegments, south, context, sceneState);
@@ -401,6 +426,8 @@ namespace OpenGlobe.Scene.Terrain
             public Texture2D TerrainTexture;
             public EsriRestImageryLevel Imagery;
             public Texture2D ImageryTexture;
+            public int ImageryWidth;
+            public int ImageryHeight;
             public int West;
             public int South;
             public bool OffsetStripOnNorth;
@@ -438,6 +465,5 @@ namespace OpenGlobe.Scene.Terrain
         private Uniform<float> _oneOverTransitionWidth;
 
         private EsriRestImagery _imagery;
-        private Texture2D _imageryTexture;
     }
 }

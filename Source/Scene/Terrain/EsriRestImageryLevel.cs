@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using OpenGlobe.Core;
 using System.Drawing;
+using System.Runtime.InteropServices;
+using System.Drawing.Imaging;
 
 namespace OpenGlobe.Scene.Terrain
 {
@@ -53,51 +55,54 @@ namespace OpenGlobe.Scene.Terrain
             get { return _latitudePosts; }
         }
 
-        public void GetImage(int west, int south, int east, int north, Bitmap destination, int startX, int startY)
+        public byte[] GetImage(int west, int south, int east, int north)
         {
-            using (Graphics g = Graphics.FromImage(destination))
+            int longitudePixels = east - west + 1;
+            int latitudePixels = north - south + 1;
+
+            byte[] buffer = new byte[longitudePixels * latitudePixels * BytesPerPixel];
+
+            int tileXStart = west / _imagerySource.TileLongitudePosts;
+            int tileXStop = east / _imagerySource.TileLongitudePosts;
+
+            int tileYStart = south / _imagerySource.TileLatitudePosts;
+            int tileYStop = north / _imagerySource.TileLatitudePosts;
+
+            for (int tileY = tileYStart; tileY <= tileYStop; ++tileY)
             {
-                g.SetClip(new Rectangle(startX, startY, destination.Width - startX, destination.Height - startY));
+                int tileYOrigin = tileY * _imagerySource.TileLatitudePosts;
 
-                int tileXStart = west / _imagerySource.TileLongitudePosts;
-                int tileXStop = east / _imagerySource.TileLongitudePosts;
+                int currentSouth = south - tileYOrigin;
+                if (currentSouth < 0)
+                    currentSouth = 0;
 
-                int tileYStart = south / _imagerySource.TileLatitudePosts;
-                int tileYStop = north / _imagerySource.TileLatitudePosts;
+                int currentNorth = north - tileYOrigin;
+                if (currentNorth >= _imagerySource.TileLatitudePosts)
+                    currentNorth = _imagerySource.TileLatitudePosts - 1;
 
-                for (int tileY = tileYStart; tileY <= tileYStop; ++tileY)
+                for (int tileX = tileXStart; tileX <= tileXStop; ++tileX)
                 {
-                    int tileYOrigin = tileY * _imagerySource.TileLatitudePosts;
+                    int tileXOrigin = tileX * _imagerySource.TileLongitudePosts;
 
-                    int currentSouth = south - tileYOrigin;
-                    if (currentSouth < 0)
-                        currentSouth = 0;
+                    int currentWest = west - tileXOrigin;
+                    if (currentWest < 0)
+                        currentWest = 0;
 
-                    int currentNorth = north - tileYOrigin;
-                    if (currentNorth >= _imagerySource.TileLatitudePosts)
-                        currentNorth = _imagerySource.TileLatitudePosts - 1;
+                    int currentEast = east - tileXOrigin;
+                    if (currentEast >= _imagerySource.TileLongitudePosts)
+                        currentEast = _imagerySource.TileLongitudePosts - 1;
 
-                    for (int tileX = tileXStart; tileX <= tileXStop; ++tileX)
-                    {
-                        int tileXOrigin = tileX * _imagerySource.TileLongitudePosts;
-
-                        int currentWest = west - tileXOrigin;
-                        if (currentWest < 0)
-                            currentWest = 0;
-
-                        int currentEast = east - tileXOrigin;
-                        if (currentEast >= _imagerySource.TileLongitudePosts)
-                            currentEast = _imagerySource.TileLongitudePosts - 1;
-
-                        int writeX = startX + currentWest + tileXOrigin - west;
-                        int writeY = startY + currentSouth + tileYOrigin - south;
-                        GetTilePosts(tileX, tileY, currentWest, currentSouth, currentEast, currentNorth, g, writeX, writeY);
-                    }
+                    int writeX = currentWest + tileXOrigin - west;
+                    int writeY = currentSouth + tileYOrigin - south;
+                    int writeIndex = (writeY * longitudePixels + writeX) * BytesPerPixel;
+                    GetTilePosts(tileX, tileY, currentWest, currentSouth, currentEast, currentNorth, buffer, writeIndex, longitudePixels * BytesPerPixel);
                 }
             }
+
+            return buffer;
         }
 
-        private void GetTilePosts(int tileLongitudeIndex, int tileLatitudeIndex, int tileWest, int tileSouth, int tileEast, int tileNorth, Graphics destination, int startX, int startY)
+        private void GetTilePosts(int tileLongitudeIndex, int tileLatitudeIndex, int tileWest, int tileSouth, int tileEast, int tileNorth, byte[] buffer, int startIndex, int stride)
         {
             Tile tile = _cache.Find(candidate => candidate.TileLongitudeIndex == tileLongitudeIndex && candidate.TileLatitudeIndex == tileLatitudeIndex);
             if (tile == null)
@@ -109,7 +114,24 @@ namespace OpenGlobe.Scene.Terrain
                 _cache.Add(tile);
             }
 
-            destination.DrawImageUnscaled(tile.Image, startX, startY);
+            int postsIndex = tileSouth * _imagerySource.TileLongitudePosts + tileWest;
+            int latitudePosts = tileNorth - tileSouth + 1;
+            int longitudePosts = tileEast - tileWest + 1;
+
+            Rectangle rectangle = new Rectangle(tileWest, tile.Image.Height - tileNorth - 1, longitudePosts, latitudePosts);
+            BitmapData bmpData = tile.Image.LockBits(rectangle, System.Drawing.Imaging.ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+            IntPtr scan0 = bmpData.Scan0;
+            long readPointer = scan0.ToInt64();
+
+            int writeIndex = startIndex;
+            for (int j = tileSouth; j <= tileNorth; ++j)
+            {
+                int row = (_imagerySource.TileLatitudePosts - j - 1) * _imagerySource.TileLongitudePosts;
+                Marshal.Copy(new IntPtr(readPointer + row), buffer, writeIndex, longitudePosts * BytesPerPixel);
+                writeIndex += stride;
+            }
+
+            tile.Image.UnlockBits(bmpData);
         }
 
         public double LongitudeToIndex(double longitude)
@@ -152,5 +174,7 @@ namespace OpenGlobe.Scene.Terrain
         private int _longitudePosts;
         private int _latitudePosts;
         private List<Tile> _cache = new List<Tile>();
+
+        private const int BytesPerPixel = 3;
     }
 }

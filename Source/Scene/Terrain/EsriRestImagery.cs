@@ -77,15 +77,12 @@ namespace OpenGlobe.Scene.Terrain
             double longitudeResolution = LevelZeroDeltaLongitudeDegrees / divisor;
             double latitudeResolution = LevelZeroDeltaLatitudeDegrees / divisor;
 
-            double west = -180.0 + longitudeResolution * longitudeIndex;
-            double east = -180.0 + longitudeResolution * (longitudeIndex + 1);
-            double south = -90.0 + latitudeResolution * latitudeIndex;
-            double north = -90.0 + latitudeResolution * (latitudeIndex + 1);
+            // Esri tiles are numbered from the northwest instead of from the southwest.
 
             StringBuilder query = new StringBuilder(_baseUri.AbsoluteUri);
             query.Append(level);
             query.Append('/');
-            query.Append(latitudeIndex);
+            query.Append((1 << level) - latitudeIndex);
             query.Append('/');
             query.Append(longitudeIndex);
 

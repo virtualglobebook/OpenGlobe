@@ -111,7 +111,6 @@ namespace OpenGlobe.Scene.Terrain
                 _cache.Add(tile);
             }
 
-            int postsIndex = tileSouth * _terrainSource.TileLongitudePosts + tileWest;
             int latitudePosts = tileNorth - tileSouth + 1;
             int longitudePosts = tileEast - tileWest + 1;
 
