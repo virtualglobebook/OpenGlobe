@@ -38,9 +38,6 @@ namespace OpenGlobe.Scene.Terrain
                 deltaLongitude /= 2.0;
                 deltaLatitude /= 2.0;
             }
-
-            //short[] buffer = new short[_levels[0].LongitudePosts * _levels[0].LatitudePosts];
-            //_levels[0].GetPosts(0, 0, _levels[0].LongitudePosts - 1, _levels[0].LatitudePosts - 1, buffer, 0, _levels[0].LongitudePosts);
         }
 
         public override GeodeticExtent Extent

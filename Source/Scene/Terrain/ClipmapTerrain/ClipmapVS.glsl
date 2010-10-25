@@ -13,6 +13,7 @@ out vec3 normalFS;
 out vec3 positionToLightFS;
 out vec3 positionToEyeFS;
 out vec2 modulus;
+out vec2 textureCoordinateFS;
 
 uniform mat4 og_modelViewPerspectiveMatrix;
 uniform vec3 og_cameraEye;
@@ -70,6 +71,8 @@ void main()
 	//  u_scaleFactor.zw: origin of current block within world
 	vec2 worldPos = GridToWorld(position);
 	height = SampleHeight(position);
+
+	textureCoordinateFS = (position + u_fineBlockOrig.zw) / 255.0;
 
 	float heightExaggeration = 0.00001;
 	vec3 displacedPosition = vec3(worldPos, height * heightExaggeration);

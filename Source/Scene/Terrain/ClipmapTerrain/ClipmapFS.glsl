@@ -11,11 +11,14 @@ in vec3 normalFS;
 in vec3 positionToLightFS;
 in vec3 positionToEyeFS;
 in vec2 modulus;
+in vec2 textureCoordinateFS;
                  
 out vec3 fragmentColor;
 
 uniform vec4 og_diffuseSpecularAmbientShininess;
 uniform vec3 u_color;
+uniform sampler2DRect og_texture0;
+uniform sampler2D og_texture2;
 
 float LightIntensity(vec3 normal, vec3 toLight, vec3 toEye, vec4 diffuseSpecularAmbientShininess)
 {
@@ -41,5 +44,6 @@ void main()
 	
 	//fragmentColor = mix(vec3(u_color * intensity), vec3(0.0, 0.0, intensity), (modulus.x > -0.5 && modulus.x < 0.5) || (modulus.y > -0.5 && modulus.y < 0.5));
 	fragmentColor = mix(vec3(u_color * intensity), vec3(0.0, 0.0, intensity), height <= 0);
+	//fragmentColor = u_color*0.0000001 + texture(og_texture2, textureCoordinateFS).rgb;
 	//fragmentColor = fragmentColor*0.0000001 + normal;
 }

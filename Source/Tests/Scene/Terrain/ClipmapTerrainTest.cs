@@ -30,7 +30,8 @@ namespace OpenGlobe.Tests.Scene.Terrain
             GraphicsWindow window = Device.CreateWindow(800, 600, "Clipmap Terrain Test");
 
             WorldWindTerrainSource worldWind = new WorldWindTerrainSource();
-            ClipmapTerrain clipmap = new ClipmapTerrain(window.Context, worldWind, 255);
+            EsriRestImagery imagery = new EsriRestImagery();
+            ClipmapTerrain clipmap = new ClipmapTerrain(window.Context, worldWind, 255, imagery);
 
             SceneState sceneState = new SceneState();
             sceneState.DiffuseIntensity = 0.9f;

@@ -44,6 +44,7 @@
   <ItemGroup>
     <Compile Include="Cameras\CameraFly.cs" />
     <Compile Include="Cameras\CameraLookAtPoint.cs" />
+    <Compile Include="Terrain\EsriRestImagery.cs" />
     <Compile Include="Globes\DayNight\DayNightGlobe.cs" />
     <Compile Include="Globes\DayNight\DayNightViewportQuad.cs" />
     <Compile Include="Globes\LatitudeLongitudeGrid\GridResolution.cs" />
@@ -72,6 +73,8 @@
     <Compile Include="Shapefiles\PolygonShapefile.cs" />
     <Compile Include="Shapefiles\PolylineShapefile.cs" />
     <Compile Include="Shapefiles\ShapefileType.cs" />
+    <Compile Include="Terrain\EsriRestImageryLevel.cs" />
+    <Compile Include="Terrain\EsriRestImageryLevelCollection.cs" />
     <Compile Include="Terrain\RasterTerrainLevel.cs" />
     <Compile Include="Terrain\RasterTerrainLevelCollection.cs" />
     <Compile Include="Terrain\RasterTerrainSource.cs" />
