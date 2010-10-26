@@ -12,79 +12,117 @@ using System.Globalization;
 
 namespace OpenGlobe.Core.Geometry
 {
-    public struct TriangleIndicesInt16 : IEquatable<TriangleIndicesInt16>
+    [CLSCompliant(false)]
+    public struct TriangleIndicesUnsignedShort : IEquatable<TriangleIndicesUnsignedShort>
     {
-        public TriangleIndicesInt16(short i0, short i1, short i2)
+        public TriangleIndicesUnsignedShort(ushort ui0, ushort ui1, ushort ui2)
         {
-            _i0 = i0;
-            _i1 = i1;
-            _i2 = i2;
+            _ui0 = ui0;
+            _ui1 = ui1;
+            _ui2 = ui2;
         }
 
-        public TriangleIndicesInt16(TriangleIndicesInt16 other)
+        public TriangleIndicesUnsignedShort(short i0, short i1, short i2)
         {
-            _i0 = other.I0;
-            _i1 = other.I1;
-            _i2 = other.I2;
+            if (i0 < 0)
+            {
+                throw new ArgumentOutOfRangeException("i0");
+            }
+
+            if (i1 < 0)
+            {
+                throw new ArgumentOutOfRangeException("i1");
+            }
+
+            if (i2 < 0)
+            {
+                throw new ArgumentOutOfRangeException("i2");
+            }
+
+            _ui0 = (ushort)i0;
+            _ui1 = (ushort)i1;
+            _ui2 = (ushort)i2;
         }
 
-        public static bool operator ==(TriangleIndicesInt16 left, TriangleIndicesInt16 right)
+        public TriangleIndicesUnsignedShort(TriangleIndicesUnsignedShort other)
+        {
+            _ui0 = other.UI0;
+            _ui1 = other.UI1;
+            _ui2 = other.UI2;
+        }
+
+        public static bool operator ==(TriangleIndicesUnsignedShort left, TriangleIndicesUnsignedShort right)
         {
             return left.Equals(right);
         }
 
-        public static bool operator !=(TriangleIndicesInt16 left, TriangleIndicesInt16 right)
+        public static bool operator !=(TriangleIndicesUnsignedShort left, TriangleIndicesUnsignedShort right)
         {
             return !left.Equals(right);
         }
 
         public override string ToString()
         {
-            return string.Format(CultureInfo.CurrentCulture, "i0: {0} i1: {1} i2: {2}", _i0, _i1, _i2);
+            return string.Format(CultureInfo.CurrentCulture, "i0: {0} i1: {1} i2: {2}", _ui0, _ui1, _ui2);
         }
 
         public override int GetHashCode()
         {
-            return _i0.GetHashCode() ^ _i1.GetHashCode() ^ _i2.GetHashCode();
+            return _ui0.GetHashCode() ^ _ui1.GetHashCode() ^ _ui2.GetHashCode();
         }
 
         public override bool Equals(object obj)
         {
-            if (!(obj is TriangleIndicesInt16))
+            if (!(obj is TriangleIndicesUnsignedShort))
                 return false;
 
-            return this.Equals((TriangleIndicesInt16)obj);
+            return this.Equals((TriangleIndicesUnsignedShort)obj);
         }
 
         #region IEquatable<TriangleIndices> Members
 
-        public bool Equals(TriangleIndicesInt16 other)
+        public bool Equals(TriangleIndicesUnsignedShort other)
         {
             return
-                (_i0.Equals(other.I0)) &&
-                (_i1.Equals(other.I1)) &&
-                (_i2.Equals(other.I2));
+                (_ui0.Equals(other.UI0)) &&
+                (_ui1.Equals(other.UI1)) &&
+                (_ui2.Equals(other.UI2));
         }
 
         #endregion
 
         public short I0
         {
-            get { return _i0; }
+            get { return (short)_ui0; }
         }
 
         public short I1
         {
-            get { return _i1; }
+            get { return (short)_ui1; }
         }
 
         public short I2
         {
-            get { return _i2; }
+            get { return (short)_ui2; }
         }
 
-        private short _i0;
-        private short _i1;
-        private short _i2;
+        public ushort UI0
+        {
+            get { return _ui0; }
+        }
+
+        public ushort UI1
+        {
+            get { return _ui1; }
+        }
+
+        public ushort UI2
+        {
+            get { return _ui2; }
+        }
+
+        private ushort _ui0;
+        private ushort _ui1;
+        private ushort _ui2;
     }
 }

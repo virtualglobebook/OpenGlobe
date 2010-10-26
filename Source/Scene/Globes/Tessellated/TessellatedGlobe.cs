@@ -50,7 +50,7 @@ namespace OpenGlobe.Scene
                     _numberOfSlicePartitions, _numberOfStackPartitions, GeographicGridEllipsoidVertexAttributes.Position);
                 _drawState.VertexArray = context.CreateVertexArray(mesh, _drawState.ShaderProgram.VertexAttributes, BufferHint.StaticDraw);
                 _primitiveType = mesh.PrimitiveType;
-                _numberOfTriangles = ((mesh.Indices as IndicesInt32).Values.Count / 3);
+                _numberOfTriangles = ((mesh.Indices as IndicesUnsignedInt).Values.Count / 3);
 
                 _drawState.RenderState.FacetCulling.FrontFaceWindingOrder = mesh.FrontFaceWindingOrder;
 

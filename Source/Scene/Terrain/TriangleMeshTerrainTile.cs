@@ -57,7 +57,7 @@ namespace OpenGlobe.Terrain
             int numberOfPartitionsX = tile.Resolution.X - 1;
             int numberOfPartitionsY = tile.Resolution.Y - 1;
             int numberOfIndices = (numberOfPartitionsX * numberOfPartitionsY) * 6;
-            IndicesInt32 indices = new IndicesInt32(numberOfIndices);
+            IndicesUnsignedInt indices = new IndicesUnsignedInt(numberOfIndices);
             mesh.Indices = indices;
 
             //
@@ -89,8 +89,8 @@ namespace OpenGlobe.Terrain
             {
                 for (int x = 0; x < numberOfPartitionsX; ++x)
                 {
-                    indices.AddTriangle(new TriangleIndicesInt32(i, i + 1, rowDelta + (i + 1)));
-                    indices.AddTriangle(new TriangleIndicesInt32(i, rowDelta + (i + 1), rowDelta + i));
+                    indices.AddTriangle(new TriangleIndicesUnsignedInt(i, i + 1, rowDelta + (i + 1)));
+                    indices.AddTriangle(new TriangleIndicesUnsignedInt(i, rowDelta + (i + 1), rowDelta + i));
                     i += 1;
                 }
                 i += 1;

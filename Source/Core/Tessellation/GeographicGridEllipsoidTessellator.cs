@@ -49,7 +49,7 @@ namespace OpenGlobe.Core.Tessellation
             VertexAttributeDoubleVector3 positionsAttribute = new VertexAttributeDoubleVector3("position", numberOfVertices);
             mesh.Attributes.Add(positionsAttribute);
 
-            IndicesInt32 indices = new IndicesInt32(3 * NumberOfTriangles(numberOfSlicePartitions, numberOfStackPartitions));
+            IndicesUnsignedInt indices = new IndicesUnsignedInt(3 * NumberOfTriangles(numberOfSlicePartitions, numberOfStackPartitions));
             mesh.Indices = indices;
 
             IList<Vector3H> normals = null;
@@ -126,9 +126,9 @@ namespace OpenGlobe.Core.Tessellation
             //
             for (int j = 1; j < numberOfSlicePartitions; ++j)
             {
-                indices.AddTriangle(new TriangleIndicesInt32(0, j, j + 1));
+                indices.AddTriangle(new TriangleIndicesUnsignedInt(0, j, j + 1));
             }
-            indices.AddTriangle(new TriangleIndicesInt32(0, numberOfSlicePartitions, 1));
+            indices.AddTriangle(new TriangleIndicesUnsignedInt(0, numberOfSlicePartitions, 1));
 
             //
             // Middle rows are triangle strips
@@ -140,11 +140,11 @@ namespace OpenGlobe.Core.Tessellation
 
                 for (int j = 0; j < numberOfSlicePartitions - 1; ++j)
                 {
-                    indices.AddTriangle(new TriangleIndicesInt32(bottomRowOffset + j, bottomRowOffset + j + 1, topRowOffset + j + 1));
-                    indices.AddTriangle(new TriangleIndicesInt32(bottomRowOffset + j, topRowOffset + j + 1, topRowOffset + j));
+                    indices.AddTriangle(new TriangleIndicesUnsignedInt(bottomRowOffset + j, bottomRowOffset + j + 1, topRowOffset + j + 1));
+                    indices.AddTriangle(new TriangleIndicesUnsignedInt(bottomRowOffset + j, topRowOffset + j + 1, topRowOffset + j));
                 }
-                indices.AddTriangle(new TriangleIndicesInt32(bottomRowOffset + numberOfSlicePartitions - 1, bottomRowOffset, topRowOffset));
-                indices.AddTriangle(new TriangleIndicesInt32(bottomRowOffset + numberOfSlicePartitions - 1, topRowOffset, topRowOffset + numberOfSlicePartitions - 1));
+                indices.AddTriangle(new TriangleIndicesUnsignedInt(bottomRowOffset + numberOfSlicePartitions - 1, bottomRowOffset, topRowOffset));
+                indices.AddTriangle(new TriangleIndicesUnsignedInt(bottomRowOffset + numberOfSlicePartitions - 1, topRowOffset, topRowOffset + numberOfSlicePartitions - 1));
             }
 
             //
@@ -153,9 +153,9 @@ namespace OpenGlobe.Core.Tessellation
             int lastPosition = positions.Count - 1;
             for (int j = lastPosition - 1; j > lastPosition - numberOfSlicePartitions; --j)
             {
-                indices.AddTriangle(new TriangleIndicesInt32(lastPosition, j, j - 1));
+                indices.AddTriangle(new TriangleIndicesUnsignedInt(lastPosition, j, j - 1));
             }
-            indices.AddTriangle(new TriangleIndicesInt32(lastPosition, lastPosition - numberOfSlicePartitions, lastPosition - 1));
+            indices.AddTriangle(new TriangleIndicesUnsignedInt(lastPosition, lastPosition - numberOfSlicePartitions, lastPosition - 1));
 
             return mesh;
         }

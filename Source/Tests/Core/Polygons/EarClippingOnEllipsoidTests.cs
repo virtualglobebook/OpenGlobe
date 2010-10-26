@@ -39,7 +39,7 @@ namespace OpenGlobe.Core
             positions.Add(Ellipsoid.UnitSphere.ToVector3D(Trig.ToRadians(new Geodetic3D(1, 0))));
             positions.Add(Ellipsoid.UnitSphere.ToVector3D(Trig.ToRadians(new Geodetic3D(1, 1))));
 
-            IndicesInt32 indices = EarClippingOnEllipsoid.Triangulate(positions);
+            IndicesUnsignedInt indices = EarClippingOnEllipsoid.Triangulate(positions);
 
             Assert.AreEqual(3, indices.Values.Count);
             Assert.AreEqual(0, indices.Values[0]);
@@ -56,7 +56,7 @@ namespace OpenGlobe.Core
             positions.Add(Ellipsoid.UnitSphere.ToVector3D(Trig.ToRadians(new Geodetic3D(1, 1))));
             positions.Add(Ellipsoid.UnitSphere.ToVector3D(Trig.ToRadians(new Geodetic3D(0, 1))));
             
-            IndicesInt32 indices = EarClippingOnEllipsoid.Triangulate(positions);
+            IndicesUnsignedInt indices = EarClippingOnEllipsoid.Triangulate(positions);
 
             Assert.AreEqual(6, indices.Values.Count);
             Assert.AreEqual(0, indices.Values[0]);
@@ -78,7 +78,7 @@ namespace OpenGlobe.Core
             positions.Add(Ellipsoid.UnitSphere.ToVector3D(Trig.ToRadians(new Geodetic3D(1, 0.25))));
             positions.Add(Ellipsoid.UnitSphere.ToVector3D(Trig.ToRadians(new Geodetic3D(0, 2))));
 
-            IndicesInt32 indices = EarClippingOnEllipsoid.Triangulate(positions);
+            IndicesUnsignedInt indices = EarClippingOnEllipsoid.Triangulate(positions);
 
             Assert.AreEqual(9, indices.Values.Count);
             Assert.AreEqual(1, indices.Values[0]);
@@ -108,7 +108,7 @@ namespace OpenGlobe.Core
             positions.Add(Ellipsoid.UnitSphere.ToVector3D(Trig.ToRadians(new Geodetic3D(0, 1))));
             positions.Add(Ellipsoid.UnitSphere.ToVector3D(Trig.ToRadians(new Geodetic3D(1.9, 0.5))));
 
-            IndicesInt32 indices = EarClippingOnEllipsoid.Triangulate(positions);
+            IndicesUnsignedInt indices = EarClippingOnEllipsoid.Triangulate(positions);
 
             Assert.AreEqual(18, indices.Values.Count);
             Assert.AreEqual(3, indices.Values[0]);

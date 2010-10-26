@@ -135,14 +135,14 @@ namespace OpenGlobe.Renderer
                     indexBuffer.CopyFromSystemMemory(indices);
                     meshBuffers.IndexBuffer = indexBuffer;
                 }
-                else if (mesh.Indices.Datatype == IndicesType.Int16)
+                else if (mesh.Indices.Datatype == IndicesType.UnsignedShort)
                 {
-                    IList<short> meshIndices = (mesh.Indices as IndicesInt16).Values;
+                    IList<ushort> meshIndices = (mesh.Indices as IndicesUnsignedShort).Values;
 
                     ushort[] indices = new ushort[meshIndices.Count];
                     for (int j = 0; j < meshIndices.Count; ++j)
                     {
-                        indices[j] = (ushort)meshIndices[j];
+                        indices[j] = meshIndices[j];
                     }
 
                     IndexBuffer indexBuffer = Device.CreateIndexBuffer(usageHint, indices.Length * sizeof(ushort));
@@ -151,14 +151,14 @@ namespace OpenGlobe.Renderer
                 }
                 else
                 {
-                    Debug.Assert(mesh.Indices.Datatype == IndicesType.Int32);
+                    Debug.Assert(mesh.Indices.Datatype == IndicesType.UnsignedInt);
 
-                    IList<int> meshIndices = (mesh.Indices as IndicesInt32).Values;
+                    IList<uint> meshIndices = (mesh.Indices as IndicesUnsignedInt).Values;
 
                     uint[] indices = new uint[meshIndices.Count];
                     for (int j = 0; j < meshIndices.Count; ++j)
                     {
-                        indices[j] = (uint)meshIndices[j];
+                        indices[j] = meshIndices[j];
                     }
 
                     IndexBuffer indexBuffer = Device.CreateIndexBuffer(usageHint, indices.Length * sizeof(uint));

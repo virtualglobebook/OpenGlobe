@@ -29,7 +29,7 @@ namespace OpenGlobe.Core.Tessellation
             public IList<Vector3D> Positions { get; set; }
             public IList<Vector3H> Normals { get; set; }
             public IList<Vector2H> TextureCoordinate { get; set; }
-            public IndicesInt32 Indices { get; set; }
+            public IndicesUnsignedInt Indices { get; set; }
         }
 
         public static Mesh Compute(int numberOfSubdivisions, SubdivisionSphereVertexAttributes vertexAttributes)
@@ -52,7 +52,7 @@ namespace OpenGlobe.Core.Tessellation
             VertexAttributeDoubleVector3 positionsAttribute = new VertexAttributeDoubleVector3("position", numberOfVertices);
             mesh.Attributes.Add(positionsAttribute);
 
-            IndicesInt32 indices = new IndicesInt32(3 * SubdivisionUtility.NumberOfTriangles(numberOfSubdivisions));
+            IndicesUnsignedInt indices = new IndicesUnsignedInt(3 * SubdivisionUtility.NumberOfTriangles(numberOfSubdivisions));
             mesh.Indices = indices;
 
             SubdivisionMesh subdivisionMesh = new SubdivisionMesh();
@@ -106,15 +106,15 @@ namespace OpenGlobe.Core.Tessellation
                 subdivisionMesh.TextureCoordinate.Add(SubdivisionUtility.ComputeTextureCoordinate(p3));
             }
 
-            Subdivide(subdivisionMesh, new TriangleIndicesInt32(0, 1, 2), numberOfSubdivisions);
-            Subdivide(subdivisionMesh, new TriangleIndicesInt32(0, 2, 3), numberOfSubdivisions);
-            Subdivide(subdivisionMesh, new TriangleIndicesInt32(0, 3, 1), numberOfSubdivisions);
-            Subdivide(subdivisionMesh, new TriangleIndicesInt32(1, 3, 2), numberOfSubdivisions);
+            Subdivide(subdivisionMesh, new TriangleIndicesUnsignedInt(0, 1, 2), numberOfSubdivisions);
+            Subdivide(subdivisionMesh, new TriangleIndicesUnsignedInt(0, 2, 3), numberOfSubdivisions);
+            Subdivide(subdivisionMesh, new TriangleIndicesUnsignedInt(0, 3, 1), numberOfSubdivisions);
+            Subdivide(subdivisionMesh, new TriangleIndicesUnsignedInt(1, 3, 2), numberOfSubdivisions);
 
             return mesh;
         }
 
-        private static void Subdivide(SubdivisionMesh subdivisionMesh, TriangleIndicesInt32 triangle, int level)
+        private static void Subdivide(SubdivisionMesh subdivisionMesh, TriangleIndicesUnsignedInt triangle, int level)
         {
             if (level > 0)
             {
@@ -149,10 +149,10 @@ namespace OpenGlobe.Core.Tessellation
                 // Subdivide input triangle into four triangles
                 //
                 --level;
-                Subdivide(subdivisionMesh, new TriangleIndicesInt32(triangle.I0, i01, i20), level);
-                Subdivide(subdivisionMesh, new TriangleIndicesInt32(i01, triangle.I1, i12), level);
-                Subdivide(subdivisionMesh, new TriangleIndicesInt32(i01, i12, i20), level);
-                Subdivide(subdivisionMesh, new TriangleIndicesInt32(i20, i12, triangle.I2), level);
+                Subdivide(subdivisionMesh, new TriangleIndicesUnsignedInt(triangle.I0, i01, i20), level);
+                Subdivide(subdivisionMesh, new TriangleIndicesUnsignedInt(i01, triangle.I1, i12), level);
+                Subdivide(subdivisionMesh, new TriangleIndicesUnsignedInt(i01, i12, i20), level);
+                Subdivide(subdivisionMesh, new TriangleIndicesUnsignedInt(i20, i12, triangle.I2), level);
             }
             else
             {

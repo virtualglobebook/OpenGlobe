@@ -45,7 +45,7 @@ namespace OpenGlobe.Scene
             VertexAttributeDoubleVector3 positionAttribute = new VertexAttributeDoubleVector3("position");
             VertexAttributeRGBA colorAttribute = new VertexAttributeRGBA("color");
             VertexAttributeRGBA outlineColorAttribute = new VertexAttributeRGBA("outlineColor");
-            IndicesInt32 indices = new IndicesInt32();
+            IndicesUnsignedInt indices = new IndicesUnsignedInt();
 
             Random r = new Random(3);
             IList<Vector3D> positions = new List<Vector3D>();
@@ -87,8 +87,8 @@ namespace OpenGlobe.Scene
 
                         if (i != 0)
                         {
-                            indices.Values.Add(positionAttribute.Values.Count - 2);
-                            indices.Values.Add(positionAttribute.Values.Count - 1);
+                            indices.Values.Add((uint)positionAttribute.Values.Count - 2);
+                            indices.Values.Add((uint)positionAttribute.Values.Count - 1);
                         }
                     }
 

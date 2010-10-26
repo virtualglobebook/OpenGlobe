@@ -354,7 +354,7 @@ namespace OpenGlobe.Scene.Terrain
             mesh.Attributes.Add(positionsAttribute);
 
             int numberOfIndices = (_clipmapSegments / 2) * 3 * 4;
-            IndicesInt16 indices = new IndicesInt16(numberOfIndices);
+            IndicesUnsignedShort indices = new IndicesUnsignedShort(numberOfIndices);
             mesh.Indices = indices;
 
             for (int i = 0; i < _clipmapPosts; ++i)
@@ -377,9 +377,9 @@ namespace OpenGlobe.Scene.Terrain
                 positions.Add(new Vector2D(i, 0.0));
             }
 
-            for (int i = 0; i < (short)numberOfIndices; i += 2)
+            for (int i = 0; i < numberOfIndices; i += 2)
             {
-                indices.AddTriangle(new TriangleIndicesInt16((short)i, (short)(i + 1), (short)(i + 2)));
+                indices.AddTriangle(new TriangleIndicesUnsignedShort((ushort)i, (ushort)(i + 1), (ushort)(i + 2)));
             }
 
             return mesh;

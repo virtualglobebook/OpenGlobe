@@ -13,9 +13,10 @@ using OpenGlobe.Core.Geometry;
 
 namespace OpenGlobe.Core
 {
+    [CLSCompliant(false)]
     public static class EarClippingOnEllipsoid
     {
-        public static IndicesInt32 Triangulate(IEnumerable<Vector3D> positions)
+        public static IndicesUnsignedInt Triangulate(IEnumerable<Vector3D> positions)
         {
             if (positions == null)
             {
@@ -38,7 +39,7 @@ namespace OpenGlobe.Core
                 throw new ArgumentOutOfRangeException("positions", "At least three positions are required.");
             }
 
-            IndicesInt32 indices = new IndicesInt32(3 * (remainingPositions.Count - 2));
+            IndicesUnsignedInt indices = new IndicesUnsignedInt(3 * (remainingPositions.Count - 2));
 
             ///////////////////////////////////////////////////////////////////
 
@@ -70,7 +71,7 @@ namespace OpenGlobe.Core
 
                     if (isEar)
                     {
-                        indices.AddTriangle(new TriangleIndicesInt32(previousNode.Value.Index, node.Value.Index, nextNode.Value.Index));
+                        indices.AddTriangle(new TriangleIndicesUnsignedInt(previousNode.Value.Index, node.Value.Index, nextNode.Value.Index));
                         remainingPositions.Remove(node);
 
                         node = nextNode;
@@ -92,7 +93,7 @@ namespace OpenGlobe.Core
             LinkedListNode<IndexedVector<Vector3D>> n0 = remainingPositions.First;
             LinkedListNode<IndexedVector<Vector3D>> n1 = n0.Next;
             LinkedListNode<IndexedVector<Vector3D>> n2 = n1.Next;
-            indices.AddTriangle(new TriangleIndicesInt32(n0.Value.Index, n1.Value.Index, n2.Value.Index));
+            indices.AddTriangle(new TriangleIndicesUnsignedInt(n0.Value.Index, n1.Value.Index, n2.Value.Index));
 
             return indices;
         }

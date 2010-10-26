@@ -7,14 +7,16 @@
 //
 #endregion
 
+using System;
 using System.Collections.Generic;
 using OpenGlobe.Core.Geometry;
 
 namespace OpenGlobe.Core
 {
+    [CLSCompliant(false)]
     public class TriangleMeshSubdivisionResult
     {
-        internal TriangleMeshSubdivisionResult(ICollection<Vector3D> positions, IndicesInt32 indices)
+        internal TriangleMeshSubdivisionResult(ICollection<Vector3D> positions, IndicesUnsignedInt indices)
         {
             _positions = positions;
             _indices = indices;
@@ -25,12 +27,12 @@ namespace OpenGlobe.Core
             get { return _positions;  }
         }
 
-        public IndicesInt32 Indices 
+        public IndicesUnsignedInt Indices 
         {
             get { return _indices;  }
         }
 
         private readonly ICollection<Vector3D> _positions;
-        private readonly IndicesInt32 _indices;
+        private readonly IndicesUnsignedInt _indices;
     }
 }

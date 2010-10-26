@@ -7,36 +7,38 @@
 //
 #endregion
 
+using System;
 using System.Collections.Generic;
 
 namespace OpenGlobe.Core.Geometry
 {
-    public class IndicesInt16 : IndicesBase
+    [CLSCompliant(false)]
+    public class IndicesUnsignedShort : IndicesBase
     {
-        public IndicesInt16()
-            : base(IndicesType.Int16)
+        public IndicesUnsignedShort()
+            : base(IndicesType.UnsignedShort)
         {
-            _values = new List<short>();
+            _values = new List<ushort>();
         }
 
-        public IndicesInt16(int capacity)
-            : base(IndicesType.Int16)
+        public IndicesUnsignedShort(int capacity)
+            : base(IndicesType.UnsignedShort)
         {
-            _values = new List<short>(capacity);
+            _values = new List<ushort>(capacity);
         }
 
-        public IList<short> Values
+        public IList<ushort> Values
         {
             get { return _values; }
         }
 
-        public void AddTriangle(TriangleIndicesInt16 triangle)
+        public void AddTriangle(TriangleIndicesUnsignedShort triangle)
         {
-            _values.Add(triangle.I0);
-            _values.Add(triangle.I1);
-            _values.Add(triangle.I2);
+            _values.Add(triangle.UI0);
+            _values.Add(triangle.UI1);
+            _values.Add(triangle.UI2);
         }
 
-        private List<short> _values;
+        private List<ushort> _values;
     }
 }

@@ -21,7 +21,7 @@ namespace OpenGlobe.Core
         [ExpectedException(typeof(ArgumentNullException))]
         public void Null()
         {
-            TriangleMeshSubdivision.Compute(null, new IndicesInt32(), Trig.ToRadians(1));
+            TriangleMeshSubdivision.Compute(null, new IndicesUnsignedInt(), Trig.ToRadians(1));
         }
 
         [Test]
@@ -35,14 +35,14 @@ namespace OpenGlobe.Core
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void OutOfRangeException()
         {
-            TriangleMeshSubdivision.Compute(new Vector3D[] { }, new IndicesInt32(), Trig.ToRadians(1));
+            TriangleMeshSubdivision.Compute(new Vector3D[] { }, new IndicesUnsignedInt(), Trig.ToRadians(1));
         }
 
         [Test]
         [ExpectedException(typeof(ArgumentException))]
         public void ArgumentException()
         {
-            IndicesInt32 indices = new IndicesInt32();
+            IndicesUnsignedInt indices = new IndicesUnsignedInt();
             indices.Values.Add(0);
             indices.Values.Add(1);
             indices.Values.Add(2);
@@ -62,7 +62,7 @@ namespace OpenGlobe.Core
                 new Vector3D(0.5, 0.5, 0)
             };
 
-            IndicesInt32 indices = new IndicesInt32();
+            IndicesUnsignedInt indices = new IndicesUnsignedInt();
             indices.Values.Add(0);
             indices.Values.Add(1);
             indices.Values.Add(2);
@@ -80,7 +80,7 @@ namespace OpenGlobe.Core
                 new Vector3D(0.5, 0.5, 0)
             };
 
-            IndicesInt32 indices = new IndicesInt32();
+            IndicesUnsignedInt indices = new IndicesUnsignedInt();
             indices.Values.Add(0);
             indices.Values.Add(1);
             indices.Values.Add(2);
@@ -103,7 +103,7 @@ namespace OpenGlobe.Core
                 new Vector3D(0, 1, 0)
             };
 
-            IndicesInt32 indices = new IndicesInt32();
+            IndicesUnsignedInt indices = new IndicesUnsignedInt();
             indices.Values.Add(0);
             indices.Values.Add(1);
             indices.Values.Add(2);
@@ -133,7 +133,7 @@ namespace OpenGlobe.Core
                 new Vector3D(0, 1, 0)
             };
 
-            IndicesInt32 indices = new IndicesInt32();
+            IndicesUnsignedInt indices = new IndicesUnsignedInt();
             indices.Values.Add(1);
             indices.Values.Add(2);
             indices.Values.Add(0);
@@ -163,7 +163,7 @@ namespace OpenGlobe.Core
                 Ellipsoid.UnitSphere.ToVector3D(Trig.ToRadians(new Geodetic2D(0, 46)))
             };
             
-            IndicesInt32 indices = new IndicesInt32();
+            IndicesUnsignedInt indices = new IndicesUnsignedInt();
             indices.Values.Add(0);
             indices.Values.Add(1);
             indices.Values.Add(2);

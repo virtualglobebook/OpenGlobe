@@ -31,7 +31,7 @@ namespace OpenGlobe.Core.Tessellation
             public IList<Vector3D> Positions { get; set; }
             public IList<Vector3H> Normals { get; set; }
             public IList<Vector2H> TextureCoordinate { get; set; }
-            public IndicesInt32 Indices { get; set; }
+            public IndicesUnsignedInt Indices { get; set; }
         }
 
         public static Mesh Compute(Ellipsoid ellipsoid, int numberOfPartitions, CubeMapEllipsoidVertexAttributes vertexAttributes)
@@ -54,7 +54,7 @@ namespace OpenGlobe.Core.Tessellation
             VertexAttributeDoubleVector3 positionsAttribute = new VertexAttributeDoubleVector3("position", numberOfVertices);
             mesh.Attributes.Add(positionsAttribute);
 
-            IndicesInt32 indices = new IndicesInt32(3 * NumberOfTriangles(numberOfPartitions));
+            IndicesUnsignedInt indices = new IndicesUnsignedInt(3 * NumberOfTriangles(numberOfPartitions));
             mesh.Indices = indices;
 
             CubeMapMesh CubeMapMesh = new CubeMapMesh();
@@ -164,7 +164,7 @@ namespace OpenGlobe.Core.Tessellation
             CubeMapMesh CubeMapMesh)
         {
             IList<Vector3D> positions = CubeMapMesh.Positions;
-            IndicesInt32 indices = CubeMapMesh.Indices;
+            IndicesUnsignedInt indices = CubeMapMesh.Indices;
             int numberOfPartitions = CubeMapMesh.NumberOfPartitions;
 
             Vector3D origin = positions[bottomLeftToRight[0]];
@@ -216,9 +216,9 @@ namespace OpenGlobe.Core.Tessellation
 
                 for (int i = 0; i < numberOfPartitions; ++i)
                 {
-                    indices.AddTriangle(new TriangleIndicesInt32(
+                    indices.AddTriangle(new TriangleIndicesUnsignedInt(
                         bottomIndices[i], bottomIndices[i + 1], topIndices[i + 1]));
-                    indices.AddTriangle(new TriangleIndicesInt32(
+                    indices.AddTriangle(new TriangleIndicesUnsignedInt(
                         bottomIndices[i], topIndices[i + 1], topIndices[i]));
                 }
             }

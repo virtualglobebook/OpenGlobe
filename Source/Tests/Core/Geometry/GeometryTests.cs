@@ -18,15 +18,15 @@ namespace OpenGlobe.Core.Geometry
         [Test]
         public void TriangleIndicesTest()
         {
-            TriangleIndicesInt32 triangle = new TriangleIndicesInt32(0, 1, 2);
-            Assert.AreEqual(0, triangle.I0);
-            Assert.AreEqual(1, triangle.I1);
-            Assert.AreEqual(2, triangle.I2);
+            TriangleIndicesUnsignedInt triangle = new TriangleIndicesUnsignedInt(0, 1, 2);
+            Assert.AreEqual(0, triangle.UI0);
+            Assert.AreEqual(1, triangle.UI1);
+            Assert.AreEqual(2, triangle.UI2);
 
-            TriangleIndicesInt32 triangle2 = triangle;
+            TriangleIndicesUnsignedInt triangle2 = triangle;
             Assert.AreEqual(triangle, triangle2);
 
-            TriangleIndicesInt32 triangle3 = new TriangleIndicesInt32(3, 4, 5);
+            TriangleIndicesUnsignedInt triangle3 = new TriangleIndicesUnsignedInt(3, 4, 5);
             Assert.AreNotEqual(triangle, triangle3);
         }
 
@@ -127,15 +127,15 @@ namespace OpenGlobe.Core.Geometry
             mesh.Indices = indicesByte;
             Assert.AreEqual(IndicesType.Byte, mesh.Indices.Datatype);
 
-            IndicesInt16 indicesShort = new IndicesInt16();
+            IndicesUnsignedShort indicesShort = new IndicesUnsignedShort();
             mesh.Indices = indicesShort;
-            Assert.AreEqual(IndicesType.Int16, mesh.Indices.Datatype);
+            Assert.AreEqual(IndicesType.UnsignedShort, mesh.Indices.Datatype);
 
-            IndicesInt32 indicesInt = new IndicesInt32();
+            IndicesUnsignedInt indicesInt = new IndicesUnsignedInt();
             mesh.Indices = indicesInt;
-            Assert.AreEqual(IndicesType.Int32, mesh.Indices.Datatype);
+            Assert.AreEqual(IndicesType.UnsignedInt, mesh.Indices.Datatype);
 
-            indicesInt.AddTriangle(new TriangleIndicesInt32(0, 1, 2));
+            indicesInt.AddTriangle(new TriangleIndicesUnsignedInt(0, 1, 2));
             Assert.AreEqual(0, indicesInt.Values[0]);
             Assert.AreEqual(1, indicesInt.Values[1]);
             Assert.AreEqual(2, indicesInt.Values[2]);

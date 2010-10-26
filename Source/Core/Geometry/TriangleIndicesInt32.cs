@@ -12,79 +12,117 @@ using System.Globalization;
 
 namespace OpenGlobe.Core.Geometry
 {
-    public struct TriangleIndicesInt32 : IEquatable<TriangleIndicesInt32>
+    [CLSCompliant(false)]
+    public struct TriangleIndicesUnsignedInt : IEquatable<TriangleIndicesUnsignedInt>
     {
-        public TriangleIndicesInt32(int i0, int i1, int i2)
+        public TriangleIndicesUnsignedInt(uint ui0, uint ui1, uint ui2)
         {
-            _i0 = i0;
-            _i1 = i1;
-            _i2 = i2;
+            _ui0 = ui0;
+            _ui1 = ui1;
+            _ui2 = ui2;
         }
 
-        public TriangleIndicesInt32(TriangleIndicesInt32 other)
+        public TriangleIndicesUnsignedInt(int i0, int i1, int i2)
         {
-            _i0 = other.I0;
-            _i1 = other.I1;
-            _i2 = other.I2;
+            if (i0 < 0)
+            {
+                throw new ArgumentOutOfRangeException("i0");
+            }
+
+            if (i1 < 0)
+            {
+                throw new ArgumentOutOfRangeException("i1");
+            }
+
+            if (i2 < 0)
+            {
+                throw new ArgumentOutOfRangeException("i2");
+            }
+
+            _ui0 = (uint)i0;
+            _ui1 = (uint)i1;
+            _ui2 = (uint)i2;
         }
 
-        public static bool operator ==(TriangleIndicesInt32 left, TriangleIndicesInt32 right)
+        public TriangleIndicesUnsignedInt(TriangleIndicesUnsignedInt other)
+        {
+            _ui0 = other.UI0;
+            _ui1 = other.UI1;
+            _ui2 = other.UI2;
+        }
+
+        public static bool operator ==(TriangleIndicesUnsignedInt left, TriangleIndicesUnsignedInt right)
         {
             return left.Equals(right);
         }
 
-        public static bool operator !=(TriangleIndicesInt32 left, TriangleIndicesInt32 right)
+        public static bool operator !=(TriangleIndicesUnsignedInt left, TriangleIndicesUnsignedInt right)
         {
             return !left.Equals(right);
         }
 
         public override string ToString()
         {
-            return string.Format(CultureInfo.CurrentCulture, "i0: {0} i1: {1} i2: {2}", _i0, _i1, _i2);
+            return string.Format(CultureInfo.CurrentCulture, "i0: {0} i1: {1} i2: {2}", _ui0, _ui1, _ui2);
         }
 
         public override int GetHashCode()
         {
-            return _i0.GetHashCode() ^ _i1.GetHashCode() ^ _i2.GetHashCode();
+            return _ui0.GetHashCode() ^ _ui1.GetHashCode() ^ _ui2.GetHashCode();
         }
 
         public override bool Equals(object obj)
         {
-            if (!(obj is TriangleIndicesInt32))
+            if (!(obj is TriangleIndicesUnsignedInt))
                 return false;
 
-            return this.Equals((TriangleIndicesInt32)obj);
+            return this.Equals((TriangleIndicesUnsignedInt)obj);
         }
 
         #region IEquatable<TriangleIndices> Members
 
-        public bool Equals(TriangleIndicesInt32 other)
+        public bool Equals(TriangleIndicesUnsignedInt other)
         {
             return
-                (_i0.Equals(other.I0)) &&
-                (_i1.Equals(other.I1)) &&
-                (_i2.Equals(other.I2));
+                (_ui0.Equals(other.UI0)) &&
+                (_ui1.Equals(other.UI1)) &&
+                (_ui2.Equals(other.UI2));
         }
 
         #endregion
 
         public int I0
         {
-            get { return _i0; }
+            get { return (int)_ui0; }
         }
 
         public int I1
         {
-            get { return _i1; }
+            get { return (int)_ui1; }
         }
 
         public int I2
         {
-            get { return _i2; }
+            get { return (int)_ui2; }
         }
 
-        private int _i0;
-        private int _i1;
-        private int _i2;
+        public uint UI0
+        {
+            get { return _ui0; }
+        }
+
+        public uint UI1
+        {
+            get { return _ui1; }
+        }
+
+        public uint UI2
+        {
+            get { return _ui2; }
+        }
+
+        private uint _ui0;
+        private uint _ui1;
+        private uint _ui2;
     }
 }

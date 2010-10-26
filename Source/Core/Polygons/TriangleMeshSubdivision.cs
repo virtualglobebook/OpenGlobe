@@ -13,9 +13,10 @@ using OpenGlobe.Core.Geometry;
 
 namespace OpenGlobe.Core
 {
+    [CLSCompliant(false)]
     public static class TriangleMeshSubdivision
     {
-        public static TriangleMeshSubdivisionResult Compute(IEnumerable<Vector3D> positions, IndicesInt32 indices, double granularity)
+        public static TriangleMeshSubdivisionResult Compute(IEnumerable<Vector3D> positions, IndicesUnsignedInt indices, double granularity)
         {
             if (positions == null)
             {
@@ -46,13 +47,13 @@ namespace OpenGlobe.Core
             // Use two queues:  one for triangles that need (or might need) to be 
             // subdivided and other for triangles that are fully subdivided.
             //
-            Queue<TriangleIndicesInt32> triangles = new Queue<TriangleIndicesInt32>(indices.Values.Count / 3);
-            Queue<TriangleIndicesInt32> done = new Queue<TriangleIndicesInt32>(indices.Values.Count / 3);
+            Queue<TriangleIndicesUnsignedInt> triangles = new Queue<TriangleIndicesUnsignedInt>(indices.Values.Count / 3);
+            Queue<TriangleIndicesUnsignedInt> done = new Queue<TriangleIndicesUnsignedInt>(indices.Values.Count / 3);
 
-            IList<int> indicesValues = indices.Values;
+            IList<uint> indicesValues = indices.Values;
             for (int i = 0; i < indicesValues.Count; i += 3)
             {
-                triangles.Enqueue(new TriangleIndicesInt32(indicesValues[i], indicesValues[i + 1], indicesValues[i + 2]));
+                triangles.Enqueue(new TriangleIndicesUnsignedInt(indicesValues[i], indicesValues[i + 1], indicesValues[i + 2]));
             }
 
             //
@@ -70,7 +71,7 @@ namespace OpenGlobe.Core
             //
             while (triangles.Count != 0)
             {
-                TriangleIndicesInt32 triangle = triangles.Dequeue();
+                TriangleIndicesUnsignedInt triangle = triangles.Dequeue();
 
                 Vector3D v0 = subdividedPositions[triangle.I0];
                 Vector3D v1 = subdividedPositions[triangle.I1];
@@ -95,8 +96,8 @@ namespace OpenGlobe.Core
                             edges.Add(edge, i);
                         }
 
-                        triangles.Enqueue(new TriangleIndicesInt32(triangle.I0, i, triangle.I2));
-                        triangles.Enqueue(new TriangleIndicesInt32(i, triangle.I1, triangle.I2));
+                        triangles.Enqueue(new TriangleIndicesUnsignedInt(triangle.I0, i, triangle.I2));
+                        triangles.Enqueue(new TriangleIndicesUnsignedInt(i, triangle.I1, triangle.I2));
                     }
                     else if (g1 == max)
                     {
@@ -109,8 +110,8 @@ namespace OpenGlobe.Core
                             edges.Add(edge, i);
                         }
 
-                        triangles.Enqueue(new TriangleIndicesInt32(triangle.I1, i, triangle.I0));
-                        triangles.Enqueue(new TriangleIndicesInt32(i, triangle.I2, triangle.I0));
+                        triangles.Enqueue(new TriangleIndicesUnsignedInt(triangle.I1, i, triangle.I0));
+                        triangles.Enqueue(new TriangleIndicesUnsignedInt(i, triangle.I2, triangle.I0));
                     }
                     else if (g2 == max)
                     {
@@ -123,8 +124,8 @@ namespace OpenGlobe.Core
                             edges.Add(edge, i);
                         }
 
-                        triangles.Enqueue(new TriangleIndicesInt32(triangle.I2, i, triangle.I1));
-                        triangles.Enqueue(new TriangleIndicesInt32(i, triangle.I0, triangle.I1));
+                        triangles.Enqueue(new TriangleIndicesUnsignedInt(triangle.I2, i, triangle.I1));
+                        triangles.Enqueue(new TriangleIndicesUnsignedInt(i, triangle.I0, triangle.I1));
                     }
                 }
                 else
@@ -136,8 +137,8 @@ namespace OpenGlobe.Core
             //
             // New indices
             //
-            IndicesInt32 subdividedIndices = new IndicesInt32(done.Count * 3);
-            foreach (TriangleIndicesInt32 t in done)
+            IndicesUnsignedInt subdividedIndices = new IndicesUnsignedInt(done.Count * 3);
+            foreach (TriangleIndicesUnsignedInt t in done)
             {
                 subdividedIndices.AddTriangle(t);
             }

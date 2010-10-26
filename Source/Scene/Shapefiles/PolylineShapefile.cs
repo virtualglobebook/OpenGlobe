@@ -52,7 +52,7 @@ namespace OpenGlobe.Scene
             VertexAttributeDoubleVector3 positionAttribute = new VertexAttributeDoubleVector3("position", positionsCount);
             VertexAttributeRGBA colorAttribute = new VertexAttributeRGBA("color", positionsCount);
             VertexAttributeRGBA outlineColorAttribute = new VertexAttributeRGBA("outlineColor", positionsCount);
-            IndicesInt32 indices = new IndicesInt32(indicesCount);
+            IndicesUnsignedInt indices = new IndicesUnsignedInt(indicesCount);
 
             foreach (Shape shape in shapefile)
             {
@@ -82,8 +82,8 @@ namespace OpenGlobe.Scene
 
                         if (i != 0)
                         {
-                            indices.Values.Add(positionAttribute.Values.Count - 2);
-                            indices.Values.Add(positionAttribute.Values.Count - 1);
+                            indices.Values.Add((uint)positionAttribute.Values.Count - 2);
+                            indices.Values.Add((uint)positionAttribute.Values.Count - 1);
                         }
                     }
                 }

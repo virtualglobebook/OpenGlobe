@@ -42,7 +42,7 @@ namespace OpenGlobe.Scene
             //
             // Pipeline Stage 2:  Triangulate
             //
-            IndicesInt32 indices = EarClippingOnEllipsoid.Triangulate(cleanPositions);
+            IndicesUnsignedInt indices = EarClippingOnEllipsoid.Triangulate(cleanPositions);
             //IndicesInt32 indices = EarClipping.Triangulate(positionsOnPlane);
 
             //

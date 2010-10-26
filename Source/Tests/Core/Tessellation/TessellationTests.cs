@@ -20,20 +20,20 @@ namespace OpenGlobe.Core.Tessellation
         public void SubdivisionSphereTessellatorTest()
         {
             Mesh simpleSphere = SubdivisionSphereTessellatorSimple.Compute(1);
-            Assert.AreEqual(IndicesType.Int32, simpleSphere.Indices.Datatype);
+            Assert.AreEqual(IndicesType.UnsignedInt, simpleSphere.Indices.Datatype);
             Assert.AreEqual(1, simpleSphere.Attributes.Count);
             Assert.IsNotNull(simpleSphere.Attributes["position"] as VertexAttributeDoubleVector3);
 
             Mesh sphere = SubdivisionSphereTessellator.Compute(1, SubdivisionSphereVertexAttributes.All);
-            Assert.AreEqual(IndicesType.Int32, sphere.Indices.Datatype);
+            Assert.AreEqual(IndicesType.UnsignedInt, sphere.Indices.Datatype);
             Assert.AreEqual(3, sphere.Attributes.Count);
             Assert.IsNotNull(sphere.Attributes["position"] as VertexAttributeDoubleVector3);
             Assert.IsNotNull(sphere.Attributes["normal"] as VertexAttributeHalfFloatVector3);
             Assert.IsNotNull(sphere.Attributes["textureCoordinate"] as VertexAttributeHalfFloatVector2);
 
             GraphicsAssert.ListsAreEqual(
-                (simpleSphere.Indices as IndicesInt32).Values, 
-                (sphere.Indices as IndicesInt32).Values);
+                (simpleSphere.Indices as IndicesUnsignedInt).Values, 
+                (sphere.Indices as IndicesUnsignedInt).Values);
             GraphicsAssert.ListsAreEqual(
                 (simpleSphere.Attributes["position"] as VertexAttributeDoubleVector3).Values,
                 (sphere.Attributes["position"] as VertexAttributeDoubleVector3).Values);
@@ -46,8 +46,8 @@ namespace OpenGlobe.Core.Tessellation
             Mesh ellipsoid = SubdivisionEllipsoidTessellator.Compute(Ellipsoid.UnitSphere, 1, SubdivisionEllipsoidVertexAttributes.All);
 
             GraphicsAssert.ListsAreEqual(
-                (sphere.Indices as IndicesInt32).Values,
-                (ellipsoid.Indices as IndicesInt32).Values);
+                (sphere.Indices as IndicesUnsignedInt).Values,
+                (ellipsoid.Indices as IndicesUnsignedInt).Values);
             GraphicsAssert.ListsAreEqual(
                 (sphere.Attributes["position"] as VertexAttributeDoubleVector3).Values,
                 (ellipsoid.Attributes["position"] as VertexAttributeDoubleVector3).Values);
@@ -109,7 +109,7 @@ namespace OpenGlobe.Core.Tessellation
             Assert.AreEqual(Vector2D.UnitY, positions[2]);
             Assert.AreEqual(new Vector2D(1, 1), positions[3]);
 
-            IList<int> indices = (mesh.Indices as IndicesInt32).Values;
+            IList<uint> indices = (mesh.Indices as IndicesUnsignedInt).Values;
             Assert.AreEqual(6, indices.Count);
             Assert.AreEqual(0, indices[0]);
             Assert.AreEqual(1, indices[1]);
