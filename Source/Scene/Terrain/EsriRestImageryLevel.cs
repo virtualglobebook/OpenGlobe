@@ -135,6 +135,47 @@ namespace OpenGlobe.Scene.Terrain
 
             tile.Image.UnlockBits(bmpData);
         }
+        
+#if Mercator
+        // Esri uses the Bing Maps / Google Earth tiling scheme, which is described here:
+        // http://msdn.microsoft.com/en-us/library/bb259689.aspx
+
+        private const double MaximumLatitude = 85.05112878;
+        private const double MinimumLatitude = -85.05112878;
+
+        public double LatitudeToIndex(double latitude)
+        {
+            if (latitude > MaximumLatitude)
+                latitude = MaximumLatitude;
+            else if (latitude < MinimumLatitude)
+                latitude = MinimumLatitude;
+
+            double sinLatitude = Math.Sin(latitude * Math.PI / 180.0);
+            double y = 0.5 - Math.Log((1 + sinLatitude) / (1 - sinLatitude)) / (4 * Math.PI);
+            int mapSize = 256 << _level;
+            return mapSize - y * mapSize - 1;
+        }
+
+        public double IndexToLatitude(int latitudeIndex)
+        {
+            int mapSize = 256 << _level;
+            latitudeIndex = mapSize - latitudeIndex - 1;
+            double y = latitudeIndex / mapSize;
+            return 90.0 - 360.0 * Math.Atan(Math.Exp(-y * 2 * Math.PI)) / Math.PI;
+        }
+#else
+        public double LatitudeToIndex(double latitude)
+        {
+            GeodeticExtent extent = _imagerySource.Extent;
+            return (latitude - extent.South) / _postDeltaLatitude;
+        }
+
+        public double IndexToLatitude(int latitudeIndex)
+        {
+            GeodeticExtent extent = _imagerySource.Extent;
+            return extent.South + latitudeIndex * _postDeltaLatitude;
+        }
+#endif
 
         public double LongitudeToIndex(double longitude)
         {
@@ -142,22 +183,10 @@ namespace OpenGlobe.Scene.Terrain
             return (longitude - extent.West) / _postDeltaLongitude;
         }
 
-        public double LatitudeToIndex(double latitude)
-        {
-            GeodeticExtent extent = _imagerySource.Extent;
-            return (latitude - extent.South) / _postDeltaLatitude;
-        }
-
         public double IndexToLongitude(int longitudeIndex)
         {
             GeodeticExtent extent = _imagerySource.Extent;
             return extent.West + longitudeIndex * _postDeltaLongitude;
-        }
-
-        public double IndexToLatitude(int latitudeIndex)
-        {
-            GeodeticExtent extent = _imagerySource.Extent;
-            return extent.South + latitudeIndex * _postDeltaLatitude;
         }
 
         private class Tile

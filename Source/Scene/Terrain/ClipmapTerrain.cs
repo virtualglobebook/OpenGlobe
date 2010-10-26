@@ -172,8 +172,8 @@ namespace OpenGlobe.Scene.Terrain
 
             for (int i = _clipmapLevels.Length - 1; i >= 0; --i)
             {
-                if (i > 1)
-                    continue;
+                //if (i > 1)
+                //    continue;
                 RenderLevel(i, context, sceneState);
             }
         }

@@ -10,7 +10,9 @@ namespace OpenGlobe.Scene.Terrain
     public class EsriRestImagery
     {
         public EsriRestImagery() :
-            this(new Uri("http://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/"))
+            //this(new Uri("http://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/"))
+            //this(new Uri("http://server.arcgisonline.com/ArcGIS/rest/services/ESRI_Imagery_World_2D/MapServer/tile/"))
+            this(new Uri("http://server.arcgisonline.com/ArcGIS/rest/services/I3_Imagery_Prime_World_2D/MapServer/tile/"))
         {
         }
 
@@ -38,12 +40,12 @@ namespace OpenGlobe.Scene.Terrain
 
         public int TileLongitudePosts
         {
-            get { return 256; }
+            get { return 512; }
         }
 
         public int TileLatitudePosts
         {
-            get { return 256; }
+            get { return 512; }
         }
 
         public EsriRestImageryLevelCollection Levels
@@ -80,7 +82,7 @@ namespace OpenGlobe.Scene.Terrain
             StringBuilder query = new StringBuilder(_baseUri.AbsoluteUri);
             query.Append(level);
             query.Append('/');
-            query.Append((1 << level) - latitudeIndex);
+            query.Append((1 << level) - latitudeIndex - 1);
             query.Append('/');
             query.Append(longitudeIndex);
 
@@ -116,7 +118,7 @@ namespace OpenGlobe.Scene.Terrain
         private const int NumberOfLevels = 20;
         private const int TileWidth = 150;
         private const int TileHeight = 150;
-        private const double LevelZeroDeltaLongitudeDegrees = 360.0;
+        private const double LevelZeroDeltaLongitudeDegrees = 180.0;
         private const double LevelZeroDeltaLatitudeDegrees = 180.0;
     }
 }
