@@ -58,7 +58,10 @@ namespace OpenGlobe.Scene.Terrain
             int longitudePixels = east - west + 1;
             int latitudePixels = north - south + 1;
 
-            byte[] buffer = new byte[longitudePixels * latitudePixels * BytesPerPixel];
+            // Align each row on a 4-byte boundary
+            int rowStride = longitudePixels * BytesPerPixel;
+            rowStride += (4 - rowStride % 4) % 4;
+            byte[] buffer = new byte[rowStride * latitudePixels];
 
             int tileXStart = west / _imagerySource.TileLongitudePosts;
             int tileXStop = east / _imagerySource.TileLongitudePosts;
@@ -92,8 +95,8 @@ namespace OpenGlobe.Scene.Terrain
 
                     int writeX = currentWest + tileXOrigin - west;
                     int writeY = currentSouth + tileYOrigin - south;
-                    int writeIndex = (writeY * longitudePixels + writeX) * BytesPerPixel;
-                    GetTilePosts(tileX, tileY, currentWest, currentSouth, currentEast, currentNorth, buffer, writeIndex, longitudePixels * BytesPerPixel);
+                    int writeIndex = writeY * rowStride + writeX * BytesPerPixel;
+                    GetTilePosts(tileX, tileY, currentWest, currentSouth, currentEast, currentNorth, buffer, writeIndex, rowStride);
                 }
             }
 
@@ -116,7 +119,8 @@ namespace OpenGlobe.Scene.Terrain
             int latitudePosts = tileNorth - tileSouth + 1;
             int longitudePosts = tileEast - tileWest + 1;
 
-            Rectangle rectangle = new Rectangle(tileWest, tile.Image.Height - tileNorth - 1, longitudePosts, latitudePosts);
+            //Rectangle rectangle = new Rectangle(tileWest, tile.Image.Height - tileNorth - 1, longitudePosts, latitudePosts);
+            Rectangle rectangle = new Rectangle(0, 0, tile.Image.Width, tile.Image.Height);
             BitmapData bmpData = tile.Image.LockBits(rectangle, System.Drawing.Imaging.ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
             IntPtr scan0 = bmpData.Scan0;
             long readPointer = scan0.ToInt64();
@@ -124,8 +128,8 @@ namespace OpenGlobe.Scene.Terrain
             int writeIndex = startIndex;
             for (int j = tileSouth; j <= tileNorth; ++j)
             {
-                int row = (_imagerySource.TileLatitudePosts - j - 1) * _imagerySource.TileLongitudePosts;
-                Marshal.Copy(new IntPtr(readPointer + row), buffer, writeIndex, longitudePosts * BytesPerPixel);
+                int row = (_imagerySource.TileLatitudePosts - j - 1) * bmpData.Stride;
+                Marshal.Copy(new IntPtr(readPointer + row + tileWest * BytesPerPixel), buffer, writeIndex, longitudePosts * BytesPerPixel);
                 writeIndex += stride;
             }
 

@@ -27,6 +27,7 @@ uniform vec4 u_coarseBlockOrig;
 uniform vec2 u_viewerPos;
 uniform vec2 u_alphaOffset;
 uniform float u_oneOverTransitionWidth;
+uniform vec4 u_textureOrigin;
 
 vec2 GridToWorld(vec2 gridPos)
 {
@@ -72,7 +73,7 @@ void main()
 	vec2 worldPos = GridToWorld(position);
 	height = SampleHeight(position);
 
-	textureCoordinateFS = (position + u_fineBlockOrig.zw) / 255.0;
+	textureCoordinateFS = (position + u_fineBlockOrig.zw) * u_textureOrigin.xy + u_textureOrigin.zw;
 
 	float heightExaggeration = 0.00001;
 	vec3 displacedPosition = vec3(worldPos, height * heightExaggeration);

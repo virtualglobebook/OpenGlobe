@@ -106,15 +106,8 @@ namespace OpenGlobe.Renderer
         {
             int rowSize = width * NumberOfChannels(format) * SizeInBytes(dataType);
 
-            if (rowSize < rowAlignment)
-            {
-                rowSize = rowAlignment;
-            }
-            else
-            {
-                int remainder = (rowSize % rowAlignment);
-                rowSize += remainder;
-            }
+            int remainder = (rowSize % rowAlignment);
+            rowSize += (rowAlignment - remainder) % rowAlignment;
 
             return rowSize * height;
         }
