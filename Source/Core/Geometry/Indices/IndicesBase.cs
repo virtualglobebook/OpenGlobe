@@ -9,13 +9,6 @@
 
 namespace OpenGlobe.Core.Geometry
 {
-    public enum IndicesType
-    {
-        Byte,
-        UnsignedShort,
-        UnsignedInt
-    }
-
     public abstract class IndicesBase
     {
         protected IndicesBase(IndicesType type)

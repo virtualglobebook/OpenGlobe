@@ -1,6 +1,6 @@
 ﻿#region License
 //
-// (C) Copyright 2009 Patrick Cozzi and Deron Ohlarik
+// (C) Copyright 2010 Patrick Cozzi and Kevin Ring
 //
 // Distributed under the Boost Software License, Version 1.0.
 // See License.txt or http://www.boost.org/LICENSE_1_0.txt.
@@ -13,16 +13,16 @@ using System.Globalization;
 namespace OpenGlobe.Core.Geometry
 {
     [CLSCompliant(false)]
-    public struct TriangleIndicesUnsignedShort : IEquatable<TriangleIndicesUnsignedShort>
+    public struct TriangleIndicesUnsignedInt : IEquatable<TriangleIndicesUnsignedInt>
     {
-        public TriangleIndicesUnsignedShort(ushort ui0, ushort ui1, ushort ui2)
+        public TriangleIndicesUnsignedInt(uint ui0, uint ui1, uint ui2)
         {
             _ui0 = ui0;
             _ui1 = ui1;
             _ui2 = ui2;
         }
 
-        public TriangleIndicesUnsignedShort(short i0, short i1, short i2)
+        public TriangleIndicesUnsignedInt(int i0, int i1, int i2)
         {
             if (i0 < 0)
             {
@@ -39,24 +39,24 @@ namespace OpenGlobe.Core.Geometry
                 throw new ArgumentOutOfRangeException("i2");
             }
 
-            _ui0 = (ushort)i0;
-            _ui1 = (ushort)i1;
-            _ui2 = (ushort)i2;
+            _ui0 = (uint)i0;
+            _ui1 = (uint)i1;
+            _ui2 = (uint)i2;
         }
 
-        public TriangleIndicesUnsignedShort(TriangleIndicesUnsignedShort other)
+        public TriangleIndicesUnsignedInt(TriangleIndicesUnsignedInt other)
         {
             _ui0 = other.UI0;
             _ui1 = other.UI1;
             _ui2 = other.UI2;
         }
 
-        public static bool operator ==(TriangleIndicesUnsignedShort left, TriangleIndicesUnsignedShort right)
+        public static bool operator ==(TriangleIndicesUnsignedInt left, TriangleIndicesUnsignedInt right)
         {
             return left.Equals(right);
         }
 
-        public static bool operator !=(TriangleIndicesUnsignedShort left, TriangleIndicesUnsignedShort right)
+        public static bool operator !=(TriangleIndicesUnsignedInt left, TriangleIndicesUnsignedInt right)
         {
             return !left.Equals(right);
         }
@@ -73,15 +73,15 @@ namespace OpenGlobe.Core.Geometry
 
         public override bool Equals(object obj)
         {
-            if (!(obj is TriangleIndicesUnsignedShort))
+            if (!(obj is TriangleIndicesUnsignedInt))
                 return false;
 
-            return this.Equals((TriangleIndicesUnsignedShort)obj);
+            return this.Equals((TriangleIndicesUnsignedInt)obj);
         }
 
         #region IEquatable<TriangleIndices> Members
 
-        public bool Equals(TriangleIndicesUnsignedShort other)
+        public bool Equals(TriangleIndicesUnsignedInt other)
         {
             return
                 (_ui0.Equals(other.UI0)) &&
@@ -91,38 +91,38 @@ namespace OpenGlobe.Core.Geometry
 
         #endregion
 
-        public short I0
+        public int I0
         {
-            get { return (short)_ui0; }
+            get { return (int)_ui0; }
         }
 
-        public short I1
+        public int I1
         {
-            get { return (short)_ui1; }
+            get { return (int)_ui1; }
         }
 
-        public short I2
+        public int I2
         {
-            get { return (short)_ui2; }
+            get { return (int)_ui2; }
         }
 
-        public ushort UI0
+        public uint UI0
         {
             get { return _ui0; }
         }
 
-        public ushort UI1
+        public uint UI1
         {
             get { return _ui1; }
         }
 
-        public ushort UI2
+        public uint UI2
         {
             get { return _ui2; }
         }
 
-        private ushort _ui0;
-        private ushort _ui1;
-        private ushort _ui2;
+        private uint _ui0;
+        private uint _ui1;
+        private uint _ui2;
     }
 }
