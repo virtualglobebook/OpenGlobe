@@ -125,8 +125,9 @@ namespace OpenGlobe.Scene.Terrain
 
         public void Render(Context context, SceneState sceneState)
         {
-            double centerLongitude = sceneState.Camera.Target.X;
-            double centerLatitude = sceneState.Camera.Target.Y;
+            Geodetic2D center = Ellipsoid.Wgs84.ToGeodetic2D(sceneState.Camera.Target);
+            double centerLongitude = Trig.ToDegrees(center.Longitude);
+            double centerLatitude = Trig.ToDegrees(center.Latitude);
 
             Level level = _clipmapLevels[_clipmapLevels.Length - 1];
             double longitudeIndex = level.Terrain.LongitudeToIndex(centerLongitude);
@@ -168,19 +169,56 @@ namespace OpenGlobe.Scene.Terrain
                 }
             }
 
+            /*// Render the lowest detail level across the entire globe
+            level = new Level(_clipmapLevels[0]);
+            for (int fillWest = level.West + _clipmapSegments; fillWest + _clipmapSegments <= level.Terrain.LongitudePosts; fillWest += _clipmapSegments)
+            {
+                level.West = fillWest;
+                int tempSouth = level.South;
+                for (int fillSouth = 0; fillSouth + _clipmapSegments <= level.Terrain.LatitudePosts; fillSouth += _clipmapSegments)
+                {
+                    level.South = fillSouth;
+                    //RenderLevel(level, level, true, context, sceneState);
+                }
+                level.South = tempSouth;
+            }
+
+            level.West = _clipmapLevels[0].West;
+            for (int fillWest = level.West - _clipmapSegments; fillWest >= 0; fillWest -= 150)
+            {
+                level.West = fillWest;
+                int tempSouth = level.South;
+                for (int fillSouth = 0; fillSouth + _clipmapSegments <= level.Terrain.LatitudePosts; fillSouth += _clipmapSegments)
+                {
+                    level.South = fillSouth;
+                    //RenderLevel(level, level, true, context, sceneState);
+                }
+                level.South = tempSouth;
+            }
+
+            level.West = _clipmapLevels[0].West;
+            for (int fillSouth = _clipmapLevels[0].South + _clipmapSegments; fillSouth + _clipmapSegments <= level.Terrain.LatitudePosts; fillSouth += _clipmapSegments)
+            {
+                level.South = fillSouth;
+                RenderLevel(level, level, true, context, sceneState);
+            }
+            for (int fillSouth = _clipmapLevels[0].South - _clipmapSegments; fillSouth + _clipmapSegments >= 0; fillSouth -= _clipmapSegments)
+            {
+                level.South = fillSouth;
+                //RenderLevel(level, level, true, context, sceneState);
+            }*/
+
             for (int i = _clipmapLevels.Length - 1; i >= 0; --i)
             {
-                //if (i > 1)
-                //    continue;
-                RenderLevel(i, context, sceneState);
+                Level thisLevel = _clipmapLevels[i];
+                Level coarserLevel = _clipmapLevels[i > 0 ? i - 1 : 0];
+
+                RenderLevel(thisLevel, coarserLevel, i == _clipmapLevels.Length - 1, context, sceneState);
             }
         }
 
-        private void RenderLevel(int levelIndex, Context context, SceneState sceneState)
+        private void RenderLevel(Level level, Level coarserLevel, bool fillRing, Context context, SceneState sceneState)
         {
-            Level level = _clipmapLevels[levelIndex];
-            Level coarserLevel = _clipmapLevels[levelIndex > 0 ? levelIndex - 1 : 0];
-
             int west = level.West;
             int south = level.South;
             int east = west + _clipmapPosts - 1;
@@ -210,8 +248,12 @@ namespace OpenGlobe.Scene.Terrain
                                                 (float)imageryWestTerrainPostOffset,
                                                 (float)imagerySouthTerrainPostOffset);
 
-            double longitudeOffset = sceneState.Camera.Target.X - level.Terrain.IndexToLongitude(level.West);
-            double latitudeOffset = sceneState.Camera.Target.Y - level.Terrain.IndexToLatitude(level.South);
+            Geodetic2D center = Ellipsoid.Wgs84.ToGeodetic2D(sceneState.Camera.Target);
+            double centerLongitude = Trig.ToDegrees(center.Longitude);
+            double centerLatitude = Trig.ToDegrees(center.Latitude);
+
+            double longitudeOffset = centerLongitude - level.Terrain.IndexToLongitude(level.West);
+            double latitudeOffset = centerLatitude - level.Terrain.IndexToLatitude(level.South);
 
             byte[] imagery = level.Imagery.GetImage((int)imageryWestIndex, (int)imagerySouthIndex, imageryEastIndex, imageryNorthIndex);
 
@@ -255,7 +297,7 @@ namespace OpenGlobe.Scene.Terrain
                 DrawBlock(_degenerateTriangles, level, coarserLevel, west, south, west, south, context, sceneState);
 
                 // Fill the center of the highest-detail ring
-                if (levelIndex == _clipmapLevels.Length - 1)
+                if (fillRing)
                 {
                     int westOffset = level.OffsetStripOnEast ? 0 : 2;
                     int southOffset = level.OffsetStripOnNorth ? 0 : 2;
@@ -311,6 +353,8 @@ namespace OpenGlobe.Scene.Terrain
 
             // TODO: Pass this in instead of computing it.
             int levelIndex = Array.IndexOf(_clipmapLevels, level);
+            if (levelIndex < 0)
+                levelIndex = 0;
             double resolution = Math.Pow(2.0, -levelIndex);
 
             // Scale our convenient power-of-two coordinates up to world coordinates.
@@ -428,6 +472,21 @@ namespace OpenGlobe.Scene.Terrain
 
         private class Level
         {
+            public Level() { }
+            public Level(Level existingInstance)
+            {
+                Terrain = existingInstance.Terrain;
+                TerrainTexture = existingInstance.TerrainTexture;
+                Imagery = existingInstance.Imagery;
+                ImageryTexture = existingInstance.ImageryTexture;
+                ImageryWidth = existingInstance.ImageryWidth;
+                ImageryHeight = existingInstance.ImageryHeight;
+                West = existingInstance.West;
+                South = existingInstance.South;
+                OffsetStripOnNorth = existingInstance.OffsetStripOnNorth;
+                OffsetStripOnEast = existingInstance.OffsetStripOnEast;
+            }
+
             public RasterTerrainLevel Terrain;
             public Texture2D TerrainTexture;
             public EsriRestImageryLevel Imagery;

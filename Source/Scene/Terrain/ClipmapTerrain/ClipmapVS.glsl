@@ -65,6 +65,26 @@ vec3 ComputeNormalForwardDifference(
     return cross(right - center, top - center);
 }
 
+vec3 GeodeticToCartesian(vec3 geodetic)
+{
+	vec2 geodeticRadians = geodetic.xy * og_pi / 180.0;
+	vec2 cosGeodetic = cos(geodeticRadians.xy);
+	vec2 sinGeodetic = sin(geodeticRadians.xy);
+
+	const float a = 6378137.0; //MaximumRadius;
+	const float b = 6356752.314245; //MinimumRadius;
+	const float aSquared = a * a;
+	const float firstEccentricitySquared = (aSquared - (b * b)) / aSquared;
+
+	float chi = sqrt(1.0 - firstEccentricitySquared * sinGeodetic.y * sinGeodetic.y);
+	float normal = a / chi;
+	float normalPlusHeight = normal + geodetic.z;
+
+	return vec3(normalPlusHeight * cosGeodetic.y * cosGeodetic.x,
+				normalPlusHeight * cosGeodetic.y * sinGeodetic.x,
+				(normal * (1.0 - firstEccentricitySquared) + geodetic.z) * sinGeodetic.y);
+}
+
 void main()
 {
 	// Convert from grid xy to world xy coordinates
@@ -75,14 +95,15 @@ void main()
 
 	textureCoordinateFS = (position + u_fineBlockOrig.zw) * u_textureOrigin.xy + u_textureOrigin.zw;
 
-	float heightExaggeration = 0.00001;
+	float heightExaggeration = 1.0;
 	vec3 displacedPosition = vec3(worldPos, height * heightExaggeration);
 	normalFS = ComputeNormalForwardDifference(position, displacedPosition, heightExaggeration);
 
-	gl_Position = og_modelViewPerspectiveMatrix * vec4(displacedPosition, 1.0);
     positionToLightFS = og_sunPosition - displacedPosition;
     positionToEyeFS = og_cameraEye - displacedPosition;
 
+	displacedPosition = GeodeticToCartesian(displacedPosition);
+	gl_Position = og_modelViewPerspectiveMatrix * vec4(displacedPosition, 1.0);
 	
 	modulus = fract(((worldPos + vec2(180, 90)) / (u_gridScaleFactor.xy * u_worldScaleFactor.xy)) / 2.0);
 	//modulus = mod(worldPos + vec2(180, 90), 150.0);

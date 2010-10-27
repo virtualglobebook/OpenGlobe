@@ -40,16 +40,18 @@ namespace OpenGlobe.Tests.Scene.Terrain
 
             ClearState clearState = new ClearState();
 
-            sceneState.Camera.PerspectiveFarPlaneDistance = 100.0;
-            sceneState.Camera.PerspectiveNearPlaneDistance = 0.001;
+            Ellipsoid ellipsoid = Ellipsoid.Wgs84;
+            sceneState.Camera.PerspectiveNearPlaneDistance = 0.0001 * ellipsoid.MaximumRadius;
+            sceneState.Camera.PerspectiveFarPlaneDistance = 20.0 * ellipsoid.MaximumRadius;
             sceneState.SunPosition = new Vector3D(200000, 300000, 200000);
 
-            CameraLookAtPoint camera = new CameraLookAtPoint(sceneState.Camera, window, Ellipsoid.UnitSphere);
+            CameraLookAtPoint camera = new CameraLookAtPoint(sceneState.Camera, window, ellipsoid);
+            camera.ViewPoint(ellipsoid, new Geodetic3D(Trig.ToRadians(-119.5326056), Trig.ToRadians(37.74451389), 2700.0));
             camera.ZoomRateRangeAdjustment = 0.0;
-            camera.CenterPoint = new Vector3D(-119.5326056, 37.74451389, 0.00001 * 2700.0);
+            //camera.CenterPoint = ellipsoid.ToVector3D();
             camera.Azimuth = 0.0;
             camera.Elevation = Trig.ToRadians(30.0);
-            camera.Range = 0.1;
+            camera.Range = 1000.0;
 
             //camera.Dispose();
             //CameraFly fly = new CameraFly(sceneState.Camera, window);
