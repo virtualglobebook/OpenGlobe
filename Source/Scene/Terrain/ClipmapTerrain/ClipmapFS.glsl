@@ -45,6 +45,6 @@ void main()
 	//fragmentColor = mix(vec3(u_color * intensity), vec3(0.0, 0.0, intensity), (modulus.x > -0.5 && modulus.x < 0.5) || (modulus.y > -0.5 && modulus.y < 0.5));
 	//fragmentColor = mix(vec3(u_color * intensity), vec3(0.0, 0.0, intensity), height <= 0);
 	vec3 color = texture(og_texture2, textureCoordinateFS).rgb;
-	fragmentColor = u_color*0.0000001 + mix(color /*+ vec3(1.0, 0.0, 0.0)*/, color, height <= 0);
+	fragmentColor = u_color*0.000000001 + mix(color /*+ vec3(1.0, 0.0, 0.0)*/, color, height <= 0) * intensity;
 	//fragmentColor = fragmentColor*0.0000001 + normal;
 }

@@ -34,9 +34,9 @@ namespace OpenGlobe.Tests.Scene.Terrain
             ClipmapTerrain clipmap = new ClipmapTerrain(window.Context, worldWind, 255, imagery);
 
             SceneState sceneState = new SceneState();
-            sceneState.DiffuseIntensity = 0.9f;
+            sceneState.DiffuseIntensity = 0.45f;
             sceneState.SpecularIntensity = 0.05f;
-            sceneState.AmbientIntensity = 0.05f;
+            sceneState.AmbientIntensity = 0.5f;
 
             ClearState clearState = new ClearState();
 
