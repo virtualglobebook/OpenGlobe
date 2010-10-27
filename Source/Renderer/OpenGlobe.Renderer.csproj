@@ -59,6 +59,7 @@
     <Compile Include="GL3x\ExtensionsGL3x.cs" />
     <Compile Include="GL3x\Handles\BufferHandleGL3x.cs" />
     <Compile Include="GL3x\Handles\FenceHandleGL3x.cs" />
+    <Compile Include="GL3x\Handles\SamplerHandleGL3x.cs" />
     <Compile Include="GL3x\Handles\TextureHandleGL3x.cs" />
     <Compile Include="GL3x\Handles\ShaderProgramHandleGL3x.cs" />
     <Compile Include="GL3x\Handles\FinalizerThreadContextGL3x.cs" />
@@ -70,6 +71,7 @@
     <Compile Include="GL3x\Handles\VertexArrayHandleGL3x.cs" />
     <Compile Include="GL3x\Shaders\FragmentOutputsGL3x.cs" />
     <Compile Include="GL3x\Synchronization\FenceGL3x.cs" />
+    <Compile Include="GL3x\Textures\TextureSamplerGL3x.cs" />
     <Compile Include="Input\Keyboard.cs" />
     <Compile Include="Input\KeyboardKey.cs" />
     <Compile Include="Input\KeyboardKeyEvent.cs" />
@@ -137,6 +139,9 @@
     <Compile Include="Shaders\LinkAutomaticUniforms\LinkAutomaticUniformCollection.cs" />
     <Compile Include="Shaders\LinkAutomaticUniforms\TextureUniform.cs" />
     <Compile Include="Synchronization\Fence.cs" />
+    <Compile Include="Textures\ImageDatatype.cs" />
+    <Compile Include="Textures\ImageFormat.cs" />
+    <Compile Include="Textures\TextureSamplers.cs" />
     <Compile Include="Textures\TextureMagnificationFilter.cs" />
     <Compile Include="Textures\TextureMinificationFilter.cs" />
     <Compile Include="Textures\TextureUtility.cs" />

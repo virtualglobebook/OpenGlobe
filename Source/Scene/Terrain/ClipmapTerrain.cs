@@ -38,7 +38,6 @@ namespace OpenGlobe.Scene.Terrain
                 _clipmapLevels[i] = new Level();
                 _clipmapLevels[i].Terrain = terrainLevel;
                 _clipmapLevels[i].TerrainTexture = Device.CreateTexture2DRectangle(new Texture2DDescription(_clipmapPosts, _clipmapPosts, TextureFormat.Red32f));
-                _clipmapLevels[i].TerrainTexture.Sampler = Texture2DSampler.LinearClampToEdge;
 
                 // Aim for roughly one imagery texel per geometry texel.
                 // Find the first imagery level that meets our resolution needs.
@@ -59,7 +58,6 @@ namespace OpenGlobe.Scene.Terrain
                 _clipmapLevels[i].ImageryWidth = (int)Math.Ceiling(_clipmapPosts * terrainLevel.PostDeltaLongitude / imageryLevel.PostDeltaLongitude);
                 _clipmapLevels[i].ImageryHeight = (int)Math.Ceiling(_clipmapPosts * terrainLevel.PostDeltaLatitude / imageryLevel.PostDeltaLatitude);
                 _clipmapLevels[i].ImageryTexture = Device.CreateTexture2DRectangle(new Texture2DDescription(_clipmapLevels[i].ImageryWidth, _clipmapLevels[i].ImageryHeight, TextureFormat.RedGreenBlue8, false));
-                _clipmapLevels[i].ImageryTexture.Sampler = Texture2DSampler.LinearClampToEdge;
             }
 
             _shaderProgram = Device.CreateShaderProgram(
@@ -223,11 +221,14 @@ namespace OpenGlobe.Scene.Terrain
                 pixelBuffer.CopyFromSystemMemory(floatPosts);
                 level.TerrainTexture.CopyFromBuffer(pixelBuffer, ImageFormat.Red, ImageDatatype.Float);
                 context.TextureUnits[0].Texture2DRectangle = level.TerrainTexture;
+                context.TextureUnits[0].TextureSampler = Device.TextureSamplers.LinearClampToEdge;
                 context.TextureUnits[1].Texture2DRectangle = coarserLevel.TerrainTexture;
+                context.TextureUnits[1].TextureSampler = Device.TextureSamplers.LinearClampToEdge;
 
                 imageryPixelBuffer.CopyFromSystemMemory(imagery);
                 level.ImageryTexture.CopyFromBuffer(imageryPixelBuffer, ImageFormat.BlueGreenRed, ImageDatatype.UnsignedByte);
                 context.TextureUnits[2].Texture2DRectangle = level.ImageryTexture;
+                context.TextureUnits[2].TextureSampler = Device.TextureSamplers.LinearClampToEdge;
 
                 DrawBlock(_fieldBlock, level, coarserLevel, west, south, west, south, context, sceneState);
                 DrawBlock(_fieldBlock, level, coarserLevel, west, south, west + _fieldBlockSegments, south, context, sceneState);

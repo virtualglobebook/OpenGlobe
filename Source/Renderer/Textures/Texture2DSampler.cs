@@ -7,55 +7,13 @@
 //
 #endregion
 
-using System;
-using System.Globalization;
+using OpenGlobe.Core;
 
 namespace OpenGlobe.Renderer
 {
-    public struct Texture2DSampler : IEquatable<Texture2DSampler>
+    public abstract class TextureSampler : Disposable
     {
-        public static readonly Texture2DSampler NearestClampToEdge =
-            new Texture2DSampler(
-                TextureMinificationFilter.Nearest,
-                TextureMagnificationFilter.Nearest,
-                TextureWrap.ClampToEdge,
-                TextureWrap.ClampToEdge);
-
-        public static readonly Texture2DSampler LinearClampToEdge =
-            new Texture2DSampler(
-                TextureMinificationFilter.Linear,
-                TextureMagnificationFilter.Linear,
-                TextureWrap.ClampToEdge,
-                TextureWrap.ClampToEdge);
-
-        public static readonly Texture2DSampler NearestRepeat =
-            new Texture2DSampler(
-                TextureMinificationFilter.Nearest,
-                TextureMagnificationFilter.Nearest,
-                TextureWrap.Repeat,
-                TextureWrap.Repeat);
-
-        public static readonly Texture2DSampler LinearRepeat =
-            new Texture2DSampler(
-                TextureMinificationFilter.Linear,
-                TextureMagnificationFilter.Linear,
-                TextureWrap.Repeat,
-                TextureWrap.Repeat);
-
-        public Texture2DSampler(
-            TextureMinificationFilter minificationFilter,
-            TextureMagnificationFilter magnificationFilter,
-            TextureWrap wrapS,
-            TextureWrap wrapT)
-        {
-            _minificationFilter = minificationFilter;
-            _magnificationFilter = magnificationFilter;
-            _wrapS = wrapS;
-            _wrapT = wrapT;
-            _maximumAnisotropic = 1;
-        }
-
-        public Texture2DSampler(
+        protected TextureSampler(
             TextureMinificationFilter minificationFilter,
             TextureMagnificationFilter magnificationFilter,
             TextureWrap wrapS,
@@ -93,54 +51,6 @@ namespace OpenGlobe.Renderer
         {
             get { return _maximumAnisotropic; }
         }
-
-        public static bool operator ==(Texture2DSampler left, Texture2DSampler right)
-        {
-            return left.Equals(right);
-        }
-
-        public static bool operator !=(Texture2DSampler left, Texture2DSampler right)
-        {
-            return !left.Equals(right);
-        }
-
-        public override string ToString()
-        {
-            return string.Format(CultureInfo.CurrentCulture, "Minification Filter: {0} Magnification Filter: {1} WrapS: {2} WrapT: {3} Maximum Anisotropic: {4}",
-                _minificationFilter, _magnificationFilter, _wrapS, _wrapT, _maximumAnisotropic);
-        }
-
-        public override int GetHashCode()
-        {
-            return
-                _minificationFilter.GetHashCode() ^
-                _magnificationFilter.GetHashCode() ^
-                _wrapS.GetHashCode() ^
-                _wrapT.GetHashCode() ^
-                _maximumAnisotropic.GetHashCode();
-        }
-
-        public override bool Equals(object obj)
-        {
-            if (!(obj is Texture2DSampler))
-                return false;
-
-            return this.Equals((Texture2DSampler)obj);
-        }
-
-        #region IEquatable<BlittableRGBA> Members
-
-        public bool Equals(Texture2DSampler other)
-        {
-            return
-                (_minificationFilter == other._minificationFilter) &&
-                (_magnificationFilter == other._magnificationFilter) &&
-                (_wrapS == other._wrapS) &&
-                (_wrapT == other._wrapT) &&
-                (_maximumAnisotropic == other._maximumAnisotropic);
-        }
-
-        #endregion
 
         private readonly TextureMinificationFilter _minificationFilter;
         private readonly TextureMagnificationFilter _magnificationFilter;

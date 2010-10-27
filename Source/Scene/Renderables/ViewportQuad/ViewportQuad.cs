@@ -40,6 +40,7 @@ namespace OpenGlobe.Scene
             _geometry.Update(context, _drawState.ShaderProgram);
 
             context.TextureUnits[0].Texture2D = Texture;
+            context.TextureUnits[0].TextureSampler = Device.TextureSamplers.LinearClampToEdge;
             _drawState.VertexArray = _geometry.VertexArray;
 
             context.Draw(PrimitiveType.TriangleStrip, _drawState, sceneState);

@@ -13,5 +13,6 @@ namespace OpenGlobe.Renderer
     {
         public abstract Texture2D Texture2D { get; set; }
         public abstract Texture2D Texture2DRectangle { get; set; }
+        public abstract TextureSampler TextureSampler { get; set; }
     }
 }

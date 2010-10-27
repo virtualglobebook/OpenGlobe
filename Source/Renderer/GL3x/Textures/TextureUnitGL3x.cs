@@ -10,6 +10,7 @@
 using System;
 using OpenGlobe.Renderer;
 using OpenTK.Graphics.OpenGL;
+using OpenTKTextureUnit = OpenTK.Graphics.OpenGL.TextureUnit;
 
 namespace OpenGlobe.Renderer.GL3x
 {
@@ -17,7 +18,8 @@ namespace OpenGlobe.Renderer.GL3x
     {
         public TextureUnitGL3x(int index, ICleanableObserver observer)
         {
-            _textureUnit = OpenTK.Graphics.OpenGL.TextureUnit.Texture0 + index;
+            _textureUnitIndex = index;
+            _textureUnit = OpenTKTextureUnit.Texture0 + index;
             _observer = observer;
         }
 
@@ -36,13 +38,16 @@ namespace OpenGlobe.Renderer.GL3x
                     throw new ArgumentException("Incompatible texture.  Did you create the texture with Device.CreateTexture2D?");
                 }
 
-                if ((_dirtyFlags == DirtyFlags.None) && (_texture2D != texture))
+                if (_texture2D != texture)
                 {
-                    _dirtyFlags |= DirtyFlags.Texture2D;
-                    _observer.NotifyDirty(this);
-                }
+                    if (_dirtyFlags == DirtyFlags.None)
+                    {
+                        _observer.NotifyDirty(this);
+                    }
 
-                _texture2D = texture;
+                    _dirtyFlags |= DirtyFlags.Texture2D;
+                    _texture2D = texture;
+                }
             }
         }
 
@@ -59,13 +64,37 @@ namespace OpenGlobe.Renderer.GL3x
                     throw new ArgumentException("Incompatible texture.  Did you create the texture with Device.CreateTexture2DRectangle?");
                 }
 
-                if ((_dirtyFlags == DirtyFlags.None) && (_texture2DRectangle != texture))
+                if (_texture2DRectangle != texture)
                 {
-                    _dirtyFlags |= DirtyFlags.Texture2DRectangle;
-                    _observer.NotifyDirty(this);
-                }
+                    if (_dirtyFlags == DirtyFlags.None)
+                    {
+                        _observer.NotifyDirty(this);
+                    }
 
-                _texture2DRectangle = texture;
+                    _dirtyFlags |= DirtyFlags.Texture2DRectangle;
+                    _texture2DRectangle = texture;
+                }
+            }
+        }
+
+        public override TextureSampler TextureSampler
+        {
+            get { return _textureSampler; }
+
+            set
+            {
+                TextureSamplerGL3x sampler = value as TextureSamplerGL3x;
+
+                if (_textureSampler != sampler)
+                {
+                    if (_dirtyFlags == DirtyFlags.None)
+                    {
+                        _observer.NotifyDirty(this);
+                    }
+
+                    _dirtyFlags |= DirtyFlags.TextureSampler;
+                    _textureSampler = sampler;
+                }
             }
         }
 
@@ -94,6 +123,8 @@ namespace OpenGlobe.Renderer.GL3x
         {
             if (_dirtyFlags != DirtyFlags.None)
             {
+                Validate();
+
 	            GL.ActiveTexture(_textureUnit);
 	
 	            if ((_dirtyFlags & DirtyFlags.Texture2D) == DirtyFlags.Texture2D)
@@ -119,12 +150,52 @@ namespace OpenGlobe.Renderer.GL3x
 	                    Texture2DGL3x.UnBind(TextureTarget.TextureRectangle);
 	                }
 	            }
-	
+
+                if ((_dirtyFlags & DirtyFlags.TextureSampler) == DirtyFlags.TextureSampler)
+                {
+                    if (_textureSampler != null)
+                    {
+                        _textureSampler.Bind(_textureUnitIndex);
+                    }
+                    else
+                    {
+                        TextureSamplerGL3x.UnBind(_textureUnitIndex);
+                    }
+                }
+
 	            _dirtyFlags = DirtyFlags.None;
             }
         }
 
         #endregion
+
+        private void Validate()
+        {
+            if ((_texture2D != null) || (_texture2DRectangle != null))
+            {
+                if (_textureSampler == null)
+                {
+                    throw new InvalidOperationException("A texture sampler must be assigned to a texture unit with one or more bound textures.");
+                }
+
+                if (_texture2DRectangle != null)
+                {
+                    if (_textureSampler.MinificationFilter != TextureMinificationFilter.Linear &&
+                        _textureSampler.MinificationFilter != TextureMinificationFilter.Nearest)
+                    {
+                        throw new InvalidOperationException("The texture sample is incompatible with the rectangle texture bound to the same texture unit.  Rectangle textures only support linear and nearest minification filters.");
+                    }
+
+                    if (_textureSampler.WrapS == TextureWrap.Repeat ||
+                        _textureSampler.WrapS == TextureWrap.MirroredRepeat ||
+                        _textureSampler.WrapT == TextureWrap.Repeat ||
+                        _textureSampler.WrapT == TextureWrap.MirroredRepeat)
+                    {
+                        throw new InvalidOperationException("The texture sample is incompatible with the rectangle texture bound to the same texture unit.  Rectangle textures do not support repeat or mirrored repeat wrap modes.");
+                    }
+                }
+            }
+        }
 
         [Flags]
         private enum DirtyFlags
@@ -132,13 +203,16 @@ namespace OpenGlobe.Renderer.GL3x
             None = 0,
             Texture2D = 1,
             Texture2DRectangle = 2,
-            All = Texture2D | Texture2DRectangle
+            TextureSampler = 4,
+            All = Texture2D | Texture2DRectangle | TextureSampler
         }
 
-        private readonly OpenTK.Graphics.OpenGL.TextureUnit _textureUnit;
+        private readonly int _textureUnitIndex;
+        private readonly OpenTKTextureUnit _textureUnit;
         private readonly ICleanableObserver _observer;
         private Texture2DGL3x _texture2D;
         private Texture2DGL3x _texture2DRectangle;
+        private TextureSamplerGL3x _textureSampler;
         private DirtyFlags _dirtyFlags;
     }
 }

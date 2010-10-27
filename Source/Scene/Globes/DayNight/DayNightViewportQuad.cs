@@ -53,8 +53,11 @@ namespace OpenGlobe.Scene
             _geometry.Update(context, _drawState.ShaderProgram);
 
             context.TextureUnits[0].Texture2D = DayTexture;
+            context.TextureUnits[0].TextureSampler = Device.TextureSamplers.LinearClampToEdge;
             context.TextureUnits[1].Texture2D = NightTexture;
+            context.TextureUnits[1].TextureSampler = Device.TextureSamplers.LinearClampToEdge;
             context.TextureUnits[2].Texture2D = BlendTexture;
+            context.TextureUnits[2].TextureSampler = Device.TextureSamplers.LinearClampToEdge;
             _drawState.VertexArray = _geometry.VertexArray;
 
             context.Draw(PrimitiveType.TriangleStrip, _drawState, sceneState);

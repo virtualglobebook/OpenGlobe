@@ -93,6 +93,7 @@ namespace OpenGlobe.Scene
                 if (Shade)
                 {
                     context.TextureUnits[0].Texture2D = Texture;
+                    context.TextureUnits[0].TextureSampler = Device.TextureSamplers.LinearClampToEdge;
                     _cameraEyeSquared.Value = cameraEyeSquared;
                     context.Draw(_primitiveType, _drawState, sceneState);
                 }

@@ -74,7 +74,11 @@ namespace OpenGlobe.Renderer
 
                 ///////////////////////////////////////////////////////////////
 
-                GL.GetInteger(GetPName.MaxVertexAttribs, out _maximumNumberOfVertexAttributes);
+                s_textureSamplers = new TextureSamplers();
+
+                ///////////////////////////////////////////////////////////////
+
+                GL.GetInteger(GetPName.MaxVertexAttribs, out s_maximumNumberOfVertexAttributes);
             }
         }
 
@@ -416,6 +420,40 @@ namespace OpenGlobe.Renderer
             return bitmap;
         }
 
+        public static TextureSampler CreateTexture2DSampler(
+            TextureMinificationFilter minificationFilter,
+            TextureMagnificationFilter magnificationFilter,
+            TextureWrap wrapS,
+            TextureWrap wrapT)
+        {
+            return new TextureSamplerGL3x(
+                minificationFilter,
+                magnificationFilter,
+                wrapS,
+                wrapT,
+                1);
+        }
+
+        public static TextureSampler CreateTexture2DSampler(
+            TextureMinificationFilter minificationFilter,
+            TextureMagnificationFilter magnificationFilter,
+            TextureWrap wrapS,
+            TextureWrap wrapT,
+            float maximumAnisotropic)
+        {
+            return new TextureSamplerGL3x(
+                minificationFilter,
+                magnificationFilter,
+                wrapS,
+                wrapT,
+                maximumAnisotropic);
+        }
+
+        public static TextureSamplers TextureSamplers
+        {
+            get { return s_textureSamplers; }
+        }
+
         public static Fence CreateFence()
         {
             return new FenceGL3x();
@@ -454,13 +492,15 @@ namespace OpenGlobe.Renderer
 
         internal static int MaximumNumberOfVertexAttributes
         {
-            get { return _maximumNumberOfVertexAttributes; }
+            get { return s_maximumNumberOfVertexAttributes; }
         }
 
         private static Extensions s_extensions;
         private static LinkAutomaticUniformCollection s_linkAutomaticUniforms;
         private static DrawAutomaticUniformFactoryCollection s_drawAutomaticUniformFactories;
 
-        private static int _maximumNumberOfVertexAttributes;
+        private static TextureSamplers s_textureSamplers;
+
+        private static int s_maximumNumberOfVertexAttributes;
     }
 }

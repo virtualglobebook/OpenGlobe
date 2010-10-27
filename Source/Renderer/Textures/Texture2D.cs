@@ -15,57 +15,6 @@ using OpenGlobe.Core;
 
 namespace OpenGlobe.Renderer
 {
-    public enum ImageFormat
-    {
-        StencilIndex,
-        DepthComponent,
-        Red,
-        Green,
-        Blue,
-        RedGreenBlue,
-        RedGreenBlueAlpha,
-        BlueGreenRed,
-        BlueGreenRedAlpha,
-        RedGreen,
-        RedGreenInteger,
-        DepthStencil,
-        RedInteger,
-        GreenInteger,
-        BlueInteger,
-        RedGreenBlueInteger,
-        RedGreenBlueAlphaInteger,
-        BlueGreenRedInteger,
-        BlueGreenRedAlphaInteger
-    }
-
-    public enum ImageDatatype
-    {
-        Byte,
-        UnsignedByte,
-        Short,
-        UnsignedShort,
-        Int,
-        UnsignedInt,
-        Float,
-        HalfFloat,
-        UnsignedByte332,
-        UnsignedShort4444,
-        UnsignedShort5551,
-        UnsignedInt8888,
-        UnsignedInt1010102,
-        UnsignedByte233Reversed,
-        UnsignedShort565,
-        UnsignedShort565Reversed,
-        UnsignedShort4444Reversed,
-        UnsignedShort1555Reversed,
-        UnsignedInt8888Reversed,
-        UnsignedInt2101010Reversed,
-        UnsignedInt248,
-        UnsignedInt10F11F11FReversed,
-        UnsignedInt5999Reversed,
-        Float32UnsignedInt248Reversed
-    }
-
     public abstract class Texture2D : Disposable
     {
         public virtual void CopyFromBuffer(
@@ -106,7 +55,6 @@ namespace OpenGlobe.Renderer
             int rowAlignment);
 
         public abstract Texture2DDescription Description { get; }
-        public abstract Texture2DSampler Sampler { get; set; }
 
         public virtual void Save(string filename)
         {

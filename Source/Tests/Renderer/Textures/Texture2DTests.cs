@@ -33,26 +33,24 @@ namespace OpenGlobe.Renderer
         }
 
         [Test]
-        public void Texture2DFilter()
+        public void Texture2DSampler()
         {
-            Texture2DSampler filter = new Texture2DSampler(
-                TextureMinificationFilter.Linear,
-                TextureMagnificationFilter.Nearest,
-                TextureWrap.MirroredRepeat,
-                TextureWrap.Repeat,
-                2);
-
-            Assert.AreEqual(TextureMinificationFilter.Linear, filter.MinificationFilter);
-            Assert.AreEqual(TextureMagnificationFilter.Nearest, filter.MagnificationFilter);
-            Assert.AreEqual(TextureWrap.MirroredRepeat, filter.WrapS);
-            Assert.AreEqual(TextureWrap.Repeat, filter.WrapT);
-            Assert.AreEqual(2, filter.MaximumAnisotropic);
-
-            Texture2DSampler filter2 = OpenGlobe.Renderer.Texture2DSampler.LinearClampToEdge;
-            Assert.AreNotEqual(filter, filter2);
-
-            Texture2DSampler filter3 = OpenGlobe.Renderer.Texture2DSampler.LinearClampToEdge;
-            Assert.AreEqual(filter2, filter3);
+            using (GraphicsWindow window = Device.CreateWindow(1, 1))
+            {
+                using (TextureSampler filter = Device.CreateTexture2DSampler(
+                    TextureMinificationFilter.Linear,
+                    TextureMagnificationFilter.Nearest,
+                    TextureWrap.MirroredRepeat,
+                    TextureWrap.Repeat,
+                    2))
+                {
+                    Assert.AreEqual(TextureMinificationFilter.Linear, filter.MinificationFilter);
+                    Assert.AreEqual(TextureMagnificationFilter.Nearest, filter.MagnificationFilter);
+                    Assert.AreEqual(TextureWrap.MirroredRepeat, filter.WrapS);
+                    Assert.AreEqual(TextureWrap.Repeat, filter.WrapT);
+                    Assert.AreEqual(2, filter.MaximumAnisotropic);
+                }
+            }
         }
 
         [Test]
@@ -267,6 +265,8 @@ namespace OpenGlobe.Renderer
             foreach (TextureUnit unit in window.Context.TextureUnits)
             {
                 Assert.IsNull(unit.Texture2D);
+                Assert.IsNull(unit.Texture2DRectangle);
+                Assert.IsNull(unit.TextureSampler);
                 ++count;
             }
             Assert.AreEqual(count, window.Context.TextureUnits.Count);
@@ -277,32 +277,35 @@ namespace OpenGlobe.Renderer
         [Test]
         public void TextureUnits()
         {
-            GraphicsWindow window = Device.CreateWindow(1, 1);
+            using (GraphicsWindow window = Device.CreateWindow(1, 1))
+            {
+                Texture2DDescription description = new Texture2DDescription(1, 1, TextureFormat.RedGreenBlueAlpha8, false);
+                Texture2D texture = Device.CreateTexture2D(description);
 
-            Texture2DDescription description = new Texture2DDescription(1, 1, TextureFormat.RedGreenBlueAlpha8, false);
-            Texture2D texture = Device.CreateTexture2D(description);
-            texture.Sampler = OpenGlobe.Renderer.Texture2DSampler.LinearRepeat;
-            Assert.AreEqual(OpenGlobe.Renderer.Texture2DSampler.LinearRepeat, texture.Sampler);
+                window.Context.TextureUnits[0].Texture2D = texture;
+                window.Context.TextureUnits[0].TextureSampler = Device.TextureSamplers.LinearRepeat;
 
-            window.Context.TextureUnits[0].Texture2D = texture;
-            Assert.AreEqual(texture, window.Context.TextureUnits[0].Texture2D);
+                Assert.AreEqual(texture, window.Context.TextureUnits[0].Texture2D);
+                Assert.AreEqual(Device.TextureSamplers.LinearRepeat, window.Context.TextureUnits[0].TextureSampler);
 
-            //
-            // Attach same texture with different filter
-            //
-            Texture2DSampler filter2 = new Texture2DSampler(
-                TextureMinificationFilter.Nearest,
-                TextureMagnificationFilter.Nearest,
-                TextureWrap.ClampToEdge,
-                TextureWrap.ClampToEdge,
-                2);
-            texture.Sampler = filter2;
+                //
+                // Assign same texture with different filter
+                //
+                TextureSampler sampler = Device.CreateTexture2DSampler(
+                    TextureMinificationFilter.Nearest,
+                    TextureMagnificationFilter.Nearest,
+                    TextureWrap.ClampToEdge,
+                    TextureWrap.ClampToEdge,
+                    2);
 
-            window.Context.TextureUnits[0].Texture2D = texture;
-            Assert.AreEqual(texture, window.Context.TextureUnits[0].Texture2D);
+                window.Context.TextureUnits[0].Texture2D = texture;
+                window.Context.TextureUnits[0].TextureSampler = sampler;
+                Assert.AreEqual(texture, window.Context.TextureUnits[0].Texture2D);
+                Assert.AreEqual(sampler, window.Context.TextureUnits[0].TextureSampler);
 
-            texture.Dispose();
-            window.Dispose();
+                sampler.Dispose();
+                texture.Dispose();
+            }
         }
     }
 }

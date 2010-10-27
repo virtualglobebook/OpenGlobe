@@ -49,7 +49,6 @@ namespace OpenGlobe
                 writePixelBuffer.CopyFromSystemMemory(pixels);
                 texture.CopyFromBuffer(writePixelBuffer, ImageFormat.RedGreenBlueAlpha, ImageDatatype.UnsignedByte);
             }
-            texture.Sampler = Texture2DSampler.NearestClampToEdge;
 
             return texture;
         }
