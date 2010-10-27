@@ -9,7 +9,7 @@
 
 namespace OpenGlobe.Core.Geometry
 {
-    public class VertexAttributeFloatVector3 : VertexAttribute<Vector3D>
+    public class VertexAttributeFloatVector3 : VertexAttribute<Vector3S>
     {
         public VertexAttributeFloatVector3(string name)
             : base(name, VertexAttributeType.FloatVector3)
