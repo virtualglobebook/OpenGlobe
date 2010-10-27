@@ -137,7 +137,10 @@
     <Compile Include="Shaders\LinkAutomaticUniforms\LinkAutomaticUniformCollection.cs" />
     <Compile Include="Shaders\LinkAutomaticUniforms\TextureUniform.cs" />
     <Compile Include="Synchronization\Fence.cs" />
+    <Compile Include="Textures\TextureMagnificationFilter.cs" />
+    <Compile Include="Textures\TextureMinificationFilter.cs" />
     <Compile Include="Textures\TextureUtility.cs" />
+    <Compile Include="Textures\TextureWrap.cs" />
     <Compile Include="Tools\TextureAtlas.cs" />
     <Compile Include="Tools\TextureCoordinateCollection.cs" />
     <Compile Include="VertexArray\VertexBufferAttribute.cs" />
@@ -232,7 +235,7 @@
     <Compile Include="OpenTK\Vector4i.cs" />
     <Compile Include="Textures\Texture2D.cs" />
     <Compile Include="Textures\Texture2DDescription.cs" />
-    <Compile Include="Textures\Texture2DFilter.cs" />
+    <Compile Include="Textures\Texture2DSampler.cs" />
     <Compile Include="Textures\TextureUnit.cs" />
     <Compile Include="Textures\TextureUnits.cs" />
     <Compile Include="VertexArray\VertexArraySizes.cs" />

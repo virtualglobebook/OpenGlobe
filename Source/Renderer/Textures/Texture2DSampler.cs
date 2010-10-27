@@ -1,6 +1,6 @@
 ﻿#region License
 //
-// (C) Copyright 2009 Patrick Cozzi and Deron Ohlarik
+// (C) Copyright 2010 Patrick Cozzi and Kevin Ring
 //
 // Distributed under the Boost Software License, Version 1.0.
 // See License.txt or http://www.boost.org/LICENSE_1_0.txt.
@@ -12,29 +12,6 @@ using System.Globalization;
 
 namespace OpenGlobe.Renderer
 {
-    public enum TextureMinificationFilter
-    {
-        Nearest,
-        Linear,
-        NearestMipmapNearest,
-        LinearMipmapNearest,
-        NearestMipmapLinear,
-        LinearMipmapLinear,
-    }
-
-    public enum TextureMagnificationFilter
-    {
-        Nearest,
-        Linear
-    }
-
-    public enum TextureWrap
-    {
-        ClampToEdge,
-        Repeat,
-        MirroredRepeat
-    }
-
     public struct Texture2DSampler : IEquatable<Texture2DSampler>
     {
         public static readonly Texture2DSampler NearestClampToEdge =
