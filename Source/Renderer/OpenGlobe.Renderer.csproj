@@ -240,7 +240,7 @@
     <Compile Include="OpenTK\Vector4i.cs" />
     <Compile Include="Textures\Texture2D.cs" />
     <Compile Include="Textures\Texture2DDescription.cs" />
-    <Compile Include="Textures\Texture2DSampler.cs" />
+    <Compile Include="Textures\TextureSampler.cs" />
     <Compile Include="Textures\TextureUnit.cs" />
     <Compile Include="Textures\TextureUnits.cs" />
     <Compile Include="VertexArray\VertexArraySizes.cs" />
