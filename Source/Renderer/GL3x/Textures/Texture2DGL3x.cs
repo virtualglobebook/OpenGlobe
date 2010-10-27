@@ -52,9 +52,9 @@ namespace OpenGlobe.Renderer.GL3x
             // Default filter, compatiable when attaching a non-mimapped 
             // texture to a frame buffer object.
             //
-            _filter = Texture2DFilter.LinearClampToEdge;
+            _sampler = Texture2DSampler.LinearClampToEdge;
 
-            ApplyFilter();
+            ApplySampler();
         }
 
         internal TextureHandleGL3x Handle
@@ -145,15 +145,15 @@ namespace OpenGlobe.Renderer.GL3x
             get { return _description; }
         }
 
-        public override Texture2DFilter Filter
+        public override Texture2DSampler Sampler
         {
-            get { return _filter; }
+            get { return _sampler; }
             set 
             {
-                if (_filter != value)
+                if (_sampler != value)
                 {
-                    _filter = value;
-                    ApplyFilter();
+                    _sampler = value;
+                    ApplySampler();
                 }
             }
         }
@@ -170,29 +170,29 @@ namespace OpenGlobe.Renderer.GL3x
             }
         }
 
-        private void ApplyFilter()
+        private void ApplySampler()
         {
             if (_target == TextureTarget.TextureRectangle)
             {
-                if (_filter.MinificationFilter != TextureMinificationFilter.Linear &&
-                    _filter.MinificationFilter != TextureMinificationFilter.Nearest)
+                if (_sampler.MinificationFilter != TextureMinificationFilter.Linear &&
+                    _sampler.MinificationFilter != TextureMinificationFilter.Nearest)
                 {
                     throw new ArgumentException("Rectangle textures only support linear and nearest minification filters.");
                 }
 
-                if (_filter.WrapS == TextureWrap.Repeat ||
-                    _filter.WrapS == TextureWrap.MirroredRepeat ||
-                    _filter.WrapT == TextureWrap.Repeat ||
-                    _filter.WrapT == TextureWrap.MirroredRepeat)
+                if (_sampler.WrapS == TextureWrap.Repeat ||
+                    _sampler.WrapS == TextureWrap.MirroredRepeat ||
+                    _sampler.WrapT == TextureWrap.Repeat ||
+                    _sampler.WrapT == TextureWrap.MirroredRepeat)
                 {
                     throw new ArgumentException("Rectangle textures do not support repeat and mirrored repeat wrap modes.");
                 }
             }
 
-            TextureMinFilter minFilter = TypeConverterGL3x.To(_filter.MinificationFilter);
-            TextureMagFilter magFilter = TypeConverterGL3x.To(_filter.MagnificationFilter);
-            TextureWrapMode wrapS = TypeConverterGL3x.To(_filter.WrapS);
-            TextureWrapMode wrapT = TypeConverterGL3x.To(_filter.WrapT);
+            TextureMinFilter minFilter = TypeConverterGL3x.To(_sampler.MinificationFilter);
+            TextureMagFilter magFilter = TypeConverterGL3x.To(_sampler.MagnificationFilter);
+            TextureWrapMode wrapS = TypeConverterGL3x.To(_sampler.WrapS);
+            TextureWrapMode wrapT = TypeConverterGL3x.To(_sampler.WrapT);
 
             BindToLastTextureUnit();
             GL.TexParameter(_target, TextureParameterName.TextureMinFilter, (int)minFilter);
@@ -208,11 +208,11 @@ namespace OpenGlobe.Renderer.GL3x
             {
                 GL.TexParameter(_target,
                     (TextureParameterName)ExtTextureFilterAnisotropic.TextureMaxAnisotropyExt,
-                    _filter.MaximumAnisotropic);
+                    _sampler.MaximumAnisotropic);
             }
             else
             {
-                if (_filter.MaximumAnisotropic != 1)
+                if (_sampler.MaximumAnisotropic != 1)
                 {
                     throw new InsufficientVideoCardException("Anisotropic filtering is not supported.  The extension GL_EXT_texture_filter_anisotropic was not found.");
                 }
@@ -236,6 +236,6 @@ namespace OpenGlobe.Renderer.GL3x
         private readonly TextureTarget _target;
         private readonly Texture2DDescription _description;
         private readonly OpenTK.Graphics.OpenGL.TextureUnit _lastTextureUnit;
-        private Texture2DFilter _filter;
+        private Texture2DSampler _sampler;
     }
 }

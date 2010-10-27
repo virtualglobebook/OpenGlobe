@@ -55,7 +55,7 @@ namespace OpenGlobe.Terrain
             _texture = Device.CreateTexture2DRectangle(new Texture2DDescription(
                 tile.Resolution.X, tile.Resolution.Y, TextureFormat.Red32f));
             _texture.CopyFromBuffer(pixelBuffer, ImageFormat.Red, ImageDatatype.Float);
-            _texture.Filter = Texture2DFilter.NearestClampToEdge;
+            _texture.Sampler = Texture2DSampler.NearestClampToEdge;
             
             ///////////////////////////////////////////////////////////////////
 
@@ -178,8 +178,8 @@ namespace OpenGlobe.Terrain
             {
                 Update(sceneState);
 
-                GrassTexture.Filter = Texture2DFilter.LinearRepeat;
-                StoneTexture.Filter = Texture2DFilter.LinearRepeat;
+                GrassTexture.Sampler = Texture2DSampler.LinearRepeat;
+                StoneTexture.Sampler = Texture2DSampler.LinearRepeat;
 
                 context.TextureUnits[0].Texture2DRectangle = _texture;
                 context.TextureUnits[6].Texture2D = ColorMapTexture;

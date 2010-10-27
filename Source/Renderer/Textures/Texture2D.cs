@@ -106,7 +106,7 @@ namespace OpenGlobe.Renderer
             int rowAlignment);
 
         public abstract Texture2DDescription Description { get; }
-        public abstract Texture2DFilter Filter { get; set; }
+        public abstract Texture2DSampler Sampler { get; set; }
 
         public virtual void Save(string filename)
         {

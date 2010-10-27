@@ -35,7 +35,7 @@ namespace OpenGlobe.Renderer
         [Test]
         public void Texture2DFilter()
         {
-            Texture2DFilter filter = new Texture2DFilter(
+            Texture2DSampler filter = new Texture2DSampler(
                 TextureMinificationFilter.Linear,
                 TextureMagnificationFilter.Nearest,
                 TextureWrap.MirroredRepeat,
@@ -48,10 +48,10 @@ namespace OpenGlobe.Renderer
             Assert.AreEqual(TextureWrap.Repeat, filter.WrapT);
             Assert.AreEqual(2, filter.MaximumAnisotropic);
 
-            Texture2DFilter filter2 = OpenGlobe.Renderer.Texture2DFilter.LinearClampToEdge;
+            Texture2DSampler filter2 = OpenGlobe.Renderer.Texture2DSampler.LinearClampToEdge;
             Assert.AreNotEqual(filter, filter2);
 
-            Texture2DFilter filter3 = OpenGlobe.Renderer.Texture2DFilter.LinearClampToEdge;
+            Texture2DSampler filter3 = OpenGlobe.Renderer.Texture2DSampler.LinearClampToEdge;
             Assert.AreEqual(filter2, filter3);
         }
 
@@ -281,8 +281,8 @@ namespace OpenGlobe.Renderer
 
             Texture2DDescription description = new Texture2DDescription(1, 1, TextureFormat.RedGreenBlueAlpha8, false);
             Texture2D texture = Device.CreateTexture2D(description);
-            texture.Filter = OpenGlobe.Renderer.Texture2DFilter.LinearRepeat;
-            Assert.AreEqual(OpenGlobe.Renderer.Texture2DFilter.LinearRepeat, texture.Filter);
+            texture.Sampler = OpenGlobe.Renderer.Texture2DSampler.LinearRepeat;
+            Assert.AreEqual(OpenGlobe.Renderer.Texture2DSampler.LinearRepeat, texture.Sampler);
 
             window.Context.TextureUnits[0].Texture2D = texture;
             Assert.AreEqual(texture, window.Context.TextureUnits[0].Texture2D);
@@ -290,13 +290,13 @@ namespace OpenGlobe.Renderer
             //
             // Attach same texture with different filter
             //
-            Texture2DFilter filter2 = new Texture2DFilter(
+            Texture2DSampler filter2 = new Texture2DSampler(
                 TextureMinificationFilter.Nearest,
                 TextureMagnificationFilter.Nearest,
                 TextureWrap.ClampToEdge,
                 TextureWrap.ClampToEdge,
                 2);
-            texture.Filter = filter2;
+            texture.Sampler = filter2;
 
             window.Context.TextureUnits[0].Texture2D = texture;
             Assert.AreEqual(texture, window.Context.TextureUnits[0].Texture2D);

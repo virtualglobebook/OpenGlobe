@@ -38,7 +38,7 @@ namespace OpenGlobe.Scene.Terrain
                 _clipmapLevels[i] = new Level();
                 _clipmapLevels[i].Terrain = terrainLevel;
                 _clipmapLevels[i].TerrainTexture = Device.CreateTexture2DRectangle(new Texture2DDescription(_clipmapPosts, _clipmapPosts, TextureFormat.Red32f));
-                _clipmapLevels[i].TerrainTexture.Filter = Texture2DFilter.LinearClampToEdge;
+                _clipmapLevels[i].TerrainTexture.Sampler = Texture2DSampler.LinearClampToEdge;
 
                 // Aim for roughly one imagery texel per geometry texel.
                 // Find the first imagery level that meets our resolution needs.
@@ -59,7 +59,7 @@ namespace OpenGlobe.Scene.Terrain
                 _clipmapLevels[i].ImageryWidth = (int)Math.Ceiling(_clipmapPosts * terrainLevel.PostDeltaLongitude / imageryLevel.PostDeltaLongitude);
                 _clipmapLevels[i].ImageryHeight = (int)Math.Ceiling(_clipmapPosts * terrainLevel.PostDeltaLatitude / imageryLevel.PostDeltaLatitude);
                 _clipmapLevels[i].ImageryTexture = Device.CreateTexture2DRectangle(new Texture2DDescription(_clipmapLevels[i].ImageryWidth, _clipmapLevels[i].ImageryHeight, TextureFormat.RedGreenBlue8, false));
-                _clipmapLevels[i].ImageryTexture.Filter = Texture2DFilter.LinearClampToEdge;
+                _clipmapLevels[i].ImageryTexture.Sampler = Texture2DSampler.LinearClampToEdge;
             }
 
             _shaderProgram = Device.CreateShaderProgram(

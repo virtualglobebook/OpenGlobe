@@ -35,37 +35,37 @@ namespace OpenGlobe.Renderer
         MirroredRepeat
     }
 
-    public struct Texture2DFilter : IEquatable<Texture2DFilter>
+    public struct Texture2DSampler : IEquatable<Texture2DSampler>
     {
-        public static readonly Texture2DFilter NearestClampToEdge =
-            new Texture2DFilter(
+        public static readonly Texture2DSampler NearestClampToEdge =
+            new Texture2DSampler(
                 TextureMinificationFilter.Nearest,
                 TextureMagnificationFilter.Nearest,
                 TextureWrap.ClampToEdge,
                 TextureWrap.ClampToEdge);
 
-        public static readonly Texture2DFilter LinearClampToEdge =
-            new Texture2DFilter(
+        public static readonly Texture2DSampler LinearClampToEdge =
+            new Texture2DSampler(
                 TextureMinificationFilter.Linear,
                 TextureMagnificationFilter.Linear,
                 TextureWrap.ClampToEdge,
                 TextureWrap.ClampToEdge);
 
-        public static readonly Texture2DFilter NearestRepeat =
-            new Texture2DFilter(
+        public static readonly Texture2DSampler NearestRepeat =
+            new Texture2DSampler(
                 TextureMinificationFilter.Nearest,
                 TextureMagnificationFilter.Nearest,
                 TextureWrap.Repeat,
                 TextureWrap.Repeat);
 
-        public static readonly Texture2DFilter LinearRepeat =
-            new Texture2DFilter(
+        public static readonly Texture2DSampler LinearRepeat =
+            new Texture2DSampler(
                 TextureMinificationFilter.Linear,
                 TextureMagnificationFilter.Linear,
                 TextureWrap.Repeat,
                 TextureWrap.Repeat);
 
-        public Texture2DFilter(
+        public Texture2DSampler(
             TextureMinificationFilter minificationFilter,
             TextureMagnificationFilter magnificationFilter,
             TextureWrap wrapS,
@@ -78,7 +78,7 @@ namespace OpenGlobe.Renderer
             _maximumAnisotropic = 1;
         }
 
-        public Texture2DFilter(
+        public Texture2DSampler(
             TextureMinificationFilter minificationFilter,
             TextureMagnificationFilter magnificationFilter,
             TextureWrap wrapS,
@@ -117,12 +117,12 @@ namespace OpenGlobe.Renderer
             get { return _maximumAnisotropic; }
         }
 
-        public static bool operator ==(Texture2DFilter left, Texture2DFilter right)
+        public static bool operator ==(Texture2DSampler left, Texture2DSampler right)
         {
             return left.Equals(right);
         }
 
-        public static bool operator !=(Texture2DFilter left, Texture2DFilter right)
+        public static bool operator !=(Texture2DSampler left, Texture2DSampler right)
         {
             return !left.Equals(right);
         }
@@ -145,15 +145,15 @@ namespace OpenGlobe.Renderer
 
         public override bool Equals(object obj)
         {
-            if (!(obj is Texture2DFilter))
+            if (!(obj is Texture2DSampler))
                 return false;
 
-            return this.Equals((Texture2DFilter)obj);
+            return this.Equals((Texture2DSampler)obj);
         }
 
         #region IEquatable<BlittableRGBA> Members
 
-        public bool Equals(Texture2DFilter other)
+        public bool Equals(Texture2DSampler other)
         {
             return
                 (_minificationFilter == other._minificationFilter) &&

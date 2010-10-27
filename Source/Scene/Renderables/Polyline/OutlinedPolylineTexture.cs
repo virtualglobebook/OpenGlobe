@@ -125,7 +125,7 @@ namespace OpenGlobe.Scene
                 // TODO:  Why does only Float or HalfFloat work here?
                 _texture = Device.CreateTexture2D(new Texture2DDescription(textureWidth, 1, TextureFormat.RedGreen8));
                 _texture.CopyFromBuffer(pixelBuffer, ImageFormat.RedGreen, ImageDatatype.Float);
-                _texture.Filter = Texture2DFilter.LinearClampToEdge;
+                _texture.Sampler = Texture2DSampler.LinearClampToEdge;
             }
         }
 
