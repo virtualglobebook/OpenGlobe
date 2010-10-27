@@ -49,7 +49,7 @@
     <Compile Include="SubdivisionSphere2.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\..\..\ThirdParty\OpenTK.1.0\Source\OpenTK\OpenTK.dll.config">
+    <None Include="..\..\..\..\ThirdParty\OpenTK.1.0\Binaries\OpenTK\Release\OpenTK.dll.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
