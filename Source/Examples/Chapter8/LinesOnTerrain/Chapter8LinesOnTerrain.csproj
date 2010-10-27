@@ -49,7 +49,7 @@
     <Compile Include="LinesOnTerrain.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\..\..\ThirdParty\OpenTK.1.0\Binaries\OpenTK\Release\OpenTK.dll.config">
+    <None Include="..\..\..\..\ThirdParty\OpenTKGL4\Binaries\OpenTK\Release\OpenTK.dll.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

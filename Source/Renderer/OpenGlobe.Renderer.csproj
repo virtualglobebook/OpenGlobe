@@ -35,7 +35,7 @@
   <ItemGroup>
     <Reference Include="OpenTK, Version=0.9.9.2, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\ThirdParty\OpenTK.1.0\Binaries\OpenTK\Release\OpenTK.dll</HintPath>
+      <HintPath>..\..\ThirdParty\OpenTKGL4\Binaries\OpenTK\Release\OpenTK.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Drawing" />
