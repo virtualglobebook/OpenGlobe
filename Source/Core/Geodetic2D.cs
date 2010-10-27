@@ -22,7 +22,7 @@ namespace OpenGlobe.Core
         public Geodetic2D(Geodetic3D geodetic3D)
         {
             _longitude = geodetic3D.Longitude;
-            _latitude = geodetic3D.Longitude;
+            _latitude = geodetic3D.Latitude;
         }
 
         public double Longitude
