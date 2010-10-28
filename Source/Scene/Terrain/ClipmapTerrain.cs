@@ -125,6 +125,18 @@ namespace OpenGlobe.Scene.Terrain
 
         public void Render(Context context, SceneState sceneState)
         {
+            // Scale the camera eye and target positions to render to the scaled ellipsoid instead of the
+            // true WGS84 ellipsoid, without affecting the view.  This avoids some precision problems.
+            Vector3D previousTarget = sceneState.Camera.Target;
+            Vector3D previousEye = sceneState.Camera.Eye;
+            double previousNearPlane = sceneState.Camera.PerspectiveNearPlaneDistance;
+            double previousFarPlane = sceneState.Camera.PerspectiveFarPlaneDistance;
+
+            sceneState.Camera.Target /= Ellipsoid.Wgs84.MaximumRadius;
+            sceneState.Camera.Eye /= Ellipsoid.Wgs84.MaximumRadius;
+            sceneState.Camera.PerspectiveNearPlaneDistance /= Ellipsoid.Wgs84.MaximumRadius;
+            sceneState.Camera.PerspectiveFarPlaneDistance /= Ellipsoid.Wgs84.MaximumRadius;
+
             Geodetic2D center = Ellipsoid.ScaledWgs84.ToGeodetic2D(sceneState.Camera.Target);
             double centerLongitude = Trig.ToDegrees(center.Longitude);
             double centerLatitude = Trig.ToDegrees(center.Latitude);
@@ -216,6 +228,11 @@ namespace OpenGlobe.Scene.Terrain
 
                 rendered = RenderLevel(thisLevel, coarserLevel, !rendered, context, sceneState);
             }
+
+            sceneState.Camera.Target = previousTarget;
+            sceneState.Camera.Eye = previousEye;
+            sceneState.Camera.PerspectiveNearPlaneDistance = previousNearPlane;
+            sceneState.Camera.PerspectiveFarPlaneDistance = previousFarPlane;
         }
 
         private bool RenderLevel(Level level, Level coarserLevel, bool fillRing, Context context, SceneState sceneState)

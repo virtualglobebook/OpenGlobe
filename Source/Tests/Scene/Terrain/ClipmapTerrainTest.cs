@@ -40,18 +40,23 @@ namespace OpenGlobe.Tests.Scene.Terrain
 
             ClearState clearState = new ClearState();
 
-            Ellipsoid ellipsoid = Ellipsoid.ScaledWgs84;
+            Ellipsoid ellipsoid = Ellipsoid.Wgs84;
             sceneState.Camera.PerspectiveNearPlaneDistance = 0.0001 * ellipsoid.MaximumRadius;
             sceneState.Camera.PerspectiveFarPlaneDistance = 20.0 * ellipsoid.MaximumRadius;
             sceneState.SunPosition = new Vector3D(200000, 300000, 200000);
 
             CameraLookAtPoint camera = new CameraLookAtPoint(sceneState.Camera, window, ellipsoid);
-            camera.ViewPoint(ellipsoid, new Geodetic3D(Trig.ToRadians(-119.5326056), Trig.ToRadians(37.74451389), 2700.0 / Ellipsoid.Wgs84.MaximumRadius));
+            camera.ViewPoint(ellipsoid, new Geodetic3D(Trig.ToRadians(-119.5326056), Trig.ToRadians(37.74451389), 2700.0));
             camera.ZoomRateRangeAdjustment = 0.0;
             //camera.CenterPoint = ellipsoid.ToVector3D();
             camera.Azimuth = 0.0;
             camera.Elevation = Trig.ToRadians(30.0);
-            camera.Range = 1000.0 / Ellipsoid.Wgs84.MaximumRadius;
+            camera.Range = 1000.0;
+
+            RayCastedGlobe globe = new RayCastedGlobe(window.Context);
+            globe.Shape = ellipsoid;
+            Bitmap bitmap = new Bitmap("NE2_50M_SR_W_4096.jpg");
+            globe.Texture = Device.CreateTexture2D(bitmap, TextureFormat.RedGreenBlue8, false);
 
             //camera.Dispose();
             //CameraFly fly = new CameraFly(sceneState.Camera, window);
@@ -76,6 +81,7 @@ namespace OpenGlobe.Tests.Scene.Terrain
                 Context context = window.Context;
                 context.Clear(clearState);
                 clipmap.Render(context, sceneState);
+                globe.Render(context, sceneState);
             };
 
             window.Run(30.0);
