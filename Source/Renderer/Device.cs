@@ -435,14 +435,14 @@ namespace OpenGlobe.Renderer
             TextureMagnificationFilter magnificationFilter,
             TextureWrap wrapS,
             TextureWrap wrapT,
-            float maximumAnisotropic)
+            float maximumAnistropy)
         {
             return new TextureSamplerGL3x(
                 minificationFilter,
                 magnificationFilter,
                 wrapS,
                 wrapT,
-                maximumAnisotropic);
+                maximumAnistropy);
         }
 
         public static TextureSamplers TextureSamplers

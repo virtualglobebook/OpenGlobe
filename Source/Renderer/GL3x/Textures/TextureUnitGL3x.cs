@@ -183,7 +183,7 @@ namespace OpenGlobe.Renderer.GL3x
                     if (_textureSampler.MinificationFilter != TextureMinificationFilter.Linear &&
                         _textureSampler.MinificationFilter != TextureMinificationFilter.Nearest)
                     {
-                        throw new InvalidOperationException("The texture sample is incompatible with the rectangle texture bound to the same texture unit.  Rectangle textures only support linear and nearest minification filters.");
+                        throw new InvalidOperationException("The texture sampler is incompatible with the rectangle texture bound to the same texture unit.  Rectangle textures only support linear and nearest minification filters.");
                     }
 
                     if (_textureSampler.WrapS == TextureWrap.Repeat ||
@@ -191,7 +191,7 @@ namespace OpenGlobe.Renderer.GL3x
                         _textureSampler.WrapT == TextureWrap.Repeat ||
                         _textureSampler.WrapT == TextureWrap.MirroredRepeat)
                     {
-                        throw new InvalidOperationException("The texture sample is incompatible with the rectangle texture bound to the same texture unit.  Rectangle textures do not support repeat or mirrored repeat wrap modes.");
+                        throw new InvalidOperationException("The texture sampler is incompatible with the rectangle texture bound to the same texture unit.  Rectangle textures do not support repeat or mirrored repeat wrap modes.");
                     }
                 }
             }

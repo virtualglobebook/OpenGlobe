@@ -201,8 +201,9 @@ namespace OpenGlobe.Renderer
             Color color = Color.FromArgb(0, 1, 2, 3);
             Bitmap bitmap = new Bitmap(1, 1);
             bitmap.SetPixel(0, 0, color);
-
-            WritePixelBuffer pixelBuffer = Device.CreateWritePixelBuffer(PixelBufferHint.Stream, 4);
+            
+            WritePixelBuffer pixelBuffer = Device.CreateWritePixelBuffer(PixelBufferHint.Stream,
+                BitmapAlgorithms.SizeOfPixelsInBytes(bitmap));
             pixelBuffer.CopyFromBitmap(bitmap);
             
             //

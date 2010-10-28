@@ -39,7 +39,6 @@ namespace OpenGlobe.Renderer
                     TextureMagnificationFilter.Linear,
                     TextureWrap.Repeat,
                     TextureWrap.Repeat);
-
 	    }
 
         public TextureSampler NearestClampToEdge

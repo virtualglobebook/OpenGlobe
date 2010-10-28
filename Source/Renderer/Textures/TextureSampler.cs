@@ -18,13 +18,13 @@ namespace OpenGlobe.Renderer
             TextureMagnificationFilter magnificationFilter,
             TextureWrap wrapS,
             TextureWrap wrapT,
-            float maximumAnisotropic)
+            float maximumAnistropy)
         {
             _minificationFilter = minificationFilter;
             _magnificationFilter = magnificationFilter;
             _wrapS = wrapS;
             _wrapT = wrapT;
-            _maximumAnisotropic = maximumAnisotropic;
+            _maximumAnistropy = maximumAnistropy;
         }
 
         public TextureMinificationFilter MinificationFilter
@@ -49,13 +49,13 @@ namespace OpenGlobe.Renderer
 
         public float MaximumAnisotropic
         {
-            get { return _maximumAnisotropic; }
+            get { return _maximumAnistropy; }
         }
 
         private readonly TextureMinificationFilter _minificationFilter;
         private readonly TextureMagnificationFilter _magnificationFilter;
         private readonly TextureWrap _wrapS;
         private readonly TextureWrap _wrapT;
-        private readonly float _maximumAnisotropic;
+        private readonly float _maximumAnistropy;
     }
 }

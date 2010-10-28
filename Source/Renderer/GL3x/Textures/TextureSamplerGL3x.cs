@@ -18,13 +18,13 @@ namespace OpenGlobe.Renderer.GL3x
             TextureMagnificationFilter magnificationFilter,
             TextureWrap wrapS,
             TextureWrap wrapT,
-            float maximumAnisotropic)
+            float maximumAnistropy)
             : base(
                 minificationFilter, 
                 magnificationFilter, 
                 wrapS, 
                 wrapT, 
-                maximumAnisotropic)
+                maximumAnistropy)
         {
             _handle = new SamplerHandleGL3x();
 
@@ -40,11 +40,11 @@ namespace OpenGlobe.Renderer.GL3x
 
             if (Device.Extensions.AnisotropicFiltering)
             {
-                GL.SamplerParameter(_handle.Value, (ArbSamplerObjects)All.TextureMaxAnisotropyExt, maximumAnisotropic);
+                GL.SamplerParameter(_handle.Value, (ArbSamplerObjects)All.TextureMaxAnisotropyExt, maximumAnistropy);
             }
             else
             {
-                if (maximumAnisotropic != 1)
+                if (maximumAnistropy != 1)
                 {
                     throw new InsufficientVideoCardException("Anisotropic filtering is not supported.  The extension GL_EXT_texture_filter_anisotropic was not found.");
                 }
