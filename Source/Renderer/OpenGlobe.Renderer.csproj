@@ -141,6 +141,7 @@
     <Compile Include="Synchronization\Fence.cs" />
     <Compile Include="Textures\ImageDatatype.cs" />
     <Compile Include="Textures\ImageFormat.cs" />
+    <Compile Include="Textures\TextureFormat.cs" />
     <Compile Include="Textures\TextureSamplers.cs" />
     <Compile Include="Textures\TextureMagnificationFilter.cs" />
     <Compile Include="Textures\TextureMinificationFilter.cs" />

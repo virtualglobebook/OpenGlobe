@@ -41,12 +41,12 @@ namespace OpenGlobe.Renderer.GL3x
             WritePixelBufferGL3x.UnBind();
             BindToLastTextureUnit();
             GL.TexImage2D(_target, 0,
-                TypeConverterGL3x.To(description.Format),
+                TypeConverterGL3x.To(description.TextureFormat),
                 description.Width,
                 description.Height,
                 0,
-                TypeConverterGL3x.TextureToPixelFormat(description.Format),   
-                TypeConverterGL3x.TextureToPixelType(description.Format),
+                TypeConverterGL3x.TextureToPixelFormat(description.TextureFormat),   
+                TypeConverterGL3x.TextureToPixelType(description.TextureFormat),
                 new IntPtr());
 
             //

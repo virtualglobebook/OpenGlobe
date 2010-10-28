@@ -22,7 +22,7 @@ namespace OpenGlobe.Renderer
             Texture2DDescription description = new Texture2DDescription(512, 256, TextureFormat.RedGreenBlueAlpha8, true);
             Assert.AreEqual(512, description.Width);
             Assert.AreEqual(256, description.Height);
-            Assert.AreEqual(TextureFormat.RedGreenBlueAlpha8, description.Format);
+            Assert.AreEqual(TextureFormat.RedGreenBlueAlpha8, description.TextureFormat);
             Assert.IsTrue(description.GenerateMipmaps);
 
             Texture2DDescription description2 = new Texture2DDescription(512, 256, TextureFormat.RedGreenBlueAlpha8, true);
