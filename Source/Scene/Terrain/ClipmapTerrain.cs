@@ -283,14 +283,14 @@ namespace OpenGlobe.Scene.Terrain
             {
                 pixelBuffer.CopyFromSystemMemory(floatPosts);
                 level.TerrainTexture.CopyFromBuffer(pixelBuffer, ImageFormat.Red, ImageDatatype.Float);
-                context.TextureUnits[0].Texture2DRectangle = level.TerrainTexture;
+                context.TextureUnits[0].Texture = level.TerrainTexture;
                 context.TextureUnits[0].TextureSampler = Device.TextureSamplers.LinearClampToEdge;
-                context.TextureUnits[1].Texture2DRectangle = coarserLevel.TerrainTexture;
+                context.TextureUnits[1].Texture = coarserLevel.TerrainTexture;
                 context.TextureUnits[1].TextureSampler = Device.TextureSamplers.LinearClampToEdge;
 
                 imageryPixelBuffer.CopyFromSystemMemory(imagery);
                 level.ImageryTexture.CopyFromBuffer(imageryPixelBuffer, ImageFormat.BlueGreenRed, ImageDatatype.UnsignedByte);
-                context.TextureUnits[2].Texture2DRectangle = level.ImageryTexture;
+                context.TextureUnits[2].Texture = level.ImageryTexture;
                 context.TextureUnits[2].TextureSampler = Device.TextureSamplers.LinearClampToEdge;
 
                 DrawBlock(_fieldBlock, level, coarserLevel, west, south, west, south, context, sceneState);

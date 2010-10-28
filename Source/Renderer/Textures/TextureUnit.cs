@@ -11,8 +11,7 @@ namespace OpenGlobe.Renderer
 {
     public abstract class TextureUnit
     {
-        public abstract Texture2D Texture2D { get; set; }
-        public abstract Texture2D Texture2DRectangle { get; set; }
+        public abstract Texture2D Texture { get; set; }
         public abstract TextureSampler TextureSampler { get; set; }
     }
 }

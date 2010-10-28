@@ -80,7 +80,7 @@ namespace OpenGlobe.Scene
 
             if (_drawState.VertexArray != null)
             {
-                context.TextureUnits[0].Texture2D = Texture;
+                context.TextureUnits[0].Texture = Texture;
                 context.TextureUnits[0].TextureSampler = Device.TextureSamplers.LinearClampToEdge;
                 context.Draw(PrimitiveType.Points, _drawState, sceneState);
             }

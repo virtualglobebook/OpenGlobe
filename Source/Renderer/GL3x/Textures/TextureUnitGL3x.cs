@@ -25,54 +25,23 @@ namespace OpenGlobe.Renderer.GL3x
 
         #region TextureUnit Members
 
-        public override Texture2D Texture2D
+        public override Texture2D Texture
         {
-            get { return _texture2D; }
+            get { return _texture; }
 
             set 
             {
                 Texture2DGL3x texture = value as Texture2DGL3x;
 
-                if (texture.Target != TextureTarget.Texture2D)
-                {
-                    throw new ArgumentException("Incompatible texture.  Did you create the texture with Device.CreateTexture2D?");
-                }
-
-                if (_texture2D != texture)
+                if (_texture != texture)
                 {
                     if (_dirtyFlags == DirtyFlags.None)
                     {
                         _observer.NotifyDirty(this);
                     }
 
-                    _dirtyFlags |= DirtyFlags.Texture2D;
-                    _texture2D = texture;
-                }
-            }
-        }
-
-        public override Texture2D Texture2DRectangle
-        {
-            get { return _texture2DRectangle; }
-
-            set
-            {
-                Texture2DGL3x texture = value as Texture2DGL3x;
-
-                if (texture.Target != TextureTarget.TextureRectangle)
-                {
-                    throw new ArgumentException("Incompatible texture.  Did you create the texture with Device.CreateTexture2DRectangle?");
-                }
-
-                if (_texture2DRectangle != texture)
-                {
-                    if (_dirtyFlags == DirtyFlags.None)
-                    {
-                        _observer.NotifyDirty(this);
-                    }
-
-                    _dirtyFlags |= DirtyFlags.Texture2DRectangle;
-                    _texture2DRectangle = texture;
+                    _dirtyFlags |= DirtyFlags.Texture;
+                    _texture = texture;
                 }
             }
         }
@@ -109,7 +78,7 @@ namespace OpenGlobe.Renderer.GL3x
             // Texture2DGL3x, the texture unit could be dirty without
             // knowing it.
             //
-            if ((_texture2D != null) || (_texture2DRectangle != null))
+            if (_texture != null)
             {
                 _dirtyFlags = DirtyFlags.All;
             }
@@ -127,27 +96,16 @@ namespace OpenGlobe.Renderer.GL3x
 
 	            GL.ActiveTexture(_textureUnit);
 	
-	            if ((_dirtyFlags & DirtyFlags.Texture2D) == DirtyFlags.Texture2D)
+	            if ((_dirtyFlags & DirtyFlags.Texture) == DirtyFlags.Texture)
 	            {
-	                if (_texture2D != null)
+	                if (_texture != null)
 	                {
-	                    _texture2D.Bind();
+	                    _texture.Bind();
 	                }
 	                else
 	                {
 	                    Texture2DGL3x.UnBind(TextureTarget.Texture2D);
-	                }
-	            }
-	
-	            if ((_dirtyFlags & DirtyFlags.Texture2DRectangle) == DirtyFlags.Texture2DRectangle)
-	            {
-	                if (_texture2DRectangle != null)
-	                {
-	                    _texture2DRectangle.Bind();
-	                }
-	                else
-	                {
-	                    Texture2DGL3x.UnBind(TextureTarget.TextureRectangle);
+                        Texture2DGL3x.UnBind(TextureTarget.TextureRectangle);
 	                }
 	            }
 
@@ -171,14 +129,14 @@ namespace OpenGlobe.Renderer.GL3x
 
         private void Validate()
         {
-            if ((_texture2D != null) || (_texture2DRectangle != null))
+            if (_texture != null)
             {
                 if (_textureSampler == null)
                 {
                     throw new InvalidOperationException("A texture sampler must be assigned to a texture unit with one or more bound textures.");
                 }
 
-                if (_texture2DRectangle != null)
+                if (_texture.Target == TextureTarget.TextureRectangle)
                 {
                     if (_textureSampler.MinificationFilter != TextureMinificationFilter.Linear &&
                         _textureSampler.MinificationFilter != TextureMinificationFilter.Nearest)
@@ -201,17 +159,15 @@ namespace OpenGlobe.Renderer.GL3x
         private enum DirtyFlags
         {
             None = 0,
-            Texture2D = 1,
-            Texture2DRectangle = 2,
-            TextureSampler = 4,
-            All = Texture2D | Texture2DRectangle | TextureSampler
+            Texture = 1,
+            TextureSampler = 2,
+            All = Texture | TextureSampler
         }
 
         private readonly int _textureUnitIndex;
         private readonly OpenTKTextureUnit _textureUnit;
         private readonly ICleanableObserver _observer;
-        private Texture2DGL3x _texture2D;
-        private Texture2DGL3x _texture2DRectangle;
+        private Texture2DGL3x _texture;
         private TextureSamplerGL3x _textureSampler;
         private DirtyFlags _dirtyFlags;
     }

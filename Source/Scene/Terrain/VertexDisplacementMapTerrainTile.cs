@@ -177,28 +177,28 @@ namespace OpenGlobe.Terrain
             {
                 Update(sceneState);
 
-                context.TextureUnits[0].Texture2DRectangle = _texture;
+                context.TextureUnits[0].Texture = _texture;
                 context.TextureUnits[0].TextureSampler = Device.TextureSamplers.NearestClampToEdge;
 
-                context.TextureUnits[6].Texture2D = ColorMapTexture;
+                context.TextureUnits[6].Texture = ColorMapTexture;
                 context.TextureUnits[6].TextureSampler = Device.TextureSamplers.LinearClampToEdge;
 
-                context.TextureUnits[1].Texture2D = ColorRampHeightTexture;
+                context.TextureUnits[1].Texture = ColorRampHeightTexture;
                 context.TextureUnits[1].TextureSampler = Device.TextureSamplers.LinearClampToEdge;
 
-                context.TextureUnits[7].Texture2D = ColorRampSlopeTexture;
+                context.TextureUnits[7].Texture = ColorRampSlopeTexture;
                 context.TextureUnits[7].TextureSampler = Device.TextureSamplers.LinearClampToEdge;
 
-                context.TextureUnits[2].Texture2D = BlendRampTexture;
+                context.TextureUnits[2].Texture = BlendRampTexture;
                 context.TextureUnits[2].TextureSampler = Device.TextureSamplers.LinearClampToEdge;
 
-                context.TextureUnits[3].Texture2D = GrassTexture;
+                context.TextureUnits[3].Texture = GrassTexture;
                 context.TextureUnits[3].TextureSampler = Device.TextureSamplers.LinearRepeat;
 
-                context.TextureUnits[4].Texture2D = StoneTexture;
+                context.TextureUnits[4].Texture = StoneTexture;
                 context.TextureUnits[4].TextureSampler = Device.TextureSamplers.LinearRepeat;
 
-                context.TextureUnits[5].Texture2D = BlendMaskTexture;
+                context.TextureUnits[5].Texture = BlendMaskTexture;
                 context.TextureUnits[5].TextureSampler = Device.TextureSamplers.LinearClampToEdge;
 
                 if (ShowTerrain || ShowSilhouette)

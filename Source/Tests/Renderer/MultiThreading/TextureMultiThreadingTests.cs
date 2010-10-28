@@ -75,9 +75,9 @@ namespace OpenGlobe.Renderer.Multithreading
             ShaderProgram sp = Device.CreateShaderProgram(ShaderSources.PassThroughVertexShader(), ShaderSources.MultitextureFragmentShader());
             VertexArray va = TestUtility.CreateVertexArray(window.Context, sp.VertexAttributes["position"].Location);
 
-            window.Context.TextureUnits[0].Texture2D = factory0.Texture;
+            window.Context.TextureUnits[0].Texture = factory0.Texture;
             window.Context.TextureUnits[0].TextureSampler = Device.TextureSamplers.NearestClampToEdge;
-            window.Context.TextureUnits[1].Texture2D = factory1.Texture;
+            window.Context.TextureUnits[1].Texture = factory1.Texture;
             window.Context.TextureUnits[1].TextureSampler = Device.TextureSamplers.NearestClampToEdge;
             window.Context.FrameBuffer = frameBuffer;
             window.Context.Draw(PrimitiveType.Points, 0, 1, new DrawState(new RenderState(), sp, va), new SceneState());
@@ -126,9 +126,9 @@ namespace OpenGlobe.Renderer.Multithreading
             ShaderProgram sp = Device.CreateShaderProgram(ShaderSources.PassThroughVertexShader(), ShaderSources.MultitextureFragmentShader());
             VertexArray va = TestUtility.CreateVertexArray(window.Context, sp.VertexAttributes["position"].Location);
 
-            window.Context.TextureUnits[0].Texture2D = factory0.Texture;
+            window.Context.TextureUnits[0].Texture = factory0.Texture;
             window.Context.TextureUnits[0].TextureSampler = Device.TextureSamplers.NearestClampToEdge;
-            window.Context.TextureUnits[1].Texture2D = factory1.Texture;
+            window.Context.TextureUnits[1].Texture = factory1.Texture;
             window.Context.TextureUnits[1].TextureSampler = Device.TextureSamplers.NearestClampToEdge;
             window.Context.FrameBuffer = frameBuffer;
             window.Context.Draw(PrimitiveType.Points, 0, 1, new DrawState(new RenderState(), sp, va), new SceneState());

@@ -164,7 +164,7 @@ namespace OpenGlobe.Renderer
 
             ///////////////////////////////////////////////////////////////////
 
-            window.Context.TextureUnits[0].Texture2D = texture;
+            window.Context.TextureUnits[0].Texture = texture;
             window.Context.TextureUnits[0].TextureSampler = Device.TextureSamplers.NearestClampToEdge;
             window.Context.FrameBuffer = frameBuffer;
             window.Context.Draw(PrimitiveType.Points, 0, 1, new DrawState(new RenderState(), sp, va), new SceneState());
@@ -242,9 +242,9 @@ namespace OpenGlobe.Renderer
 
             ///////////////////////////////////////////////////////////////////
 
-            window.Context.TextureUnits[0].Texture2D = texture0;
+            window.Context.TextureUnits[0].Texture = texture0;
             window.Context.TextureUnits[0].TextureSampler = Device.TextureSamplers.NearestClampToEdge;
-            window.Context.TextureUnits[1].Texture2D = texture1;
+            window.Context.TextureUnits[1].Texture = texture1;
             window.Context.TextureUnits[1].TextureSampler = Device.TextureSamplers.NearestClampToEdge;
             window.Context.FrameBuffer = frameBuffer;
             window.Context.Draw(PrimitiveType.Points, 0, 1, new DrawState(new RenderState(), sp, va), new SceneState());

@@ -67,7 +67,7 @@ namespace OpenGlobe.Scene
             if (_textured.Value)
             {
                 Verify.ThrowInvalidOperationIfNull(Texture, "Texture");
-                context.TextureUnits[0].Texture2D = Texture;
+                context.TextureUnits[0].Texture = Texture;
                 context.TextureUnits[0].TextureSampler = Device.TextureSamplers.LinearClampToEdge;
             }
 

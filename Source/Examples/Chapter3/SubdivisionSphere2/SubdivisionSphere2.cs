@@ -112,7 +112,7 @@ namespace OpenGlobe.Examples.Chapter3
         {
             Context context = _window.Context;
             context.Clear(_clearState);
-            context.TextureUnits[0].Texture2D = _texture;
+            context.TextureUnits[0].Texture = _texture;
             context.TextureUnits[0].TextureSampler = Device.TextureSamplers.LinearClampToEdge;
             context.Draw(_primitiveType, _drawState, _sceneState);
         }

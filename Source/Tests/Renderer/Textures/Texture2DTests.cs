@@ -264,8 +264,7 @@ namespace OpenGlobe.Renderer
             int count = 0;
             foreach (TextureUnit unit in window.Context.TextureUnits)
             {
-                Assert.IsNull(unit.Texture2D);
-                Assert.IsNull(unit.Texture2DRectangle);
+                Assert.IsNull(unit.Texture);
                 Assert.IsNull(unit.TextureSampler);
                 ++count;
             }
@@ -282,10 +281,10 @@ namespace OpenGlobe.Renderer
                 Texture2DDescription description = new Texture2DDescription(1, 1, TextureFormat.RedGreenBlueAlpha8, false);
                 Texture2D texture = Device.CreateTexture2D(description);
 
-                window.Context.TextureUnits[0].Texture2D = texture;
+                window.Context.TextureUnits[0].Texture = texture;
                 window.Context.TextureUnits[0].TextureSampler = Device.TextureSamplers.LinearRepeat;
 
-                Assert.AreEqual(texture, window.Context.TextureUnits[0].Texture2D);
+                Assert.AreEqual(texture, window.Context.TextureUnits[0].Texture);
                 Assert.AreEqual(Device.TextureSamplers.LinearRepeat, window.Context.TextureUnits[0].TextureSampler);
 
                 //
@@ -298,9 +297,9 @@ namespace OpenGlobe.Renderer
                     TextureWrap.ClampToEdge,
                     2);
 
-                window.Context.TextureUnits[0].Texture2D = texture;
+                window.Context.TextureUnits[0].Texture = texture;
                 window.Context.TextureUnits[0].TextureSampler = sampler;
-                Assert.AreEqual(texture, window.Context.TextureUnits[0].Texture2D);
+                Assert.AreEqual(texture, window.Context.TextureUnits[0].Texture);
                 Assert.AreEqual(sampler, window.Context.TextureUnits[0].TextureSampler);
 
                 sampler.Dispose();

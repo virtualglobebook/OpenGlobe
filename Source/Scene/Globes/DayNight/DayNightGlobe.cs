@@ -84,9 +84,9 @@ namespace OpenGlobe.Scene
                 Vector3S cameraEyeSquared = eye.MultiplyComponents(eye).ToVector3S();
                 _cameraEyeSquaredSP.Value = cameraEyeSquared;
 
-                context.TextureUnits[0].Texture2D = DayTexture;
+                context.TextureUnits[0].Texture = DayTexture;
                 context.TextureUnits[0].TextureSampler = Device.TextureSamplers.LinearClampToEdge;
-                context.TextureUnits[1].Texture2D = NightTexture;
+                context.TextureUnits[1].Texture = NightTexture;
                 context.TextureUnits[1].TextureSampler = Device.TextureSamplers.LinearClampToEdge;
                 context.Draw(_primitiveType, _drawState, sceneState);
             }

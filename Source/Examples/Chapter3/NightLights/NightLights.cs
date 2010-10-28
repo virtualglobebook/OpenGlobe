@@ -156,9 +156,9 @@ namespace OpenGlobe.Examples.Chapter3
         {
             Context context = _window.Context;
             context.Clear(_clearState);
-            context.TextureUnits[0].Texture2D = _dayTexture;
+            context.TextureUnits[0].Texture = _dayTexture;
             context.TextureUnits[0].TextureSampler = Device.TextureSamplers.LinearClampToEdge;
-            context.TextureUnits[1].Texture2D = _nightTexture;
+            context.TextureUnits[1].Texture = _nightTexture;
             context.TextureUnits[1].TextureSampler = Device.TextureSamplers.LinearClampToEdge;
             context.Draw(_primitiveType, _drawState, _sceneState);
         }
