@@ -18,8 +18,7 @@ namespace OpenGlobe.Renderer.GL3x
     {
         public TextureUnitsGL3x()
         {
-            int textureUnits;
-            GL.GetInteger(GetPName.MaxCombinedTextureImageUnits, out textureUnits);
+            int textureUnits = Device.NumberOfTextureUnits;
 
             _textureUnits = new TextureUnit[textureUnits];
             for (int i = 0; i < textureUnits; ++i)

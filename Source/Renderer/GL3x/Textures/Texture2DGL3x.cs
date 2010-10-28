@@ -27,13 +27,10 @@ namespace OpenGlobe.Renderer.GL3x
                 throw new ArgumentException("description.GenerateMipmaps cannot be true for texture rectangles.", "description");
             }
 
-            int textureUnits;
-            GL.GetInteger(GetPName.MaxCombinedTextureImageUnits, out textureUnits);
-
             _handle = new TextureHandleGL3x();
             _target = textureTarget;
             _description = description;
-            _lastTextureUnit = OpenTKTextureUnit.Texture0 + (textureUnits - 1);
+            _lastTextureUnit = OpenTKTextureUnit.Texture0 + (Device.NumberOfTextureUnits - 1);
 
             //
             // TexImage2D is just used to allocate the texture so a PBO can't be bound.

@@ -75,10 +75,6 @@ namespace OpenGlobe.Renderer
                 ///////////////////////////////////////////////////////////////
 
                 s_textureSamplers = new TextureSamplers();
-
-                ///////////////////////////////////////////////////////////////
-
-                GL.GetInteger(GetPName.MaxVertexAttribs, out s_maximumNumberOfVertexAttributes);
             }
         }
 
@@ -490,9 +486,30 @@ namespace OpenGlobe.Renderer
             get { return s_drawAutomaticUniformFactories; }
         }
 
-        internal static int MaximumNumberOfVertexAttributes
+        public static int MaximumNumberOfVertexAttributes
         {
-            get { return s_maximumNumberOfVertexAttributes; }
+            get 
+            {
+                if (s_maximumNumberOfVertexAttributes == 0)
+                {
+                    GL.GetInteger(GetPName.MaxVertexAttribs, out s_maximumNumberOfVertexAttributes);
+                }
+
+                return s_maximumNumberOfVertexAttributes; 
+            }
+        }
+
+        public static int NumberOfTextureUnits
+        {
+            get 
+            {
+                if (s_numberOfTextureUnits == 0)
+                {
+                    GL.GetInteger(GetPName.MaxCombinedTextureImageUnits, out s_numberOfTextureUnits);
+                }
+
+                return s_numberOfTextureUnits;
+            }
         }
 
         private static Extensions s_extensions;
@@ -502,5 +519,6 @@ namespace OpenGlobe.Renderer
         private static TextureSamplers s_textureSamplers;
 
         private static int s_maximumNumberOfVertexAttributes;
+        private static int s_numberOfTextureUnits;
     }
 }
