@@ -257,8 +257,8 @@ namespace OpenGlobe.Scene.Terrain
 
             byte[] imagery = level.Imagery.GetImage((int)imageryWestIndex, (int)imagerySouthIndex, imageryEastIndex, imageryNorthIndex);
 
-            using (WritePixelBuffer pixelBuffer = Device.CreateWritePixelBuffer(WritePixelBufferHint.StreamWrite, _clipmapPosts * _clipmapPosts * sizeof(float)))
-            using (WritePixelBuffer imageryPixelBuffer = Device.CreateWritePixelBuffer(WritePixelBufferHint.StreamWrite, imagery.Length))
+            using (WritePixelBuffer pixelBuffer = Device.CreateWritePixelBuffer(PixelBufferHint.Stream, _clipmapPosts * _clipmapPosts * sizeof(float)))
+            using (WritePixelBuffer imageryPixelBuffer = Device.CreateWritePixelBuffer(PixelBufferHint.Stream, imagery.Length))
             {
                 pixelBuffer.CopyFromSystemMemory(floatPosts);
                 level.TerrainTexture.CopyFromBuffer(pixelBuffer, ImageFormat.Red, ImageDatatype.Float);

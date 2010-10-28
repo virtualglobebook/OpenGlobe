@@ -46,7 +46,6 @@
     <Compile Include="BlittableRGBA.cs" />
     <Compile Include="Buffers\BufferHint.cs" />
     <Compile Include="Buffers\ReadPixelBufferHint.cs" />
-    <Compile Include="Buffers\WritePixelBufferHint.cs" />
     <Compile Include="ClearState.cs" />
     <Compile Include="Conversion.cs" />
     <Compile Include="DrawState.cs" />

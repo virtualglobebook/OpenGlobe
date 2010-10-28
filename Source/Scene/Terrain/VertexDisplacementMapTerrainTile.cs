@@ -48,7 +48,7 @@ namespace OpenGlobe.Terrain
             //
             // Upload height map as a one channel floating point texture
             //
-            WritePixelBuffer pixelBuffer = Device.CreateWritePixelBuffer(WritePixelBufferHint.StreamWrite,
+            WritePixelBuffer pixelBuffer = Device.CreateWritePixelBuffer(PixelBufferHint.Stream,
                 sizeof(float) * tile.Heights.Length);
             pixelBuffer.CopyFromSystemMemory(tile.Heights);
 

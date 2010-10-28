@@ -17,7 +17,7 @@ namespace OpenGlobe.Renderer.GL3x
 {
     internal class ReadPixelBufferGL3x : ReadPixelBuffer
     {
-        public ReadPixelBufferGL3x(ReadPixelBufferHint usageHint, int sizeInBytes)
+        public ReadPixelBufferGL3x(PixelBufferHint usageHint, int sizeInBytes)
         {
             _bufferObject = new PixelBufferGL3x(BufferTarget.PixelPackBuffer, ToBufferHint(usageHint), sizeInBytes);
             _usageHint = usageHint;
@@ -58,7 +58,7 @@ namespace OpenGlobe.Renderer.GL3x
             get { return _bufferObject.SizeInBytes; }
         }
 
-        public override ReadPixelBufferHint UsageHint
+        public override PixelBufferHint UsageHint
         {
             get { return _usageHint; }
         }
@@ -78,18 +78,18 @@ namespace OpenGlobe.Renderer.GL3x
 
         #endregion
 
-        static BufferHint ToBufferHint(ReadPixelBufferHint usageHint)
+        static BufferHint ToBufferHint(PixelBufferHint usageHint)
         {
             Debug.Assert(
-                (usageHint == ReadPixelBufferHint.StreamRead) ||
-                (usageHint == ReadPixelBufferHint.StaticRead) ||
-                (usageHint == ReadPixelBufferHint.DynamicRead));
+                (usageHint == PixelBufferHint.Stream) ||
+                (usageHint == PixelBufferHint.Static) ||
+                (usageHint == PixelBufferHint.Dynamic));
 
             return _bufferHints[(int)usageHint];
         }
 
         private PixelBufferGL3x _bufferObject;
-        private ReadPixelBufferHint _usageHint;
+        private PixelBufferHint _usageHint;
 
         private static readonly BufferHint[] _bufferHints = new[]
         {

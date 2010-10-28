@@ -17,7 +17,7 @@ namespace OpenGlobe.Renderer.GL3x
 {
     internal class WritePixelBufferGL3x : WritePixelBuffer
     {
-        public WritePixelBufferGL3x(WritePixelBufferHint usageHint, int sizeInBytes)
+        public WritePixelBufferGL3x(PixelBufferHint usageHint, int sizeInBytes)
         {
             _bufferObject = new PixelBufferGL3x(BufferTarget.PixelUnpackBuffer, ToBufferHint(usageHint), sizeInBytes);
             _usageHint = usageHint;
@@ -63,7 +63,7 @@ namespace OpenGlobe.Renderer.GL3x
             get { return _bufferObject.SizeInBytes; }
         }
 
-        public override WritePixelBufferHint UsageHint
+        public override PixelBufferHint UsageHint
         {
             get { return _usageHint; }
         }
@@ -83,18 +83,18 @@ namespace OpenGlobe.Renderer.GL3x
 
         #endregion
 
-        static BufferHint ToBufferHint(WritePixelBufferHint usageHint)
+        static BufferHint ToBufferHint(PixelBufferHint usageHint)
         {
             Debug.Assert(
-                (usageHint == WritePixelBufferHint.StreamWrite) ||
-                (usageHint == WritePixelBufferHint.StaticWrite) ||
-                (usageHint == WritePixelBufferHint.DynamicWrite));
+                (usageHint == PixelBufferHint.Stream) ||
+                (usageHint == PixelBufferHint.Static) ||
+                (usageHint == PixelBufferHint.Dynamic));
 
             return _bufferHints[(int)usageHint];
         }
 
         private PixelBufferGL3x _bufferObject;
-        private WritePixelBufferHint _usageHint;
+        private PixelBufferHint _usageHint;
 
         private static readonly BufferHint[] _bufferHints = new[]
         {

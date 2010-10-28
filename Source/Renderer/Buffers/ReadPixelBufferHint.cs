@@ -9,10 +9,10 @@
 
 namespace OpenGlobe.Renderer
 {
-    public enum ReadPixelBufferHint
+    public enum PixelBufferHint
     {
-        StreamRead,
-        StaticRead,
-        DynamicRead,
+        Stream,
+        Static,
+        Dynamic,
     }
 }

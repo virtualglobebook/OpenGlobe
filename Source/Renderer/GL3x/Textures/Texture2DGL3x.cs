@@ -123,7 +123,7 @@ namespace OpenGlobe.Renderer.GL3x
         {
             Debug.Assert((rowAlignment == 1) || (rowAlignment == 2) || (rowAlignment == 4) || (rowAlignment == 8));
 
-            ReadPixelBufferGL3x pixelBuffer = new ReadPixelBufferGL3x(ReadPixelBufferHint.StreamRead,
+            ReadPixelBufferGL3x pixelBuffer = new ReadPixelBufferGL3x(PixelBufferHint.Stream,
                 TextureUtility.RequiredSizeInBytes(_description.Width, _description.Height, format, dataType, rowAlignment));
 
             pixelBuffer.Bind();
