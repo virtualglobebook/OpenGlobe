@@ -44,7 +44,7 @@ namespace OpenGlobe
             BlittableRGBA[] pixels = new BlittableRGBA[] { rgba };
 
             int sizeInBytes = pixels.Length * SizeInBytes<BlittableRGBA>.Value;
-            using (WritePixelBuffer writePixelBuffer = Device.CreateWritePixelBuffer(WritePixelBufferHint.StreamDraw, sizeInBytes))
+            using (WritePixelBuffer writePixelBuffer = Device.CreateWritePixelBuffer(WritePixelBufferHint.StreamWrite, sizeInBytes))
             {
                 writePixelBuffer.CopyFromSystemMemory(pixels);
                 texture.CopyFromBuffer(writePixelBuffer, ImageFormat.RedGreenBlueAlpha, ImageDatatype.UnsignedByte);

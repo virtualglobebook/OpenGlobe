@@ -86,9 +86,9 @@ namespace OpenGlobe.Renderer.GL3x
         static BufferHint ToBufferHint(WritePixelBufferHint usageHint)
         {
             Debug.Assert(
-                (usageHint == WritePixelBufferHint.StreamDraw) ||
-                (usageHint == WritePixelBufferHint.StaticDraw) ||
-                (usageHint == WritePixelBufferHint.DynamicDraw));
+                (usageHint == WritePixelBufferHint.StreamWrite) ||
+                (usageHint == WritePixelBufferHint.StaticWrite) ||
+                (usageHint == WritePixelBufferHint.DynamicWrite));
 
             return _bufferHints[(int)usageHint];
         }

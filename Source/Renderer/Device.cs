@@ -361,7 +361,7 @@ namespace OpenGlobe.Renderer
 
         private static Texture2D CreateTexture2DFromBitmap(Bitmap bitmap, TextureFormat format, bool generateMipmaps, TextureTarget textureTarget)
         {
-            using (WritePixelBuffer pixelBuffer = Device.CreateWritePixelBuffer(WritePixelBufferHint.StreamDraw, 
+            using (WritePixelBuffer pixelBuffer = Device.CreateWritePixelBuffer(WritePixelBufferHint.StreamWrite, 
                 BitmapAlgorithms.SizeOfPixelsInBytes(bitmap)))
             {
                 pixelBuffer.CopyFromBitmap(bitmap);

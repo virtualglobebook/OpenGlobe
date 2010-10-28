@@ -11,8 +11,8 @@ namespace OpenGlobe.Renderer
 {
     public enum WritePixelBufferHint
     {
-        StreamDraw,
-        StaticDraw,
-        DynamicDraw,
+        StreamWrite,
+        StaticWrite,
+        DynamicWrite,
     }
 }

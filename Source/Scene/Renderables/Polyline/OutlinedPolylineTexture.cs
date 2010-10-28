@@ -112,7 +112,7 @@ namespace OpenGlobe.Scene
                     j += 2;
                 }
 
-                WritePixelBuffer pixelBuffer = Device.CreateWritePixelBuffer(WritePixelBufferHint.StreamDraw,
+                WritePixelBuffer pixelBuffer = Device.CreateWritePixelBuffer(WritePixelBufferHint.StreamWrite,
                     sizeof(float) * textureResolution);
                 pixelBuffer.CopyFromSystemMemory(texels);
 

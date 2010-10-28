@@ -68,7 +68,7 @@ namespace OpenGlobe.Renderer
             };
 
             int sizeInBytes = pixels.Length * SizeInBytes<BlittableRGBA>.Value;
-            WritePixelBuffer writePixelBuffer = Device.CreateWritePixelBuffer(WritePixelBufferHint.StreamDraw, sizeInBytes);
+            WritePixelBuffer writePixelBuffer = Device.CreateWritePixelBuffer(WritePixelBufferHint.StreamWrite, sizeInBytes);
             writePixelBuffer.CopyFromSystemMemory(pixels);
 
             //
@@ -113,7 +113,7 @@ namespace OpenGlobe.Renderer
             };
 
             int sizeInBytes = pixels.Length * sizeof(float);
-            WritePixelBuffer writePixelBuffer = Device.CreateWritePixelBuffer(WritePixelBufferHint.StreamDraw, sizeInBytes);
+            WritePixelBuffer writePixelBuffer = Device.CreateWritePixelBuffer(WritePixelBufferHint.StreamWrite, sizeInBytes);
             writePixelBuffer.CopyFromSystemMemory(pixels);
 
             //
@@ -176,7 +176,7 @@ namespace OpenGlobe.Renderer
             };
 
             int sizeInBytes = pixels.Length * sizeof(byte);
-            WritePixelBuffer writePixelBuffer = Device.CreateWritePixelBuffer(WritePixelBufferHint.StreamDraw, sizeInBytes);
+            WritePixelBuffer writePixelBuffer = Device.CreateWritePixelBuffer(WritePixelBufferHint.StreamWrite, sizeInBytes);
             writePixelBuffer.CopyFromSystemMemory(pixels);
 
             //
@@ -224,7 +224,7 @@ namespace OpenGlobe.Renderer
             };
 
             int sizeInBytes = pixels.Length * sizeof(byte);
-            WritePixelBuffer writePixelBuffer = Device.CreateWritePixelBuffer(WritePixelBufferHint.StreamDraw, sizeInBytes);
+            WritePixelBuffer writePixelBuffer = Device.CreateWritePixelBuffer(WritePixelBufferHint.StreamWrite, sizeInBytes);
             writePixelBuffer.CopyFromSystemMemory(pixels);
 
             //

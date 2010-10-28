@@ -163,9 +163,9 @@ namespace OpenGlobe.Renderer
             // Verify creating pixel buffer
             //
             int sizeInBytes = pixels.Length * SizeInBytes<BlittableRGBA>.Value;
-            WritePixelBuffer pixelBuffer = Device.CreateWritePixelBuffer(WritePixelBufferHint.StreamDraw, sizeInBytes);
+            WritePixelBuffer pixelBuffer = Device.CreateWritePixelBuffer(WritePixelBufferHint.StreamWrite, sizeInBytes);
             Assert.IsNotNull(pixelBuffer);
-            Assert.AreEqual(WritePixelBufferHint.StreamDraw, pixelBuffer.UsageHint);
+            Assert.AreEqual(WritePixelBufferHint.StreamWrite, pixelBuffer.UsageHint);
             Assert.AreEqual(sizeInBytes, pixelBuffer.SizeInBytes);
 
             //
@@ -202,7 +202,7 @@ namespace OpenGlobe.Renderer
             Bitmap bitmap = new Bitmap(1, 1);
             bitmap.SetPixel(0, 0, color);
 
-            WritePixelBuffer pixelBuffer = Device.CreateWritePixelBuffer(WritePixelBufferHint.StreamDraw, 4);
+            WritePixelBuffer pixelBuffer = Device.CreateWritePixelBuffer(WritePixelBufferHint.StreamWrite, 4);
             pixelBuffer.CopyFromBitmap(bitmap);
             
             //
