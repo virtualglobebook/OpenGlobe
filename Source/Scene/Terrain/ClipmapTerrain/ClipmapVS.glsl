@@ -31,80 +31,75 @@ uniform vec4 u_textureOrigin;
 
 vec2 GridToWorld(vec2 gridPos)
 {
-	return (gridPos * u_gridScaleFactor.xy + u_gridScaleFactor.zw) * u_worldScaleFactor.xy + u_worldScaleFactor.zw;
+    return (gridPos * u_gridScaleFactor.xy + u_gridScaleFactor.zw) * u_worldScaleFactor.xy + u_worldScaleFactor.zw;
 }
 
 float SampleHeight(vec2 gridPos)
 {
-	// Compute coordinates for vertex texture
-	//  u_fineBlockOrig.xy: 1/(w, h) of texture
-	//  u_fineBlockOrig.zw: origin of block in texture
-	vec2 uvFine = gridPos + u_fineBlockOrig.zw;
-	vec2 uvCoarse = gridPos / 2.0 + u_coarseBlockOrig.zw;
+    // Compute coordinates for vertex texture
+    //  u_fineBlockOrig.xy: 1/(w, h) of texture
+    //  u_fineBlockOrig.zw: origin of block in texture
+    vec2 uvFine = gridPos + u_fineBlockOrig.zw;
+    vec2 uvCoarse = gridPos / 2.0 + u_coarseBlockOrig.zw;
 
-	// compute alpha (transition parameter) and blend elevation
-	vec2 alpha = clamp((abs(gridPos - u_viewerPos) - u_alphaOffset) * u_oneOverTransitionWidth, 0, 1);
-	float alphaScalar = max(alpha.x, alpha.y);
+    // compute alpha (transition parameter) and blend elevation
+    vec2 alpha = clamp((abs(gridPos - u_viewerPos) - u_alphaOffset) * u_oneOverTransitionWidth, 0, 1);
+    float alphaScalar = max(alpha.x, alpha.y);
 
-	// sample the vertex texture
-	float heightFine = texture(og_texture0, uvFine + vec2(0.5, 0.5)).r;
-	float heightCoarse = texture(og_texture1, uvCoarse + vec2(0.5, 0.5)).r;
-	return mix(heightFine, heightCoarse, alphaScalar);
+    // sample the vertex texture
+    float heightFine = texture(og_texture0, uvFine + vec2(0.5, 0.5)).r;
+    float heightCoarse = texture(og_texture1, uvCoarse + vec2(0.5, 0.5)).r;
+    return mix(heightFine, heightCoarse, alphaScalar);
 }
 
 vec3 ComputeNormalForwardDifference(
     vec2 gridPos, 
-	vec3 worldPos,
+    vec3 worldPos,
     float heightExaggeration)
 {
-	vec2 rightGrid = gridPos + vec2(1.0, 0.0);
+    vec2 rightGrid = gridPos + vec2(1.0, 0.0);
     vec3 right = vec3(rightGrid * u_gridScaleFactor.xy * u_worldScaleFactor.xy, SampleHeight(rightGrid) * heightExaggeration);
-	vec2 topGrid = gridPos + vec2(0.0, 1.0);
+    vec2 topGrid = gridPos + vec2(0.0, 1.0);
     vec3 top = vec3(topGrid * u_gridScaleFactor.xy * u_worldScaleFactor.xy, SampleHeight(topGrid) * heightExaggeration);
-	vec3 center = vec3(gridPos * u_gridScaleFactor.xy * u_worldScaleFactor.xy, worldPos.z);
+    vec3 center = vec3(gridPos * u_gridScaleFactor.xy * u_worldScaleFactor.xy, worldPos.z);
     return cross(right - center, top - center);
 }
 
 vec3 GeodeticToCartesian(vec3 geodetic)
 {
-	vec2 geodeticRadians = geodetic.xy * og_pi / 180.0;
-	vec2 cosGeodetic = cos(geodeticRadians.xy);
-	vec2 sinGeodetic = sin(geodeticRadians.xy);
+    vec2 geodeticRadians = geodetic.xy * og_radiansPerDegree;
+    vec2 cosGeodetic = cos(geodeticRadians.xy);
+    vec2 sinGeodetic = sin(geodeticRadians.xy);
 
-	const float a = 6378137.0; //MaximumRadius;
-	const float b = 6356752.314245; //MinimumRadius;
-	const float aSquared = a * a;
-	const float firstEccentricitySquared = (aSquared - (b * b)) / aSquared;
-
-	float chi = sqrt(1.0 - firstEccentricitySquared * sinGeodetic.y * sinGeodetic.y);
-	float normal = a / chi;
-	float normalPlusHeight = normal + geodetic.z;
-
-	return vec3(normalPlusHeight * cosGeodetic.y * cosGeodetic.x,
-				normalPlusHeight * cosGeodetic.y * sinGeodetic.x,
-				(normal * (1.0 - firstEccentricitySquared) + geodetic.z) * sinGeodetic.y);
+    vec3 normal = vec3(cosGeodetic.y * cosGeodetic.x,
+                       cosGeodetic.y * sinGeodetic.x,
+                       sinGeodetic.y);
+    //const vec3 Radii = vec3(6378137.0, 6378137.0, 6356752.314245);
+    const vec3 Radii = vec3(1.0, 1.0, 0.99664718933522437664791458697109);
+    vec3 position = normalize(normal * Radii) * Radii;
+    return normal * geodetic.z + position;
 }
 
 void main()
 {
-	// Convert from grid xy to world xy coordinates
-	//  u_scaleFactor.xy: grid spacing of current level
-	//  u_scaleFactor.zw: origin of current block within world
-	vec2 worldPos = GridToWorld(position);
-	height = SampleHeight(position);
+    // Convert from grid xy to world xy coordinates
+    //  u_scaleFactor.xy: grid spacing of current level
+    //  u_scaleFactor.zw: origin of current block within world
+    vec2 worldPos = GridToWorld(position);
+    height = SampleHeight(position);
 
-	textureCoordinateFS = (position + u_fineBlockOrig.zw) * u_textureOrigin.xy + u_textureOrigin.zw;
+    textureCoordinateFS = (position + u_fineBlockOrig.zw) * u_textureOrigin.xy + u_textureOrigin.zw;
 
-	float heightExaggeration = 1.0;
-	vec3 displacedPosition = vec3(worldPos, height * heightExaggeration);
-	normalFS = ComputeNormalForwardDifference(position, displacedPosition, heightExaggeration);
+    float heightExaggeration = 1.0 / 6378137.0;
+    vec3 displacedPosition = vec3(worldPos, height * heightExaggeration);
+    normalFS = ComputeNormalForwardDifference(position, displacedPosition, heightExaggeration);
 
     positionToLightFS = og_sunPosition - displacedPosition;
     positionToEyeFS = og_cameraEye - displacedPosition;
 
-	displacedPosition = GeodeticToCartesian(displacedPosition);
-	gl_Position = og_modelViewPerspectiveMatrix * vec4(displacedPosition, 1.0);
-	
-	modulus = fract(((worldPos + vec2(180, 90)) / (u_gridScaleFactor.xy * u_worldScaleFactor.xy)) / 2.0);
-	//modulus = mod(worldPos + vec2(180, 90), 150.0);
+    displacedPosition = GeodeticToCartesian(displacedPosition);
+    gl_Position = og_modelViewPerspectiveMatrix * vec4(displacedPosition, 1.0);
+    
+    modulus = fract(((worldPos + vec2(180, 90)) / (u_gridScaleFactor.xy * u_worldScaleFactor.xy)) / 2.0);
+    //modulus = mod(worldPos + vec2(180, 90), 150.0);
 }

@@ -125,7 +125,7 @@ namespace OpenGlobe.Scene.Terrain
 
         public void Render(Context context, SceneState sceneState)
         {
-            Geodetic2D center = Ellipsoid.Wgs84.ToGeodetic2D(sceneState.Camera.Target);
+            Geodetic2D center = Ellipsoid.ScaledWgs84.ToGeodetic2D(sceneState.Camera.Target);
             double centerLongitude = Trig.ToDegrees(center.Longitude);
             double centerLatitude = Trig.ToDegrees(center.Latitude);
 
@@ -208,16 +208,17 @@ namespace OpenGlobe.Scene.Terrain
                 //RenderLevel(level, level, true, context, sceneState);
             }*/
 
+            bool rendered = false;
             for (int i = _clipmapLevels.Length - 1; i >= 0; --i)
             {
                 Level thisLevel = _clipmapLevels[i];
                 Level coarserLevel = _clipmapLevels[i > 0 ? i - 1 : 0];
 
-                RenderLevel(thisLevel, coarserLevel, i == _clipmapLevels.Length - 1, context, sceneState);
+                rendered = RenderLevel(thisLevel, coarserLevel, !rendered, context, sceneState);
             }
         }
 
-        private void RenderLevel(Level level, Level coarserLevel, bool fillRing, Context context, SceneState sceneState)
+        private bool RenderLevel(Level level, Level coarserLevel, bool fillRing, Context context, SceneState sceneState)
         {
             int west = level.West;
             int south = level.South;
@@ -226,6 +227,16 @@ namespace OpenGlobe.Scene.Terrain
 
             short[] posts = new short[_clipmapPosts * _clipmapPosts];
             level.Terrain.GetPosts(west, south, east, north, posts, 0, _clipmapPosts);
+
+            Geodetic3D eye = Ellipsoid.ScaledWgs84.ToGeodetic3D(sceneState.Camera.Eye);
+            double heightAboveTerrain = eye.Height - posts[(_clipmapPosts / 2) * (_clipmapPosts +  1)];
+
+            double levelExtent = EstimateLevelExtent(level);
+            if (level != coarserLevel && levelExtent < heightAboveTerrain)
+            {
+                // Do not render this level.
+                return false;
+            }
 
             // TODO: This is AWESOME!
             float[] floatPosts = new float[posts.Length];
@@ -247,13 +258,6 @@ namespace OpenGlobe.Scene.Terrain
                                                 (float)(level.Terrain.PostDeltaLatitude / level.Imagery.PostDeltaLatitude),
                                                 (float)imageryWestTerrainPostOffset,
                                                 (float)imagerySouthTerrainPostOffset);
-
-            Geodetic2D center = Ellipsoid.Wgs84.ToGeodetic2D(sceneState.Camera.Target);
-            double centerLongitude = Trig.ToDegrees(center.Longitude);
-            double centerLatitude = Trig.ToDegrees(center.Latitude);
-
-            double longitudeOffset = centerLongitude - level.Terrain.IndexToLongitude(level.West);
-            double latitudeOffset = centerLatitude - level.Terrain.IndexToLatitude(level.South);
 
             byte[] imagery = level.Imagery.GetImage((int)imageryWestIndex, (int)imagerySouthIndex, imageryEastIndex, imageryNorthIndex);
 
@@ -331,6 +335,8 @@ namespace OpenGlobe.Scene.Terrain
                     DrawBlock(_offsetStripVertical, level, coarserLevel, west, south, offset, south + _fieldBlockSegments + southOffset, context, sceneState);
                 }
             }
+
+            return true;
         }
 
         private void DrawBlock(VertexArray block, Level level, Level coarserLevel, int overallWest, int overallSouth, int blockWest, int blockSouth, Context context, SceneState sceneState)
@@ -468,6 +474,24 @@ namespace OpenGlobe.Scene.Terrain
             }
 
             bmp.Save(filename, System.Drawing.Imaging.ImageFormat.Png);
+        }
+
+        private double EstimateLevelExtent(Level level)
+        {
+            int east = level.West + _clipmapSegments;
+            int north = level.South + _clipmapSegments;
+
+            Geodetic2D southwest = new Geodetic2D(
+                                    Trig.ToRadians(level.Terrain.IndexToLongitude(level.West)),
+                                    Trig.ToRadians(level.Terrain.IndexToLatitude(level.South)));
+            Geodetic2D northeast = new Geodetic2D(
+                                    Trig.ToRadians(level.Terrain.IndexToLongitude(east)),
+                                    Trig.ToRadians(level.Terrain.IndexToLatitude(north)));
+
+            Vector3D southwestCartesian = Ellipsoid.ScaledWgs84.ToVector3D(southwest);
+            Vector3D northeastCartesian = Ellipsoid.ScaledWgs84.ToVector3D(northeast);
+
+            return (northeastCartesian - southwestCartesian).Magnitude;
         }
 
         private class Level
