@@ -80,7 +80,7 @@ namespace OpenGlobe.Renderer.GL3x
             //
             if (_texture != null)
             {
-                _dirtyFlags = DirtyFlags.All;
+                _dirtyFlags |= DirtyFlags.Texture;
             }
 
             Clean();

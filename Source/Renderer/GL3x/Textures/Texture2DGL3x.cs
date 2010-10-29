@@ -51,7 +51,6 @@ namespace OpenGlobe.Renderer.GL3x
             // texture to a frame buffer object.
             //
             ApplySampler(Device.TextureSamplers.LinearClampToEdge);
-            ApplySampler(Device.TextureSamplers.NearestClampToEdge);
         }
 
         internal TextureHandleGL3x Handle
