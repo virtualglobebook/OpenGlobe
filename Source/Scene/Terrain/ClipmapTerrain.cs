@@ -246,7 +246,7 @@ namespace OpenGlobe.Scene.Terrain
             level.Terrain.GetPosts(west, south, east, north, posts, 0, _clipmapPosts);
 
             Geodetic3D eye = Ellipsoid.ScaledWgs84.ToGeodetic3D(sceneState.Camera.Eye);
-            double heightAboveTerrain = eye.Height - posts[(_clipmapPosts / 2) * (_clipmapPosts +  1)];
+            double heightAboveTerrain = eye.Height - posts[(_clipmapPosts / 2) * (_clipmapPosts +  1)] / Ellipsoid.Wgs84.MaximumRadius;
 
             double levelExtent = EstimateLevelExtent(level);
             if (level != coarserLevel && levelExtent < heightAboveTerrain)
