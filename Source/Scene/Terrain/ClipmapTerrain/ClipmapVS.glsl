@@ -8,11 +8,9 @@
 
 layout(location = og_positionVertexLocation) in vec2 position;
 
-out float height;
 out vec3 normalFS;
 out vec3 positionToLightFS;
 out vec3 positionToEyeFS;
-out vec2 modulus;
 out vec2 textureCoordinateFS;
 
 uniform mat4 og_modelViewPerspectiveMatrix;
@@ -40,15 +38,15 @@ float SampleHeight(vec2 gridPos)
     //  u_fineBlockOrig.xy: 1/(w, h) of texture
     //  u_fineBlockOrig.zw: origin of block in texture
     vec2 uvFine = gridPos + u_fineBlockOrig.zw;
-    vec2 uvCoarse = gridPos / 2.0 + u_coarseBlockOrig.zw;
+    vec2 uvCoarse = gridPos * 0.5 + u_coarseBlockOrig.zw;
 
     // compute alpha (transition parameter) and blend elevation
     vec2 alpha = clamp((abs(gridPos - u_viewerPos) - u_alphaOffset) * u_oneOverTransitionWidth, 0, 1);
     float alphaScalar = max(alpha.x, alpha.y);
 
     // sample the vertex texture
-    float heightFine = texture(og_texture0, uvFine + vec2(0.5, 0.5)).r;
-    float heightCoarse = texture(og_texture1, uvCoarse + vec2(0.5, 0.5)).r;
+    float heightFine = texture(og_texture0, uvFine).r;
+    float heightCoarse = texture(og_texture1, uvCoarse).r;
     return mix(heightFine, heightCoarse, alphaScalar);
 }
 
@@ -74,7 +72,6 @@ vec3 GeodeticToCartesian(vec3 geodetic)
     vec3 normal = vec3(cosGeodetic.y * cosGeodetic.x,
                        cosGeodetic.y * sinGeodetic.x,
                        sinGeodetic.y);
-    //const vec3 Radii = vec3(6378137.0, 6378137.0, 6356752.314245);
     const vec3 Radii = vec3(1.0, 1.0, 0.99664718933522437664791458697109);
     vec3 position = normalize(normal * Radii) * Radii;
     return normal * geodetic.z + position;
@@ -82,15 +79,12 @@ vec3 GeodeticToCartesian(vec3 geodetic)
 
 void main()
 {
-    // Convert from grid xy to world xy coordinates
-    //  u_scaleFactor.xy: grid spacing of current level
-    //  u_scaleFactor.zw: origin of current block within world
     vec2 worldPos = GridToWorld(position);
-    height = SampleHeight(position);
+    float height = SampleHeight(position);
 
     textureCoordinateFS = (position + u_fineBlockOrig.zw) * u_textureOrigin.xy + u_textureOrigin.zw;
 
-    float heightExaggeration = 1.0 / 6378137.0;
+    const float heightExaggeration = 1.0 / 6378137.0;
     vec3 displacedPosition = vec3(worldPos, height * heightExaggeration);
     normalFS = ComputeNormalForwardDifference(position, displacedPosition, heightExaggeration);
 
@@ -99,7 +93,4 @@ void main()
 
     displacedPosition = GeodeticToCartesian(displacedPosition);
     gl_Position = og_modelViewPerspectiveMatrix * vec4(displacedPosition, 1.0);
-    
-    modulus = fract(((worldPos + vec2(180, 90)) / (u_gridScaleFactor.xy * u_worldScaleFactor.xy)) / 2.0);
-    //modulus = mod(worldPos + vec2(180, 90), 150.0);
 }

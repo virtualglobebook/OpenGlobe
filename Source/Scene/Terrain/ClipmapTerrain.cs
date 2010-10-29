@@ -112,7 +112,6 @@ namespace OpenGlobe.Scene.Terrain
             _worldScaleFactor = (Uniform<Vector4S>)_shaderProgram.Uniforms["u_worldScaleFactor"];
             _fineBlockOrigin = (Uniform<Vector4S>)_shaderProgram.Uniforms["u_fineBlockOrig"];
             _coarseBlockOrigin = (Uniform<Vector4S>)_shaderProgram.Uniforms["u_coarseBlockOrig"];
-            _color = (Uniform<Vector3S>)_shaderProgram.Uniforms["u_color"];
             _viewerPos = (Uniform<Vector2S>)_shaderProgram.Uniforms["u_viewerPos"];
             _alphaOffset = (Uniform<Vector2S>)_shaderProgram.Uniforms["u_alphaOffset"];
             _oneOverTransitionWidth = (Uniform<float>)_shaderProgram.Uniforms["u_oneOverTransitionWidth"];
@@ -273,8 +272,8 @@ namespace OpenGlobe.Scene.Terrain
 
             _textureOrigin.Value = new Vector4S((float)(level.Terrain.PostDeltaLongitude / level.Imagery.PostDeltaLongitude),
                                                 (float)(level.Terrain.PostDeltaLatitude / level.Imagery.PostDeltaLatitude),
-                                                (float)imageryWestTerrainPostOffset,
-                                                (float)imagerySouthTerrainPostOffset);
+                                                (float)(imageryWestTerrainPostOffset + 0.5),
+                                                (float)(imagerySouthTerrainPostOffset + 0.5));
 
             byte[] imagery = level.Imagery.GetImage((int)imageryWestIndex, (int)imagerySouthIndex, imageryEastIndex, imageryNorthIndex);
 
@@ -388,7 +387,7 @@ namespace OpenGlobe.Scene.Terrain
 
             _gridScaleFactor.Value = new Vector4S((float)resolution, (float)resolution, (float)(blockWest * resolution), (float)(blockSouth * resolution));
             _worldScaleFactor.Value = new Vector4S((float)xScale, (float)yScale, (float)xOffset, (float)yOffset);
-            _fineBlockOrigin.Value = new Vector4S((float)(1.0 / _clipmapPosts), (float)(1.0 / _clipmapPosts), (float)textureWest, (float)textureSouth);
+            _fineBlockOrigin.Value = new Vector4S((float)(1.0 / _clipmapPosts), (float)(1.0 / _clipmapPosts), (float)(textureWest + 0.5), (float)(textureSouth + 0.5));
             _coarseBlockOrigin.Value = new Vector4S((float)(1.0 / (2 * _clipmapPosts)), (float)(1.0 / (2 * _clipmapPosts)), (float)(parentTextureWest / 2), (float)(parentTextureSouth / 2));
 
             _viewerPos.Value = new Vector2S(_clipmapSegments / 2.0f - textureWest, _clipmapSegments / 2.0f - textureSouth);
@@ -400,8 +399,6 @@ namespace OpenGlobe.Scene.Terrain
                 _oneOverTransitionWidth.Value = (float)(1.0 / w);
             else
                 _oneOverTransitionWidth.Value = 0.0f;
-
-            _color.Value = new Vector3S(0.0f, 1.0f, 0.0f);
 
             context.Draw(_primitiveType, drawState, sceneState);
         }
@@ -565,7 +562,6 @@ namespace OpenGlobe.Scene.Terrain
         private Uniform<Vector4S> _worldScaleFactor;
         private Uniform<Vector4S> _fineBlockOrigin;
         private Uniform<Vector4S> _coarseBlockOrigin;
-        private Uniform<Vector3S> _color;
         private Uniform<Vector2S> _viewerPos;
         private Uniform<Vector2S> _alphaOffset;
         private Uniform<float> _oneOverTransitionWidth;
