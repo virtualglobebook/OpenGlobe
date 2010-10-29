@@ -18,16 +18,20 @@ namespace OpenGlobe.Renderer.GL3x
     {
         public TextureUnitsGL3x()
         {
-            int textureUnits = Device.NumberOfTextureUnits;
+            //
+            // Device.NumberOfTextureUnits is not initialized yet.
+            //
+            int numberOfTextureUnits;
+            GL.GetInteger(GetPName.MaxCombinedTextureImageUnits, out numberOfTextureUnits);
 
-            _textureUnits = new TextureUnit[textureUnits];
-            for (int i = 0; i < textureUnits; ++i)
+            _textureUnits = new TextureUnit[numberOfTextureUnits];
+            for (int i = 0; i < numberOfTextureUnits; ++i)
             {
                 TextureUnitGL3x textureUnit = new TextureUnitGL3x(i, this);
                 _textureUnits[i] = textureUnit;
             }
             _dirtyTextureUnits = new List<ICleanable>();
-            _lastTextureUnit = _textureUnits[textureUnits - 1] as TextureUnitGL3x;
+            _lastTextureUnit = _textureUnits[numberOfTextureUnits - 1] as TextureUnitGL3x;
         }
 
         #region TextureUnits Members

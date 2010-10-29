@@ -24,9 +24,7 @@ namespace OpenGlobe.Renderer.GL3x
     {
         public ColorAttachmentsGL3x()
         {
-            int maximumColorAttachments;
-            GL.GetInteger(GetPName.MaxColorAttachments, out maximumColorAttachments);
-            _colorAttachments = new ColorAttachmentGL3x[maximumColorAttachments];
+            _colorAttachments = new ColorAttachmentGL3x[Device.MaximumNumberOfColorAttachments];
         }
 
         #region ColorAttachments Members

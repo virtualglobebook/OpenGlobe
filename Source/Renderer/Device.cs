@@ -32,6 +32,12 @@ namespace OpenGlobe.Renderer
         {
             using (GraphicsWindow window = CreateWindow(1, 1))
             {
+                GL.GetInteger(GetPName.MaxVertexAttribs, out s_maximumNumberOfVertexAttributes);
+                GL.GetInteger(GetPName.MaxCombinedTextureImageUnits, out s_numberOfTextureUnits);
+                GL.GetInteger(GetPName.MaxColorAttachments, out s_maximumNumberOfColorAttachments);
+
+                ///////////////////////////////////////////////////////////////
+
                 s_extensions = new ExtensionsGL3x();
 
                 ///////////////////////////////////////////////////////////////
@@ -488,37 +494,27 @@ namespace OpenGlobe.Renderer
 
         public static int MaximumNumberOfVertexAttributes
         {
-            get 
-            {
-                if (s_maximumNumberOfVertexAttributes == 0)
-                {
-                    GL.GetInteger(GetPName.MaxVertexAttribs, out s_maximumNumberOfVertexAttributes);
-                }
-
-                return s_maximumNumberOfVertexAttributes; 
-            }
+            get { return s_maximumNumberOfVertexAttributes;  }
         }
 
         public static int NumberOfTextureUnits
         {
-            get 
-            {
-                if (s_numberOfTextureUnits == 0)
-                {
-                    GL.GetInteger(GetPName.MaxCombinedTextureImageUnits, out s_numberOfTextureUnits);
-                }
-
-                return s_numberOfTextureUnits;
-            }
+            get { return s_numberOfTextureUnits; }
         }
 
+        public static int MaximumNumberOfColorAttachments
+        { 
+            get { return s_maximumNumberOfColorAttachments; } 
+        }
+
+        private static int s_maximumNumberOfVertexAttributes;
+        private static int s_numberOfTextureUnits;
+        private static int s_maximumNumberOfColorAttachments;
+        
         private static Extensions s_extensions;
         private static LinkAutomaticUniformCollection s_linkAutomaticUniforms;
         private static DrawAutomaticUniformFactoryCollection s_drawAutomaticUniformFactories;
 
         private static TextureSamplers s_textureSamplers;
-
-        private static int s_maximumNumberOfVertexAttributes;
-        private static int s_numberOfTextureUnits;
     }
 }
