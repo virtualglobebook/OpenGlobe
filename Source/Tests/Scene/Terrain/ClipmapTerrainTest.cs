@@ -58,6 +58,9 @@ namespace OpenGlobe.Tests.Scene.Terrain
             Bitmap bitmap = new Bitmap("NE2_50M_SR_W_4096.jpg");
             globe.Texture = Device.CreateTexture2D(bitmap, TextureFormat.RedGreenBlue8, false);
 
+            ClearState clearDepth = new ClearState();
+            clearDepth.Buffers = ClearBuffers.DepthBuffer;
+
             //camera.Dispose();
             //CameraFly fly = new CameraFly(sceneState.Camera, window);
             //fly.UpdateParametersFromCamera();
@@ -80,8 +83,11 @@ namespace OpenGlobe.Tests.Scene.Terrain
             {
                 Context context = window.Context;
                 context.Clear(clearState);
-                clipmap.Render(context, sceneState);
                 globe.Render(context, sceneState);
+
+                context.Clear(clearDepth);
+
+                clipmap.Render(context, sceneState);
             };
 
             window.Run(30.0);
