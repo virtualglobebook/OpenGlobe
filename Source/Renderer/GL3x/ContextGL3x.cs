@@ -137,31 +137,13 @@ namespace OpenGlobe.Renderer.GL3x
 
         public override FrameBuffer FrameBuffer
         {
-            get { return _boundFrameBuffer; }
-
-            set
-            {
-                FrameBufferGL3x frameBufferGL3x = value as FrameBufferGL3x;
-
-                if (_boundFrameBuffer != frameBufferGL3x)
-                {
-                    if (frameBufferGL3x != null)
-                    {
-                        frameBufferGL3x.Bind();
-                    }
-                    else
-                    {
-                        FrameBufferGL3x.UnBind();
-                    }
-
-                    _boundFrameBuffer = frameBufferGL3x;
-                }
-            }
+            get { return _setFrameBuffer; }
+            set { _setFrameBuffer = value as FrameBufferGL3x; }
         }
 
         public override void Clear(ClearState clearState)
         {
-            CleanFrameBuffer();
+            ApplyFrameBuffer();
 
             ApplyScissorTest(clearState.ScissorTest);
             ApplyColorMask(clearState.ColorMask);
@@ -504,8 +486,8 @@ namespace OpenGlobe.Renderer.GL3x
             ApplyVertexArray(drawState.VertexArray);
             ApplyShaderProgram(drawState, sceneState);
 
-            CleanTextureUnits();
-            CleanFrameBuffer();
+            _textureUnits.Clean();
+            ApplyFrameBuffer();
         }
 
         private void ApplyRenderState(RenderState renderState)
@@ -553,17 +535,25 @@ namespace OpenGlobe.Renderer.GL3x
 #endif
         }
 
-        private void CleanTextureUnits()
+        private void ApplyFrameBuffer()
         {
-            _textureUnits.Clean();
-        }
-
-        private void CleanFrameBuffer()
-        {
-            if (_boundFrameBuffer != null)
+            if (_boundFrameBuffer != _setFrameBuffer)
             {
-                _boundFrameBuffer.Clean();
+                if (_setFrameBuffer != null)
+                {
+                    _setFrameBuffer.Bind();
+                }
+                else
+                {
+                    FrameBufferGL3x.UnBind();
+                }
 
+                _boundFrameBuffer = _setFrameBuffer;
+            }
+
+            if (_setFrameBuffer != null)
+            {
+                _setFrameBuffer.Clean();
 #if DEBUG
                 FramebufferErrorCode errorCode = GL.CheckFramebufferStatus(FramebufferTarget.Framebuffer);
                 Debug.Assert(errorCode == FramebufferErrorCode.FramebufferComplete);
@@ -578,6 +568,7 @@ namespace OpenGlobe.Renderer.GL3x
         private RenderState _renderState;
         private ShaderProgramGL3x _boundShaderProgram;
         private FrameBufferGL3x _boundFrameBuffer;
+        private FrameBufferGL3x _setFrameBuffer;
 
         private TextureUnitsGL3x _textureUnits;
     }

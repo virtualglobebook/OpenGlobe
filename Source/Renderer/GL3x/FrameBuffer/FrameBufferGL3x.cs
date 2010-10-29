@@ -88,10 +88,16 @@ namespace OpenGlobe.Renderer.GL3x
 
             set
             {
-                Debug.Assert(value == null || value.Description.DepthRenderable);
+                if (_depthAttachment != value)
+                {
+                    if ((value != null) && (!value.Description.DepthRenderable))
+                    {
+                        throw new ArgumentException("Texture must be depth renderable but the Description.DepthRenderable property is false.");
+                    }
 
-                _depthAttachment = value;
-                _dirtyFlags |= DirtyFlags.DepthAttachment;
+                    _depthAttachment = value;
+                    _dirtyFlags |= DirtyFlags.DepthAttachment;
+                }
             }
         }
 
@@ -101,10 +107,16 @@ namespace OpenGlobe.Renderer.GL3x
 
             set
             {
-                Debug.Assert(value == null || value.Description.DepthStencilRenderable);
+                if (_depthStencilAttachment != value)
+                {
+                    if ((value != null) && (!value.Description.DepthStencilRenderable))
+                    {
+                        throw new ArgumentException("Texture must be depth/stencil renderable but the Description.DepthStencilRenderable property is false.");
+                    }
 
-                _depthStencilAttachment = value;
-                _dirtyFlags |= DirtyFlags.DepthStencilAttachment;
+                    _depthStencilAttachment = value;
+                    _dirtyFlags |= DirtyFlags.DepthStencilAttachment;
+                }
             }
         }
 

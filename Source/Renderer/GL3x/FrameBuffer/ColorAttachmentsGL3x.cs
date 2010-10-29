@@ -7,8 +7,8 @@
 //
 #endregion
 
+using System;
 using System.Collections;
-using System.Diagnostics;
 using OpenTK.Graphics.OpenGL;
 using OpenGlobe.Renderer;
 
@@ -35,20 +35,26 @@ namespace OpenGlobe.Renderer.GL3x
 
             set
             {
-                if ((_colorAttachments[index].Texture != null) && (value == null))
+                if ((value != null) && (!value.Description.ColorRenderable))
                 {
-                    --_count;
-                }
-                else if ((_colorAttachments[index].Texture == null) && (value != null))
-                {
-                    ++_count;
+                    throw new ArgumentException("Texture must be color renderable but the Description.ColorRenderable property is false.");
                 }
 
-                Debug.Assert(value == null || value.Description.ColorRenderable);
+                if (_colorAttachments[index].Texture != value)
+                {
+                    if ((_colorAttachments[index].Texture != null) && (value == null))
+                    {
+                        --_count;
+                    }
+                    else if ((_colorAttachments[index].Texture == null) && (value != null))
+                    {
+                        ++_count;
+                    }
 
-                _colorAttachments[index].Texture = value;
-                _colorAttachments[index].Dirty = true;
-                Dirty = true;
+                    _colorAttachments[index].Texture = value;
+                    _colorAttachments[index].Dirty = true;
+                    Dirty = true;
+                }
             }
         }
 
