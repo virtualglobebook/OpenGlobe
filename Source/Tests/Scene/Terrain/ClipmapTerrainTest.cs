@@ -89,6 +89,13 @@ namespace OpenGlobe.Tests.Scene.Terrain
 
                 clipmap.Render(context, sceneState);
             };
+            window.PreRenderFrame += delegate()
+            {
+                Context context = window.Context;
+                //clipmap.PreRender(context, sceneState);
+            };
+
+            clipmap.PreRender(window.Context, sceneState);
 
             window.Run(30.0);
         }
