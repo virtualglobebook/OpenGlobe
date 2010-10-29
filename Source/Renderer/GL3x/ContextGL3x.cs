@@ -452,7 +452,7 @@ namespace OpenGlobe.Renderer.GL3x
             }
         }
 
-        private static void VerifyDraw(DrawState drawState, SceneState sceneState)
+        private void VerifyDraw(DrawState drawState, SceneState sceneState)
         {
             if (drawState == null)
             {
@@ -477,6 +477,16 @@ namespace OpenGlobe.Renderer.GL3x
             if (sceneState == null)
             {
                 throw new ArgumentNullException("sceneState");
+            }
+
+            if (_setFrameBuffer != null)
+            {
+                if (drawState.RenderState.DepthTest.Enabled &&
+                    !((_setFrameBuffer.DepthAttachment != null) || 
+                      (_setFrameBuffer.DepthStencilAttachment != null)))
+                {
+                    throw new ArgumentException("The depth test is enabled (drawState.RenderState.DepthTest.Enabled) but the context's FrameBuffer property doesn't have a depth or depth/stencil attachment (DepthAttachment or DepthStencilAttachment).", "drawState");
+                }
             }
         }
 
