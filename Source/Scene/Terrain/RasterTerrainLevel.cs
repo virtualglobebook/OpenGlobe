@@ -21,7 +21,7 @@ namespace OpenGlobe.Scene.Terrain
         public abstract int LongitudePosts { get; }
         public abstract int LatitudePosts { get; }
 
-        public abstract void GetPosts(int west, int south, int east, int north, short[] destination, int startIndex, int stride);
+        public abstract void GetPosts(int west, int south, int east, int north, float[] destination, int startIndex, int stride);
 
         public abstract double LongitudeToIndex(double centerLongitude);
         public abstract double LatitudeToIndex(double centerLatitude);

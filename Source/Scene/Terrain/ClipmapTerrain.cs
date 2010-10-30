@@ -184,7 +184,7 @@ namespace OpenGlobe.Scene.Terrain
             int east = west + _clipmapPosts - 1;
             int north = south + _clipmapPosts - 1;
 
-            short[] posts = new short[_clipmapPosts * _clipmapPosts];
+            float[] posts = new float[_clipmapPosts * _clipmapPosts];
             level.Terrain.GetPosts(west, south, east, north, posts, 0, _clipmapPosts);
 
             Geodetic3D eye = Ellipsoid.ScaledWgs84.ToGeodetic3D(sceneState.Camera.Eye);
@@ -197,16 +197,9 @@ namespace OpenGlobe.Scene.Terrain
                 //return false;
             }
 
-            // TODO: This is AWESOME!
-            float[] floatPosts = new float[posts.Length];
-            for (int i = 0; i < floatPosts.Length; ++i)
-            {
-                floatPosts[i] = posts[i];
-            }
-
             using (WritePixelBuffer pixelBuffer = Device.CreateWritePixelBuffer(PixelBufferHint.Stream, _clipmapPosts * _clipmapPosts * sizeof(float)))
             {
-                pixelBuffer.CopyFromSystemMemory(floatPosts);
+                pixelBuffer.CopyFromSystemMemory(posts);
                 level.TerrainTexture.CopyFromBuffer(pixelBuffer, ImageFormat.Red, ImageDatatype.Float);
             }
 

@@ -61,7 +61,7 @@ namespace OpenGlobe.Scene.Terrain
             get { return _latitudePosts; }
         }
 
-        public override void GetPosts(int west, int south, int east, int north, short[] destination, int startIndex, int stride)
+        public override void GetPosts(int west, int south, int east, int north, float[] destination, int startIndex, int stride)
         {
             int tileXStart = west / _terrainSource.TileLongitudePosts;
             int tileXStop = east / _terrainSource.TileLongitudePosts;
@@ -99,7 +99,7 @@ namespace OpenGlobe.Scene.Terrain
             }
         }
 
-        private void GetTilePosts(int tileLongitudeIndex, int tileLatitudeIndex, int tileWest, int tileSouth, int tileEast, int tileNorth, short[] destination, int startIndex, int stride)
+        private void GetTilePosts(int tileLongitudeIndex, int tileLatitudeIndex, int tileWest, int tileSouth, int tileEast, int tileNorth, float[] destination, int startIndex, int stride)
         {
             Tile tile = _cache.Find(candidate => candidate.TileLongitudeIndex == tileLongitudeIndex && candidate.TileLatitudeIndex == tileLatitudeIndex);
             if (tile == null)
