@@ -63,6 +63,13 @@ namespace OpenGlobe
             return va;
         }
 
+        public static RenderState CreateRenderStateWithoutDepthTest()
+        {
+            RenderState rs = new RenderState();
+            rs.DepthTest.Enabled = false;
+            return rs;
+        }
+
         public static void ValidateColor(Texture2D colorTexture, byte red, byte green, byte blue)
         {
             using (ReadPixelBuffer readPixelBuffer = colorTexture.CopyToBuffer(ImageFormat.RedGreenBlue, ImageDatatype.UnsignedByte, 1))

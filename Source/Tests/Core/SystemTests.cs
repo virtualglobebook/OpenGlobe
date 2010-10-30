@@ -53,12 +53,9 @@ namespace OpenGlobe.Core
             using (ShaderProgram sp = Device.CreateShaderProgram(ShaderSources.PassThroughVertexShader(), ShaderSources.PassThroughFragmentShader()))
             using (VertexArray va = window.Context.CreateVertexArray(mesh, sp.VertexAttributes, BufferHint.StaticDraw))
             {
-                RenderState rs = new RenderState();
-                rs.DepthTest.Function = DepthTestFunction.LessThanOrEqual;
-
                 window.Context.FrameBuffer = frameBuffer;
                 window.Context.Clear(new ClearState());
-                window.Context.Draw(PrimitiveType.Triangles, new DrawState(rs, sp, va), new SceneState());
+                window.Context.Draw(PrimitiveType.Triangles, new DrawState(TestUtility.CreateRenderStateWithoutDepthTest(), sp, va), new SceneState());
 
                 TestUtility.ValidateColor(frameBuffer.ColorAttachments[0], 255, 0, 0);
             }

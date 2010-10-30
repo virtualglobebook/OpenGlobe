@@ -46,7 +46,6 @@ namespace OpenGlobe.Renderer
             if (disposing)
             {
                 _sp.Dispose();
-                _window.Dispose();
             }
             base.Dispose(disposing);
         }
