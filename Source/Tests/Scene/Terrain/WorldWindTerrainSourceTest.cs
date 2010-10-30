@@ -8,14 +8,9 @@
 #endregion
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 using NUnit.Framework;
-using OpenGlobe.Scene.Terrain;
-using System.Net;
-using System.Diagnostics;
 
-namespace OpenGlobe.Tests.Scene.Terrain
+namespace OpenGlobe.Scene.Terrain
 {
     [TestFixture]
     public class WorldWindTerrainSourceTest

@@ -48,21 +48,20 @@ namespace OpenGlobe.Core
 
         private static void Render(Mesh mesh)
         {
-            GraphicsWindow window = Device.CreateWindow(1, 1);
-            FrameBuffer frameBuffer = TestUtility.CreateFrameBuffer(window.Context);
+            using (GraphicsWindow window = Device.CreateWindow(1, 1))
+            using (FrameBuffer frameBuffer = TestUtility.CreateFrameBuffer(window.Context))
+            using (ShaderProgram sp = Device.CreateShaderProgram(ShaderSources.PassThroughVertexShader(), ShaderSources.PassThroughFragmentShader()))
+            using (VertexArray va = window.Context.CreateVertexArray(mesh, sp.VertexAttributes, BufferHint.StaticDraw))
+            {
+                RenderState rs = new RenderState();
+                rs.DepthTest.Function = DepthTestFunction.LessThanOrEqual;
 
-            ShaderProgram sp = Device.CreateShaderProgram(ShaderSources.PassThroughVertexShader(), ShaderSources.PassThroughFragmentShader());
-            VertexArray va = window.Context.CreateVertexArray(mesh, sp.VertexAttributes, BufferHint.StaticDraw);
+                window.Context.FrameBuffer = frameBuffer;
+                window.Context.Clear(new ClearState());
+                window.Context.Draw(PrimitiveType.Triangles, new DrawState(rs, sp, va), new SceneState());
 
-            window.Context.FrameBuffer = frameBuffer;
-            window.Context.Draw(PrimitiveType.Triangles, new DrawState(new RenderState(), sp, va), new SceneState());
-
-            TestUtility.ValidateColor(frameBuffer.ColorAttachments[0], 255, 0, 0);
-
-            va.Dispose();
-            sp.Dispose();
-            frameBuffer.Dispose();
-            window.Dispose();
+                TestUtility.ValidateColor(frameBuffer.ColorAttachments[0], 255, 0, 0);
+            }
         }
     }
 }

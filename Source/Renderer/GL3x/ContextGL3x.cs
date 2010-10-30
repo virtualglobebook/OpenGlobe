@@ -20,7 +20,7 @@ namespace OpenGlobe.Renderer.GL3x
 {
     internal class ContextGL3x : Context
     {
-        public ContextGL3x()
+        public ContextGL3x(int width, int height)
         {
             Vector4 clearColor = new Vector4();
             GL.GetFloat(GetPName.DepthClearValue, out _clearDepth);
@@ -39,6 +39,8 @@ namespace OpenGlobe.Renderer.GL3x
             // Sync GL state with default render state.
             //
             ForceApplyRenderState(_renderState);
+
+            Viewport = new Rectangle(0, 0, width, height);
         }
 
         #region ForceApplyRenderState
@@ -128,8 +130,10 @@ namespace OpenGlobe.Renderer.GL3x
 
             set
             {
-                Debug.Assert(value.Width >= 0);
-                Debug.Assert(value.Height >= 0);
+                if (value.Width < 0 || value.Height < 0)
+                {
+                    throw new ArgumentOutOfRangeException("Viewport", "The viewport width and height must be greater than or equal to zero.");
+                }
 
                 GL.Viewport(value);
             }

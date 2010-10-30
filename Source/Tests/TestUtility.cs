@@ -21,14 +21,11 @@ namespace OpenGlobe
         /// </summary>
         public static FrameBuffer CreateFrameBuffer(Context context)
         {
-            Texture2DDescription colorDescription = new Texture2DDescription(1, 1, TextureFormat.RedGreenBlue8, false);
-            Texture2D colorTexture = Device.CreateTexture2D(colorDescription);
             FrameBuffer frameBuffer = context.CreateFrameBuffer();
-            frameBuffer.ColorAttachments[0] = colorTexture;
-
-            // TODO:  Why isn't this the default?
-            // TODO:  Lower left or upper left?
-            context.Viewport = new Rectangle(0, 0, 1, 1);
+            frameBuffer.ColorAttachments[0] = Device.CreateTexture2D(
+                new Texture2DDescription(1, 1, TextureFormat.RedGreenBlue8, false));
+            frameBuffer.DepthAttachment = Device.CreateTexture2D(
+                new Texture2DDescription(1, 1, TextureFormat.Depth24, false));
 
             return frameBuffer;
         }

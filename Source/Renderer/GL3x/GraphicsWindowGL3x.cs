@@ -17,6 +17,16 @@ namespace OpenGlobe.Renderer.GL3x
     {
         public GraphicsWindowGL3x(int width, int height, string title, WindowType windowType)
         {
+            if (width < 0)
+            {
+                throw new ArgumentOutOfRangeException("width", "Width must be greater than or equal to zero.");
+            }
+
+            if (height < 0)
+            {
+                throw new ArgumentOutOfRangeException("height", "Height must be greater than or equal to zero.");
+            }
+
             GameWindowFlags gameWindowFlags = (windowType == WindowType.Default) ? GameWindowFlags.Default : GameWindowFlags.Fullscreen;
             if (windowType == WindowType.FullScreen)
             {
@@ -34,7 +44,7 @@ namespace OpenGlobe.Renderer.GL3x
             _gameWindw.UpdateFrame += new EventHandler<FrameEventArgs>(this.OnUpdateFrame);
             _gameWindw.RenderFrame += new EventHandler<FrameEventArgs>(this.OnRenderFrame);
 
-            _context = new ContextGL3x();
+            _context = new ContextGL3x(width, height);
 
             _mouse = new MouseGL3x(_gameWindw.Mouse);
             _keyboard = new KeyboardGL3x(_gameWindw.Keyboard);

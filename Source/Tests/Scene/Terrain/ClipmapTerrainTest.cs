@@ -7,18 +7,13 @@
 //
 #endregion
 
-using System;
-using System.Collections.Generic;
-using System.Text;
 using NUnit.Framework;
-using OpenGlobe.Scene.Terrain;
 using OpenGlobe.Renderer;
 using OpenGlobe.Core.Geometry;
-using OpenGlobe.Scene;
 using OpenGlobe.Core;
 using System.Drawing;
 
-namespace OpenGlobe.Tests.Scene.Terrain
+namespace OpenGlobe.Scene.Terrain
 {
     [TestFixture]
     public class ClipmapTerrainTest
