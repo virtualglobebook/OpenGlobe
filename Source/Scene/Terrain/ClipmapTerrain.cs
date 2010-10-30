@@ -143,8 +143,8 @@ namespace OpenGlobe.Scene.Terrain
                 ++south;
             }
 
-            level.CurrentOrigin.West = west;
-            level.CurrentOrigin.South = south;
+            level.CurrentOrigin.TerrainWest = west;
+            level.CurrentOrigin.TerrainSouth = south;
             level.OffsetStripOnEast = true;
             level.OffsetStripOnNorth = true;
 
@@ -153,18 +153,18 @@ namespace OpenGlobe.Scene.Terrain
                 level = _clipmapLevels[i];
                 Level finerLevel = _clipmapLevels[i + 1];
 
-                level.CurrentOrigin.West = finerLevel.CurrentOrigin.West / 2 - _fieldBlockSegments;
-                level.OffsetStripOnEast = (level.CurrentOrigin.West % 2) == 0;
+                level.CurrentOrigin.TerrainWest = finerLevel.CurrentOrigin.TerrainWest / 2 - _fieldBlockSegments;
+                level.OffsetStripOnEast = (level.CurrentOrigin.TerrainWest % 2) == 0;
                 if (!level.OffsetStripOnEast)
                 {
-                    --level.CurrentOrigin.West;
+                    --level.CurrentOrigin.TerrainWest;
                 }
 
-                level.CurrentOrigin.South = finerLevel.CurrentOrigin.South / 2 - _fieldBlockSegments;
-                level.OffsetStripOnNorth = (level.CurrentOrigin.South % 2) == 0;
+                level.CurrentOrigin.TerrainSouth = finerLevel.CurrentOrigin.TerrainSouth / 2 - _fieldBlockSegments;
+                level.OffsetStripOnNorth = (level.CurrentOrigin.TerrainSouth % 2) == 0;
                 if (!level.OffsetStripOnNorth)
                 {
-                    --level.CurrentOrigin.South;
+                    --level.CurrentOrigin.TerrainSouth;
                 }
             }
 
@@ -179,8 +179,8 @@ namespace OpenGlobe.Scene.Terrain
 
         private void PreRenderLevel(Level level, Level coarserLevel, Context context, SceneState sceneState)
         {
-            int west = level.CurrentOrigin.West;
-            int south = level.CurrentOrigin.South;
+            int west = level.CurrentOrigin.TerrainWest;
+            int south = level.CurrentOrigin.TerrainSouth;
             int east = west + _clipmapPosts - 1;
             int north = south + _clipmapPosts - 1;
 
@@ -211,20 +211,12 @@ namespace OpenGlobe.Scene.Terrain
             }
 
             // Map the terrain posts indices to imagery post indices and offsets
-            double imageryWestIndex = level.Imagery.LongitudeToIndex(level.Terrain.IndexToLongitude(level.CurrentOrigin.West));
-            double imagerySouthIndex = level.Imagery.LatitudeToIndex(level.Terrain.IndexToLatitude(level.CurrentOrigin.South));
-            int imageryEastIndex = (int)imageryWestIndex + level.ImageryWidth - 1;
-            int imageryNorthIndex = (int)imagerySouthIndex + level.ImageryHeight - 1;
+            level.CurrentOrigin.ImageryWest = level.Imagery.LongitudeToIndex(level.Terrain.IndexToLongitude(level.CurrentOrigin.TerrainWest));
+            level.CurrentOrigin.ImagerySouth = level.Imagery.LatitudeToIndex(level.Terrain.IndexToLatitude(level.CurrentOrigin.TerrainSouth));
+            int imageryEastIndex = (int)level.CurrentOrigin.ImageryWest + level.ImageryWidth - 1;
+            int imageryNorthIndex = (int)level.CurrentOrigin.ImagerySouth + level.ImageryHeight - 1;
 
-            double imageryWestTerrainPostOffset = imageryWestIndex - (int)imageryWestIndex;
-            double imagerySouthTerrainPostOffset = imagerySouthIndex - (int)imagerySouthIndex;
-
-            _textureOrigin.Value = new Vector4S((float)(level.Terrain.PostDeltaLongitude / level.Imagery.PostDeltaLongitude),
-                                                (float)(level.Terrain.PostDeltaLatitude / level.Imagery.PostDeltaLatitude),
-                                                (float)(imageryWestTerrainPostOffset + 0.5),
-                                                (float)(imagerySouthTerrainPostOffset + 0.5));
-
-            byte[] imagery = level.Imagery.GetImage((int)imageryWestIndex, (int)imagerySouthIndex, imageryEastIndex, imageryNorthIndex);
+            byte[] imagery = level.Imagery.GetImage((int)level.CurrentOrigin.ImageryWest, (int)level.CurrentOrigin.ImagerySouth, imageryEastIndex, imageryNorthIndex);
 
             using (WritePixelBuffer imageryPixelBuffer = Device.CreateWritePixelBuffer(PixelBufferHint.Stream, imagery.Length))
             {
@@ -271,10 +263,18 @@ namespace OpenGlobe.Scene.Terrain
             context.TextureUnits[2].Texture = level.ImageryTexture;
             context.TextureUnits[2].TextureSampler = Device.TextureSamplers.LinearClampToEdge;
 
-            int west = level.CurrentOrigin.West;
-            int south = level.CurrentOrigin.South;
+            int west = level.CurrentOrigin.TerrainWest;
+            int south = level.CurrentOrigin.TerrainSouth;
             int east = west + _clipmapPosts - 1;
             int north = south + _clipmapPosts - 1;
+
+            double imageryWestTerrainPostOffset = level.CurrentOrigin.ImageryWest - (int)level.CurrentOrigin.ImageryWest;
+            double imagerySouthTerrainPostOffset = level.CurrentOrigin.ImagerySouth - (int)level.CurrentOrigin.ImagerySouth;
+
+            _textureOrigin.Value = new Vector4S((float)(level.Terrain.PostDeltaLongitude / level.Imagery.PostDeltaLongitude),
+                                                (float)(level.Terrain.PostDeltaLatitude / level.Imagery.PostDeltaLatitude),
+                                                (float)(imageryWestTerrainPostOffset + 0.5),
+                                                (float)(imagerySouthTerrainPostOffset + 0.5));
 
             DrawBlock(_fieldBlock, level, coarserLevel, west, south, west, south, context, sceneState);
             DrawBlock(_fieldBlock, level, coarserLevel, west, south, west + _fieldBlockSegments, south, context, sceneState);
@@ -349,8 +349,8 @@ namespace OpenGlobe.Scene.Terrain
             int textureWest = blockWest - overallWest;
             int textureSouth = blockSouth - overallSouth;
 
-            int parentOverallWest = coarserLevel.CurrentOrigin.West * 2;
-            int parentOverallSouth = coarserLevel.CurrentOrigin.South * 2;
+            int parentOverallWest = coarserLevel.CurrentOrigin.TerrainWest * 2;
+            int parentOverallSouth = coarserLevel.CurrentOrigin.TerrainSouth * 2;
             double parentTextureWest = blockWest - parentOverallWest;
             double parentTextureSouth = blockSouth - parentOverallSouth;
 
@@ -475,12 +475,12 @@ namespace OpenGlobe.Scene.Terrain
 
         private double EstimateLevelExtent(Level level)
         {
-            int east = level.CurrentOrigin.West + _clipmapSegments;
-            int north = level.CurrentOrigin.South + _clipmapSegments;
+            int east = level.CurrentOrigin.TerrainWest + _clipmapSegments;
+            int north = level.CurrentOrigin.TerrainSouth + _clipmapSegments;
 
             Geodetic2D southwest = new Geodetic2D(
-                                    Trig.ToRadians(level.Terrain.IndexToLongitude(level.CurrentOrigin.West)),
-                                    Trig.ToRadians(level.Terrain.IndexToLatitude(level.CurrentOrigin.South)));
+                                    Trig.ToRadians(level.Terrain.IndexToLongitude(level.CurrentOrigin.TerrainWest)),
+                                    Trig.ToRadians(level.Terrain.IndexToLatitude(level.CurrentOrigin.TerrainSouth)));
             Geodetic2D northeast = new Geodetic2D(
                                     Trig.ToRadians(level.Terrain.IndexToLongitude(east)),
                                     Trig.ToRadians(level.Terrain.IndexToLatitude(north)));
@@ -493,8 +493,10 @@ namespace OpenGlobe.Scene.Terrain
 
         private class IndexOrigin
         {
-            public int West;
-            public int South;
+            public int TerrainWest;
+            public int TerrainSouth;
+            public double ImageryWest;
+            public double ImagerySouth;
         }
 
         private class Level
@@ -508,8 +510,8 @@ namespace OpenGlobe.Scene.Terrain
                 ImageryTexture = existingInstance.ImageryTexture;
                 ImageryWidth = existingInstance.ImageryWidth;
                 ImageryHeight = existingInstance.ImageryHeight;
-                CurrentOrigin.West = existingInstance.CurrentOrigin.West;
-                CurrentOrigin.South = existingInstance.CurrentOrigin.South;
+                CurrentOrigin.TerrainWest = existingInstance.CurrentOrigin.TerrainWest;
+                CurrentOrigin.TerrainSouth = existingInstance.CurrentOrigin.TerrainSouth;
                 OffsetStripOnNorth = existingInstance.OffsetStripOnNorth;
                 OffsetStripOnEast = existingInstance.OffsetStripOnEast;
             }
