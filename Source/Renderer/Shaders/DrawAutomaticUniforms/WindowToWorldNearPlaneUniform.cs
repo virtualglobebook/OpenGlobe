@@ -17,7 +17,7 @@ namespace OpenGlobe.Renderer
     {
         public WindowToWorldNearPlaneUniform(Uniform uniform)
         {
-            _uniform = uniform as Uniform<Matrix4>;
+            _uniform = (Uniform<Matrix4>)uniform;
         }
 
         #region DrawAutomaticUniform Members

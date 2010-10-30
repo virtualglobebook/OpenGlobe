@@ -52,7 +52,7 @@ namespace OpenGlobe.Scene
                     EmbeddedResources.GetText("OpenGlobe.Scene.Renderables.Polyline.Polyline.PolylineVS.glsl"),
                     EmbeddedResources.GetText("OpenGlobe.Scene.Renderables.Polyline.Polyline.PolylineGS.glsl"),
                     EmbeddedResources.GetText("OpenGlobe.Scene.Renderables.Polyline.Polyline.PolylineFS.glsl"));
-                _fillDistance = _drawState.ShaderProgram.Uniforms["u_fillDistance"] as Uniform<float>;
+                _fillDistance = (Uniform<float>)_drawState.ShaderProgram.Uniforms["u_fillDistance"];
             }
             
             ///////////////////////////////////////////////////////////////////

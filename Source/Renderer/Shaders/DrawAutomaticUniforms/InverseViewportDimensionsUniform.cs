@@ -16,7 +16,7 @@ namespace OpenGlobe.Renderer
     {
         public InverseViewportDimensionsUniform(Uniform uniform)
         {
-            _uniform = uniform as Uniform<Vector2S>;
+            _uniform = (Uniform<Vector2S>)uniform;
         }
 
         #region DrawAutomaticUniform Members

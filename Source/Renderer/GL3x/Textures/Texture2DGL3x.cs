@@ -98,7 +98,7 @@ namespace OpenGlobe.Renderer.GL3x
             Debug.Assert(pixelBuffer.SizeInBytes >= TextureUtility.RequiredSizeInBytes(width, height, format, dataType, rowAlignment));
             Debug.Assert((rowAlignment == 1) || (rowAlignment == 2) || (rowAlignment == 4) || (rowAlignment == 8));
 
-            WritePixelBufferGL3x bufferObjectGL = pixelBuffer as WritePixelBufferGL3x;
+            WritePixelBufferGL3x bufferObjectGL = (WritePixelBufferGL3x)pixelBuffer;
 
             bufferObjectGL.Bind();
             BindToLastTextureUnit();

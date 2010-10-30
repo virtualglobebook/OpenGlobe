@@ -13,7 +13,7 @@ namespace OpenGlobe.Renderer
     {
         public HighResolutionSnapScaleUniform(Uniform uniform)
         {
-            _uniform = uniform as Uniform<float>;
+            _uniform = (Uniform<float>)uniform;
         }
 
         #region DrawAutomaticUniform Members

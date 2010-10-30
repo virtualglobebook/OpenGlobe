@@ -117,8 +117,8 @@ namespace OpenGlobe.Examples.Chapter3
             ShaderProgram sp = Device.CreateShaderProgram(vs, fs);
 
             float blendDurationScale = 0.1f;
-            (sp.Uniforms["u_blendDuration"] as Uniform<float>).Value = blendDurationScale;
-            (sp.Uniforms["u_blendDurationScale"] as Uniform<float>).Value = 1 / (2 * blendDurationScale);
+            ((Uniform<float>)sp.Uniforms["u_blendDuration"]).Value = blendDurationScale;
+            ((Uniform<float>)sp.Uniforms["u_blendDurationScale"]).Value = 1 / (2 * blendDurationScale);
 
             Mesh mesh = SubdivisionEllipsoidTessellator.Compute(Ellipsoid.ScaledWgs84, 5, SubdivisionEllipsoidVertexAttributes.Position);
             VertexArray va = _window.Context.CreateVertexArray(mesh, sp.VertexAttributes, BufferHint.StaticDraw);

@@ -27,9 +27,9 @@ namespace OpenGlobe.Terrain
                 EmbeddedResources.GetText("OpenGlobe.Scene.Terrain.TriangleMeshTerrainTile.SilhouetteGS.glsl"),
                 EmbeddedResources.GetText("OpenGlobe.Scene.Terrain.TriangleMeshTerrainTile.SilhouetteFS.glsl"));
 
-            Uniform<float> fillDistance = silhouetteSP.Uniforms["u_fillDistance"] as Uniform<float>;
+            Uniform<float> fillDistance = (Uniform<float>)silhouetteSP.Uniforms["u_fillDistance"];
             fillDistance.Value = 1.5f;
-            _silhouetteHeightExaggeration = silhouetteSP.Uniforms["u_heightExaggeration"] as Uniform<float>;
+            _silhouetteHeightExaggeration = (Uniform<float>)silhouetteSP.Uniforms["u_heightExaggeration"];
 
             ShaderProgram sp = Device.CreateShaderProgram(
                 EmbeddedResources.GetText("OpenGlobe.Scene.Terrain.TriangleMeshTerrainTile.TerrainVS.glsl"),
@@ -38,9 +38,9 @@ namespace OpenGlobe.Terrain
             _tileMinimumHeight = tile.MinimumHeight;
             _tileMaximumHeight = tile.MaximumHeight;
 
-            _heightExaggeration = sp.Uniforms["u_heightExaggeration"] as Uniform<float>;
-            _minimumHeight = sp.Uniforms["u_minimumHeight"] as Uniform<float>;
-            _maximumHeight = sp.Uniforms["u_maximumHeight"] as Uniform<float>;
+            _heightExaggeration = (Uniform<float>)sp.Uniforms["u_heightExaggeration"];
+            _minimumHeight = (Uniform<float>)sp.Uniforms["u_minimumHeight"];
+            _maximumHeight = (Uniform<float>)sp.Uniforms["u_maximumHeight"];
             HeightExaggeration = 1;
 
             ///////////////////////////////////////////////////////////////////

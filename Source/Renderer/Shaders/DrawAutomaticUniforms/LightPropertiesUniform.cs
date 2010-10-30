@@ -15,7 +15,7 @@ namespace OpenGlobe.Renderer
     {
         public LightPropertiesUniform(Uniform uniform)
         {
-            _uniform = uniform as Uniform<Vector4S>;
+            _uniform = (Uniform<Vector4S>)uniform;
         }
 
         #region DrawAutomaticUniform Members

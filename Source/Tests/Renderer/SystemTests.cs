@@ -154,7 +154,7 @@ namespace OpenGlobe.Renderer
 
             ShaderProgram sp = Device.CreateShaderProgram(ShaderSources.PassThroughVertexShader(), fs);
 
-            Uniform<int> textureUniform = sp.Uniforms["textureUnit"] as Uniform<int>;
+            Uniform<int> textureUniform = (Uniform<int>)sp.Uniforms["textureUnit"];
             textureUniform.Value = 0;
 
             ///////////////////////////////////////////////////////////////////

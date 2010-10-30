@@ -48,7 +48,7 @@ namespace OpenGlobe.Examples.Chapter03
                       fragmentColor = u_color;
                   }";
             ShaderProgram sp = Device.CreateShaderProgram(vs, fs);
-            (sp.Uniforms["u_color"] as Uniform<Vector3S>).Value = new Vector3S(1, 0, 0);
+            ((Uniform<Vector3S>)sp.Uniforms["u_color"]).Value = new Vector3S(1, 0, 0);
 
             ///////////////////////////////////////////////////////////////////
             

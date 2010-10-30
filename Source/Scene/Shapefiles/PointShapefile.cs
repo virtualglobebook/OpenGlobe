@@ -57,7 +57,7 @@ namespace OpenGlobe.Scene
                     throw new NotSupportedException("The type of an individual shape does not match the Shapefile type.");
                 }
 
-                PointD point = (shape as ShapePoint).Point;
+                PointD point = ((ShapePoint)shape).Point;
                 Vector3D position = globeShape.ToVector3D(Trig.ToRadians(new Geodetic3D(point.X, point.Y))); ;
 
                 Billboard icon = new Billboard();

@@ -16,7 +16,7 @@ namespace OpenGlobe.Renderer
     {
         public PixelSizePerDistanceUniform(Uniform uniform)
         {
-            _uniform = uniform as Uniform<float>;
+            _uniform = (Uniform<float>)uniform;
         }
 
         #region DrawAutomaticUniform Members

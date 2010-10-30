@@ -28,10 +28,10 @@ namespace OpenGlobe.Scene
                 EmbeddedResources.GetText("OpenGlobe.Scene.Renderables.Plane.Shaders.LineVS.glsl"),
                 EmbeddedResources.GetText("OpenGlobe.Scene.Renderables.Plane.Shaders.LineGS.glsl"),
                 EmbeddedResources.GetText("OpenGlobe.Scene.Renderables.Plane.Shaders.LineFS.glsl"));
-            _lineLogarithmicDepth = lineSP.Uniforms["u_logarithmicDepth"] as Uniform<bool>;
-            _lineLogarithmicDepthConstant = lineSP.Uniforms["u_logarithmicDepthConstant"] as Uniform<float>;
-            _lineFillDistance = lineSP.Uniforms["u_fillDistance"] as Uniform<float>;
-            _lineColorUniform = lineSP.Uniforms["u_color"] as Uniform<Vector3S>;
+            _lineLogarithmicDepth = (Uniform<bool>)lineSP.Uniforms["u_logarithmicDepth"];
+            _lineLogarithmicDepthConstant = (Uniform<float>)lineSP.Uniforms["u_logarithmicDepthConstant"];
+            _lineFillDistance = (Uniform<float>)lineSP.Uniforms["u_fillDistance"];
+            _lineColorUniform = (Uniform<Vector3S>)lineSP.Uniforms["u_color"];
 
             OutlineWidth = 1;
             OutlineColor = Color.Gray;
@@ -49,10 +49,10 @@ namespace OpenGlobe.Scene
             ShaderProgram fillSP = Device.CreateShaderProgram(
                 EmbeddedResources.GetText("OpenGlobe.Scene.Renderables.Plane.Shaders.FillVS.glsl"),
                 EmbeddedResources.GetText("OpenGlobe.Scene.Renderables.Plane.Shaders.FillFS.glsl"));
-            _fillLogarithmicDepth = fillSP.Uniforms["u_logarithmicDepth"] as Uniform<bool>;
-            _fillLogarithmicDepthConstant = fillSP.Uniforms["u_logarithmicDepthConstant"] as Uniform<float>;
-            _fillColorUniform = fillSP.Uniforms["u_color"] as Uniform<Vector3S>;
-            _fillAlphaUniform = fillSP.Uniforms["u_alpha"] as Uniform<float>;
+            _fillLogarithmicDepth = (Uniform<bool>)fillSP.Uniforms["u_logarithmicDepth"];
+            _fillLogarithmicDepthConstant = (Uniform<float>)fillSP.Uniforms["u_logarithmicDepthConstant"];
+            _fillColorUniform = (Uniform<Vector3S>)fillSP.Uniforms["u_color"];
+            _fillAlphaUniform = (Uniform<float>)fillSP.Uniforms["u_alpha"];
 
             LogarithmicDepthConstant = 1;
             FillColor = Color.Gray;

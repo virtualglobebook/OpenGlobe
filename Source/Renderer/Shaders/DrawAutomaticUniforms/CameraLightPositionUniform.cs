@@ -15,7 +15,7 @@ namespace OpenGlobe.Renderer
     {
         public CameraLightPositionUniform(Uniform uniform)
         {
-            _uniform = uniform as Uniform<Vector3S>;
+            _uniform = (Uniform<Vector3S>)uniform;
         }
 
         #region DrawAutomaticUniform Members

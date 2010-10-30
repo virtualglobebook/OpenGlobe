@@ -138,7 +138,7 @@ namespace OpenGlobe.Renderer.GL3x
         public override FrameBuffer FrameBuffer
         {
             get { return _setFrameBuffer; }
-            set { _setFrameBuffer = value as FrameBufferGL3x; }
+            set { _setFrameBuffer = (FrameBufferGL3x)value; }
         }
 
         public override void Clear(ClearState clearState)
@@ -176,7 +176,7 @@ namespace OpenGlobe.Renderer.GL3x
             VerifyDraw(drawState, sceneState);
             ApplyBeforeDraw(drawState, sceneState);
             
-            VertexArrayGL3x vertexArray = drawState.VertexArray as VertexArrayGL3x;
+            VertexArrayGL3x vertexArray = (VertexArrayGL3x)drawState.VertexArray;
             IndexBufferGL3x indexBuffer = vertexArray.IndexBuffer as IndexBufferGL3x;
             
             if (indexBuffer != null)
@@ -197,7 +197,7 @@ namespace OpenGlobe.Renderer.GL3x
             VerifyDraw(drawState, sceneState);
             ApplyBeforeDraw(drawState, sceneState);
 
-            VertexArrayGL3x vertexArray = drawState.VertexArray as VertexArrayGL3x;
+            VertexArrayGL3x vertexArray = (VertexArrayGL3x)drawState.VertexArray;
             IndexBufferGL3x indexBuffer = vertexArray.IndexBuffer as IndexBufferGL3x;
 
             if (indexBuffer != null)
@@ -517,14 +517,14 @@ namespace OpenGlobe.Renderer.GL3x
 
         private void ApplyVertexArray(VertexArray vertexArray)
         {
-            VertexArrayGL3x vertexArrayGL3x = vertexArray as VertexArrayGL3x;
+            VertexArrayGL3x vertexArrayGL3x = (VertexArrayGL3x)vertexArray;
             vertexArrayGL3x.Bind();
             vertexArrayGL3x.Clean();
         }
 
         private void ApplyShaderProgram(DrawState drawState, SceneState sceneState)
         {
-            ShaderProgramGL3x shaderProgramGL3x = drawState.ShaderProgram as ShaderProgramGL3x;
+            ShaderProgramGL3x shaderProgramGL3x = (ShaderProgramGL3x)drawState.ShaderProgram;
 
             if (_boundShaderProgram != shaderProgramGL3x)
             {

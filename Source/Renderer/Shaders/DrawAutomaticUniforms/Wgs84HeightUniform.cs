@@ -15,7 +15,7 @@ namespace OpenGlobe.Renderer
     {
         public Wgs84HeightUniform(Uniform uniform)
         {
-            _uniform = uniform as Uniform<float>;
+            _uniform = (Uniform<float>)uniform;
         }
 
         #region DrawAutomaticUniform Members

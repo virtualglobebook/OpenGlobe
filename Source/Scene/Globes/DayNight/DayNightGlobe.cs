@@ -24,12 +24,12 @@ namespace OpenGlobe.Scene
             ShaderProgram sp = Device.CreateShaderProgram(
                 EmbeddedResources.GetText("OpenGlobe.Scene.Globes.DayNight.Shaders.GlobeVS.glsl"),
                 EmbeddedResources.GetText("OpenGlobe.Scene.Globes.DayNight.Shaders.GlobeFS.glsl"));
-            _cameraEyeSquaredSP = sp.Uniforms["u_cameraEyeSquared"] as Uniform<Vector3S>;
-            _useAverageDepth = sp.Uniforms["u_useAverageDepth"] as Uniform<bool>;
+            _cameraEyeSquaredSP = (Uniform<Vector3S>)sp.Uniforms["u_cameraEyeSquared"];
+            _useAverageDepth = (Uniform<bool>)sp.Uniforms["u_useAverageDepth"];
 
             float blendDurationScale = 0.1f;
-            (sp.Uniforms["u_blendDuration"] as Uniform<float>).Value = blendDurationScale;
-            (sp.Uniforms["u_blendDurationScale"] as Uniform<float>).Value = 1 / (2 * blendDurationScale);
+            ((Uniform<float>)sp.Uniforms["u_blendDuration"]).Value = blendDurationScale;
+            ((Uniform<float>)sp.Uniforms["u_blendDurationScale"]).Value = 1 / (2 * blendDurationScale);
 
             _drawState = new DrawState();
             _drawState.ShaderProgram = sp;
@@ -55,7 +55,7 @@ namespace OpenGlobe.Scene
                 _drawState.RenderState.FacetCulling.Face = CullFace.Front;
                 _drawState.RenderState.FacetCulling.FrontFaceWindingOrder = mesh.FrontFaceWindingOrder;
 
-                (_drawState.ShaderProgram.Uniforms["u_globeOneOverRadiiSquared"] as Uniform<Vector3S>).Value = _shape.OneOverRadiiSquared.ToVector3S();
+                ((Uniform<Vector3S>)_drawState.ShaderProgram.Uniforms["u_globeOneOverRadiiSquared"]).Value = _shape.OneOverRadiiSquared.ToVector3S();
 
                 if (_wireframe != null)
                 {

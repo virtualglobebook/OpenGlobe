@@ -132,7 +132,7 @@ namespace OpenGlobe.Renderer
             {
                 if (mesh.Indices.Datatype == IndicesType.Byte)
                 {
-                    IList<byte> meshIndices = (mesh.Indices as IndicesByte).Values;
+                    IList<byte> meshIndices = ((IndicesByte)mesh.Indices).Values;
 
                     byte[] indices = new byte[meshIndices.Count];
                     meshIndices.CopyTo(indices, 0);
@@ -143,7 +143,7 @@ namespace OpenGlobe.Renderer
                 }
                 else if (mesh.Indices.Datatype == IndicesType.UnsignedShort)
                 {
-                    IList<ushort> meshIndices = (mesh.Indices as IndicesUnsignedShort).Values;
+                    IList<ushort> meshIndices = ((IndicesUnsignedShort)mesh.Indices).Values;
 
                     ushort[] indices = new ushort[meshIndices.Count];
                     for (int j = 0; j < meshIndices.Count; ++j)
@@ -159,7 +159,7 @@ namespace OpenGlobe.Renderer
                 {
                     Debug.Assert(mesh.Indices.Datatype == IndicesType.UnsignedInt);
 
-                    IList<uint> meshIndices = (mesh.Indices as IndicesUnsignedInt).Values;
+                    IList<uint> meshIndices = ((IndicesUnsignedInt)mesh.Indices).Values;
 
                     uint[] indices = new uint[meshIndices.Count];
                     for (int j = 0; j < meshIndices.Count; ++j)
@@ -185,7 +185,7 @@ namespace OpenGlobe.Renderer
 
                 if (attribute.Datatype == VertexAttributeType.Double)
                 {
-                    IList<double> values = (attribute as VertexAttribute<double>).Values;
+                    IList<double> values = ((VertexAttribute<double>)attribute).Values;
 
                     float[] valuesArray = new float[values.Count];
                     for (int i = 0; i < values.Count; ++i)
@@ -200,7 +200,7 @@ namespace OpenGlobe.Renderer
                 }
                 else if (attribute.Datatype == VertexAttributeType.DoubleVector2)
                 {
-                    IList<Vector2D> values = (attribute as VertexAttribute<Vector2D>).Values;
+                    IList<Vector2D> values = ((VertexAttribute<Vector2D>)attribute).Values;
 
                     Vector2S[] valuesArray = new Vector2S[values.Count];
                     for (int i = 0; i < values.Count; ++i)
@@ -215,7 +215,7 @@ namespace OpenGlobe.Renderer
                 }
                 else if (attribute.Datatype == VertexAttributeType.DoubleVector3)
                 {
-                    IList<Vector3D> values = (attribute as VertexAttribute<Vector3D>).Values;
+                    IList<Vector3D> values = ((VertexAttribute<Vector3D>)attribute).Values;
 
                     Vector3S[] valuesArray = new Vector3S[values.Count];
                     for (int i = 0; i < values.Count; ++i)
@@ -230,7 +230,7 @@ namespace OpenGlobe.Renderer
                 }
                 else if (attribute.Datatype == VertexAttributeType.DoubleVector4)
                 {
-                    IList<Vector4D> values = (attribute as VertexAttribute<Vector4D>).Values;
+                    IList<Vector4D> values = ((VertexAttribute<Vector4D>)attribute).Values;
 
                     Vector4S[] valuesArray = new Vector4S[values.Count];
                     for (int i = 0; i < values.Count; ++i)
@@ -245,56 +245,56 @@ namespace OpenGlobe.Renderer
                 }
                 else if (attribute.Datatype == VertexAttributeType.HalfFloat)
                 {
-                    VertexBuffer vertexBuffer = CreateVertexBuffer((attribute as VertexAttribute<Half>).Values, SizeInBytes<Half>.Value, usageHint);
+                    VertexBuffer vertexBuffer = CreateVertexBuffer(((VertexAttribute<Half>)attribute).Values, SizeInBytes<Half>.Value, usageHint);
 
                     meshBuffers.Attributes[shaderAttribute.Location] =
                         new VertexBufferAttribute(vertexBuffer, ComponentDatatype.HalfFloat, 1);
                 }
                 else if (attribute.Datatype == VertexAttributeType.HalfFloatVector2)
                 {
-                    VertexBuffer vertexBuffer = CreateVertexBuffer((attribute as VertexAttribute<Vector2H>).Values, SizeInBytes<Vector2H>.Value, usageHint);
+                    VertexBuffer vertexBuffer = CreateVertexBuffer(((VertexAttribute<Vector2H>)attribute).Values, SizeInBytes<Vector2H>.Value, usageHint);
 
                     meshBuffers.Attributes[shaderAttribute.Location] =
                         new VertexBufferAttribute(vertexBuffer, ComponentDatatype.HalfFloat, 2);
                 }
                 else if (attribute.Datatype == VertexAttributeType.HalfFloatVector3)
                 {
-                    VertexBuffer vertexBuffer = CreateVertexBuffer((attribute as VertexAttribute<Vector3H>).Values, SizeInBytes<Vector3H>.Value, usageHint);
+                    VertexBuffer vertexBuffer = CreateVertexBuffer(((VertexAttribute<Vector3H>)attribute).Values, SizeInBytes<Vector3H>.Value, usageHint);
 
                     meshBuffers.Attributes[shaderAttribute.Location] =
                         new VertexBufferAttribute(vertexBuffer, ComponentDatatype.HalfFloat, 3);
                 }
                 else if (attribute.Datatype == VertexAttributeType.HalfFloatVector4)
                 {
-                    VertexBuffer vertexBuffer = CreateVertexBuffer((attribute as VertexAttribute<Vector4H>).Values, SizeInBytes<Vector4H>.Value, usageHint);
+                    VertexBuffer vertexBuffer = CreateVertexBuffer(((VertexAttribute<Vector4H>)attribute).Values, SizeInBytes<Vector4H>.Value, usageHint);
 
                     meshBuffers.Attributes[shaderAttribute.Location] =
                         new VertexBufferAttribute(vertexBuffer, ComponentDatatype.HalfFloat, 4);
                 }
                 else if (attribute.Datatype == VertexAttributeType.Float)
                 {
-                    VertexBuffer vertexBuffer = CreateVertexBuffer((attribute as VertexAttribute<float>).Values, sizeof(float), usageHint);
+                    VertexBuffer vertexBuffer = CreateVertexBuffer(((VertexAttribute<float>)attribute).Values, sizeof(float), usageHint);
 
                     meshBuffers.Attributes[shaderAttribute.Location] =
                         new VertexBufferAttribute(vertexBuffer, ComponentDatatype.Float, 1);
                 }
                 else if (attribute.Datatype == VertexAttributeType.FloatVector2)
                 {
-                    VertexBuffer vertexBuffer = CreateVertexBuffer((attribute as VertexAttribute<Vector2S>).Values, SizeInBytes<Vector2S>.Value, usageHint);
+                    VertexBuffer vertexBuffer = CreateVertexBuffer(((VertexAttribute<Vector2S>)attribute).Values, SizeInBytes<Vector2S>.Value, usageHint);
 
                     meshBuffers.Attributes[shaderAttribute.Location] =
                         new VertexBufferAttribute(vertexBuffer, ComponentDatatype.Float, 2);
                 }
                 else if (attribute.Datatype == VertexAttributeType.FloatVector3)
                 {
-                    VertexBuffer vertexBuffer = CreateVertexBuffer((attribute as VertexAttribute<Vector3S>).Values, SizeInBytes<Vector3S>.Value, usageHint);
+                    VertexBuffer vertexBuffer = CreateVertexBuffer(((VertexAttribute<Vector3S>)attribute).Values, SizeInBytes<Vector3S>.Value, usageHint);
 
                     meshBuffers.Attributes[shaderAttribute.Location] =
                         new VertexBufferAttribute(vertexBuffer, ComponentDatatype.Float, 3);
                 }
                 else if (attribute.Datatype == VertexAttributeType.FloatVector4)
                 {
-                    VertexBuffer vertexBuffer = CreateVertexBuffer((attribute as VertexAttribute<Vector4S>).Values, SizeInBytes<Vector4S>.Value, usageHint);
+                    VertexBuffer vertexBuffer = CreateVertexBuffer(((VertexAttribute<Vector4S>)attribute).Values, SizeInBytes<Vector4S>.Value, usageHint);
 
                     meshBuffers.Attributes[shaderAttribute.Location] =
                         new VertexBufferAttribute(vertexBuffer, ComponentDatatype.Float, 4);
@@ -303,14 +303,14 @@ namespace OpenGlobe.Renderer
                 {
                     if (attribute is VertexAttributeRGBA)
                     {
-                        VertexBuffer vertexBuffer = CreateVertexBuffer((attribute as VertexAttribute<byte>).Values, sizeof(byte), usageHint);
+                        VertexBuffer vertexBuffer = CreateVertexBuffer(((VertexAttribute<byte>)attribute).Values, sizeof(byte), usageHint);
 
                         meshBuffers.Attributes[shaderAttribute.Location] =
                             new VertexBufferAttribute(vertexBuffer, ComponentDatatype.UnsignedByte, 4, true, 0, 0);
                     }
                     else
                     {
-                        VertexBuffer vertexBuffer = CreateVertexBuffer((attribute as VertexAttribute<byte>).Values, sizeof(byte), usageHint);
+                        VertexBuffer vertexBuffer = CreateVertexBuffer(((VertexAttribute<byte>)attribute).Values, sizeof(byte), usageHint);
 
                         meshBuffers.Attributes[shaderAttribute.Location] =
                             new VertexBufferAttribute(vertexBuffer, ComponentDatatype.UnsignedByte, 1);

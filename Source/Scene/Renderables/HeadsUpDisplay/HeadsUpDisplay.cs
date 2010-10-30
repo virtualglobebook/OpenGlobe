@@ -34,8 +34,8 @@ namespace OpenGlobe.Scene
                 EmbeddedResources.GetText("OpenGlobe.Scene.Renderables.HeadsUpDisplay.Shaders.HeadsUpDisplayVS.glsl"),
                 EmbeddedResources.GetText("OpenGlobe.Scene.Renderables.HeadsUpDisplay.Shaders.HeadsUpDisplayGS.glsl"),
                 EmbeddedResources.GetText("OpenGlobe.Scene.Renderables.HeadsUpDisplay.Shaders.HeadsUpDisplayFS.glsl"));
-            _colorUniform = sp.Uniforms["u_color"] as Uniform<Vector3S>;
-            _originScaleUniform = sp.Uniforms["u_originScale"] as Uniform<Vector2S>;
+            _colorUniform = (Uniform<Vector3S>)sp.Uniforms["u_color"];
+            _originScaleUniform = (Uniform<Vector2S>)sp.Uniforms["u_originScale"];
 
             _drawState = new DrawState(renderState, sp, null);
 

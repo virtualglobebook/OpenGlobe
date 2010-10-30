@@ -23,9 +23,9 @@ namespace OpenGlobe.Scene
             ShaderProgram sp = Device.CreateShaderProgram(
                 EmbeddedResources.GetText("OpenGlobe.Scene.Globes.Tessellated.Shaders.GlobeVS.glsl"),
                 EmbeddedResources.GetText("OpenGlobe.Scene.Globes.Tessellated.Shaders.GlobeFS.glsl"));
-            _textured = sp.Uniforms["u_Textured"] as Uniform<bool>;
-            _logarithmicDepth = sp.Uniforms["u_logarithmicDepth"] as Uniform<bool>;
-            _logarithmicDepthConstant = sp.Uniforms["u_logarithmicDepthConstant"] as Uniform<float>;
+            _textured = (Uniform<bool>)sp.Uniforms["u_Textured"];
+            _logarithmicDepth = (Uniform<bool>)sp.Uniforms["u_logarithmicDepth"];
+            _logarithmicDepthConstant = (Uniform<float>)sp.Uniforms["u_logarithmicDepthConstant"];
             LogarithmicDepthConstant = 1;
             
             _drawState = new DrawState();
@@ -50,7 +50,7 @@ namespace OpenGlobe.Scene
                     _numberOfSlicePartitions, _numberOfStackPartitions, GeographicGridEllipsoidVertexAttributes.Position);
                 _drawState.VertexArray = context.CreateVertexArray(mesh, _drawState.ShaderProgram.VertexAttributes, BufferHint.StaticDraw);
                 _primitiveType = mesh.PrimitiveType;
-                _numberOfTriangles = ((mesh.Indices as IndicesUnsignedInt).Values.Count / 3);
+                _numberOfTriangles = (((IndicesUnsignedInt)mesh.Indices).Values.Count / 3);
 
                 _drawState.RenderState.FacetCulling.FrontFaceWindingOrder = mesh.FrontFaceWindingOrder;
 

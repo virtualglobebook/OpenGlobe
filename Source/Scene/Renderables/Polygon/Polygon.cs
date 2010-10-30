@@ -26,7 +26,7 @@ namespace OpenGlobe.Scene
             //
             // Pipeline Stage 1a:  Clean up - Remove duplicate positions
             //
-            List<Vector3D> cleanPositions = SimplePolygonAlgorithms.Cleanup(positions) as List<Vector3D>;
+            List<Vector3D> cleanPositions = (List<Vector3D>)SimplePolygonAlgorithms.Cleanup(positions);
 
             //
             // Pipeline Stage 1b:  Clean up - Swap winding order
@@ -36,7 +36,7 @@ namespace OpenGlobe.Scene
             if (SimplePolygonAlgorithms.ComputeWindingOrder(positionsOnPlane) == PolygonWindingOrder.Clockwise)
             {
                 cleanPositions.Reverse();
-                //(positionsOnPlane as List<Vector2D>).Reverse();
+                //((List<Vector2D>)positionsOnPlane).Reverse();
             }
             
             //
@@ -69,8 +69,8 @@ namespace OpenGlobe.Scene
             ShaderProgram sp = Device.CreateShaderProgram(
                 EmbeddedResources.GetText("OpenGlobe.Scene.Renderables.Polygon.Shaders.PolygonVS.glsl"),
                 EmbeddedResources.GetText("OpenGlobe.Scene.Renderables.Polygon.Shaders.PolygonFS.glsl"));
-            (sp.Uniforms["u_globeOneOverRadiiSquared"] as Uniform<Vector3S>).Value = globeShape.OneOverRadiiSquared.ToVector3S();
-            _colorUniform = sp.Uniforms["u_color"] as Uniform<Vector4S>;
+            ((Uniform<Vector3S>)sp.Uniforms["u_globeOneOverRadiiSquared"]).Value = globeShape.OneOverRadiiSquared.ToVector3S();
+            _colorUniform = (Uniform<Vector4S>)sp.Uniforms["u_color"];
 
             _drawState = new DrawState();
             _drawState.RenderState.Blending.Enabled = true;

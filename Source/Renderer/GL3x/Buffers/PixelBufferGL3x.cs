@@ -72,7 +72,7 @@ namespace OpenGlobe.Renderer.GL3x
                 //
                 // OpenGL wants rows bottom to top.
                 //
-                Bitmap flippedBitmap = bitmap.Clone() as Bitmap;
+                Bitmap flippedBitmap = (Bitmap)bitmap.Clone();
                 flippedBitmap.RotateFlip(RotateFlipType.RotateNoneFlipY);
                 lockedBitmap = flippedBitmap;
             }

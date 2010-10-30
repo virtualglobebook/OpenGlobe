@@ -148,28 +148,28 @@ namespace OpenGlobe.Renderer
             Assert.IsEmpty(sp.UniformBlocks);
             Assert.AreEqual(24, sp.Uniforms.Count);
 
-            Uniform<float> exampleFloat = sp.Uniforms["exampleFloat"] as Uniform<float>;
+            Uniform<float> exampleFloat = (Uniform<float>)sp.Uniforms["exampleFloat"];
             Assert.AreEqual("exampleFloat", exampleFloat.Name);
             Assert.AreEqual(UniformType.Float, exampleFloat.Datatype);
             Assert.AreEqual(0, exampleFloat.Value);
             exampleFloat.Value = 0.75f;
             Assert.AreEqual(0.75f, exampleFloat.Value);
 
-            Uniform<Vector2S> exampleVec2 = sp.Uniforms["exampleVec2"] as Uniform<Vector2S>;
+            Uniform<Vector2S> exampleVec2 = (Uniform<Vector2S>)sp.Uniforms["exampleVec2"];
             Assert.AreEqual("exampleVec2", exampleVec2.Name);
             Assert.AreEqual(UniformType.FloatVector2, exampleVec2.Datatype);
             Assert.AreEqual(new Vector2S(), exampleVec2.Value);
             exampleVec2.Value = new Vector2S(1, 0.5f);
             Assert.AreEqual(new Vector2S(1, 0.5f), exampleVec2.Value);
 
-            Uniform<Vector3S> exampleVec3 = sp.Uniforms["exampleVec3"] as Uniform<Vector3S>;
+            Uniform<Vector3S> exampleVec3 = (Uniform<Vector3S>)sp.Uniforms["exampleVec3"];
             Assert.AreEqual("exampleVec3", exampleVec3.Name);
             Assert.AreEqual(UniformType.FloatVector3, exampleVec3.Datatype);
             Assert.AreEqual(new Vector3S(), exampleVec3.Value);
             exampleVec3.Value = new Vector3S(1, 0, 0);
             Assert.AreEqual(new Vector3S(1, 0, 0), exampleVec3.Value);
 
-            Uniform<Vector4S> exampleVec4 = sp.Uniforms["exampleVec4"] as Uniform<Vector4S>;
+            Uniform<Vector4S> exampleVec4 = (Uniform<Vector4S>)sp.Uniforms["exampleVec4"];
             Assert.AreEqual("exampleVec4", exampleVec4.Name);
             Assert.AreEqual(UniformType.FloatVector4, exampleVec4.Datatype);
             Assert.AreEqual(new Vector4S(), exampleVec4.Value);
@@ -178,28 +178,28 @@ namespace OpenGlobe.Renderer
 
             ///////////////////////////////////////////////////////////////////
 
-            Uniform<int> exampleInt = sp.Uniforms["exampleInt"] as Uniform<int>;
+            Uniform<int> exampleInt = (Uniform<int>)sp.Uniforms["exampleInt"];
             Assert.AreEqual("exampleInt", exampleInt.Name);
             Assert.AreEqual(UniformType.Int, exampleInt.Datatype);
             Assert.AreEqual(0, exampleInt.Value);
             exampleInt.Value = 1;
             Assert.AreEqual(1, exampleInt.Value);
 
-            Uniform<Vector2i> exampleIVec2 = sp.Uniforms["exampleIVec2"] as Uniform<Vector2i>;
+            Uniform<Vector2i> exampleIVec2 = (Uniform<Vector2i>)sp.Uniforms["exampleIVec2"];
             Assert.AreEqual("exampleIVec2", exampleIVec2.Name);
             Assert.AreEqual(UniformType.IntVector2, exampleIVec2.Datatype);
             Assert.AreEqual(new Vector2i(), exampleIVec2.Value);
             exampleIVec2.Value = new Vector2i(1, 0);
             Assert.AreEqual(new Vector2i(1, 0), exampleIVec2.Value);
 
-            Uniform<Vector3i> exampleIVec3 = sp.Uniforms["exampleIVec3"] as Uniform<Vector3i>;
+            Uniform<Vector3i> exampleIVec3 = (Uniform<Vector3i>)sp.Uniforms["exampleIVec3"];
             Assert.AreEqual("exampleIVec3", exampleIVec3.Name);
             Assert.AreEqual(UniformType.IntVector3, exampleIVec3.Datatype);
             Assert.AreEqual(new Vector3i(), exampleIVec3.Value);
             exampleIVec3.Value = new Vector3i(1, 0, 0);
             Assert.AreEqual(new Vector3i(1, 0, 0), exampleIVec3.Value);
 
-            Uniform<Vector4i> exampleIVec4 = sp.Uniforms["exampleIVec4"] as Uniform<Vector4i>;
+            Uniform<Vector4i> exampleIVec4 = (Uniform<Vector4i>)sp.Uniforms["exampleIVec4"];
             Assert.AreEqual("exampleIVec4", exampleIVec4.Name);
             Assert.AreEqual(UniformType.IntVector4, exampleIVec4.Datatype);
             Assert.AreEqual(new Vector4i(), exampleIVec4.Value);
@@ -208,28 +208,28 @@ namespace OpenGlobe.Renderer
 
             ///////////////////////////////////////////////////////////////////
 
-            Uniform<bool> exampleBool = sp.Uniforms["exampleBool"] as Uniform<bool>;
+            Uniform<bool> exampleBool = (Uniform<bool>)sp.Uniforms["exampleBool"];
             Assert.AreEqual("exampleBool", exampleBool.Name);
             Assert.AreEqual(UniformType.Bool, exampleBool.Datatype);
             Assert.AreEqual(false, exampleBool.Value);
             exampleBool.Value = true;
             Assert.AreEqual(true, exampleBool.Value);
 
-            Uniform<Vector2b> exampleBVec2 = sp.Uniforms["exampleBVec2"] as Uniform<Vector2b>;
+            Uniform<Vector2b> exampleBVec2 = (Uniform<Vector2b>)sp.Uniforms["exampleBVec2"];
             Assert.AreEqual("exampleBVec2", exampleBVec2.Name);
             Assert.AreEqual(UniformType.BoolVector2, exampleBVec2.Datatype);
             Assert.AreEqual(new Vector2b(), exampleBVec2.Value);
             exampleBVec2.Value = new Vector2b(true, false);
             Assert.AreEqual(new Vector2b(true, false), exampleBVec2.Value);
 
-            Uniform<Vector3b> exampleBVec3 = sp.Uniforms["exampleBVec3"] as Uniform<Vector3b>;
+            Uniform<Vector3b> exampleBVec3 = (Uniform<Vector3b>)sp.Uniforms["exampleBVec3"];
             Assert.AreEqual("exampleBVec3", exampleBVec3.Name);
             Assert.AreEqual(UniformType.BoolVector3, exampleBVec3.Datatype);
             Assert.AreEqual(new Vector3b(), exampleBVec3.Value);
             exampleBVec3.Value = new Vector3b(true, false, false);
             Assert.AreEqual(new Vector3b(true, false, false), exampleBVec3.Value);
 
-            Uniform<Vector4b> exampleBVec4 = sp.Uniforms["exampleBVec4"] as Uniform<Vector4b>;
+            Uniform<Vector4b> exampleBVec4 = (Uniform<Vector4b>)sp.Uniforms["exampleBVec4"];
             Assert.AreEqual("exampleBVec4", exampleBVec4.Name);
             Assert.AreEqual(UniformType.BoolVector4, exampleBVec4.Datatype);
             Assert.AreEqual(new Vector4b(), exampleBVec4.Value);
@@ -238,21 +238,21 @@ namespace OpenGlobe.Renderer
 
             ///////////////////////////////////////////////////////////////////
 
-            Uniform<int> exampleSampler2D = sp.Uniforms["exampleSampler2D"] as Uniform<int>;
+            Uniform<int> exampleSampler2D = (Uniform<int>)sp.Uniforms["exampleSampler2D"];
             Assert.AreEqual("exampleSampler2D", exampleSampler2D.Name);
             Assert.AreEqual(UniformType.Sampler2D, exampleSampler2D.Datatype);
             Assert.AreEqual(0, exampleSampler2D.Value);
             exampleSampler2D.Value = 1;
             Assert.AreEqual(1, exampleSampler2D.Value);
 
-            Uniform<int> exampleSampler2DRect = sp.Uniforms["exampleSampler2DRect"] as Uniform<int>;
+            Uniform<int> exampleSampler2DRect = (Uniform<int>)sp.Uniforms["exampleSampler2DRect"];
             Assert.AreEqual("exampleSampler2DRect", exampleSampler2DRect.Name);
             Assert.AreEqual(UniformType.Sampler2DRectangle, exampleSampler2DRect.Datatype);
             Assert.AreEqual(0, exampleSampler2DRect.Value);
             exampleSampler2DRect.Value = 1;
             Assert.AreEqual(1, exampleSampler2DRect.Value);
 
-            Uniform<int> exampleSampler1DArray = sp.Uniforms["exampleSampler1DArray"] as Uniform<int>;
+            Uniform<int> exampleSampler1DArray = (Uniform<int>)sp.Uniforms["exampleSampler1DArray"];
             Assert.AreEqual("exampleSampler1DArray", exampleSampler1DArray.Name);
             Assert.AreEqual(UniformType.Sampler1DArray, exampleSampler1DArray.Datatype);
             Assert.AreEqual(0, exampleSampler1DArray.Value);
@@ -266,7 +266,7 @@ namespace OpenGlobe.Renderer
                 new Vector4(0.25f, 0, 0, 0),
                 new Vector4(0, 0, 0, 0),
                 new Vector4(0, 0, 0, 0));
-            Uniform<Matrix4> exampleMat4 = sp.Uniforms["exampleMat4"] as Uniform<Matrix4>;
+            Uniform<Matrix4> exampleMat4 = (Uniform<Matrix4>)sp.Uniforms["exampleMat4"];
             Assert.AreEqual("exampleMat4", exampleMat4.Name);
             Assert.AreEqual(UniformType.FloatMatrix44, exampleMat4.Datatype);
             Assert.AreEqual(new Matrix4(), exampleMat4.Value);
@@ -277,7 +277,7 @@ namespace OpenGlobe.Renderer
                 new Vector3(0, 0, 0),
                 new Vector3(0, 0, 0.25f),
                 new Vector3(0, 0, 0));
-            Uniform<Matrix3> exampleMat3 = sp.Uniforms["exampleMat3"] as Uniform<Matrix3>;
+            Uniform<Matrix3> exampleMat3 = (Uniform<Matrix3>)sp.Uniforms["exampleMat3"];
             Assert.AreEqual("exampleMat3", exampleMat3.Name);
             Assert.AreEqual(UniformType.FloatMatrix33, exampleMat3.Datatype);
             Assert.AreEqual(new Matrix3(), exampleMat3.Value);
@@ -287,7 +287,7 @@ namespace OpenGlobe.Renderer
             Matrix2 m2 = new Matrix2(
                 new Vector2(0, 1),
                 new Vector2(0, 0));
-            Uniform<Matrix2> exampleMat2 = sp.Uniforms["exampleMat2"] as Uniform<Matrix2>;
+            Uniform<Matrix2> exampleMat2 = (Uniform<Matrix2>)sp.Uniforms["exampleMat2"];
             Assert.AreEqual("exampleMat2", exampleMat2.Name);
             Assert.AreEqual(UniformType.FloatMatrix22, exampleMat2.Datatype);
             Assert.AreEqual(new Matrix2(), exampleMat2.Value);
@@ -298,7 +298,7 @@ namespace OpenGlobe.Renderer
                 new Vector2(0, 0),
                 new Vector2(0, 0.25f),
                 new Vector2(0, 0));
-            Uniform<Matrix23> exampleMat23 = sp.Uniforms["exampleMat23"] as Uniform<Matrix23>;
+            Uniform<Matrix23> exampleMat23 = (Uniform<Matrix23>)sp.Uniforms["exampleMat23"];
             Assert.AreEqual("exampleMat23", exampleMat23.Name);
             Assert.AreEqual(UniformType.FloatMatrix23, exampleMat23.Datatype);
             Assert.AreEqual(new Matrix23(), exampleMat23.Value);
@@ -310,7 +310,7 @@ namespace OpenGlobe.Renderer
                 new Vector2(0, 0),
                 new Vector2(0.25f, 0),
                 new Vector2(0, 0));
-            Uniform<Matrix24> exampleMat24 = sp.Uniforms["exampleMat24"] as Uniform<Matrix24>;
+            Uniform<Matrix24> exampleMat24 = (Uniform<Matrix24>)sp.Uniforms["exampleMat24"];
             Assert.AreEqual("exampleMat24", exampleMat24.Name);
             Assert.AreEqual(UniformType.FloatMatrix24, exampleMat24.Datatype);
             Assert.AreEqual(new Matrix24(), exampleMat24.Value);
@@ -320,7 +320,7 @@ namespace OpenGlobe.Renderer
             Matrix32 m32 = new Matrix32(
                 new Vector3(0, 0, 0),
                 new Vector3(0, 0.25f, 0));
-            Uniform<Matrix32> exampleMat32 = sp.Uniforms["exampleMat32"] as Uniform<Matrix32>;
+            Uniform<Matrix32> exampleMat32 = (Uniform<Matrix32>)sp.Uniforms["exampleMat32"];
             Assert.AreEqual("exampleMat32", exampleMat32.Name);
             Assert.AreEqual(UniformType.FloatMatrix32, exampleMat32.Datatype);
             Assert.AreEqual(new Matrix32(), exampleMat32.Value);
@@ -332,7 +332,7 @@ namespace OpenGlobe.Renderer
                 new Vector3(0, 0, 0),
                 new Vector3(0.25f, 0, 0),
                 new Vector3(0, 0, 0));
-            Uniform<Matrix34> exampleMat34 = sp.Uniforms["exampleMat34"] as Uniform<Matrix34>;
+            Uniform<Matrix34> exampleMat34 = (Uniform<Matrix34>)sp.Uniforms["exampleMat34"];
             Assert.AreEqual("exampleMat34", exampleMat34.Name);
             Assert.AreEqual(UniformType.FloatMatrix34, exampleMat34.Datatype);
             Assert.AreEqual(new Matrix34(), exampleMat34.Value);
@@ -342,7 +342,7 @@ namespace OpenGlobe.Renderer
             Matrix42 m42 = new Matrix42(
                 new Vector4(0, 0, 0, 0.25f),
                 new Vector4(0, 0, 0, 0));
-            Uniform<Matrix42> exampleMat42 = sp.Uniforms["exampleMat42"] as Uniform<Matrix42>;
+            Uniform<Matrix42> exampleMat42 = (Uniform<Matrix42>)sp.Uniforms["exampleMat42"];
             Assert.AreEqual("exampleMat42", exampleMat42.Name);
             Assert.AreEqual(UniformType.FloatMatrix42, exampleMat42.Datatype);
             Assert.AreEqual(new Matrix42(), exampleMat42.Value);
@@ -353,7 +353,7 @@ namespace OpenGlobe.Renderer
                 new Vector4(0, 0, 0, 0),
                 new Vector4(0, 0, 0, 0.25f),
                 new Vector4(0, 0, 0, 0));
-            Uniform<Matrix43> exampleMat43 = sp.Uniforms["exampleMat43"] as Uniform<Matrix43>;
+            Uniform<Matrix43> exampleMat43 = (Uniform<Matrix43>)sp.Uniforms["exampleMat43"];
             Assert.AreEqual("exampleMat43", exampleMat43.Name);
             Assert.AreEqual(UniformType.FloatMatrix43, exampleMat43.Datatype);
             Assert.AreEqual(new Matrix43(), exampleMat43.Value);
@@ -387,10 +387,10 @@ namespace OpenGlobe.Renderer
                           texture(og_texture3, vec2(0, 0));
                   }";
             ShaderProgram sp = Device.CreateShaderProgram(ShaderSources.PassThroughVertexShader(), fs);
-            Assert.AreEqual(0, (sp.Uniforms["og_texture0"] as Uniform<int>).Value);
-            Assert.AreEqual(1, (sp.Uniforms["og_texture1"] as Uniform<int>).Value);
-            Assert.AreEqual(2, (sp.Uniforms["og_texture2"] as Uniform<int>).Value);
-            Assert.AreEqual(3, (sp.Uniforms["og_texture3"] as Uniform<int>).Value);
+            Assert.AreEqual(0, ((Uniform<int>)sp.Uniforms["og_texture0"]).Value);
+            Assert.AreEqual(1, ((Uniform<int>)sp.Uniforms["og_texture1"]).Value);
+            Assert.AreEqual(2, ((Uniform<int>)sp.Uniforms["og_texture2"]).Value);
+            Assert.AreEqual(3, ((Uniform<int>)sp.Uniforms["og_texture3"]).Value);
 
             sp.Dispose();
             window.Dispose();

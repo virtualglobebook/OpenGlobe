@@ -62,7 +62,7 @@ namespace OpenGlobe.Scene
                     EmbeddedResources.GetText("OpenGlobe.Scene.Renderables.Polyline.OutlinedPolylineTexture.PolylineVS.glsl"),
                     EmbeddedResources.GetText("OpenGlobe.Scene.Renderables.Polyline.OutlinedPolylineTexture.PolylineGS.glsl"),
                     EmbeddedResources.GetText("OpenGlobe.Scene.Renderables.Polyline.OutlinedPolylineTexture.PolylineFS.glsl"));
-                _distance = _drawState.ShaderProgram.Uniforms["u_distance"] as Uniform<float>;
+                _distance = (Uniform<float>)_drawState.ShaderProgram.Uniforms["u_distance"];
             }
 
             ///////////////////////////////////////////////////////////////////

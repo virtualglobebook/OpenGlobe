@@ -25,7 +25,7 @@ namespace OpenGlobe.Renderer
 
         public override void Set(Uniform uniform)
         {
- 	        (uniform as Uniform<int>).Value = _textureUnit;
+ 	        ((Uniform<int>)uniform).Value = _textureUnit;
         }
 
         #endregion

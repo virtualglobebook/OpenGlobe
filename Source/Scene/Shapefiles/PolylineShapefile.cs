@@ -66,7 +66,7 @@ namespace OpenGlobe.Scene
                     throw new NotSupportedException("The type of an individual shape does not match the Shapefile type.");
                 }
 
-                IList<PointD[]> parts = (shape as ShapePolyLine).Parts;
+                IList<PointD[]> parts = ((ShapePolyLine)shape).Parts;
 
                 for (int j = 0; j < parts.Count; ++j)
                 {
@@ -118,7 +118,7 @@ namespace OpenGlobe.Scene
                     throw new NotSupportedException("The type of an individual shape does not match the Shapefile type.");
                 }
 
-                IList<PointD[]> parts = (shape as ShapePolyLine).Parts;
+                IList<PointD[]> parts = ((ShapePolyLine)shape).Parts;
 
                 for (int i = 0; i < parts.Count; ++i)
                 {

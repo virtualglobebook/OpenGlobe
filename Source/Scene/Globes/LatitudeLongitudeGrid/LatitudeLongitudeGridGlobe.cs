@@ -25,9 +25,9 @@ namespace OpenGlobe.Scene
             ShaderProgram sp = Device.CreateShaderProgram(
                 EmbeddedResources.GetText("OpenGlobe.Scene.Globes.LatitudeLongitudeGrid.Shaders.GlobeVS.glsl"),
                 EmbeddedResources.GetText("OpenGlobe.Scene.Globes.LatitudeLongitudeGrid.Shaders.GlobeFS.glsl"));
-            _gridWidth = sp.Uniforms["u_gridLineWidth"] as Uniform<Vector2S>;
-            _gridResolution = sp.Uniforms["u_gridResolution"] as Uniform<Vector2S>;
-            _globeOneOverRadiiSquared = sp.Uniforms["u_globeOneOverRadiiSquared"] as Uniform<Vector3S>;
+            _gridWidth = (Uniform<Vector2S>)sp.Uniforms["u_gridLineWidth"];
+            _gridResolution = (Uniform<Vector2S>)sp.Uniforms["u_gridResolution"];
+            _globeOneOverRadiiSquared = (Uniform<Vector3S>)sp.Uniforms["u_globeOneOverRadiiSquared"];
 
             _drawState = new DrawState();
             _drawState.ShaderProgram = sp;

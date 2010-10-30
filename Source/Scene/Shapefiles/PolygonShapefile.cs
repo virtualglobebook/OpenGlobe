@@ -62,7 +62,7 @@ namespace OpenGlobe.Scene
                     throw new NotSupportedException("The type of an individual shape does not match the Shapefile type.");
                 }
 
-                IList<PointD[]> parts = (shape as ShapePolygon).Parts;
+                IList<PointD[]> parts = ((ShapePolygon)shape).Parts;
 
                 for (int j = 0; j < parts.Count; ++j)
                 {

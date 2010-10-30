@@ -32,11 +32,11 @@ namespace OpenGlobe.Core.Tessellation
             Assert.IsNotNull(sphere.Attributes["textureCoordinate"] as VertexAttributeHalfFloatVector2);
 
             GraphicsAssert.ListsAreEqual(
-                (simpleSphere.Indices as IndicesUnsignedInt).Values, 
-                (sphere.Indices as IndicesUnsignedInt).Values);
+                ((IndicesUnsignedInt)simpleSphere.Indices).Values, 
+                ((IndicesUnsignedInt)sphere.Indices).Values);
             GraphicsAssert.ListsAreEqual(
-                (simpleSphere.Attributes["position"] as VertexAttributeDoubleVector3).Values,
-                (sphere.Attributes["position"] as VertexAttributeDoubleVector3).Values);
+                ((VertexAttributeDoubleVector3)simpleSphere.Attributes["position"]).Values,
+                ((VertexAttributeDoubleVector3)sphere.Attributes["position"]).Values);
         }
 
         [Test]
@@ -46,17 +46,17 @@ namespace OpenGlobe.Core.Tessellation
             Mesh ellipsoid = SubdivisionEllipsoidTessellator.Compute(Ellipsoid.UnitSphere, 1, SubdivisionEllipsoidVertexAttributes.All);
 
             GraphicsAssert.ListsAreEqual(
-                (sphere.Indices as IndicesUnsignedInt).Values,
-                (ellipsoid.Indices as IndicesUnsignedInt).Values);
+                ((IndicesUnsignedInt)sphere.Indices).Values,
+                ((IndicesUnsignedInt)ellipsoid.Indices).Values);
             GraphicsAssert.ListsAreEqual(
-                (sphere.Attributes["position"] as VertexAttributeDoubleVector3).Values,
-                (ellipsoid.Attributes["position"] as VertexAttributeDoubleVector3).Values);
+                ((VertexAttributeDoubleVector3)sphere.Attributes["position"]).Values,
+                ((VertexAttributeDoubleVector3)ellipsoid.Attributes["position"]).Values);
             GraphicsAssert.ListsAreEqual(
-                (sphere.Attributes["normal"] as VertexAttributeHalfFloatVector3).Values,
-                (ellipsoid.Attributes["normal"] as VertexAttributeHalfFloatVector3).Values);
+                ((VertexAttributeHalfFloatVector3)sphere.Attributes["normal"]).Values,
+                ((VertexAttributeHalfFloatVector3)ellipsoid.Attributes["normal"]).Values);
             GraphicsAssert.ListsAreEqual(
-                (sphere.Attributes["textureCoordinate"] as VertexAttributeHalfFloatVector2).Values,
-                (ellipsoid.Attributes["textureCoordinate"] as VertexAttributeHalfFloatVector2).Values);
+                ((VertexAttributeHalfFloatVector2)sphere.Attributes["textureCoordinate"]).Values,
+                ((VertexAttributeHalfFloatVector2)ellipsoid.Attributes["textureCoordinate"]).Values);
         }
 
         [Test]
@@ -64,9 +64,9 @@ namespace OpenGlobe.Core.Tessellation
         {
             Mesh mesh = CubeMapEllipsoidTessellator.Compute(Ellipsoid.UnitSphere, 3, CubeMapEllipsoidVertexAttributes.All);
 
-            VertexAttributeDoubleVector3 positions = mesh.Attributes["position"] as VertexAttributeDoubleVector3;
-            VertexAttributeHalfFloatVector3 normals = mesh.Attributes["normal"] as VertexAttributeHalfFloatVector3;
-            VertexAttributeHalfFloatVector2 textureCoordinates = mesh.Attributes["textureCoordinate"] as VertexAttributeHalfFloatVector2;
+            VertexAttributeDoubleVector3 positions = (VertexAttributeDoubleVector3)mesh.Attributes["position"];
+            VertexAttributeHalfFloatVector3 normals = (VertexAttributeHalfFloatVector3)mesh.Attributes["normal"];
+            VertexAttributeHalfFloatVector2 textureCoordinates = (VertexAttributeHalfFloatVector2)mesh.Attributes["textureCoordinate"];
 
             Assert.AreEqual(positions.Values.Count, normals.Values.Count);
             Assert.AreEqual(positions.Values.Count, textureCoordinates.Values.Count);
@@ -77,9 +77,9 @@ namespace OpenGlobe.Core.Tessellation
         {
             Mesh mesh = GeographicGridEllipsoidTessellator.Compute(Ellipsoid.UnitSphere, 8, 4, GeographicGridEllipsoidVertexAttributes.All);
 
-            VertexAttributeDoubleVector3 positions = mesh.Attributes["position"] as VertexAttributeDoubleVector3;
-            VertexAttributeHalfFloatVector3 normals = mesh.Attributes["normal"] as VertexAttributeHalfFloatVector3;
-            VertexAttributeHalfFloatVector2 textureCoordinates = mesh.Attributes["textureCoordinate"] as VertexAttributeHalfFloatVector2;
+            VertexAttributeDoubleVector3 positions = (VertexAttributeDoubleVector3)mesh.Attributes["position"];
+            VertexAttributeHalfFloatVector3 normals = (VertexAttributeHalfFloatVector3)mesh.Attributes["normal"];
+            VertexAttributeHalfFloatVector2 textureCoordinates = (VertexAttributeHalfFloatVector2)mesh.Attributes["textureCoordinate"];
 
             Assert.AreEqual(positions.Values.Count, normals.Values.Count);
             Assert.AreEqual(positions.Values.Count, textureCoordinates.Values.Count);
@@ -102,14 +102,14 @@ namespace OpenGlobe.Core.Tessellation
             Assert.AreEqual(PrimitiveType.Triangles, mesh.PrimitiveType);
             Assert.AreEqual(WindingOrder.Counterclockwise, mesh.FrontFaceWindingOrder);
 
-            IList<Vector2D> positions = (mesh.Attributes["position"] as VertexAttributeDoubleVector2).Values;
+            IList<Vector2D> positions = ((VertexAttributeDoubleVector2)mesh.Attributes["position"]).Values;
             Assert.AreEqual(4, positions.Count);
             Assert.AreEqual(Vector2D.Zero, positions[0]);
             Assert.AreEqual(Vector2D.UnitX, positions[1]);
             Assert.AreEqual(Vector2D.UnitY, positions[2]);
             Assert.AreEqual(new Vector2D(1, 1), positions[3]);
 
-            IList<uint> indices = (mesh.Indices as IndicesUnsignedInt).Values;
+            IList<uint> indices = ((IndicesUnsignedInt)mesh.Indices).Values;
             Assert.AreEqual(6, indices.Count);
             Assert.AreEqual(0, indices[0]);
             Assert.AreEqual(1, indices[1]);

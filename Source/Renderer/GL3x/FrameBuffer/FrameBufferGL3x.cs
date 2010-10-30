@@ -127,7 +127,7 @@ namespace OpenGlobe.Renderer.GL3x
             if (texture != null)
             {
                 // TODO:  Mipmap level
-                Texture2DGL3x textureGL = texture as Texture2DGL3x;
+                Texture2DGL3x textureGL = (Texture2DGL3x)texture;
                 GL.FramebufferTexture(FramebufferTarget.Framebuffer, attachPoint, textureGL.Handle.Value, 0);
             }
             else

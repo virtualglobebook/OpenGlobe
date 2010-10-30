@@ -31,7 +31,7 @@ namespace OpenGlobe.Renderer.GL3x
 
             set 
             {
-                Texture2DGL3x texture = value as Texture2DGL3x;
+                Texture2DGL3x texture = (Texture2DGL3x)value;
 
                 if (_texture != texture)
                 {
@@ -52,7 +52,7 @@ namespace OpenGlobe.Renderer.GL3x
 
             set
             {
-                TextureSamplerGL3x sampler = value as TextureSamplerGL3x;
+                TextureSamplerGL3x sampler = (TextureSamplerGL3x)value;
 
                 if (_textureSampler != sampler)
                 {

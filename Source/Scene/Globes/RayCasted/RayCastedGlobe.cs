@@ -26,12 +26,12 @@ namespace OpenGlobe.Scene
             string vs = EmbeddedResources.GetText("OpenGlobe.Scene.Globes.RayCasted.Shaders.GlobeVS.glsl");
 
             ShaderProgram sp = Device.CreateShaderProgram(vs, EmbeddedResources.GetText("OpenGlobe.Scene.Globes.RayCasted.Shaders.GlobeFS.glsl"));
-            _cameraEyeSquared = sp.Uniforms["u_cameraEyeSquared"] as Uniform<Vector3S>;
-            _useAverageDepth = sp.Uniforms["u_useAverageDepth"] as Uniform<bool>;
+            _cameraEyeSquared = (Uniform<Vector3S>)sp.Uniforms["u_cameraEyeSquared"];
+            _useAverageDepth = (Uniform<bool>)sp.Uniforms["u_useAverageDepth"];
 
             ShaderProgram solidSP = Device.CreateShaderProgram(vs, EmbeddedResources.GetText("OpenGlobe.Scene.Globes.RayCasted.Shaders.SolidShadedGlobeFS.glsl"));
-            _cameraEyeSquaredSolid = solidSP.Uniforms["u_cameraEyeSquared"] as Uniform<Vector3S>;
-            _useAverageDepthSolid = solidSP.Uniforms["u_useAverageDepth"] as Uniform<bool>;
+            _cameraEyeSquaredSolid = (Uniform<Vector3S>)solidSP.Uniforms["u_cameraEyeSquared"];
+            _useAverageDepthSolid = (Uniform<bool>)solidSP.Uniforms["u_useAverageDepth"];
 
             _drawState = new DrawState(_renderState, sp, null);
             _drawStateSolid = new DrawState(_renderState, solidSP, null);
@@ -61,8 +61,8 @@ namespace OpenGlobe.Scene
 
                 _renderState.FacetCulling.FrontFaceWindingOrder = mesh.FrontFaceWindingOrder;
 
-                (_drawState.ShaderProgram.Uniforms["u_globeOneOverRadiiSquared"] as Uniform<Vector3S>).Value = _shape.OneOverRadiiSquared.ToVector3S();
-                (_drawStateSolid.ShaderProgram.Uniforms["u_globeOneOverRadiiSquared"] as Uniform<Vector3S>).Value = _shape.OneOverRadiiSquared.ToVector3S();
+                ((Uniform<Vector3S>)_drawState.ShaderProgram.Uniforms["u_globeOneOverRadiiSquared"]).Value = _shape.OneOverRadiiSquared.ToVector3S();
+                ((Uniform<Vector3S>)_drawStateSolid.ShaderProgram.Uniforms["u_globeOneOverRadiiSquared"]).Value = _shape.OneOverRadiiSquared.ToVector3S();
 
                 if (_wireframe != null)
                 {

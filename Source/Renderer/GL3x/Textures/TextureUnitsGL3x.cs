@@ -31,7 +31,7 @@ namespace OpenGlobe.Renderer.GL3x
                 _textureUnits[i] = textureUnit;
             }
             _dirtyTextureUnits = new List<ICleanable>();
-            _lastTextureUnit = _textureUnits[numberOfTextureUnits - 1] as TextureUnitGL3x;
+            _lastTextureUnit = (TextureUnitGL3x)_textureUnits[numberOfTextureUnits - 1];
         }
 
         #region TextureUnits Members

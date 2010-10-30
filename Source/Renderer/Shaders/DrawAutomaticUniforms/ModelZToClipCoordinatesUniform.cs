@@ -13,7 +13,7 @@ namespace OpenGlobe.Renderer
     {
         public ModelZToClipCoordinatesUniform(Uniform uniform)
         {
-            _uniform = uniform as Uniform<Matrix42>;
+            _uniform = (Uniform<Matrix42>)uniform;
         }
 
         #region DrawAutomaticUniform Members

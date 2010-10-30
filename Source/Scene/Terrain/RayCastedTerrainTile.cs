@@ -39,12 +39,12 @@ namespace OpenGlobe.Terrain
             _tileAABBUpperRight = new Vector3D(tile.Resolution.X, tile.Resolution.Y,
                 tile.MaximumHeight - tile.MinimumHeight);
 
-            _heightExaggeration = sp.Uniforms["u_heightExaggeration"] as Uniform<float>;
-            _minimumHeight = sp.Uniforms["u_minimumHeight"] as Uniform<float>;
-            _maximumHeight = sp.Uniforms["u_maximumHeight"] as Uniform<float>;
-            _aabbLowerLeft = sp.Uniforms["u_aabbLowerLeft"] as Uniform<Vector3S>;
-            _aabbUpperRight = sp.Uniforms["u_aabbUpperRight"] as Uniform<Vector3S>;
-            _shadingAlgorithm = sp.Uniforms["u_shadingAlgorithm"] as Uniform<int>;
+            _heightExaggeration = (Uniform<float>)sp.Uniforms["u_heightExaggeration"];
+            _minimumHeight = (Uniform<float>)sp.Uniforms["u_minimumHeight"];
+            _maximumHeight = (Uniform<float>)sp.Uniforms["u_maximumHeight"];
+            _aabbLowerLeft = (Uniform<Vector3S>)sp.Uniforms["u_aabbLowerLeft"];
+            _aabbUpperRight = (Uniform<Vector3S>)sp.Uniforms["u_aabbUpperRight"];
+            _shadingAlgorithm = (Uniform<int>)sp.Uniforms["u_shadingAlgorithm"];
 
             HeightExaggeration = 1;
 
@@ -82,7 +82,7 @@ namespace OpenGlobe.Terrain
                 // TEXEL_SPACE_TODO:  Translate box so it is not centered at 
                 // the origin - world space and texel space will match up.
                 //
-                IList<Vector3D> positions = (mesh.Attributes["position"] as VertexAttributeDoubleVector3).Values;
+                IList<Vector3D> positions = ((VertexAttributeDoubleVector3)mesh.Attributes["position"]).Values;
                 for (int i = 0; i < positions.Count; ++i)
                 {
                     positions[i] = positions[i] + halfRadii;

@@ -61,11 +61,11 @@ namespace OpenGlobe.Terrain
             ShaderProgram spTerrain = Device.CreateShaderProgram(
                 EmbeddedResources.GetText("OpenGlobe.Scene.Terrain.VertexDisplacementMapTerrainTile.TerrainVS.glsl"),
                 EmbeddedResources.GetText("OpenGlobe.Scene.Terrain.VertexDisplacementMapTerrainTile.TerrainFS.glsl"));
-            _heightExaggerationUniform = spTerrain.Uniforms["u_heightExaggeration"] as Uniform<float>;
-            (spTerrain.Uniforms["u_positionToTextureCoordinate"] as Uniform<Vector2S>).Value = new Vector2S(
+            _heightExaggerationUniform = (Uniform<float>)spTerrain.Uniforms["u_heightExaggeration"];
+            ((Uniform<Vector2S>)spTerrain.Uniforms["u_positionToTextureCoordinate"]).Value = new Vector2S(
                 (float)(1.0 / (double)(tile.Resolution.X)), 
                 (float)( 1.0 / (double)(tile.Resolution.Y)));
-            (spTerrain.Uniforms["u_positionToRepeatTextureCoordinate"] as Uniform<Vector2S>).Value = new Vector2S(
+            ((Uniform<Vector2S>)spTerrain.Uniforms["u_positionToRepeatTextureCoordinate"]).Value = new Vector2S(
                 (float)(4.0 / (double)tile.Resolution.X),
                 (float)(4.0 / (double)tile.Resolution.Y));
             
@@ -75,9 +75,9 @@ namespace OpenGlobe.Terrain
                 EmbeddedResources.GetText("OpenGlobe.Scene.Terrain.VertexDisplacementMapTerrainTile.NormalsVS.glsl"),
                 EmbeddedResources.GetText("OpenGlobe.Scene.Terrain.VertexDisplacementMapTerrainTile.NormalsGS.glsl"),
                 EmbeddedResources.GetText("OpenGlobe.Scene.Terrain.VertexDisplacementMapTerrainTile.NormalsFS.glsl"));
-            _heightExaggerationNormals = spNormals.Uniforms["u_heightExaggeration"] as Uniform<float>;
-            _fillDistanceNormals = spNormals.Uniforms["u_fillDistance"] as Uniform<float>;
-            (spNormals.Uniforms["u_color"] as Uniform<Vector3S>).Value = Vector3S.Zero;
+            _heightExaggerationNormals = (Uniform<float>)spNormals.Uniforms["u_heightExaggeration"];
+            _fillDistanceNormals = (Uniform<float>)spNormals.Uniforms["u_fillDistance"];
+            ((Uniform<Vector3S>)spNormals.Uniforms["u_color"]).Value = Vector3S.Zero;
 
             ///////////////////////////////////////////////////////////////////
 
@@ -85,9 +85,9 @@ namespace OpenGlobe.Terrain
                 EmbeddedResources.GetText("OpenGlobe.Scene.Terrain.VertexDisplacementMapTerrainTile.WireframeVS.glsl"),
                 EmbeddedResources.GetText("OpenGlobe.Scene.Terrain.VertexDisplacementMapTerrainTile.WireframeGS.glsl"),
                 EmbeddedResources.GetText("OpenGlobe.Scene.Terrain.VertexDisplacementMapTerrainTile.WireframeFS.glsl"));
-            _lineWidthWireframe = spWireframe.Uniforms["u_halfLineWidth"] as Uniform<float>;
-            _heightExaggerationWireframe = spWireframe.Uniforms["u_heightExaggeration"] as Uniform<float>;
-            (spWireframe.Uniforms["u_color"] as Uniform<Vector3S>).Value = Vector3S.Zero;
+            _lineWidthWireframe = (Uniform<float>)spWireframe.Uniforms["u_halfLineWidth"];
+            _heightExaggerationWireframe = (Uniform<float>)spWireframe.Uniforms["u_heightExaggeration"];
+            ((Uniform<Vector3S>)spWireframe.Uniforms["u_color"]).Value = Vector3S.Zero;
             
             ///////////////////////////////////////////////////////////////////
 
@@ -138,14 +138,16 @@ namespace OpenGlobe.Terrain
         {
             if (_dirty)
             {
-                (_drawStateTerrain.ShaderProgram.Uniforms["u_normalAlgorithm"] as Uniform<int>).Value = (int)_normalsAlgorithm;
-                (_drawStateTerrain.ShaderProgram.Uniforms["u_shadingAlgorithm"] as Uniform<int>).Value = (int)_shadingAlgorithm;
-                (_drawStateTerrain.ShaderProgram.Uniforms["u_showTerrain"] as Uniform<bool>).Value = _showTerrain;
-                (_drawStateTerrain.ShaderProgram.Uniforms["u_showSilhouette"] as Uniform<bool>).Value = _showSilhouette;
-                (_drawStateNormals.ShaderProgram.Uniforms["u_normalAlgorithm"] as Uniform<int>).Value = (int)_normalsAlgorithm;
+                ShaderProgram sp = _drawStateTerrain.ShaderProgram;
 
-                _minimumHeight = _drawStateTerrain.ShaderProgram.Uniforms["u_minimumHeight"] as Uniform<float>;
-                _maximumHeight = _drawStateTerrain.ShaderProgram.Uniforms["u_maximumHeight"] as Uniform<float>;
+                ((Uniform<int>)sp.Uniforms["u_normalAlgorithm"]).Value = (int)_normalsAlgorithm;
+                ((Uniform<int>)sp.Uniforms["u_shadingAlgorithm"] ).Value = (int)_shadingAlgorithm;
+                ((Uniform<bool>)sp.Uniforms["u_showTerrain"]).Value = _showTerrain;
+                ((Uniform<bool>)sp.Uniforms["u_showSilhouette"]).Value = _showSilhouette;
+                ((Uniform<int>)sp.Uniforms["u_normalAlgorithm"]).Value = (int)_normalsAlgorithm;
+
+                _minimumHeight = (Uniform<float>)sp.Uniforms["u_minimumHeight"];
+                _maximumHeight = (Uniform<float>)sp.Uniforms["u_maximumHeight"];
 
                 _dirty = false;
             }

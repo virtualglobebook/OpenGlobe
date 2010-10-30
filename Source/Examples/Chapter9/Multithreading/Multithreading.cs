@@ -174,7 +174,7 @@ namespace OpenGlobe.Examples.Chapter9
         {
             foreach (IRenderable shapefile in _shapefiles)
             {
-                (shapefile as IDisposable).Dispose();
+                ((IDisposable)shapefile).Dispose();
             }
 
             _doneQueue.Dispose();

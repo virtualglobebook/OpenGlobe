@@ -131,7 +131,7 @@ namespace OpenGlobe.Renderer.GL3x
 
             GL.EnableVertexAttribArray(index);
 
-            VertexBufferGL3x bufferObjectGL = vb.VertexBuffer as VertexBufferGL3x;
+            VertexBufferGL3x bufferObjectGL = (VertexBufferGL3x)vb.VertexBuffer;
             
             bufferObjectGL.Bind();
             GL.VertexAttribPointer(index,

@@ -48,10 +48,10 @@ namespace OpenGlobe.Scene
                 EmbeddedResources.GetText("OpenGlobe.Scene.Renderables.Wireframe.Shaders.WireframeVS.glsl"),
                 EmbeddedResources.GetText("OpenGlobe.Scene.Renderables.Wireframe.Shaders.WireframeGS.glsl"),
                 EmbeddedResources.GetText("OpenGlobe.Scene.Renderables.Wireframe.Shaders.WireframeFS.glsl"));
-            _lineWidth = sp.Uniforms["u_halfLineWidth"] as Uniform<float>;
+            _lineWidth = (Uniform<float>)sp.Uniforms["u_halfLineWidth"];
             Width = 1;
 
-            _colorUniform = sp.Uniforms["u_color"] as Uniform<Vector3S>;
+            _colorUniform = (Uniform<Vector3S>)sp.Uniforms["u_color"];
             Color = Color.Black;
 
             _drawState = new DrawState(renderState, sp, context.CreateVertexArray(mesh, sp.VertexAttributes, BufferHint.StaticDraw));

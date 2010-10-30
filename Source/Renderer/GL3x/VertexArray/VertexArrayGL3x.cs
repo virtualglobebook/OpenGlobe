@@ -35,7 +35,7 @@ namespace OpenGlobe.Renderer.GL3x
             {
                 if (_indexBuffer != null)
                 {
-                    IndexBufferGL3x bufferObjectGL = _indexBuffer as IndexBufferGL3x;
+                    IndexBufferGL3x bufferObjectGL = (IndexBufferGL3x)_indexBuffer;
                     bufferObjectGL.Bind();
                 }
                 else
