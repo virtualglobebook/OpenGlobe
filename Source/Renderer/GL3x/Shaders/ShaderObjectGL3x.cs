@@ -23,23 +23,23 @@ namespace OpenGlobe.Renderer.GL3x
             string builtInConstants =
                 "#version 330 \n" +
 
-                "#define og_positionVertexLocation          0 \n" +
-                "#define og_normalVertexLocation            1 \n" +
-                "#define og_textureCoordinateVertexLocation 2 \n" +
-                "#define og_colorVertexLocation             3 \n" +
-
+                "#define og_positionVertexLocation          " + VertexLocations.Position.ToString(NumberFormatInfo.InvariantInfo) + " \n" +
+                "#define og_normalVertexLocation            " + VertexLocations.Normal.ToString(NumberFormatInfo.InvariantInfo) + " \n" +
+                "#define og_textureCoordinateVertexLocation " + VertexLocations.TextureCoordinate.ToString(NumberFormatInfo.InvariantInfo) + " \n" +
+                "#define og_colorVertexLocation             " + VertexLocations.Color.ToString(NumberFormatInfo.InvariantInfo) + " \n" +
+               
                 "const float og_E =                " + Math.E.ToString(NumberFormatInfo.InvariantInfo) + "; \n" +
                 "const float og_pi =               " + Math.PI.ToString(NumberFormatInfo.InvariantInfo) + "; \n" +
-                "const float og_oneOverPi =        " + (1.0 / Math.PI).ToString(NumberFormatInfo.InvariantInfo) + "; \n" +
-                "const float og_piOverTwo =        " + (Math.PI * 0.5).ToString(NumberFormatInfo.InvariantInfo) + "; \n" +
-                "const float og_piOverThree =      " + (Math.PI / 3.0).ToString(NumberFormatInfo.InvariantInfo) + "; \n" +
-                "const float og_piOverFour =       " + (Math.PI / 4.0).ToString(NumberFormatInfo.InvariantInfo) + "; \n" +
-                "const float og_piOverSix =        " + (Math.PI / 6.0).ToString(NumberFormatInfo.InvariantInfo) + "; \n" +
-                "const float og_threePiOver2 =     " + ((3.0 * Math.PI) * 0.5).ToString(NumberFormatInfo.InvariantInfo) + "; \n" +
-                "const float og_twoPi =            " + (Trig.TwoPI).ToString(NumberFormatInfo.InvariantInfo) + "; \n" +
-                "const float og_oneOverTwoPi =     " + (1.0 / Trig.TwoPI).ToString(NumberFormatInfo.InvariantInfo) + "; \n" +
-                "const float og_halfPi =           " + (Trig.HalfPI).ToString(NumberFormatInfo.InvariantInfo) + "; \n" +
-                "const float og_radiansPerDegree = " + (Trig.RadiansPerDegree).ToString(NumberFormatInfo.InvariantInfo) + "; \n";
+                "const float og_oneOverPi =        " + Trig.OneOverPi.ToString(NumberFormatInfo.InvariantInfo) + "; \n" +
+                "const float og_piOverTwo =        " + Trig.PiOverTwo.ToString(NumberFormatInfo.InvariantInfo) + "; \n" +
+                "const float og_piOverThree =      " + Trig.PiOverThree.ToString(NumberFormatInfo.InvariantInfo) + "; \n" +
+                "const float og_piOverFour =       " + Trig.PiOverFour.ToString(NumberFormatInfo.InvariantInfo) + "; \n" +
+                "const float og_piOverSix =        " + Trig.PiOverSix.ToString(NumberFormatInfo.InvariantInfo) + "; \n" +
+                "const float og_threePiOver2 =     " + Trig.ThreePiOver2.ToString(NumberFormatInfo.InvariantInfo) + "; \n" +
+                "const float og_twoPi =            " + Trig.TwoPi.ToString(NumberFormatInfo.InvariantInfo) + "; \n" +
+                "const float og_oneOverTwoPi =     " + Trig.OneOverTwoPi.ToString(NumberFormatInfo.InvariantInfo) + "; \n" +
+                "const float og_halfPi =           " + Trig.HalfPi.ToString(NumberFormatInfo.InvariantInfo) + "; \n" +
+                "const float og_radiansPerDegree = " + Trig.RadiansPerDegree.ToString(NumberFormatInfo.InvariantInfo) + "; \n";
 
             string modifiedSource;
 

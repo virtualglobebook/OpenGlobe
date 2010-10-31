@@ -39,7 +39,7 @@ namespace OpenGlobe.Core.Tessellation
 
         public static Vector2H ComputeTextureCoordinate(Vector3D position)
         {
-            return new Vector2H((Math.Atan2(position.Y, position.X) / Trig.TwoPI) + 0.5,
+            return new Vector2H((Math.Atan2(position.Y, position.X) / Trig.TwoPi) + 0.5,
                                 (Math.Asin(position.Z) / Math.PI) + 0.5);
         }
     }

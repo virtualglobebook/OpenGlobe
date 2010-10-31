@@ -76,7 +76,7 @@ namespace OpenGlobe.Core.Tessellation
 
             for (int j = 0; j < numberOfSlicePartitions; ++j)
             {
-                double theta = Trig.TwoPI * (((double)j) / numberOfSlicePartitions);
+                double theta = Trig.TwoPi * (((double)j) / numberOfSlicePartitions);
                 cosTheta[j] = Math.Cos(theta);
                 sinTheta[j] = Math.Sin(theta);
             }

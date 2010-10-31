@@ -256,11 +256,11 @@ namespace OpenGlobe.Scene
             _roll -= seconds;
             while (_roll > Math.PI)
             {
-                _roll -= Trig.TwoPI;
+                _roll -= Trig.TwoPi;
             }
             while (_roll < -Math.PI)
             {
-                _roll += Trig.TwoPI;
+                _roll += Trig.TwoPi;
             }
         }
 
@@ -269,11 +269,11 @@ namespace OpenGlobe.Scene
             _roll += seconds;
             while (_roll > Math.PI)
             {
-                _roll -= Trig.TwoPI;
+                _roll -= Trig.TwoPi;
             }
             while (_roll < -Math.PI)
             {
-                _roll += Trig.TwoPI;
+                _roll += Trig.TwoPi;
             }
         }
 
@@ -292,35 +292,35 @@ namespace OpenGlobe.Scene
             _yaw -= yawWindowRatio * Math.PI;
             _pitch -= pitchWindowRatio * Math.PI;
 
-            if (_pitch < -Trig.HalfPI)
+            if (_pitch < -Trig.HalfPi)
             {
-                _pitch = -Trig.HalfPI + (-Trig.HalfPI - _pitch);
+                _pitch = -Trig.HalfPi + (-Trig.HalfPi - _pitch);
                 _yaw += Math.PI;
                 _roll += Math.PI;
             }
-            else if (_pitch > Trig.HalfPI)
+            else if (_pitch > Trig.HalfPi)
             {
-                _pitch = Trig.HalfPI - (_pitch - Trig.HalfPI);
+                _pitch = Trig.HalfPi - (_pitch - Trig.HalfPi);
                 _yaw += Math.PI;
                 _roll += Math.PI;
             }
 
             while (_yaw > Math.PI)
             {
-                _yaw -= Trig.TwoPI;
+                _yaw -= Trig.TwoPi;
             }
             while (_yaw < -Math.PI)
             {
-                _yaw += Trig.TwoPI;
+                _yaw += Trig.TwoPi;
             }
 
             while (_roll > Math.PI)
             {
-                _roll -= Trig.TwoPI;
+                _roll -= Trig.TwoPi;
             }
             while (_roll < -Math.PI)
             {
-                _roll += Trig.TwoPI;
+                _roll += Trig.TwoPi;
             }
         }
 

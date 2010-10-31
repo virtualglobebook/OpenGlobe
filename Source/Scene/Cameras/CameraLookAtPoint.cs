@@ -412,25 +412,25 @@ namespace OpenGlobe.Scene
             double azimuthWindowRatio = (double)movement.Width / (double)_window.Width;
             double elevationWindowRatio = (double)movement.Height / (double)_window.Height;
 
-            _azimuth -= azimuthWindowRatio * Trig.TwoPI;
+            _azimuth -= azimuthWindowRatio * Trig.TwoPi;
             _elevation += elevationWindowRatio * Math.PI;
 
             while (_azimuth > Math.PI)
             {
-                _azimuth -= Trig.TwoPI;
+                _azimuth -= Trig.TwoPi;
             }
             while (_azimuth < -Math.PI)
             {
-                _azimuth += Trig.TwoPI;
+                _azimuth += Trig.TwoPi;
             }
 
-            if (_elevation < -Trig.HalfPI)
+            if (_elevation < -Trig.HalfPi)
             {
-                _elevation = -Trig.HalfPI;
+                _elevation = -Trig.HalfPi;
             }
-            else if (_elevation > Trig.HalfPI)
+            else if (_elevation > Trig.HalfPi)
             {
-                _elevation = Trig.HalfPI;
+                _elevation = Trig.HalfPi;
             }
         }
 
