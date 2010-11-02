@@ -24,19 +24,35 @@ uniform vec2 u_levelScaleFactor;
 uniform vec2 u_levelZeroWorldScaleFactor;
 uniform vec2 u_levelZeroWorldOrigin;
 uniform float u_heightExaggeration;
+uniform vec2 u_fineLevelOriginInCoarse;
+uniform vec2 u_viewPosInClippedLevel;
+uniform vec2 u_unblendedRegionSize;
+uniform vec2 u_oneOverBlendedRegionSize;
+
+float SampleHeight(vec2 clippedLevelCurrent)
+{
+	vec2 uvFine = clippedLevelCurrent + vec2(0.5, 0.5);
+	vec2 uvCoarse = clippedLevelCurrent * 0.5 + u_fineLevelOriginInCoarse + vec2(0.5, 0.5);
+
+	vec2 alpha = clamp((abs(clippedLevelCurrent - u_viewPosInClippedLevel) - u_unblendedRegionSize) * u_oneOverBlendedRegionSize, 0, 1);
+	float alphaScalar = max(alpha.x, alpha.y);
+
+	float fineHeight = texture(og_texture0, uvFine).r;
+	float coarseHeight = texture(og_texture1, uvCoarse).r;
+	return mix(fineHeight, coarseHeight, alphaScalar);
+}
 
 void main()
 {
 	vec2 clippedLevelCurrent = position + u_blockOriginInClippedLevel;
 
 	// Compute a normal for the fragment shader by forward differencing
-	vec2 uv = clippedLevelCurrent + vec2(0.5, 0.5);
-	vec2 uvRight = uv + vec2(1.0, 0.0);
-	vec2 uvTop = uv + vec2(0.0, 1.0);
+	vec2 right = clippedLevelCurrent + vec2(1.0, 0.0);
+	vec2 top = clippedLevelCurrent + vec2(0.0, 1.0);
 
-	float centerHeight = texture(og_texture0, uv).r * u_heightExaggeration;
-	float rightHeight = texture(og_texture0, uvRight).r * u_heightExaggeration;
-	float topHeight = texture(og_texture0, uvTop).r * u_heightExaggeration;
+	float centerHeight = SampleHeight(clippedLevelCurrent) * u_heightExaggeration;
+	float rightHeight = SampleHeight(right) * u_heightExaggeration;
+	float topHeight = SampleHeight(top) * u_heightExaggeration;
 
 	vec2 levelGridDeltaInWorld = u_levelScaleFactor * u_levelZeroWorldScaleFactor;
 	normalFS = cross(vec3(levelGridDeltaInWorld.x, 0.0, rightHeight - centerHeight), vec3(0.0, levelGridDeltaInWorld.y, topHeight - centerHeight));
