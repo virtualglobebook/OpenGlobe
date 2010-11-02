@@ -33,8 +33,6 @@ void main()
 	vec2 uv = clippedLevelCurrent + vec2(0.5, 0.5);
 	vec2 uvRight = uv + vec2(1.0, 0.0);
 	vec2 uvTop = uv + vec2(0.0, 1.0);
-	vec2 uvLeft = uv + vec2(-1.0, 0.0);
-	vec2 uvBottom = uv + vec2(0.0, -1.0);
 
 	float centerHeight = texture(og_texture0, uv).r * u_heightExaggeration;
 	float rightHeight = texture(og_texture0, uvRight).r * u_heightExaggeration;
