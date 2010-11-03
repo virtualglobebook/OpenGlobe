@@ -85,9 +85,9 @@ namespace OpenGlobe.Scene
                 _cameraEyeSquaredSP.Value = cameraEyeSquared;
 
                 context.TextureUnits[0].Texture = DayTexture;
-                context.TextureUnits[0].TextureSampler = Device.TextureSamplers.LinearClampToEdge;
+                context.TextureUnits[0].TextureSampler = Device.TextureSamplers.LinearClamp;
                 context.TextureUnits[1].Texture = NightTexture;
-                context.TextureUnits[1].TextureSampler = Device.TextureSamplers.LinearClampToEdge;
+                context.TextureUnits[1].TextureSampler = Device.TextureSamplers.LinearClamp;
                 context.Draw(_primitiveType, _drawState, sceneState);
             }
 

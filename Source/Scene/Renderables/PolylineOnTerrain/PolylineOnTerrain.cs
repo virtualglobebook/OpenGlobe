@@ -148,16 +148,16 @@ namespace OpenGlobe.Scene
             // Render the line on terrain using the wall method
             //
             context.TextureUnits[0].Texture = silhouetteTexture;
-            context.TextureUnits[0].TextureSampler = Device.TextureSamplers.LinearClampToEdge;
+            context.TextureUnits[0].TextureSampler = Device.TextureSamplers.LinearClamp;
             context.TextureUnits[1].Texture = depthTexture;
-            context.TextureUnits[1].TextureSampler = Device.TextureSamplers.LinearClampToEdge;
+            context.TextureUnits[1].TextureSampler = Device.TextureSamplers.LinearClamp;
             context.Draw(PrimitiveType.LinesAdjacency, _wallDrawState, sceneState);
 
             //
             // Render the line on terrain using the depth-fail shadow volume method
             //
             context.TextureUnits[0].Texture = silhouetteTexture;
-            context.TextureUnits[0].TextureSampler = Device.TextureSamplers.LinearClampToEdge;
+            context.TextureUnits[0].TextureSampler = Device.TextureSamplers.LinearClamp;
             context.Draw(PrimitiveType.LinesAdjacency, _shadowVolumePassOne, sceneState);
             
             //

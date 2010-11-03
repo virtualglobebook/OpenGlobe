@@ -50,7 +50,7 @@ namespace OpenGlobe.Renderer.GL3x
             // Default sampler, compatiable when attaching a non-mimapped 
             // texture to a frame buffer object.
             //
-            ApplySampler(Device.TextureSamplers.LinearClampToEdge);
+            ApplySampler(Device.TextureSamplers.LinearClamp);
         }
 
         internal TextureHandleGL3x Handle

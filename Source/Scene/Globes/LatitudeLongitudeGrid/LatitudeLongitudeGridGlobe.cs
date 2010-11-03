@@ -87,7 +87,7 @@ namespace OpenGlobe.Scene
             _gridWidth.Value = new Vector2S(width, width);
 
             context.TextureUnits[0].Texture = Texture;
-            context.TextureUnits[0].TextureSampler = Device.TextureSamplers.LinearClampToEdge;
+            context.TextureUnits[0].TextureSampler = Device.TextureSamplers.LinearClamp;
             context.Draw(_primitiveType, _drawState, sceneState);
         }
 

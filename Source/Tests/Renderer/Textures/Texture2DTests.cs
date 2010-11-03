@@ -293,8 +293,8 @@ namespace OpenGlobe.Renderer
                 TextureSampler sampler = Device.CreateTexture2DSampler(
                     TextureMinificationFilter.Nearest,
                     TextureMagnificationFilter.Nearest,
-                    TextureWrap.ClampToEdge,
-                    TextureWrap.ClampToEdge,
+                    TextureWrap.Clamp,
+                    TextureWrap.Clamp,
                     2);
 
                 window.Context.TextureUnits[0].Texture = texture;

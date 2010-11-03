@@ -118,7 +118,7 @@ namespace OpenGlobe.Terrain
             if (ShowTerrain)
             {
                 context.TextureUnits[0].Texture = _texture;
-                context.TextureUnits[0].TextureSampler = Device.TextureSamplers.NearestClampToEdge;
+                context.TextureUnits[0].TextureSampler = Device.TextureSamplers.NearestClamp;
                 context.Draw(_primitiveType, _drawState, sceneState);
             }
 

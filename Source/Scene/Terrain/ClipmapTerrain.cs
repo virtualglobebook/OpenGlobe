@@ -250,11 +250,11 @@ namespace OpenGlobe.Scene.Terrain
         private bool RenderLevel(Level level, Level coarserLevel, bool fillRing, Context context, SceneState sceneState)
         {
             context.TextureUnits[0].Texture = level.TerrainTexture;
-            context.TextureUnits[0].TextureSampler = Device.TextureSamplers.LinearClampToEdge;
+            context.TextureUnits[0].TextureSampler = Device.TextureSamplers.LinearClamp;
             context.TextureUnits[1].Texture = coarserLevel.TerrainTexture;
-            context.TextureUnits[1].TextureSampler = Device.TextureSamplers.LinearClampToEdge;
+            context.TextureUnits[1].TextureSampler = Device.TextureSamplers.LinearClamp;
             context.TextureUnits[2].Texture = level.ImageryTexture;
-            context.TextureUnits[2].TextureSampler = Device.TextureSamplers.LinearClampToEdge;
+            context.TextureUnits[2].TextureSampler = Device.TextureSamplers.LinearClamp;
 
             int west = level.CurrentOrigin.TerrainWest;
             int south = level.CurrentOrigin.TerrainSouth;

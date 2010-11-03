@@ -72,9 +72,9 @@ namespace OpenGlobe.Renderer.Multithreading
                 using (VertexArray va = TestUtility.CreateVertexArray(window.Context, sp.VertexAttributes["position"].Location))
                 {
                     window.Context.TextureUnits[0].Texture = factory0.Texture;
-                    window.Context.TextureUnits[0].TextureSampler = Device.TextureSamplers.NearestClampToEdge;
+                    window.Context.TextureUnits[0].TextureSampler = Device.TextureSamplers.NearestClamp;
                     window.Context.TextureUnits[1].Texture = factory1.Texture;
-                    window.Context.TextureUnits[1].TextureSampler = Device.TextureSamplers.NearestClampToEdge;
+                    window.Context.TextureUnits[1].TextureSampler = Device.TextureSamplers.NearestClamp;
                     window.Context.FrameBuffer = frameBuffer;
                     window.Context.Draw(PrimitiveType.Points, 0, 1, new DrawState(TestUtility.CreateRenderStateWithoutDepthTest(), sp, va), new SceneState());
 
@@ -117,9 +117,9 @@ namespace OpenGlobe.Renderer.Multithreading
                 using (VertexArray va = TestUtility.CreateVertexArray(window.Context, sp.VertexAttributes["position"].Location))
                 {
                     window.Context.TextureUnits[0].Texture = factory0.Texture;
-                    window.Context.TextureUnits[0].TextureSampler = Device.TextureSamplers.NearestClampToEdge;
+                    window.Context.TextureUnits[0].TextureSampler = Device.TextureSamplers.NearestClamp;
                     window.Context.TextureUnits[1].Texture = factory1.Texture;
-                    window.Context.TextureUnits[1].TextureSampler = Device.TextureSamplers.NearestClampToEdge;
+                    window.Context.TextureUnits[1].TextureSampler = Device.TextureSamplers.NearestClamp;
                     window.Context.FrameBuffer = frameBuffer;
                     window.Context.Draw(PrimitiveType.Points, 0, 1, new DrawState(TestUtility.CreateRenderStateWithoutDepthTest(), sp, va), new SceneState());
 

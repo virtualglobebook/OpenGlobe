@@ -813,7 +813,7 @@ namespace OpenGlobe.Renderer.GL3x
         public static TextureWrapMode To(TextureWrap wrap)
         {
             Debug.Assert(
-                (wrap == TextureWrap.ClampToEdge) ||
+                (wrap == TextureWrap.Clamp) ||
                 (wrap == TextureWrap.Repeat) ||
                 (wrap == TextureWrap.MirroredRepeat));
 

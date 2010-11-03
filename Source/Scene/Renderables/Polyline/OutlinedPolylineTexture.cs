@@ -140,7 +140,7 @@ namespace OpenGlobe.Scene
                 _distance.Value = (float)(((Width * 0.5) + OutlineWidth + 1) * sceneState.HighResolutionSnapScale);
 
                 context.TextureUnits[0].Texture = _texture;
-                context.TextureUnits[0].TextureSampler = Device.TextureSamplers.LinearClampToEdge;
+                context.TextureUnits[0].TextureSampler = Device.TextureSamplers.LinearClamp;
                 context.Draw(_primitiveType, _drawState, sceneState);
             }
         }

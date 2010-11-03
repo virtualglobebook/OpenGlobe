@@ -11,7 +11,7 @@ namespace OpenGlobe.Renderer
 {
     public enum TextureWrap
     {
-        ClampToEdge,
+        Clamp,
         Repeat,
         MirroredRepeat
     }

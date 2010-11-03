@@ -68,7 +68,7 @@ namespace OpenGlobe.Scene
             {
                 Verify.ThrowInvalidOperationIfNull(Texture, "Texture");
                 context.TextureUnits[0].Texture = Texture;
-                context.TextureUnits[0].TextureSampler = Device.TextureSamplers.LinearClampToEdge;
+                context.TextureUnits[0].TextureSampler = Device.TextureSamplers.LinearClamp;
             }
 
             _drawState.RenderState.RasterizationMode = Wireframe ? RasterizationMode.Line : RasterizationMode.Fill;
