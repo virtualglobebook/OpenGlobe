@@ -34,14 +34,15 @@ namespace OpenGlobe.Scene.Terrain
             sceneState.AmbientIntensity = 0.05f;
 
             ClearState clearState = new ClearState();
+            clearState.Color = Color.LightSkyBlue;
 
             Ellipsoid ellipsoid = Ellipsoid.Wgs84;
-            sceneState.Camera.PerspectiveNearPlaneDistance = 0.01;
-            sceneState.Camera.PerspectiveFarPlaneDistance = 2000.0;
+            sceneState.Camera.PerspectiveNearPlaneDistance = 0.001;
+            sceneState.Camera.PerspectiveFarPlaneDistance = 200.0;
             sceneState.SunPosition = new Vector3D(200000, 300000, 200000);
 
             CameraLookAtPoint camera = new CameraLookAtPoint(sceneState.Camera, window, Ellipsoid.UnitSphere);
-            camera.CenterPoint = new Vector3D(-119.5326056, 37.74451389, 0.00001 * 2700.0);
+            camera.CenterPoint = new Vector3D(-119.43, 37.64, 0.00001 * 3000.0);
             camera.ZoomRateRangeAdjustment = 0.0;
             camera.Azimuth = 0.0;
             camera.Elevation = Trig.ToRadians(30.0);
@@ -90,6 +91,13 @@ namespace OpenGlobe.Scene.Terrain
             };
 
             clipmap.PreRender(window.Context, sceneState);
+
+            PersistentView.Execute(@"C:\Users\Kevin Ring\Documents\Book\svn\TerrainLevelOfDetail\Figures\ClipmapWithCracks.xml", window, sceneState.Camera);
+
+            HighResolutionSnap snap = new HighResolutionSnap(window, sceneState);
+            snap.ColorFilename = @"C:\Users\Kevin Ring\Documents\Book\svn\TerrainLevelOfDetail\Figures\ClipmapWithCracks.png";
+            snap.WidthInInches = 3;
+            snap.DotsPerInch = 600;
 
             window.Run(30.0);
         }

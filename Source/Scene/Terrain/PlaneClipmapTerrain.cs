@@ -108,7 +108,7 @@ namespace OpenGlobe.Scene.Terrain
             Mesh degenerateTriangleMesh = CreateDegenerateTriangleMesh();
             _degenerateTriangles = context.CreateVertexArray(degenerateTriangleMesh, _shaderProgram.VertexAttributes, BufferHint.StaticDraw);
 
-            _blockOriginInClippedLevel = (Uniform<Vector2S>)_shaderProgram.Uniforms["u_blockOriginInClippedLevel"];
+            _patchOriginInClippedLevel = (Uniform<Vector2S>)_shaderProgram.Uniforms["u_patchOriginInClippedLevel"];
             _clippedLevelOrigin = (Uniform<Vector2S>)_shaderProgram.Uniforms["u_clippedLevelOrigin"];
             _levelScaleFactor = (Uniform<Vector2S>)_shaderProgram.Uniforms["u_levelScaleFactor"];
             _levelZeroWorldScaleFactor = (Uniform<Vector2S>)_shaderProgram.Uniforms["u_levelZeroWorldScaleFactor"];
@@ -335,7 +335,7 @@ namespace OpenGlobe.Scene.Terrain
             int textureWest = blockWest - overallWest;
             int textureSouth = blockSouth - overallSouth;
 
-            _blockOriginInClippedLevel.Value = new Vector2S(textureWest, textureSouth);
+            _patchOriginInClippedLevel.Value = new Vector2S(textureWest, textureSouth);
             DrawState drawState = new DrawState(_renderState, _shaderProgram, block);
             context.Draw(_primitiveType, drawState, sceneState);
         }
@@ -465,7 +465,7 @@ namespace OpenGlobe.Scene.Terrain
         private VertexArray _finestOffsetStripVertical;
         private VertexArray _degenerateTriangles;
 
-        private Uniform<Vector2S> _blockOriginInClippedLevel;
+        private Uniform<Vector2S> _patchOriginInClippedLevel;
         private Uniform<Vector2S> _clippedLevelOrigin;
         private Uniform<Vector2S> _levelScaleFactor;
         private Uniform<Vector2S> _levelZeroWorldScaleFactor;
