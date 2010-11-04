@@ -13,7 +13,6 @@ using System.Diagnostics;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
 using OpenGlobe.Core;
-using OpenGlobe.Core.Geometry;
 using OpenGlobe.Renderer;
 
 namespace OpenGlobe.Renderer.GL3x

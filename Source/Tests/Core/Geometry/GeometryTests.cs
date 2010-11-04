@@ -10,7 +10,7 @@
 using System.Drawing;
 using NUnit.Framework;
 
-namespace OpenGlobe.Core.Geometry
+namespace OpenGlobe.Core
 {
     [TestFixture]
     public class GeometryTests

@@ -8,7 +8,7 @@
     <ProjectGuid>{D51BA9B4-A2D5-41E5-BACC-3869C35F9C68}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>OpenGlobe.Examples.Chapter5</RootNamespace>
+    <RootNamespace>OpenGlobe.Examples</RootNamespace>
     <AssemblyName>Chapter5RayCasting</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

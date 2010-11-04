@@ -12,11 +12,11 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
-[assembly: AssemblyTitle("OpenGlobe.Examples.Chapter5.VertexDisplacementMap")]
+[assembly: AssemblyTitle("OpenGlobe.Examples.VertexDisplacementMap")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("OpenGlobe.Examples.Chapter5.VertexDisplacementMap")]
+[assembly: AssemblyProduct("OpenGlobe.Examples.VertexDisplacementMap")]
 [assembly: AssemblyCopyright("Copyright ©  2010")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

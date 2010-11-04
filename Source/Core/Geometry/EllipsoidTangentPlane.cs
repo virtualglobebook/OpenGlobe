@@ -9,7 +9,6 @@
 
 using System;
 using System.Collections.Generic;
-using OpenGlobe.Core.Geometry;
 
 namespace OpenGlobe.Core
 {

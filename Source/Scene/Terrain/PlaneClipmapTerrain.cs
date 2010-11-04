@@ -10,12 +10,10 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using OpenGlobe.Renderer;
-using OpenGlobe.Core.Geometry;
-using OpenGlobe.Core;
-using OpenGlobe.Terrain;
-using OpenGlobe.Core.Tessellation;
 using System.Drawing;
+using OpenGlobe.Core;
+using OpenGlobe.Renderer;
+using OpenGlobe.Terrain;
 using OpenTK;
 
 namespace OpenGlobe.Scene.Terrain

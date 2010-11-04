@@ -7,7 +7,7 @@
 //
 #endregion
 
-using OpenGlobe.Core.Geometry;
+using OpenGlobe.Core;
 
 namespace OpenGlobe.Renderer
 {

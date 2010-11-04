@@ -9,7 +9,7 @@
 
 using System.Collections.Generic;
 
-namespace OpenGlobe.Core.Geometry
+namespace OpenGlobe.Core
 {
     // TODO:  These are the common types but we may need to add more.
     public enum VertexAttributeType

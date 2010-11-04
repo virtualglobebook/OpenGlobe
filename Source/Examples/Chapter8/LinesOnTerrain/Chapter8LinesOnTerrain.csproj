@@ -8,7 +8,7 @@
     <ProjectGuid>{2F86841E-018F-4FB7-A428-981B34A2F9F8}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>OpenGlobe.Examples.Chapter8</RootNamespace>
+    <RootNamespace>OpenGlobe.Examples</RootNamespace>
     <AssemblyName>Chapter8LinesOnTerrain</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

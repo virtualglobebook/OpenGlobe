@@ -7,7 +7,7 @@
 //
 #endregion
 
-namespace OpenGlobe.Core.Geometry
+namespace OpenGlobe.Core
 {
     public class VertexAttributeHalfFloatVector4 : VertexAttribute<Vector4H>
     {

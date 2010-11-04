@@ -12,7 +12,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Diagnostics;
-using OpenGlobe.Core.Geometry;
 using OpenGlobe.Core;
 
 namespace OpenGlobe.Renderer

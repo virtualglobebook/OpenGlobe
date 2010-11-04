@@ -11,7 +11,7 @@ using System;
 using System.Globalization;
 using System.Collections.Generic;
 
-namespace OpenGlobe.Core.Geometry
+namespace OpenGlobe.Core
 {
     public class Ellipsoid
     {

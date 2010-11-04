@@ -12,12 +12,10 @@ using System.Drawing;
 using System.Collections.Generic;
 
 using OpenGlobe.Core;
-using OpenGlobe.Core.Geometry;
-using OpenGlobe.Core.Tessellation;
 using OpenGlobe.Renderer;
 using OpenGlobe.Scene;
 
-namespace OpenGlobe.Examples.Chapter3
+namespace OpenGlobe.Examples
 {
     sealed class LatitudeLongitudeGrid : IDisposable
     {

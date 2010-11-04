@@ -9,7 +9,7 @@
 
 using System.Collections.Generic;
 
-namespace OpenGlobe.Core.Geometry
+namespace OpenGlobe.Core
 {
     public class IndicesByte : IndicesBase
     {

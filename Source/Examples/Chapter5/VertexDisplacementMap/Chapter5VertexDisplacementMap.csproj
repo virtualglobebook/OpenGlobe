@@ -8,7 +8,7 @@
     <ProjectGuid>{35405C20-1149-4941-99E3-5EC639B1086A}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>OpenGlobe.Examples.Chapter5</RootNamespace>
+    <RootNamespace>OpenGlobe.Examples</RootNamespace>
     <AssemblyName>Chapter5VertexDisplacementMap</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

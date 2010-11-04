@@ -8,7 +8,7 @@
     <ProjectGuid>{C084FBCF-6C79-47DD-9440-A829F3D534FB}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>OpenGlobe.Examples.Chapter3</RootNamespace>
+    <RootNamespace>OpenGlobe.Examples</RootNamespace>
     <AssemblyName>Chapter3NightLights</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

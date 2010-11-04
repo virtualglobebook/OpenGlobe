@@ -7,9 +7,9 @@
 //
 #endregion
 
-using NUnit.Framework;
 using System.Drawing;
-using OpenGlobe.Core.Geometry;
+using NUnit.Framework;
+using OpenGlobe.Core;
 
 namespace OpenGlobe.Renderer
 {

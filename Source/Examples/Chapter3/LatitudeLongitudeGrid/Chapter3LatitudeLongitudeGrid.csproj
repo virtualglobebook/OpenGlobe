@@ -8,7 +8,7 @@
     <ProjectGuid>{89A86599-4C34-4016-BD0B-23AA6511EB03}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>OpenGlobe.Examples.Chapter3</RootNamespace>
+    <RootNamespace>OpenGlobe.Examples</RootNamespace>
     <AssemblyName>Chapter3LatitudeLongitudeGrid</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

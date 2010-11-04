@@ -12,11 +12,11 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
-[assembly: AssemblyTitle("OpenGlobe.Examples.Chapter3.Triangle")]
+[assembly: AssemblyTitle("OpenGlobe.Examples.Triangle")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("OpenGlobe.Examples.Chapter3.Triangle")]
+[assembly: AssemblyProduct("OpenGlobe.Examples.Triangle")]
 [assembly: AssemblyCopyright("Copyright ©  2010")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

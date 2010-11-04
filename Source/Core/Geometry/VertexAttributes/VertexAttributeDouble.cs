@@ -7,7 +7,7 @@
 //
 #endregion
 
-namespace OpenGlobe.Core.Geometry
+namespace OpenGlobe.Core
 {
     public class VertexAttributeDouble : VertexAttribute<double>
     {

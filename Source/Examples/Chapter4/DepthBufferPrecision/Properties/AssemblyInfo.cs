@@ -12,11 +12,11 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
-[assembly: AssemblyTitle("OpenGlobe.Examples.Chapter5.DepthBufferPrecision")]
+[assembly: AssemblyTitle("OpenGlobe.Examples.DepthBufferPrecision")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("OpenGlobe.Examples.Chapter5.DepthBufferPrecision")]
+[assembly: AssemblyProduct("OpenGlobe.Examples.DepthBufferPrecision")]
 [assembly: AssemblyCopyright("Copyright ©  2010")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

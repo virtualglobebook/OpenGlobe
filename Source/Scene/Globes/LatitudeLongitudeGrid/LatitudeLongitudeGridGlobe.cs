@@ -9,8 +9,6 @@
 
 using System;
 using OpenGlobe.Core;
-using OpenGlobe.Core.Geometry;
-using OpenGlobe.Core.Tessellation;
 using OpenGlobe.Renderer;
 using System.Collections.Generic;
 

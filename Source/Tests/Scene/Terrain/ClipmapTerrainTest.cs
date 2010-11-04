@@ -7,11 +7,10 @@
 //
 #endregion
 
+using System.Drawing;
 using NUnit.Framework;
 using OpenGlobe.Renderer;
-using OpenGlobe.Core.Geometry;
 using OpenGlobe.Core;
-using System.Drawing;
 
 namespace OpenGlobe.Scene.Terrain
 {

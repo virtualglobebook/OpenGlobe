@@ -11,12 +11,11 @@ using System;
 using System.Drawing;
 
 using OpenGlobe.Core;
-using OpenGlobe.Core.Geometry;
 using OpenGlobe.Renderer;
 using OpenGlobe.Scene;
 using OpenGlobe.Terrain;
 
-namespace OpenGlobe.Examples.Chapter5
+namespace OpenGlobe.Examples
 {
     sealed class RayCasting : IDisposable
     {

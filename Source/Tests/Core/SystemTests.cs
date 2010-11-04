@@ -9,8 +9,6 @@
 
 using NUnit.Framework;
 using OpenGlobe.Renderer;
-using OpenGlobe.Core.Geometry;
-using OpenGlobe.Core.Tessellation;
 
 namespace OpenGlobe.Core
 {

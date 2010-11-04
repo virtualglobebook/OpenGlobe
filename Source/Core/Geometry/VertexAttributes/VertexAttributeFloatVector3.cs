@@ -7,7 +7,7 @@
 //
 #endregion
 
-namespace OpenGlobe.Core.Geometry
+namespace OpenGlobe.Core
 {
     public class VertexAttributeFloatVector3 : VertexAttribute<Vector3S>
     {

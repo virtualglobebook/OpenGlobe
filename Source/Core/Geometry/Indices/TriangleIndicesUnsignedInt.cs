@@ -10,7 +10,7 @@
 using System;
 using System.Globalization;
 
-namespace OpenGlobe.Core.Geometry
+namespace OpenGlobe.Core
 {
     [CLSCompliant(false)]
     public struct TriangleIndicesUnsignedInt : IEquatable<TriangleIndicesUnsignedInt>

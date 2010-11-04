@@ -10,7 +10,7 @@
 using System;
 using System.Drawing;
 
-namespace OpenGlobe.Core.Geometry
+namespace OpenGlobe.Core
 {
     public class VertexAttributeRGBA : VertexAttribute<byte>
     {

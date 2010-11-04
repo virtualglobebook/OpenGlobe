@@ -11,8 +11,6 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using OpenGlobe.Core;
-using OpenGlobe.Core.Geometry;
-using OpenGlobe.Core.Tessellation;
 using OpenGlobe.Renderer;
 using OpenGlobe.Scene;
 

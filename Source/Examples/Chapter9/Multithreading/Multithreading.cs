@@ -15,12 +15,10 @@ using System.Drawing;
 using System.Collections.Generic;
 
 using OpenGlobe.Core;
-using OpenGlobe.Core.Geometry;
-using OpenGlobe.Core.Tessellation;
 using OpenGlobe.Renderer;
 using OpenGlobe.Scene;
 
-namespace OpenGlobe.Examples.Chapter9
+namespace OpenGlobe.Examples
 {
     internal class ShapefileRequest
     {

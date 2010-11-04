@@ -10,8 +10,6 @@
 using System;
 using System.Drawing;
 using OpenGlobe.Core;
-using OpenGlobe.Core.Geometry;
-using OpenGlobe.Core.Tessellation;
 using OpenGlobe.Scene;
 using OpenGlobe.Renderer;
 using System.Collections.Generic;

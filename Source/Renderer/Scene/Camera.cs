@@ -11,7 +11,6 @@ using System;
 using System.Globalization;
 using System.Xml;
 using OpenGlobe.Core;
-using OpenGlobe.Core.Geometry;
 
 namespace OpenGlobe.Renderer
 {

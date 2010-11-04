@@ -11,10 +11,9 @@ using System;
 using System.Drawing;
 using System.Collections.Generic;
 using OpenGlobe.Core;
-using OpenGlobe.Core.Geometry;
 using OpenGlobe.Renderer;
 
-namespace OpenGlobe.Examples.Chapter03
+namespace OpenGlobe.Examples
 {
     sealed class Triangle : IDisposable
     {

@@ -12,7 +12,6 @@ using System.IO;
 using System.Drawing;
 using System.Collections.Generic;
 
-using OpenGlobe.Core.Geometry;
 using OpenGlobe.Renderer;
 using OpenGlobe.Scene;
 
@@ -25,7 +24,7 @@ using OpenGlobe.Terrain;
 // wall normal angle is not a good way to determine which shader to use
 //
 
-namespace OpenGlobe.Examples.Chapter8
+namespace OpenGlobe.Examples
 {
     sealed class LinesOnTerrain : IDisposable
     {

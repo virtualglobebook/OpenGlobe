@@ -12,11 +12,11 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
-[assembly: AssemblyTitle("OpenGlobe.Examples.Chapter3.LatitudeLongitudeGrid")]
+[assembly: AssemblyTitle("OpenGlobe.Examples.LatitudeLongitudeGrid")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("OpenGlobe.Examples.Chapter3.LatitudeLongitudeGrid")]
+[assembly: AssemblyProduct("OpenGlobe.Examples.LatitudeLongitudeGrid")]
 [assembly: AssemblyCopyright("Copyright ©  2010")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

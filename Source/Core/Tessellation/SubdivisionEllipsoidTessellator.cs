@@ -9,9 +9,8 @@
 
 using System;
 using System.Collections.Generic;
-using OpenGlobe.Core.Geometry;
 
-namespace OpenGlobe.Core.Tessellation
+namespace OpenGlobe.Core
 {
     [Flags]
     public enum SubdivisionEllipsoidVertexAttributes

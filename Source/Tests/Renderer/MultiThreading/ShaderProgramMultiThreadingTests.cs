@@ -10,7 +10,7 @@
 using System.Threading;
 using System.Drawing;
 using NUnit.Framework;
-using OpenGlobe.Core.Geometry;
+using OpenGlobe.Core;
 
 namespace OpenGlobe.Renderer.Multithreading
 {

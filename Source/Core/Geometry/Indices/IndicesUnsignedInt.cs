@@ -10,7 +10,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace OpenGlobe.Core.Geometry
+namespace OpenGlobe.Core
 {
     [CLSCompliant(false)]
     public class IndicesUnsignedInt : IndicesBase

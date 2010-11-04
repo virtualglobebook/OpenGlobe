@@ -13,7 +13,6 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.Diagnostics;
 using OpenGlobe.Core;
-using OpenGlobe.Core.Geometry;
 using OpenGlobe.Renderer.GL3x;
 using OpenTK.Graphics.OpenGL;
 using ImagingPixelFormat = System.Drawing.Imaging.PixelFormat;

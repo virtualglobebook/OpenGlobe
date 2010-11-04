@@ -11,7 +11,6 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 using NUnit.Framework;
 using OpenGlobe.Core;
-using OpenGlobe.Core.Geometry;
 
 namespace OpenGlobe.Renderer
 {

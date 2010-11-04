@@ -7,8 +7,6 @@
 //
 #endregion
 
-using OpenGlobe.Core.Geometry;
-
 namespace OpenGlobe.Renderer
 {
     internal class PerspectiveFarPlaneDistanceUniform : DrawAutomaticUniform

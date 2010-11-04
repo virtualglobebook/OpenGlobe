@@ -12,11 +12,10 @@ using System.Drawing;
 using System.Globalization;
 
 using OpenGlobe.Core;
-using OpenGlobe.Core.Geometry;
 using OpenGlobe.Renderer;
 using OpenGlobe.Scene;
 
-namespace OpenGlobe.Examples.Chapter4
+namespace OpenGlobe.Examples
 {
     sealed class DepthBufferPrecision : IDisposable
     {

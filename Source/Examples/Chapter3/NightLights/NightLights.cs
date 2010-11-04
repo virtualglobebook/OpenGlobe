@@ -10,12 +10,11 @@
 using System;
 using System.Drawing;
 
-using OpenGlobe.Core.Geometry;
-using OpenGlobe.Core.Tessellation;
+using OpenGlobe.Core;
 using OpenGlobe.Renderer;
 using OpenGlobe.Scene;
 
-namespace OpenGlobe.Examples.Chapter3
+namespace OpenGlobe.Examples
 {
     sealed class NightLights : IDisposable
     {

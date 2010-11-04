@@ -9,9 +9,8 @@
 
 using System.Collections.Generic;
 using NUnit.Framework;
-using OpenGlobe.Core.Geometry;
 
-namespace OpenGlobe.Core.Tessellation
+namespace OpenGlobe.Core
 {
     [TestFixture]
     public class TessellationTests

@@ -10,7 +10,6 @@
 using System;
 using System.Drawing;
 
-using OpenGlobe.Core.Geometry;
 using OpenGlobe.Core;
 using OpenGlobe.Renderer;
 using OpenGlobe.Scene;

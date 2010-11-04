@@ -9,11 +9,8 @@
 
 using System;
 using System.Collections.Generic;
-
-using OpenGlobe.Core.Geometry;
-using OpenGlobe.Renderer;
-
 using OpenGlobe.Core;
+using OpenGlobe.Renderer;
 
 //
 // deron junk todo

@@ -10,7 +10,7 @@
 using System.Collections.ObjectModel;
 using System.Collections.Generic;
 
-namespace OpenGlobe.Core.Geometry
+namespace OpenGlobe.Core
 {
     public class VertexAttributeCollection : ICollection<VertexAttribute>
     {

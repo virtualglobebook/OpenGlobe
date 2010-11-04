@@ -9,9 +9,8 @@
 
 using System;
 using System.Drawing;
-using OpenGlobe.Core.Geometry;
-using OpenGlobe.Renderer;
 using OpenGlobe.Core;
+using OpenGlobe.Renderer;
 
 namespace OpenGlobe.Scene
 {

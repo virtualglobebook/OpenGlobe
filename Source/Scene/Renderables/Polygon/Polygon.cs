@@ -8,11 +8,10 @@
 #endregion
 
 using System;
+using System.Drawing;
 using System.Collections.Generic;
 using OpenGlobe.Core;
-using OpenGlobe.Core.Geometry;
 using OpenGlobe.Renderer;
-using System.Drawing;
 
 namespace OpenGlobe.Scene
 {

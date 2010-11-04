@@ -11,11 +11,10 @@ using System;
 using System.Drawing;
 
 using OpenGlobe.Core;
-using OpenGlobe.Core.Geometry;
 using OpenGlobe.Renderer;
 using OpenGlobe.Scene;
 
-namespace OpenGlobe.Examples.Chapter3.NumberPrecision
+namespace OpenGlobe.Examples
 {
     sealed class NumberPrecision : IDisposable
     {
