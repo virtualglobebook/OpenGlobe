@@ -56,7 +56,7 @@ namespace OpenGlobe.Examples
             VertexAttributeFloatVector3 positionsAttribute = new VertexAttributeFloatVector3("position", 3);
             mesh.Attributes.Add(positionsAttribute);
 
-            IndicesByte indices = new IndicesByte(3);
+            IndicesUnsignedShort indices = new IndicesUnsignedShort(3);
             mesh.Indices = indices;
 
             IList<Vector3S> positions = positionsAttribute.Values;
@@ -64,7 +64,7 @@ namespace OpenGlobe.Examples
             positions.Add(new Vector3S(1, 0, 0));
             positions.Add(new Vector3S(0, 0, 1));
 
-            indices.AddTriangle(new TriangleIndicesByte(0, 1, 2));
+            indices.AddTriangle(new TriangleIndicesUnsignedShort(0, 1, 2));
 
             VertexArray va = _window.Context.CreateVertexArray(mesh, sp.VertexAttributes, BufferHint.StaticDraw);
 

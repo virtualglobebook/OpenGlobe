@@ -42,11 +42,9 @@
     <Compile Include="Geometry\Ellipsoid.cs" />
     <Compile Include="Geometry\EllipsoidTangentPlane.cs" />
     <Compile Include="Geometry\Indices\IndicesBase.cs" />
-    <Compile Include="Geometry\Indices\IndicesByte.cs" />
     <Compile Include="Geometry\Indices\IndicesType.cs" />
     <Compile Include="Geometry\Indices\IndicesUnsignedInt.cs" />
     <Compile Include="Geometry\Indices\IndicesUnsignedShort.cs" />
-    <Compile Include="Geometry\Indices\TriangleIndicesByte.cs" />
     <Compile Include="Geometry\Indices\TriangleIndicesUnsignedShort.cs" />
     <Compile Include="Geometry\Indices\TriangleIndicesUnsignedInt.cs" />
     <Compile Include="Geometry\Mesh.cs" />

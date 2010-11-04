@@ -11,7 +11,6 @@ namespace OpenGlobe.Core
 {
     public enum IndicesType
     {
-        Byte,
         UnsignedShort,
         UnsignedInt
     }

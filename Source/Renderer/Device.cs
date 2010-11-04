@@ -129,18 +129,7 @@ namespace OpenGlobe.Renderer
 
             if (mesh.Indices != null)
             {
-                if (mesh.Indices.Datatype == IndicesType.Byte)
-                {
-                    IList<byte> meshIndices = ((IndicesByte)mesh.Indices).Values;
-
-                    byte[] indices = new byte[meshIndices.Count];
-                    meshIndices.CopyTo(indices, 0);
-
-                    IndexBuffer indexBuffer = Device.CreateIndexBuffer(usageHint, indices.Length * sizeof(byte));
-                    indexBuffer.CopyFromSystemMemory(indices);
-                    meshBuffers.IndexBuffer = indexBuffer;
-                }
-                else if (mesh.Indices.Datatype == IndicesType.UnsignedShort)
+                if (mesh.Indices.Datatype == IndicesType.UnsignedShort)
                 {
                     IList<ushort> meshIndices = ((IndicesUnsignedShort)mesh.Indices).Values;
 

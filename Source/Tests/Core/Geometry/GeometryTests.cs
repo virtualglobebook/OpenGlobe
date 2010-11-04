@@ -123,10 +123,6 @@ namespace OpenGlobe.Core
         {
             Mesh mesh = new Mesh();
 
-            IndicesByte indicesByte = new IndicesByte();
-            mesh.Indices = indicesByte;
-            Assert.AreEqual(IndicesType.Byte, mesh.Indices.Datatype);
-
             IndicesUnsignedShort indicesShort = new IndicesUnsignedShort();
             mesh.Indices = indicesShort;
             Assert.AreEqual(IndicesType.UnsignedShort, mesh.Indices.Datatype);

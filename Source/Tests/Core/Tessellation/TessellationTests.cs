@@ -90,7 +90,7 @@ namespace OpenGlobe.Core
             Mesh mesh = BoxTessellator.Compute(new Vector3D(1, 1, 1));
 
             Assert.IsNotNull(mesh.Attributes["position"] as VertexAttributeDoubleVector3);
-            Assert.IsNotNull(mesh.Indices as IndicesByte);
+            Assert.IsNotNull(mesh.Indices as IndicesUnsignedShort);
         }
 
         [Test]

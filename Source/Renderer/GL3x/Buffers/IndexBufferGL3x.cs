@@ -44,11 +44,7 @@ namespace OpenGlobe.Renderer.GL3x
             int destinationOffsetInBytes,
             int lengthInBytes)
         {
-            if (typeof(T) == typeof(byte))
-            {
-                _dataType = IndexBufferDatatype.UnsignedByte;
-            }
-            else if (typeof(T) == typeof(ushort))
+            if (typeof(T) == typeof(ushort))
             {
                 _dataType = IndexBufferDatatype.UnsignedShort;
             }

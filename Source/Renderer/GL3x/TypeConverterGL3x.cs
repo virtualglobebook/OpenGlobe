@@ -446,11 +446,7 @@ namespace OpenGlobe.Renderer.GL3x
 
         public static DrawElementsType To(IndexBufferDatatype type)
         {
-            if (type == IndexBufferDatatype.UnsignedByte)
-            {
-                return DrawElementsType.UnsignedByte;
-            }
-            else if (type == IndexBufferDatatype.UnsignedShort)
+            if (type == IndexBufferDatatype.UnsignedShort)
             {
                 return DrawElementsType.UnsignedShort;
             }

@@ -28,7 +28,7 @@ namespace OpenGlobe.Core
             VertexAttributeDoubleVector3 positionsAttribute = new VertexAttributeDoubleVector3("position", 8);
             mesh.Attributes.Add(positionsAttribute);
 
-            IndicesByte indices = new IndicesByte(24);
+            IndicesUnsignedShort indices = new IndicesUnsignedShort(24);
             mesh.Indices = indices;
 
             //
@@ -49,18 +49,18 @@ namespace OpenGlobe.Core
             //
             // 6 faces, 2 triangles each
             //
-            indices.AddTriangle(new TriangleIndicesByte(4, 5, 6));    // Top: plane z = corner.Z
-            indices.AddTriangle(new TriangleIndicesByte(4, 6, 7));
-            indices.AddTriangle(new TriangleIndicesByte(1, 0, 3));    // Bottom: plane z = -corner.Z
-            indices.AddTriangle(new TriangleIndicesByte(1, 3, 2));
-            indices.AddTriangle(new TriangleIndicesByte(1, 6, 5));    // Side: plane x = corner.X
-            indices.AddTriangle(new TriangleIndicesByte(1, 2, 6));
-            indices.AddTriangle(new TriangleIndicesByte(2, 3, 7));    // Side: plane y = corner.Y
-            indices.AddTriangle(new TriangleIndicesByte(2, 7, 6));
-            indices.AddTriangle(new TriangleIndicesByte(3, 0, 4));    // Side: plane x = -corner.X
-            indices.AddTriangle(new TriangleIndicesByte(3, 4, 7));
-            indices.AddTriangle(new TriangleIndicesByte(0, 1, 5));    // Side: plane y = -corner.Y
-            indices.AddTriangle(new TriangleIndicesByte(0, 5, 4));
+            indices.AddTriangle(new TriangleIndicesUnsignedShort(4, 5, 6));    // Top: plane z = corner.Z
+            indices.AddTriangle(new TriangleIndicesUnsignedShort(4, 6, 7));
+            indices.AddTriangle(new TriangleIndicesUnsignedShort(1, 0, 3));    // Bottom: plane z = -corner.Z
+            indices.AddTriangle(new TriangleIndicesUnsignedShort(1, 3, 2));
+            indices.AddTriangle(new TriangleIndicesUnsignedShort(1, 6, 5));    // Side: plane x = corner.X
+            indices.AddTriangle(new TriangleIndicesUnsignedShort(1, 2, 6));
+            indices.AddTriangle(new TriangleIndicesUnsignedShort(2, 3, 7));    // Side: plane y = corner.Y
+            indices.AddTriangle(new TriangleIndicesUnsignedShort(2, 7, 6));
+            indices.AddTriangle(new TriangleIndicesUnsignedShort(3, 0, 4));    // Side: plane x = -corner.X
+            indices.AddTriangle(new TriangleIndicesUnsignedShort(3, 4, 7));
+            indices.AddTriangle(new TriangleIndicesUnsignedShort(0, 1, 5));    // Side: plane y = -corner.Y
+            indices.AddTriangle(new TriangleIndicesUnsignedShort(0, 5, 4));
 
             return mesh;
         }

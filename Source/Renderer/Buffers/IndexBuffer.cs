@@ -14,7 +14,13 @@ namespace OpenGlobe.Renderer
 {
     public enum IndexBufferDatatype
     {
-        UnsignedByte,
+        //
+        // OpenGL supports byte indices but D3D does not.  We do not use them 
+        // because they are unlikely to have a speed or memory benefit:
+        //
+        // http://www.opengl.org/discussion_boards/ubbthreads.php?ubb=showflat&Number=285547
+        //
+
         UnsignedShort,
         UnsignedInt
     }

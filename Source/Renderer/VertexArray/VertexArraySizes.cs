@@ -20,8 +20,6 @@ namespace OpenGlobe.Renderer
         {
             switch (type)
             {
-                case IndexBufferDatatype.UnsignedByte:
-                    return sizeof(byte);
                 case IndexBufferDatatype.UnsignedShort:
                     return sizeof(ushort);
             }
