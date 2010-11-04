@@ -490,7 +490,6 @@ namespace OpenGlobe.Scene.Terrain
         private VertexArray _degenerateTriangles;
 
         private Uniform<Vector2S> _patchOriginInClippedLevel;
-        private Uniform<Vector2S> _clippedLevelOrigin;
         private Uniform<Vector2S> _levelScaleFactor;
         private Uniform<Vector2S> _levelZeroWorldScaleFactor;
         private Uniform<Vector2S> _viewerOffsetFromOrigin;
