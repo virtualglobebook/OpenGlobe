@@ -203,8 +203,8 @@ namespace OpenGlobe.Renderer
                 window.Context.FrameBuffer = frameBuffer;
                 window.Context.Draw(PrimitiveType.Points, 0, 1, new DrawState(TestUtility.CreateRenderStateWithoutDepthTest(), sp, va), new SceneState());
 
-                TestUtility.ValidateColor(frameBuffer.ColorAttachments[0], 255, 0, 0);
-                TestUtility.ValidateColor(frameBuffer.ColorAttachments[1], 0, 255, 0);
+                TestUtility.ValidateColor(redTexture, 255, 0, 0);
+                TestUtility.ValidateColor(greenTexture, 0, 255, 0);
             }
         }
 
