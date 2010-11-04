@@ -109,7 +109,6 @@ namespace OpenGlobe.Scene.Terrain
             _degenerateTriangles = context.CreateVertexArray(degenerateTriangleMesh, _shaderProgram.VertexAttributes, BufferHint.StaticDraw);
 
             _patchOriginInClippedLevel = (Uniform<Vector2S>)_shaderProgram.Uniforms["u_patchOriginInClippedLevel"];
-            _clippedLevelOrigin = (Uniform<Vector2S>)_shaderProgram.Uniforms["u_clippedLevelOrigin"];
             _levelScaleFactor = (Uniform<Vector2S>)_shaderProgram.Uniforms["u_levelScaleFactor"];
             _levelZeroWorldScaleFactor = (Uniform<Vector2S>)_shaderProgram.Uniforms["u_levelZeroWorldScaleFactor"];
             _levelZeroWorldOrigin = (Uniform<Vector2S>)_shaderProgram.Uniforms["u_levelZeroWorldOrigin"];
@@ -226,10 +225,18 @@ namespace OpenGlobe.Scene.Terrain
             double previousNearPlane = sceneState.Camera.PerspectiveNearPlaneDistance;
             double previousFarPlane = sceneState.Camera.PerspectiveFarPlaneDistance;
 
+            Vector3D toSubtract = new Vector3D(sceneState.Camera.Target.X, sceneState.Camera.Target.Y, 0.0);
+            sceneState.Camera.Target -= toSubtract;
+            sceneState.Camera.Eye -= toSubtract;
             //sceneState.Camera.Target /= Ellipsoid.Wgs84.MaximumRadius;
             //sceneState.Camera.Eye /= Ellipsoid.Wgs84.MaximumRadius;
             //sceneState.Camera.PerspectiveNearPlaneDistance /= Ellipsoid.Wgs84.MaximumRadius;
             //sceneState.Camera.PerspectiveFarPlaneDistance /= Ellipsoid.Wgs84.MaximumRadius;
+
+            _levelZeroWorldScaleFactor.Value = new Vector2S((float)_clipmapLevels[0].Terrain.PostDeltaLongitude, (float)_clipmapLevels[0].Terrain.PostDeltaLatitude);
+            _heightExaggeration.Value = 0.00001f;
+
+            Vector2D center = toSubtract.XY;
 
             bool rendered = false;
             for (int i = _clipmapLevels.Length - 1; i >= 0; --i)
@@ -237,7 +244,7 @@ namespace OpenGlobe.Scene.Terrain
                 Level thisLevel = _clipmapLevels[i];
                 Level coarserLevel = _clipmapLevels[i > 0 ? i - 1 : 0];
 
-                rendered = RenderLevel(i, thisLevel, coarserLevel, !rendered, context, sceneState);
+                rendered = RenderLevel(i, thisLevel, coarserLevel, !rendered, center, context, sceneState);
             }
 
             sceneState.Camera.Target = previousTarget;
@@ -246,10 +253,10 @@ namespace OpenGlobe.Scene.Terrain
             sceneState.Camera.PerspectiveFarPlaneDistance = previousFarPlane;
         }
 
-        private bool RenderLevel(int levelIndex, Level level, Level coarserLevel, bool fillRing, Context context, SceneState sceneState)
+        private bool RenderLevel(int levelIndex, Level level, Level coarserLevel, bool fillRing, Vector2D center, Context context, SceneState sceneState)
         {
             context.TextureUnits[0].Texture = level.TerrainTexture;
-            context.TextureUnits[0].TextureSampler = Device.TextureSamplers.NearestClamp;
+            context.TextureUnits[0].TextureSampler = Device.TextureSamplers.LinearClamp;
             context.TextureUnits[1].Texture = coarserLevel.TerrainTexture;
             context.TextureUnits[1].TextureSampler = Device.TextureSamplers.LinearClamp;
 
@@ -263,10 +270,11 @@ namespace OpenGlobe.Scene.Terrain
 
             float levelScaleFactor = (float)Math.Pow(2.0, -levelIndex);
             _levelScaleFactor.Value = new Vector2S(levelScaleFactor, levelScaleFactor);
-            _clippedLevelOrigin.Value = new Vector2S(west, south);
-            _levelZeroWorldScaleFactor.Value = new Vector2S((float)_clipmapLevels[0].Terrain.PostDeltaLongitude, (float)_clipmapLevels[0].Terrain.PostDeltaLatitude);
-            _levelZeroWorldOrigin.Value = new Vector2S((float)_terrainSource.Extent.West, (float)_terrainSource.Extent.South);
-            _heightExaggeration.Value = 0.00001f;
+
+            double originLongitude = level.Terrain.IndexToLongitude(level.CurrentOrigin.TerrainWest);
+            double originLatitude = level.Terrain.IndexToLatitude(level.CurrentOrigin.TerrainSouth);
+            _levelZeroWorldOrigin.Value = new Vector2S((float)(originLongitude - center.X),
+                                                       (float)(originLatitude - center.Y));
 
             DrawBlock(_fieldBlock, level, coarserLevel, west, south, west, south, context, sceneState);
             DrawBlock(_fieldBlock, level, coarserLevel, west, south, west + _fieldBlockSegments, south, context, sceneState);

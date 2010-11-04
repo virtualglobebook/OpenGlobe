@@ -15,7 +15,6 @@ out vec3 positionToEyeFS;
 uniform mat4 og_modelViewPerspectiveMatrix;
 uniform vec3 og_sunPosition;
 uniform vec2 u_patchOriginInClippedLevel;
-uniform vec2 u_clippedLevelOrigin;
 uniform vec2 u_levelScaleFactor;
 uniform vec2 u_levelZeroWorldScaleFactor;
 uniform vec2 u_levelZeroWorldOrigin;
@@ -28,13 +27,13 @@ float SampleHeight(vec2 clippedLevelCurrent)
 	return texture(og_texture0, uvFine).r;
 }
 
-vec3 ComputeNormal(vec2 clippedLevelCurrent, out float height)
+vec3 ComputeNormal(vec2 levelPos, out float height)
 {
 	// Compute a normal by forward differencing.
-	vec2 right = clippedLevelCurrent + vec2(1.0, 0.0);
-	vec2 top = clippedLevelCurrent + vec2(0.0, 1.0);
+	vec2 right = levelPos + vec2(1.0, 0.0);
+	vec2 top = levelPos + vec2(0.0, 1.0);
 
-	height = SampleHeight(clippedLevelCurrent) * u_heightExaggeration;
+	height = SampleHeight(levelPos) * u_heightExaggeration;
 	float rightHeight = SampleHeight(right) * u_heightExaggeration;
 	float topHeight = SampleHeight(top) * u_heightExaggeration;
 
@@ -44,12 +43,11 @@ vec3 ComputeNormal(vec2 clippedLevelCurrent, out float height)
 
 void main()
 {
-	vec2 clippedLevelCurrent = position + u_patchOriginInClippedLevel;
+	vec2 levelPos = position + u_patchOriginInClippedLevel;
 
 	float height;
-	normalFS = ComputeNormal(clippedLevelCurrent, height);
+	normalFS = ComputeNormal(levelPos, height);
 
-	vec2 levelPos = clippedLevelCurrent + u_clippedLevelOrigin;
 	vec2 worldPos = levelPos * u_levelScaleFactor * u_levelZeroWorldScaleFactor + u_levelZeroWorldOrigin;
 	vec3 displacedPosition = vec3(worldPos, height);
 
