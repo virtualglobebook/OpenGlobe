@@ -17,14 +17,26 @@ uniform vec3 og_sunPosition;
 uniform vec2 u_patchOriginInClippedLevel;
 uniform vec2 u_levelScaleFactor;
 uniform vec2 u_levelZeroWorldScaleFactor;
-uniform vec2 u_levelZeroWorldOrigin;
+uniform vec2 u_viewerOffsetFromOrigin;
+uniform vec2 u_fineLevelOriginInCoarse;
+uniform vec2 u_viewPosInClippedLevel;
+uniform vec2 u_unblendedRegionSize;
+uniform vec2 u_oneOverBlendedRegionSize;
 uniform float u_heightExaggeration;
-uniform sampler2DRect og_texture0;    // height map
+uniform sampler2DRect og_texture0;    // finer height map
+uniform sampler2DRect og_texture1;    // coarser height map
 
 float SampleHeight(vec2 clippedLevelCurrent)
 {
 	vec2 uvFine = clippedLevelCurrent + vec2(0.5, 0.5);
-	return texture(og_texture0, uvFine).r;
+	vec2 uvCoarse = clippedLevelCurrent * 0.5 + u_fineLevelOriginInCoarse + vec2(0.5, 0.5);
+
+	vec2 alpha = clamp((abs(clippedLevelCurrent - u_viewPosInClippedLevel) - u_unblendedRegionSize) * u_oneOverBlendedRegionSize, 0, 1);
+	float alphaScalar = max(alpha.x, alpha.y);
+
+	float fineHeight = texture(og_texture0, uvFine).r;
+	float coarseHeight = texture(og_texture1, uvCoarse).r;
+	return mix(fineHeight, coarseHeight, alphaScalar);
 }
 
 vec3 ComputeNormal(vec2 levelPos, out float height)
@@ -48,7 +60,7 @@ void main()
 	float height;
 	normalFS = ComputeNormal(levelPos, height);
 
-	vec2 worldPos = levelPos * u_levelScaleFactor * u_levelZeroWorldScaleFactor + u_levelZeroWorldOrigin;
+	vec2 worldPos = levelPos * u_levelScaleFactor * u_levelZeroWorldScaleFactor - u_viewerOffsetFromOrigin;
 	vec3 displacedPosition = vec3(worldPos, height);
 
     positionToLightFS = og_sunPosition - displacedPosition;

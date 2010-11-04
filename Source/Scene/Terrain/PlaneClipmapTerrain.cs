@@ -111,12 +111,22 @@ namespace OpenGlobe.Scene.Terrain
             _patchOriginInClippedLevel = (Uniform<Vector2S>)_shaderProgram.Uniforms["u_patchOriginInClippedLevel"];
             _levelScaleFactor = (Uniform<Vector2S>)_shaderProgram.Uniforms["u_levelScaleFactor"];
             _levelZeroWorldScaleFactor = (Uniform<Vector2S>)_shaderProgram.Uniforms["u_levelZeroWorldScaleFactor"];
-            _levelZeroWorldOrigin = (Uniform<Vector2S>)_shaderProgram.Uniforms["u_levelZeroWorldOrigin"];
+            _viewerOffsetFromOrigin = (Uniform<Vector2S>)_shaderProgram.Uniforms["u_viewerOffsetFromOrigin"];
             _heightExaggeration = (Uniform<float>)_shaderProgram.Uniforms["u_heightExaggeration"];
+            _viewPosInClippedLevel = (Uniform<Vector2S>)_shaderProgram.Uniforms["u_viewPosInClippedLevel"];
+            _fineLevelOriginInCoarse = (Uniform<Vector2S>)_shaderProgram.Uniforms["u_fineLevelOriginInCoarse"];
+            _unblendedRegionSize = (Uniform<Vector2S>)_shaderProgram.Uniforms["u_unblendedRegionSize"];
+            _oneOverBlendedRegionSize = (Uniform<Vector2S>)_shaderProgram.Uniforms["u_oneOverBlendedRegionSize"];
 
             _renderState = new RenderState();
             _renderState.FacetCulling.FrontFaceWindingOrder = fieldBlockMesh.FrontFaceWindingOrder;
             _primitiveType = fieldBlockMesh.PrimitiveType;
+
+            float oneOverBlendedRegionSize = (float)(10.0 / _clipmapPosts);
+            _oneOverBlendedRegionSize.Value = new Vector2S(oneOverBlendedRegionSize, oneOverBlendedRegionSize);
+
+            float unblendedRegionSize = (float)(_clipmapSegments / 2 - _clipmapPosts / 10.0 - 1);
+            _unblendedRegionSize.Value = new Vector2S(unblendedRegionSize, unblendedRegionSize);
         }
 
         public void PreRender(Context context, SceneState sceneState)
@@ -256,7 +266,7 @@ namespace OpenGlobe.Scene.Terrain
         private bool RenderLevel(int levelIndex, Level level, Level coarserLevel, bool fillRing, Vector2D center, Context context, SceneState sceneState)
         {
             context.TextureUnits[0].Texture = level.TerrainTexture;
-            context.TextureUnits[0].TextureSampler = Device.TextureSamplers.LinearClamp;
+            context.TextureUnits[0].TextureSampler = Device.TextureSamplers.NearestClamp;
             context.TextureUnits[1].Texture = coarserLevel.TerrainTexture;
             context.TextureUnits[1].TextureSampler = Device.TextureSamplers.LinearClamp;
 
@@ -273,8 +283,16 @@ namespace OpenGlobe.Scene.Terrain
 
             double originLongitude = level.Terrain.IndexToLongitude(level.CurrentOrigin.TerrainWest);
             double originLatitude = level.Terrain.IndexToLatitude(level.CurrentOrigin.TerrainSouth);
-            _levelZeroWorldOrigin.Value = new Vector2S((float)(originLongitude - center.X),
-                                                       (float)(originLatitude - center.Y));
+            _viewerOffsetFromOrigin.Value = new Vector2S((float)(center.X - originLongitude),
+                                                        (float)(center.Y - originLatitude));
+
+            int coarserWest = coarserLevel.CurrentOrigin.TerrainWest;
+            int coarserSouth = coarserLevel.CurrentOrigin.TerrainSouth;
+            _fineLevelOriginInCoarse.Value = new Vector2S(west / 2 - coarserWest,
+                                                          south / 2 - coarserSouth);
+
+            _viewPosInClippedLevel.Value = new Vector2S((float)(level.Terrain.LongitudeToIndex(center.X) - level.CurrentOrigin.TerrainWest),
+                                                        (float)(level.Terrain.LatitudeToIndex(center.Y) - level.CurrentOrigin.TerrainSouth));
 
             DrawBlock(_fieldBlock, level, coarserLevel, west, south, west, south, context, sceneState);
             DrawBlock(_fieldBlock, level, coarserLevel, west, south, west + _fieldBlockSegments, south, context, sceneState);
@@ -477,8 +495,12 @@ namespace OpenGlobe.Scene.Terrain
         private Uniform<Vector2S> _clippedLevelOrigin;
         private Uniform<Vector2S> _levelScaleFactor;
         private Uniform<Vector2S> _levelZeroWorldScaleFactor;
-        private Uniform<Vector2S> _levelZeroWorldOrigin;
+        private Uniform<Vector2S> _viewerOffsetFromOrigin;
         private Uniform<float> _heightExaggeration;
+        private Uniform<Vector2S> _fineLevelOriginInCoarse;
+        private Uniform<Vector2S> _viewPosInClippedLevel;
+        private Uniform<Vector2S> _unblendedRegionSize;
+        private Uniform<Vector2S> _oneOverBlendedRegionSize;
 
         private EsriRestImagery _imagery;
     }
