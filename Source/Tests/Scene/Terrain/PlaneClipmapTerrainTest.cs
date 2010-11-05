@@ -55,10 +55,10 @@ namespace OpenGlobe.Scene.Terrain
             ClearState clearDepth = new ClearState();
             clearDepth.Buffers = ClearBuffers.DepthBuffer;
 
-            //camera.Dispose();
-            //CameraFly fly = new CameraFly(sceneState.Camera, window);
-            //fly.UpdateParametersFromCamera();
-            //fly.MovementRate = 0.01;
+            camera.Dispose();
+            CameraFly fly = new CameraFly(sceneState.Camera, window);
+            fly.UpdateParametersFromCamera();
+            fly.MovementRate = 0.01;
 
             window.Keyboard.KeyDown += delegate(object sender, KeyboardKeyEventArgs e)
             {

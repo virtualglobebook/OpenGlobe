@@ -130,7 +130,7 @@ namespace OpenGlobe.Scene.Terrain
         public void PreRender(Context context, SceneState sceneState)
         {
             //Geodetic2D center = Ellipsoid.ScaledWgs84.ToGeodetic2D(sceneState.Camera.Target / Ellipsoid.Wgs84.MaximumRadius);
-            Geodetic2D center = new Geodetic2D(sceneState.Camera.Target.X, sceneState.Camera.Target.Y);
+            Geodetic2D center = new Geodetic2D(sceneState.Camera.Eye.X, sceneState.Camera.Eye.Y);
             double centerLongitude = center.Longitude; //Trig.ToDegrees(center.Longitude);
             double centerLatitude = center.Latitude; //Trig.ToDegrees(center.Latitude);
 
@@ -233,7 +233,7 @@ namespace OpenGlobe.Scene.Terrain
             double previousNearPlane = sceneState.Camera.PerspectiveNearPlaneDistance;
             double previousFarPlane = sceneState.Camera.PerspectiveFarPlaneDistance;
 
-            Vector3D toSubtract = new Vector3D(sceneState.Camera.Target.X, sceneState.Camera.Target.Y, 0.0);
+            Vector3D toSubtract = new Vector3D(sceneState.Camera.Eye.X, sceneState.Camera.Eye.Y, 0.0);
             sceneState.Camera.Target -= toSubtract;
             sceneState.Camera.Eye -= toSubtract;
             //sceneState.Camera.Target /= Ellipsoid.Wgs84.MaximumRadius;
@@ -241,13 +241,15 @@ namespace OpenGlobe.Scene.Terrain
             //sceneState.Camera.PerspectiveNearPlaneDistance /= Ellipsoid.Wgs84.MaximumRadius;
             //sceneState.Camera.PerspectiveFarPlaneDistance /= Ellipsoid.Wgs84.MaximumRadius;
 
+            int maxLevel = _clipmapLevels.Length - 1;
+
             _levelZeroWorldScaleFactor.Value = new Vector2S((float)_clipmapLevels[0].Terrain.PostDeltaLongitude, (float)_clipmapLevels[0].Terrain.PostDeltaLatitude);
             _heightExaggeration.Value = 0.00001f;
 
             Vector2D center = toSubtract.XY;
 
             bool rendered = false;
-            for (int i = _clipmapLevels.Length - 1; i >= 0; --i)
+            for (int i = maxLevel; i >= 0; --i)
             {
                 Level thisLevel = _clipmapLevels[i];
                 Level coarserLevel = _clipmapLevels[i > 0 ? i - 1 : 0];
@@ -361,6 +363,7 @@ namespace OpenGlobe.Scene.Terrain
 
             _patchOriginInClippedLevel.Value = new Vector2S(textureWest, textureSouth);
             DrawState drawState = new DrawState(_renderState, _shaderProgram, block);
+            drawState.RenderState.RasterizationMode = RasterizationMode.Line;
             context.Draw(_primitiveType, drawState, sceneState);
         }
 
