@@ -45,6 +45,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chapter9Multithreading", "E
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chapter03Triangle", "Examples\Chapter03\Triangle\Chapter03Triangle.csproj", "{F837D516-6C6F-4612-847A-22CC13B13AF3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chapter05Jitter", "Examples\Chapter05\Jitter\Chapter05Jitter.csproj", "{B1DBCA8C-DB77-4E11-BCE9-589681E497C8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -127,6 +129,10 @@ Global
 		{F837D516-6C6F-4612-847A-22CC13B13AF3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F837D516-6C6F-4612-847A-22CC13B13AF3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F837D516-6C6F-4612-847A-22CC13B13AF3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B1DBCA8C-DB77-4E11-BCE9-589681E497C8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B1DBCA8C-DB77-4E11-BCE9-589681E497C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B1DBCA8C-DB77-4E11-BCE9-589681E497C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B1DBCA8C-DB77-4E11-BCE9-589681E497C8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
