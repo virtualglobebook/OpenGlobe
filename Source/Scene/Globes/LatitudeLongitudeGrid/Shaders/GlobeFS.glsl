@@ -31,7 +31,7 @@ float LightIntensity(vec3 normal, vec3 toLight, vec3 toEye, vec4 diffuseSpecular
             diffuseSpecularAmbientShininess.z;
 }
 
-vec3 ComputeDeticSurfaceNormal(vec3 positionOnEllipsoid, vec3 oneOverEllipsoidRadiiSquared)
+vec3 GeodeticSurfaceNormal(vec3 positionOnEllipsoid, vec3 oneOverEllipsoidRadiiSquared)
 {
     return normalize(positionOnEllipsoid * oneOverEllipsoidRadiiSquared);
 }
@@ -43,7 +43,7 @@ vec2 ComputeTextureCoordinates(vec3 normal)
 
 void main()
 {
-    vec3 normal = ComputeDeticSurfaceNormal(worldPosition, u_globeOneOverRadiiSquared);
+    vec3 normal = GeodeticSurfaceNormal(worldPosition, u_globeOneOverRadiiSquared);
     vec2 textureCoordinate = ComputeTextureCoordinates(normal);
 
     vec2 distanceToLine = mod(textureCoordinate, u_gridResolution);

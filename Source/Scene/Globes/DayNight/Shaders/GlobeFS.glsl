@@ -65,7 +65,7 @@ float ComputeWorldPositionDepth(vec3 position, mat4x2 modelZToClipCoordinates)
     return v.x;
 }
 
-vec3 ComputeDeticSurfaceNormal(vec3 positionOnEllipsoid, vec3 oneOverEllipsoidRadiiSquared)
+vec3 GeodeticSurfaceNormal(vec3 positionOnEllipsoid, vec3 oneOverEllipsoidRadiiSquared)
 {
     return normalize(positionOnEllipsoid * oneOverEllipsoidRadiiSquared);
 }
@@ -107,7 +107,7 @@ void main()
     if (i.Intersects)
     {
         vec3 position = og_cameraEye + (i.NearTime * rayDirection);
-        vec3 normal = ComputeDeticSurfaceNormal(position, u_globeOneOverRadiiSquared);
+        vec3 normal = GeodeticSurfaceNormal(position, u_globeOneOverRadiiSquared);
 
         vec3 toLight = normalize(og_sunPosition - position);
         vec3 toEye = normalize(og_cameraEye - position);

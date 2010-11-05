@@ -28,14 +28,14 @@ float LightIntensity(vec3 normal, vec3 toLight, vec3 toEye, vec4 diffuseSpecular
             diffuseSpecularAmbientShininess.z;
 }
 
-vec3 ComputeDeticSurfaceNormal(vec3 positionOnEllipsoid, vec3 oneOverEllipsoidRadiiSquared)
+vec3 GeodeticSurfaceNormal(vec3 positionOnEllipsoid, vec3 oneOverEllipsoidRadiiSquared)
 {
     return normalize(positionOnEllipsoid * oneOverEllipsoidRadiiSquared);
 }
 
 void main()
 {
-	vec3 normal = ComputeDeticSurfaceNormal(worldPosition, u_globeOneOverRadiiSquared);
+	vec3 normal = GeodeticSurfaceNormal(worldPosition, u_globeOneOverRadiiSquared);
     float intensity = LightIntensity(normal,  normalize(positionToLight), normalize(positionToEye), og_diffuseSpecularAmbientShininess);
 
 	fragmentColor = vec4(intensity * u_color.rgb, u_color.a);
