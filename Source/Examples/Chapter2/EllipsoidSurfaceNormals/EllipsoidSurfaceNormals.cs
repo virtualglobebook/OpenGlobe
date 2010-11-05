@@ -79,7 +79,7 @@ namespace OpenGlobe.Examples
             ///////////////////////////////////////////////////////////////////
 
             Vector3D p = _globeShape.ToVector3D(new Geodetic3D(0, Trig.ToRadians(45), 0));
-            Vector3D deticNormal = _globeShape.DeticSurfaceNormal(p);
+            Vector3D deticNormal = _globeShape.GeodeticSurfaceNormal(p);
             Vector3D centricNormal = Ellipsoid.CentricSurfaceNormal(p);
 
             double normalLength = _globeShape.MaximumRadius;

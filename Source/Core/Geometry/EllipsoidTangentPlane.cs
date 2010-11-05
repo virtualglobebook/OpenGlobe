@@ -34,7 +34,7 @@ namespace OpenGlobe.Core
             AxisAlignedBoundingBox box = new AxisAlignedBoundingBox(positions);
 
             _origin = ellipsoid.ScaleToGeodeticSurface(box.Center);
-            _normal = ellipsoid.DeticSurfaceNormal(_origin);
+            _normal = ellipsoid.GeodeticSurfaceNormal(_origin);
             _d = -_origin.Dot(_origin);
             _yAxis = _origin.Cross(_origin.MostOrthogonalAxis).Normalize();
             _xAxis = _yAxis.Cross(_origin).Normalize();

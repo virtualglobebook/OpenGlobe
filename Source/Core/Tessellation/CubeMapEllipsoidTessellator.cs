@@ -233,7 +233,7 @@ namespace OpenGlobe.Core
 
                 if ((CubeMapMesh.Normals != null) || (CubeMapMesh.TextureCoordinate != null))
                 {
-                    Vector3D deticSurfaceNormal = CubeMapMesh.Ellipsoid.DeticSurfaceNormal(positions[i]);
+                    Vector3D deticSurfaceNormal = CubeMapMesh.Ellipsoid.GeodeticSurfaceNormal(positions[i]);
 
                     if (CubeMapMesh.Normals != null)
                     {

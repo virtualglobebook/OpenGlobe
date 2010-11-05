@@ -106,7 +106,7 @@ namespace OpenGlobe.Core
             {
                 for (int i = 0; i < positions.Count; ++i)
                 {
-                    Vector3D deticSurfaceNormal = ellipsoid.DeticSurfaceNormal(positions[i]);
+                    Vector3D deticSurfaceNormal = ellipsoid.GeodeticSurfaceNormal(positions[i]);
 
                     if (normals != null)
                     {

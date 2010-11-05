@@ -98,10 +98,10 @@ namespace OpenGlobe.Core
 
             if ((subdivisionMesh.Normals != null) || (subdivisionMesh.TextureCoordinate != null))
             {
-                Vector3D d0 = ellipsoid.DeticSurfaceNormal(p0);
-                Vector3D d1 = ellipsoid.DeticSurfaceNormal(p1);
-                Vector3D d2 = ellipsoid.DeticSurfaceNormal(p2);
-                Vector3D d3 = ellipsoid.DeticSurfaceNormal(p3);
+                Vector3D d0 = ellipsoid.GeodeticSurfaceNormal(p0);
+                Vector3D d1 = ellipsoid.GeodeticSurfaceNormal(p1);
+                Vector3D d2 = ellipsoid.GeodeticSurfaceNormal(p2);
+                Vector3D d3 = ellipsoid.GeodeticSurfaceNormal(p3);
 
                 if (subdivisionMesh.Normals != null)
                 {
@@ -151,9 +151,9 @@ namespace OpenGlobe.Core
 
                 if ((subdivisionMesh.Normals != null) || (subdivisionMesh.TextureCoordinate != null))
                 {
-                    Vector3D d01 = subdivisionMesh.Ellipsoid.DeticSurfaceNormal(p01);
-                    Vector3D d12 = subdivisionMesh.Ellipsoid.DeticSurfaceNormal(p12);
-                    Vector3D d20 = subdivisionMesh.Ellipsoid.DeticSurfaceNormal(p20);
+                    Vector3D d01 = subdivisionMesh.Ellipsoid.GeodeticSurfaceNormal(p01);
+                    Vector3D d12 = subdivisionMesh.Ellipsoid.GeodeticSurfaceNormal(p12);
+                    Vector3D d20 = subdivisionMesh.Ellipsoid.GeodeticSurfaceNormal(p20);
 
                     if (subdivisionMesh.Normals != null)
                     {

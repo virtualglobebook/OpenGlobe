@@ -31,10 +31,10 @@ namespace OpenGlobe.Core
         }
 
         [Test]
-        public void DeticSurfaceNormal()
+        public void GeodeticSurfaceNormal()
         {
-            Assert.IsTrue(new Vector3D(1, 0, 0).Equals(Ellipsoid.UnitSphere.DeticSurfaceNormal(new Vector3D(1, 0, 0))));
-            Assert.IsTrue(new Vector3D(0, 0, 1).Equals(Ellipsoid.UnitSphere.DeticSurfaceNormal(new Vector3D(0, 0, 1))));
+            Assert.IsTrue(new Vector3D(1, 0, 0).Equals(Ellipsoid.UnitSphere.GeodeticSurfaceNormal(new Vector3D(1, 0, 0))));
+            Assert.IsTrue(new Vector3D(0, 0, 1).Equals(Ellipsoid.UnitSphere.GeodeticSurfaceNormal(new Vector3D(0, 0, 1))));
         }
 
         [Test]

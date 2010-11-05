@@ -47,7 +47,7 @@ namespace OpenGlobe.Core
             return positionOnEllipsoid.Normalize();
         }
 
-        public Vector3D DeticSurfaceNormal(Vector3D positionOnEllipsoid)
+        public Vector3D GeodeticSurfaceNormal(Vector3D positionOnEllipsoid)
         {
             return (positionOnEllipsoid.MultiplyComponents(_oneOverRadiiSquared)).Normalize();
         }
