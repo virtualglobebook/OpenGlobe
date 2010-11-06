@@ -63,6 +63,7 @@
     <Compile Include="Geometry\VertexAttributes\VertexAttributeHalfFloatVector2.cs" />
     <Compile Include="Geometry\VertexAttributes\VertexAttributeHalfFloatVector3.cs" />
     <Compile Include="Geometry\VertexAttributes\VertexAttributeHalfFloatVector4.cs" />
+    <Compile Include="Geometry\VertexAttributes\VertexAttributeRGB.cs" />
     <Compile Include="Geometry\VertexAttributes\VertexAttributeRGBA.cs" />
     <Compile Include="Half.cs" />
     <Compile Include="Imaging\BitmapAlgorithms.cs" />

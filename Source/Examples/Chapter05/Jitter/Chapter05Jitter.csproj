@@ -45,6 +45,7 @@
     <Reference Include="System.Drawing" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="JitteryScene.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Jitter.cs" />
   </ItemGroup>

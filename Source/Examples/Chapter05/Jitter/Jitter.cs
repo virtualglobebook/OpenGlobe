@@ -21,80 +21,15 @@ namespace OpenGlobe.Examples
     {
         public Jitter()
         {
-            Ellipsoid globeShape = Ellipsoid.Wgs84;
+            double xTranslation = Ellipsoid.Wgs84.Radii.X;
 
             _window = Device.CreateWindow(800, 600, "Chapter 5:  Jitter");
             _window.Resize += OnResize;
             _window.RenderFrame += OnRenderFrame;
             _sceneState = new SceneState();
-            _clearState = new ClearState();
 
-            string vs =
-                @"#version 330
+            _scene = new JitteryScene(_window.Context, xTranslation);
 
-                  layout(location = og_positionVertexLocation) in vec4 position;
-                  uniform mat4 og_modelViewPerspectiveMatrix;
-
-                  void main()                     
-                  {
-                        gl_Position = og_modelViewPerspectiveMatrix * position; 
-                  }";
-
-            string fs =
-                @"#version 330
-                 
-                  out vec3 fragmentColor;
-                  uniform vec3 u_color;
-
-                  void main()
-                  {
-                      fragmentColor = u_color;
-                  }";
-            ShaderProgram sp = Device.CreateShaderProgram(vs, fs);
-            _color = (Uniform<Vector3S>)sp.Uniforms["u_color"];
-
-            ///////////////////////////////////////////////////////////////////
-            
-            Mesh mesh = new Mesh();
-
-            VertexAttributeDoubleVector3 positionsAttribute = new VertexAttributeDoubleVector3("position", 3);
-            mesh.Attributes.Add(positionsAttribute);
-
-            double delta = 1;
-
-            IList<Vector3D> positions = positionsAttribute.Values;
-            positions.Add(new Vector3D(globeShape.Radii.X, delta + 0, 0));
-            positions.Add(new Vector3D(globeShape.Radii.X, delta + 1000000, 0));
-            positions.Add(new Vector3D(globeShape.Radii.X, delta + 0, 1000000));
-
-            positions.Add(new Vector3D(globeShape.Radii.X, -delta - 0, 0));
-            positions.Add(new Vector3D(globeShape.Radii.X, -delta - 0, 1000000));
-            positions.Add(new Vector3D(globeShape.Radii.X, -delta - 1000000, 0));
-
-            VertexArray va = _window.Context.CreateVertexArray(mesh, sp.VertexAttributes, BufferHint.StaticDraw);
-
-            ///////////////////////////////////////////////////////////////////
-
-            RenderState renderState = new RenderState();
-            renderState.FacetCulling.Enabled = false;
-            renderState.DepthTest.Enabled = false;
-
-            _drawState = new DrawState(renderState, sp, va);
-
-            ///////////////////////////////////////////////////////////////////
-
-            Vector3D localOrigin = Vector3D.UnitX * globeShape.Radii.X;
-
-            _billboards = new BillboardCollection(_window.Context);
-            _billboards.DepthTestEnabled = false;
-            _billboards.DepthWrite = false;
-            _billboards.Texture = Device.CreateTexture2D(Device.CreateBitmapFromPoint(5), TextureFormat.RedGreenBlueAlpha8, false);
-
-            Billboard billboard = new Billboard();
-            billboard.Position = localOrigin;
-            billboard.Color = Color.Blue;
-            _billboards.Add(billboard);
-           
             ///////////////////////////////////////////////////////////////////
 
             _hudFont = new Font("Arial", 16);
@@ -106,10 +41,10 @@ namespace OpenGlobe.Examples
             Camera camera = _sceneState.Camera;
             camera.PerspectiveNearPlaneDistance = 0.1;
             camera.PerspectiveFarPlaneDistance = 1000000;
-            camera.Target = localOrigin;
-            camera.Eye = localOrigin * 1.1;
+            camera.Target = Vector3D.UnitX * xTranslation;
+            camera.Eye = Vector3D.UnitX * xTranslation * 1.1;
 
-            _camera = new CameraLookAtPoint(camera, _window, globeShape);
+            _camera = new CameraLookAtPoint(camera, _window, Ellipsoid.UnitSphere);
             _camera.Range = (camera.Eye - camera.Target).Magnitude;
             _camera.MinimumZoomRate = 1;
             _camera.MaximumZoomRate = Double.MaxValue;
@@ -142,14 +77,9 @@ namespace OpenGlobe.Examples
             UpdateHUD();
 
             Context context = _window.Context;
-            context.Clear(_clearState);
+            context.Clear(ClearState.Default);
 
-            _color.Value = new Vector3S(1, 0, 0);
-            context.Draw(PrimitiveType.Triangles, 0, 3, _drawState, _sceneState);
-            _color.Value = new Vector3S(0, 1, 0);
-            context.Draw(PrimitiveType.Triangles, 3, 3, _drawState, _sceneState);
-
-            _billboards.Render(context, _sceneState);
+            _scene.Render(context, _sceneState);
             _hud.Render(context, _sceneState);
         }
 
@@ -157,10 +87,6 @@ namespace OpenGlobe.Examples
 
         public void Dispose()
         {
-            _drawState.VertexArray.Dispose();
-            _drawState.ShaderProgram.Dispose();
-            _billboards.Texture.Dispose();
-            _billboards.Dispose();
             _camera.Dispose();
             _hudFont.Dispose();
             _hud.Texture.Dispose();
@@ -185,11 +111,8 @@ namespace OpenGlobe.Examples
 
         private readonly GraphicsWindow _window;
         private readonly SceneState _sceneState;
-        private readonly ClearState _clearState;
-        private readonly DrawState _drawState;
-        private readonly Uniform<Vector3S> _color;
 
-        private readonly BillboardCollection _billboards;
+        private readonly IRenderable _scene;
 
         private readonly Font _hudFont;
         private readonly HeadsUpDisplay _hud;

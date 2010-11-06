@@ -296,6 +296,14 @@ namespace OpenGlobe.Renderer
                         meshBuffers.Attributes[shaderAttribute.Location] =
                             new VertexBufferAttribute(vertexBuffer, ComponentDatatype.UnsignedByte, 4, true, 0, 0);
                     }
+
+                    else if (attribute is VertexAttributeRGB)
+                    {
+                        VertexBuffer vertexBuffer = CreateVertexBuffer(((VertexAttribute<byte>)attribute).Values, sizeof(byte), usageHint);
+
+                        meshBuffers.Attributes[shaderAttribute.Location] =
+                            new VertexBufferAttribute(vertexBuffer, ComponentDatatype.UnsignedByte, 3, true, 0, 0);
+                    }
                     else
                     {
                         VertexBuffer vertexBuffer = CreateVertexBuffer(((VertexAttribute<byte>)attribute).Values, sizeof(byte), usageHint);

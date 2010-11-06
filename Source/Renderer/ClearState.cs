@@ -37,5 +37,7 @@ namespace OpenGlobe.Renderer
         public Color Color { get; set; }
         public float Depth { get; set; }
         public int Stencil { get; set; }
+
+        public static readonly ClearState Default = new ClearState();
     }
 }
