@@ -392,13 +392,14 @@ namespace OpenGlobe.Renderer
             return bitmap;
         }
 
-        public static Bitmap CreateBitmapFromPoint(int diameter)
+        public static Bitmap CreateBitmapFromPoint(int radiusInPixels)
         {
-            if (diameter < 1)
+            if (radiusInPixels < 1)
             {
-                throw new ArgumentOutOfRangeException("diameter");
+                throw new ArgumentOutOfRangeException("radius");
             }
 
+            int diameter = radiusInPixels * 2;
             Bitmap bitmap = new Bitmap(diameter, diameter, ImagingPixelFormat.Format32bppArgb);
             Graphics graphics = Graphics.FromImage(bitmap);
             Brush brush = new SolidBrush(Color.White);

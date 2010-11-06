@@ -10,8 +10,10 @@
 using System;
 using System.Drawing;
 using System.Collections.Generic;
+using System.Globalization;
 using OpenGlobe.Core;
 using OpenGlobe.Renderer;
+using OpenGlobe.Scene;
 
 namespace OpenGlobe.Examples
 {
@@ -19,6 +21,8 @@ namespace OpenGlobe.Examples
     {
         public Jitter()
         {
+            Ellipsoid globeShape = Ellipsoid.Wgs84;
+
             _window = Device.CreateWindow(800, 600, "Chapter 5:  Jitter");
             _window.Resize += OnResize;
             _window.RenderFrame += OnRenderFrame;
@@ -47,24 +51,25 @@ namespace OpenGlobe.Examples
                       fragmentColor = u_color;
                   }";
             ShaderProgram sp = Device.CreateShaderProgram(vs, fs);
-            ((Uniform<Vector3S>)sp.Uniforms["u_color"]).Value = new Vector3S(1, 0, 0);
+            _color = (Uniform<Vector3S>)sp.Uniforms["u_color"];
 
             ///////////////////////////////////////////////////////////////////
             
             Mesh mesh = new Mesh();
 
-            VertexAttributeFloatVector3 positionsAttribute = new VertexAttributeFloatVector3("position", 3);
+            VertexAttributeDoubleVector3 positionsAttribute = new VertexAttributeDoubleVector3("position", 3);
             mesh.Attributes.Add(positionsAttribute);
 
-            IndicesUnsignedShort indices = new IndicesUnsignedShort(3);
-            mesh.Indices = indices;
+            double delta = 1;
 
-            IList<Vector3S> positions = positionsAttribute.Values;
-            positions.Add(new Vector3S(0, 0, 0));
-            positions.Add(new Vector3S(1, 0, 0));
-            positions.Add(new Vector3S(0, 0, 1));
+            IList<Vector3D> positions = positionsAttribute.Values;
+            positions.Add(new Vector3D(globeShape.Radii.X, delta + 0, 0));
+            positions.Add(new Vector3D(globeShape.Radii.X, delta + 1000000, 0));
+            positions.Add(new Vector3D(globeShape.Radii.X, delta + 0, 1000000));
 
-            indices.AddTriangle(new TriangleIndicesUnsignedShort(0, 1, 2));
+            positions.Add(new Vector3D(globeShape.Radii.X, -delta - 0, 0));
+            positions.Add(new Vector3D(globeShape.Radii.X, -delta - 0, 1000000));
+            positions.Add(new Vector3D(globeShape.Radii.X, -delta - 1000000, 0));
 
             VertexArray va = _window.Context.CreateVertexArray(mesh, sp.VertexAttributes, BufferHint.StaticDraw);
 
@@ -77,8 +82,53 @@ namespace OpenGlobe.Examples
             _drawState = new DrawState(renderState, sp, va);
 
             ///////////////////////////////////////////////////////////////////
-            
-            _sceneState.Camera.ZoomToTarget(1);
+
+            Vector3D localOrigin = Vector3D.UnitX * globeShape.Radii.X;
+
+            _billboards = new BillboardCollection(_window.Context);
+            _billboards.DepthTestEnabled = false;
+            _billboards.DepthWrite = false;
+            _billboards.Texture = Device.CreateTexture2D(Device.CreateBitmapFromPoint(5), TextureFormat.RedGreenBlueAlpha8, false);
+
+            Billboard billboard = new Billboard();
+            billboard.Position = localOrigin;
+            billboard.Color = Color.Blue;
+            _billboards.Add(billboard);
+           
+            ///////////////////////////////////////////////////////////////////
+
+            _hudFont = new Font("Arial", 16);
+            _hud = new HeadsUpDisplay(_window.Context);
+            _hud.Color = Color.Black;
+
+            ///////////////////////////////////////////////////////////////////
+
+            Camera camera = _sceneState.Camera;
+            camera.PerspectiveNearPlaneDistance = 0.1;
+            camera.PerspectiveFarPlaneDistance = 1000000;
+            camera.Target = localOrigin;
+            camera.Eye = localOrigin * 1.1;
+
+            _camera = new CameraLookAtPoint(camera, _window, globeShape);
+            _camera.Range = (camera.Eye - camera.Target).Magnitude;
+            _camera.MinimumZoomRate = 1;
+            _camera.MaximumZoomRate = Double.MaxValue;
+            _camera.ZoomFactor = 10;
+            _camera.ZoomRateRangeAdjustment = 0;
+        }
+
+        private void UpdateHUD()
+        {
+            string text = "Distance: " + string.Format(CultureInfo.CurrentCulture, "{0:N}", _camera.Range);
+
+            if (_hud.Texture != null)
+            {
+                _hud.Texture.Dispose();
+                _hud.Texture = null;
+            }
+            _hud.Texture = Device.CreateTexture2D(
+                Device.CreateBitmapFromText(text, _hudFont),
+                TextureFormat.RedGreenBlueAlpha8, false);
         }
 
         private void OnResize()
@@ -89,10 +139,18 @@ namespace OpenGlobe.Examples
 
         private void OnRenderFrame()
         {
+            UpdateHUD();
+
             Context context = _window.Context;
             context.Clear(_clearState);
 
-            context.Draw(PrimitiveType.Triangles, _drawState, _sceneState);
+            _color.Value = new Vector3S(1, 0, 0);
+            context.Draw(PrimitiveType.Triangles, 0, 3, _drawState, _sceneState);
+            _color.Value = new Vector3S(0, 1, 0);
+            context.Draw(PrimitiveType.Triangles, 3, 3, _drawState, _sceneState);
+
+            _billboards.Render(context, _sceneState);
+            _hud.Render(context, _sceneState);
         }
 
         #region IDisposable Members
@@ -101,6 +159,12 @@ namespace OpenGlobe.Examples
         {
             _drawState.VertexArray.Dispose();
             _drawState.ShaderProgram.Dispose();
+            _billboards.Texture.Dispose();
+            _billboards.Dispose();
+            _camera.Dispose();
+            _hudFont.Dispose();
+            _hud.Texture.Dispose();
+            _hud.Dispose();
             _window.Dispose();
         }
 
@@ -123,5 +187,13 @@ namespace OpenGlobe.Examples
         private readonly SceneState _sceneState;
         private readonly ClearState _clearState;
         private readonly DrawState _drawState;
+        private readonly Uniform<Vector3S> _color;
+
+        private readonly BillboardCollection _billboards;
+
+        private readonly Font _hudFont;
+        private readonly HeadsUpDisplay _hud;
+
+        private readonly CameraLookAtPoint _camera;
     }
 }

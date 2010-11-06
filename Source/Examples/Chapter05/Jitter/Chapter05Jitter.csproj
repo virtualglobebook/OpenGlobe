@@ -5,7 +5,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{b1dbca8c-db77-4e11-bce9-589681e497c8}</ProjectGuid>
+    <ProjectGuid>{B1DBCA8C-DB77-4E11-BCE9-589681E497C8}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>OpenGlobe.Examples</RootNamespace>
@@ -61,6 +61,10 @@
     <ProjectReference Include="..\..\..\Renderer\OpenGlobe.Renderer.csproj">
       <Project>{E735AB3A-EB92-4C51-814E-E5E1F2173AA4}</Project>
       <Name>OpenGlobe.Renderer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Scene\OpenGlobe.Scene.csproj">
+      <Project>{71ABD41E-1545-45DF-B016-58E89111A4F3}</Project>
+      <Name>OpenGlobe.Scene</Name>
     </ProjectReference>
   </ItemGroup>
 </Project>

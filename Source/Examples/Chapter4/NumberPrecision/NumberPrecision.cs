@@ -25,8 +25,8 @@ namespace OpenGlobe.Examples
             _window.RenderFrame += OnRenderFrame;
             _window.Keyboard.KeyDown += OnKeyDown;
             _sceneState = new SceneState();
-            _camera = new CameraLookAtPoint(_sceneState.Camera, _window, new Ellipsoid(0.001, 0.001, 0.001),
-                new Vector3D(_viewCenterX, 0.0, 0.0));
+            _sceneState.Camera.Target = new Vector3D(_viewCenterX, 0.0, 0.0);
+            _camera = new CameraLookAtPoint(_sceneState.Camera, _window, new Ellipsoid(0.001, 0.001, 0.001));
             _camera.MouseEnabled = false;
             CenterCameraOnPoint();
             _clearState = new ClearState();

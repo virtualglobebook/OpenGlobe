@@ -29,8 +29,7 @@ namespace OpenGlobe.Scene
         /// <param name="camera">The renderer camera that is to be manipulated by the new instance.</param>
         /// <param name="window">The window in which the scene is drawn.</param>
         /// <param name="ellipsoid">The ellipsoid defining the shape of the globe.</param>
-        /// <param name="centerPoint">The position on which the camera is centered.</param>
-        public CameraLookAtPoint(Camera camera, GraphicsWindow window, Ellipsoid ellipsoid, Vector3D centerPoint)
+        public CameraLookAtPoint(Camera camera, GraphicsWindow window, Ellipsoid ellipsoid)
         {
             if (camera == null)
             {
@@ -44,13 +43,15 @@ namespace OpenGlobe.Scene
             _camera = camera;
             _window = window;
 
-            _centerPoint = centerPoint;
+            _centerPoint = camera.Target;
 
             _zoomFactor = 5.0;
             _zoomRateRangeAdjustment = ellipsoid.MaximumRadius;
             _maximumZoomRate = Double.MaxValue;
             _minimumZoomRate = ellipsoid.MaximumRadius / 100.0;
 
+            // TODO: Should really be:
+            // _range = (camera.Eye - camera.Target).Magnitude;
             _range = ellipsoid.MaximumRadius * 2.0;
 
             MouseEnabled = true;
@@ -62,19 +63,8 @@ namespace OpenGlobe.Scene
         /// <param name="camera">The renderer camera that is to be manipulated by the new instance.</param>
         /// <param name="window">The window in which the scene is drawn.</param>
         /// <param name="ellipsoid">The ellipsoid defining the shape of the globe.</param>
-        public CameraLookAtPoint(Camera camera, GraphicsWindow window, Ellipsoid ellipsoid) :
-            this(camera, window, ellipsoid, Vector3D.Zero)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance.
-        /// </summary>
-        /// <param name="camera">The renderer camera that is to be manipulated by the new instance.</param>
-        /// <param name="window">The window in which the scene is drawn.</param>
-        /// <param name="ellipsoid">The ellipsoid defining the shape of the globe.</param>
         public CameraLookAtPoint(Camera camera, GraphicsWindow window) :
-            this(camera, window, Ellipsoid.UnitSphere, Vector3D.Zero)
+            this(camera, window, Ellipsoid.UnitSphere)
         {
         }
 
