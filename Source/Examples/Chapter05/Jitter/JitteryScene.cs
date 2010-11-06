@@ -27,10 +27,11 @@ namespace OpenGlobe.Examples
                   layout(location = og_colorVertexLocation) in vec3 color;
                   out vec3 fsColor;
                   uniform mat4 og_modelViewPerspectiveMatrix;
+                  uniform float og_highResolutionSnapScale;
 
                   void main()                     
                   {
-                        gl_PointSize = 8.0;
+                        gl_PointSize = 8.0 * og_highResolutionSnapScale;
                         gl_Position = og_modelViewPerspectiveMatrix * position; 
                         fsColor = color;
                   }";
@@ -64,13 +65,13 @@ namespace OpenGlobe.Examples
             positions.Add(new Vector3D(xTranslation, -triangleDelta - 0, 1000000));
             positions.Add(new Vector3D(xTranslation, -triangleDelta - 1000000, 0));
             positions.Add(new Vector3D(xTranslation, 0, 0));                            // Blue point
-
+            
             colorAttribute.AddColor(Color.Red);
             colorAttribute.AddColor(Color.Red);
             colorAttribute.AddColor(Color.Red);
-            colorAttribute.AddColor(Color.Green);
-            colorAttribute.AddColor(Color.Green);
-            colorAttribute.AddColor(Color.Green);
+            colorAttribute.AddColor(Color.FromArgb(0, 255, 0));
+            colorAttribute.AddColor(Color.FromArgb(0, 255, 0));
+            colorAttribute.AddColor(Color.FromArgb(0, 255, 0));
             colorAttribute.AddColor(Color.Blue);
 
             _va = context.CreateVertexArray(mesh, _sp.VertexAttributes, BufferHint.StaticDraw);

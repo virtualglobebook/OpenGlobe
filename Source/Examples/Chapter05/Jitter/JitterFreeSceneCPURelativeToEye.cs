@@ -28,10 +28,11 @@ namespace OpenGlobe.Examples
                   layout(location = og_colorVertexLocation) in vec3 color;
                   out vec3 fsColor;
                   uniform mat4 u_modelViewPerspectiveMatrixRelativeToEye;
+                  uniform float og_highResolutionSnapScale;
 
                   void main()                     
                   {
-                        gl_PointSize = 8.0;
+                        gl_PointSize = 8.0 * og_highResolutionSnapScale;
                         gl_Position = u_modelViewPerspectiveMatrixRelativeToEye * position; 
                         fsColor = color;
                   }";
