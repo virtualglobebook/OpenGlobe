@@ -109,7 +109,7 @@ namespace OpenGlobe.Scene.Terrain
             _patchOriginInClippedLevel = (Uniform<Vector2S>)_shaderProgram.Uniforms["u_patchOriginInClippedLevel"];
             _levelScaleFactor = (Uniform<Vector2S>)_shaderProgram.Uniforms["u_levelScaleFactor"];
             _levelZeroWorldScaleFactor = (Uniform<Vector2S>)_shaderProgram.Uniforms["u_levelZeroWorldScaleFactor"];
-            _viewerOffsetFromOrigin = (Uniform<Vector2S>)_shaderProgram.Uniforms["u_viewerOffsetFromOrigin"];
+            _levelOffsetFromWorldOrigin = (Uniform<Vector2S>)_shaderProgram.Uniforms["u_levelOffsetFromWorldOrigin"];
             _heightExaggeration = (Uniform<float>)_shaderProgram.Uniforms["u_heightExaggeration"];
             _viewPosInClippedLevel = (Uniform<Vector2S>)_shaderProgram.Uniforms["u_viewPosInClippedLevel"];
             _fineLevelOriginInCoarse = (Uniform<Vector2S>)_shaderProgram.Uniforms["u_fineLevelOriginInCoarse"];
@@ -283,8 +283,8 @@ namespace OpenGlobe.Scene.Terrain
 
             double originLongitude = level.Terrain.IndexToLongitude(level.CurrentOrigin.TerrainWest);
             double originLatitude = level.Terrain.IndexToLatitude(level.CurrentOrigin.TerrainSouth);
-            _viewerOffsetFromOrigin.Value = new Vector2S((float)(center.X - originLongitude),
-                                                        (float)(center.Y - originLatitude));
+            _levelOffsetFromWorldOrigin.Value = new Vector2S((float)(originLongitude - center.X),
+                                                             (float)(originLatitude - center.Y));
 
             int coarserWest = coarserLevel.CurrentOrigin.TerrainWest;
             int coarserSouth = coarserLevel.CurrentOrigin.TerrainSouth;
@@ -495,7 +495,7 @@ namespace OpenGlobe.Scene.Terrain
         private Uniform<Vector2S> _patchOriginInClippedLevel;
         private Uniform<Vector2S> _levelScaleFactor;
         private Uniform<Vector2S> _levelZeroWorldScaleFactor;
-        private Uniform<Vector2S> _viewerOffsetFromOrigin;
+        private Uniform<Vector2S> _levelOffsetFromWorldOrigin;
         private Uniform<float> _heightExaggeration;
         private Uniform<Vector2S> _fineLevelOriginInCoarse;
         private Uniform<Vector2S> _viewPosInClippedLevel;

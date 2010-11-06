@@ -6,18 +6,17 @@
 // See License.txt or http://www.boost.org/LICENSE_1_0.txt.
 //
 
-layout(location = og_positionVertexLocation) in vec2 position;
+in vec2 position;
 
 out vec3 normalFS;
 out vec3 positionToLightFS;
-out vec3 positionToEyeFS;
 
 uniform mat4 og_modelViewPerspectiveMatrix;
 uniform vec3 og_sunPosition;
 uniform vec2 u_patchOriginInClippedLevel;
 uniform vec2 u_levelScaleFactor;
 uniform vec2 u_levelZeroWorldScaleFactor;
-uniform vec2 u_viewerOffsetFromOrigin;
+uniform vec2 u_levelOffsetFromWorldOrigin;
 uniform vec2 u_fineLevelOriginInCoarse;
 uniform vec2 u_viewPosInClippedLevel;
 uniform vec2 u_unblendedRegionSize;
@@ -60,7 +59,7 @@ void main()
 	float height;
 	normalFS = ComputeNormal(levelPos, height);
 
-	vec2 worldPos = levelPos * u_levelScaleFactor * u_levelZeroWorldScaleFactor - u_viewerOffsetFromOrigin;
+	vec2 worldPos = levelPos * u_levelScaleFactor * u_levelZeroWorldScaleFactor + u_levelOffsetFromWorldOrigin;
 	vec3 displacedPosition = vec3(worldPos, height);
 
     positionToLightFS = og_sunPosition - displacedPosition;
