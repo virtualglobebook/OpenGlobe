@@ -28,11 +28,11 @@ namespace OpenGlobe.Examples
                   layout(location = og_colorVertexLocation) in vec3 color;
                   out vec3 fsColor;
                   uniform mat4 u_modelViewPerspectiveMatrixRelativeToEye;
-                  uniform float og_highResolutionSnapScale;
+                  uniform float u_pointSize;
 
                   void main()                     
                   {
-                        gl_PointSize = 8.0 * og_highResolutionSnapScale;
+                        gl_PointSize = u_pointSize;
                         gl_Position = u_modelViewPerspectiveMatrixRelativeToEye * position; 
                         fsColor = color;
                   }";
@@ -48,6 +48,7 @@ namespace OpenGlobe.Examples
                       fragmentColor = fsColor;
                   }";
             _sp = Device.CreateShaderProgram(vs, fs);
+            _pointSize = (Uniform<float>)_sp.Uniforms["u_pointSize"];
             _modelViewPerspectiveMatrixRelativeToEye = (Uniform<Matrix4>)(_sp.Uniforms["u_modelViewPerspectiveMatrixRelativeToEye"]);
 
             ///////////////////////////////////////////////////////////////////
@@ -128,6 +129,8 @@ namespace OpenGlobe.Examples
 
                 _positionBuffer.CopyFromSystemMemory(_positionsRelativeToEye);
             }
+
+            _pointSize.Value = (float)(8.0 * sceneState.HighResolutionSnapScale);
         }
 
         #region IRenderable Members
@@ -154,6 +157,7 @@ namespace OpenGlobe.Examples
 
         private readonly VertexArray _va;
         private readonly ShaderProgram _sp;
+        private readonly Uniform<float> _pointSize;
         private readonly Uniform<Matrix4> _modelViewPerspectiveMatrixRelativeToEye;
         private readonly DrawState _drawState;
 

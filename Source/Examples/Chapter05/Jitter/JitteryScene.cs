@@ -27,11 +27,11 @@ namespace OpenGlobe.Examples
                   layout(location = og_colorVertexLocation) in vec3 color;
                   out vec3 fsColor;
                   uniform mat4 og_modelViewPerspectiveMatrix;
-                  uniform float og_highResolutionSnapScale;
+                  uniform float u_pointSize;
 
                   void main()                     
                   {
-                        gl_PointSize = 8.0 * og_highResolutionSnapScale;
+                        gl_PointSize = u_pointSize;
                         gl_Position = og_modelViewPerspectiveMatrix * position; 
                         fsColor = color;
                   }";
@@ -47,6 +47,7 @@ namespace OpenGlobe.Examples
                       fragmentColor = fsColor;
                   }";
             _sp = Device.CreateShaderProgram(vs, fs);
+            _pointSize = (Uniform<float>)_sp.Uniforms["u_pointSize"];
 
             ///////////////////////////////////////////////////////////////////
 
@@ -90,6 +91,8 @@ namespace OpenGlobe.Examples
 
         public void Render(Context context, SceneState sceneState)
         {
+            _pointSize.Value = (float)(8.0 * sceneState.HighResolutionSnapScale);
+            
             context.Draw(PrimitiveType.Triangles, 0, 6, _drawState, sceneState);
             context.Draw(PrimitiveType.Points, 6, 1, _drawState, sceneState);
         }
@@ -108,6 +111,7 @@ namespace OpenGlobe.Examples
 
         private readonly VertexArray _va;
         private readonly ShaderProgram _sp;
+        private readonly Uniform<float> _pointSize;
         private readonly DrawState _drawState;
     }
 }
