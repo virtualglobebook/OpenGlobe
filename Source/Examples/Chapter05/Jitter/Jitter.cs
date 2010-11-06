@@ -27,6 +27,7 @@ namespace OpenGlobe.Examples
             _window.Resize += OnResize;
             _window.RenderFrame += OnRenderFrame;
             _sceneState = new SceneState();
+            _clearState = new ClearState();
 
             _scene = new JitteryScene(_window.Context, xTranslation);
 
@@ -77,7 +78,7 @@ namespace OpenGlobe.Examples
             UpdateHUD();
 
             Context context = _window.Context;
-            context.Clear(ClearState.Default);
+            context.Clear(_clearState);
 
             _scene.Render(context, _sceneState);
             _hud.Render(context, _sceneState);
@@ -111,6 +112,7 @@ namespace OpenGlobe.Examples
 
         private readonly GraphicsWindow _window;
         private readonly SceneState _sceneState;
+        private readonly ClearState _clearState;
 
         private readonly IRenderable _scene;
 

@@ -88,9 +88,6 @@ namespace OpenGlobe.Examples
 
 
             _clearState = new ClearState();
-            _clearState.Color = Color.White;
-            _clearState.Stencil = 0;
-            _clearState.Depth = 1;
 
             // junk
             string fs =
@@ -132,7 +129,6 @@ namespace OpenGlobe.Examples
             // Terrain to framebuffer
             //
             _window.Context.FrameBuffer = null;
-            _clearState.Buffers = ClearBuffers.DepthBuffer | ClearBuffers.ColorBuffer | ClearBuffers.StencilBuffer; // junk can't you get rid of the stencil clear?
              _window.Context.Clear(_clearState);
             _tile.Render(_window.Context, _sceneState);
 

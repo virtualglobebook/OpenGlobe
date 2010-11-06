@@ -107,10 +107,14 @@ namespace OpenGlobe.Terrain
 
             _primitiveType = mesh.PrimitiveType;
 
-            _clearState = new ClearState();
-            _clearState.Color = Color.White;
-            _clearState.Stencil = 0;
-            _clearState.Depth = 1;
+            _clearColor = new ClearState();
+            _clearColor.Buffers = ClearBuffers.ColorBuffer;
+            
+            //
+            // Only depth needs to be cleared but include stencil for speed.
+            //
+            _clearDepthStencil = new ClearState();
+            _clearDepthStencil.Buffers = ClearBuffers.DepthBuffer | ClearBuffers.StencilBuffer;
         }
 
         public void Render(Context context, SceneState sceneState)
@@ -131,16 +135,14 @@ namespace OpenGlobe.Terrain
             // Depth texture
             //
             context.FrameBuffer =_terrainFrameBuffer;
-            _clearState.Buffers = ClearBuffers.DepthBuffer;
-            context.Clear(_clearState);
+            context.Clear(_clearDepthStencil);
             Render(context, sceneState);
 
             //
             // Silhouette texture
             //
             context.FrameBuffer = _silhouetteFrameBuffer;
-            _clearState.Buffers = ClearBuffers.ColorBuffer;
-            context.Clear(_clearState);
+            context.Clear(_clearColor);
             if (silhouette)
             {
                 context.Draw(_primitiveType, _silhouetteDrawState, sceneState);
@@ -281,7 +283,8 @@ namespace OpenGlobe.Terrain
         private Texture2D _silhouetteTexture;
         private Texture2D _colorTexture;
 
-        private readonly ClearState _clearState;
+        private readonly ClearState _clearColor;
+        private readonly ClearState _clearDepthStencil;
 
         private readonly PrimitiveType _primitiveType;
     }
