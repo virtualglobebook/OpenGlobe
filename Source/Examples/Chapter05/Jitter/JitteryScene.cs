@@ -18,7 +18,7 @@ namespace OpenGlobe.Examples
 {
     sealed class JitteryScene : IDisposable, IRenderable
     {
-        public JitteryScene(Context context, double xTranslation)
+        public JitteryScene(Context context, double xTranslation, double triangleDelta)
         {
             string vs =
                 @"#version 330
@@ -56,16 +56,14 @@ namespace OpenGlobe.Examples
             mesh.Attributes.Add(positionsAttribute);
             mesh.Attributes.Add(colorAttribute);
 
-            double delta = 1;
-
             IList<Vector3D> positions = positionsAttribute.Values;
-            positions.Add(new Vector3D(xTranslation, delta + 0, 0));            // Red triangle
-            positions.Add(new Vector3D(xTranslation, delta + 1000000, 0));
-            positions.Add(new Vector3D(xTranslation, delta + 0, 1000000));
-            positions.Add(new Vector3D(xTranslation, -delta - 0, 0));           // Green triangle
-            positions.Add(new Vector3D(xTranslation, -delta - 0, 1000000));
-            positions.Add(new Vector3D(xTranslation, -delta - 1000000, 0));
-            positions.Add(new Vector3D(xTranslation, 0, 0));                    // Blue point
+            positions.Add(new Vector3D(xTranslation, triangleDelta + 0, 0));            // Red triangle
+            positions.Add(new Vector3D(xTranslation, triangleDelta + 1000000, 0));
+            positions.Add(new Vector3D(xTranslation, triangleDelta + 0, 1000000));
+            positions.Add(new Vector3D(xTranslation, -triangleDelta - 0, 0));           // Green triangle
+            positions.Add(new Vector3D(xTranslation, -triangleDelta - 0, 1000000));
+            positions.Add(new Vector3D(xTranslation, -triangleDelta - 1000000, 0));
+            positions.Add(new Vector3D(xTranslation, 0, 0));                            // Blue point
 
             colorAttribute.AddColor(Color.Red);
             colorAttribute.AddColor(Color.Red);

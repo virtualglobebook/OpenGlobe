@@ -29,8 +29,9 @@ namespace OpenGlobe.Examples
             _sceneState = new SceneState();
             _clearState = new ClearState();
 
-            _scene = new JitteryScene(_window.Context, xTranslation);
-
+            //_scene = new JitteryScene(_window.Context, xTranslation, 1);
+            _scene = new JitterFreeSceneCPURelativeToEye(_window.Context, xTranslation, 1);
+            
             ///////////////////////////////////////////////////////////////////
 
             _hudFont = new Font("Arial", 16);
