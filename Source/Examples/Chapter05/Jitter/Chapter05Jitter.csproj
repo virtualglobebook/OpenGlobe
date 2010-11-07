@@ -52,6 +52,7 @@
     <Compile Include="EmbeddedResources.cs" />
     <Compile Include="JitterFreeSceneCPURelativeToEye\JitterFreeSceneCPURelativeToEye.cs" />
     <Compile Include="JitterFreeSceneGPURelativeToEye\JitterFreeSceneGPURelativeToEye.cs" />
+    <Compile Include="JitterFreeSceneRelativeToCenter\JitterFreeSceneRelativeToCenter.cs" />
     <Compile Include="JitteryScene\JitteryScene.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Jitter.cs" />
@@ -64,6 +65,7 @@
     <EmbeddedResource Include="JitteryScene\Shaders\VS.glsl" />
     <EmbeddedResource Include="JitterFreeSceneCPURelativeToEye\Shaders\VS.glsl" />
     <EmbeddedResource Include="JitterFreeSceneGPURelativeToEye\Shaders\VS.glsl" />
+    <EmbeddedResource Include="JitterFreeSceneRelativeToCenter\Shaders\VS.glsl" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Core\OpenGlobe.Core.csproj">

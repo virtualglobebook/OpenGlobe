@@ -131,7 +131,7 @@ namespace OpenGlobe.Examples
                         _scene = new JitteryScene(_window.Context, _xTranslation, _triangleDelta);
                         break;
                     case JitterAlgorithm.JitterFreeSceneRelativeToCenter:
-                        _scene = new JitteryScene(_window.Context, _xTranslation, _triangleDelta);
+                        _scene = new JitterFreeSceneRelativeToCenter(_window.Context, _xTranslation, _triangleDelta);
                         break;
                     case JitterAlgorithm.JitterFreeSceneCPURelativeToEye:
                         _scene = new JitterFreeSceneCPURelativeToEye(_window.Context, _xTranslation, _triangleDelta);
