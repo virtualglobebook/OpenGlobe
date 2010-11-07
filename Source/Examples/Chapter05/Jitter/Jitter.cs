@@ -30,8 +30,6 @@ namespace OpenGlobe.Examples
     {
         public Jitter()
         {
-            _xTranslation = Ellipsoid.Wgs84.Radii.X;
-
             _window = Device.CreateWindow(800, 600, "Chapter 5:  Jitter");
             _window.Resize += OnResize;
             _window.RenderFrame += OnRenderFrame;
@@ -39,36 +37,28 @@ namespace OpenGlobe.Examples
             _sceneState = new SceneState();
             _clearState = new ClearState();
 
-            ///////////////////////////////////////////////////////////////////
-
             _hudFont = new Font("Arial", 16);
             _hud = new HeadsUpDisplay(_window.Context);
             _hud.Color = Color.Black;
 
-            ///////////////////////////////////////////////////////////////////
-
-            Camera camera = _sceneState.Camera;
-            camera.PerspectiveNearPlaneDistance = 0.01;
-            camera.PerspectiveFarPlaneDistance = 5000000;
-            camera.Target = Vector3D.UnitX * _xTranslation;
-            camera.Eye = Vector3D.UnitX * _xTranslation * 1.1;
-
-            _camera = new CameraLookAtPoint(camera, _window, Ellipsoid.UnitSphere);
-            _camera.Range = (camera.Eye - camera.Target).Magnitude;
-            _camera.MinimumZoomRate = 1;
-            _camera.MaximumZoomRate = Double.MaxValue;
-            _camera.ZoomFactor = 10;
-            _camera.ZoomRateRangeAdjustment = 0;
-
+            CreateCamera();
             CreateScene();
-
-            ///////////////////////////////////////////////////////////////////
 
             PersistentView.Execute(@"E:\Manuscript\VertexTransformPrecision\Figures\aaa.xml", _window, _sceneState.Camera);
             HighResolutionSnap snap = new HighResolutionSnap(_window, _sceneState);
             snap.ColorFilename = @"E:\Manuscript\VertexTransformPrecision\Figures\aaa.png";
             snap.WidthInInches = 3;
             snap.DotsPerInch = 600;
+        }
+
+        private double ToMeters(double value)
+        {
+            return _scaleWorldCoordinates ? (value * Ellipsoid.Wgs84.MaximumRadius) : value;
+        }
+
+        private double FromMeters(double value)
+        {
+            return _scaleWorldCoordinates ? (value / Ellipsoid.Wgs84.MaximumRadius) : value;
         }
 
         private static string JitterAlgorithmToString(JitterAlgorithm algorithm)
@@ -94,8 +84,9 @@ namespace OpenGlobe.Examples
         {
             string text;
 
-            text = "Algorithm: " + JitterAlgorithmToString(_jitterAlgorithm) + " (left/right)\n";
-            text += "Distance: " + string.Format(CultureInfo.CurrentCulture, "{0:N}", _camera.Range);
+            text = "Scale World Coordinates: " + _scaleWorldCoordinates + " ('s')\n";
+            text += "Algorithm: " + JitterAlgorithmToString(_jitterAlgorithm) + " (left/right)\n";
+            text += "Distance: " + string.Format(CultureInfo.CurrentCulture, "{0:N}", ToMeters(_camera.Range));
 
             if (_hud.Texture != null)
             {
@@ -107,10 +98,34 @@ namespace OpenGlobe.Examples
                 TextureFormat.RedGreenBlueAlpha8, false);
         }
 
+        private void CreateCamera()
+        {
+            _xTranslation = FromMeters(Ellipsoid.Wgs84.Radii.X);
+
+            Camera camera = _sceneState.Camera;
+            camera.PerspectiveNearPlaneDistance = FromMeters(0.01);
+            camera.PerspectiveFarPlaneDistance = FromMeters(5000000);
+            camera.Target = Vector3D.UnitX * _xTranslation;
+            camera.Eye = Vector3D.UnitX * _xTranslation * 1.1;
+
+            if (_camera != null)
+            {
+                ((IDisposable)_camera).Dispose();
+                _camera = null;
+            }
+
+            _camera = new CameraLookAtPoint(camera, _window, Ellipsoid.UnitSphere);
+            _camera.Range = (camera.Eye - camera.Target).Magnitude;
+            _camera.MinimumZoomRate = FromMeters(1);
+            _camera.MaximumZoomRate = FromMeters(Double.MaxValue);
+            _camera.ZoomFactor = 10;
+            _camera.ZoomRateRangeAdjustment = 0;
+        }
+
         private void CreateScene()
         {
-            const double triangleLength = 200000;
-            const double triangleDelta = 0.5;
+            double triangleLength = FromMeters(200000);
+            double triangleDelta = FromMeters(0.5);
 
             Vector3D[] positions = new Vector3D[]
             {
@@ -162,7 +177,14 @@ namespace OpenGlobe.Examples
 
         private void OnKeyUp(object sender, KeyboardKeyEventArgs e)
         {
-            if ((e.Key == KeyboardKey.Left) || (e.Key == KeyboardKey.Right))
+            if (e.Key == KeyboardKey.S)
+            {
+                _scaleWorldCoordinates = !_scaleWorldCoordinates;
+
+                CreateCamera();
+                CreateScene();
+            }
+            else if ((e.Key == KeyboardKey.Left) || (e.Key == KeyboardKey.Right))
             {
                 _jitterAlgorithm += (e.Key == KeyboardKey.Right) ? 1 : -1;
 
@@ -179,7 +201,7 @@ namespace OpenGlobe.Examples
             }
             else if ((e.Key == KeyboardKey.Down) || (e.Key == KeyboardKey.Up))
             {
-                _camera.Range += (e.Key == KeyboardKey.Down) ? 0.01 : -0.01;
+                _camera.Range += (e.Key == KeyboardKey.Down) ? FromMeters(0.01) : FromMeters(-0.01);
             }
         }
 
@@ -226,8 +248,6 @@ namespace OpenGlobe.Examples
             }
         }
 
-        private readonly double _xTranslation;
-
         private readonly GraphicsWindow _window;
         private readonly SceneState _sceneState;
         private readonly ClearState _clearState;
@@ -235,8 +255,10 @@ namespace OpenGlobe.Examples
         private readonly Font _hudFont;
         private readonly HeadsUpDisplay _hud;
 
-        private readonly CameraLookAtPoint _camera;
+        private double _xTranslation;
+        private CameraLookAtPoint _camera;
 
+        private bool _scaleWorldCoordinates;
         private IRenderable _scene;
         private JitterAlgorithm _jitterAlgorithm;
     }
