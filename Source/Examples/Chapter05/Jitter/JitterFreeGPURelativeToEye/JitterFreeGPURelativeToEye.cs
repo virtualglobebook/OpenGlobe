@@ -72,13 +72,13 @@ namespace OpenGlobe.Examples
             {
                 double doubleHigh = Math.Floor(value / 65536.0) * 65536.0;
                 high = (float)doubleHigh;
-                low = (float)(value - high);
+                low = (float)(value - doubleHigh);
             }
             else
             {
                 double doubleHigh = Math.Floor(-value / 65536.0) * 65536.0;
                 high = (float)-doubleHigh;
-                low = (float)(value + high);
+                low = (float)(value + doubleHigh);
             }
         }
 
