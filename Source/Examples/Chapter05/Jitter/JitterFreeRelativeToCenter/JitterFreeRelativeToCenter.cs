@@ -22,7 +22,7 @@ namespace OpenGlobe.Examples
         public JitterFreeSceneRelativeToCenter(Context context, Vector3D[] positions, byte[] colors)
         {
             _sp = Device.CreateShaderProgram(
-                EmbeddedResources.GetText("OpenGlobe.Examples.JitterFreeSceneRelativeToCenter.Shaders.VS.glsl"),
+                EmbeddedResources.GetText("OpenGlobe.Examples.JitterFreeRelativeToCenter.Shaders.VS.glsl"),
                 EmbeddedResources.GetText("OpenGlobe.Examples.Shaders.FS.glsl"));
             _modelViewPerspectiveMatrixRelativeToCenter = (Uniform<Matrix4>)(_sp.Uniforms["u_modelViewPerspectiveMatrixRelativeToCenter"]);
             _pointSize = (Uniform<float>)_sp.Uniforms["u_pointSize"];

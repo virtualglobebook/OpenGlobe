@@ -22,7 +22,7 @@ namespace OpenGlobe.Examples
         public JitterFreeSceneCPURelativeToEye(Context context, Vector3D[] positions, byte[] colors)
         {
             _sp = Device.CreateShaderProgram(
-                EmbeddedResources.GetText("OpenGlobe.Examples.JitterFreeSceneCPURelativeToEye.Shaders.VS.glsl"),
+                EmbeddedResources.GetText("OpenGlobe.Examples.JitterFreeCPURelativeToEye.Shaders.VS.glsl"),
                 EmbeddedResources.GetText("OpenGlobe.Examples.Shaders.FS.glsl"));
             _modelViewPerspectiveMatrixRelativeToEye = (Uniform<Matrix4>)(_sp.Uniforms["u_modelViewPerspectiveMatrixRelativeToEye"]);
             _pointSize = (Uniform<float>)_sp.Uniforms["u_pointSize"];

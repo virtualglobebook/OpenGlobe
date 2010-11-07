@@ -50,11 +50,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="EmbeddedResources.cs" />
-    <Compile Include="JitterFreeSceneCPURelativeToEye\JitterFreeSceneCPURelativeToEye.cs" />
-    <Compile Include="JitterFreeSceneGPURelativeToEyeDSFUN90\JitterFreeSceneGPURelativeToEyeDSFUN90.cs" />
-    <Compile Include="JitterFreeSceneGPURelativeToEye\JitterFreeSceneGPURelativeToEye.cs" />
-    <Compile Include="JitterFreeSceneRelativeToCenter\JitterFreeSceneRelativeToCenter.cs" />
-    <Compile Include="JitteryScene\JitteryScene.cs" />
+    <Compile Include="JitterFreeCPURelativeToEye\JitterFreeCPURelativeToEye.cs" />
+    <Compile Include="JitterFreeGPURelativeToEyeDSFUN90\JitterFreeGPURelativeToEyeDSFUN90.cs" />
+    <Compile Include="JitterFreeGPURelativeToEye\JitterFreeGPURelativeToEye.cs" />
+    <Compile Include="JitterFreeRelativeToCenter\JitterFreeRelativeToCenter.cs" />
+    <Compile Include="Jittery\Jittery.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Jitter.cs" />
   </ItemGroup>
@@ -63,11 +63,11 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <EmbeddedResource Include="Shaders\FS.glsl" />
-    <EmbeddedResource Include="JitteryScene\Shaders\VS.glsl" />
-    <EmbeddedResource Include="JitterFreeSceneCPURelativeToEye\Shaders\VS.glsl" />
-    <EmbeddedResource Include="JitterFreeSceneGPURelativeToEye\Shaders\VS.glsl" />
-    <EmbeddedResource Include="JitterFreeSceneRelativeToCenter\Shaders\VS.glsl" />
-    <EmbeddedResource Include="JitterFreeSceneGPURelativeToEyeDSFUN90\Shaders\VS.glsl" />
+    <EmbeddedResource Include="Jittery\Shaders\VS.glsl" />
+    <EmbeddedResource Include="JitterFreeCPURelativeToEye\Shaders\VS.glsl" />
+    <EmbeddedResource Include="JitterFreeGPURelativeToEye\Shaders\VS.glsl" />
+    <EmbeddedResource Include="JitterFreeRelativeToCenter\Shaders\VS.glsl" />
+    <EmbeddedResource Include="JitterFreeGPURelativeToEyeDSFUN90\Shaders\VS.glsl" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Core\OpenGlobe.Core.csproj">

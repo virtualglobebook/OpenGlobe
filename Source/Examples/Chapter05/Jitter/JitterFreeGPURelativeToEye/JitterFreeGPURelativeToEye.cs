@@ -17,17 +17,12 @@ using OpenTK;
 
 namespace OpenGlobe.Examples
 {
-    /// <summary>
-    /// The same as JitterFreeSceneGPURelativeToEye, except with a different 
-    /// implementation of DoubleToTwoFloats() and a different vertex shader
-    /// based on emulated doubles from the DSFUN90 Fortran library.
-    /// </summary>
-    sealed class JitterFreeSceneGPURelativeToEyeDSFUN90 : IDisposable, IRenderable
+    sealed class JitterFreeSceneGPURelativeToEye : IDisposable, IRenderable
     {
-        public JitterFreeSceneGPURelativeToEyeDSFUN90(Context context, Vector3D[] positions, byte[] colors)
+        public JitterFreeSceneGPURelativeToEye(Context context, Vector3D[] positions, byte[] colors)
         {
             _sp = Device.CreateShaderProgram(
-                EmbeddedResources.GetText("OpenGlobe.Examples.JitterFreeSceneGPURelativeToEyeDSFUN90.Shaders.VS.glsl"),
+                EmbeddedResources.GetText("OpenGlobe.Examples.JitterFreeGPURelativeToEye.Shaders.VS.glsl"),
                 EmbeddedResources.GetText("OpenGlobe.Examples.Shaders.FS.glsl"));
             _cameraEyeHigh = (Uniform<Vector3S>)_sp.Uniforms["u_cameraEyeHigh"];
             _cameraEyeLow = (Uniform<Vector3S>)_sp.Uniforms["u_cameraEyeLow"];
@@ -73,8 +68,18 @@ namespace OpenGlobe.Examples
 
         private static void DoubleToTwoFloats(double value, out float high, out float low)
         {
-            high = (float)value;
-            low = (float)(value - high);
+            if (value >= 0.0)
+            {
+                double doubleHigh = Math.Floor(value / 65536.0) * 65536.0;
+                high = (float)doubleHigh;
+                low = (float)(value - high);
+            }
+            else
+            {
+                double doubleHigh = Math.Floor(-value / 65536.0) * 65536.0;
+                high = (float)-doubleHigh;
+                low = (float)(value + high);
+            }
         }
 
         private static void Vector3DToTwoVector3S(Vector3D value, out Vector3S high, out Vector3S low)

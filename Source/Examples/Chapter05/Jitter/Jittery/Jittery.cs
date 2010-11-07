@@ -21,7 +21,7 @@ namespace OpenGlobe.Examples
         public JitteryScene(Context context, Vector3D[] positions, byte[] colors)
         {
             _sp = Device.CreateShaderProgram(
-                EmbeddedResources.GetText("OpenGlobe.Examples.JitteryScene.Shaders.VS.glsl"),
+                EmbeddedResources.GetText("OpenGlobe.Examples.Jittery.Shaders.VS.glsl"),
                 EmbeddedResources.GetText("OpenGlobe.Examples.Shaders.FS.glsl"));
             _pointSize = (Uniform<float>)_sp.Uniforms["u_pointSize"];
 

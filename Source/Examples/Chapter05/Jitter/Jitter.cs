@@ -42,7 +42,7 @@ namespace OpenGlobe.Examples
             _hud.Color = Color.Black;
 
             CreateCamera();
-            CreateScene();
+            CreateAlgorithm();
 
             PersistentView.Execute(@"E:\Manuscript\VertexTransformPrecision\Figures\aaa.xml", _window, _sceneState.Camera);
             HighResolutionSnap snap = new HighResolutionSnap(_window, _sceneState);
@@ -122,7 +122,7 @@ namespace OpenGlobe.Examples
             _camera.ZoomRateRangeAdjustment = 0;
         }
 
-        private void CreateScene()
+        private void CreateAlgorithm()
         {
             double triangleLength = FromMeters(200000);
             double triangleDelta = FromMeters(0.5);
@@ -149,28 +149,28 @@ namespace OpenGlobe.Examples
                 0, 0, 255
             };
 
-            if (_scene != null)
+            if (_algorithm != null)
             {
-                ((IDisposable)_scene).Dispose();
-                _scene = null;
+                ((IDisposable)_algorithm).Dispose();
+                _algorithm = null;
             }
 
             switch (_jitterAlgorithm)
             {
                 case JitterAlgorithm.Jittery:
-                    _scene = new JitteryScene(_window.Context, positions, colors);
+                    _algorithm = new JitteryScene(_window.Context, positions, colors);
                     break;
                 case JitterAlgorithm.JitterFreeSceneRelativeToCenter:
-                    _scene = new JitterFreeSceneRelativeToCenter(_window.Context, positions, colors);
+                    _algorithm = new JitterFreeSceneRelativeToCenter(_window.Context, positions, colors);
                     break;
                 case JitterAlgorithm.JitterFreeSceneCPURelativeToEye:
-                    _scene = new JitterFreeSceneCPURelativeToEye(_window.Context, positions, colors);
+                    _algorithm = new JitterFreeSceneCPURelativeToEye(_window.Context, positions, colors);
                     break;
                 case JitterAlgorithm.JitterFreeSceneGPURelativeToEye:
-                    _scene = new JitterFreeSceneGPURelativeToEye(_window.Context, positions, colors);
+                    _algorithm = new JitterFreeSceneGPURelativeToEye(_window.Context, positions, colors);
                     break;
                 case JitterAlgorithm.JitterFreeSceneGPURelativeToEyeDSFUN90:
-                    _scene = new JitterFreeSceneGPURelativeToEyeDSFUN90(_window.Context, positions, colors);
+                    _algorithm = new JitterFreeSceneGPURelativeToEyeDSFUN90(_window.Context, positions, colors);
                     break;
             }
         }
@@ -182,7 +182,7 @@ namespace OpenGlobe.Examples
                 _scaleWorldCoordinates = !_scaleWorldCoordinates;
 
                 CreateCamera();
-                CreateScene();
+                CreateAlgorithm();
             }
             else if ((e.Key == KeyboardKey.Left) || (e.Key == KeyboardKey.Right))
             {
@@ -197,7 +197,7 @@ namespace OpenGlobe.Examples
                     _jitterAlgorithm = JitterAlgorithm.Jittery;
                 }
 
-                CreateScene();
+                CreateAlgorithm();
             }
             else if ((e.Key == KeyboardKey.Down) || (e.Key == KeyboardKey.Up))
             {
@@ -218,7 +218,7 @@ namespace OpenGlobe.Examples
             Context context = _window.Context;
             context.Clear(_clearState);
 
-            _scene.Render(context, _sceneState);
+            _algorithm.Render(context, _sceneState);
             _hud.Render(context, _sceneState);
         }
 
@@ -259,7 +259,7 @@ namespace OpenGlobe.Examples
         private CameraLookAtPoint _camera;
 
         private bool _scaleWorldCoordinates;
-        private IRenderable _scene;
+        private IRenderable _algorithm;
         private JitterAlgorithm _jitterAlgorithm;
     }
 }
