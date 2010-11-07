@@ -18,7 +18,7 @@ namespace OpenGlobe.Examples
 {
     sealed class JitteryScene : IDisposable, IRenderable
     {
-        public JitteryScene(Context context, double xTranslation, double triangleDelta)
+        public JitteryScene(Context context, Vector3D[] positions, byte[] colors)
         {
             _sp = Device.CreateShaderProgram(
                 EmbeddedResources.GetText("OpenGlobe.Examples.JitteryScene.Shaders.VS.glsl"),
@@ -33,22 +33,15 @@ namespace OpenGlobe.Examples
             mesh.Attributes.Add(positionsAttribute);
             mesh.Attributes.Add(colorAttribute);
 
-            IList<Vector3D> positions = positionsAttribute.Values;
-            positions.Add(new Vector3D(xTranslation, triangleDelta + 0, 0));            // Red triangle
-            positions.Add(new Vector3D(xTranslation, triangleDelta + 1000000, 0));
-            positions.Add(new Vector3D(xTranslation, triangleDelta + 0, 1000000));
-            positions.Add(new Vector3D(xTranslation, -triangleDelta - 0, 0));           // Green triangle
-            positions.Add(new Vector3D(xTranslation, -triangleDelta - 0, 1000000));
-            positions.Add(new Vector3D(xTranslation, -triangleDelta - 1000000, 0));
-            positions.Add(new Vector3D(xTranslation, 0, 0));                            // Blue point
-            
-            colorAttribute.AddColor(Color.Red);
-            colorAttribute.AddColor(Color.Red);
-            colorAttribute.AddColor(Color.Red);
-            colorAttribute.AddColor(Color.FromArgb(0, 255, 0));
-            colorAttribute.AddColor(Color.FromArgb(0, 255, 0));
-            colorAttribute.AddColor(Color.FromArgb(0, 255, 0));
-            colorAttribute.AddColor(Color.Blue);
+            for (int i = 0; i < positions.Length; ++i)
+            {
+                positionsAttribute.Values.Add(positions[i]);
+            }
+
+            for (int i = 0; i < colors.Length; ++i)
+            {
+                colorAttribute.Values.Add(colors[i]);
+            }
 
             _va = context.CreateVertexArray(mesh, _sp.VertexAttributes, BufferHint.StaticDraw);
 

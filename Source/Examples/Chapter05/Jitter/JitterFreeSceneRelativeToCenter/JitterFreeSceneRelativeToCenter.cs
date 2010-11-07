@@ -19,7 +19,7 @@ namespace OpenGlobe.Examples
 {
     sealed class JitterFreeSceneRelativeToCenter : IDisposable, IRenderable
     {
-        public JitterFreeSceneRelativeToCenter(Context context, double xTranslation, double triangleDelta)
+        public JitterFreeSceneRelativeToCenter(Context context, Vector3D[] positions, byte[] colors)
         {
             _sp = Device.CreateShaderProgram(
                 EmbeddedResources.GetText("OpenGlobe.Examples.JitterFreeSceneRelativeToCenter.Shaders.VS.glsl"),
@@ -35,23 +35,16 @@ namespace OpenGlobe.Examples
             mesh.Attributes.Add(positionsAttribute);
             mesh.Attributes.Add(colorAttribute);
 
-            IList<Vector3D> positions = positionsAttribute.Values;
-            positions.Add(new Vector3D(0, triangleDelta + 0, 0));            // Red triangle
-            positions.Add(new Vector3D(0, triangleDelta + 1000000, 0));
-            positions.Add(new Vector3D(0, triangleDelta + 0, 1000000));
-            positions.Add(new Vector3D(0, -triangleDelta - 0, 0));           // Green triangle
-            positions.Add(new Vector3D(0, -triangleDelta - 0, 1000000));
-            positions.Add(new Vector3D(0, -triangleDelta - 1000000, 0));
-            positions.Add(new Vector3D(0, 0, 0));                            // Blue point
-            _center = new Vector3D(xTranslation, 0, 0);
+            _center = new AxisAlignedBoundingBox(positions).Center;
+            for (int i = 0; i < positions.Length; ++i)
+            {
+                positionsAttribute.Values.Add(positions[i] - _center);
+            }
 
-            colorAttribute.AddColor(Color.Red);
-            colorAttribute.AddColor(Color.Red);
-            colorAttribute.AddColor(Color.Red);
-            colorAttribute.AddColor(Color.FromArgb(0, 255, 0));
-            colorAttribute.AddColor(Color.FromArgb(0, 255, 0));
-            colorAttribute.AddColor(Color.FromArgb(0, 255, 0));
-            colorAttribute.AddColor(Color.Blue);
+            for (int i = 0; i < colors.Length; ++i)
+            {
+                colorAttribute.Values.Add(colors[i]);
+            }
 
             _va = context.CreateVertexArray(mesh, _sp.VertexAttributes, BufferHint.StaticDraw);
 

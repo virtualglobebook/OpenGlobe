@@ -19,7 +19,7 @@ namespace OpenGlobe.Examples
 {
     sealed class JitterFreeSceneCPURelativeToEye : IDisposable, IRenderable
     {
-        public JitterFreeSceneCPURelativeToEye(Context context, double xTranslation, double triangleDelta)
+        public JitterFreeSceneCPURelativeToEye(Context context, Vector3D[] positions, byte[] colors)
         {
             _sp = Device.CreateShaderProgram(
                 EmbeddedResources.GetText("OpenGlobe.Examples.JitterFreeSceneCPURelativeToEye.Shaders.VS.glsl"),
@@ -29,29 +29,10 @@ namespace OpenGlobe.Examples
 
             ///////////////////////////////////////////////////////////////////
 
-            _positions = new Vector3D[]
-            {
-                new Vector3D(xTranslation, triangleDelta + 0, 0),            // Red triangle
-                new Vector3D(xTranslation, triangleDelta + 1000000, 0),
-                new Vector3D(xTranslation, triangleDelta + 0, 1000000),
-                new Vector3D(xTranslation, -triangleDelta - 0, 0),           // Green triangle
-                new Vector3D(xTranslation, -triangleDelta - 0, 1000000),
-                new Vector3D(xTranslation, -triangleDelta - 1000000, 0),
-                new Vector3D(xTranslation, 0, 0),                            // Blue point
-            };
+            _positions = new Vector3D[positions.Length];
+            positions.CopyTo(_positions, 0);
             _positionsRelativeToEye = new Vector3S[_positions.Length];
             _eye = Vector3D.Zero;
-
-            byte[] colors = new byte[]
-            {
-                255, 0, 0,
-                255, 0, 0,
-                255, 0, 0,
-                0, 255, 0,
-                0, 255, 0,
-                0, 255, 0,
-                0, 0, 255
-            };
 
             //
             // _positionBuffer is dynamic, and is written to when the camera moves.

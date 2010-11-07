@@ -30,7 +30,6 @@ namespace OpenGlobe.Examples
         public Jitter()
         {
             _xTranslation = Ellipsoid.Wgs84.Radii.X;
-            _triangleDelta = 0.5;
 
             _window = Device.CreateWindow(800, 600, "Chapter 5:  Jitter");
             _window.Resize += OnResize;
@@ -60,9 +59,7 @@ namespace OpenGlobe.Examples
             _camera.ZoomFactor = 10;
             _camera.ZoomRateRangeAdjustment = 0;
 
-            ///////////////////////////////////////////////////////////////////
-
-            _scene = new JitteryScene(_window.Context, _xTranslation, _triangleDelta);
+            CreateScene();
 
             ///////////////////////////////////////////////////////////////////
 
@@ -107,6 +104,56 @@ namespace OpenGlobe.Examples
                 TextureFormat.RedGreenBlueAlpha8, false);
         }
 
+        private void CreateScene()
+        {
+            const double triangleLength = 1000000;
+            const double triangleDelta = 0.5;
+
+            Vector3D[] positions = new Vector3D[]
+            {
+                new Vector3D(_xTranslation, triangleDelta + 0, 0),                  // Red triangle
+                new Vector3D(_xTranslation, triangleDelta + triangleLength, 0),
+                new Vector3D(_xTranslation, triangleDelta + 0, triangleLength),
+                new Vector3D(_xTranslation, -triangleDelta - 0, 0),                 // Green triangle
+                new Vector3D(_xTranslation, -triangleDelta - 0, triangleLength),
+                new Vector3D(_xTranslation, -triangleDelta - triangleLength, 0),
+                new Vector3D(_xTranslation, 0, 0),                                  // Blue point
+            };
+
+            byte[] colors = new byte[]
+            {
+                255, 0, 0,
+                255, 0, 0,
+                255, 0, 0,
+                0, 255, 0,
+                0, 255, 0,
+                0, 255, 0,
+                0, 0, 255
+            };
+
+            if (_scene != null)
+            {
+                ((IDisposable)_scene).Dispose();
+                _scene = null;
+            }
+
+            switch (_jitterAlgorithm)
+            {
+                case JitterAlgorithm.Jittery:
+                    _scene = new JitteryScene(_window.Context, positions, colors);
+                    break;
+                case JitterAlgorithm.JitterFreeSceneRelativeToCenter:
+                    _scene = new JitterFreeSceneRelativeToCenter(_window.Context, positions, colors);
+                    break;
+                case JitterAlgorithm.JitterFreeSceneCPURelativeToEye:
+                    _scene = new JitterFreeSceneCPURelativeToEye(_window.Context, positions, colors);
+                    break;
+                case JitterAlgorithm.JitterFreeSceneGPURelativeToEye:
+                    _scene = new JitterFreeSceneGPURelativeToEye(_window.Context, positions, colors);
+                    break;
+            }
+        }
+
         private void OnKeyUp(object sender, KeyboardKeyEventArgs e)
         {
             if ((e.Key == KeyboardKey.Left) || (e.Key == KeyboardKey.Right))
@@ -122,24 +169,7 @@ namespace OpenGlobe.Examples
                     _jitterAlgorithm = JitterAlgorithm.Jittery;
                 }
 
-                ((IDisposable)_scene).Dispose();
-                _scene = null;
-
-                switch (_jitterAlgorithm)
-                {
-                    case JitterAlgorithm.Jittery:
-                        _scene = new JitteryScene(_window.Context, _xTranslation, _triangleDelta);
-                        break;
-                    case JitterAlgorithm.JitterFreeSceneRelativeToCenter:
-                        _scene = new JitterFreeSceneRelativeToCenter(_window.Context, _xTranslation, _triangleDelta);
-                        break;
-                    case JitterAlgorithm.JitterFreeSceneCPURelativeToEye:
-                        _scene = new JitterFreeSceneCPURelativeToEye(_window.Context, _xTranslation, _triangleDelta);
-                        break;
-                    case JitterAlgorithm.JitterFreeSceneGPURelativeToEye:
-                        _scene = new JitterFreeSceneGPURelativeToEye(_window.Context, _xTranslation, _triangleDelta);
-                        break;
-                }
+                CreateScene();
             }
             else if ((e.Key == KeyboardKey.Down) || (e.Key == KeyboardKey.Up))
             {
@@ -191,7 +221,6 @@ namespace OpenGlobe.Examples
         }
 
         private readonly double _xTranslation;
-        private readonly double _triangleDelta;
 
         private readonly GraphicsWindow _window;
         private readonly SceneState _sceneState;
