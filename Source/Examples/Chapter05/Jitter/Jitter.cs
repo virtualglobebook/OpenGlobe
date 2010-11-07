@@ -23,6 +23,7 @@ namespace OpenGlobe.Examples
         JitterFreeSceneRelativeToCenter,
         JitterFreeSceneCPURelativeToEye,
         JitterFreeSceneGPURelativeToEye,
+        JitterFreeSceneGPURelativeToEyeDSFUN90,
     }
 
     sealed class Jitter : IDisposable
@@ -82,6 +83,8 @@ namespace OpenGlobe.Examples
                     return "CPU Relative to Eye";
                 case JitterAlgorithm.JitterFreeSceneGPURelativeToEye:
                     return "GPU Relative To Eye";
+                case JitterAlgorithm.JitterFreeSceneGPURelativeToEyeDSFUN90:
+                    return "GPU Relative To Eye [DSFUN90]";
             }
 
             return string.Empty;
@@ -151,6 +154,9 @@ namespace OpenGlobe.Examples
                 case JitterAlgorithm.JitterFreeSceneGPURelativeToEye:
                     _scene = new JitterFreeSceneGPURelativeToEye(_window.Context, positions, colors);
                     break;
+                case JitterAlgorithm.JitterFreeSceneGPURelativeToEyeDSFUN90:
+                    _scene = new JitterFreeSceneGPURelativeToEyeDSFUN90(_window.Context, positions, colors);
+                    break;
             }
         }
 
@@ -162,9 +168,9 @@ namespace OpenGlobe.Examples
 
                 if (_jitterAlgorithm < JitterAlgorithm.Jittery)
                 {
-                    _jitterAlgorithm = JitterAlgorithm.JitterFreeSceneGPURelativeToEye;
+                    _jitterAlgorithm = JitterAlgorithm.JitterFreeSceneGPURelativeToEyeDSFUN90;
                 }
-                else if (_jitterAlgorithm > JitterAlgorithm.JitterFreeSceneGPURelativeToEye)
+                else if (_jitterAlgorithm > JitterAlgorithm.JitterFreeSceneGPURelativeToEyeDSFUN90)
                 {
                     _jitterAlgorithm = JitterAlgorithm.Jittery;
                 }
