@@ -31,8 +31,8 @@ namespace OpenGlobe.Examples
 
                   void main()                     
                   {
-                        gl_PointSize = u_pointSize;
                         gl_Position = og_modelViewPerspectiveMatrix * position; 
+                        gl_PointSize = u_pointSize;
                         fsColor = color;
                   }";
 
@@ -52,7 +52,6 @@ namespace OpenGlobe.Examples
             ///////////////////////////////////////////////////////////////////
 
             Mesh mesh = new Mesh();
-
             VertexAttributeDoubleVector3 positionsAttribute = new VertexAttributeDoubleVector3("position", 7);
             VertexAttributeRGB colorAttribute = new VertexAttributeRGB("color", 7);
             mesh.Attributes.Add(positionsAttribute);

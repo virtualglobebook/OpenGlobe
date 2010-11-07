@@ -50,6 +50,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="JitterFreeSceneCPURelativeToEye.cs" />
+    <Compile Include="JitterFreeSceneGPURelativeToEye.cs" />
     <Compile Include="JitteryScene.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Jitter.cs" />

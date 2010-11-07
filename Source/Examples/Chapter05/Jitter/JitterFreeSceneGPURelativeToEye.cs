@@ -17,22 +17,30 @@ using OpenTK;
 
 namespace OpenGlobe.Examples
 {
-    sealed class JitterFreeSceneCPURelativeToEye : IDisposable, IRenderable
+    sealed class JitterFreeSceneGPURelativeToEye : IDisposable, IRenderable
     {
-        public JitterFreeSceneCPURelativeToEye(Context context, double xTranslation, double triangleDelta)
+        public JitterFreeSceneGPURelativeToEye(Context context, double xTranslation, double triangleDelta)
         {
             string vs =
                 @"#version 330
 
-                  layout(location = og_positionVertexLocation) in vec4 position;
-                  layout(location = og_colorVertexLocation) in vec3 color;
+                  in vec3 positionHigh;
+                  in vec3 positionLow;
+                  in vec3 color;
+
                   out vec3 fsColor;
+
+                  uniform vec3 u_cameraEyeHigh;
+                  uniform vec3 u_cameraEyeLow;
                   uniform mat4 u_modelViewPerspectiveMatrixRelativeToEye;
                   uniform float u_pointSize;
 
                   void main()                     
                   {
-                        gl_Position = u_modelViewPerspectiveMatrixRelativeToEye * position; 
+                        vec3 highDifference = positionHigh - u_cameraEyeHigh;
+                        vec3 lowDifference = positionLow - u_cameraEyeLow;
+
+                        gl_Position = u_modelViewPerspectiveMatrixRelativeToEye * vec4(highDifference + lowDifference, 1.0);
                         gl_PointSize = u_pointSize;
                         fsColor = color;
                   }";
@@ -48,12 +56,22 @@ namespace OpenGlobe.Examples
                       fragmentColor = fsColor;
                   }";
             _sp = Device.CreateShaderProgram(vs, fs);
+            _cameraEyeHigh = (Uniform<Vector3S>)_sp.Uniforms["u_cameraEyeHigh"];
+            _cameraEyeLow = (Uniform<Vector3S>)_sp.Uniforms["u_cameraEyeLow"];
             _modelViewPerspectiveMatrixRelativeToEye = (Uniform<Matrix4>)(_sp.Uniforms["u_modelViewPerspectiveMatrixRelativeToEye"]);
             _pointSize = (Uniform<float>)_sp.Uniforms["u_pointSize"];
 
             ///////////////////////////////////////////////////////////////////
 
-            _positions = new Vector3D[]
+            Mesh mesh = new Mesh();
+            VertexAttributeFloatVector3 positionsHighAttribute = new VertexAttributeFloatVector3("positionHigh", 7);
+            VertexAttributeFloatVector3 positionsLowAttribute = new VertexAttributeFloatVector3("positionLow", 7);
+            VertexAttributeRGB colorAttribute = new VertexAttributeRGB("color", 7);
+            mesh.Attributes.Add(positionsHighAttribute);
+            mesh.Attributes.Add(positionsLowAttribute);
+            mesh.Attributes.Add(colorAttribute);
+
+            Vector3D[] positions = new Vector3D[]
             {
                 new Vector3D(xTranslation, triangleDelta + 0, 0),            // Red triangle
                 new Vector3D(xTranslation, triangleDelta + 1000000, 0),
@@ -61,35 +79,28 @@ namespace OpenGlobe.Examples
                 new Vector3D(xTranslation, -triangleDelta - 0, 0),           // Green triangle
                 new Vector3D(xTranslation, -triangleDelta - 0, 1000000),
                 new Vector3D(xTranslation, -triangleDelta - 1000000, 0),
-                new Vector3D(xTranslation, 0, 0),                            // Blue point
+                new Vector3D(xTranslation, 0, 0)                             // Blue point
             };
-            _positionsRelativeToEye = new Vector3S[_positions.Length];
-            _eye = Vector3D.Zero;
 
-            byte[] colors = new byte[]
+            for (int i = 0; i < positions.Length; ++i)
             {
-                255, 0, 0,
-                255, 0, 0,
-                255, 0, 0,
-                0, 255, 0,
-                0, 255, 0,
-                0, 255, 0,
-                0, 0, 255
-            };
+                Vector3S positionHigh;
+                Vector3S positionLow;
+                Vector3DToTwoVector3S(positions[i], out positionHigh, out positionLow);
 
-            //
-            // _positionBuffer is dynamic, and is written to when the camera moves.
-            //
-            _positionBuffer = Device.CreateVertexBuffer(BufferHint.DynamicDraw, _positionsRelativeToEye.Length * SizeInBytes<Vector3S>.Value);
+                positionsHighAttribute.Values.Add(positionHigh);
+                positionsLowAttribute.Values.Add(positionLow);
+            }
 
-            VertexBuffer colorBuffer = Device.CreateVertexBuffer(BufferHint.StaticDraw, colors.Length);
-            colorBuffer.CopyFromSystemMemory(colors);
+            colorAttribute.AddColor(Color.Red);
+            colorAttribute.AddColor(Color.Red);
+            colorAttribute.AddColor(Color.Red);
+            colorAttribute.AddColor(Color.FromArgb(0, 255, 0));
+            colorAttribute.AddColor(Color.FromArgb(0, 255, 0));
+            colorAttribute.AddColor(Color.FromArgb(0, 255, 0));
+            colorAttribute.AddColor(Color.Blue);
 
-            _va = context.CreateVertexArray();
-            _va.Attributes[_sp.VertexAttributes["position"].Location] =
-                new VertexBufferAttribute(_positionBuffer, ComponentDatatype.Float, 3);
-            _va.Attributes[_sp.VertexAttributes["color"].Location] =
-                new VertexBufferAttribute(colorBuffer, ComponentDatatype.UnsignedByte, 3, true, 0, 0);
+            _va = context.CreateVertexArray(mesh, _sp.VertexAttributes, BufferHint.StaticDraw);
 
             ///////////////////////////////////////////////////////////////////
 
@@ -101,6 +112,40 @@ namespace OpenGlobe.Examples
             _drawState = new DrawState(renderState, _sp, _va);
         }
 
+        private static void DoubleToTwoFloats(double value, out float high, out float low)
+        {
+            if (value >= 0.0)
+            {
+                double doubleHigh = Math.Floor(value / 65536.0) * 65536.0;
+                high = (float)doubleHigh;
+                low = (float)(value - high);
+            }
+            else
+            {
+                double doubleHigh = Math.Floor(-value / 65536.0) * 65536.0;
+                high = (float)-doubleHigh;
+                low = (float)(value + high);
+            }
+        }
+
+        private static void Vector3DToTwoVector3S(Vector3D value, out Vector3S high, out Vector3S low)
+        {
+            float highX;
+            float highY;
+            float highZ;
+
+            float lowX;
+            float lowY;
+            float lowZ;
+
+            DoubleToTwoFloats(value.X, out highX, out lowX);
+            DoubleToTwoFloats(value.Y, out highY, out lowY);
+            DoubleToTwoFloats(value.Z, out highZ, out lowZ);
+
+            high = new Vector3S(highX, highY, highZ);
+            low = new Vector3S(lowX, lowY, lowZ);
+        }
+
         private void Update(SceneState sceneState)
         {
             Vector3D eye = sceneState.Camera.Eye;
@@ -108,6 +153,12 @@ namespace OpenGlobe.Examples
             if (_eye != eye)
             {
                 _eye = eye;
+
+                Vector3S eyeHigh;
+                Vector3S eyeLow;
+                Vector3DToTwoVector3S(eye, out eyeHigh, out eyeLow);
+                _cameraEyeHigh.Value = eyeHigh;
+                _cameraEyeLow.Value = eyeLow;
 
                 Matrix4d m = sceneState.ModelMatrix;
                 m.M41 += eye.X;
@@ -121,13 +172,6 @@ namespace OpenGlobe.Examples
 
                 _modelViewPerspectiveMatrixRelativeToEye.Value = Conversion.ToMatrix4(
                     m * sceneState.ViewMatrix * sceneState.PerspectiveMatrix);
-
-                for (int i = 0; i < _positions.Length; ++i)
-                {
-                    _positionsRelativeToEye[i] = (_positions[i] - eye).ToVector3S();
-                }
-
-                _positionBuffer.CopyFromSystemMemory(_positionsRelativeToEye);
             }
 
             _pointSize.Value = (float)(8.0 * sceneState.HighResolutionSnapScale);
@@ -157,13 +201,12 @@ namespace OpenGlobe.Examples
 
         private readonly VertexArray _va;
         private readonly ShaderProgram _sp;
+        private readonly Uniform<Vector3S> _cameraEyeHigh;
+        private readonly Uniform<Vector3S> _cameraEyeLow;
         private readonly Uniform<Matrix4> _modelViewPerspectiveMatrixRelativeToEye;
         private readonly Uniform<float> _pointSize;
         private readonly DrawState _drawState;
 
-        private readonly VertexBuffer _positionBuffer;
-        private readonly Vector3D[] _positions;
-        private readonly Vector3S[] _positionsRelativeToEye;
         private Vector3D _eye;
     }
 }
