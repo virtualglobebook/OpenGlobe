@@ -48,8 +48,8 @@ namespace OpenGlobe.Examples
             ///////////////////////////////////////////////////////////////////
 
             Camera camera = _sceneState.Camera;
-            camera.PerspectiveNearPlaneDistance = 0.1;
-            camera.PerspectiveFarPlaneDistance = 1000000;
+            camera.PerspectiveNearPlaneDistance = 0.01;
+            camera.PerspectiveFarPlaneDistance = 5000000;
             camera.Target = Vector3D.UnitX * _xTranslation;
             camera.Eye = Vector3D.UnitX * _xTranslation * 1.1;
 
@@ -109,7 +109,7 @@ namespace OpenGlobe.Examples
 
         private void CreateScene()
         {
-            const double triangleLength = 1000000;
+            const double triangleLength = 200000;
             const double triangleDelta = 0.5;
 
             Vector3D[] positions = new Vector3D[]
