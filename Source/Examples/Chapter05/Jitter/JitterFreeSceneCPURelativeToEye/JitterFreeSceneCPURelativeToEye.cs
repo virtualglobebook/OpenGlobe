@@ -21,33 +21,9 @@ namespace OpenGlobe.Examples
     {
         public JitterFreeSceneCPURelativeToEye(Context context, double xTranslation, double triangleDelta)
         {
-            string vs =
-                @"#version 330
-
-                  layout(location = og_positionVertexLocation) in vec4 position;
-                  layout(location = og_colorVertexLocation) in vec3 color;
-                  out vec3 fsColor;
-                  uniform mat4 u_modelViewPerspectiveMatrixRelativeToEye;
-                  uniform float u_pointSize;
-
-                  void main()                     
-                  {
-                        gl_Position = u_modelViewPerspectiveMatrixRelativeToEye * position; 
-                        gl_PointSize = u_pointSize;
-                        fsColor = color;
-                  }";
-
-            string fs =
-                @"#version 330
-                 
-                  in vec3 fsColor;
-                  out vec3 fragmentColor;
-
-                  void main()
-                  {
-                      fragmentColor = fsColor;
-                  }";
-            _sp = Device.CreateShaderProgram(vs, fs);
+            _sp = Device.CreateShaderProgram(
+                EmbeddedResources.GetText("OpenGlobe.Examples.JitterFreeSceneCPURelativeToEye.Shaders.VS.glsl"),
+                EmbeddedResources.GetText("OpenGlobe.Examples.Shaders.FS.glsl"));
             _modelViewPerspectiveMatrixRelativeToEye = (Uniform<Matrix4>)(_sp.Uniforms["u_modelViewPerspectiveMatrixRelativeToEye"]);
             _pointSize = (Uniform<float>)_sp.Uniforms["u_pointSize"];
 

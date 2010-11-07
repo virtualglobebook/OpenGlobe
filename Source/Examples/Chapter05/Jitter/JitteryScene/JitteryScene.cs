@@ -20,33 +20,9 @@ namespace OpenGlobe.Examples
     {
         public JitteryScene(Context context, double xTranslation, double triangleDelta)
         {
-            string vs =
-                @"#version 330
-
-                  layout(location = og_positionVertexLocation) in vec4 position;
-                  layout(location = og_colorVertexLocation) in vec3 color;
-                  out vec3 fsColor;
-                  uniform mat4 og_modelViewPerspectiveMatrix;
-                  uniform float u_pointSize;
-
-                  void main()                     
-                  {
-                        gl_Position = og_modelViewPerspectiveMatrix * position; 
-                        gl_PointSize = u_pointSize;
-                        fsColor = color;
-                  }";
-
-            string fs =
-                @"#version 330
-                 
-                  in vec3 fsColor;
-                  out vec3 fragmentColor;
-
-                  void main()
-                  {
-                      fragmentColor = fsColor;
-                  }";
-            _sp = Device.CreateShaderProgram(vs, fs);
+            _sp = Device.CreateShaderProgram(
+                EmbeddedResources.GetText("OpenGlobe.Examples.JitteryScene.Shaders.VS.glsl"),
+                EmbeddedResources.GetText("OpenGlobe.Examples.Shaders.FS.glsl"));
             _pointSize = (Uniform<float>)_sp.Uniforms["u_pointSize"];
 
             ///////////////////////////////////////////////////////////////////

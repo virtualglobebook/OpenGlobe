@@ -60,6 +60,10 @@
     <None Include="..\..\..\..\ThirdParty\OpenTKGL4\Binaries\OpenTK\Release\OpenTK.dll.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <EmbeddedResource Include="Shaders\FS.glsl" />
+    <EmbeddedResource Include="JitteryScene\Shaders\VS.glsl" />
+    <EmbeddedResource Include="JitterFreeSceneCPURelativeToEye\Shaders\VS.glsl" />
+    <EmbeddedResource Include="JitterFreeSceneGPURelativeToEye\Shaders\VS.glsl" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Core\OpenGlobe.Core.csproj">
@@ -75,4 +79,5 @@
       <Name>OpenGlobe.Scene</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
 </Project>
