@@ -7,13 +7,12 @@
 //
 #endregion
 
-using OpenTK;
 using OpenTK.Graphics.OpenGL;
-using OpenGlobe.Renderer;
+using OpenGlobe.Core;
 
 namespace OpenGlobe.Renderer.GL3x
 {
-    internal class UniformIntVector2GL3x : Uniform<Vector2i>, ICleanable
+    internal class UniformIntVector2GL3x : Uniform<Vector2I>, ICleanable
     {
         internal UniformIntVector2GL3x(string name, int location, ICleanableObserver observer)
             : base(name, UniformType.IntVector2)
@@ -26,7 +25,7 @@ namespace OpenGlobe.Renderer.GL3x
 
         #region Uniform<> Members
 
-        public override Vector2i Value
+        public override Vector2I Value
         {
             set
             {
@@ -55,7 +54,7 @@ namespace OpenGlobe.Renderer.GL3x
         #endregion
 
         private int _location;
-        private Vector2i _value;
+        private Vector2I _value;
         private bool _dirty;
         private readonly ICleanableObserver _observer;
     }

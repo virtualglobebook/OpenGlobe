@@ -182,12 +182,12 @@ namespace OpenGlobe.Renderer
                 exampleInt.Value = 1;
                 Assert.AreEqual(1, exampleInt.Value);
 
-                Uniform<Vector2i> exampleIVec2 = (Uniform<Vector2i>)sp.Uniforms["exampleIVec2"];
+                Uniform<Vector2I> exampleIVec2 = (Uniform<Vector2I>)sp.Uniforms["exampleIVec2"];
                 Assert.AreEqual("exampleIVec2", exampleIVec2.Name);
                 Assert.AreEqual(UniformType.IntVector2, exampleIVec2.Datatype);
-                Assert.AreEqual(new Vector2i(), exampleIVec2.Value);
-                exampleIVec2.Value = new Vector2i(1, 0);
-                Assert.AreEqual(new Vector2i(1, 0), exampleIVec2.Value);
+                Assert.AreEqual(new Vector2I(), exampleIVec2.Value);
+                exampleIVec2.Value = new Vector2I(1, 0);
+                Assert.AreEqual(new Vector2I(1, 0), exampleIVec2.Value);
 
                 Uniform<Vector3i> exampleIVec3 = (Uniform<Vector3i>)sp.Uniforms["exampleIVec3"];
                 Assert.AreEqual("exampleIVec3", exampleIVec3.Name);
