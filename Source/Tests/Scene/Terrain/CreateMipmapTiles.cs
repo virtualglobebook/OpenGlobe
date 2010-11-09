@@ -14,6 +14,7 @@ namespace OpenGlobe.Tests.Scene.Terrain
     public class CreateMipmapTiles
     {
         [Test]
+        [Explicit]
         public void Test()
         {
             string inputFilename = @"..\..\..\..\Data\Terrain\ps_height_16k.bt";
