@@ -19,7 +19,7 @@ namespace OpenGlobe.Examples
 {
     public enum JitterAlgorithm
     {
-        Jittery,
+        RelativeToWorld,
         RelativeToCenter,
         CPURelativeToEye,
         GPURelativeToEye,
@@ -66,7 +66,7 @@ namespace OpenGlobe.Examples
         {
             switch (algorithm)
             {
-                case JitterAlgorithm.Jittery:
+                case JitterAlgorithm.RelativeToWorld:
                     return "Relative to World [Jittery]";
                 case JitterAlgorithm.RelativeToCenter:
                     return "Realtive to Center";
@@ -160,20 +160,20 @@ namespace OpenGlobe.Examples
 
             switch (_jitterAlgorithm)
             {
-                case JitterAlgorithm.Jittery:
-                    _algorithm = new JitteryScene(_window.Context, positions, colors);
+                case JitterAlgorithm.RelativeToWorld:
+                    _algorithm = new RelativeToWorld(_window.Context, positions, colors);
                     break;
                 case JitterAlgorithm.RelativeToCenter:
-                    _algorithm = new JitterFreeSceneRelativeToCenter(_window.Context, positions, colors);
+                    _algorithm = new RelativeToCenter(_window.Context, positions, colors);
                     break;
                 case JitterAlgorithm.CPURelativeToEye:
-                    _algorithm = new JitterFreeSceneCPURelativeToEye(_window.Context, positions, colors);
+                    _algorithm = new CPURelativeToEye(_window.Context, positions, colors);
                     break;
                 case JitterAlgorithm.GPURelativeToEye:
-                    _algorithm = new JitterFreeSceneGPURelativeToEye(_window.Context, positions, colors);
+                    _algorithm = new GPURelativeToEye(_window.Context, positions, colors);
                     break;
                 case JitterAlgorithm.GPURelativeToEyeDSFUN90:
-                    _algorithm = new JitterFreeSceneGPURelativeToEyeDSFUN90(_window.Context, positions, colors);
+                    _algorithm = new GPURelativeToEyeDSFUN90(_window.Context, positions, colors);
                     break;
                 case JitterAlgorithm.GPURelativeToEyeLOD:
                     _algorithm = new SceneGPURelativeToEyeLOD(_window.Context, positions, colors);
@@ -194,13 +194,13 @@ namespace OpenGlobe.Examples
             {
                 _jitterAlgorithm += (e.Key == KeyboardKey.Right) ? 1 : -1;
 
-                if (_jitterAlgorithm < JitterAlgorithm.Jittery)
+                if (_jitterAlgorithm < JitterAlgorithm.RelativeToWorld)
                 {
                     _jitterAlgorithm = JitterAlgorithm.GPURelativeToEyeLOD;
                 }
                 else if (_jitterAlgorithm > JitterAlgorithm.GPURelativeToEyeLOD)
                 {
-                    _jitterAlgorithm = JitterAlgorithm.Jittery;
+                    _jitterAlgorithm = JitterAlgorithm.RelativeToWorld;
                 }
 
                 CreateAlgorithm();

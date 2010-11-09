@@ -16,9 +16,9 @@ using OpenGlobe.Scene;
 
 namespace OpenGlobe.Examples
 {
-    sealed class JitteryScene : IDisposable, IRenderable
+    sealed class RelativeToWorld : IDisposable, IRenderable
     {
-        public JitteryScene(Context context, Vector3D[] positions, byte[] colors)
+        public RelativeToWorld(Context context, Vector3D[] positions, byte[] colors)
         {
             _sp = Device.CreateShaderProgram(
                 EmbeddedResources.GetText("OpenGlobe.Examples.Jittery.Shaders.VS.glsl"),

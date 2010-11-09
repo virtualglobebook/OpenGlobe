@@ -22,9 +22,9 @@ namespace OpenGlobe.Examples
     /// implementation of DoubleToTwoFloats() and a different vertex shader
     /// based on emulated doubles from the DSFUN90 Fortran library.
     /// </summary>
-    sealed class JitterFreeSceneGPURelativeToEyeDSFUN90 : IDisposable, IRenderable
+    sealed class GPURelativeToEyeDSFUN90 : IDisposable, IRenderable
     {
-        public JitterFreeSceneGPURelativeToEyeDSFUN90(Context context, Vector3D[] positions, byte[] colors)
+        public GPURelativeToEyeDSFUN90(Context context, Vector3D[] positions, byte[] colors)
         {
             _sp = Device.CreateShaderProgram(
                 EmbeddedResources.GetText("OpenGlobe.Examples.JitterFreeGPURelativeToEyeDSFUN90.Shaders.VS.glsl"),

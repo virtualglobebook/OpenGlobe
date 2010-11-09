@@ -17,9 +17,9 @@ using OpenTK;
 
 namespace OpenGlobe.Examples
 {
-    sealed class JitterFreeSceneRelativeToCenter : IDisposable, IRenderable
+    sealed class RelativeToCenter : IDisposable, IRenderable
     {
-        public JitterFreeSceneRelativeToCenter(Context context, Vector3D[] positions, byte[] colors)
+        public RelativeToCenter(Context context, Vector3D[] positions, byte[] colors)
         {
             _sp = Device.CreateShaderProgram(
                 EmbeddedResources.GetText("OpenGlobe.Examples.JitterFreeRelativeToCenter.Shaders.VS.glsl"),

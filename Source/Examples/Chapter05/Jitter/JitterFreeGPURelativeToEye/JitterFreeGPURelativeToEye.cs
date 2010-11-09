@@ -17,9 +17,9 @@ using OpenTK;
 
 namespace OpenGlobe.Examples
 {
-    sealed class JitterFreeSceneGPURelativeToEye : IDisposable, IRenderable
+    sealed class GPURelativeToEye : IDisposable, IRenderable
     {
-        public JitterFreeSceneGPURelativeToEye(Context context, Vector3D[] positions, byte[] colors)
+        public GPURelativeToEye(Context context, Vector3D[] positions, byte[] colors)
         {
             _sp = Device.CreateShaderProgram(
                 EmbeddedResources.GetText("OpenGlobe.Examples.JitterFreeGPURelativeToEye.Shaders.VS.glsl"),
