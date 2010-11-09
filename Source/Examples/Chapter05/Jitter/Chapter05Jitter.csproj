@@ -50,12 +50,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="EmbeddedResources.cs" />
-    <Compile Include="JitterFreeCPURelativeToEye\JitterFreeCPURelativeToEye.cs" />
-    <Compile Include="JitterFreeGPURelativeToEyeDSFUN90\JitterFreeGPURelativeToEyeDSFUN90.cs" />
+    <Compile Include="CPURelativeToEye\CPURelativeToEye.cs" />
+    <Compile Include="GPURelativeToEyeDSFUN90\GPURelativeToEyeDSFUN90.cs" />
     <Compile Include="GPURelativeToEyeLOD\GPURelativeToEyeLOD.cs" />
-    <Compile Include="JitterFreeGPURelativeToEye\JitterFreeGPURelativeToEye.cs" />
-    <Compile Include="JitterFreeRelativeToCenter\JitterFreeRelativeToCenter.cs" />
-    <Compile Include="Jittery\Jittery.cs" />
+    <Compile Include="GPURelativeToEye\GPURelativeToEye.cs" />
+    <Compile Include="RelativeToCenter\RelativeToCenter.cs" />
+    <Compile Include="RelativeToWorld\RelativeToWorld.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Jitter.cs" />
   </ItemGroup>
@@ -64,11 +64,11 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <EmbeddedResource Include="Shaders\FS.glsl" />
-    <EmbeddedResource Include="Jittery\Shaders\VS.glsl" />
-    <EmbeddedResource Include="JitterFreeCPURelativeToEye\Shaders\VS.glsl" />
-    <EmbeddedResource Include="JitterFreeGPURelativeToEye\Shaders\VS.glsl" />
-    <EmbeddedResource Include="JitterFreeRelativeToCenter\Shaders\VS.glsl" />
-    <EmbeddedResource Include="JitterFreeGPURelativeToEyeDSFUN90\Shaders\VS.glsl" />
+    <EmbeddedResource Include="RelativeToWorld\Shaders\VS.glsl" />
+    <EmbeddedResource Include="CPURelativeToEye\Shaders\VS.glsl" />
+    <EmbeddedResource Include="GPURelativeToEye\Shaders\VS.glsl" />
+    <EmbeddedResource Include="RelativeToCenter\Shaders\VS.glsl" />
+    <EmbeddedResource Include="GPURelativeToEyeDSFUN90\Shaders\VS.glsl" />
     <EmbeddedResource Include="GPURelativeToEyeLOD\Shaders\HighPrecisionVS.glsl" />
     <EmbeddedResource Include="GPURelativeToEyeLOD\Shaders\LowPrecisionVS.glsl" />
   </ItemGroup>
