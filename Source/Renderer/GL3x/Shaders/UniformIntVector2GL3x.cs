@@ -7,8 +7,8 @@
 //
 #endregion
 
-using OpenTK.Graphics.OpenGL;
 using OpenGlobe.Core;
+using OpenTK.Graphics.OpenGL;
 
 namespace OpenGlobe.Renderer.GL3x
 {

@@ -218,22 +218,22 @@ namespace OpenGlobe.Core
 
         public static bool operator >(Vector3D left, Vector3D right)
         {
-            return (left.X > right.X) && (left.Y > right.Y) && (left.Y > right.Y);
+            return (left.X > right.X) && (left.Y > right.Y) && (left.Z > right.Z);
         }
 
         public static bool operator >=(Vector3D left, Vector3D right)
         {
-            return (left.X >= right.X) && (left.Y >= right.Y) && (left.Y >= right.Y);
+            return (left.X >= right.X) && (left.Y >= right.Y) && (left.Z >= right.Z);
         }
 
         public static bool operator <(Vector3D left, Vector3D right)
         {
-            return (left.X < right.X) && (left.Y < right.Y) && (left.Y < right.Y);
+            return (left.X < right.X) && (left.Y < right.Y) && (left.Z < right.Z);
         }
 
         public static bool operator <=(Vector3D left, Vector3D right)
         {
-            return (left.X <= right.X) && (left.Y <= right.Y) && (left.Y <= right.Y);
+            return (left.X <= right.X) && (left.Y <= right.Y) && (left.Z <= right.Z);
         }
 
         public static bool operator ==(Vector3D left, Vector3D right)
@@ -268,6 +268,11 @@ namespace OpenGlobe.Core
         public Vector3S ToVector3S()
         {
             return new Vector3S((float)_x, (float)_y, (float)_z);
+        }
+
+        public Vector3I ToVector3I()
+        {
+            return new Vector3I((int)_x, (int)_y, (int)_z);
         }
 
         public Vector3H ToVector3H()

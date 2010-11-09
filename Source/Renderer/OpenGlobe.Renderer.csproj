@@ -236,7 +236,6 @@
     <Compile Include="OpenTK\Matrix34.cs" />
     <Compile Include="OpenTK\Matrix42.cs" />
     <Compile Include="OpenTK\Matrix43.cs" />
-    <Compile Include="OpenTK\Vector3i.cs" />
     <Compile Include="OpenTK\Vector4i.cs" />
     <Compile Include="Textures\Texture2D.cs" />
     <Compile Include="Textures\Texture2DDescription.cs" />

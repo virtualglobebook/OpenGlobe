@@ -245,6 +245,11 @@ namespace OpenGlobe.Core
             return new Vector3D(_x, _y, _z);
         }
 
+        public Vector3I ToVector3I()
+        {
+            return new Vector3I((int)_x, (int)_y, (int)_z);
+        }
+
         public Vector3H ToVector3H()
         {
             return new Vector3H(_x, _y, _z);

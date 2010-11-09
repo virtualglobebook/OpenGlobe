@@ -134,6 +134,11 @@ namespace OpenGlobe.Core
             return new Vector3D(_x, _y, _z);
         }
 
+        public Vector3I ToVector3I()
+        {
+            return new Vector3I((int)_x.ToDouble(), (int)_y.ToDouble(), (int)_z.ToDouble());
+        }
+
         public Vector3S ToVector3S()
         {
             return new Vector3S(_x, _y, _z);

@@ -70,6 +70,7 @@
     </Compile>
     <Compile Include="Core\Vector3DTests.cs" />
     <Compile Include="Core\Vector3HTests.cs" />
+    <Compile Include="Core\Vector3ITests.cs" />
     <Compile Include="Core\Vector4DTests.cs" />
     <Compile Include="Core\Vector4HTests.cs" />
     <Compile Include="Core\Vector4STests.cs" />

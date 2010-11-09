@@ -189,12 +189,12 @@ namespace OpenGlobe.Renderer
                 exampleIVec2.Value = new Vector2I(1, 0);
                 Assert.AreEqual(new Vector2I(1, 0), exampleIVec2.Value);
 
-                Uniform<Vector3i> exampleIVec3 = (Uniform<Vector3i>)sp.Uniforms["exampleIVec3"];
+                Uniform<Vector3I> exampleIVec3 = (Uniform<Vector3I>)sp.Uniforms["exampleIVec3"];
                 Assert.AreEqual("exampleIVec3", exampleIVec3.Name);
                 Assert.AreEqual(UniformType.IntVector3, exampleIVec3.Datatype);
-                Assert.AreEqual(new Vector3i(), exampleIVec3.Value);
-                exampleIVec3.Value = new Vector3i(1, 0, 0);
-                Assert.AreEqual(new Vector3i(1, 0, 0), exampleIVec3.Value);
+                Assert.AreEqual(new Vector3I(), exampleIVec3.Value);
+                exampleIVec3.Value = new Vector3I(1, 0, 0);
+                Assert.AreEqual(new Vector3I(1, 0, 0), exampleIVec3.Value);
 
                 Uniform<Vector4i> exampleIVec4 = (Uniform<Vector4i>)sp.Uniforms["exampleIVec4"];
                 Assert.AreEqual("exampleIVec4", exampleIVec4.Name);
