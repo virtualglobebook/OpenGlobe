@@ -34,7 +34,7 @@ namespace OpenGlobe.Tests.Scene.Terrain
                 if (isFloatingPoint != 0)
                     throw new InvalidDataException("I only read integer elevations.");
                 if (columns != rows)
-                    throw new InvalidDataException("I don't know how to handle different numbers of rows and columns.")
+                    throw new InvalidDataException("I don't know how to handle different numbers of rows and columns.");
 
                 Directory.CreateDirectory(outputPath);
 

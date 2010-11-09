@@ -73,6 +73,7 @@
     <Compile Include="Core\Vector3ITests.cs" />
     <Compile Include="Core\Vector4DTests.cs" />
     <Compile Include="Core\Vector4HTests.cs" />
+    <Compile Include="Core\Vector4ITests.cs" />
     <Compile Include="Core\Vector4STests.cs" />
     <Compile Include="IntervalTests.cs" />
     <Compile Include="GraphicsAssert.cs" />
