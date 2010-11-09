@@ -145,5 +145,23 @@ namespace OpenGlobe.Core
             Assert.AreEqual(1.0, sA.X, 1e-7);
             Assert.AreEqual(2.0, sA.Y, 1e-7);
         }
+
+        [Test]
+        public void ToVector2I()
+        {
+            Vector2H a = new Vector2H(1.0, 2.0);
+            Vector2I sA = a.ToVector2I();
+            Assert.AreEqual(1, sA.X);
+            Assert.AreEqual(2, sA.Y);
+        }
+
+        [Test]
+        public void ToVector2B()
+        {
+            Vector2H a = new Vector2H(1.0, 0.0);
+            Vector2B sA = a.ToVector2B();
+            Assert.IsTrue(sA.X);
+            Assert.IsFalse(sA.Y);
+        }
     }
 }

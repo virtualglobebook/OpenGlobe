@@ -121,6 +121,16 @@ namespace OpenGlobe.Core
             return new Vector2S(_x, _y);
         }
 
+        public Vector2I ToVector2I()
+        {
+            return new Vector2I(Convert.ToInt32(_x), Convert.ToInt32(_y));
+        }
+
+        public Vector2B ToVector2B()
+        {
+            return new Vector2B(Convert.ToBoolean(_x), Convert.ToBoolean(_y));
+        }
+
         private readonly Half _x;
         private readonly Half _y;
     }

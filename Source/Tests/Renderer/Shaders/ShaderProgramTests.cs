@@ -212,12 +212,12 @@ namespace OpenGlobe.Renderer
                 exampleBool.Value = true;
                 Assert.AreEqual(true, exampleBool.Value);
 
-                Uniform<Vector2b> exampleBVec2 = (Uniform<Vector2b>)sp.Uniforms["exampleBVec2"];
+                Uniform<Vector2B> exampleBVec2 = (Uniform<Vector2B>)sp.Uniforms["exampleBVec2"];
                 Assert.AreEqual("exampleBVec2", exampleBVec2.Name);
                 Assert.AreEqual(UniformType.BoolVector2, exampleBVec2.Datatype);
-                Assert.AreEqual(new Vector2b(), exampleBVec2.Value);
-                exampleBVec2.Value = new Vector2b(true, false);
-                Assert.AreEqual(new Vector2b(true, false), exampleBVec2.Value);
+                Assert.AreEqual(new Vector2B(), exampleBVec2.Value);
+                exampleBVec2.Value = new Vector2B(true, false);
+                Assert.AreEqual(new Vector2B(true, false), exampleBVec2.Value);
 
                 Uniform<Vector3b> exampleBVec3 = (Uniform<Vector3b>)sp.Uniforms["exampleBVec3"];
                 Assert.AreEqual("exampleBVec3", exampleBVec3.Name);

@@ -148,6 +148,11 @@ namespace OpenGlobe.Core
             return new Vector2H(_x, _y);
         }
 
+        public Vector2B ToVector2B()
+        {
+            return new Vector2B(Convert.ToBoolean(_x), Convert.ToBoolean(_y));
+        }
+
         private readonly int _x;
         private readonly int _y;
     }

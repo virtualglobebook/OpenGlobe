@@ -63,8 +63,10 @@
     <Compile Include="Core\Polygons\TriangleMeshSubdivisionTests.cs" />
     <Compile Include="Core\SystemTests.cs" />
     <Compile Include="Core\Tessellation\TessellationTests.cs" />
+    <Compile Include="Core\Vector2BTests.cs" />
     <Compile Include="Core\Vector2DTests.cs" />
     <Compile Include="Core\Vector2HTests.cs" />
+    <Compile Include="Core\Vector2ITests.cs" />
     <Compile Include="Core\Vector2STests.cs">
       <SubType>Code</SubType>
     </Compile>
