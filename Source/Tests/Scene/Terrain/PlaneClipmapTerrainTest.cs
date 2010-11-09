@@ -25,7 +25,7 @@ namespace OpenGlobe.Scene.Terrain
 
             WorldWindTerrainSource worldWind = new WorldWindTerrainSource();
             EsriRestImagery imagery = new EsriRestImagery();
-            PlaneClipmapTerrain clipmap = new PlaneClipmapTerrain(window.Context, worldWind, 255, imagery);
+            PlaneClipmapTerrain clipmap = new PlaneClipmapTerrain(window.Context, worldWind, 511, imagery);
 
             SceneState sceneState = new SceneState();
             sceneState.DiffuseIntensity = 0.90f;
@@ -41,7 +41,7 @@ namespace OpenGlobe.Scene.Terrain
             sceneState.SunPosition = new Vector3D(200000, 300000, 200000);
 
             CameraLookAtPoint camera = new CameraLookAtPoint(sceneState.Camera, window, Ellipsoid.UnitSphere);
-            camera.CenterPoint = new Vector3D(-119.43, 37.64, 0.00001 * 3000.0);
+            camera.CenterPoint = new Vector3D(-119.533283, 37.74523, 0.00001 * 2700.0);
             camera.ZoomRateRangeAdjustment = 0.0;
             camera.Azimuth = 0.0;
             camera.Elevation = Trig.ToRadians(30.0);
@@ -55,16 +55,22 @@ namespace OpenGlobe.Scene.Terrain
             ClearState clearDepth = new ClearState();
             clearDepth.Buffers = ClearBuffers.DepthBuffer;
 
-            camera.Dispose();
-            CameraFly fly = new CameraFly(sceneState.Camera, window);
-            fly.UpdateParametersFromCamera();
-            fly.MovementRate = 0.01;
+            //camera.Dispose();
+            //sceneState.Camera.Eye = new Vector3D(-119.533283, 37.74523, 0.00001 * 2700.0);
+            //sceneState.Camera.Target = sceneState.Camera.Eye + Vector3D.UnitZ;
+            //CameraFly fly = new CameraFly(sceneState.Camera, window);
+            //fly.UpdateParametersFromCamera();
+            //fly.MovementRate = 0.01;
 
             window.Keyboard.KeyDown += delegate(object sender, KeyboardKeyEventArgs e)
             {
                 if (e.Key == KeyboardKey.S)
                 {
                     sceneState.SunPosition = sceneState.Camera.Eye;
+                }
+                else if (e.Key == KeyboardKey.W)
+                {
+                    clipmap.Wireframe = !clipmap.Wireframe;
                 }
             };
 
@@ -91,10 +97,10 @@ namespace OpenGlobe.Scene.Terrain
 
             clipmap.PreRender(window.Context, sceneState);
 
-            PersistentView.Execute(@"C:\Users\Kevin Ring\Documents\Book\svn\TerrainLevelOfDetail\Figures\ClipmapWithCracks.xml", window, sceneState.Camera);
+            PersistentView.Execute(@"C:\Users\Kevin Ring\Documents\Book\svn\TerrainLevelOfDetail\Figures\HalfDome.xml", window, sceneState.Camera);
 
             HighResolutionSnap snap = new HighResolutionSnap(window, sceneState);
-            snap.ColorFilename = @"C:\Users\Kevin Ring\Documents\Book\svn\TerrainLevelOfDetail\Figures\ClipmapWithCracks.png";
+            snap.ColorFilename = @"C:\Users\Kevin Ring\Documents\Book\svn\TerrainLevelOfDetail\Figures\HalfDome.png";
             snap.WidthInInches = 3;
             snap.DotsPerInch = 600;
 

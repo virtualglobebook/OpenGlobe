@@ -12,7 +12,7 @@ out vec3 normalFS;
 out vec3 positionToLightFS;
 
 uniform mat4 og_modelViewPerspectiveMatrix;
-uniform vec3 og_sunPosition;
+uniform vec3 u_sunPositionRelativeToViewer;
 uniform vec2 u_patchOriginInClippedLevel;
 uniform vec2 u_levelScaleFactor;
 uniform vec2 u_levelZeroWorldScaleFactor;
@@ -43,13 +43,17 @@ vec3 ComputeNormal(vec2 levelPos, out float height)
 	// Compute a normal by forward differencing.
 	vec2 right = levelPos + vec2(1.0, 0.0);
 	vec2 top = levelPos + vec2(0.0, 1.0);
+	vec2 left = levelPos - vec2(1.0, 0.0);
+	vec2 bottom = levelPos - vec2(0.0, 1.0);
 
 	height = SampleHeight(levelPos) * u_heightExaggeration;
 	float rightHeight = SampleHeight(right) * u_heightExaggeration;
 	float topHeight = SampleHeight(top) * u_heightExaggeration;
+	float leftHeight = SampleHeight(left) * u_heightExaggeration;
+	float bottomHeight = SampleHeight(bottom) * u_heightExaggeration;
 
 	vec2 gridDeltaInWorld = u_levelScaleFactor * u_levelZeroWorldScaleFactor;
-	return cross(vec3(gridDeltaInWorld.x, 0.0, rightHeight - height), vec3(0.0, gridDeltaInWorld.y, topHeight - height));
+	return vec3(leftHeight - rightHeight, bottomHeight - topHeight, 2.0 * gridDeltaInWorld);
 }
 
 void main()
@@ -62,7 +66,7 @@ void main()
 	vec2 worldPos = levelPos * u_levelScaleFactor * u_levelZeroWorldScaleFactor + u_levelOffsetFromWorldOrigin;
 	vec3 displacedPosition = vec3(worldPos, height);
 
-    positionToLightFS = og_sunPosition - displacedPosition;
+    positionToLightFS = u_sunPositionRelativeToViewer - displacedPosition;
 
     gl_Position = og_modelViewPerspectiveMatrix * vec4(displacedPosition, 1.0);
 }
