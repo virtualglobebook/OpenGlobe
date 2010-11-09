@@ -12,14 +12,14 @@ using OpenTK.Graphics.OpenGL;
 
 namespace OpenGlobe.Renderer.GL3x
 {
-    internal sealed class TextureHandleGL3x : IDisposable
+    internal sealed class TextureNameGL3x : IDisposable
     {
-        public TextureHandleGL3x()
+        public TextureNameGL3x()
         {
             _value = GL.GenTexture();
         }
 
-        ~TextureHandleGL3x()
+        ~TextureNameGL3x()
         {
             FinalizerThreadContextGL3x.RunFinalizer(Dispose);
         }

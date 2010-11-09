@@ -12,14 +12,14 @@ using OpenTK.Graphics.OpenGL;
 
 namespace OpenGlobe.Renderer.GL3x
 {
-    internal sealed class SamplerHandleGL3x : IDisposable
+    internal sealed class SamplerNameGL3x : IDisposable
     {
-        public SamplerHandleGL3x()
+        public SamplerNameGL3x()
         {
             GL.GenSamplers(1, out _value);
         }
 
-        ~SamplerHandleGL3x()
+        ~SamplerNameGL3x()
         {
             FinalizerThreadContextGL3x.RunFinalizer(Dispose);
         }

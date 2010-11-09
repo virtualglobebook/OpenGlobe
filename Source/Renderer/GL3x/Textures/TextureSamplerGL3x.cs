@@ -26,21 +26,21 @@ namespace OpenGlobe.Renderer.GL3x
                 wrapT, 
                 maximumAnistropy)
         {
-            _handle = new SamplerHandleGL3x();
+            _name = new SamplerNameGL3x();
 
             int glMinificationFilter = (int)TypeConverterGL3x.To(minificationFilter);
             int glMagnificationFilter = (int)TypeConverterGL3x.To(magnificationFilter);
             int glWrapS = (int)TypeConverterGL3x.To(wrapS);
             int glWrapT = (int)TypeConverterGL3x.To(wrapT);
 
-            GL.SamplerParameterI(_handle.Value, (ArbSamplerObjects)All.TextureMinFilter, ref glMinificationFilter);
-            GL.SamplerParameterI(_handle.Value, (ArbSamplerObjects)All.TextureMagFilter, ref glMagnificationFilter);
-            GL.SamplerParameterI(_handle.Value, (ArbSamplerObjects)All.TextureWrapS, ref glWrapS);
-            GL.SamplerParameterI(_handle.Value, (ArbSamplerObjects)All.TextureWrapT, ref glWrapT);
+            GL.SamplerParameterI(_name.Value, (ArbSamplerObjects)All.TextureMinFilter, ref glMinificationFilter);
+            GL.SamplerParameterI(_name.Value, (ArbSamplerObjects)All.TextureMagFilter, ref glMagnificationFilter);
+            GL.SamplerParameterI(_name.Value, (ArbSamplerObjects)All.TextureWrapS, ref glWrapS);
+            GL.SamplerParameterI(_name.Value, (ArbSamplerObjects)All.TextureWrapT, ref glWrapT);
 
             if (Device.Extensions.AnisotropicFiltering)
             {
-                GL.SamplerParameter(_handle.Value, (ArbSamplerObjects)All.TextureMaxAnisotropyExt, maximumAnistropy);
+                GL.SamplerParameter(_name.Value, (ArbSamplerObjects)All.TextureMaxAnisotropyExt, maximumAnistropy);
             }
             else
             {
@@ -53,7 +53,7 @@ namespace OpenGlobe.Renderer.GL3x
 
         internal void Bind(int textureUnitIndex)
         {
-            GL.BindSampler(textureUnitIndex, _handle.Value);
+            GL.BindSampler(textureUnitIndex, _name.Value);
         }
 
         internal static void UnBind(int textureUnitIndex)
@@ -67,13 +67,13 @@ namespace OpenGlobe.Renderer.GL3x
         {
             if (disposing)
             {
-                _handle.Dispose();
+                _name.Dispose();
             }
             base.Dispose(disposing);
         }
 
         #endregion
 
-        private readonly SamplerHandleGL3x _handle;
+        private readonly SamplerNameGL3x _name;
     }
 }

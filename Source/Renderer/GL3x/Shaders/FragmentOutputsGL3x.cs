@@ -15,7 +15,7 @@ namespace OpenGlobe.Renderer.GL3x
 {
     internal class FragmentOutputsGL3x : FragmentOutputs
     {
-        public FragmentOutputsGL3x(ShaderProgramHandleGL3x program)
+        public FragmentOutputsGL3x(ShaderProgramNameGL3x program)
         {
             _program = program;
         }
@@ -39,6 +39,6 @@ namespace OpenGlobe.Renderer.GL3x
 
         #endregion
 
-        private ShaderProgramHandleGL3x _program;
+        private ShaderProgramNameGL3x _program;
     }
 }

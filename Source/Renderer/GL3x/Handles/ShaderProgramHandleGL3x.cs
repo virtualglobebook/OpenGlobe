@@ -12,14 +12,14 @@ using OpenTK.Graphics.OpenGL;
 
 namespace OpenGlobe.Renderer.GL3x
 {
-    internal sealed class ShaderProgramHandleGL3x : IDisposable
+    internal sealed class ShaderProgramNameGL3x : IDisposable
     {
-        public ShaderProgramHandleGL3x()
+        public ShaderProgramNameGL3x()
         {
             _value = GL.CreateProgram();
         }
 
-        ~ShaderProgramHandleGL3x()
+        ~ShaderProgramNameGL3x()
         {
             FinalizerThreadContextGL3x.RunFinalizer(Dispose);
         }

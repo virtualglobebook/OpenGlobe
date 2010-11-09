@@ -12,14 +12,14 @@ using OpenTK.Graphics.OpenGL;
 
 namespace OpenGlobe.Renderer.GL3x
 {
-    internal sealed class BufferHandleGL3x : IDisposable
+    internal sealed class BufferNameGL3x : IDisposable
     {
-        public BufferHandleGL3x()
+        public BufferNameGL3x()
         {
             GL.GenBuffers(1, out _value);
         }
 
-        ~BufferHandleGL3x()
+        ~BufferNameGL3x()
         {
             FinalizerThreadContextGL3x.RunFinalizer(Dispose);
         }

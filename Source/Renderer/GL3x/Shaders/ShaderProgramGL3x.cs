@@ -37,7 +37,7 @@ namespace OpenGlobe.Renderer.GL3x
             }
             _fragmentShader = new ShaderObjectGL3x(ShaderType.FragmentShader, fragmentShaderSource);
 
-            _program = new ShaderProgramHandleGL3x();
+            _program = new ShaderProgramNameGL3x();
             int programHandle = _program.Value;
 
             GL.AttachShader(programHandle, _vertexShader.Handle);
@@ -66,7 +66,7 @@ namespace OpenGlobe.Renderer.GL3x
             InitializeAutomaticUniforms(_uniforms);
         }
 
-        private static ShaderVertexAttributeCollection FindVertexAttributes(ShaderProgramHandleGL3x program)
+        private static ShaderVertexAttributeCollection FindVertexAttributes(ShaderProgramNameGL3x program)
         {
             int programHandle = program.Value;
 
@@ -106,7 +106,7 @@ namespace OpenGlobe.Renderer.GL3x
             return vertexAttributes;
         }
 
-        private UniformCollection FindUniforms(ShaderProgramHandleGL3x program)
+        private UniformCollection FindUniforms(ShaderProgramNameGL3x program)
         {
             int programHandle = program.Value;
 
@@ -284,7 +284,7 @@ namespace OpenGlobe.Renderer.GL3x
             return null;
         }
 
-        private static UniformBlockCollection FindUniformBlocks(ShaderProgramHandleGL3x program)
+        private static UniformBlockCollection FindUniformBlocks(ShaderProgramNameGL3x program)
         {
             int programHandle = program.Value;
 
@@ -421,7 +421,7 @@ namespace OpenGlobe.Renderer.GL3x
             return name;
         }
 
-        internal ShaderProgramHandleGL3x Handle
+        internal ShaderProgramNameGL3x Handle
         {
             get { return _program; }
         }
@@ -507,7 +507,7 @@ namespace OpenGlobe.Renderer.GL3x
         private readonly ShaderObjectGL3x _vertexShader;
         private readonly ShaderObjectGL3x _geometryShader;
         private readonly ShaderObjectGL3x _fragmentShader;
-        private readonly ShaderProgramHandleGL3x _program;
+        private readonly ShaderProgramNameGL3x _program;
         private readonly FragmentOutputsGL3x _fragmentOutputs;
         private readonly ShaderVertexAttributeCollection _vertexAttributes;
         private readonly IList<ICleanable> _dirtyUniforms;

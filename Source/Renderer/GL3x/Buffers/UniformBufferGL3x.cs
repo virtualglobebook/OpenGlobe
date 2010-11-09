@@ -19,7 +19,7 @@ namespace OpenGlobe.Renderer.GL3x
             _bufferObject = new BufferGL3x(BufferTarget.UniformBuffer, usageHint, sizeInBytes);
         }
 
-        internal BufferHandleGL3x Handle
+        internal BufferNameGL3x Handle
         {
             get { return _bufferObject.Handle; }
         }

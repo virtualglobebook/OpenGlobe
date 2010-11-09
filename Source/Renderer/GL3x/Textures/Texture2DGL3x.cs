@@ -27,7 +27,7 @@ namespace OpenGlobe.Renderer.GL3x
                 throw new ArgumentException("description.GenerateMipmaps cannot be true for texture rectangles.", "description");
             }
 
-            _handle = new TextureHandleGL3x();
+            _name = new TextureNameGL3x();
             _target = textureTarget;
             _description = description;
             _lastTextureUnit = OpenTKTextureUnit.Texture0 + (Device.NumberOfTextureUnits - 1);
@@ -53,9 +53,9 @@ namespace OpenGlobe.Renderer.GL3x
             ApplySampler(Device.TextureSamplers.LinearClamp);
         }
 
-        internal TextureHandleGL3x Handle
+        internal TextureNameGL3x Handle
         {
-            get { return _handle; }
+            get { return _name; }
         }
 
         internal TextureTarget Target
@@ -65,7 +65,7 @@ namespace OpenGlobe.Renderer.GL3x
 
         internal void Bind()
         {
-            GL.BindTexture(_target, _handle.Value);
+            GL.BindTexture(_target, _name.Value);
         }
 
         private void BindToLastTextureUnit()
@@ -173,14 +173,14 @@ namespace OpenGlobe.Renderer.GL3x
         {
             if (disposing)
             {
-                _handle.Dispose();
+                _name.Dispose();
             }
             base.Dispose(disposing);
         }
 
         #endregion
 
-        private readonly TextureHandleGL3x _handle;
+        private readonly TextureNameGL3x _name;
         private readonly TextureTarget _target;
         private readonly Texture2DDescription _description;
         private readonly OpenTKTextureUnit _lastTextureUnit;

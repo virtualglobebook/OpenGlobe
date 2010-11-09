@@ -18,13 +18,13 @@ namespace OpenGlobe.Renderer.GL3x
     {
         public VertexArrayGL3x()
 	    {
-            _handle = new VertexArrayNameGL3x();
+            _name = new VertexArrayNameGL3x();
             _attributes = new VertexBufferAttributesGL3x();
         }
 
         internal void Bind()
         {
-            GL.BindVertexArray(_handle.Value);
+            GL.BindVertexArray(_name.Value);
         }
 
         internal void Clean()
@@ -83,14 +83,14 @@ namespace OpenGlobe.Renderer.GL3x
                 {
                     _indexBuffer.Dispose();
                 }
-                _handle.Dispose();
+                _name.Dispose();
             }
             base.Dispose(disposing);
         }
 
         #endregion
 
-        private VertexArrayNameGL3x _handle;
+        private VertexArrayNameGL3x _name;
         private VertexBufferAttributesGL3x _attributes;
         private IndexBuffer _indexBuffer;
         private bool _dirtyIndexBuffer;

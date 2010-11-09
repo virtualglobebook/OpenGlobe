@@ -23,7 +23,7 @@ namespace OpenGlobe.Renderer.GL3x
         {
             Debug.Assert(sizeInBytes > 0);
 
-            _handle = new BufferHandleGL3x();
+            _name = new BufferNameGL3x();
 
             _sizeInBytes = sizeInBytes;
             _type = type;
@@ -86,22 +86,22 @@ namespace OpenGlobe.Renderer.GL3x
             get { return TypeConverterGL3x.To(_usageHint); }
         }
 
-        public BufferHandleGL3x Handle
+        public BufferNameGL3x Handle
         {
-            get { return _handle; }
+            get { return _name; }
         }
 
         public void Bind()
         {
-            GL.BindBuffer(_type, _handle.Value);
+            GL.BindBuffer(_type, _name.Value);
         }
 
         public void Dispose()
         {
-            _handle.Dispose();
+            _name.Dispose();
         }
 
-        private BufferHandleGL3x _handle;
+        private BufferNameGL3x _name;
         private readonly int _sizeInBytes;
         private readonly BufferTarget _type;
         private readonly BufferUsageHint _usageHint;

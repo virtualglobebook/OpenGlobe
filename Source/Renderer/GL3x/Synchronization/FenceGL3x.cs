@@ -17,13 +17,13 @@ namespace OpenGlobe.Renderer.GL3x
     {
         public FenceGL3x()
         {
-            _handle = new FenceHandleGL3x();
+            _name = new FenceNameGL3x();
             //TODO:  When/where to GL.Fush?  If at all.  Or use SYNC_FLUSH_COMMANDS_BIT with ClientWait?
         }
 
         public override void ServerWait()
         {
-            GL.WaitSync(_handle.Value, 0, (long)ArbSync.TimeoutIgnored);
+            GL.WaitSync(_name.Value, 0, (long)ArbSync.TimeoutIgnored);
         }
 
         public override ClientWaitResult ClientWait()
@@ -38,7 +38,7 @@ namespace OpenGlobe.Renderer.GL3x
                 throw new ArgumentOutOfRangeException("timeoutInNanoseconds");
             }
 
-            ArbSync result = GL.ClientWaitSync(_handle.Value, 0, timeoutInNanoseconds);
+            ArbSync result = GL.ClientWaitSync(_name.Value, 0, timeoutInNanoseconds);
 
             switch (result)
             {
@@ -58,7 +58,7 @@ namespace OpenGlobe.Renderer.GL3x
             int length;
             int status;
 
-            GL.GetSync(_handle.Value, ArbSync.SyncStatus, 1, out length, out status);
+            GL.GetSync(_name.Value, ArbSync.SyncStatus, 1, out length, out status);
 
             if (status == (int)ArbSync.Unsignaled)
             {
@@ -76,13 +76,13 @@ namespace OpenGlobe.Renderer.GL3x
         {
             if (disposing)
             {
-                _handle.Dispose();
+                _name.Dispose();
             }
             base.Dispose(disposing);
         }
 
         #endregion
 
-        private FenceHandleGL3x _handle;
+        private FenceNameGL3x _name;
     }
 }

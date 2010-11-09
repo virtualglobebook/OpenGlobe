@@ -12,14 +12,14 @@ using OpenTK.Graphics.OpenGL;
 
 namespace OpenGlobe.Renderer.GL3x
 {
-    internal sealed class FenceHandleGL3x : IDisposable
+    internal sealed class FenceNameGL3x : IDisposable
     {
-        public FenceHandleGL3x()
+        public FenceNameGL3x()
         {
             _value = GL.FenceSync(ArbSync.SyncGpuCommandsComplete, 0);
         }
 
-        ~FenceHandleGL3x()
+        ~FenceNameGL3x()
         {
             FinalizerThreadContextGL3x.RunFinalizer(Dispose);
         }

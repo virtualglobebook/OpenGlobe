@@ -19,13 +19,13 @@ namespace OpenGlobe.Renderer.GL3x
     {
         public FrameBufferGL3x()
         {
-            _handle = new FrameBufferHandleGL3x();
+            _name = new FrameBufferNameGL3x();
             _colorAttachments = new ColorAttachmentsGL3x();
         }
 
         internal void Bind()
         {
-            GL.BindFramebuffer(FramebufferTarget.Framebuffer, _handle.Value);
+            GL.BindFramebuffer(FramebufferTarget.Framebuffer, _name.Value);
         }
 
         internal static void UnBind()
@@ -142,7 +142,7 @@ namespace OpenGlobe.Renderer.GL3x
         {
             if (disposing)
             {
-                _handle.Dispose();
+                _name.Dispose();
             }
             base.Dispose(disposing);
         }
@@ -157,7 +157,7 @@ namespace OpenGlobe.Renderer.GL3x
             DepthStencilAttachment = 2
         }
 
-        private FrameBufferHandleGL3x _handle;
+        private FrameBufferNameGL3x _name;
         private ColorAttachmentsGL3x _colorAttachments;
         private Texture2D _depthAttachment;
         private Texture2D _depthStencilAttachment;
