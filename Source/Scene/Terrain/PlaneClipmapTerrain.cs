@@ -268,14 +268,25 @@ namespace OpenGlobe.Scene.Terrain
 
             int maxLevel = _clipmapLevels.Length - 1;
 
+            int longitudeIndex = (int)_clipmapLevels[0].Terrain.LongitudeToIndex(clipmapCenter.X);
+            int latitudeIndex = (int)_clipmapLevels[0].Terrain.LatitudeToIndex(clipmapCenter.Y);
+
+            float[] heightSample = new float[1];
+            _clipmapLevels[0].Terrain.GetPosts(longitudeIndex, latitudeIndex, longitudeIndex, latitudeIndex, heightSample, 0, 1);
+
             while (maxLevel > 0)
             {
-                double terrainHeight = 2000 * heightExaggeration; // TODO: get the real terrain height
+                double terrainHeight = heightSample[0] * heightExaggeration; // TODO: get the real terrain height
                 double viewerHeight = clipmapCenter.Z;
                 double h = viewerHeight - terrainHeight;
                 double gridExtent = _clipmapLevels[maxLevel].Terrain.PostDeltaLongitude * _clipmapPosts;
-                if (gridExtent > 2.5 * h)
+                if (h > 0.4 * gridExtent)
+                {
+                }
+                else
+                {
                     break;
+                }
                 --maxLevel;
             }
 

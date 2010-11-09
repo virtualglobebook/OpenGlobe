@@ -21,11 +21,12 @@ namespace OpenGlobe.Scene.Terrain
         [Explicit]
         public void Test()
         {
-            GraphicsWindow window = Device.CreateWindow(800, 600, "Clipmap Terrain Test");
+            GraphicsWindow window = Device.CreateWindow(640, 480, "Clipmap Terrain Test");
 
-            WorldWindTerrainSource worldWind = new WorldWindTerrainSource();
+            //WorldWindTerrainSource worldWind = new WorldWindTerrainSource();
+            SimpleTerrainSource terrainSource = new SimpleTerrainSource();
             EsriRestImagery imagery = new EsriRestImagery();
-            PlaneClipmapTerrain clipmap = new PlaneClipmapTerrain(window.Context, worldWind, 511, imagery);
+            PlaneClipmapTerrain clipmap = new PlaneClipmapTerrain(window.Context, terrainSource, 255, imagery);
 
             SceneState sceneState = new SceneState();
             sceneState.DiffuseIntensity = 0.90f;
@@ -42,6 +43,7 @@ namespace OpenGlobe.Scene.Terrain
 
             CameraLookAtPoint camera = new CameraLookAtPoint(sceneState.Camera, window, Ellipsoid.UnitSphere);
             camera.CenterPoint = new Vector3D(-119.533283, 37.74523, 0.00001 * 2700.0);
+            //camera.CenterPoint = new Vector3D(-75.5967666, 40.0388333, 0.00001 * 100.0);
             camera.ZoomRateRangeAdjustment = 0.0;
             camera.Azimuth = 0.0;
             camera.Elevation = Trig.ToRadians(30.0);
