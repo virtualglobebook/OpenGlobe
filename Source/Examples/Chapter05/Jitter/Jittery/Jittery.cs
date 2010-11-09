@@ -28,8 +28,8 @@ namespace OpenGlobe.Examples
             ///////////////////////////////////////////////////////////////////
 
             Mesh mesh = new Mesh();
-            VertexAttributeDoubleVector3 positionsAttribute = new VertexAttributeDoubleVector3("position", 7);
-            VertexAttributeRGB colorAttribute = new VertexAttributeRGB("color", 7);
+            VertexAttributeDoubleVector3 positionsAttribute = new VertexAttributeDoubleVector3("position", positions.Length);
+            VertexAttributeRGB colorAttribute = new VertexAttributeRGB("color", positions.Length);
             mesh.Attributes.Add(positionsAttribute);
             mesh.Attributes.Add(colorAttribute);
 

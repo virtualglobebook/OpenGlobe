@@ -32,9 +32,9 @@ namespace OpenGlobe.Examples
             ///////////////////////////////////////////////////////////////////
 
             Mesh mesh = new Mesh();
-            VertexAttributeFloatVector3 positionsHighAttribute = new VertexAttributeFloatVector3("positionHigh", 7);
-            VertexAttributeFloatVector3 positionsLowAttribute = new VertexAttributeFloatVector3("positionLow", 7);
-            VertexAttributeRGB colorAttribute = new VertexAttributeRGB("color", 7);
+            VertexAttributeFloatVector3 positionsHighAttribute = new VertexAttributeFloatVector3("positionHigh", positions.Length);
+            VertexAttributeFloatVector3 positionsLowAttribute = new VertexAttributeFloatVector3("positionLow", positions.Length);
+            VertexAttributeRGB colorAttribute = new VertexAttributeRGB("color", positions.Length);
             mesh.Attributes.Add(positionsHighAttribute);
             mesh.Attributes.Add(positionsLowAttribute);
             mesh.Attributes.Add(colorAttribute);

@@ -18,7 +18,7 @@ using OpenTK;
 namespace OpenGlobe.Examples
 {
     /// <summary>
-    /// The same as JitterFreeSceneGPURelativeToEye, except with a different 
+    /// The same as GPURelativeToEye, except with a different 
     /// implementation of DoubleToTwoFloats() and a different vertex shader
     /// based on emulated doubles from the DSFUN90 Fortran library.
     /// </summary>
@@ -37,9 +37,9 @@ namespace OpenGlobe.Examples
             ///////////////////////////////////////////////////////////////////
 
             Mesh mesh = new Mesh();
-            VertexAttributeFloatVector3 positionsHighAttribute = new VertexAttributeFloatVector3("positionHigh", 7);
-            VertexAttributeFloatVector3 positionsLowAttribute = new VertexAttributeFloatVector3("positionLow", 7);
-            VertexAttributeRGB colorAttribute = new VertexAttributeRGB("color", 7);
+            VertexAttributeFloatVector3 positionsHighAttribute = new VertexAttributeFloatVector3("positionHigh", positions.Length);
+            VertexAttributeFloatVector3 positionsLowAttribute = new VertexAttributeFloatVector3("positionLow", positions.Length);
+            VertexAttributeRGB colorAttribute = new VertexAttributeRGB("color", positions.Length);
             mesh.Attributes.Add(positionsHighAttribute);
             mesh.Attributes.Add(positionsLowAttribute);
             mesh.Attributes.Add(colorAttribute);

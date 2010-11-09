@@ -20,10 +20,11 @@ namespace OpenGlobe.Examples
     public enum JitterAlgorithm
     {
         Jittery,
-        JitterFreeSceneRelativeToCenter,
-        JitterFreeSceneCPURelativeToEye,
-        JitterFreeSceneGPURelativeToEye,
-        JitterFreeSceneGPURelativeToEyeDSFUN90,
+        RelativeToCenter,
+        CPURelativeToEye,
+        GPURelativeToEye,
+        GPURelativeToEyeDSFUN90,
+        GPURelativeToEyeLOD,
     }
 
     sealed class Jitter : IDisposable
@@ -67,14 +68,16 @@ namespace OpenGlobe.Examples
             {
                 case JitterAlgorithm.Jittery:
                     return "Relative to World [Jittery]";
-                case JitterAlgorithm.JitterFreeSceneRelativeToCenter:
+                case JitterAlgorithm.RelativeToCenter:
                     return "Realtive to Center";
-                case JitterAlgorithm.JitterFreeSceneCPURelativeToEye:
+                case JitterAlgorithm.CPURelativeToEye:
                     return "CPU Relative to Eye";
-                case JitterAlgorithm.JitterFreeSceneGPURelativeToEye:
+                case JitterAlgorithm.GPURelativeToEye:
                     return "GPU Relative To Eye";
-                case JitterAlgorithm.JitterFreeSceneGPURelativeToEyeDSFUN90:
+                case JitterAlgorithm.GPURelativeToEyeDSFUN90:
                     return "GPU Relative To Eye [DSFUN90]";
+                case JitterAlgorithm.GPURelativeToEyeLOD:
+                    return "GPU Relative To Eye [LOD]";
             }
 
             return string.Empty;
@@ -160,17 +163,20 @@ namespace OpenGlobe.Examples
                 case JitterAlgorithm.Jittery:
                     _algorithm = new JitteryScene(_window.Context, positions, colors);
                     break;
-                case JitterAlgorithm.JitterFreeSceneRelativeToCenter:
+                case JitterAlgorithm.RelativeToCenter:
                     _algorithm = new JitterFreeSceneRelativeToCenter(_window.Context, positions, colors);
                     break;
-                case JitterAlgorithm.JitterFreeSceneCPURelativeToEye:
+                case JitterAlgorithm.CPURelativeToEye:
                     _algorithm = new JitterFreeSceneCPURelativeToEye(_window.Context, positions, colors);
                     break;
-                case JitterAlgorithm.JitterFreeSceneGPURelativeToEye:
+                case JitterAlgorithm.GPURelativeToEye:
                     _algorithm = new JitterFreeSceneGPURelativeToEye(_window.Context, positions, colors);
                     break;
-                case JitterAlgorithm.JitterFreeSceneGPURelativeToEyeDSFUN90:
+                case JitterAlgorithm.GPURelativeToEyeDSFUN90:
                     _algorithm = new JitterFreeSceneGPURelativeToEyeDSFUN90(_window.Context, positions, colors);
+                    break;
+                case JitterAlgorithm.GPURelativeToEyeLOD:
+                    _algorithm = new SceneGPURelativeToEyeLOD(_window.Context, positions, colors);
                     break;
             }
         }
@@ -190,9 +196,9 @@ namespace OpenGlobe.Examples
 
                 if (_jitterAlgorithm < JitterAlgorithm.Jittery)
                 {
-                    _jitterAlgorithm = JitterAlgorithm.JitterFreeSceneGPURelativeToEyeDSFUN90;
+                    _jitterAlgorithm = JitterAlgorithm.GPURelativeToEyeLOD;
                 }
-                else if (_jitterAlgorithm > JitterAlgorithm.JitterFreeSceneGPURelativeToEyeDSFUN90)
+                else if (_jitterAlgorithm > JitterAlgorithm.GPURelativeToEyeLOD)
                 {
                     _jitterAlgorithm = JitterAlgorithm.Jittery;
                 }
