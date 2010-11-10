@@ -97,6 +97,7 @@
     <Compile Include="Vector2H.cs" />
     <Compile Include="Vector2I.cs" />
     <Compile Include="Vector2S.cs" />
+    <Compile Include="Vector3B.cs" />
     <Compile Include="Vector3D.cs" />
     <Compile Include="Vector3H.cs" />
     <Compile Include="Vector3I.cs" />

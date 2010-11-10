@@ -322,6 +322,16 @@ namespace OpenGlobe.Core
         }
 
         [Test]
+        public void ToVector3I()
+        {
+            Vector3D a = new Vector3D(1.0, 2.0, 3.0);
+            Vector3I sA = a.ToVector3I();
+            Assert.AreEqual(1, sA.X);
+            Assert.AreEqual(2, sA.Y);
+            Assert.AreEqual(3, sA.Z);
+        }
+
+        [Test]
         public void ToVector3H()
         {
             Vector3D a = new Vector3D(1.0, 2.0, 3.0);
@@ -329,6 +339,16 @@ namespace OpenGlobe.Core
             Assert.AreEqual((Half)1.0, sA.X, 1e-7);
             Assert.AreEqual((Half)2.0, sA.Y, 1e-7);
             Assert.AreEqual((Half)3.0, sA.Z, 1e-7);
+        }
+
+        [Test]
+        public void ToVector3B()
+        {
+            Vector3D a = new Vector3D(0.0, 1.0, 0.0);
+            Vector3B sA = a.ToVector3B();
+            Assert.IsFalse(sA.X);
+            Assert.IsTrue(sA.Y);
+            Assert.IsFalse(sA.Z);
         }
 
         [Test]

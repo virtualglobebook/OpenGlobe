@@ -225,7 +225,6 @@
     <Compile Include="Shaders\UniformBlockMatrixArrayMember.cs" />
     <Compile Include="Shaders\ShaderVertexAttribute.cs" />
     <Compile Include="ShaderVertexAttributeCollection.cs" />
-    <Compile Include="OpenTK\Vector3b.cs" />
     <Compile Include="OpenTK\Vector4b.cs" />
     <Compile Include="OpenTK\Matrix22.cs" />
     <Compile Include="OpenTK\Matrix23.cs" />

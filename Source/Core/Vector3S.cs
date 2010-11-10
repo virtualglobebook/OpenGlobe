@@ -255,6 +255,11 @@ namespace OpenGlobe.Core
             return new Vector3H(_x, _y, _z);
         }
 
+        public Vector3B ToVector3B()
+        {
+            return new Vector3B(Convert.ToBoolean(_x), Convert.ToBoolean(_y), Convert.ToBoolean(_z));
+        }
+
         private readonly float _x;
         private readonly float _y;
         private readonly float _z;

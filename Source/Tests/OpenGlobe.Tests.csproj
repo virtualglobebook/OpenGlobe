@@ -70,6 +70,7 @@
     <Compile Include="Core\Vector2STests.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Core\Vector3BTests.cs" />
     <Compile Include="Core\Vector3DTests.cs" />
     <Compile Include="Core\Vector3HTests.cs" />
     <Compile Include="Core\Vector3ITests.cs" />

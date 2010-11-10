@@ -164,6 +164,26 @@ namespace OpenGlobe.Core
         }
 
         [Test]
+        public void ToVector3I()
+        {
+            Vector3H a = new Vector3H(1.0, 2.0, 3.0);
+            Vector3I sA = a.ToVector3I();
+            Assert.AreEqual(1, sA.X);
+            Assert.AreEqual(2, sA.Y);
+            Assert.AreEqual(3, sA.Z);
+        }
+
+        [Test]
+        public void ToVector3B()
+        {
+            Vector3H a = new Vector3H(0, 1, 0);
+            Vector3B sA = a.ToVector3B();
+            Assert.IsFalse(sA.X);
+            Assert.IsTrue(sA.Y);
+            Assert.IsFalse(sA.Z);
+        }
+
+        [Test]
         public void XY()
         {
             Vector3H a = new Vector3H(1.0, 2.0, 3.0);

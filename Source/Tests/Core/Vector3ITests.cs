@@ -293,6 +293,16 @@ namespace OpenGlobe.Core
         }
 
         [Test]
+        public void ToVector3B()
+        {
+            Vector3I a = new Vector3I(0, 1, 0);
+            Vector3B sA = a.ToVector3B();
+            Assert.IsFalse(sA.X);
+            Assert.IsTrue(sA.Y);
+            Assert.IsFalse(sA.Z);
+        }
+
+        [Test]
         public void Cross()
         {
             Vector3I a = new Vector3I(1, 0, 0);
