@@ -19,6 +19,10 @@ uniform float u_pointSize;
 
 void main()                     
 {
+    //
+    // Emulated double precision subtraction ported from dssub() in DSFUN90.
+    // http://crd.lbl.gov/~dhbailey/mpdist/
+    //
 	vec3 t1 = positionLow - u_cameraEyeLow;
 	vec3 e = t1 - positionLow;
 	vec3 t2 = ((-u_cameraEyeLow - e) + (positionLow - (t1 - e))) + positionHigh - u_cameraEyeHigh;
