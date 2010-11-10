@@ -126,6 +126,8 @@ namespace OpenGlobe.Scene.Terrain
 
             float unblendedRegionSize = (float)(_clipmapSegments / 2 - _clipmapPosts / 10.0 - 1);
             _unblendedRegionSize.Value = new Vector2S(unblendedRegionSize, unblendedRegionSize);
+
+            HeightExaggeration = 0.00001f;
         }
 
         public bool Wireframe
@@ -134,9 +136,15 @@ namespace OpenGlobe.Scene.Terrain
             set { _wireframe = value; }
         }
 
+        public float HeightExaggeration
+        {
+            get { return _heightExaggeration.Value; }
+            set { _heightExaggeration.Value = value; }
+        }
+
         public void PreRender(Context context, SceneState sceneState)
         {
-            Vector3D clipmapCenter = sceneState.Camera.Eye;
+            Vector3D clipmapCenter = sceneState.Camera.Target;
             //Geodetic2D center = Ellipsoid.ScaledWgs84.ToGeodetic2D(sceneState.Camera.Target / Ellipsoid.Wgs84.MaximumRadius);
             Geodetic2D center = new Geodetic2D(clipmapCenter.X, clipmapCenter.Y);
             double centerLongitude = center.Longitude; //Trig.ToDegrees(center.Longitude);
@@ -223,13 +231,13 @@ namespace OpenGlobe.Scene.Terrain
             int imageryEastIndex = (int)level.CurrentOrigin.ImageryWest + level.ImageryWidth - 1;
             int imageryNorthIndex = (int)level.CurrentOrigin.ImagerySouth + level.ImageryHeight - 1;
 
-            byte[] imagery = level.Imagery.GetImage((int)level.CurrentOrigin.ImageryWest, (int)level.CurrentOrigin.ImagerySouth, imageryEastIndex, imageryNorthIndex);
+            /*byte[] imagery = level.Imagery.GetImage((int)level.CurrentOrigin.ImageryWest, (int)level.CurrentOrigin.ImagerySouth, imageryEastIndex, imageryNorthIndex);
 
             using (WritePixelBuffer imageryPixelBuffer = Device.CreateWritePixelBuffer(PixelBufferHint.Stream, imagery.Length))
             {
                 imageryPixelBuffer.CopyFromSystemMemory(imagery);
                 level.ImageryTexture.CopyFromBuffer(imageryPixelBuffer, ImageFormat.BlueGreenRed, ImageDatatype.UnsignedByte);
-            }
+            }*/
         }
 
         public void Render(Context context, SceneState sceneState)
@@ -243,7 +251,7 @@ namespace OpenGlobe.Scene.Terrain
                 _renderState.RasterizationMode = RasterizationMode.Fill;
             }
 
-            Vector3D clipmapCenter = sceneState.Camera.Eye;
+            Vector3D clipmapCenter = sceneState.Camera.Target;
 
             // Scale the camera eye and target positions to render to the scaled ellipsoid instead of the
             // true WGS84 ellipsoid, without affecting the view.  This avoids some precision problems.
@@ -262,9 +270,7 @@ namespace OpenGlobe.Scene.Terrain
             //sceneState.Camera.PerspectiveNearPlaneDistance /= Ellipsoid.Wgs84.MaximumRadius;
             //sceneState.Camera.PerspectiveFarPlaneDistance /= Ellipsoid.Wgs84.MaximumRadius;
 
-            double heightExaggeration = 0.00001;
             _levelZeroWorldScaleFactor.Value = new Vector2S((float)_clipmapLevels[0].Terrain.PostDeltaLongitude, (float)_clipmapLevels[0].Terrain.PostDeltaLatitude);
-            _heightExaggeration.Value = (float)heightExaggeration;
 
             int maxLevel = _clipmapLevels.Length - 1;
 
@@ -276,14 +282,11 @@ namespace OpenGlobe.Scene.Terrain
 
             while (maxLevel > 0)
             {
-                double terrainHeight = heightSample[0] * heightExaggeration; // TODO: get the real terrain height
+                double terrainHeight = heightSample[0] * _heightExaggeration.Value; // TODO: get the real terrain height
                 double viewerHeight = clipmapCenter.Z;
                 double h = viewerHeight - terrainHeight;
                 double gridExtent = _clipmapLevels[maxLevel].Terrain.PostDeltaLongitude * _clipmapPosts;
-                if (h > 0.4 * gridExtent)
-                {
-                }
-                else
+                if (h <= 0.4 * gridExtent)
                 {
                     break;
                 }

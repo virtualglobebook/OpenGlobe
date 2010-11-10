@@ -55,14 +55,14 @@ namespace OpenGlobe.Tests.Scene.Terrain
                     ++levels;
                 }
 
-                for (int level = 0; level < levels; ++level)
+                for (int level = 0; level <= levels; ++level)
                 {
-                    string levelPath = Path.Combine(outputPath, level.ToString());
-                    int levelPower = 1 >> level;
+                    string levelPath = Path.Combine(outputPath, (levels - level).ToString());
+                    int levelPower = 1 << level;
 
-                    for (int yTile = 0; yTile < yTiles; ++yTile)
+                    for (int yTile = 0; yTile < yTiles / levelPower; ++yTile)
                     {
-                        for (int xTile = 0; xTile < xTiles; ++xTile)
+                        for (int xTile = 0; xTile < xTiles / levelPower; ++xTile)
                         {
                             string tilePath = Path.Combine(levelPath, yTile.ToString());
                             Directory.CreateDirectory(tilePath);
@@ -70,20 +70,41 @@ namespace OpenGlobe.Tests.Scene.Terrain
                             using (FileStream tileStream = new FileStream(tilePath, FileMode.Create))
                             {
                                 byte[] tileData = new byte[tileXPosts * tileYPosts * sizeof(short)];
-                                byte[] columnData = new byte[tileYPosts * levelPower * sizeof(short)];
+                                byte[] columnData = new byte[(tileYSize * levelPower + 1) * sizeof(short)];
                                 for (int column = 0; column < tileXPosts; ++column)
                                 {
-                                    int offset = 256 + (xTile * tileXSize + column) * levelPower * rows * sizeof(short);
+                                    int offset = 256 + ((xTile * tileXSize + column) * levelPower * rows + yTile * tileYSize * levelPower) * sizeof(short);
                                     inputStream.Seek(offset, SeekOrigin.Begin);
-                                    ReallyRead(inputStream, columnData, 0, tileData.Length);
+                                    ReallyRead(inputStream, columnData, 0, columnData.Length);
 
-                                    for (int i = 0; i < columnData.Length; ++i)
+                                    for (int i = 0; i < tileYPosts; ++i)
                                     {
-                                        tileData[column + i * tileXPosts] = columnData[i];
+                                        tileData[column * 2 + i * 2 * tileXPosts] = columnData[i * 2 * levelPower];
+                                        tileData[column * 2 + i * 2 * tileXPosts + 1] = columnData[i * 2 * levelPower + 1];
                                     }
                                 }
 
                                 tileStream.Write(tileData, 0, tileData.Length);
+                                
+                                tilePath = Path.ChangeExtension(tilePath, ".png");
+
+                                Bitmap bmp = new Bitmap(tileXPosts, tileYPosts, PixelFormat.Format24bppRgb);
+                                for (int j = 0; j < tileYPosts; ++j)
+                                {
+                                    for (int i = 0; i < tileXPosts; ++i)
+                                    {
+                                        int postIndex = j * tileXPosts + i;
+                                        short height = BitConverter.ToInt16(tileData, postIndex * 2);
+                                        height /= 200;
+                                        if (height > 0)
+                                            bmp.SetPixel(i, j, Color.FromArgb(0, height, 0));
+                                        else if (height >= -255)
+                                            bmp.SetPixel(i, j, Color.FromArgb(0, 0, -height));
+                                        else
+                                            bmp.SetPixel(i, j, Color.FromArgb(255, 0, 0));
+                                    }
+                                }
+                                bmp.Save(tilePath);
                             }
                         }
                     }
@@ -96,7 +117,10 @@ namespace OpenGlobe.Tests.Scene.Terrain
             int read = 0;
             while (read < length)
             {
-                read += stream.Read(buffer, read, length - read);
+                int justRead = stream.Read(buffer, read, length - read);
+                if (justRead == 0)
+                    throw new InvalidDataException("Unexpected end of file found.");
+                read += justRead;
             }
         }
     }
