@@ -8,8 +8,6 @@
 #endregion
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Runtime.InteropServices;
 using System.Globalization;
 
@@ -237,6 +235,11 @@ namespace OpenGlobe.Core
         public Vector4H ToVector4H()
         {
             return new Vector4H(_x, _y, _z, _w);
+        }
+
+        public Vector4B ToVector4B()
+        {
+            return new Vector4B(Convert.ToBoolean(_x), Convert.ToBoolean(_y), Convert.ToBoolean(_z), Convert.ToBoolean(_w));
         }
 
         private readonly int _x;

@@ -259,9 +259,19 @@ namespace OpenGlobe.Core
             return new Vector4D(_x, _y, _z, _w);
         }
 
+        public Vector4I ToVector4I()
+        {
+            return new Vector4I((int)_x, (int)_y, (int)_z, (int)_w);
+        }
+
         public Vector4H ToVector4H()
         {
             return new Vector4H(_x, _y, _z, _w);
+        }
+
+        public Vector4B ToVector4B()
+        {
+            return new Vector4B(Convert.ToBoolean(_x), Convert.ToBoolean(_y), Convert.ToBoolean(_z), Convert.ToBoolean(_w));
         }
 
         private readonly float _x;

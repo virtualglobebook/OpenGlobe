@@ -102,6 +102,7 @@
     <Compile Include="Vector3H.cs" />
     <Compile Include="Vector3I.cs" />
     <Compile Include="Vector3S.cs" />
+    <Compile Include="Vector4B.cs" />
     <Compile Include="Vector4D.cs" />
     <Compile Include="Vector4H.cs" />
     <Compile Include="Vector4I.cs" />

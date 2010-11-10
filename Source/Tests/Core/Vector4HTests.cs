@@ -161,7 +161,7 @@ namespace OpenGlobe.Core
 #endif
 
         [Test]
-        public void ToVector3S()
+        public void ToVector4S()
         {
             Vector4H a = new Vector4H(1.0, 2.0, 3.0, 4.0);
             Vector4S sA = a.ToVector4S();
@@ -172,7 +172,7 @@ namespace OpenGlobe.Core
         }
 
         [Test]
-        public void ToVector3D()
+        public void ToVector4D()
         {
             Vector4H a = new Vector4H(1.0, 2.0, 3.0, 4.0);
             Vector4D sA = a.ToVector4D();
@@ -180,6 +180,28 @@ namespace OpenGlobe.Core
             Assert.AreEqual(2.0, sA.Y, 1e-7);
             Assert.AreEqual(3.0, sA.Z, 1e-7);
             Assert.AreEqual(4.0, sA.W, 1e-7);
+        }
+
+        [Test]
+        public void ToVector4I()
+        {
+            Vector4H a = new Vector4H(1.0, 2.0, 3.0, 4.0);
+            Vector4I sA = a.ToVector4I();
+            Assert.AreEqual(1, sA.X);
+            Assert.AreEqual(2, sA.Y);
+            Assert.AreEqual(3, sA.Z);
+            Assert.AreEqual(4, sA.W);
+        }
+
+        [Test]
+        public void ToVector4B()
+        {
+            Vector4H a = new Vector4H(0.0, 1.0, 1.0, 0.0);
+            Vector4B sA = a.ToVector4B();
+            Assert.IsFalse(sA.X);
+            Assert.IsTrue(sA.Y);
+            Assert.IsTrue(sA.Z);
+            Assert.IsFalse(sA.W);
         }
 
         [Test]

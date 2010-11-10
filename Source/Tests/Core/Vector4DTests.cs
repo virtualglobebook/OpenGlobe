@@ -365,6 +365,17 @@ namespace OpenGlobe.Core
         }
 
         [Test]
+        public void ToVector4I()
+        {
+            Vector4D a = new Vector4D(1.0, 2.0, 3.0, 4.0);
+            Vector4I sA = a.ToVector4I();
+            Assert.AreEqual(1, sA.X);
+            Assert.AreEqual(2, sA.Y);
+            Assert.AreEqual(3, sA.Z);
+            Assert.AreEqual(4, sA.W);
+        }
+
+        [Test]
         public void ToVector4H()
         {
             Vector4D a = new Vector4D(1.0, 2.0, 3.0, 4.0);
@@ -373,6 +384,17 @@ namespace OpenGlobe.Core
             Assert.AreEqual((Half)2.0, sA.Y, 1e-7);
             Assert.AreEqual((Half)3.0, sA.Z, 1e-7);
             Assert.AreEqual((Half)4.0, sA.W, 1e-7);
+        }
+
+        [Test]
+        public void ToVector4B()
+        {
+            Vector4D a = new Vector4D(0.0, 1.0, 1.0, 0.0);
+            Vector4B sA = a.ToVector4B();
+            Assert.IsFalse(sA.X);
+            Assert.IsTrue(sA.Y);
+            Assert.IsTrue(sA.Z);
+            Assert.IsFalse(sA.W);
         }
 
 #if !CSToJava

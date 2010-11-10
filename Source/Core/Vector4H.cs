@@ -157,6 +157,16 @@ namespace OpenGlobe.Core
             return new Vector4S(_x, _y, _z, _w);
         }
 
+        public Vector4I ToVector4I()
+        {
+            return new Vector4I((int)_x.ToDouble(), (int)_y.ToDouble(), (int)_z.ToDouble(), (int)_w.ToDouble());
+        }
+
+        public Vector4B ToVector4B()
+        {
+            return new Vector4B(Convert.ToBoolean(_x), Convert.ToBoolean(_y), Convert.ToBoolean(_z), Convert.ToBoolean(_w));
+        }
+
         private readonly Half _x;
         private readonly Half _y;
         private readonly Half _z;
