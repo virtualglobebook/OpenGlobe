@@ -114,18 +114,18 @@ namespace OpenGlobe.Examples
                 _cameraEyeHigh.Value = eyeHigh;
                 _cameraEyeLow.Value = eyeLow;
 
-                Matrix4d m = sceneState.ModelMatrix;
-                m.M41 += eye.X;
-                m.M42 += eye.Y;
-                m.M43 += eye.Z;
+                Matrix4d mv = sceneState.ModelViewMatrix;
+                mv.M41 = 0.0;
+                mv.M42 = 0.0;
+                mv.M43 = 0.0;
 
                 //TODO:  A transpose is wrong somewhere.  The above should be this:
-                //m.M14 += eye.X;
-                //m.M24 += eye.Y;
-                //m.M34 += eye.Z;
+                //mv.M14 = 0;
+                //mv.M24 = 0;
+                //mv.M34 = 0;
 
                 _modelViewPerspectiveMatrixRelativeToEye.Value = Conversion.ToMatrix4(
-                    m * sceneState.ViewMatrix * sceneState.PerspectiveMatrix);
+                    mv * sceneState.PerspectiveMatrix);
             }
 
             _pointSize.Value = (float)(8.0 * sceneState.HighResolutionSnapScale);

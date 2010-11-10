@@ -70,18 +70,14 @@ namespace OpenGlobe.Examples
             {
                 _eye = eye;
 
-                Matrix4d m = sceneState.ModelMatrix;
-                m.M41 += _center.X;
-                m.M42 += _center.Y;
-                m.M43 += _center.Z;
-
-                //TODO:  A transpose is wrong somewhere.  The above should be this:
-                //m.M14 += _center.X;
-                //m.M24 += _center.Y;
-                //m.M34 += _center.Z;
+                Matrix4d mv = sceneState.ModelViewMatrix;
+                Vector4d centerEye = Vector4d.Transform(new Vector4d(_center.X, _center.Y, _center.Z, 1.0), mv);
+                mv.M41 = centerEye.X;
+                mv.M42 = centerEye.Y;
+                mv.M43 = centerEye.Z;
 
                 _modelViewPerspectiveMatrixRelativeToCenter.Value = Conversion.ToMatrix4(
-                    m * sceneState.ViewMatrix * sceneState.PerspectiveMatrix);
+                    mv * sceneState.PerspectiveMatrix);
             }
 
             _pointSize.Value = (float)(8.0 * sceneState.HighResolutionSnapScale);
