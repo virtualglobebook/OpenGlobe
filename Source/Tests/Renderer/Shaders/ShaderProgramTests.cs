@@ -8,8 +8,8 @@
 #endregion
 
 using NUnit.Framework;
-using OpenTK;
 using OpenGlobe.Core;
+using OpenTK;
 
 namespace OpenGlobe.Renderer
 {

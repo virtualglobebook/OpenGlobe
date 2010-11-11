@@ -14,7 +14,6 @@ using System.Drawing;
 using OpenGlobe.Core;
 using OpenGlobe.Renderer;
 using OpenGlobe.Terrain;
-using OpenTK;
 
 namespace OpenGlobe.Scene.Terrain
 {

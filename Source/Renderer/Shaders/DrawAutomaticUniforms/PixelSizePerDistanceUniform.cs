@@ -8,7 +8,6 @@
 #endregion
 
 using System;
-using OpenTK;
 
 namespace OpenGlobe.Renderer
 {
