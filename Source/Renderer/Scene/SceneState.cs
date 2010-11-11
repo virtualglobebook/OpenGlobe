@@ -145,8 +145,7 @@ namespace OpenGlobe.Renderer
             get { return ModelViewMatrix * OrthographicMatrix; }
         }
 
-        // TODO:  Should return matrix in double precision
-        public Matrix42 ModelZToClipCoordinates
+        public Matrix42<double> ModelZToClipCoordinates
         {
             get
             {
@@ -154,9 +153,9 @@ namespace OpenGlobe.Renderer
                 // Bottom two rows of model-view-projection matrix
                 //
                 Matrix4d m = ModelViewPerspectiveMatrix;
-                return new Matrix42(
-                    (float)m.M13, (float)m.M23, (float)m.M33, (float)m.M43,
-                    (float)m.M14, (float)m.M24, (float)m.M34, (float)m.M44);
+                return new Matrix42<double>(
+                    m.M13, m.M23, m.M33, m.M43,
+                    m.M14, m.M24, m.M34, m.M44);
             }
         }
 

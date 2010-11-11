@@ -56,6 +56,8 @@
     <Compile Include="Core\Geometry\EllipsoidTests.cs" />
     <Compile Include="Core\Geometry\GeometryTests.cs" />
     <Compile Include="Core\HalfTests.cs" />
+    <Compile Include="Core\Matrices\Matrix24Tests.cs" />
+    <Compile Include="Core\Matrices\Matrix42Tests.cs" />
     <Compile Include="Core\MessageQueueTests.cs" />
     <Compile Include="Core\Polygons\EarClippingOnEllipsoidTests.cs" />
     <Compile Include="Core\Polygons\EarClippingTests.cs" />
@@ -91,6 +93,7 @@
     <Compile Include="Renderer\MultiThreading\VertexBufferMultiThreadingTests.cs" />
     <Compile Include="Renderer\Scene\CameraTest.cs" />
     <Compile Include="Renderer\Shaders\ShaderCacheTests.cs" />
+    <Compile Include="Renderer\Shaders\UniformTests.cs" />
     <Compile Include="Renderer\VertexArray\VertexArrayTests.cs" />
     <Compile Include="Renderer\Buffers\BufferObjectTests.cs" />
     <Compile Include="Renderer\FrameBuffer\FrameBufferTests.cs" />

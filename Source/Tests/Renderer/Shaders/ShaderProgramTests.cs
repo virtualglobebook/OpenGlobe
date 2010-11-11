@@ -94,10 +94,8 @@ namespace OpenGlobe.Renderer
                   uniform mat3   exampleMat3;
                   uniform mat2   exampleMat2;
                   uniform mat2x3 exampleMat23;
-                  uniform mat2x4 exampleMat24;
                   uniform mat3x2 exampleMat32;
                   uniform mat3x4 exampleMat34;
-                  uniform mat4x2 exampleMat42;
                   uniform mat4x3 exampleMat43;
 
                   uniform sampler2D exampleSampler2D;
@@ -126,10 +124,8 @@ namespace OpenGlobe.Renderer
                       red += exampleMat3[0].x;
                       red += exampleMat2[0].x;
                       red += exampleMat23[0].x;
-                      red += exampleMat24[0].x;
                       red += exampleMat32[0].x;
                       red += exampleMat34[0].x;
-                      red += exampleMat42[0].x;
                       red += exampleMat43[0].x;
                       red += texture(exampleSampler2D, vec2(0, 0)).r;
                       red += texture(exampleSampler2DRect, vec2(0, 0)).r;
@@ -143,7 +139,7 @@ namespace OpenGlobe.Renderer
             {
                 Assert.IsFalse(sp.Log.Contains("warning"));
                 Assert.IsEmpty(sp.UniformBlocks);
-                Assert.AreEqual(24, sp.Uniforms.Count);
+                Assert.AreEqual(22, sp.Uniforms.Count);
 
                 Uniform<float> exampleFloat = (Uniform<float>)sp.Uniforms["exampleFloat"];
                 Assert.AreEqual("exampleFloat", exampleFloat.Name);
@@ -302,18 +298,6 @@ namespace OpenGlobe.Renderer
                 exampleMat23.Value = m23;
                 Assert.AreEqual(m23, exampleMat23.Value);
 
-                Matrix24 m24 = new Matrix24(
-                    new Vector2(0, 0),
-                    new Vector2(0, 0),
-                    new Vector2(0.25f, 0),
-                    new Vector2(0, 0));
-                Uniform<Matrix24> exampleMat24 = (Uniform<Matrix24>)sp.Uniforms["exampleMat24"];
-                Assert.AreEqual("exampleMat24", exampleMat24.Name);
-                Assert.AreEqual(UniformType.FloatMatrix24, exampleMat24.Datatype);
-                Assert.AreEqual(new Matrix24(), exampleMat24.Value);
-                exampleMat24.Value = m24;
-                Assert.AreEqual(m24, exampleMat24.Value);
-
                 Matrix32 m32 = new Matrix32(
                     new Vector3(0, 0, 0),
                     new Vector3(0, 0.25f, 0));
@@ -335,16 +319,6 @@ namespace OpenGlobe.Renderer
                 Assert.AreEqual(new Matrix34(), exampleMat34.Value);
                 exampleMat34.Value = m34;
                 Assert.AreEqual(m34, exampleMat34.Value);
-
-                Matrix42 m42 = new Matrix42(
-                    new Vector4(0, 0, 0, 0.25f),
-                    new Vector4(0, 0, 0, 0));
-                Uniform<Matrix42> exampleMat42 = (Uniform<Matrix42>)sp.Uniforms["exampleMat42"];
-                Assert.AreEqual("exampleMat42", exampleMat42.Name);
-                Assert.AreEqual(UniformType.FloatMatrix42, exampleMat42.Datatype);
-                Assert.AreEqual(new Matrix42(), exampleMat42.Value);
-                exampleMat42.Value = m42;
-                Assert.AreEqual(m42, exampleMat42.Value);
 
                 Matrix43 m43 = new Matrix43(
                     new Vector4(0, 0, 0, 0),

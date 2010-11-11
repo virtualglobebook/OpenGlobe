@@ -68,6 +68,8 @@
     <Compile Include="Half.cs" />
     <Compile Include="Imaging\BitmapAlgorithms.cs" />
     <Compile Include="Interval.cs" />
+    <Compile Include="Matrices\Matrix24.cs" />
+    <Compile Include="Matrices\Matrix42.cs" />
     <Compile Include="MessageQueue.cs" />
     <Compile Include="MessageQueueEventArgs.cs" />
     <Compile Include="Polygons\EarClipping.cs" />

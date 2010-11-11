@@ -25,52 +25,42 @@ namespace OpenGlobe.Renderer
         [Test]
         public void ClearColorDepth()
         {
-            GraphicsWindow window = Device.CreateWindow(1, 1);
-            FrameBuffer frameBuffer = TestUtility.CreateFrameBuffer(window.Context);
+            using (GraphicsWindow window = Device.CreateWindow(1, 1))
+            using (FrameBuffer frameBuffer = TestUtility.CreateFrameBuffer(window.Context))
+            using (Texture2D depthTexture = Device.CreateTexture2D(new Texture2DDescription(1, 1, TextureFormat.Depth32f, false)))
+            {
+                frameBuffer.DepthAttachment = depthTexture;
 
-            Texture2DDescription depthDescription = new Texture2DDescription(1, 1, TextureFormat.Depth32f, false);
-            Texture2D depthTexture = Device.CreateTexture2D(depthDescription);
-            frameBuffer.DepthAttachment = depthTexture;
+                window.Context.FrameBuffer = frameBuffer;
+                window.Context.Clear(new ClearState() { Buffers = ClearBuffers.All, Color = Color.Red, Depth = 0.5f });
+                TestUtility.ValidateColor(frameBuffer.ColorAttachments[0], 255, 0, 0);
+                ValidateDepth(frameBuffer.DepthAttachment, 0.5f);
 
-            window.Context.FrameBuffer = frameBuffer;
-            window.Context.Clear(new ClearState() { Buffers = ClearBuffers.All, Color = Color.Red, Depth = 0.5f });
-            TestUtility.ValidateColor(frameBuffer.ColorAttachments[0], 255, 0, 0);
-            ValidateDepth(frameBuffer.DepthAttachment, 0.5f);
+                //
+                // Scissor out window and verify clear doesn't modify contents
+                //
+                ScissorTest scissorTest = new ScissorTest();
+                scissorTest.Enabled = true;
+                scissorTest.Rectangle = new Rectangle(0, 0, 0, 0);
 
-            //
-            // Scissor out window and verify clear doesn't modify contents
-            //
-            ScissorTest scissorTest = new ScissorTest();
-            scissorTest.Enabled = true;
-            scissorTest.Rectangle = new Rectangle(0, 0, 0, 0);
-
-            window.Context.Clear(new ClearState() { ScissorTest = scissorTest, Buffers = ClearBuffers.All, Color = Color.Blue, Depth = 1 });
-            TestUtility.ValidateColor(frameBuffer.ColorAttachments[0], 255, 0, 0);
-            ValidateDepth(frameBuffer.DepthAttachment, 0.5f);
-
-            depthTexture.Dispose();
-            frameBuffer.Dispose();
-            window.Dispose();
+                window.Context.Clear(new ClearState() { ScissorTest = scissorTest, Buffers = ClearBuffers.All, Color = Color.Blue, Depth = 1 });
+                TestUtility.ValidateColor(frameBuffer.ColorAttachments[0], 255, 0, 0);
+                ValidateDepth(frameBuffer.DepthAttachment, 0.5f);
+            }
         }
 
         [Test]
         public void RenderPoint()
         {
-            GraphicsWindow window = Device.CreateWindow(1, 1);
-            FrameBuffer frameBuffer = TestUtility.CreateFrameBuffer(window.Context);
-
-            ShaderProgram sp = Device.CreateShaderProgram(ShaderSources.PassThroughVertexShader(), ShaderSources.PassThroughFragmentShader());
-            VertexArray va = TestUtility.CreateVertexArray(window.Context, sp.VertexAttributes["position"].Location);
-
-            window.Context.FrameBuffer = frameBuffer;
-            window.Context.Draw(PrimitiveType.Points, 0, 1, new DrawState(TestUtility.CreateRenderStateWithoutDepthTest(), sp, va), new SceneState());
-
-            TestUtility.ValidateColor(frameBuffer.ColorAttachments[0], 255, 0, 0);
-
-            va.Dispose();
-            sp.Dispose();
-            frameBuffer.Dispose();
-            window.Dispose();
+            using (GraphicsWindow window = Device.CreateWindow(1, 1))
+            using (FrameBuffer frameBuffer = TestUtility.CreateFrameBuffer(window.Context))
+            using (ShaderProgram sp = Device.CreateShaderProgram(ShaderSources.PassThroughVertexShader(), ShaderSources.PassThroughFragmentShader()))
+            using (VertexArray va = TestUtility.CreateVertexArray(window.Context, sp.VertexAttributes["position"].Location))
+            {
+                window.Context.FrameBuffer = frameBuffer;
+                window.Context.Draw(PrimitiveType.Points, 0, 1, new DrawState(TestUtility.CreateRenderStateWithoutDepthTest(), sp, va), new SceneState());
+                TestUtility.ValidateColor(frameBuffer.ColorAttachments[0], 255, 0, 0);
+            }
         }
 
         [Test]
@@ -131,9 +121,6 @@ namespace OpenGlobe.Renderer
         [Test]
         public void RenderTexturedPoint()
         {
-            GraphicsWindow window = Device.CreateWindow(1, 1);
-            FrameBuffer frameBuffer = TestUtility.CreateFrameBuffer(window.Context);
-
             string fs =
                 @"#version 330
                  
@@ -145,30 +132,22 @@ namespace OpenGlobe.Renderer
                       FragColor = texture(textureUnit, vec2(0, 0));
                   }";
 
-            ShaderProgram sp = Device.CreateShaderProgram(ShaderSources.PassThroughVertexShader(), fs);
+            using (GraphicsWindow window = Device.CreateWindow(1, 1))
+            using (FrameBuffer frameBuffer = TestUtility.CreateFrameBuffer(window.Context))
+            using (ShaderProgram sp = Device.CreateShaderProgram(ShaderSources.PassThroughVertexShader(), fs))
+            using (Texture2D texture = TestUtility.CreateTexture(new BlittableRGBA(Color.FromArgb(0, 255, 0, 0))))
+            using (VertexArray va = TestUtility.CreateVertexArray(window.Context, sp.VertexAttributes["position"].Location))
+            {
+                Uniform<int> textureUniform = (Uniform<int>)sp.Uniforms["textureUnit"];
+                textureUniform.Value = 0;
 
-            Uniform<int> textureUniform = (Uniform<int>)sp.Uniforms["textureUnit"];
-            textureUniform.Value = 0;
+                window.Context.TextureUnits[0].Texture = texture;
+                window.Context.TextureUnits[0].TextureSampler = Device.TextureSamplers.NearestClamp;
+                window.Context.FrameBuffer = frameBuffer;
+                window.Context.Draw(PrimitiveType.Points, 0, 1, new DrawState(TestUtility.CreateRenderStateWithoutDepthTest(), sp, va), new SceneState());
 
-            ///////////////////////////////////////////////////////////////////
-
-            Texture2D texture = TestUtility.CreateTexture(new BlittableRGBA(Color.FromArgb(0, 255, 0, 0)));
-            VertexArray va = TestUtility.CreateVertexArray(window.Context, sp.VertexAttributes["position"].Location);
-
-            ///////////////////////////////////////////////////////////////////
-
-            window.Context.TextureUnits[0].Texture = texture;
-            window.Context.TextureUnits[0].TextureSampler = Device.TextureSamplers.NearestClamp;
-            window.Context.FrameBuffer = frameBuffer;
-            window.Context.Draw(PrimitiveType.Points, 0, 1, new DrawState(TestUtility.CreateRenderStateWithoutDepthTest(), sp, va), new SceneState());
-
-            TestUtility.ValidateColor(frameBuffer.ColorAttachments[0], 255, 0, 0);
-
-            va.Dispose();
-            texture.Dispose();
-            sp.Dispose();
-            frameBuffer.Dispose();
-            window.Dispose();
+                TestUtility.ValidateColor(frameBuffer.ColorAttachments[0], 255, 0, 0);
+            }
         }
 
         [Test]
@@ -213,34 +192,22 @@ namespace OpenGlobe.Renderer
         [Test]
         public void RenderMultitexturedPoint()
         {
-            GraphicsWindow window = Device.CreateWindow(1, 1);
-            FrameBuffer frameBuffer = TestUtility.CreateFrameBuffer(window.Context);
+            using (GraphicsWindow window = Device.CreateWindow(1, 1))
+            using (FrameBuffer frameBuffer = TestUtility.CreateFrameBuffer(window.Context))
+            using (ShaderProgram sp = Device.CreateShaderProgram(ShaderSources.PassThroughVertexShader(), ShaderSources.MultitextureFragmentShader()))
+            using (Texture2D texture0 = TestUtility.CreateTexture(new BlittableRGBA(Color.FromArgb(0, 255, 0, 0))))
+            using (Texture2D texture1 = TestUtility.CreateTexture(new BlittableRGBA(Color.FromArgb(0, 0, 255, 0))))
+            using (VertexArray va = TestUtility.CreateVertexArray(window.Context, sp.VertexAttributes["position"].Location))
+            {
+                window.Context.TextureUnits[0].Texture = texture0;
+                window.Context.TextureUnits[0].TextureSampler = Device.TextureSamplers.NearestClamp;
+                window.Context.TextureUnits[1].Texture = texture1;
+                window.Context.TextureUnits[1].TextureSampler = Device.TextureSamplers.NearestClamp;
+                window.Context.FrameBuffer = frameBuffer;
+                window.Context.Draw(PrimitiveType.Points, 0, 1, new DrawState(TestUtility.CreateRenderStateWithoutDepthTest(), sp, va), new SceneState());
 
-            ShaderProgram sp = Device.CreateShaderProgram(ShaderSources.PassThroughVertexShader(), ShaderSources.MultitextureFragmentShader());
-
-            ///////////////////////////////////////////////////////////////////
-
-            Texture2D texture0 = TestUtility.CreateTexture(new BlittableRGBA(Color.FromArgb(0, 255, 0, 0)));
-            Texture2D texture1 = TestUtility.CreateTexture(new BlittableRGBA(Color.FromArgb(0, 0, 255, 0)));
-            VertexArray va = TestUtility.CreateVertexArray(window.Context, sp.VertexAttributes["position"].Location);
-
-            ///////////////////////////////////////////////////////////////////
-
-            window.Context.TextureUnits[0].Texture = texture0;
-            window.Context.TextureUnits[0].TextureSampler = Device.TextureSamplers.NearestClamp;
-            window.Context.TextureUnits[1].Texture = texture1;
-            window.Context.TextureUnits[1].TextureSampler = Device.TextureSamplers.NearestClamp;
-            window.Context.FrameBuffer = frameBuffer;
-            window.Context.Draw(PrimitiveType.Points, 0, 1, new DrawState(TestUtility.CreateRenderStateWithoutDepthTest(), sp, va), new SceneState());
-
-            TestUtility.ValidateColor(frameBuffer.ColorAttachments[0], 255, 255, 0);
-
-            va.Dispose();
-            texture1.Dispose();
-            texture0.Dispose();
-            sp.Dispose();
-            frameBuffer.Dispose();
-            window.Dispose();
+                TestUtility.ValidateColor(frameBuffer.ColorAttachments[0], 255, 255, 0);
+            }
         }
 
         /// <summary>
@@ -249,40 +216,31 @@ namespace OpenGlobe.Renderer
         [Test]
         public void RenderPointWithStencil()
         {
-            GraphicsWindow window = Device.CreateWindow(1, 1);
-            FrameBuffer frameBuffer = TestUtility.CreateFrameBuffer(window.Context);
+            using (GraphicsWindow window = Device.CreateWindow(1, 1))
+            using (FrameBuffer frameBuffer = TestUtility.CreateFrameBuffer(window.Context))
+            using (Texture2D depthStencilTexture = Device.CreateTexture2D(new Texture2DDescription(1, 1, TextureFormat.Depth24Stencil8, false)))
+            using (ShaderProgram sp = Device.CreateShaderProgram(ShaderSources.PassThroughVertexShader(), ShaderSources.PassThroughFragmentShader()))
+            using (VertexArray va = TestUtility.CreateVertexArray(window.Context, sp.VertexAttributes["position"].Location))
+            {
+                frameBuffer.DepthStencilAttachment = depthStencilTexture;
 
-            Texture2DDescription depthStencilDescription = new Texture2DDescription(1, 1, TextureFormat.Depth24Stencil8, false);
-            Texture2D depthStencilTexture = Device.CreateTexture2D(depthStencilDescription);
-            frameBuffer.DepthStencilAttachment = depthStencilTexture;
+                StencilTest stencilTest = new StencilTest();
+                stencilTest.Enabled = true;
+                stencilTest.FrontFace.DepthFailStencilPassOperation = StencilOperation.Replace;
+                stencilTest.FrontFace.DepthPassStencilPassOperation = StencilOperation.Replace;
+                stencilTest.FrontFace.StencilFailOperation = StencilOperation.Replace;
+                stencilTest.FrontFace.ReferenceValue = 1;
 
-            ShaderProgram sp = Device.CreateShaderProgram(ShaderSources.PassThroughVertexShader(), ShaderSources.PassThroughFragmentShader());
-            VertexArray va = TestUtility.CreateVertexArray(window.Context, sp.VertexAttributes["position"].Location);
+                RenderState renderState = new RenderState();
+                renderState.StencilTest = stencilTest;
 
-            ///////////////////////////////////////////////////////////////////
+                window.Context.FrameBuffer = frameBuffer;
+                window.Context.Clear(new ClearState());
+                window.Context.Draw(PrimitiveType.Points, 0, 1, new DrawState(renderState, sp, va), new SceneState());
 
-            StencilTest stencilTest = new StencilTest();
-            stencilTest.Enabled = true;
-            stencilTest.FrontFace.DepthFailStencilPassOperation = StencilOperation.Replace;
-            stencilTest.FrontFace.DepthPassStencilPassOperation = StencilOperation.Replace;
-            stencilTest.FrontFace.StencilFailOperation = StencilOperation.Replace;
-            stencilTest.FrontFace.ReferenceValue = 1;
-
-            RenderState renderState = new RenderState();
-            renderState.StencilTest = stencilTest;
-
-            window.Context.FrameBuffer = frameBuffer;
-            window.Context.Clear(new ClearState());
-            window.Context.Draw(PrimitiveType.Points, 0, 1, new DrawState(renderState, sp, va), new SceneState());
-
-            TestUtility.ValidateColor(frameBuffer.ColorAttachments[0], 255, 0, 0);
-            ValidateStencil(frameBuffer.DepthStencilAttachment, stencilTest.FrontFace.ReferenceValue);
-
-            va.Dispose();
-            sp.Dispose();
-            depthStencilTexture.Dispose();
-            frameBuffer.Dispose();
-            window.Dispose();
+                TestUtility.ValidateColor(frameBuffer.ColorAttachments[0], 255, 0, 0);
+                ValidateStencil(frameBuffer.DepthStencilAttachment, stencilTest.FrontFace.ReferenceValue);
+            }
         }
 
         [Test]

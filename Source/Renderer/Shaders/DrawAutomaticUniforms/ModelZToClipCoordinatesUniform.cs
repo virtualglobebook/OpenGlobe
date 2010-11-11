@@ -7,24 +7,26 @@
 //
 #endregion
 
+using OpenGlobe.Core;
+
 namespace OpenGlobe.Renderer
 {
     internal class ModelZToClipCoordinatesUniform : DrawAutomaticUniform
     {
         public ModelZToClipCoordinatesUniform(Uniform uniform)
         {
-            _uniform = (Uniform<Matrix42>)uniform;
+            _uniform = (Uniform<Matrix42<float>>)uniform;
         }
 
         #region DrawAutomaticUniform Members
 
         public override void Set(Context context, DrawState drawState, SceneState sceneState)
         {
-            _uniform.Value = sceneState.ModelZToClipCoordinates;
+            _uniform.Value = Matrix42<float>.DoubleToFloat(sceneState.ModelZToClipCoordinates);
         }
 
         #endregion
 
-        private Uniform<Matrix42> _uniform;
+        private Uniform<Matrix42<float>> _uniform;
     }
 }

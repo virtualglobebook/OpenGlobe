@@ -227,11 +227,9 @@
     <Compile Include="ShaderVertexAttributeCollection.cs" />
     <Compile Include="OpenTK\Matrix22.cs" />
     <Compile Include="OpenTK\Matrix23.cs" />
-    <Compile Include="OpenTK\Matrix24.cs" />
     <Compile Include="OpenTK\Matrix32.cs" />
     <Compile Include="OpenTK\Matrix33.cs" />
     <Compile Include="OpenTK\Matrix34.cs" />
-    <Compile Include="OpenTK\Matrix42.cs" />
     <Compile Include="OpenTK\Matrix43.cs" />
     <Compile Include="Textures\Texture2D.cs" />
     <Compile Include="Textures\Texture2DDescription.cs" />
