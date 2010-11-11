@@ -7,18 +7,18 @@
 //
 #endregion
 
-using OpenTK;
+using OpenGlobe.Core;
 using OpenTK.Graphics.OpenGL;
-using OpenGlobe.Renderer;
 
 namespace OpenGlobe.Renderer.GL3x
 {
-    internal class UniformFloatMatrix23GL3x : Uniform<Matrix23>, ICleanable
+    internal class UniformFloatMatrix23GL3x : Uniform<Matrix23<float>>, ICleanable
     {
         internal UniformFloatMatrix23GL3x(string name, int location, ICleanableObserver observer)
             : base(name, UniformType.FloatMatrix23)
         {
             _location = location;
+            _value = new Matrix23<float>();
             _dirty = true;
             _observer = observer;
             _observer.NotifyDirty(this);
@@ -26,7 +26,7 @@ namespace OpenGlobe.Renderer.GL3x
 
         #region Uniform<> Members
 
-        public override Matrix23 Value
+        public override Matrix23<float> Value
         {
             set
             {
@@ -48,22 +48,14 @@ namespace OpenGlobe.Renderer.GL3x
 
         public void Clean()
         {
-            Vector3 column0 = _value.Column0;
-            Vector3 column1 = _value.Column1;
-
-            float[] columnMajorElements = new float[] { 
-            column0.X, column0.Y, column0.Z,
-            column1.X, column1.Y, column1.Z };
-
-            GL.UniformMatrix2x3(_location, 1, false, columnMajorElements);
-
+            GL.UniformMatrix2x3(_location, 1, false, _value.ReadOnlyColumnMajorValues);
             _dirty = false;
         }
 
         #endregion
 
         private int _location;
-        private Matrix23 _value;
+        private Matrix23<float> _value;
         private bool _dirty;
         private readonly ICleanableObserver _observer;
     }

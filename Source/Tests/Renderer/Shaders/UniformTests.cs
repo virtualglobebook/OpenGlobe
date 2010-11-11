@@ -87,5 +87,76 @@ namespace OpenGlobe.Renderer
             }
         }
 
+        [Test]
+        public void Matrix32()
+        {
+            string fs =
+                @"#version 330
+
+                  uniform mat3x2 exampleMat32;
+                  out vec3 FragColor;
+
+                  void main()
+                  {
+                      FragColor = vec3(exampleMat32[1].x, exampleMat32[2].x, 0.0);
+                  }";
+
+            using (GraphicsWindow window = Device.CreateWindow(1, 1))
+            using (FrameBuffer frameBuffer = TestUtility.CreateFrameBuffer(window.Context))
+            using (ShaderProgram sp = Device.CreateShaderProgram(ShaderSources.PassThroughVertexShader(), fs))
+            using (VertexArray va = TestUtility.CreateVertexArray(window.Context, sp.VertexAttributes["position"].Location))
+            {
+                Matrix32<float> m32 = new Matrix32<float>(
+                        0.0f, 1.0f, 1.0f,
+                        0.0f, 0.0f, 0.0f);
+                Uniform<Matrix32<float>> exampleMat32 = (Uniform<Matrix32<float>>)sp.Uniforms["exampleMat32"];
+                Assert.AreEqual("exampleMat32", exampleMat32.Name);
+                Assert.AreEqual(UniformType.FloatMatrix32, exampleMat32.Datatype);
+                Assert.AreEqual(new Matrix32<float>(), exampleMat32.Value);
+                exampleMat32.Value = m32;
+                Assert.AreEqual(m32, exampleMat32.Value);
+
+                window.Context.FrameBuffer = frameBuffer;
+                window.Context.Draw(PrimitiveType.Points, 0, 1, new DrawState(TestUtility.CreateRenderStateWithoutDepthTest(), sp, va), new SceneState());
+                TestUtility.ValidateColor(frameBuffer.ColorAttachments[0], 255, 255, 0);
+            }
+        }
+
+        [Test]
+        public void Matrix23()
+        {
+            string fs =
+                @"#version 330
+
+                  uniform mat2x3 exampleMat23;
+                  out vec3 FragColor;
+
+                  void main()
+                  {
+                      FragColor = vec3(exampleMat23[0].z, exampleMat23[1].x, 0.0);
+                  }";
+
+            using (GraphicsWindow window = Device.CreateWindow(1, 1))
+            using (FrameBuffer frameBuffer = TestUtility.CreateFrameBuffer(window.Context))
+            using (ShaderProgram sp = Device.CreateShaderProgram(ShaderSources.PassThroughVertexShader(), fs))
+            using (VertexArray va = TestUtility.CreateVertexArray(window.Context, sp.VertexAttributes["position"].Location))
+            {
+                Matrix23<float> m23 = new Matrix23<float>(
+                        0.0f, 1.0f,
+                        0.0f, 0.0f,
+                        1.0f, 0.0f);
+                Uniform<Matrix23<float>> exampleMat23 = (Uniform<Matrix23<float>>)sp.Uniforms["exampleMat23"];
+                Assert.AreEqual("exampleMat23", exampleMat23.Name);
+                Assert.AreEqual(UniformType.FloatMatrix23, exampleMat23.Datatype);
+                Assert.AreEqual(new Matrix23<float>(), exampleMat23.Value);
+                exampleMat23.Value = m23;
+                Assert.AreEqual(m23, exampleMat23.Value);
+
+                window.Context.FrameBuffer = frameBuffer;
+                window.Context.Draw(PrimitiveType.Points, 0, 1, new DrawState(TestUtility.CreateRenderStateWithoutDepthTest(), sp, va), new SceneState());
+                TestUtility.ValidateColor(frameBuffer.ColorAttachments[0], 255, 255, 0);
+            }
+        }
+
     }
 }

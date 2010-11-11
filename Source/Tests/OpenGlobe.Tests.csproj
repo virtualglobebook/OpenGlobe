@@ -56,7 +56,9 @@
     <Compile Include="Core\Geometry\EllipsoidTests.cs" />
     <Compile Include="Core\Geometry\GeometryTests.cs" />
     <Compile Include="Core\HalfTests.cs" />
+    <Compile Include="Core\Matrices\Matrix23Tests.cs" />
     <Compile Include="Core\Matrices\Matrix24Tests.cs" />
+    <Compile Include="Core\Matrices\Matrix32Tests.cs" />
     <Compile Include="Core\Matrices\Matrix42Tests.cs" />
     <Compile Include="Core\MessageQueueTests.cs" />
     <Compile Include="Core\Polygons\EarClippingOnEllipsoidTests.cs" />
