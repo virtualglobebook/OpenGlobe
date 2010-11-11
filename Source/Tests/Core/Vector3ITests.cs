@@ -17,9 +17,18 @@ namespace OpenGlobe.Core
     public class Vector3ITests
     {
         [Test]
-        public void Construct()
+        public void Construct0()
         {
             Vector3I v = new Vector3I(1, 2, 3);
+            Assert.AreEqual(1, v.X);
+            Assert.AreEqual(2, v.Y);
+            Assert.AreEqual(3, v.Z);
+        }
+
+        [Test]
+        public void Construct1()
+        {
+            Vector3I v = new Vector3I(new Vector2I(1, 2), 3);
             Assert.AreEqual(1, v.X);
             Assert.AreEqual(2, v.Y);
             Assert.AreEqual(3, v.Z);

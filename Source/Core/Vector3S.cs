@@ -56,6 +56,13 @@ namespace OpenGlobe.Core
             _z = z;
         }
 
+        public Vector3S(Vector2S v, float z)
+        {
+            _x = v.X;
+            _y = v.Y;
+            _z = z;
+        }
+
         public float X
         {
             get { return _x; }
