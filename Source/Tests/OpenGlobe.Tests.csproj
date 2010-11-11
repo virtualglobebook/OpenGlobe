@@ -63,6 +63,7 @@
     <Compile Include="Core\Matrices\Matrix34Tests.cs" />
     <Compile Include="Core\Matrices\Matrix42Tests.cs" />
     <Compile Include="Core\Matrices\Matrix43Tests.cs" />
+    <Compile Include="Core\Matrices\Matrix4DTests.cs" />
     <Compile Include="Core\MessageQueueTests.cs" />
     <Compile Include="Core\Polygons\EarClippingOnEllipsoidTests.cs" />
     <Compile Include="Core\Polygons\EarClippingTests.cs" />
