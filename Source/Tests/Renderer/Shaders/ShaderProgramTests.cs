@@ -92,7 +92,6 @@ namespace OpenGlobe.Renderer
 
                   uniform mat4   exampleMat4;
                   uniform mat3   exampleMat3;
-                  uniform mat2   exampleMat2;
 
                   uniform sampler2D exampleSampler2D;
                   uniform sampler2DRect exampleSampler2DRect;
@@ -118,7 +117,6 @@ namespace OpenGlobe.Renderer
                       red += float(exampleBVec4.x);
                       red += exampleMat4[0].x;
                       red += exampleMat3[0].x;
-                      red += exampleMat2[0].x;
                       red += texture(exampleSampler2D, vec2(0, 0)).r;
                       red += texture(exampleSampler2DRect, vec2(0, 0)).r;
                       red += texture1DArray(exampleSampler1DArray, vec2(0, 0)).r;
@@ -131,7 +129,7 @@ namespace OpenGlobe.Renderer
             {
                 Assert.IsFalse(sp.Log.Contains("warning"));
                 Assert.IsEmpty(sp.UniformBlocks);
-                Assert.AreEqual(18, sp.Uniforms.Count);
+                Assert.AreEqual(17, sp.Uniforms.Count);
 
                 Uniform<float> exampleFloat = (Uniform<float>)sp.Uniforms["exampleFloat"];
                 Assert.AreEqual("exampleFloat", exampleFloat.Name);
@@ -268,16 +266,6 @@ namespace OpenGlobe.Renderer
                 Assert.AreEqual(new Matrix3(), exampleMat3.Value);
                 exampleMat3.Value = m3;
                 Assert.AreEqual(m3, exampleMat3.Value);
-
-                Matrix2 m2 = new Matrix2(
-                    new Vector2(0, 1),
-                    new Vector2(0, 0));
-                Uniform<Matrix2> exampleMat2 = (Uniform<Matrix2>)sp.Uniforms["exampleMat2"];
-                Assert.AreEqual("exampleMat2", exampleMat2.Name);
-                Assert.AreEqual(UniformType.FloatMatrix22, exampleMat2.Datatype);
-                Assert.AreEqual(new Matrix2(), exampleMat2.Value);
-                exampleMat2.Value = m2;
-                Assert.AreEqual(m2, exampleMat2.Value);
             }
         }
 

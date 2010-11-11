@@ -56,6 +56,7 @@
     <Compile Include="Core\Geometry\EllipsoidTests.cs" />
     <Compile Include="Core\Geometry\GeometryTests.cs" />
     <Compile Include="Core\HalfTests.cs" />
+    <Compile Include="Core\Matrices\Matrix2Tests.cs" />
     <Compile Include="Core\Matrices\Matrix23Tests.cs" />
     <Compile Include="Core\Matrices\Matrix24Tests.cs" />
     <Compile Include="Core\Matrices\Matrix32Tests.cs" />

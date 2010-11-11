@@ -225,7 +225,6 @@
     <Compile Include="Shaders\UniformBlockMatrixArrayMember.cs" />
     <Compile Include="Shaders\ShaderVertexAttribute.cs" />
     <Compile Include="ShaderVertexAttributeCollection.cs" />
-    <Compile Include="OpenTK\Matrix22.cs" />
     <Compile Include="OpenTK\Matrix33.cs" />
     <Compile Include="Textures\Texture2D.cs" />
     <Compile Include="Textures\Texture2DDescription.cs" />

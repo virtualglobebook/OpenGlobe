@@ -68,6 +68,7 @@
     <Compile Include="Half.cs" />
     <Compile Include="Imaging\BitmapAlgorithms.cs" />
     <Compile Include="Interval.cs" />
+    <Compile Include="Matrices\Matrix2.cs" />
     <Compile Include="Matrices\Matrix23.cs" />
     <Compile Include="Matrices\Matrix24.cs" />
     <Compile Include="Matrices\Matrix32.cs" />

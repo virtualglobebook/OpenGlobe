@@ -194,7 +194,6 @@ namespace OpenGlobe.Renderer
             }
         }
 
-
         [Test]
         public void Matrix34()
         {
@@ -225,6 +224,41 @@ namespace OpenGlobe.Renderer
                 Assert.AreEqual(new Matrix34<float>(), exampleMat34.Value);
                 exampleMat34.Value = m34;
                 Assert.AreEqual(m34, exampleMat34.Value);
+
+                window.Context.FrameBuffer = frameBuffer;
+                window.Context.Draw(PrimitiveType.Points, 0, 1, new DrawState(TestUtility.CreateRenderStateWithoutDepthTest(), sp, va), new SceneState());
+                TestUtility.ValidateColor(frameBuffer.ColorAttachments[0], 255, 255, 0);
+            }
+        }
+
+        [Test]
+        public void Matrix22()
+        {
+            string fs =
+                @"#version 330
+
+                  uniform mat2 exampleMat2;
+                  out vec3 FragColor;
+
+                  void main()
+                  {
+                      FragColor = vec3(exampleMat2[1].x, exampleMat2[1].y, 0.0);
+                  }";
+
+            using (GraphicsWindow window = Device.CreateWindow(1, 1))
+            using (FrameBuffer frameBuffer = TestUtility.CreateFrameBuffer(window.Context))
+            using (ShaderProgram sp = Device.CreateShaderProgram(ShaderSources.PassThroughVertexShader(), fs))
+            using (VertexArray va = TestUtility.CreateVertexArray(window.Context, sp.VertexAttributes["position"].Location))
+            {
+                Matrix2<float> m2 = new Matrix2<float>(
+                        0.0f, 1.0f,
+                        0.0f, 1.0f);
+                Uniform<Matrix2<float>> exampleMat2 = (Uniform<Matrix2<float>>)sp.Uniforms["exampleMat2"];
+                Assert.AreEqual("exampleMat2", exampleMat2.Name);
+                Assert.AreEqual(UniformType.FloatMatrix22, exampleMat2.Datatype);
+                Assert.AreEqual(new Matrix2<float>(), exampleMat2.Value);
+                exampleMat2.Value = m2;
+                Assert.AreEqual(m2, exampleMat2.Value);
 
                 window.Context.FrameBuffer = frameBuffer;
                 window.Context.Draw(PrimitiveType.Points, 0, 1, new DrawState(TestUtility.CreateRenderStateWithoutDepthTest(), sp, va), new SceneState());
