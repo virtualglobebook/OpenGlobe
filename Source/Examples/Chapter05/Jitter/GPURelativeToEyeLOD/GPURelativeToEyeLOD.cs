@@ -31,7 +31,7 @@ namespace OpenGlobe.Examples
                 EmbeddedResources.GetText("OpenGlobe.Examples.Shaders.FS.glsl"));
             _cameraEyeHigh = (Uniform<Vector3S>)_spHigh.Uniforms["u_cameraEyeHigh"];
             _cameraEyeLow = (Uniform<Vector3S>)_spHigh.Uniforms["u_cameraEyeLow"];
-            _modelViewPerspectiveMatrixRelativeToEye = (Uniform<Matrix4>)(_spHigh.Uniforms["u_modelViewPerspectiveMatrixRelativeToEye"]);
+            _modelViewPerspectiveMatrixRelativeToEye = (Uniform<Matrix4F>)(_spHigh.Uniforms["u_modelViewPerspectiveMatrixRelativeToEye"]);
             _pointSizeHigh = (Uniform<float>)_spHigh.Uniforms["u_pointSize"];
 
             ///////////////////////////////////////////////////////////////////
@@ -125,18 +125,15 @@ namespace OpenGlobe.Examples
                 _cameraEyeHigh.Value = eyeHigh;
                 _cameraEyeLow.Value = eyeLow;
 
-                Matrix4d mv = sceneState.ModelViewMatrix;
-                mv.M41 = 0.0;
-                mv.M42 = 0.0;
-                mv.M43 = 0.0;
+                Matrix4D m = sceneState.ModelViewMatrix;
+                Matrix4D mv = new Matrix4D(
+                    m.Column0Row0, m.Column1Row0, m.Column2Row0, 0.0,
+                    m.Column0Row1, m.Column1Row1, m.Column2Row1, 0.0,
+                    m.Column0Row2, m.Column1Row2, m.Column2Row2, 0.0,
+                    m.Column0Row3, m.Column1Row3, m.Column2Row3, m.Column3Row3);
 
-                //TODO:  A transpose is wrong somewhere.  The above should be this:
-                //mv.M14 = 0;
-                //mv.M24 = 0;
-                //mv.M34 = 0;
-
-                _modelViewPerspectiveMatrixRelativeToEye.Value = Conversion.ToMatrix4(
-                    mv * sceneState.PerspectiveMatrix);
+                _modelViewPerspectiveMatrixRelativeToEye.Value =
+                    (sceneState.PerspectiveMatrix * mv).ToMatrix4F();
             }
 
             _pointSizeHigh.Value = (float)(8.0 * sceneState.HighResolutionSnapScale);
@@ -190,7 +187,7 @@ namespace OpenGlobe.Examples
         private readonly ShaderProgram _spHigh;
         private readonly Uniform<Vector3S> _cameraEyeHigh;
         private readonly Uniform<Vector3S> _cameraEyeLow;
-        private readonly Uniform<Matrix4> _modelViewPerspectiveMatrixRelativeToEye;
+        private readonly Uniform<Matrix4F> _modelViewPerspectiveMatrixRelativeToEye;
         private readonly Uniform<float> _pointSizeHigh;
         private readonly DrawState _drawStateHigh;
 

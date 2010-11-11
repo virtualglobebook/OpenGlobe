@@ -265,5 +265,42 @@ namespace OpenGlobe.Renderer
                 TestUtility.ValidateColor(frameBuffer.ColorAttachments[0], 255, 255, 0);
             }
         }
+
+        [Test]
+        public void Matrix4()
+        {
+            string fs =
+                @"#version 330
+
+                  uniform mat4 exampleMat4;
+                  out vec3 FragColor;
+
+                  void main()
+                  {
+                      FragColor = vec3(exampleMat4[0].z, exampleMat4[3].y, 0.0);
+                  }";
+
+            using (GraphicsWindow window = Device.CreateWindow(1, 1))
+            using (FrameBuffer frameBuffer = TestUtility.CreateFrameBuffer(window.Context))
+            using (ShaderProgram sp = Device.CreateShaderProgram(ShaderSources.PassThroughVertexShader(), fs))
+            using (VertexArray va = TestUtility.CreateVertexArray(window.Context, sp.VertexAttributes["position"].Location))
+            {
+                Matrix4F m4 = new Matrix4F(
+                        0.0f, 0.0f, 0.0f, 0.0f,
+                        0.0f, 0.0f, 0.0f, 1.0f,
+                        1.0f, 0.0f, 0.0f, 0.0f,
+                        0.0f, 0.0f, 0.0f, 0.0f);
+                Uniform<Matrix4F> exampleMat4 = (Uniform<Matrix4F>)sp.Uniforms["exampleMat4"];
+                Assert.AreEqual("exampleMat4", exampleMat4.Name);
+                Assert.AreEqual(UniformType.FloatMatrix44, exampleMat4.Datatype);
+                Assert.AreEqual(new Matrix4F(), exampleMat4.Value);
+                exampleMat4.Value = m4;
+                Assert.AreEqual(m4, exampleMat4.Value);
+
+                window.Context.FrameBuffer = frameBuffer;
+                window.Context.Draw(PrimitiveType.Points, 0, 1, new DrawState(TestUtility.CreateRenderStateWithoutDepthTest(), sp, va), new SceneState());
+                TestUtility.ValidateColor(frameBuffer.ColorAttachments[0], 255, 255, 0);
+            }
+        }
     }
 }

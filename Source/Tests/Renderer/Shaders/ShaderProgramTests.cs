@@ -90,7 +90,6 @@ namespace OpenGlobe.Renderer
                   uniform bvec3 exampleBVec3;
                   uniform bvec4 exampleBVec4;
 
-                  uniform mat4   exampleMat4;
                   uniform mat3   exampleMat3;
 
                   uniform sampler2D exampleSampler2D;
@@ -115,7 +114,6 @@ namespace OpenGlobe.Renderer
                       red += float(exampleBVec2.x);
                       red += float(exampleBVec3.x);
                       red += float(exampleBVec4.x);
-                      red += exampleMat4[0].x;
                       red += exampleMat3[0].x;
                       red += texture(exampleSampler2D, vec2(0, 0)).r;
                       red += texture(exampleSampler2DRect, vec2(0, 0)).r;
@@ -129,7 +127,7 @@ namespace OpenGlobe.Renderer
             {
                 Assert.IsFalse(sp.Log.Contains("warning"));
                 Assert.IsEmpty(sp.UniformBlocks);
-                Assert.AreEqual(17, sp.Uniforms.Count);
+                Assert.AreEqual(16, sp.Uniforms.Count);
 
                 Uniform<float> exampleFloat = (Uniform<float>)sp.Uniforms["exampleFloat"];
                 Assert.AreEqual("exampleFloat", exampleFloat.Name);
@@ -243,18 +241,6 @@ namespace OpenGlobe.Renderer
                 Assert.AreEqual(1, exampleSampler1DArray.Value);
 
                 ///////////////////////////////////////////////////////////////
-
-                Matrix4 m4 = new Matrix4(
-                    new Vector4(0, 0, 0, 0),
-                    new Vector4(0.25f, 0, 0, 0),
-                    new Vector4(0, 0, 0, 0),
-                    new Vector4(0, 0, 0, 0));
-                Uniform<Matrix4> exampleMat4 = (Uniform<Matrix4>)sp.Uniforms["exampleMat4"];
-                Assert.AreEqual("exampleMat4", exampleMat4.Name);
-                Assert.AreEqual(UniformType.FloatMatrix44, exampleMat4.Datatype);
-                Assert.AreEqual(new Matrix4(), exampleMat4.Value);
-                exampleMat4.Value = m4;
-                Assert.AreEqual(m4, exampleMat4.Value);
 
                 Matrix3 m3 = new Matrix3(
                     new Vector3(0, 0, 0),

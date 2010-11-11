@@ -7,7 +7,7 @@
 //
 #endregion
 
-using OpenTK;
+using OpenGlobe.Core;
 
 namespace OpenGlobe.Renderer
 {
@@ -15,18 +15,18 @@ namespace OpenGlobe.Renderer
     {
         public OrthographicMatrixUniform(Uniform uniform)
         {
-            _uniform = (Uniform<Matrix4>)uniform;
+            _uniform = (Uniform<Matrix4F>)uniform;
         }
 
         #region DrawAutomaticUniform Members
 
         public override void Set(Context context, DrawState drawState, SceneState sceneState)
         {
-            _uniform.Value = Conversion.ToMatrix4(sceneState.OrthographicMatrix);
+            _uniform.Value = sceneState.OrthographicMatrix.ToMatrix4F();
         }
 
         #endregion
 
-        private Uniform<Matrix4> _uniform;
+        private Uniform<Matrix4F> _uniform;
     }
 }

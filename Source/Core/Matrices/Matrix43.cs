@@ -87,11 +87,10 @@ namespace OpenGlobe.Core
 
         public bool Equals(Matrix43<T> other)
         {
-            //TODO
-            //if (other == null)
-            //{
-            //    return false;
-            //}
+            if (Matrix4F.ReferenceEquals(other, null))
+            {
+                return false;
+            }
 
             for (int i = 0; i < _values.Length; ++i)
             {

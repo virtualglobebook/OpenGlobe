@@ -47,8 +47,11 @@
     <Compile Include="Buffers\BufferHint.cs" />
     <Compile Include="Buffers\PixelBufferHint.cs" />
     <Compile Include="ClearState.cs" />
+    <Compile Include="Shaders\DrawAutomaticUniforms\ModelMatrixUniform.cs" />
+    <Compile Include="Shaders\DrawAutomaticUniforms\ModelMatrixUniformFactory.cs" />
+    <Compile Include="Shaders\DrawAutomaticUniforms\ViewMatrixUniform.cs" />
+    <Compile Include="Shaders\DrawAutomaticUniforms\ViewMatrixUniformFactory.cs" />
     <Compile Include="VertexArray\VertexLocations.cs" />
-    <Compile Include="Conversion.cs" />
     <Compile Include="DrawState.cs" />
     <Compile Include="Extensions.cs">
       <SubType>Code</SubType>

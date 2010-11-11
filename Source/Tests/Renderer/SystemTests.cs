@@ -244,29 +244,43 @@ namespace OpenGlobe.Renderer
         }
 
         [Test]
-        public void RenderPointWithDrawAutomaticUniforms()
+        public void RenderPointWithDrawAutomaticUniforms0()
         {
             string vs =
                 @"#version 330
 
                   layout(location = og_positionVertexLocation) in vec4 position;
-                  uniform mat4 og_modelViewMatrix;
+                  uniform mat4 og_viewMatrix;
+                  uniform mat4 og_modelMatrix;
                   uniform mat4 og_perspectiveMatrix;
+
+                  void main()
+                  {
+                      gl_Position = og_perspectiveMatrix * og_viewMatrix * og_modelMatrix * position; 
+                  }";
+
+            RenderPoint(vs);
+        }
+
+        [Test]
+        public void RenderPointWithDrawAutomaticUniforms1()
+        {
+            string vs =
+                @"#version 330
+
+                  layout(location = og_positionVertexLocation) in vec4 position;
                   uniform mat4 og_modelViewPerspectiveMatrix;
 
                   void main()
                   {
-                        if (position.x > 0)
-                        {
-                            mat4 modelViewMatrix = og_perspectiveMatrix * og_modelViewMatrix;
-                            gl_Position = modelViewMatrix * position; 
-                        }
-                        else
-                        {
-                            gl_Position = og_modelViewPerspectiveMatrix * position; 
-                        }
+                      gl_Position = og_modelViewPerspectiveMatrix * position; 
                   }";
 
+            RenderPoint(vs);
+        }
+
+        private void RenderPoint(string vs)
+        {
             using (GraphicsWindow window = Device.CreateWindow(1, 1))
             using (FrameBuffer frameBuffer = TestUtility.CreateFrameBuffer(window.Context))
             using (ShaderProgram sp = Device.CreateShaderProgram(vs, ShaderSources.PassThroughFragmentShader()))

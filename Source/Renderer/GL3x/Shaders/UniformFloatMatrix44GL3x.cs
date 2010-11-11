@@ -7,18 +7,18 @@
 //
 #endregion
 
-using OpenTK;
+using OpenGlobe.Core;
 using OpenTK.Graphics.OpenGL;
-using OpenGlobe.Renderer;
 
 namespace OpenGlobe.Renderer.GL3x
 {
-    internal class UniformFloatMatrix44GL3x : Uniform<Matrix4>, ICleanable
+    internal class UniformFloatMatrix44GL3x : Uniform<Matrix4F>, ICleanable
     {
         internal UniformFloatMatrix44GL3x(string name, int location, ICleanableObserver observer)
             : base(name, UniformType.FloatMatrix44)
         {
             _location = location;
+            _value = new Matrix4F();
             _dirty = true;
             _observer = observer;
             _observer.NotifyDirty(this);
@@ -26,7 +26,7 @@ namespace OpenGlobe.Renderer.GL3x
 
         #region Uniform<> Members
 
-        public override Matrix4 Value
+        public override Matrix4F Value
         {
             set
             {
@@ -48,14 +48,14 @@ namespace OpenGlobe.Renderer.GL3x
 
         public void Clean()
         {
-            GL.UniformMatrix4(_location, false, ref _value);
+            GL.UniformMatrix4(_location, 1, false, _value.ReadOnlyColumnMajorValues);
             _dirty = false;
         }
 
         #endregion
 
         private int _location;
-        private Matrix4 _value;
+        private Matrix4F _value;
         private bool _dirty;
         private readonly ICleanableObserver _observer;
     }

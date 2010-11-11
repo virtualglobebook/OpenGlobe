@@ -24,7 +24,7 @@ namespace OpenGlobe.Examples
             _sp = Device.CreateShaderProgram(
                 EmbeddedResources.GetText("OpenGlobe.Examples.CPURelativeToEye.Shaders.VS.glsl"),
                 EmbeddedResources.GetText("OpenGlobe.Examples.Shaders.FS.glsl"));
-            _modelViewPerspectiveMatrixRelativeToEye = (Uniform<Matrix4>)(_sp.Uniforms["u_modelViewPerspectiveMatrixRelativeToEye"]);
+            _modelViewPerspectiveMatrixRelativeToEye = (Uniform<Matrix4F>)(_sp.Uniforms["u_modelViewPerspectiveMatrixRelativeToEye"]);
             _pointSize = (Uniform<float>)_sp.Uniforms["u_pointSize"];
 
             ///////////////////////////////////////////////////////////////////
@@ -66,18 +66,15 @@ namespace OpenGlobe.Examples
             {
                 _eye = eye;
 
-                Matrix4d mv = sceneState.ModelViewMatrix;
-                mv.M41 = 0.0;
-                mv.M42 = 0.0;
-                mv.M43 = 0.0;
+                Matrix4D m = sceneState.ModelViewMatrix;
+                Matrix4D mv = new Matrix4D(
+                    m.Column0Row0, m.Column1Row0, m.Column2Row0, 0.0,
+                    m.Column0Row1, m.Column1Row1, m.Column2Row1, 0.0,
+                    m.Column0Row2, m.Column1Row2, m.Column2Row2, 0.0,
+                    m.Column0Row3, m.Column1Row3, m.Column2Row3, m.Column3Row3);
 
-                //TODO:  A transpose is wrong somewhere.  The above should be this:
-                //mv.M14 = 0;
-                //mv.M24 = 0;
-                //mv.M34 = 0;
-
-                _modelViewPerspectiveMatrixRelativeToEye.Value = Conversion.ToMatrix4(
-                    mv * sceneState.PerspectiveMatrix);
+                _modelViewPerspectiveMatrixRelativeToEye.Value = 
+                    (sceneState.PerspectiveMatrix * mv).ToMatrix4F();
 
                 for (int i = 0; i < _positions.Length; ++i)
                 {
@@ -114,7 +111,7 @@ namespace OpenGlobe.Examples
 
         private readonly VertexArray _va;
         private readonly ShaderProgram _sp;
-        private readonly Uniform<Matrix4> _modelViewPerspectiveMatrixRelativeToEye;
+        private readonly Uniform<Matrix4F> _modelViewPerspectiveMatrixRelativeToEye;
         private readonly Uniform<float> _pointSize;
         private readonly DrawState _drawState;
 

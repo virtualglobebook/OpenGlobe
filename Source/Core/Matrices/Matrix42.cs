@@ -62,21 +62,6 @@ namespace OpenGlobe.Core
         public T Column3Row0 { get { return _values[6]; } }
         public T Column3Row1 { get { return _values[7]; } }
 
-/*
-        TODO
- 
-        public Matrix42<Y> To<Y>() where Y : IEquatable<Y>
-        {
-            return new Matrix42<Y>((Y)Column0Row0);
-        }
-
-        public Matrix42<float> ToFloat()
-        {
-            return new Matrix42<float>(
-                (float)Column0Row0, (float)Column1Row0, (float)Column2Row0, (float)Column3Row0,
-                (float)Column0Row1, (float)Column1Row1, (float)Column2Row1, (float)Column3Row1);
-        }
-*/
         public static Matrix42<float> DoubleToFloat(Matrix42<double> value)
         {
             return new Matrix42<float>(
@@ -92,11 +77,10 @@ namespace OpenGlobe.Core
 
         public bool Equals(Matrix42<T> other)
         {
-            //TODO
-            //if (other == null)
-            //{
-            //    return false;
-            //}
+            if (Matrix4F.ReferenceEquals(other, null))
+            {
+                return false;
+            }
 
             for (int i = 0; i < _values.Length; ++i)
             {

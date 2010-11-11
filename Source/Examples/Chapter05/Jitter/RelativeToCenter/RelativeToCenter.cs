@@ -24,7 +24,7 @@ namespace OpenGlobe.Examples
             _sp = Device.CreateShaderProgram(
                 EmbeddedResources.GetText("OpenGlobe.Examples.RelativeToCenter.Shaders.VS.glsl"),
                 EmbeddedResources.GetText("OpenGlobe.Examples.Shaders.FS.glsl"));
-            _modelViewPerspectiveMatrixRelativeToCenter = (Uniform<Matrix4>)(_sp.Uniforms["u_modelViewPerspectiveMatrixRelativeToCenter"]);
+            _modelViewPerspectiveMatrixRelativeToCenter = (Uniform<Matrix4F>)(_sp.Uniforms["u_modelViewPerspectiveMatrixRelativeToCenter"]);
             _pointSize = (Uniform<float>)_sp.Uniforms["u_pointSize"];
 
             ///////////////////////////////////////////////////////////////////
@@ -70,14 +70,16 @@ namespace OpenGlobe.Examples
             {
                 _eye = eye;
 
-                Matrix4d mv = sceneState.ModelViewMatrix;
-                Vector4d centerEye = Vector4d.Transform(new Vector4d(_center.X, _center.Y, _center.Z, 1.0), mv);
-                mv.M41 = centerEye.X;
-                mv.M42 = centerEye.Y;
-                mv.M43 = centerEye.Z;
+                Matrix4D m = sceneState.ModelViewMatrix;
+                Vector4D centerEye = m * new Vector4D(_center, 1.0);
+                Matrix4D mv = new Matrix4D(
+                    m.Column0Row0, m.Column1Row0, m.Column2Row0, centerEye.X,
+                    m.Column0Row1, m.Column1Row1, m.Column2Row1, centerEye.Y,
+                    m.Column0Row2, m.Column1Row2, m.Column2Row2, centerEye.Z,
+                    m.Column0Row3, m.Column1Row3, m.Column2Row3, m.Column3Row3);
 
-                _modelViewPerspectiveMatrixRelativeToCenter.Value = Conversion.ToMatrix4(
-                    mv * sceneState.PerspectiveMatrix);
+                _modelViewPerspectiveMatrixRelativeToCenter.Value =
+                    (sceneState.PerspectiveMatrix * mv).ToMatrix4F();
             }
 
             _pointSize.Value = (float)(8.0 * sceneState.HighResolutionSnapScale);
@@ -107,7 +109,7 @@ namespace OpenGlobe.Examples
 
         private readonly VertexArray _va;
         private readonly ShaderProgram _sp;
-        private readonly Uniform<Matrix4> _modelViewPerspectiveMatrixRelativeToCenter;
+        private readonly Uniform<Matrix4F> _modelViewPerspectiveMatrixRelativeToCenter;
         private readonly Uniform<float> _pointSize;
         private readonly DrawState _drawState;
 

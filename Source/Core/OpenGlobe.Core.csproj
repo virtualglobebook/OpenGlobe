@@ -76,6 +76,7 @@
     <Compile Include="Matrices\Matrix42.cs" />
     <Compile Include="Matrices\Matrix43.cs" />
     <Compile Include="Matrices\Matrix4D.cs" />
+    <Compile Include="Matrices\Matrix4F.cs" />
     <Compile Include="MessageQueue.cs" />
     <Compile Include="MessageQueueEventArgs.cs" />
     <Compile Include="Polygons\EarClipping.cs" />

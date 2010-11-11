@@ -24,7 +24,7 @@ namespace OpenGlobe.Renderer
             Shininess = 12;
             Camera = new Camera();
             SunPosition = new Vector3D(200000, 0, 0);
-            ModelMatrix = Matrix4d.Identity;
+            ModelMatrix = Matrix4D.Identity;
             HighResolutionSnapScale = 1;
         }
 
@@ -41,7 +41,7 @@ namespace OpenGlobe.Renderer
             get { return Camera.Eye; }
         }
 
-        public Matrix4d ComputeViewportTransformationMatrix(Rectangle viewport, double nearDepthRange, double farDepthRange)
+        public Matrix4D ComputeViewportTransformationMatrix(Rectangle viewport, double nearDepthRange, double farDepthRange)
         {
             double halfWidth = viewport.Width * 0.5;
             double halfHeight = viewport.Height * 0.5;
@@ -50,97 +50,64 @@ namespace OpenGlobe.Renderer
             //
             // Bottom and top swapped:  MS -> OpenGL
             //
-            return new Matrix4d(
-                halfWidth, 0, 0, 0,
-                0, halfHeight, 0, 0,
-                0, 0, halfDepth, 0,
-                viewport.Left + halfWidth, viewport.Top + halfHeight, nearDepthRange + halfDepth, 1);
+            return new Matrix4D(
+                halfWidth, 0.0,        0.0,       viewport.Left + halfWidth,
+                0.0,       halfHeight, 0.0,       viewport.Top + halfHeight,
+                0.0,       0.0,        halfDepth, nearDepthRange + halfDepth,
+                0.0,       0.0,        0.0,       1.0);
         }
 
-        public static Matrix4d ComputeViewportOrthographicMatrix(Rectangle viewport)
+        public static Matrix4D ComputeViewportOrthographicMatrix(Rectangle viewport)
         {
             //
             // Bottom and top swapped:  MS -> OpenGL
             //
-            return Matrix4d.CreateOrthographicOffCenter(viewport.Left, viewport.Right, viewport.Top,
-                viewport.Bottom, 0, 1);
+            return Matrix4D.CreateOrthographicOffCenter(
+                viewport.Left, viewport.Right, 
+                viewport.Top, viewport.Bottom, 
+                0.0, 1.0);
         }
 
-        public Matrix4d OrthographicMatrix
+        public Matrix4D OrthographicMatrix
         {
             //
             // Bottom and top swapped:  MS -> OpenGL
             //
             get
             {
-                return Matrix4d.CreateOrthographicOffCenter(Camera.OrthographicLeft, Camera.OrthographicRight, 
+                return Matrix4D.CreateOrthographicOffCenter(Camera.OrthographicLeft, Camera.OrthographicRight, 
                     Camera.OrthographicTop, Camera.OrthographicBottom,
                     Camera.OrthographicNearPlaneDistance, Camera.OrthographicFarPlaneDistance);
             }
         }
 
-        public Matrix4d PerspectiveMatrix 
+        public Matrix4D PerspectiveMatrix 
         {
             get
             {
-                //
-                // Workaround because the following throws for zNear >= zFar
-                //
-                //return Matrix4d.CreatePerspectiveFieldOfView(Camera.FieldOfViewY, Camera.AspectRatio,
-                //    Camera.PerspectiveNearPlaneDistance, Camera.PerspectiveFarPlaneDistance);
-
-                double fovy = Camera.FieldOfViewY;
-                double aspect = Camera.AspectRatio;
-                double zNear = Camera.PerspectiveNearPlaneDistance;
-                double zFar = Camera.PerspectiveFarPlaneDistance;
-
-                Debug.Assert(fovy > 0 && fovy <= System.Math.PI);
-                Debug.Assert(aspect > 0);
-                Debug.Assert(zNear > 0);
-                Debug.Assert(zFar > 0);
-
-                double yMax = zNear * System.Math.Tan(0.5 * fovy);
-                double yMin = -yMax;
-                double xMin = yMin * aspect;
-                double xMax = yMax * aspect;
-
-                double left = xMin;
-                double right = xMax;
-                double bottom = yMin;
-                double top = yMax;
-
-                double x = (2.0 * zNear) / (right - left);
-                double y = (2.0 * zNear) / (top - bottom);
-                double a = (right + left) / (right - left);
-                double b = (top + bottom) / (top - bottom);
-                double c = -(zFar + zNear) / (zFar - zNear);
-                double d = -(2.0 * zFar * zNear) / (zFar - zNear);
-
-                return new Matrix4d(x, 0, 0, 0,
-                                    0, y, 0, 0,
-                                    a, b, c, -1,
-                                    0, 0, d, 0);
+                return Matrix4D.CreatePerspectiveFieldOfView(Camera.FieldOfViewY, Camera.AspectRatio,
+                    Camera.PerspectiveNearPlaneDistance, Camera.PerspectiveFarPlaneDistance);
             }
         }
 
-        public Matrix4d ViewMatrix
+        public Matrix4D ViewMatrix
         {
-            get { return Matrix4d.LookAt(Camera.Eye.X, Camera.Eye.Y, Camera.Eye.Z, Camera.Target.X, Camera.Target.Y, Camera.Target.Z, Camera.Up.X, Camera.Up.Y, Camera.Up.Z); }
+            get { return Matrix4D.LookAt(Camera.Eye, Camera.Target, Camera.Up); }
         }
 
-        public Matrix4d ModelMatrix { get; set; }
-        
-        public Matrix4d ModelViewMatrix
+        public Matrix4D ModelMatrix { get; set; }
+
+        public Matrix4D ModelViewMatrix
         {
-            get { return ModelMatrix * ViewMatrix; }
+            get { return ViewMatrix * ModelMatrix; }
         }
 
-        public Matrix4d ModelViewPerspectiveMatrix
+        public Matrix4D ModelViewPerspectiveMatrix
         {
-            get { return ModelViewMatrix * PerspectiveMatrix; }
+            get { return PerspectiveMatrix * ModelViewMatrix; }
         }
 
-        public Matrix4d ModelViewOrthographicMatrix
+        public Matrix4D ModelViewOrthographicMatrix
         {
             get { return ModelViewMatrix * OrthographicMatrix; }
         }
@@ -152,10 +119,10 @@ namespace OpenGlobe.Renderer
                 //
                 // Bottom two rows of model-view-projection matrix
                 //
-                Matrix4d m = ModelViewPerspectiveMatrix;
+                Matrix4D m = ModelViewPerspectiveMatrix;
                 return new Matrix42<double>(
-                    m.M13, m.M23, m.M33, m.M43,
-                    m.M14, m.M24, m.M34, m.M44);
+                    m.Column0Row2, m.Column1Row2, m.Column2Row2, m.Column3Row2,
+                    m.Column0Row3, m.Column1Row3, m.Column2Row3, m.Column3Row3);
             }
         }
 

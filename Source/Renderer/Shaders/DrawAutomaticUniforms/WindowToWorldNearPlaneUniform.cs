@@ -8,7 +8,6 @@
 #endregion
 
 using System;
-using OpenTK;
 using OpenGlobe.Core;
 
 namespace OpenGlobe.Renderer
@@ -17,7 +16,7 @@ namespace OpenGlobe.Renderer
     {
         public WindowToWorldNearPlaneUniform(Uniform uniform)
         {
-            _uniform = (Uniform<Matrix4>)uniform;
+            _uniform = (Uniform<Matrix4F>)uniform;
         }
 
         #region DrawAutomaticUniform Members
@@ -37,15 +36,15 @@ namespace OpenGlobe.Renderer
             Vector3D xAxis = camera.Right * (nearDistance * Math.Tan(theta));  // Rescale right to near plane
             Vector3D yAxis = camera.Up * (nearDistance * Math.Tan(phi));       // Rescale up to near plane
 
-            _uniform.Value = Conversion.ToMatrix4(new Matrix4d(
-                    xAxis.X, xAxis.Y, xAxis.Z, 0,
-                    yAxis.X, yAxis.Y, yAxis.Z, 0,
-                    0, 0, 0, 0,
-                    origin.X, origin.Y, origin.Z, 1));
+            _uniform.Value = new Matrix4D(
+                    xAxis.X, yAxis.X, 0.0, origin.X,
+                    xAxis.Y, yAxis.Y, 0.0, origin.Y,
+                    xAxis.Z, yAxis.Z, 0.0, origin.Z,
+                    0.0,     0.0,     0.0, 1.0).ToMatrix4F();
         }
 
         #endregion
 
-        private Uniform<Matrix4> _uniform;
+        private Uniform<Matrix4F> _uniform;
     }
 }

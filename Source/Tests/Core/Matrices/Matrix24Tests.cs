@@ -124,8 +124,7 @@ namespace OpenGlobe.Core
             Assert.IsTrue(objA.Equals(objC));
             Assert.IsFalse(objA.Equals(objB));
 
-            //TODO
-            //Assert.IsFalse(a.Equals(null));
+            Assert.IsFalse(a.Equals(null));
             Assert.IsFalse(a.Equals(5));
         }
 
