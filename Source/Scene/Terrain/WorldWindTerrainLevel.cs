@@ -117,7 +117,7 @@ namespace OpenGlobe.Scene.Terrain
             int writeIndex = startIndex;
             for (int j = tileSouth; j <= tileNorth; ++j)
             {
-                int row = (_terrainSource.TileLatitudePosts - j - 1) * (_terrainSource.TileLongitudePosts + 1);
+                int row = (_terrainSource.TileLatitudePosts - j - 1) * _terrainSource.TileLongitudePosts;
                 for (int i = tileWest; i <= tileEast; ++i)
                 {
                     destination[writeIndex] = tile.Posts[row + i];
