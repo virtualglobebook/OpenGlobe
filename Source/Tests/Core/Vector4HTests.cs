@@ -17,7 +17,7 @@ namespace OpenGlobe.Core
     public class Vector4HTests
     {
         [Test]
-        public void Construct()
+        public void Construct0()
         {
             Vector4H v1 = new Vector4H(1.0f, 2.0f, 3.0f, 4.0f);
             Assert.AreEqual((Half)1.0f, v1.X);
@@ -30,6 +30,26 @@ namespace OpenGlobe.Core
             Assert.AreEqual((Half)2.0, v2.Y);
             Assert.AreEqual((Half)3.0, v2.Z);
             Assert.AreEqual((Half)4.0, v2.W);
+        }
+
+        [Test]
+        public void Construct1()
+        {
+            Vector4H v = new Vector4H(new Vector3H(1.0, 2.0, 3.0), (Half)4.0);
+            Assert.AreEqual((Half)1.0, v.X);
+            Assert.AreEqual((Half)2.0, v.Y);
+            Assert.AreEqual((Half)3.0, v.Z);
+            Assert.AreEqual((Half)4.0, v.W);
+        }
+
+        [Test]
+        public void Construct2()
+        {
+            Vector4H v = new Vector4H(new Vector2H(1.0, 2.0), (Half)3.0, (Half)4.0);
+            Assert.AreEqual((Half)1.0, v.X);
+            Assert.AreEqual((Half)2.0, v.Y);
+            Assert.AreEqual((Half)3.0, v.Z);
+            Assert.AreEqual((Half)4.0, v.W);
         }
 
         [Test]

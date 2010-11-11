@@ -62,6 +62,22 @@ namespace OpenGlobe.Core
             _w = w;
         }
 
+        public Vector4H(Vector3H v, Half w)
+        {
+            _x = v.X;
+            _y = v.Y;
+            _z = v.Z;
+            _w = w;
+        }
+
+        public Vector4H(Vector2H v, Half z, Half w)
+        {
+            _x = v.X;
+            _y = v.Y;
+            _z = z;
+            _w = w;
+        }
+
         public Vector4H(float x, float y, float z, float w)
         {
             _x = new Half(x);

@@ -40,6 +40,22 @@ namespace OpenGlobe.Core
             _w = w;
         }
 
+        public Vector4B(Vector3B v, bool w)
+        {
+            _x = v.X;
+            _y = v.Y;
+            _z = v.Z;
+            _w = w;
+        }
+
+        public Vector4B(Vector2B v, bool z, bool w)
+        {
+            _x = v.X;
+            _y = v.Y;
+            _z = z;
+            _w = w;
+        }
+
         public bool X
         {
             get { return _x; }

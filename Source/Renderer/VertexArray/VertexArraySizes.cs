@@ -7,10 +7,8 @@
 //
 #endregion
 
-using System.Runtime.InteropServices;
 using System.Diagnostics;
-using OpenGlobe.Renderer;
-using OpenTK;
+using OpenGlobe.Core;
 
 namespace OpenGlobe.Renderer
 {

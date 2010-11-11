@@ -62,6 +62,22 @@ namespace OpenGlobe.Core
             _w = w;
         }
 
+        public Vector4S(Vector3S v, float w)
+        {
+            _x = v.X;
+            _y = v.Y;
+            _z = v.Z;
+            _w = w;
+        }
+
+        public Vector4S(Vector2S v, float z, float w)
+        {
+            _x = v.X;
+            _y = v.Y;
+            _z = z;
+            _w = w;
+        }
+
         public float X
         {
             get { return _x; }

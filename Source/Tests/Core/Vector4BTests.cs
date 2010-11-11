@@ -17,9 +17,29 @@ namespace OpenGlobe.Core
     public class Vector4BTests
     {
         [Test]
-        public void Construct()
+        public void Construct0()
         {
             Vector4B v = new Vector4B(false, false, true, true);
+            Assert.IsFalse(v.X);
+            Assert.IsFalse(v.Y);
+            Assert.IsTrue(v.Z);
+            Assert.IsTrue(v.W);
+        }
+
+        [Test]
+        public void Construct1()
+        {
+            Vector4B v = new Vector4B(new Vector3B(false, false, true), true);
+            Assert.IsFalse(v.X);
+            Assert.IsFalse(v.Y);
+            Assert.IsTrue(v.Z);
+            Assert.IsTrue(v.W);
+        }
+
+        [Test]
+        public void Construct2()
+        {
+            Vector4B v = new Vector4B(new Vector2B(false, false), true, true);
             Assert.IsFalse(v.X);
             Assert.IsFalse(v.Y);
             Assert.IsTrue(v.Z);
