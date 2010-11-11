@@ -7,18 +7,18 @@
 //
 #endregion
 
-using OpenTK;
+using OpenGlobe.Core;
 using OpenTK.Graphics.OpenGL;
-using OpenGlobe.Renderer;
 
 namespace OpenGlobe.Renderer.GL3x
 {
-    internal class UniformFloatMatrix43GL3x : Uniform<Matrix43>, ICleanable
+    internal class UniformFloatMatrix43GL3x : Uniform<Matrix43<float>>, ICleanable
     {
         internal UniformFloatMatrix43GL3x(string name, int location, ICleanableObserver observer)
             : base(name, UniformType.FloatMatrix43)
         {
             _location = location;
+            _value = new Matrix43<float>();
             _dirty = true;
             _observer = observer;
             _observer.NotifyDirty(this);
@@ -26,7 +26,7 @@ namespace OpenGlobe.Renderer.GL3x
 
         #region Uniform<> Members
 
-        public override Matrix43 Value
+        public override Matrix43<float> Value
         {
             set
             {
@@ -48,26 +48,14 @@ namespace OpenGlobe.Renderer.GL3x
 
         public void Clean()
         {
-            Vector3 column0 = _value.Column0;
-            Vector3 column1 = _value.Column1;
-            Vector3 column2 = _value.Column2;
-            Vector3 column3 = _value.Column3;
-
-            float[] columnMajorElements = new float[] { 
-            column0.X, column0.Y, column0.Z, 
-            column1.X, column1.Y, column1.Z, 
-            column2.X, column2.Y, column2.Z, 
-            column3.X, column3.Y, column3.Z };
-
-            GL.UniformMatrix4x3(_location, 1, false, columnMajorElements);
-
+            GL.UniformMatrix4x3(_location, 1, false, _value.ReadOnlyColumnMajorValues);
             _dirty = false;
         }
 
         #endregion
 
         private int _location;
-        private Matrix43 _value;
+        private Matrix43<float> _value;
         private bool _dirty;
         private readonly ICleanableObserver _observer;
     }

@@ -71,7 +71,9 @@
     <Compile Include="Matrices\Matrix23.cs" />
     <Compile Include="Matrices\Matrix24.cs" />
     <Compile Include="Matrices\Matrix32.cs" />
+    <Compile Include="Matrices\Matrix34.cs" />
     <Compile Include="Matrices\Matrix42.cs" />
+    <Compile Include="Matrices\Matrix43.cs" />
     <Compile Include="MessageQueue.cs" />
     <Compile Include="MessageQueueEventArgs.cs" />
     <Compile Include="Polygons\EarClipping.cs" />
