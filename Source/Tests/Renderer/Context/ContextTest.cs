@@ -18,18 +18,13 @@ namespace OpenGlobe.Renderer
         [Test]
         public void Clear()
         {
-            GraphicsWindow window = Device.CreateWindow(1, 1);
-
-            window.Context.Clear(new ClearState { Buffers = ClearBuffers.ColorBuffer });
-            window.Context.Clear(new ClearState { Buffers = ClearBuffers.DepthBuffer });
-            window.Context.Clear(new ClearState { Buffers = ClearBuffers.StencilBuffer });
-
-            //
-            // The following is much faster
-            //
-            window.Context.Clear(new ClearState { Buffers = ClearBuffers.All });
-
-            window.Dispose();
+            using (GraphicsWindow window = Device.CreateWindow(1, 1))
+            {
+                window.Context.Clear(new ClearState { Buffers = ClearBuffers.ColorBuffer });
+                window.Context.Clear(new ClearState { Buffers = ClearBuffers.DepthBuffer });
+                window.Context.Clear(new ClearState { Buffers = ClearBuffers.StencilBuffer });
+                window.Context.Clear(new ClearState { Buffers = ClearBuffers.All });
+            }
         }
     }
 }

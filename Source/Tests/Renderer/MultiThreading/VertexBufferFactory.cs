@@ -47,7 +47,12 @@ namespace OpenGlobe.Renderer
         {
             if (disposing)
             {
-                _vertexBuffer.Dispose();
+                if (_vertexBuffer != null)
+                {
+                    _vertexBuffer.Dispose();
+                    _vertexBuffer = null;
+                }
+
                 _window.Dispose();
             }
             base.Dispose(disposing);

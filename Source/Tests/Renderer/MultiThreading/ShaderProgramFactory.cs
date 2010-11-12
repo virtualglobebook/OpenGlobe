@@ -45,7 +45,11 @@ namespace OpenGlobe.Renderer
         {
             if (disposing)
             {
-                _sp.Dispose();
+                if (_sp != null)
+                {
+                    _sp.Dispose();
+                    _sp = null;
+                }
             }
             base.Dispose(disposing);
         }

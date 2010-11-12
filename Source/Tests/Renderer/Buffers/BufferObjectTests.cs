@@ -108,45 +108,40 @@ namespace OpenGlobe.Renderer
         [Test]
         public void UniformBuffer()
         {
-            GraphicsWindow window = Device.CreateWindow(1, 1);
+            using (GraphicsWindow window = Device.CreateWindow(1, 1))
+            using (ShaderProgram sp = Device.CreateShaderProgram(
+                    ShaderSources.PassThroughVertexShader(),
+                    ShaderSources.RedUniformBlockFragmentShader()))
+            using (UniformBuffer uniformBuffer = Device.CreateUniformBuffer(BufferHint.DynamicDraw, sp.UniformBlocks["RedBlock"].SizeInBytes))
+            {
+                Assert.IsFalse(sp.Log.Contains("warning"));
 
-            ShaderProgram sp = Device.CreateShaderProgram(
-                ShaderSources.PassThroughVertexShader(),
-                ShaderSources.RedUniformBlockFragmentShader());
-            Assert.IsFalse(sp.Log.Contains("warning"));
+                UniformBlock redBlock = sp.UniformBlocks["RedBlock"];
+                UniformBlockMember red = redBlock.Members["red"];
 
-            UniformBlock redBlock = sp.UniformBlocks["RedBlock"];
-            UniformBlockMember red = redBlock.Members["red"];
+                //
+                // Verify creating uniform buffer
+                //
+                Assert.IsNotNull(uniformBuffer);
+                Assert.AreEqual(BufferHint.DynamicDraw, uniformBuffer.UsageHint);
+                Assert.AreEqual(redBlock.SizeInBytes, uniformBuffer.SizeInBytes);
 
-            //
-            // Verify creating uniform buffer
-            //
-            UniformBuffer uniformBuffer = Device.CreateUniformBuffer(BufferHint.DynamicDraw, redBlock.SizeInBytes);
-            Assert.IsNotNull(uniformBuffer);
-            Assert.AreEqual(BufferHint.DynamicDraw, uniformBuffer.UsageHint);
-            Assert.AreEqual(redBlock.SizeInBytes, uniformBuffer.SizeInBytes);
+                redBlock.Bind(uniformBuffer);
 
-            redBlock.Bind(uniformBuffer);
+                //
+                // Verify copying into red member
+                //
+                float redIntensity = 0.5f;
+                uniformBuffer.CopyFromSystemMemory(new[] { redIntensity }, red.OffsetInBytes);
 
-            //
-            // Verify copying into red member
-            //
-            float redIntensity = 0.5f;
-            uniformBuffer.CopyFromSystemMemory(new[] { redIntensity }, red.OffsetInBytes);
-
-            float[] redIntensity2 = uniformBuffer.CopyToSystemMemory<float>(red.OffsetInBytes, sizeof(float));
-            Assert.AreEqual(redIntensity, redIntensity2[0]);
-
-            sp.Dispose();
-            uniformBuffer.Dispose();
-            window.Dispose();
+                float[] redIntensity2 = uniformBuffer.CopyToSystemMemory<float>(red.OffsetInBytes, sizeof(float));
+                Assert.AreEqual(redIntensity, redIntensity2[0]);
+            }
         }
 
         [Test]
         public void WritePixelBuffer()
         {
-            GraphicsWindow window = Device.CreateWindow(1, 1);
-
             BlittableRGBA[] pixels = new BlittableRGBA[]
             {
                 new BlittableRGBA(Color.Red), 
@@ -154,73 +149,71 @@ namespace OpenGlobe.Renderer
                 new BlittableRGBA(Color.Blue), 
                 new BlittableRGBA(Color.White)
             };
-
-            //
-            // Verify creating pixel buffer
-            //
             int sizeInBytes = pixels.Length * SizeInBytes<BlittableRGBA>.Value;
-            WritePixelBuffer pixelBuffer = Device.CreateWritePixelBuffer(PixelBufferHint.Stream, sizeInBytes);
-            Assert.IsNotNull(pixelBuffer);
-            Assert.AreEqual(PixelBufferHint.Stream, pixelBuffer.UsageHint);
-            Assert.AreEqual(sizeInBytes, pixelBuffer.SizeInBytes);
 
-            //
-            // Verify copying entire buffer between system memory and pixel buffer
-            //
-            pixelBuffer.CopyFromSystemMemory(pixels);
+            using (GraphicsWindow window = Device.CreateWindow(1, 1))
+            using (WritePixelBuffer pixelBuffer = Device.CreateWritePixelBuffer(PixelBufferHint.Stream, sizeInBytes))
+            {
+                //
+                // Verify creating pixel buffer
+                //
+                Assert.IsNotNull(pixelBuffer);
+                Assert.AreEqual(PixelBufferHint.Stream, pixelBuffer.UsageHint);
+                Assert.AreEqual(sizeInBytes, pixelBuffer.SizeInBytes);
 
-            BlittableRGBA[] pixels2 = pixelBuffer.CopyToSystemMemory<BlittableRGBA>(0, pixelBuffer.SizeInBytes);
-            Assert.AreEqual(pixels[0], pixels2[0]);
-            Assert.AreEqual(pixels[1], pixels2[1]);
-            Assert.AreEqual(pixels[2], pixels2[2]);
+                //
+                // Verify copying entire buffer between system memory and pixel buffer
+                //
+                pixelBuffer.CopyFromSystemMemory(pixels);
 
-            //
-            // Verify modiying a subset of the vertex buffer
-            //
-            BlittableRGBA modifiedPixel = new BlittableRGBA(Color.Black);
-            pixelBuffer.CopyFromSystemMemory(new[] { modifiedPixel }, SizeInBytes<BlittableRGBA>.Value);
+                BlittableRGBA[] pixels2 = pixelBuffer.CopyToSystemMemory<BlittableRGBA>(0, pixelBuffer.SizeInBytes);
+                Assert.AreEqual(pixels[0], pixels2[0]);
+                Assert.AreEqual(pixels[1], pixels2[1]);
+                Assert.AreEqual(pixels[2], pixels2[2]);
 
-            BlittableRGBA[] pixels3 = pixelBuffer.CopyToSystemMemory<BlittableRGBA>(0, pixelBuffer.SizeInBytes);
-            Assert.AreEqual(pixels[0], pixels3[0]);
-            Assert.AreEqual(modifiedPixel, pixels3[1]);
-            Assert.AreEqual(pixels[2], pixels3[2]);
+                //
+                // Verify modiying a subset of the vertex buffer
+                //
+                BlittableRGBA modifiedPixel = new BlittableRGBA(Color.Black);
+                pixelBuffer.CopyFromSystemMemory(new[] { modifiedPixel }, SizeInBytes<BlittableRGBA>.Value);
 
-            pixelBuffer.Dispose();
-            window.Dispose();
+                BlittableRGBA[] pixels3 = pixelBuffer.CopyToSystemMemory<BlittableRGBA>(0, pixelBuffer.SizeInBytes);
+                Assert.AreEqual(pixels[0], pixels3[0]);
+                Assert.AreEqual(modifiedPixel, pixels3[1]);
+                Assert.AreEqual(pixels[2], pixels3[2]);
+            }
         }
 
         [Test]
         public void WritePixelBufferBitmap()
         {
-            GraphicsWindow window = Device.CreateWindow(1, 1);
+            using (Bitmap bitmap = new Bitmap(1, 1))
+            using (GraphicsWindow window = Device.CreateWindow(1, 1))
+            using (WritePixelBuffer pixelBuffer = Device.CreateWritePixelBuffer(PixelBufferHint.Stream,
+                BitmapAlgorithms.SizeOfPixelsInBytes(bitmap)))
+            {
+                Color color = Color.FromArgb(0, 1, 2, 3);
+                bitmap.SetPixel(0, 0, color);
 
-            Color color = Color.FromArgb(0, 1, 2, 3);
-            Bitmap bitmap = new Bitmap(1, 1);
-            bitmap.SetPixel(0, 0, color);
-            
-            WritePixelBuffer pixelBuffer = Device.CreateWritePixelBuffer(PixelBufferHint.Stream,
-                BitmapAlgorithms.SizeOfPixelsInBytes(bitmap));
-            pixelBuffer.CopyFromBitmap(bitmap);
-            
-            //
-            // Verify read back - comes back BGRA
-            //
-            BlittableBGRA[] readBackPixel = pixelBuffer.CopyToSystemMemory<BlittableBGRA>();
-            Assert.AreEqual(color.R, readBackPixel[0].R);
-            Assert.AreEqual(color.G, readBackPixel[0].G);
-            Assert.AreEqual(color.B, readBackPixel[0].B);
-            Assert.AreEqual(color.A, readBackPixel[0].A);
+                pixelBuffer.CopyFromBitmap(bitmap);
 
-            //
-            // Verify read back into bitmap
-            //
-            Bitmap readBackBitmap = pixelBuffer.CopyToBitmap(1, 1, PixelFormat.Format32bppArgb);
-            Assert.AreEqual(color, readBackBitmap.GetPixel(0, 0));
+                //
+                // Verify read back - comes back BGRA
+                //
+                BlittableBGRA[] readBackPixel = pixelBuffer.CopyToSystemMemory<BlittableBGRA>();
+                Assert.AreEqual(color.R, readBackPixel[0].R);
+                Assert.AreEqual(color.G, readBackPixel[0].G);
+                Assert.AreEqual(color.B, readBackPixel[0].B);
+                Assert.AreEqual(color.A, readBackPixel[0].A);
 
-            readBackBitmap.Dispose();
-            pixelBuffer.Dispose();
-            bitmap.Dispose();
-            window.Dispose();
+                //
+                // Verify read back into bitmap
+                //
+                using (Bitmap readBackBitmap = pixelBuffer.CopyToBitmap(1, 1, PixelFormat.Format32bppArgb))
+                {
+                    Assert.AreEqual(color, readBackBitmap.GetPixel(0, 0));
+                }
+            }
         }
     }
 }

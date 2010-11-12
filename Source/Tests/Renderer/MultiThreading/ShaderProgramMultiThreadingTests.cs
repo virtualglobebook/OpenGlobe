@@ -56,18 +56,16 @@ namespace OpenGlobe.Renderer.Multithreading
             using (var thread0Window = Device.CreateWindow(1, 1))
             using (var thread1Window = Device.CreateWindow(1, 1))
             using (var window = Device.CreateWindow(1, 1))
+            using (ShaderProgramFactory factory0 = new ShaderProgramFactory(thread0Window, ShaderSources.PassThroughVertexShader(), ShaderSources.PassThroughFragmentShader()))
+            using (ShaderProgramFactory factory1 = new ShaderProgramFactory(thread1Window, ShaderSources.PassThroughVertexShader(), ShaderSources.PassThroughFragmentShader()))
             {
-                ShaderProgramFactory factory0 = new ShaderProgramFactory(thread0Window, ShaderSources.PassThroughVertexShader(), ShaderSources.PassThroughFragmentShader());
                 Thread t0 = new Thread(factory0.Create);
                 t0.Start();
                 t0.Join();
 
-                ShaderProgramFactory factory1 = new ShaderProgramFactory(thread1Window, ShaderSources.PassThroughVertexShader(), ShaderSources.PassThroughFragmentShader());
                 Thread t1 = new Thread(factory1.Create);
                 t1.Start();
                 t1.Join();
-
-                ///////////////////////////////////////////////////////////////////
 
                 using (FrameBuffer frameBuffer = TestUtility.CreateFrameBuffer(window.Context))
                 using (VertexArray va = TestUtility.CreateVertexArray(window.Context, factory0.ShaderProgram.VertexAttributes["position"].Location))
@@ -80,9 +78,6 @@ namespace OpenGlobe.Renderer.Multithreading
                     window.Context.Draw(PrimitiveType.Points, 0, 1, new DrawState(TestUtility.CreateRenderStateWithoutDepthTest(), factory1.ShaderProgram, va), new SceneState());
                     TestUtility.ValidateColor(frameBuffer.ColorAttachments[0], 255, 0, 0);
                 }
-
-                factory1.Dispose();
-                factory0.Dispose();
             }
         }
 
@@ -97,20 +92,17 @@ namespace OpenGlobe.Renderer.Multithreading
             using (var thread0Window = Device.CreateWindow(1, 1))
             using (var thread1Window = Device.CreateWindow(1, 1))
             using (var window = Device.CreateWindow(1, 1))
+            using (ShaderProgramFactory factory0 = new ShaderProgramFactory(thread0Window, ShaderSources.PassThroughVertexShader(), ShaderSources.PassThroughFragmentShader()))
+            using (ShaderProgramFactory factory1 = new ShaderProgramFactory(thread1Window, ShaderSources.PassThroughVertexShader(), ShaderSources.PassThroughFragmentShader()))
             {
-
-                ShaderProgramFactory factory0 = new ShaderProgramFactory(thread0Window, ShaderSources.PassThroughVertexShader(), ShaderSources.PassThroughFragmentShader());
                 Thread t0 = new Thread(factory0.Create);
                 t0.Start();
 
-                ShaderProgramFactory factory1 = new ShaderProgramFactory(thread1Window, ShaderSources.PassThroughVertexShader(), ShaderSources.PassThroughFragmentShader());
                 Thread t1 = new Thread(factory1.Create);
                 t1.Start();
 
                 t0.Join();
                 t1.Join();
-
-                ///////////////////////////////////////////////////////////////////
 
                 using (FrameBuffer frameBuffer = TestUtility.CreateFrameBuffer(window.Context))
                 using (VertexArray va = TestUtility.CreateVertexArray(window.Context, factory0.ShaderProgram.VertexAttributes["position"].Location))
@@ -123,9 +115,6 @@ namespace OpenGlobe.Renderer.Multithreading
                     window.Context.Draw(PrimitiveType.Points, 0, 1, new DrawState(TestUtility.CreateRenderStateWithoutDepthTest(), factory1.ShaderProgram, va), new SceneState());
                     TestUtility.ValidateColor(frameBuffer.ColorAttachments[0], 255, 0, 0);
                 }
-
-                factory1.Dispose();
-                factory0.Dispose();
             }
         }
     }

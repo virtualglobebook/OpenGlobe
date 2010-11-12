@@ -22,49 +22,48 @@ namespace OpenGlobe.Scene
         [Test]
         public void Construct()
         {
-            BillboardCollectionTest billboardGroup = new BillboardCollectionTest();
-            BillboardCollection group = billboardGroup.Group;
-
-            Assert.IsTrue(group.DepthTestEnabled);
-            Assert.IsFalse(group.Wireframe);
-
-            billboardGroup.Dispose();
+            using (BillboardCollectionTest billboardGroup = new BillboardCollectionTest())
+            {
+                BillboardCollection group = billboardGroup.Group;
+                Assert.IsTrue(group.DepthTestEnabled);
+                Assert.IsFalse(group.Wireframe);
+            }
         }
 
         [Test]
         public void List()
         {
-            BillboardCollectionTest billboardGroup = new BillboardCollectionTest();
-            IList<Billboard> group = billboardGroup.Group;
-
-            Assert.AreEqual(0, group.Count);
-            Assert.IsFalse(group.IsReadOnly);
-
-            Billboard b0 = new Billboard() { Position = new Vector3D(0, 1, 2) };
-            Billboard b1 = new Billboard() { Position = new Vector3D(3, 4, 5) };
-            Billboard[] billboards = new Billboard[] { b0, b1 };
-            group.Add(b0);
-            group.Add(b1);
-
-            Assert.AreEqual(billboards.Length, group.Count);
-            Assert.AreEqual(b0, group[0]);
-            Assert.AreEqual(0, group.IndexOf(b0));
-            Assert.AreEqual(b1, group[1]);
-            Assert.AreEqual(1, group.IndexOf(b1));
-
-            int i = 0;
-            foreach (Billboard b in group)
+            using (BillboardCollectionTest billboardGroup = new BillboardCollectionTest())
             {
-                Assert.AreEqual(billboards[i++], b);
-                Assert.AreEqual(group, b.Group);
+                IList<Billboard> group = billboardGroup.Group;
+
+                Assert.AreEqual(0, group.Count);
+                Assert.IsFalse(group.IsReadOnly);
+
+                Billboard b0 = new Billboard() { Position = new Vector3D(0, 1, 2) };
+                Billboard b1 = new Billboard() { Position = new Vector3D(3, 4, 5) };
+                Billboard[] billboards = new Billboard[] { b0, b1 };
+                group.Add(b0);
+                group.Add(b1);
+
+                Assert.AreEqual(billboards.Length, group.Count);
+                Assert.AreEqual(b0, group[0]);
+                Assert.AreEqual(0, group.IndexOf(b0));
+                Assert.AreEqual(b1, group[1]);
+                Assert.AreEqual(1, group.IndexOf(b1));
+
+                int i = 0;
+                foreach (Billboard b in group)
+                {
+                    Assert.AreEqual(billboards[i++], b);
+                    Assert.AreEqual(group, b.Group);
+                }
+
+                Assert.IsTrue(group.Contains(b0));
+                group.Clear();
+                Assert.AreEqual(0, group.Count);
+                Assert.IsFalse(group.Contains(b0));
             }
-
-            Assert.IsTrue(group.Contains(b0));
-            group.Clear();
-            Assert.AreEqual(0, group.Count);
-            Assert.IsFalse(group.Contains(b0));
-
-            billboardGroup.Dispose();
         }
 
         [Test]
