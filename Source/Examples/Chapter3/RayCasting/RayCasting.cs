@@ -85,7 +85,7 @@ namespace OpenGlobe.Examples
         private void CenterCameraOnGlobeCenter()
         {
             _camera.CenterPoint = Vector3D.Zero;
-            _camera.FixedToLocalRotation = Matrix3d.Identity;
+            _camera.FixedToLocalRotation = Matrix3D.Identity;
             _camera.Azimuth = 0.0;
             _camera.Elevation = 0.0;
             _camera.Range = _globe.Shape.MaximumRadius * 3.0;

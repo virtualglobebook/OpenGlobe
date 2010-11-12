@@ -302,5 +302,41 @@ namespace OpenGlobe.Renderer
                 TestUtility.ValidateColor(frameBuffer.ColorAttachments[0], 255, 255, 0);
             }
         }
+
+        [Test]
+        public void Matrix3()
+        {
+            string fs =
+                @"#version 330
+
+                  uniform mat3 exampleMat3;
+                  out vec3 FragColor;
+
+                  void main()
+                  {
+                      FragColor = vec3(exampleMat3[0].y, exampleMat3[2].x, 0.0);
+                  }";
+
+            using (GraphicsWindow window = Device.CreateWindow(1, 1))
+            using (FrameBuffer frameBuffer = TestUtility.CreateFrameBuffer(window.Context))
+            using (ShaderProgram sp = Device.CreateShaderProgram(ShaderSources.PassThroughVertexShader(), fs))
+            using (VertexArray va = TestUtility.CreateVertexArray(window.Context, sp.VertexAttributes["position"].Location))
+            {
+                Matrix3S m3 = new Matrix3S(
+                        0.0f, 0.0f, 1.0f,
+                        1.0f, 0.0f, 0.0f,
+                        0.0f, 0.0f, 0.0f);
+                Uniform<Matrix3S> exampleMat3 = (Uniform<Matrix3S>)sp.Uniforms["exampleMat3"];
+                Assert.AreEqual("exampleMat3", exampleMat3.Name);
+                Assert.AreEqual(UniformType.FloatMatrix33, exampleMat3.Datatype);
+                Assert.AreEqual(new Matrix3S(), exampleMat3.Value);
+                exampleMat3.Value = m3;
+                Assert.AreEqual(m3, exampleMat3.Value);
+
+                window.Context.FrameBuffer = frameBuffer;
+                window.Context.Draw(PrimitiveType.Points, 0, 1, new DrawState(TestUtility.CreateRenderStateWithoutDepthTest(), sp, va), new SceneState());
+                TestUtility.ValidateColor(frameBuffer.ColorAttachments[0], 255, 255, 0);
+            }
+        }
     }
 }

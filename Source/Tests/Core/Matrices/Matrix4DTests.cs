@@ -197,6 +197,20 @@ namespace OpenGlobe.Core
         }
 
         [Test]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void Multiply3()
+        {
+            Matrix4D m = null * new Matrix4D();
+        }
+
+        [Test]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void Multiply4()
+        {
+            Matrix4D m = new Matrix4D() * null;
+        }
+
+        [Test]
         public void MultiplyVector0()
         {
             Matrix4D zero = new Matrix4D(0.0);
@@ -222,6 +236,14 @@ namespace OpenGlobe.Core
             Vector4D v = new Vector4D(1.0, 2.0, 3.0, 4.0);
             Vector4D result = new Vector4D(7.0, 10.0, 5.0, 8.0);
             Assert.AreEqual(result, m * v);
+        }
+
+        [Test]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void MultiplyVector3()
+        {
+            Matrix4D m = null;
+            Vector4D result = m * new Vector4D();
         }
 
         [Test]

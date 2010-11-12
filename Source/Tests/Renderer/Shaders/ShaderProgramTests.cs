@@ -90,8 +90,6 @@ namespace OpenGlobe.Renderer
                   uniform bvec3 exampleBVec3;
                   uniform bvec4 exampleBVec4;
 
-                  uniform mat3   exampleMat3;
-
                   uniform sampler2D exampleSampler2D;
                   uniform sampler2DRect exampleSampler2DRect;
                   uniform sampler1DArray exampleSampler1DArray;
@@ -114,7 +112,6 @@ namespace OpenGlobe.Renderer
                       red += float(exampleBVec2.x);
                       red += float(exampleBVec3.x);
                       red += float(exampleBVec4.x);
-                      red += exampleMat3[0].x;
                       red += texture(exampleSampler2D, vec2(0, 0)).r;
                       red += texture(exampleSampler2DRect, vec2(0, 0)).r;
                       red += texture1DArray(exampleSampler1DArray, vec2(0, 0)).r;
@@ -127,7 +124,7 @@ namespace OpenGlobe.Renderer
             {
                 Assert.IsFalse(sp.Log.Contains("warning"));
                 Assert.IsEmpty(sp.UniformBlocks);
-                Assert.AreEqual(16, sp.Uniforms.Count);
+                Assert.AreEqual(15, sp.Uniforms.Count);
 
                 Uniform<float> exampleFloat = (Uniform<float>)sp.Uniforms["exampleFloat"];
                 Assert.AreEqual("exampleFloat", exampleFloat.Name);
@@ -239,19 +236,6 @@ namespace OpenGlobe.Renderer
                 Assert.AreEqual(0, exampleSampler1DArray.Value);
                 exampleSampler1DArray.Value = 1;
                 Assert.AreEqual(1, exampleSampler1DArray.Value);
-
-                ///////////////////////////////////////////////////////////////
-
-                Matrix3 m3 = new Matrix3(
-                    new Vector3(0, 0, 0),
-                    new Vector3(0, 0, 0.25f),
-                    new Vector3(0, 0, 0));
-                Uniform<Matrix3> exampleMat3 = (Uniform<Matrix3>)sp.Uniforms["exampleMat3"];
-                Assert.AreEqual("exampleMat3", exampleMat3.Name);
-                Assert.AreEqual(UniformType.FloatMatrix33, exampleMat3.Datatype);
-                Assert.AreEqual(new Matrix3(), exampleMat3.Value);
-                exampleMat3.Value = m3;
-                Assert.AreEqual(m3, exampleMat3.Value);
             }
         }
 

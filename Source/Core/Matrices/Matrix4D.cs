@@ -174,6 +174,16 @@ namespace OpenGlobe.Core
 
         public static Matrix4D operator *(Matrix4D left, Matrix4D right)
         {
+            if (Matrix4D.ReferenceEquals(left, null))
+            {
+                throw new ArgumentNullException("left");
+            }
+
+            if (Matrix4D.ReferenceEquals(right, null))
+            {
+                throw new ArgumentNullException("right");
+            }
+
             double[] leftValues = left.ReadOnlyColumnMajorValues;
             double[] rightValues = right.ReadOnlyColumnMajorValues;
 
@@ -270,6 +280,11 @@ namespace OpenGlobe.Core
 
         public static Vector4D operator *(Matrix4D matrix, Vector4D vector)
         {
+            if (Matrix4D.ReferenceEquals(matrix, null))
+            {
+                throw new ArgumentNullException("matrix");
+            }
+
             double[] values = matrix.ReadOnlyColumnMajorValues;
 
             double x = 

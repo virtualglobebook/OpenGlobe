@@ -193,7 +193,7 @@ namespace OpenGlobe.Scene
         /// Gets or sets the transformation from the <see cref="Ellipsoid"/> fixed axes to
         /// the local axes in which the <see cref="Azimuth"/> and <see cref="Elevation"/> are defined.
         /// </summary>
-        public Matrix3d FixedToLocalRotation
+        public Matrix3D FixedToLocalRotation
         {
             get { return _fixedToLocalRotation; }
             set { _fixedToLocalRotation = value; UpdateCameraFromParameters(); }
@@ -251,7 +251,7 @@ namespace OpenGlobe.Scene
             double sinLon = Math.Sin(geographic.Longitude);
             double sinLat = Math.Sin(geographic.Latitude);
             _fixedToLocalRotation =
-                new Matrix3d(-sinLon,            cosLon,             0.0,
+                new Matrix3D(-sinLon,            cosLon,             0.0,
                              -sinLat * cosLon,   -sinLat * sinLon,   cosLat,
                              cosLat * cosLon,    cosLat * sinLon,    sinLat);
 
@@ -307,7 +307,7 @@ namespace OpenGlobe.Scene
                 _camera.Up = new Vector3D(-Math.Cos(_azimuth), -Math.Sin(_azimuth), 0.0);
             }
 
-            Matrix3d localToFixed = _fixedToLocalRotation.Transpose();
+            Matrix3D localToFixed = _fixedToLocalRotation.Transpose();
             _camera.Eye = localToFixed * _camera.Eye;
             _camera.Eye += _centerPoint;
             _camera.Up = localToFixed * _camera.Up;
@@ -467,6 +467,6 @@ namespace OpenGlobe.Scene
         private bool _mouseEnabled;
 
         private Vector3D _centerPoint = Vector3D.Zero;
-        private Matrix3d _fixedToLocalRotation = Matrix3d.Identity;
+        private Matrix3D _fixedToLocalRotation = Matrix3D.Identity;
     }
 }

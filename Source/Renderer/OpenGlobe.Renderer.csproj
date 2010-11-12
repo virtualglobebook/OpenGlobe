@@ -86,7 +86,6 @@
     <Compile Include="Input\MouseMoveEventArgs.cs" />
     <Compile Include="Mesh\MeshVertexBufferAttributes.cs" />
     <Compile Include="Mesh\MeshBuffers.cs" />
-    <Compile Include="OpenTK\Matrix3d.cs" />
     <Compile Include="RenderState\ColorMask.cs" />
     <Compile Include="RenderState\DepthRange.cs" />
     <Compile Include="Scene\Camera.cs" />
@@ -228,7 +227,6 @@
     <Compile Include="Shaders\UniformBlockMatrixArrayMember.cs" />
     <Compile Include="Shaders\ShaderVertexAttribute.cs" />
     <Compile Include="ShaderVertexAttributeCollection.cs" />
-    <Compile Include="OpenTK\Matrix33.cs" />
     <Compile Include="Textures\Texture2D.cs" />
     <Compile Include="Textures\Texture2DDescription.cs" />
     <Compile Include="Textures\TextureSampler.cs" />

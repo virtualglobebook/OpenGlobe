@@ -73,6 +73,8 @@
     <Compile Include="Matrices\Matrix24.cs" />
     <Compile Include="Matrices\Matrix32.cs" />
     <Compile Include="Matrices\Matrix34.cs" />
+    <Compile Include="Matrices\Matrix3D.cs" />
+    <Compile Include="Matrices\Matrix3S.cs" />
     <Compile Include="Matrices\Matrix42.cs" />
     <Compile Include="Matrices\Matrix43.cs" />
     <Compile Include="Matrices\Matrix4D.cs" />
