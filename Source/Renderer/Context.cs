@@ -36,7 +36,8 @@ namespace OpenGlobe.Renderer
         public virtual VertexArray CreateVertexArray(MeshBuffers meshBuffers)
         {
             VertexArray va = CreateVertexArray();
-            
+
+            va.DisposeBuffers = true;
             va.IndexBuffer = meshBuffers.IndexBuffer;
             for (int i = 0; i < meshBuffers.Attributes.MaximumCount; ++i)
             {

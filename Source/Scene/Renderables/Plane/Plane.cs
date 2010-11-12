@@ -246,6 +246,7 @@ namespace OpenGlobe.Scene
             _drawStateLine.ShaderProgram.Dispose();
             _drawStateFill.ShaderProgram.Dispose();
             _positionBuffer.Dispose();
+            _va.IndexBuffer.Dispose();
             _va.Dispose();
         }
 

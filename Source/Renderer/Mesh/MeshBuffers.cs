@@ -11,7 +11,10 @@ using OpenGlobe.Core;
 
 namespace OpenGlobe.Renderer
 {
-    public class MeshBuffers : Disposable
+    /// <summary>
+    /// Does not own vertex and index buffers.  They must be disposed.
+    /// </summary>
+    public class MeshBuffers
     {
         public virtual VertexBufferAttributes Attributes
         {

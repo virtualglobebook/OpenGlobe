@@ -13,7 +13,7 @@ using System;
 
 namespace OpenGlobe.Renderer
 {
-    public class VertexBufferAttribute : Disposable
+    public class VertexBufferAttribute
     {
         public VertexBufferAttribute(
             VertexBuffer vertexBuffer,
@@ -93,20 +93,6 @@ namespace OpenGlobe.Renderer
         public int StrideInBytes
         {
             get { return _strideInBytes; }
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            // TODO:  Should not do this because a vertex buffer can
-            // be assigned to more than one VertexBufferAttribute.
-            if (disposing)
-            {
-                if (_vertexBuffer != null)
-                {
-                    _vertexBuffer.Dispose();
-                }
-            }
-            base.Dispose(disposing);
         }
 
         private VertexBuffer _vertexBuffer;

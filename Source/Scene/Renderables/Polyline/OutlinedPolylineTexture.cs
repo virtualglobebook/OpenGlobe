@@ -80,7 +80,6 @@ namespace OpenGlobe.Scene
                 }
 
                 _drawState.VertexArray = context.CreateVertexArray(_meshBuffers);
-                _meshBuffers.Dispose();
                 _meshBuffers = null;
             }
 

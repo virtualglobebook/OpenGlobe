@@ -38,14 +38,14 @@ namespace OpenGlobe.Examples
             //
             _positionBuffer = Device.CreateVertexBuffer(BufferHint.DynamicDraw, _positionsRelativeToEye.Length * SizeInBytes<Vector3S>.Value);
 
-            VertexBuffer colorBuffer = Device.CreateVertexBuffer(BufferHint.StaticDraw, colors.Length);
-            colorBuffer.CopyFromSystemMemory(colors);
+            _colorBuffer = Device.CreateVertexBuffer(BufferHint.StaticDraw, colors.Length);
+            _colorBuffer.CopyFromSystemMemory(colors);
 
             _va = context.CreateVertexArray();
             _va.Attributes[_sp.VertexAttributes["position"].Location] =
                 new VertexBufferAttribute(_positionBuffer, ComponentDatatype.Float, 3);
             _va.Attributes[_sp.VertexAttributes["color"].Location] =
-                new VertexBufferAttribute(colorBuffer, ComponentDatatype.UnsignedByte, 3, true, 0, 0);
+                new VertexBufferAttribute(_colorBuffer, ComponentDatatype.UnsignedByte, 3, true, 0, 0);
 
             ///////////////////////////////////////////////////////////////////
 
@@ -102,6 +102,8 @@ namespace OpenGlobe.Examples
 
         public void Dispose()
         {
+            _positionBuffer.Dispose();
+            _colorBuffer.Dispose();
             _va.Dispose();
             _sp.Dispose();
         }
@@ -115,6 +117,7 @@ namespace OpenGlobe.Examples
         private readonly DrawState _drawState;
 
         private readonly VertexBuffer _positionBuffer;
+        private readonly VertexBuffer _colorBuffer;
         private readonly Vector3D[] _positions;
         private readonly Vector3S[] _positionsRelativeToEye;
         private Vector3D _eye;

@@ -174,6 +174,7 @@ namespace OpenGlobe.Scene
             }
             if (_lineVA != null)
             {
+                _lineVA.IndexBuffer.Dispose();
                 _lineVA.Dispose();
             }
             if (_wallSP != null)

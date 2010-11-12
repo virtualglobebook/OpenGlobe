@@ -57,8 +57,8 @@ namespace OpenGlobe
             positionsBuffer.CopyFromSystemMemory(positions);
 
             VertexArray va = context.CreateVertexArray();
-            va.Attributes[positionLocation] =
-                new VertexBufferAttribute(positionsBuffer, ComponentDatatype.Float, 4);
+            va.Attributes[positionLocation] = new VertexBufferAttribute(positionsBuffer, ComponentDatatype.Float, 4);
+            va.DisposeBuffers = true;
 
             return va;
         }

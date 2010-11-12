@@ -232,10 +232,11 @@ namespace OpenGlobe.Examples
 
         public void Dispose()
         {
-            _camera.Dispose();
             _hudFont.Dispose();
             _hud.Texture.Dispose();
             _hud.Dispose();
+            _camera.Dispose();
+            ((IDisposable)_algorithm).Dispose();
             _window.Dispose();
         }
 

@@ -20,93 +20,89 @@ namespace OpenGlobe.Renderer
         [Test]
         public void VertexBuffer()
         {
-            GraphicsWindow window = Device.CreateWindow(1, 1);
-
             Vector3S[] positions = new Vector3S[] 
             { 
                 Vector3S.Zero,
                 new Vector3S(1, 0, 0),
                 new Vector3S(0, 1, 0)
             };
-
-            //
-            // Verify creating vertex buffer
-            //
             int sizeInBytes = positions.Length * SizeInBytes<Vector3S>.Value;
-            VertexBuffer vertexBuffer = Device.CreateVertexBuffer(BufferHint.StaticDraw, sizeInBytes);
-            Assert.IsNotNull(vertexBuffer);
-            Assert.AreEqual(BufferHint.StaticDraw, vertexBuffer.UsageHint);
-            Assert.AreEqual(sizeInBytes, vertexBuffer.SizeInBytes);
 
-            //
-            // Verify copying entire buffer between system memory and vertex buffer
-            //
-            vertexBuffer.CopyFromSystemMemory(positions);
+            using (GraphicsWindow window = Device.CreateWindow(1, 1))
+            using (VertexBuffer vertexBuffer = Device.CreateVertexBuffer(BufferHint.StaticDraw, sizeInBytes))
+            {
+                //
+                // Verify creating vertex buffer
+                //
+                Assert.IsNotNull(vertexBuffer);
+                Assert.AreEqual(BufferHint.StaticDraw, vertexBuffer.UsageHint);
+                Assert.AreEqual(sizeInBytes, vertexBuffer.SizeInBytes);
 
-            Vector3S[] positions2 = vertexBuffer.CopyToSystemMemory<Vector3S>(0, vertexBuffer.SizeInBytes);
-            Assert.AreEqual(positions[0], positions2[0]);
-            Assert.AreEqual(positions[1], positions2[1]);
-            Assert.AreEqual(positions[2], positions2[2]);
+                //
+                // Verify copying entire buffer between system memory and vertex buffer
+                //
+                vertexBuffer.CopyFromSystemMemory(positions);
 
-            //
-            // Verify modiying a subset of the vertex buffer
-            //
-            Vector3S[] modifiedPositions = new Vector3S[] 
-            { 
-                new Vector3S(0, 1, 0),
-                Vector3S.Zero
-            };
-            vertexBuffer.CopyFromSystemMemory(modifiedPositions, SizeInBytes<Vector3S>.Value, SizeInBytes<Vector3S>.Value);
+                Vector3S[] positions2 = vertexBuffer.CopyToSystemMemory<Vector3S>(0, vertexBuffer.SizeInBytes);
+                Assert.AreEqual(positions[0], positions2[0]);
+                Assert.AreEqual(positions[1], positions2[1]);
+                Assert.AreEqual(positions[2], positions2[2]);
 
-            Vector3S[] positions3 = vertexBuffer.CopyToSystemMemory<Vector3S>(0, vertexBuffer.SizeInBytes);
-            Assert.AreEqual(positions[0], positions3[0]);
-            Assert.AreEqual(modifiedPositions[0], positions3[1]);
-            Assert.AreEqual(positions[2], positions3[2]);
+                //
+                // Verify modiying a subset of the vertex buffer
+                //
+                Vector3S[] modifiedPositions = new Vector3S[] 
+                { 
+                    new Vector3S(0, 1, 0),
+                    Vector3S.Zero
+                };
+                vertexBuffer.CopyFromSystemMemory(modifiedPositions, SizeInBytes<Vector3S>.Value, SizeInBytes<Vector3S>.Value);
 
-            vertexBuffer.Dispose();
-            window.Dispose();
+                Vector3S[] positions3 = vertexBuffer.CopyToSystemMemory<Vector3S>(0, vertexBuffer.SizeInBytes);
+                Assert.AreEqual(positions[0], positions3[0]);
+                Assert.AreEqual(modifiedPositions[0], positions3[1]);
+                Assert.AreEqual(positions[2], positions3[2]);
+            }
         }
 
         [Test]
         public void IndexBuffer()
         {
-            GraphicsWindow window = Device.CreateWindow(1, 1);
-
             uint[] indices = new uint[] { 0, 1, 2 };
-
-            //
-            // Verify creating index buffer
-            //
             int sizeInBytes = indices.Length * sizeof(uint);
-            IndexBuffer indexBuffer = Device.CreateIndexBuffer(BufferHint.DynamicDraw, sizeInBytes);
-            Assert.IsNotNull(indexBuffer);
-            Assert.AreEqual(BufferHint.DynamicDraw, indexBuffer.UsageHint);
-            Assert.AreEqual(sizeInBytes, indexBuffer.SizeInBytes);
 
-            //
-            // Verify copying entire buffer between system memory and index buffer
-            //
-            indexBuffer.CopyFromSystemMemory(indices);
-            Assert.AreEqual(IndexBufferDatatype.UnsignedInt, indexBuffer.Datatype);
+            using (GraphicsWindow window = Device.CreateWindow(1, 1))
+            using (IndexBuffer indexBuffer = Device.CreateIndexBuffer(BufferHint.DynamicDraw, sizeInBytes))
+            {
+                //
+                // Verify creating index buffer
+                //
+                Assert.IsNotNull(indexBuffer);
+                Assert.AreEqual(BufferHint.DynamicDraw, indexBuffer.UsageHint);
+                Assert.AreEqual(sizeInBytes, indexBuffer.SizeInBytes);
 
-            uint[] indices2 = indexBuffer.CopyToSystemMemory<uint>(0, indexBuffer.SizeInBytes);
-            Assert.AreEqual(indices[0], indices2[0]);
-            Assert.AreEqual(indices[1], indices2[1]);
-            Assert.AreEqual(indices[2], indices2[2]);
+                //
+                // Verify copying entire buffer between system memory and index buffer
+                //
+                indexBuffer.CopyFromSystemMemory(indices);
+                Assert.AreEqual(IndexBufferDatatype.UnsignedInt, indexBuffer.Datatype);
 
-            //
-            // Verify modiying a subset of the index buffer
-            //
-            uint modifiedIndex = 3;
-            indexBuffer.CopyFromSystemMemory(new[] { modifiedIndex }, sizeof(uint));
+                uint[] indices2 = indexBuffer.CopyToSystemMemory<uint>(0, indexBuffer.SizeInBytes);
+                Assert.AreEqual(indices[0], indices2[0]);
+                Assert.AreEqual(indices[1], indices2[1]);
+                Assert.AreEqual(indices[2], indices2[2]);
 
-            uint[] indices3 = indexBuffer.CopyToSystemMemory<uint>(0, indexBuffer.SizeInBytes);
-            Assert.AreEqual(indices[0], indices3[0]);
-            Assert.AreEqual(modifiedIndex, indices3[1]);
-            Assert.AreEqual(indices[2], indices3[2]);
+                //
+                // Verify modiying a subset of the index buffer
+                //
+                uint modifiedIndex = 3;
+                indexBuffer.CopyFromSystemMemory(new[] { modifiedIndex }, sizeof(uint));
 
-            indexBuffer.Dispose();
-            window.Dispose();
+                uint[] indices3 = indexBuffer.CopyToSystemMemory<uint>(0, indexBuffer.SizeInBytes);
+                Assert.AreEqual(indices[0], indices3[0]);
+                Assert.AreEqual(modifiedIndex, indices3[1]);
+                Assert.AreEqual(indices[2], indices3[2]);
+            }
         }
 
         [Test]

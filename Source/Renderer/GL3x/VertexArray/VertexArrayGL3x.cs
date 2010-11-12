@@ -8,6 +8,7 @@
 #endregion
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using OpenTK.Graphics.OpenGL;
 using OpenGlobe.Renderer;
@@ -78,11 +79,30 @@ namespace OpenGlobe.Renderer.GL3x
         {
             if (disposing)
             {
-                _attributes.Dispose();
-                if (_indexBuffer != null)
+                if (DisposeBuffers)
                 {
-                    _indexBuffer.Dispose();
+                    //
+                    // Multiple components may share the same vertex buffer, so
+                    // find the unique set of vertex buffers used by this vertex array.
+                    //
+                    HashSet<VertexBuffer> vertexBuffers = new HashSet<VertexBuffer>();
+
+                    foreach (VertexBufferAttribute attribute in _attributes)
+                    {
+                        vertexBuffers.Add(attribute.VertexBuffer);
+                    }
+
+                    foreach (VertexBuffer vb in vertexBuffers)
+                    {
+                        vb.Dispose();
+                    }
+
+                    if (_indexBuffer != null)
+                    {
+                        _indexBuffer.Dispose();
+                    }
                 }
+
                 _name.Dispose();
             }
             base.Dispose(disposing);

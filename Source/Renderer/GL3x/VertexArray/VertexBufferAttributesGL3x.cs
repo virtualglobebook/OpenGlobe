@@ -64,11 +64,11 @@ namespace OpenGlobe.Renderer.GL3x
 
         public override IEnumerator GetEnumerator()
         {
-            foreach (VertexBufferAttributeGL3x vb in _attributes)
+            foreach (VertexBufferAttributeGL3x attribute in _attributes)
             {
-                if (vb.VertexBufferAttribute != null)
+                if (attribute.VertexBufferAttribute != null)
                 {
-                    yield return vb.VertexBufferAttribute;
+                    yield return attribute.VertexBufferAttribute;
                 }
             }
         }
@@ -83,11 +83,11 @@ namespace OpenGlobe.Renderer.GL3x
 
                 for (int i = 0; i < _attributes.Length; ++i)
                 {
-                    VertexBufferAttribute vb = _attributes[i].VertexBufferAttribute;
+                    VertexBufferAttribute attribute = _attributes[i].VertexBufferAttribute;
 
                     if (_attributes[i].Dirty)
                     {
-                        if (vb != null)
+                        if (attribute != null)
                         {
                             Attach(i);
                         }
@@ -99,9 +99,9 @@ namespace OpenGlobe.Renderer.GL3x
                         _attributes[i].Dirty = false;
                     }
 
-                    if (vb != null)
+                    if (attribute != null)
                     {
-                        maximumArrayIndex = Math.Max(NumberOfVertices(vb) - 1, maximumArrayIndex);
+                        maximumArrayIndex = Math.Max(NumberOfVertices(attribute) - 1, maximumArrayIndex);
                     }
                 }
 
@@ -112,34 +112,34 @@ namespace OpenGlobe.Renderer.GL3x
 
         private void Attach(int index)
         {
-            VertexBufferAttribute vb = _attributes[index].VertexBufferAttribute;
+            VertexBufferAttribute attribute = _attributes[index].VertexBufferAttribute;
 
-            Debug.Assert(vb.NumberOfComponents >= 1);
-            Debug.Assert(vb.NumberOfComponents <= 4);
+            Debug.Assert(attribute.NumberOfComponents >= 1);
+            Debug.Assert(attribute.NumberOfComponents <= 4);
 #if DEBUG
-            if (vb.Normalize)
+            if (attribute.Normalize)
             {
                 Debug.Assert(
-                    (vb.ComponentDatatype == ComponentDatatype.Byte) ||
-                    (vb.ComponentDatatype == ComponentDatatype.UnsignedByte) ||
-                    (vb.ComponentDatatype == ComponentDatatype.Short) ||
-                    (vb.ComponentDatatype == ComponentDatatype.UnsignedShort) ||
-                    (vb.ComponentDatatype == ComponentDatatype.Int) ||
-                    (vb.ComponentDatatype == ComponentDatatype.UnsignedInt));
+                    (attribute.ComponentDatatype == ComponentDatatype.Byte) ||
+                    (attribute.ComponentDatatype == ComponentDatatype.UnsignedByte) ||
+                    (attribute.ComponentDatatype == ComponentDatatype.Short) ||
+                    (attribute.ComponentDatatype == ComponentDatatype.UnsignedShort) ||
+                    (attribute.ComponentDatatype == ComponentDatatype.Int) ||
+                    (attribute.ComponentDatatype == ComponentDatatype.UnsignedInt));
             }
 #endif
 
             GL.EnableVertexAttribArray(index);
 
-            VertexBufferGL3x bufferObjectGL = (VertexBufferGL3x)vb.VertexBuffer;
+            VertexBufferGL3x bufferObjectGL = (VertexBufferGL3x)attribute.VertexBuffer;
             
             bufferObjectGL.Bind();
             GL.VertexAttribPointer(index,
-                vb.NumberOfComponents,
-                TypeConverterGL3x.To(vb.ComponentDatatype),
-                vb.Normalize,
-                vb.StrideInBytes,
-                vb.OffsetInBytes);
+                attribute.NumberOfComponents,
+                TypeConverterGL3x.To(attribute.ComponentDatatype),
+                attribute.Normalize,
+                attribute.StrideInBytes,
+                attribute.OffsetInBytes);
         }
 
         private static void Detach(int index)
@@ -158,24 +158,9 @@ namespace OpenGlobe.Renderer.GL3x
             }
         }
 
-        private static int NumberOfVertices(VertexBufferAttribute vb)
+        private static int NumberOfVertices(VertexBufferAttribute attribute)
         {
-            return vb.VertexBuffer.SizeInBytes / vb.StrideInBytes;
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                foreach (VertexBufferAttributeGL3x attribute in _attributes)
-                {
-                    if (attribute.VertexBufferAttribute != null)
-                    {
-                        attribute.VertexBufferAttribute.Dispose();
-                    }
-                }
-            }
-            base.Dispose(disposing);
+            return attribute.VertexBuffer.SizeInBytes / attribute.StrideInBytes;
         }
 
         private VertexBufferAttributeGL3x[] _attributes;

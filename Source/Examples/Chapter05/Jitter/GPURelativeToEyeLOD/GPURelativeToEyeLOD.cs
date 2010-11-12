@@ -44,21 +44,21 @@ namespace OpenGlobe.Examples
             }
             _center = positions[6];
 
-            VertexBuffer positionBufferHigh = Device.CreateVertexBuffer(BufferHint.StaticDraw, positions.Length * SizeInBytes<Vector3S>.Value);
-            VertexBuffer positionBufferLow = Device.CreateVertexBuffer(BufferHint.StaticDraw, positions.Length * SizeInBytes<Vector3S>.Value);
-            VertexBuffer colorBuffer = Device.CreateVertexBuffer(BufferHint.StaticDraw, colors.Length);
+            _positionBufferHigh = Device.CreateVertexBuffer(BufferHint.StaticDraw, positions.Length * SizeInBytes<Vector3S>.Value);
+            _positionBufferLow = Device.CreateVertexBuffer(BufferHint.StaticDraw, positions.Length * SizeInBytes<Vector3S>.Value);
+            _colorBuffer = Device.CreateVertexBuffer(BufferHint.StaticDraw, colors.Length);
 
-            positionBufferHigh.CopyFromSystemMemory(positionsHigh);
-            positionBufferLow.CopyFromSystemMemory(positionsLow);
-            colorBuffer.CopyFromSystemMemory(colors);
+            _positionBufferHigh.CopyFromSystemMemory(positionsHigh);
+            _positionBufferLow.CopyFromSystemMemory(positionsLow);
+            _colorBuffer.CopyFromSystemMemory(colors);
 
             _vaHigh = context.CreateVertexArray();
             _vaHigh.Attributes[_spHigh.VertexAttributes["positionHigh"].Location] =
-                new VertexBufferAttribute(positionBufferHigh, ComponentDatatype.Float, 3);
+                new VertexBufferAttribute(_positionBufferHigh, ComponentDatatype.Float, 3);
             _vaHigh.Attributes[_spHigh.VertexAttributes["positionLow"].Location] =
-                new VertexBufferAttribute(positionBufferLow, ComponentDatatype.Float, 3);
+                new VertexBufferAttribute(_positionBufferLow, ComponentDatatype.Float, 3);
             _vaHigh.Attributes[_spHigh.VertexAttributes["color"].Location] =
-                new VertexBufferAttribute(colorBuffer, ComponentDatatype.UnsignedByte, 3, true, 0, 0);
+                new VertexBufferAttribute(_colorBuffer, ComponentDatatype.UnsignedByte, 3, true, 0, 0);
 
             ///////////////////////////////////////////////////////////////////
 
@@ -79,9 +79,9 @@ namespace OpenGlobe.Examples
 
             _vaLow = context.CreateVertexArray();
             _vaLow.Attributes[_spLow.VertexAttributes["position"].Location] =
-                new VertexBufferAttribute(positionBufferHigh, ComponentDatatype.Float, 3);
+                new VertexBufferAttribute(_positionBufferHigh, ComponentDatatype.Float, 3);
             _vaLow.Attributes[_spLow.VertexAttributes["color"].Location] =
-                new VertexBufferAttribute(colorBuffer, ComponentDatatype.UnsignedByte, 3, true, 0, 0);
+                new VertexBufferAttribute(_colorBuffer, ComponentDatatype.UnsignedByte, 3, true, 0, 0);
 
             _drawStateLow = new DrawState(renderState, _spLow, _vaLow);
         }
@@ -173,6 +173,10 @@ namespace OpenGlobe.Examples
 
         public void Dispose()
         {
+            _positionBufferHigh.Dispose();
+            _positionBufferLow.Dispose();
+            _colorBuffer.Dispose();
+
             _vaHigh.Dispose();
             _spHigh.Dispose();
 
@@ -181,6 +185,10 @@ namespace OpenGlobe.Examples
         }
 
         #endregion
+
+        private readonly VertexBuffer _positionBufferHigh;
+        private readonly VertexBuffer _positionBufferLow;
+        private readonly VertexBuffer _colorBuffer;
 
         private readonly VertexArray _vaHigh;
         private readonly ShaderProgram _spHigh;

@@ -23,5 +23,7 @@ namespace OpenGlobe.Renderer
             get { return null; }
             set { }
         }
+
+        public bool DisposeBuffers { get; set; }
     }
 }
