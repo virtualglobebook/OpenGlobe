@@ -24,7 +24,7 @@ namespace OpenGlobe.Renderer
         {
             _window.MakeCurrent();
 
-            int vbSizeInBytes = _positions.Length * SizeInBytes<Vector3S>.Value;
+            int vbSizeInBytes = ArraySizeInBytes.Size(_positions);
             _vertexBuffer = Device.CreateVertexBuffer(BufferHint.StaticDraw, vbSizeInBytes);
             _vertexBuffer.CopyFromSystemMemory(_positions);
             _positions = null;

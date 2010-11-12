@@ -119,6 +119,21 @@ namespace OpenGlobe.Core
         }
 
         [Test]
+        public void VertexAttributeEmulatedDoubleVector3()
+        {
+            Mesh mesh = new Mesh();
+
+            string name = "high low";
+            VertexAttributeEmulatedDoubleVector3 attribute = new VertexAttributeEmulatedDoubleVector3("high", "low");
+            Assert.AreEqual("high", attribute.HighName);
+            Assert.AreEqual("low", attribute.LowName);
+
+            mesh.Attributes.Add(attribute);
+            Assert.AreEqual(name, mesh.Attributes[name].Name);
+            Assert.AreEqual(VertexAttributeType.EmulatedDoubleVector3, mesh.Attributes[name].Datatype);
+        }
+
+        [Test]
         public void MeshIndices()
         {
             Mesh mesh = new Mesh();

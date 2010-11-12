@@ -40,8 +40,7 @@ namespace OpenGlobe
 
             BlittableRGBA[] pixels = new BlittableRGBA[] { rgba };
 
-            int sizeInBytes = pixels.Length * SizeInBytes<BlittableRGBA>.Value;
-            using (WritePixelBuffer writePixelBuffer = Device.CreateWritePixelBuffer(PixelBufferHint.Stream, sizeInBytes))
+            using (WritePixelBuffer writePixelBuffer = Device.CreateWritePixelBuffer(PixelBufferHint.Stream, ArraySizeInBytes.Size(pixels)))
             {
                 writePixelBuffer.CopyFromSystemMemory(pixels);
                 texture.CopyFromBuffer(writePixelBuffer, ImageFormat.RedGreenBlueAlpha, ImageDatatype.UnsignedByte);
@@ -53,9 +52,9 @@ namespace OpenGlobe
         public static VertexArray CreateVertexArray(Context context, int positionLocation)
         {
             Vector4S[] positions = new[] { new Vector4S(0, 0, 0, 1) };
-            VertexBuffer positionsBuffer = Device.CreateVertexBuffer(BufferHint.StaticDraw, positions.Length * SizeInBytes<Vector4S>.Value);
+            VertexBuffer positionsBuffer = Device.CreateVertexBuffer(BufferHint.StaticDraw, ArraySizeInBytes.Size(positions));
             positionsBuffer.CopyFromSystemMemory(positions);
-
+            
             VertexArray va = context.CreateVertexArray();
             va.Attributes[positionLocation] = new VertexBufferAttribute(positionsBuffer, ComponentDatatype.Float, 4);
             va.DisposeBuffers = true;

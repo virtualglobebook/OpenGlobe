@@ -23,9 +23,7 @@ namespace OpenGlobe.Renderer
 
         public virtual void CopyFromSystemMemory<T>(T[] bufferInSystemMemory, int destinationOffsetInBytes) where T : struct
         {
-            int lengthInBytes = bufferInSystemMemory.Length * SizeInBytes<T>.Value;
-
-            CopyFromSystemMemory<T>(bufferInSystemMemory, destinationOffsetInBytes, lengthInBytes);
+            CopyFromSystemMemory<T>(bufferInSystemMemory, destinationOffsetInBytes, ArraySizeInBytes.Size(bufferInSystemMemory));
         }
 
         public abstract void CopyFromSystemMemory<T>(

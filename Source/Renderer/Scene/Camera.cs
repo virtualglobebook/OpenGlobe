@@ -42,6 +42,16 @@ namespace OpenGlobe.Renderer
         public Vector3D Target { get; set; }
         public Vector3D Up { get; set; }
 
+        public Vector3S EyeHigh
+        {
+            get { return Eye.ToVector3S(); }
+        }
+
+        public Vector3S EyeLow
+        {
+            get { return (Eye - EyeHigh.ToVector3D()).ToVector3S(); }
+        }
+        
         public Vector3D Forward
         {
             get { return (Target - Eye).Normalize(); }

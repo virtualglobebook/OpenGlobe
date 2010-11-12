@@ -61,7 +61,7 @@ namespace OpenGlobe.Renderer
                 new BlittableRGBA(Color.Red), 
                 new BlittableRGBA(Color.Green)
             };
-            int sizeInBytes = pixels.Length * SizeInBytes<BlittableRGBA>.Value;
+            int sizeInBytes = ArraySizeInBytes.Size(pixels);
             Texture2DDescription description = new Texture2DDescription(2, 1, TextureFormat.RedGreenBlueAlpha8, false);
 
             using (GraphicsWindow window = Device.CreateWindow(1, 1))

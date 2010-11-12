@@ -52,7 +52,7 @@ namespace OpenGlobe.Renderer.GL3x
             Debug.Assert(destinationOffsetInBytes + lengthInBytes <= _sizeInBytes);
 
             Debug.Assert(lengthInBytes >= 0);
-            Debug.Assert(lengthInBytes <= bufferInSystemMemory.Length * SizeInBytes<T>.Value);
+            Debug.Assert(lengthInBytes <= ArraySizeInBytes.Size(bufferInSystemMemory));
 
             GL.BindVertexArray(0);
             Bind();

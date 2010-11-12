@@ -47,8 +47,16 @@
     <Compile Include="Buffers\BufferHint.cs" />
     <Compile Include="Buffers\PixelBufferHint.cs" />
     <Compile Include="ClearState.cs" />
+    <Compile Include="Shaders\DrawAutomaticUniforms\CameraEyeHighUniform.cs" />
+    <Compile Include="Shaders\DrawAutomaticUniforms\CameraEyeHighUniformFactory.cs" />
+    <Compile Include="Shaders\DrawAutomaticUniforms\CameraEyeLowUniform.cs" />
+    <Compile Include="Shaders\DrawAutomaticUniforms\CameraEyeLowUniformFactory.cs" />
     <Compile Include="Shaders\DrawAutomaticUniforms\ModelMatrixUniform.cs" />
     <Compile Include="Shaders\DrawAutomaticUniforms\ModelMatrixUniformFactory.cs" />
+    <Compile Include="Shaders\DrawAutomaticUniforms\ModelViewMatrixRelativeToEyeUniform.cs" />
+    <Compile Include="Shaders\DrawAutomaticUniforms\ModelViewMatrixRelativeToEyeUniformFactory.cs" />
+    <Compile Include="Shaders\DrawAutomaticUniforms\ModelViewPerspectiveMatrixRelativeToEyeUniform.cs" />
+    <Compile Include="Shaders\DrawAutomaticUniforms\ModelViewPerspectiveMatrixRelativeToEyeUniformFactory.cs" />
     <Compile Include="Shaders\DrawAutomaticUniforms\ViewMatrixUniform.cs" />
     <Compile Include="Shaders\DrawAutomaticUniforms\ViewMatrixUniformFactory.cs" />
     <Compile Include="VertexArray\VertexLocations.cs" />

@@ -81,7 +81,7 @@ namespace OpenGlobe.Renderer
             using (GraphicsWindow window = Device.CreateWindow(1, 1))
             using (FrameBuffer frameBuffer = TestUtility.CreateFrameBuffer(window.Context))
             using (ShaderProgram sp = Device.CreateShaderProgram(ShaderSources.PassThroughVertexShader(), ShaderSources.PassThroughFragmentShader()))
-            using (VertexBuffer positionsBuffer = Device.CreateVertexBuffer(BufferHint.StaticDraw, positions.Length * SizeInBytes<Vector4S>.Value))
+            using (VertexBuffer positionsBuffer = Device.CreateVertexBuffer(BufferHint.StaticDraw, ArraySizeInBytes.Size(positions)))
             using (IndexBuffer indexBuffer = Device.CreateIndexBuffer(BufferHint.StaticDraw, indices.Length * sizeof(ushort)))
             using (VertexArray va = window.Context.CreateVertexArray())
             {
@@ -329,11 +329,10 @@ namespace OpenGlobe.Renderer
             using (FrameBuffer frameBuffer = TestUtility.CreateFrameBuffer(window.Context))
             using (ShaderProgram sp = Device.CreateShaderProgram(vs, fs))
             using (VertexBuffer vertexBuffer = Device.CreateVertexBuffer(BufferHint.StaticDraw,
-                    (positions.Length * SizeInBytes<Vector4S>.Value) +
-                    (colors.Length * SizeInBytes<BlittableRGBA>.Value)))
+                    ArraySizeInBytes.Size(positions) + ArraySizeInBytes.Size(colors)))
             using (VertexArray va = window.Context.CreateVertexArray())
             {
-                int colorsOffset = positions.Length * SizeInBytes<Vector4S>.Value;
+                int colorsOffset = ArraySizeInBytes.Size(positions);
                 vertexBuffer.CopyFromSystemMemory(positions);
                 vertexBuffer.CopyFromSystemMemory(colors, colorsOffset);
 
@@ -400,7 +399,7 @@ namespace OpenGlobe.Renderer
             GraphicsWindow window = Device.CreateWindow(1, 1);
             FrameBuffer frameBuffer = TestUtility.CreateFrameBuffer(window.Context);
             ShaderProgram sp = Device.CreateShaderProgram(vs, fs);
-            VertexBuffer vertexBuffer = Device.CreateVertexBuffer(BufferHint.StaticDraw, vertices.Length * SizeInBytes<InterleavedVertex>.Value);
+            VertexBuffer vertexBuffer = Device.CreateVertexBuffer(BufferHint.StaticDraw, ArraySizeInBytes.Size(vertices));
             VertexArray va = window.Context.CreateVertexArray();
             {
                 int colorOffset = SizeInBytes<Vector4S>.Value;

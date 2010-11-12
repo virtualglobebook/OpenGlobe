@@ -36,7 +36,7 @@ namespace OpenGlobe.Examples
             //
             // _positionBuffer is dynamic, and is written to when the camera moves.
             //
-            _positionBuffer = Device.CreateVertexBuffer(BufferHint.DynamicDraw, _positionsRelativeToEye.Length * SizeInBytes<Vector3S>.Value);
+            _positionBuffer = Device.CreateVertexBuffer(BufferHint.DynamicDraw, ArraySizeInBytes.Size(_positionsRelativeToEye));
 
             _colorBuffer = Device.CreateVertexBuffer(BufferHint.StaticDraw, colors.Length);
             _colorBuffer.CopyFromSystemMemory(colors);

@@ -44,8 +44,8 @@ namespace OpenGlobe.Examples
             }
             _center = positions[6];
 
-            _positionBufferHigh = Device.CreateVertexBuffer(BufferHint.StaticDraw, positions.Length * SizeInBytes<Vector3S>.Value);
-            _positionBufferLow = Device.CreateVertexBuffer(BufferHint.StaticDraw, positions.Length * SizeInBytes<Vector3S>.Value);
+            _positionBufferHigh = Device.CreateVertexBuffer(BufferHint.StaticDraw, ArraySizeInBytes.Size(positions));
+            _positionBufferLow = Device.CreateVertexBuffer(BufferHint.StaticDraw, ArraySizeInBytes.Size(positions));
             _colorBuffer = Device.CreateVertexBuffer(BufferHint.StaticDraw, colors.Length);
 
             _positionBufferHigh.CopyFromSystemMemory(positionsHigh);

@@ -54,7 +54,7 @@ namespace OpenGlobe.Renderer.GL3x
             Debug.Assert(destinationOffsetInBytes + lengthInBytes <= _sizeInBytes);
 
             Debug.Assert(lengthInBytes >= 0);
-            Debug.Assert(lengthInBytes <= bufferInSystemMemory.Length * SizeInBytes<T>.Value);
+            Debug.Assert(lengthInBytes <= ArraySizeInBytes.Size(bufferInSystemMemory));
 
             Bind();
             GL.BufferSubData<T>(_type,

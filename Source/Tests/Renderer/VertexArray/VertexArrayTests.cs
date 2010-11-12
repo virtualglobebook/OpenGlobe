@@ -24,7 +24,7 @@ namespace OpenGlobe.Renderer
                 new Vector3S(1, 0, 0),
                 new Vector3S(0, 1, 0)
             };
-            int vbSizeInBytes = positions.Length * SizeInBytes<Vector3S>.Value;
+            int vbSizeInBytes = ArraySizeInBytes.Size(positions);
 
             uint[] indices = new uint[] { 0, 1, 2 };
             int ibSizeInBytes = indices.Length * sizeof(uint);

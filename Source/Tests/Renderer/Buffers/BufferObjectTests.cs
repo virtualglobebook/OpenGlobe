@@ -26,7 +26,7 @@ namespace OpenGlobe.Renderer
                 new Vector3S(1, 0, 0),
                 new Vector3S(0, 1, 0)
             };
-            int sizeInBytes = positions.Length * SizeInBytes<Vector3S>.Value;
+            int sizeInBytes = ArraySizeInBytes.Size(positions);
 
             using (GraphicsWindow window = Device.CreateWindow(1, 1))
             using (VertexBuffer vertexBuffer = Device.CreateVertexBuffer(BufferHint.StaticDraw, sizeInBytes))
@@ -149,7 +149,7 @@ namespace OpenGlobe.Renderer
                 new BlittableRGBA(Color.Blue), 
                 new BlittableRGBA(Color.White)
             };
-            int sizeInBytes = pixels.Length * SizeInBytes<BlittableRGBA>.Value;
+            int sizeInBytes = ArraySizeInBytes.Size(pixels);
 
             using (GraphicsWindow window = Device.CreateWindow(1, 1))
             using (WritePixelBuffer pixelBuffer = Device.CreateWritePixelBuffer(PixelBufferHint.Stream, sizeInBytes))

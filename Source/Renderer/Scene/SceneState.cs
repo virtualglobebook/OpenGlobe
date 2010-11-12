@@ -102,6 +102,24 @@ namespace OpenGlobe.Renderer
             get { return ViewMatrix * ModelMatrix; }
         }
 
+        public Matrix4D ModelViewMatrixRelativeToEye
+        {
+            get 
+            {
+                Matrix4D m = ModelViewMatrix;
+                return new Matrix4D(
+                    m.Column0Row0, m.Column1Row0, m.Column2Row0, 0.0,
+                    m.Column0Row1, m.Column1Row1, m.Column2Row1, 0.0,
+                    m.Column0Row2, m.Column1Row2, m.Column2Row2, 0.0,
+                    m.Column0Row3, m.Column1Row3, m.Column2Row3, m.Column3Row3);
+            }
+        }
+
+        public Matrix4D ModelViewPerspectiveMatrixRelativeToEye
+        {
+            get { return PerspectiveMatrix * ModelViewMatrixRelativeToEye; }
+        }
+
         public Matrix4D ModelViewPerspectiveMatrix
         {
             get { return PerspectiveMatrix * ModelViewMatrix; }
