@@ -17,6 +17,9 @@ namespace OpenGlobe.Renderer
     [TestFixture]
     public class DrawStateTests
     {
+        /// <summary>
+        /// Example code in the book.
+        /// </summary>
         private static int CompareDrawStates(DrawState left, DrawState right)
         {
             // Sort by shader first
@@ -45,7 +48,7 @@ namespace OpenGlobe.Renderer
                 return 1;
             }
 
-            // TODO: continue comparing other states in order of most to least expensive...
+            // Continue comparing other states in order of most to least expensive...
             return 0;
         }
 

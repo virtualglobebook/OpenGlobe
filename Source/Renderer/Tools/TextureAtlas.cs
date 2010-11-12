@@ -81,7 +81,7 @@ namespace OpenGlobe.Renderer
             annotatedBitmaps.Sort(new BitmapMaximumToMinimumHeight());
 
             //
-            // TODO:  Pack more tightly based on algorithm in
+            // This could be packed more tightly using the algorithm in
             //
             //     http://www-ui.is.s.u-tokyo.ac.jp/~takeo/papers/i3dg2001.pdf
             //

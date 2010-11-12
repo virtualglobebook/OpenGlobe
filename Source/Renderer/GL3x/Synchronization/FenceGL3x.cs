@@ -18,7 +18,6 @@ namespace OpenGlobe.Renderer.GL3x
         public FenceGL3x()
         {
             _name = new FenceNameGL3x();
-            //TODO:  When/where to GL.Fush?  If at all.  Or use SYNC_FLUSH_COMMANDS_BIT with ClientWait?
         }
 
         public override void ServerWait()

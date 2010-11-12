@@ -24,7 +24,6 @@ namespace OpenGlobe.Renderer.GL3x
 
         public override void Bind(UniformBuffer uniformBuffer)
         {
-            // TODO: avoid duplicate binds?
             BufferNameGL3x bufferHandle = ((UniformBufferGL3x)uniformBuffer).Handle;
             GL.BindBufferBase(BufferTarget.UniformBuffer, _bindHandle, bufferHandle.Value);
         }
