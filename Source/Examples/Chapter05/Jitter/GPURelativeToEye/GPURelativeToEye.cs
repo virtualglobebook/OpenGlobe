@@ -25,7 +25,7 @@ namespace OpenGlobe.Examples
                 EmbeddedResources.GetText("OpenGlobe.Examples.Shaders.FS.glsl"));
             _cameraEyeHigh = (Uniform<Vector3S>)_sp.Uniforms["u_cameraEyeHigh"];
             _cameraEyeLow = (Uniform<Vector3S>)_sp.Uniforms["u_cameraEyeLow"];
-            _modelViewPerspectiveMatrixRelativeToEye = (Uniform<Matrix4F>)(_sp.Uniforms["u_modelViewPerspectiveMatrixRelativeToEye"]);
+            _modelViewPerspectiveMatrixRelativeToEye = (Uniform<Matrix4S>)(_sp.Uniforms["u_modelViewPerspectiveMatrixRelativeToEye"]);
             _pointSize = (Uniform<float>)_sp.Uniforms["u_pointSize"];
 
             ///////////////////////////////////////////////////////////////////
@@ -121,7 +121,7 @@ namespace OpenGlobe.Examples
                     m.Column0Row3, m.Column1Row3, m.Column2Row3, m.Column3Row3);
 
                 _modelViewPerspectiveMatrixRelativeToEye.Value =
-                    (sceneState.PerspectiveMatrix * mv).ToMatrix4F();
+                    (sceneState.PerspectiveMatrix * mv).ToMatrix4S();
             }
 
             _pointSize.Value = (float)(8.0 * sceneState.HighResolutionSnapScale);
@@ -153,7 +153,7 @@ namespace OpenGlobe.Examples
         private readonly ShaderProgram _sp;
         private readonly Uniform<Vector3S> _cameraEyeHigh;
         private readonly Uniform<Vector3S> _cameraEyeLow;
-        private readonly Uniform<Matrix4F> _modelViewPerspectiveMatrixRelativeToEye;
+        private readonly Uniform<Matrix4S> _modelViewPerspectiveMatrixRelativeToEye;
         private readonly Uniform<float> _pointSize;
         private readonly DrawState _drawState;
 

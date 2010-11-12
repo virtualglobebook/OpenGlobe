@@ -15,18 +15,18 @@ namespace OpenGlobe.Renderer
     {
         public ViewportOrthographicMatrixUniform(Uniform uniform)
         {
-            _uniform = (Uniform<Matrix4F>)uniform;
+            _uniform = (Uniform<Matrix4S>)uniform;
         }
 
         #region DrawAutomaticUniform Members
 
         public override void Set(Context context, DrawState drawState, SceneState sceneState)
         {
-            _uniform.Value = SceneState.ComputeViewportOrthographicMatrix(context.Viewport).ToMatrix4F();
+            _uniform.Value = SceneState.ComputeViewportOrthographicMatrix(context.Viewport).ToMatrix4S();
         }
 
         #endregion
 
-        private Uniform<Matrix4F> _uniform;
+        private Uniform<Matrix4S> _uniform;
     }
 }

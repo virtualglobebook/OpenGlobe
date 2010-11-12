@@ -285,15 +285,15 @@ namespace OpenGlobe.Renderer
             using (ShaderProgram sp = Device.CreateShaderProgram(ShaderSources.PassThroughVertexShader(), fs))
             using (VertexArray va = TestUtility.CreateVertexArray(window.Context, sp.VertexAttributes["position"].Location))
             {
-                Matrix4F m4 = new Matrix4F(
+                Matrix4S m4 = new Matrix4S(
                         0.0f, 0.0f, 0.0f, 0.0f,
                         0.0f, 0.0f, 0.0f, 1.0f,
                         1.0f, 0.0f, 0.0f, 0.0f,
                         0.0f, 0.0f, 0.0f, 0.0f);
-                Uniform<Matrix4F> exampleMat4 = (Uniform<Matrix4F>)sp.Uniforms["exampleMat4"];
+                Uniform<Matrix4S> exampleMat4 = (Uniform<Matrix4S>)sp.Uniforms["exampleMat4"];
                 Assert.AreEqual("exampleMat4", exampleMat4.Name);
                 Assert.AreEqual(UniformType.FloatMatrix44, exampleMat4.Datatype);
-                Assert.AreEqual(new Matrix4F(), exampleMat4.Value);
+                Assert.AreEqual(new Matrix4S(), exampleMat4.Value);
                 exampleMat4.Value = m4;
                 Assert.AreEqual(m4, exampleMat4.Value);
 

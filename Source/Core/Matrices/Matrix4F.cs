@@ -16,14 +16,14 @@ namespace OpenGlobe.Core
     /// <summary>
     /// 4x4 matrix - 4 columns and 4 rows.
     /// </summary>
-    public class Matrix4F
+    public class Matrix4S
     {
-        public Matrix4F()
+        public Matrix4S()
         {
             _values = new float[NumberOfComponents];
         }
 
-        public Matrix4F(float value)
+        public Matrix4S(float value)
         {
             _values = new float[] 
             { 
@@ -34,7 +34,7 @@ namespace OpenGlobe.Core
             };
         }
 
-        public Matrix4F(
+        public Matrix4S(
             float column0row0, float column1row0, float column2row0, float column3row0,
             float column0row1, float column1row1, float column2row1, float column3row1,
             float column0row2, float column1row2, float column2row2, float column3row2,
@@ -74,9 +74,9 @@ namespace OpenGlobe.Core
         public float Column3Row2 { get { return _values[14]; } }
         public float Column3Row3 { get { return _values[15]; } }
 
-        public bool Equals(Matrix4F other)
+        public bool Equals(Matrix4S other)
         {
-            if (Matrix4F.ReferenceEquals(other, null))
+            if (Matrix4S.ReferenceEquals(other, null))
             {
                 return false;
             }
@@ -92,21 +92,21 @@ namespace OpenGlobe.Core
             return true;
         }
 
-        public static bool operator ==(Matrix4F left, Matrix4F right)
+        public static bool operator ==(Matrix4S left, Matrix4S right)
         {
             return left.Equals(right);
         }
 
-        public static bool operator !=(Matrix4F left, Matrix4F right)
+        public static bool operator !=(Matrix4S left, Matrix4S right)
         {
             return !left.Equals(right);
         }
 
         public override bool Equals(object obj)
         {
-            if (obj is Matrix4F)
+            if (obj is Matrix4S)
             {
-                return Equals((Matrix4F)obj);
+                return Equals((Matrix4S)obj);
             }
             return false;
         }
@@ -140,7 +140,7 @@ namespace OpenGlobe.Core
         public float[] ReadOnlyColumnMajorValues { get { return _values; } }
 
 
-        public static readonly Matrix4F Identity = new Matrix4F(
+        public static readonly Matrix4S Identity = new Matrix4S(
             1.0f, 0.0f, 0.0f, 0.0f,
             0.0f, 1.0f, 0.0f, 0.0f,
             0.0f, 0.0f, 1.0f, 0.0f,

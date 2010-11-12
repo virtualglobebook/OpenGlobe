@@ -90,7 +90,7 @@ namespace OpenGlobe.Core
                 9.0, 10.0, 11.0, 12.0,
                 13.0, 14.0, 15.0, 16.0);
 
-            Matrix4F mf = m.ToMatrix4F();
+            Matrix4S mf = m.ToMatrix4S();
 
             Assert.AreEqual(1.0f, mf.Column0Row0, 1e-7);
             Assert.AreEqual(2.0f, mf.Column1Row0, 1e-7);

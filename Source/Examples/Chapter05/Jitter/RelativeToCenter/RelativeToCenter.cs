@@ -23,7 +23,7 @@ namespace OpenGlobe.Examples
             _sp = Device.CreateShaderProgram(
                 EmbeddedResources.GetText("OpenGlobe.Examples.RelativeToCenter.Shaders.VS.glsl"),
                 EmbeddedResources.GetText("OpenGlobe.Examples.Shaders.FS.glsl"));
-            _modelViewPerspectiveMatrixRelativeToCenter = (Uniform<Matrix4F>)(_sp.Uniforms["u_modelViewPerspectiveMatrixRelativeToCenter"]);
+            _modelViewPerspectiveMatrixRelativeToCenter = (Uniform<Matrix4S>)(_sp.Uniforms["u_modelViewPerspectiveMatrixRelativeToCenter"]);
             _pointSize = (Uniform<float>)_sp.Uniforms["u_pointSize"];
 
             ///////////////////////////////////////////////////////////////////
@@ -78,7 +78,7 @@ namespace OpenGlobe.Examples
                     m.Column0Row3, m.Column1Row3, m.Column2Row3, m.Column3Row3);
 
                 _modelViewPerspectiveMatrixRelativeToCenter.Value =
-                    (sceneState.PerspectiveMatrix * mv).ToMatrix4F();
+                    (sceneState.PerspectiveMatrix * mv).ToMatrix4S();
             }
 
             _pointSize.Value = (float)(8.0 * sceneState.HighResolutionSnapScale);
@@ -108,7 +108,7 @@ namespace OpenGlobe.Examples
 
         private readonly VertexArray _va;
         private readonly ShaderProgram _sp;
-        private readonly Uniform<Matrix4F> _modelViewPerspectiveMatrixRelativeToCenter;
+        private readonly Uniform<Matrix4S> _modelViewPerspectiveMatrixRelativeToCenter;
         private readonly Uniform<float> _pointSize;
         private readonly DrawState _drawState;
 
