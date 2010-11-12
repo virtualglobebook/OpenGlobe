@@ -44,12 +44,14 @@ namespace OpenGlobe.Tests.Scene.Terrain
                 const int tileXPosts = tileXSize + 1;
                 const int tileYPosts = tileYSize + 1;
 
+                const int lowestDetailMaxSize = 255;
+
                 int xTiles = (columns - 1) / tileXSize;
                 int yTiles = (rows - 1) / tileYSize;
 
                 int levels = 0;
                 int shift = columns;
-                while (shift > tileXSize)
+                while (shift > lowestDetailMaxSize)
                 {
                     shift >>= 1;
                     ++levels;
@@ -60,17 +62,24 @@ namespace OpenGlobe.Tests.Scene.Terrain
                     string levelPath = Path.Combine(outputPath, (levels - level).ToString());
                     int levelPower = 1 << level;
 
-                    for (int yTile = 0; yTile < yTiles / levelPower; ++yTile)
+                    for (int yTile = 0; yTile < yTiles / levelPower + 1; ++yTile)
                     {
-                        for (int xTile = 0; xTile < xTiles / levelPower; ++xTile)
+                        for (int xTile = 0; xTile < xTiles / levelPower + 1; ++xTile)
                         {
                             string tilePath = Path.Combine(levelPath, yTile.ToString());
                             Directory.CreateDirectory(tilePath);
                             tilePath = Path.Combine(tilePath, xTile.ToString() + ".bil");
                             using (FileStream tileStream = new FileStream(tilePath, FileMode.Create))
                             {
-                                byte[] tileData = new byte[tileXPosts * tileYPosts * sizeof(short)];
-                                byte[] columnData = new byte[(tileYSize * levelPower + 1) * sizeof(short)];
+                                int postsX = tileXPosts;
+                                if (postsX > columns)
+                                    postsX = columns;
+                                int postsY = tileYPosts;
+                                if (postsY > rows)
+                                    postsY = rows;
+                                
+                                byte[] tileData = new byte[postsX * postsY * sizeof(short)];
+                                byte[] columnData = new byte[((postsY - 1) * levelPower + 1) * sizeof(short)];
                                 for (int column = 0; column < tileXPosts; ++column)
                                 {
                                     int offset = 256 + ((xTile * tileXSize + column) * levelPower * rows + yTile * tileYSize * levelPower) * sizeof(short);
@@ -79,14 +88,14 @@ namespace OpenGlobe.Tests.Scene.Terrain
 
                                     for (int i = 0; i < tileYPosts; ++i)
                                     {
-                                        tileData[column * 2 + i * 2 * tileXPosts] = columnData[i * 2 * levelPower];
-                                        tileData[column * 2 + i * 2 * tileXPosts + 1] = columnData[i * 2 * levelPower + 1];
+                                        tileData[column * 2 + i * 2 * postsX] = columnData[i * 2 * levelPower];
+                                        tileData[column * 2 + i * 2 * postsX + 1] = columnData[i * 2 * levelPower + 1];
                                     }
                                 }
 
                                 tileStream.Write(tileData, 0, tileData.Length);
                                 
-                                tilePath = Path.ChangeExtension(tilePath, ".png");
+                                /*tilePath = Path.ChangeExtension(tilePath, ".png");
 
                                 Bitmap bmp = new Bitmap(tileXPosts, tileYPosts, PixelFormat.Format24bppRgb);
                                 for (int j = 0; j < tileYPosts; ++j)
@@ -104,7 +113,7 @@ namespace OpenGlobe.Tests.Scene.Terrain
                                             bmp.SetPixel(i, j, Color.FromArgb(255, 0, 0));
                                     }
                                 }
-                                bmp.Save(tilePath);
+                                bmp.Save(tilePath);*/
                             }
                         }
                     }

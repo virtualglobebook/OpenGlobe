@@ -96,12 +96,12 @@ namespace OpenGlobe.Scene.Terrain
         private const int TileHeight = 512;
         private const int TileXPosts = 513;
         private const int TileYPosts = 513;
-        private const double LevelZeroDeltaLongitudeDegrees = 10.0;
-        private const double LevelZeroDeltaLatitudeDegrees = 10.0;
+        private const double LevelZeroDeltaLongitudeDegrees = 16384.0;
+        private const double LevelZeroDeltaLatitudeDegrees = 16384.0;
 
         private string _path;
         private SimpleTerrainLevel[] _levels;
         private RasterTerrainLevelCollection _levelsCollection;
-        private GeodeticExtent _extent = new GeodeticExtent(-LevelZeroDeltaLongitudeDegrees / 2.0, -LevelZeroDeltaLatitudeDegrees / 2.0, LevelZeroDeltaLongitudeDegrees / 2.0, LevelZeroDeltaLatitudeDegrees / 2.0);
+        private GeodeticExtent _extent = new GeodeticExtent(-16384.0 / 2.0, -16384.0 / 2.0, 16384.0 / 2.0, 16384.0 / 2.0);
     }
 }

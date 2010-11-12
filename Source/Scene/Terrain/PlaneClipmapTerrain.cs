@@ -143,7 +143,7 @@ namespace OpenGlobe.Scene.Terrain
 
         public void PreRender(Context context, SceneState sceneState)
         {
-            Vector3D clipmapCenter = sceneState.Camera.Target;
+            Vector3D clipmapCenter = sceneState.Camera.Eye;
             //Geodetic2D center = Ellipsoid.ScaledWgs84.ToGeodetic2D(sceneState.Camera.Target / Ellipsoid.Wgs84.MaximumRadius);
             Geodetic2D center = new Geodetic2D(clipmapCenter.X, clipmapCenter.Y);
             double centerLongitude = center.Longitude; //Trig.ToDegrees(center.Longitude);
@@ -250,7 +250,7 @@ namespace OpenGlobe.Scene.Terrain
                 _renderState.RasterizationMode = RasterizationMode.Fill;
             }
 
-            Vector3D clipmapCenter = sceneState.Camera.Target;
+            Vector3D clipmapCenter = sceneState.Camera.Eye;
 
             // Scale the camera eye and target positions to render to the scaled ellipsoid instead of the
             // true WGS84 ellipsoid, without affecting the view.  This avoids some precision problems.
@@ -279,7 +279,7 @@ namespace OpenGlobe.Scene.Terrain
             float[] heightSample = new float[1];
             _clipmapLevels[0].Terrain.GetPosts(longitudeIndex, latitudeIndex, longitudeIndex, latitudeIndex, heightSample, 0, 1);
 
-            while (maxLevel > 0)
+            /*while (maxLevel > 0)
             {
                 double terrainHeight = heightSample[0] * _heightExaggeration.Value; // TODO: get the real terrain height
                 double viewerHeight = clipmapCenter.Z;
@@ -290,7 +290,7 @@ namespace OpenGlobe.Scene.Terrain
                     break;
                 }
                 --maxLevel;
-            }
+            }*/
 
             Vector2D center = toSubtract.XY;
 

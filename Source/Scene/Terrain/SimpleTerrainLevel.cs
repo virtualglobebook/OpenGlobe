@@ -15,8 +15,11 @@ namespace OpenGlobe.Scene.Terrain
             _tileDeltaLatitude = tileDeltaLatitude;
 
             GeodeticExtent extent = terrainSource.Extent;
-            _longitudePosts = (int)Math.Round((extent.East - extent.West) / tileDeltaLongitude) * _terrainSource.TileLongitudePosts;
-            _latitudePosts = (int)Math.Round((extent.North - extent.South) / tileDeltaLatitude) * _terrainSource.TileLatitudePosts;
+            _longitudeTiles = (int)Math.Round((extent.East - extent.West) / tileDeltaLongitude);
+            _latitudeTiles = (int)Math.Round((extent.North - extent.South) / tileDeltaLatitude);
+
+            _longitudePosts = _longitudeTiles * _terrainSource.TileLongitudePosts;
+            _latitudePosts = _latitudeTiles * _terrainSource.TileLatitudePosts;
 
             _postDeltaLongitude = (extent.East - extent.West) / _longitudePosts;
             _postDeltaLatitude = (extent.North - extent.South) / _latitudePosts;
@@ -88,7 +91,16 @@ namespace OpenGlobe.Scene.Terrain
                 tile = new Tile();
                 tile.TileLongitudeIndex = tileLongitudeIndex;
                 tile.TileLatitudeIndex = tileLatitudeIndex;
-                tile.Posts = _terrainSource.GetTile(_level, tileLongitudeIndex, tileLatitudeIndex);
+
+                if (tileLongitudeIndex < 0 || tileLatitudeIndex < 0 ||
+                    tileLongitudeIndex >= _longitudeTiles || tileLatitudeIndex >= _latitudeTiles)
+                {
+                    tile.Posts = new short[(_terrainSource.TileLongitudePosts + 1) * (_terrainSource.TileLatitudePosts + 1)];
+                }
+                else
+                {
+                    tile.Posts = _terrainSource.GetTile(_level, tileLongitudeIndex, tileLatitudeIndex);
+                }
                 _cache.Add(tile);
             }
 
@@ -148,5 +160,7 @@ namespace OpenGlobe.Scene.Terrain
         private double _postDeltaLongitude;
         private double _postDeltaLatitude;
         private List<Tile> _cache = new List<Tile>();
+        private int _longitudeTiles;
+        private int _latitudeTiles;
     }
 }
