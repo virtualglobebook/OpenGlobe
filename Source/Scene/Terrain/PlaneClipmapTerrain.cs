@@ -312,7 +312,7 @@ namespace OpenGlobe.Scene.Terrain
         private bool RenderLevel(int levelIndex, Level level, Level coarserLevel, bool fillRing, Vector2D center, Context context, SceneState sceneState)
         {
             context.TextureUnits[0].Texture = level.TerrainTexture;
-            context.TextureUnits[0].TextureSampler = Device.TextureSamplers.LinearClamp;
+            context.TextureUnits[0].TextureSampler = Device.TextureSamplers.NearestClamp;
             context.TextureUnits[1].Texture = coarserLevel.TerrainTexture;
             context.TextureUnits[1].TextureSampler = Device.TextureSamplers.LinearClamp;
 
