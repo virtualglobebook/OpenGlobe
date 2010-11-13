@@ -11,6 +11,7 @@ using System.Drawing;
 using NUnit.Framework;
 using OpenGlobe.Renderer;
 using OpenGlobe.Core;
+using System;
 
 namespace OpenGlobe.Scene.Terrain
 {
@@ -25,14 +26,14 @@ namespace OpenGlobe.Scene.Terrain
 
             //WorldWindTerrainSource worldWind = new WorldWindTerrainSource();
             SimpleTerrainSource terrainSource = new SimpleTerrainSource(@"..\..\..\..\Data\Terrain\ps_height_16k");
-            EsriRestImagery imagery = new EsriRestImagery();
-            PlaneClipmapTerrain clipmap = new PlaneClipmapTerrain(window.Context, terrainSource, 255, imagery);
+            PlaneClipmapTerrain clipmap = new PlaneClipmapTerrain(window.Context, terrainSource, 255);
             clipmap.HeightExaggeration = 0.01f;
 
             SceneState sceneState = new SceneState();
             sceneState.DiffuseIntensity = 0.90f;
             sceneState.SpecularIntensity = 0.05f;
             sceneState.AmbientIntensity = 0.05f;
+            sceneState.Camera.FieldOfViewY = Math.PI / 3.0;
 
             ClearState clearState = new ClearState();
             clearState.Color = Color.LightSkyBlue;
