@@ -123,6 +123,12 @@ namespace OpenGlobe.Scene.Terrain
             set { _showBlendRegions.Value = value; }
         }
 
+        public bool ComputeAveragedNormals
+        {
+            get { return _averagedNormals; }
+            set { _averagedNormals = value; }
+        }
+
         public float HeightExaggeration
         {
             get { return _heightExaggeration.Value; }
@@ -458,50 +464,80 @@ namespace OpenGlobe.Scene.Terrain
             float heightExaggeration = HeightExaggeration;
             float postDelta = (float)level.Terrain.PostDeltaLongitude;
 
-            for (int j = 0; j < _clipmapSegments; ++j)
+            if (_averagedNormals)
             {
-                for (int i = 0; i < _clipmapSegments; ++i)
+                for (int j = 0; j < _clipmapSegments; ++j)
                 {
-                    int sw = j * _clipmapPosts + i;
-                    float swHeight = posts[sw] * heightExaggeration;
-                    int se = j * _clipmapPosts + i + 1;
-                    float seHeight = posts[se] * heightExaggeration; ;
-                    int nw = (j + 1) * _clipmapPosts + i;
-                    float nwHeight = posts[nw] * heightExaggeration; ;
-                    int ne = (j + 1) * _clipmapPosts + i + 1;
-                    float neHeight = posts[ne] * heightExaggeration; ;
+                    for (int i = 0; i < _clipmapSegments; ++i)
+                    {
+                        int sw = j * _clipmapPosts + i;
+                        float swHeight = posts[sw] * heightExaggeration;
+                        int se = j * _clipmapPosts + i + 1;
+                        float seHeight = posts[se] * heightExaggeration;
+                        int nw = (j + 1) * _clipmapPosts + i;
+                        float nwHeight = posts[nw] * heightExaggeration;
+                        int ne = (j + 1) * _clipmapPosts + i + 1;
+                        float neHeight = posts[ne] * heightExaggeration;
 
-                    Vector3S lowerLeftNormal = new Vector3S(swHeight - seHeight, swHeight - nwHeight, postDelta);
-                    normals[sw] += lowerLeftNormal;
-                    normals[nw] += lowerLeftNormal;
-                    normals[se] += lowerLeftNormal;
+                        Vector3S lowerLeftNormal = new Vector3S(swHeight - seHeight, swHeight - nwHeight, postDelta);
+                        normals[sw] += lowerLeftNormal;
+                        normals[nw] += lowerLeftNormal;
+                        normals[se] += lowerLeftNormal;
 
-                    Vector3S upperRightNormal = new Vector3S(nwHeight - neHeight, seHeight - neHeight, postDelta);
-                    normals[nw] += upperRightNormal;
-                    normals[se] += upperRightNormal;
-                    normals[ne] += upperRightNormal;
+                        Vector3S upperRightNormal = new Vector3S(nwHeight - neHeight, seHeight - neHeight, postDelta);
+                        normals[nw] += upperRightNormal;
+                        normals[se] += upperRightNormal;
+                        normals[ne] += upperRightNormal;
+                    }
+                }
+
+                for (int j = 0; j < _clipmapPosts; ++j)
+                {
+                    for (int i = 0; i < _clipmapPosts; ++i)
+                    {
+                        float faces;
+                        if ((i == 0 || i == _clipmapPosts - 1) &&
+                            (j == 0 || j == _clipmapPosts - 1))
+                        {
+                            faces = 1.0f;
+                        }
+                        else if (i == 0 || j == 0 || i == _clipmapPosts - 1 || j == _clipmapPosts - 1)
+                        {
+                            faces = 3.0f;
+                        }
+                        else
+                        {
+                            faces = 6.0f;
+                        }
+                        normals[j * _clipmapPosts + i] /= faces;
+                    }
                 }
             }
-
-            for (int j = 0; j < _clipmapPosts; ++j)
+            else
             {
-                for (int i = 0; i < _clipmapPosts; ++i)
+                for (int j = 0; j < _clipmapPosts; ++j)
                 {
-                    float faces;
-                    if ((i == 0 || i == _clipmapPosts - 1) &&
-                        (j == 0 || j == _clipmapPosts - 1))
+                    for (int i = 0; i < _clipmapPosts; ++i)
                     {
-                        faces = 1.0f;
+                        if (i == 0 || i == _clipmapPosts - 1 ||
+                            j == 0 || j == _clipmapPosts - 1)
+                        {
+                            normals[j * _clipmapPosts + i] = Vector3S.UnitZ;
+                        }
+                        else
+                        {
+                            int top = (j + 1) * _clipmapPosts + i;
+                            float topHeight = posts[top] * heightExaggeration;
+                            int bottom = (j - 1) * _clipmapPosts + i;
+                            float bottomHeight = posts[bottom] * heightExaggeration;
+                            int right = j * _clipmapPosts + i + 1;
+                            float rightHeight = posts[right] * heightExaggeration;
+                            int left = j * _clipmapPosts + i - 1;
+                            float leftHeight = posts[left] * heightExaggeration;
+
+                            normals[j * _clipmapPosts + i] = new Vector3S(leftHeight - rightHeight, bottomHeight - topHeight, 2.0f * postDelta);
+                        }
                     }
-                    else if (i == 0 || j == 0 || i == _clipmapPosts - 1 || j == _clipmapPosts - 1)
-                    {
-                        faces = 3.0f;
-                    }
-                    else
-                    {
-                        faces = 6.0f;
-                    }
-                    normals[j * _clipmapPosts + i] /= faces;
                 }
             }
 
@@ -573,5 +609,6 @@ namespace OpenGlobe.Scene.Terrain
         private Uniform<bool> _showBlendRegions;
 
         private bool _wireframe;
+        private bool _averagedNormals;
     }
 }
