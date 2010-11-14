@@ -15,8 +15,8 @@ in float alphaFS;
 out vec3 fragmentColor;
 
 uniform vec4 og_diffuseSpecularAmbientShininess;
-uniform sampler2DRect og_texture2;    // finer normal map
-uniform sampler2DRect og_texture3;    // coarser normal map
+uniform sampler2D og_texture2;    // finer normal map
+uniform sampler2D og_texture3;    // coarser normal map
 
 uniform bool u_showBlendRegions;
 

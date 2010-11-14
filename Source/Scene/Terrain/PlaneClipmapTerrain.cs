@@ -33,8 +33,8 @@ namespace OpenGlobe.Scene.Terrain
                 RasterTerrainLevel terrainLevel = _terrainSource.Levels[i];
                 _clipmapLevels[i] = new Level();
                 _clipmapLevels[i].Terrain = terrainLevel;
-                _clipmapLevels[i].TerrainTexture = Device.CreateTexture2DRectangle(new Texture2DDescription(_clipmapPosts, _clipmapPosts, TextureFormat.Red32f));
-                _clipmapLevels[i].NormalTexture = Device.CreateTexture2DRectangle(new Texture2DDescription(_clipmapPosts, _clipmapPosts, TextureFormat.RedGreenBlue32f));
+                _clipmapLevels[i].TerrainTexture = Device.CreateTexture2D(new Texture2DDescription(_clipmapPosts, _clipmapPosts, TextureFormat.Red32f));
+                _clipmapLevels[i].NormalTexture = Device.CreateTexture2D(new Texture2DDescription(_clipmapPosts, _clipmapPosts, TextureFormat.RedGreenBlue32f));
             }
 
             _shaderProgram = Device.CreateShaderProgram(
@@ -97,6 +97,7 @@ namespace OpenGlobe.Scene.Terrain
             _sunPositionRelativeToViewer = (Uniform<Vector3S>)_shaderProgram.Uniforms["u_sunPositionRelativeToViewer"];
             _fineTextureOrigin = (Uniform<Vector2S>)_shaderProgram.Uniforms["u_fineTextureOrigin"];
             _showBlendRegions = (Uniform<bool>)_shaderProgram.Uniforms["u_showBlendRegions"];
+            _oneOverClipmapSize = (Uniform<float>)_shaderProgram.Uniforms["u_oneOverClipmapSize"];
 
             _renderState = new RenderState();
             _renderState.FacetCulling.FrontFaceWindingOrder = fieldBlockMesh.FrontFaceWindingOrder;
@@ -107,6 +108,8 @@ namespace OpenGlobe.Scene.Terrain
 
             float unblendedRegionSize = (float)(_clipmapSegments / 2 - _clipmapPosts / 10.0 - 1);
             _unblendedRegionSize.Value = new Vector2S(unblendedRegionSize, unblendedRegionSize);
+
+            _oneOverClipmapSize.Value = 1.0f / clipmapPosts;
 
             HeightExaggeration = 0.00001f;
         }
@@ -289,13 +292,13 @@ namespace OpenGlobe.Scene.Terrain
         private bool RenderLevel(int levelIndex, Level level, Level coarserLevel, bool fillRing, Vector2D center, Context context, SceneState sceneState)
         {
             context.TextureUnits[0].Texture = level.TerrainTexture;
-            context.TextureUnits[0].TextureSampler = Device.TextureSamplers.NearestClamp;
+            context.TextureUnits[0].TextureSampler = Device.TextureSamplers.NearestRepeat;
             context.TextureUnits[1].Texture = coarserLevel.TerrainTexture;
-            context.TextureUnits[1].TextureSampler = Device.TextureSamplers.LinearClamp;
+            context.TextureUnits[1].TextureSampler = Device.TextureSamplers.LinearRepeat;
             context.TextureUnits[2].Texture = level.NormalTexture;
-            context.TextureUnits[2].TextureSampler = Device.TextureSamplers.LinearClamp;
+            context.TextureUnits[2].TextureSampler = Device.TextureSamplers.LinearRepeat;
             context.TextureUnits[3].Texture = coarserLevel.NormalTexture;
-            context.TextureUnits[3].TextureSampler = Device.TextureSamplers.LinearClamp;
+            context.TextureUnits[3].TextureSampler = Device.TextureSamplers.LinearRepeat;
 
             int west = level.CurrentOrigin.TerrainWest;
             int south = level.CurrentOrigin.TerrainSouth;
@@ -318,7 +321,7 @@ namespace OpenGlobe.Scene.Terrain
             _viewPosInClippedLevel.Value = new Vector2S((float)(level.Terrain.LongitudeToIndex(center.X) - level.CurrentOrigin.TerrainWest),
                                                         (float)(level.Terrain.LatitudeToIndex(center.Y) - level.CurrentOrigin.TerrainSouth));
 
-            _fineTextureOrigin.Value = new Vector2S(0.5f, 0.5f);
+            _fineTextureOrigin.Value = level.OriginInTexture.ToVector2S() + new Vector2S(0.5f, 0.5f);
 
             DrawBlock(_fieldBlock, level, coarserLevel, west, south, west, south, context, sceneState);
             DrawBlock(_fieldBlock, level, coarserLevel, west, south, west + _fieldBlockSegments, south, context, sceneState);
@@ -570,6 +573,8 @@ namespace OpenGlobe.Scene.Terrain
             public bool OffsetStripOnNorth;
             public bool OffsetStripOnEast;
 
+            public Vector2I OriginInTexture = new Vector2I(0, 0);
+
             public IndexOrigin CurrentOrigin = new IndexOrigin();
             public IndexOrigin DesiredOrigin = new IndexOrigin();
         }
@@ -610,5 +615,6 @@ namespace OpenGlobe.Scene.Terrain
 
         private bool _wireframe;
         private bool _averagedNormals;
+        private Uniform<float> _oneOverClipmapSize;
     }
 }

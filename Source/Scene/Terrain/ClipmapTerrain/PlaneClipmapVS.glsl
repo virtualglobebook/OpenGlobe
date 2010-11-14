@@ -26,15 +26,16 @@ uniform vec2 u_unblendedRegionSize;
 uniform vec2 u_oneOverBlendedRegionSize;
 uniform vec2 u_fineTextureOrigin;
 uniform float u_heightExaggeration;
-uniform sampler2DRect og_texture0;    // finer height map
-uniform sampler2DRect og_texture1;    // coarser height map
+uniform float u_oneOverClipmapSize;
+uniform sampler2D og_texture0;    // finer height map
+uniform sampler2D og_texture1;    // coarser height map
 
 void main()
 {
 	vec2 levelPos = position + u_patchOriginInClippedLevel;
 
-	fineUvFS = levelPos + u_fineTextureOrigin;
-	coarseUvFS = levelPos * 0.5 + u_fineLevelOriginInCoarse;
+	fineUvFS = (levelPos + u_fineTextureOrigin) * u_oneOverClipmapSize;
+	coarseUvFS = (levelPos * 0.5 + u_fineLevelOriginInCoarse) * u_oneOverClipmapSize;
 
 	vec2 alpha = clamp((abs(levelPos - u_viewPosInClippedLevel) - u_unblendedRegionSize) * u_oneOverBlendedRegionSize, 0, 1);
 	alphaFS = max(alpha.x, alpha.y);
