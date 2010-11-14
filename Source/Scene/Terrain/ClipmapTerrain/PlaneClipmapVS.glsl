@@ -9,8 +9,10 @@
 in vec2 position;
 
 //out vec3 normalFS;
-out vec2 uvFS;
+out vec2 fineUvFS;
+out vec2 coarseUvFS;
 out vec3 positionToLightFS;
+out float alphaFS;
 
 uniform mat4 og_modelViewPerspectiveMatrix;
 uniform vec3 u_sunPositionRelativeToViewer;
@@ -29,22 +31,21 @@ uniform sampler2DRect og_texture1;    // coarser height map
 
 float SampleHeight(vec2 clippedLevelCurrent)
 {
-	vec2 uvFine = clippedLevelCurrent + u_fineTextureOrigin;
-	vec2 uvCoarse = clippedLevelCurrent * 0.5 + u_fineLevelOriginInCoarse;
+	fineUvFS = clippedLevelCurrent + u_fineTextureOrigin;
+	coarseUvFS = clippedLevelCurrent * 0.5 + u_fineLevelOriginInCoarse;
 
 	vec2 alpha = clamp((abs(clippedLevelCurrent - u_viewPosInClippedLevel) - u_unblendedRegionSize) * u_oneOverBlendedRegionSize, 0, 1);
-	float alphaScalar = max(alpha.x, alpha.y);
+	alphaFS = max(alpha.x, alpha.y);
 
-	float fineHeight = texture(og_texture0, uvFine).r;
-	float coarseHeight = texture(og_texture1, uvCoarse).r;
-	return mix(fineHeight, coarseHeight, alphaScalar);
+	float fineHeight = texture(og_texture0, fineUvFS).r;
+	float coarseHeight = texture(og_texture1, coarseUvFS).r;
+	return mix(fineHeight, coarseHeight, alphaFS);
 }
 
 void main()
 {
 	vec2 levelPos = position + u_patchOriginInClippedLevel;
 
-	uvFS = levelPos;
 	float height = SampleHeight(levelPos) * u_heightExaggeration;
 	//normalFS = ComputeNormal(levelPos, height);
 

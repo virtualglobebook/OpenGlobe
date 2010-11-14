@@ -96,6 +96,7 @@ namespace OpenGlobe.Scene.Terrain
             _oneOverBlendedRegionSize = (Uniform<Vector2S>)_shaderProgram.Uniforms["u_oneOverBlendedRegionSize"];
             _sunPositionRelativeToViewer = (Uniform<Vector3S>)_shaderProgram.Uniforms["u_sunPositionRelativeToViewer"];
             _fineTextureOrigin = (Uniform<Vector2S>)_shaderProgram.Uniforms["u_fineTextureOrigin"];
+            _showBlendRegions = (Uniform<bool>)_shaderProgram.Uniforms["u_showBlendRegions"];
 
             _renderState = new RenderState();
             _renderState.FacetCulling.FrontFaceWindingOrder = fieldBlockMesh.FrontFaceWindingOrder;
@@ -114,6 +115,12 @@ namespace OpenGlobe.Scene.Terrain
         {
             get { return _wireframe; }
             set { _wireframe = value; }
+        }
+
+        public bool ShowBlendRegions
+        {
+            get { return _showBlendRegions.Value; }
+            set { _showBlendRegions.Value = value; }
         }
 
         public float HeightExaggeration
@@ -291,6 +298,8 @@ namespace OpenGlobe.Scene.Terrain
             context.TextureUnits[1].TextureSampler = Device.TextureSamplers.LinearClamp;
             context.TextureUnits[2].Texture = level.NormalTexture;
             context.TextureUnits[2].TextureSampler = Device.TextureSamplers.LinearClamp;
+            context.TextureUnits[3].Texture = coarserLevel.NormalTexture;
+            context.TextureUnits[3].TextureSampler = Device.TextureSamplers.LinearClamp;
 
             int west = level.CurrentOrigin.TerrainWest;
             int south = level.CurrentOrigin.TerrainSouth;
@@ -571,6 +580,7 @@ namespace OpenGlobe.Scene.Terrain
         private Uniform<Vector2S> _oneOverBlendedRegionSize;
         private Uniform<Vector3S> _sunPositionRelativeToViewer;
         private Uniform<Vector2S> _fineTextureOrigin;
+        private Uniform<bool> _showBlendRegions;
 
         private bool _wireframe;
     }

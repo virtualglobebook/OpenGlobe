@@ -25,7 +25,6 @@ namespace OpenGlobe.Examples
         {
             _window = Device.CreateWindow(640, 480, "Chapter 11:  Clipmap Terrain");
 
-            //WorldWindTerrainSource worldWind = new WorldWindTerrainSource();
             SimpleTerrainSource terrainSource = new SimpleTerrainSource(@"..\..\..\..\..\..\Data\Terrain\ps_height_16k");
             _clipmap = new PlaneClipmapTerrain(_window.Context, terrainSource, 255);
             _clipmap.HeightExaggeration = 0.01f;
@@ -87,6 +86,10 @@ namespace OpenGlobe.Examples
             else if (e.Key == KeyboardKey.W)
             {
                 _clipmap.Wireframe = !_clipmap.Wireframe;
+            }
+            else if (e.Key == KeyboardKey.B)
+            {
+                _clipmap.ShowBlendRegions = !_clipmap.ShowBlendRegions;
             }
         }
 
