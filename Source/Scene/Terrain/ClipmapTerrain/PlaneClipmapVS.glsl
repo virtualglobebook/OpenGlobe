@@ -29,25 +29,19 @@ uniform float u_heightExaggeration;
 uniform sampler2DRect og_texture0;    // finer height map
 uniform sampler2DRect og_texture1;    // coarser height map
 
-float SampleHeight(vec2 clippedLevelCurrent)
-{
-	fineUvFS = clippedLevelCurrent + u_fineTextureOrigin;
-	coarseUvFS = clippedLevelCurrent * 0.5 + u_fineLevelOriginInCoarse;
-
-	vec2 alpha = clamp((abs(clippedLevelCurrent - u_viewPosInClippedLevel) - u_unblendedRegionSize) * u_oneOverBlendedRegionSize, 0, 1);
-	alphaFS = max(alpha.x, alpha.y);
-
-	float fineHeight = texture(og_texture0, fineUvFS).r;
-	float coarseHeight = texture(og_texture1, coarseUvFS).r;
-	return mix(fineHeight, coarseHeight, alphaFS);
-}
-
 void main()
 {
 	vec2 levelPos = position + u_patchOriginInClippedLevel;
 
-	float height = SampleHeight(levelPos) * u_heightExaggeration;
-	//normalFS = ComputeNormal(levelPos, height);
+	fineUvFS = levelPos + u_fineTextureOrigin;
+	coarseUvFS = levelPos * 0.5 + u_fineLevelOriginInCoarse;
+
+	vec2 alpha = clamp((abs(levelPos - u_viewPosInClippedLevel) - u_unblendedRegionSize) * u_oneOverBlendedRegionSize, 0, 1);
+	alphaFS = max(alpha.x, alpha.y);
+
+	float fineHeight = texture(og_texture0, fineUvFS).r;
+	float coarseHeight = texture(og_texture1, coarseUvFS).r;
+	float height = mix(fineHeight, coarseHeight, alphaFS) * u_heightExaggeration;
 
 	vec2 worldPos = levelPos * u_levelScaleFactor * u_levelZeroWorldScaleFactor + u_levelOffsetFromWorldOrigin;
 	vec3 displacedPosition = vec3(worldPos, height);

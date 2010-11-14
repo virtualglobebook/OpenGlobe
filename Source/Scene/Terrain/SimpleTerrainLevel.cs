@@ -95,7 +95,7 @@ namespace OpenGlobe.Scene.Terrain
                 if (tileLongitudeIndex < 0 || tileLatitudeIndex < 0 ||
                     tileLongitudeIndex >= _longitudeTiles || tileLatitudeIndex >= _latitudeTiles)
                 {
-                    tile.Posts = new short[(_terrainSource.TileLongitudePosts + 1) * (_terrainSource.TileLatitudePosts + 1)];
+                    tile.Posts = new ushort[(_terrainSource.TileLongitudePosts + 1) * (_terrainSource.TileLatitudePosts + 1)];
                 }
                 else
                 {
@@ -146,7 +146,7 @@ namespace OpenGlobe.Scene.Terrain
 
         private class Tile
         {
-            public short[] Posts;
+            public ushort[] Posts;
             public int TileLongitudeIndex;
             public int TileLatitudeIndex;
         }

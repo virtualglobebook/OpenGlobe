@@ -91,6 +91,10 @@ namespace OpenGlobe.Examples
             {
                 _clipmap.ShowBlendRegions = !_clipmap.ShowBlendRegions;
             }
+            else if (e.Key == KeyboardKey.L)
+            {
+                _update = !_update;
+            }
         }
 
         private void OnRenderFrame()
@@ -102,8 +106,11 @@ namespace OpenGlobe.Examples
 
         private void OnPreRenderFrame()
         {
-            Context context = _window.Context;
-            _clipmap.PreRender(context, _sceneState);
+            if (_update)
+            {
+                Context context = _window.Context;
+                _clipmap.PreRender(context, _sceneState);
+            }
         }
 
         #region IDisposable Members
@@ -139,5 +146,6 @@ namespace OpenGlobe.Examples
         private readonly CameraFly _cameraFly;
         private readonly ClearState _clearState;
         private readonly PlaneClipmapTerrain _clipmap;
+        private bool _update = true;
     }
 }

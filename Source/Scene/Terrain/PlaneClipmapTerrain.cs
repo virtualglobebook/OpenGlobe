@@ -233,22 +233,14 @@ namespace OpenGlobe.Scene.Terrain
 
             Vector3D clipmapCenter = sceneState.Camera.Eye;
 
-            // Scale the camera eye and target positions to render to the scaled ellipsoid instead of the
-            // true WGS84 ellipsoid, without affecting the view.  This avoids some precision problems.
             Vector3D previousTarget = sceneState.Camera.Target;
             Vector3D previousEye = sceneState.Camera.Eye;
-            double previousNearPlane = sceneState.Camera.PerspectiveNearPlaneDistance;
-            double previousFarPlane = sceneState.Camera.PerspectiveFarPlaneDistance;
 
             _sunPositionRelativeToViewer.Value = (sceneState.SunPosition - clipmapCenter).ToVector3S();
 
             Vector3D toSubtract = new Vector3D(clipmapCenter.X, clipmapCenter.Y, 0.0);
             sceneState.Camera.Target -= toSubtract;
             sceneState.Camera.Eye -= toSubtract;
-            //sceneState.Camera.Target /= Ellipsoid.Wgs84.MaximumRadius;
-            //sceneState.Camera.Eye /= Ellipsoid.Wgs84.MaximumRadius;
-            //sceneState.Camera.PerspectiveNearPlaneDistance /= Ellipsoid.Wgs84.MaximumRadius;
-            //sceneState.Camera.PerspectiveFarPlaneDistance /= Ellipsoid.Wgs84.MaximumRadius;
 
             _levelZeroWorldScaleFactor.Value = new Vector2S((float)_clipmapLevels[0].Terrain.PostDeltaLongitude, (float)_clipmapLevels[0].Terrain.PostDeltaLatitude);
 
@@ -286,8 +278,6 @@ namespace OpenGlobe.Scene.Terrain
 
             sceneState.Camera.Target = previousTarget;
             sceneState.Camera.Eye = previousEye;
-            sceneState.Camera.PerspectiveNearPlaneDistance = previousNearPlane;
-            sceneState.Camera.PerspectiveFarPlaneDistance = previousFarPlane;
         }
 
         private bool RenderLevel(int levelIndex, Level level, Level coarserLevel, bool fillRing, Vector2D center, Context context, SceneState sceneState)

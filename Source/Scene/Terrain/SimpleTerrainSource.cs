@@ -74,7 +74,7 @@ namespace OpenGlobe.Scene.Terrain
             get { return _levelsCollection; }
         }
 
-        internal short[] GetTile(int level, int tileLongitudeIndex, int tileLatitudeIndex)
+        internal ushort[] GetTile(int level, int tileLongitudeIndex, int tileLatitudeIndex)
         {
             tileLatitudeIndex = (1 << level) - tileLatitudeIndex - 1;
 
@@ -83,10 +83,10 @@ namespace OpenGlobe.Scene.Terrain
             path = Path.Combine(path, tileLongitudeIndex.ToString() + ".bil");
 
             byte[] bytes = File.ReadAllBytes(path);
-            short[] result = new short[bytes.Length / 2];
+            ushort[] result = new ushort[bytes.Length / 2];
             for (int i = 0; i < bytes.Length / 2; ++i)
             {
-                result[i] = BitConverter.ToInt16(bytes, i * 2);
+                result[i] = BitConverter.ToUInt16(bytes, i * 2);
             }
 
             return result;
