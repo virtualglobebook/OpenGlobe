@@ -8,7 +8,8 @@
 
 in vec2 position;
 
-out vec3 normalFS;
+//out vec3 normalFS;
+out vec2 uvFS;
 out vec3 positionToLightFS;
 
 uniform mat4 og_modelViewPerspectiveMatrix;
@@ -39,30 +40,13 @@ float SampleHeight(vec2 clippedLevelCurrent)
 	return mix(fineHeight, coarseHeight, alphaScalar);
 }
 
-vec3 ComputeNormal(vec2 levelPos, out float height)
-{
-	// Compute a normal by forward differencing.
-	vec2 right = levelPos + vec2(1.0, 0.0);
-	vec2 top = levelPos + vec2(0.0, 1.0);
-	vec2 left = levelPos - vec2(1.0, 0.0);
-	vec2 bottom = levelPos - vec2(0.0, 1.0);
-
-	height = SampleHeight(levelPos) * u_heightExaggeration;
-	float rightHeight = SampleHeight(right) * u_heightExaggeration;
-	float topHeight = SampleHeight(top) * u_heightExaggeration;
-	float leftHeight = SampleHeight(left) * u_heightExaggeration;
-	float bottomHeight = SampleHeight(bottom) * u_heightExaggeration;
-
-	vec2 gridDeltaInWorld = u_levelScaleFactor * u_levelZeroWorldScaleFactor;
-	return vec3(leftHeight - rightHeight, bottomHeight - topHeight, 2.0 * gridDeltaInWorld);
-}
-
 void main()
 {
 	vec2 levelPos = position + u_patchOriginInClippedLevel;
 
-	float height;
-	normalFS = ComputeNormal(levelPos, height);
+	uvFS = levelPos;
+	float height = SampleHeight(levelPos) * u_heightExaggeration;
+	//normalFS = ComputeNormal(levelPos, height);
 
 	vec2 worldPos = levelPos * u_levelScaleFactor * u_levelZeroWorldScaleFactor + u_levelOffsetFromWorldOrigin;
 	vec3 displacedPosition = vec3(worldPos, height);

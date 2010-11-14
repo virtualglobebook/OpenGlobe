@@ -6,17 +6,19 @@
 // See License.txt or http://www.boost.org/LICENSE_1_0.txt.
 //
 
-in vec3 normalFS;
+//in vec3 normalFS;
+in vec2 uvFS;
 in vec3 positionToLightFS;
 in vec2 textureCoordinateFS;
                  
 out vec3 fragmentColor;
 
 uniform vec4 og_diffuseSpecularAmbientShininess;
+uniform sampler2DRect og_texture2;    // normal map
 
 void main()
 {
-    vec3 normal = normalize(normalFS);
+    vec3 normal = normalize(texture(og_texture2, uvFS).rgb);
     vec3 positionToLight = normalize(positionToLightFS);
 
 	float diffuse = og_diffuseSpecularAmbientShininess.x * max(dot(positionToLight, normal), 0.0);

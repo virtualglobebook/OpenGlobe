@@ -34,7 +34,7 @@ namespace OpenGlobe.Scene.Terrain
                 _clipmapLevels[i] = new Level();
                 _clipmapLevels[i].Terrain = terrainLevel;
                 _clipmapLevels[i].TerrainTexture = Device.CreateTexture2DRectangle(new Texture2DDescription(_clipmapPosts, _clipmapPosts, TextureFormat.Red32f));
-                _clipmapLevels[i].NormalTexture = Device.CreateTexture2DRectangle(new Texture2DDescription(_clipmapPosts * 2, _clipmapPosts * 2, TextureFormat.RedGreenBlue32f));
+                _clipmapLevels[i].NormalTexture = Device.CreateTexture2DRectangle(new Texture2DDescription(_clipmapPosts, _clipmapPosts, TextureFormat.RedGreenBlue32f));
             }
 
             _shaderProgram = Device.CreateShaderProgram(
@@ -204,6 +204,13 @@ namespace OpenGlobe.Scene.Terrain
                 pixelBuffer.CopyFromSystemMemory(posts);
                 level.TerrainTexture.CopyFromBuffer(pixelBuffer, ImageFormat.Red, ImageDatatype.Float);
             }
+
+            Vector3S[] normals = ComputeNormals(level, posts);
+            using (WritePixelBuffer normalBuffer = Device.CreateWritePixelBuffer(PixelBufferHint.Stream, normals.Length * SizeInBytes<Vector3S>.Value))
+            {
+                normalBuffer.CopyFromSystemMemory(normals);
+                level.NormalTexture.CopyFromBuffer(normalBuffer, ImageFormat.RedGreenBlue, ImageDatatype.Float);
+            }
         }
 
         public void Render(Context context, SceneState sceneState)
@@ -282,6 +289,8 @@ namespace OpenGlobe.Scene.Terrain
             context.TextureUnits[0].TextureSampler = Device.TextureSamplers.NearestClamp;
             context.TextureUnits[1].Texture = coarserLevel.TerrainTexture;
             context.TextureUnits[1].TextureSampler = Device.TextureSamplers.LinearClamp;
+            context.TextureUnits[2].Texture = level.NormalTexture;
+            context.TextureUnits[2].TextureSampler = Device.TextureSamplers.LinearClamp;
 
             int west = level.CurrentOrigin.TerrainWest;
             int south = level.CurrentOrigin.TerrainSouth;
@@ -441,6 +450,63 @@ namespace OpenGlobe.Scene.Terrain
             Vector3D northeastCartesian = Ellipsoid.ScaledWgs84.ToVector3D(northeast);
 
             return (northeastCartesian - southwestCartesian).Magnitude;
+        }
+
+        private Vector3S[] ComputeNormals(Level level, float[] posts)
+        {
+            Vector3S[] normals = new Vector3S[_clipmapPosts * _clipmapPosts];
+
+            float heightExaggeration = HeightExaggeration;
+            float postDelta = (float)level.Terrain.PostDeltaLongitude;
+
+            for (int j = 0; j < _clipmapSegments; ++j)
+            {
+                for (int i = 0; i < _clipmapSegments; ++i)
+                {
+                    int sw = j * _clipmapPosts + i;
+                    float swHeight = posts[sw] * heightExaggeration;
+                    int se = j * _clipmapPosts + i + 1;
+                    float seHeight = posts[se] * heightExaggeration; ;
+                    int nw = (j + 1) * _clipmapPosts + i;
+                    float nwHeight = posts[nw] * heightExaggeration; ;
+                    int ne = (j + 1) * _clipmapPosts + i + 1;
+                    float neHeight = posts[ne] * heightExaggeration; ;
+
+                    Vector3S lowerLeftNormal = new Vector3S(swHeight - seHeight, swHeight - nwHeight, postDelta);
+                    normals[sw] += lowerLeftNormal;
+                    normals[nw] += lowerLeftNormal;
+                    normals[se] += lowerLeftNormal;
+
+                    Vector3S upperRightNormal = new Vector3S(nwHeight - neHeight, seHeight - neHeight, postDelta);
+                    normals[nw] += upperRightNormal;
+                    normals[se] += upperRightNormal;
+                    normals[ne] += upperRightNormal;
+                }
+            }
+
+            for (int j = 0; j < _clipmapPosts; ++j)
+            {
+                for (int i = 0; i < _clipmapPosts; ++i)
+                {
+                    float faces;
+                    if ((i == 0 || i == _clipmapPosts - 1) &&
+                        (j == 0 || j == _clipmapPosts - 1))
+                    {
+                        faces = 1.0f;
+                    }
+                    else if (i == 0 || j == 0 || i == _clipmapPosts - 1 || j == _clipmapPosts - 1)
+                    {
+                        faces = 3.0f;
+                    }
+                    else
+                    {
+                        faces = 6.0f;
+                    }
+                    normals[j * _clipmapPosts + i] /= faces;
+                }
+            }
+
+            return normals;
         }
 
         private class IndexOrigin
