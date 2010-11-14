@@ -65,7 +65,7 @@ namespace OpenGlobe.Scene.Terrain
             sceneState.Camera.Target = sceneState.Camera.Eye + Vector3D.UnitZ;
             CameraFly fly = new CameraFly(sceneState.Camera, window);
             fly.UpdateParametersFromCamera();
-            fly.MovementRate = 500.0;
+            fly.MovementRate = 100.0;
 
             window.Keyboard.KeyDown += delegate(object sender, KeyboardKeyEventArgs e)
             {

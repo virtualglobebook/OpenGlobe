@@ -34,6 +34,7 @@ namespace OpenGlobe.Scene.Terrain
                 _clipmapLevels[i] = new Level();
                 _clipmapLevels[i].Terrain = terrainLevel;
                 _clipmapLevels[i].TerrainTexture = Device.CreateTexture2DRectangle(new Texture2DDescription(_clipmapPosts, _clipmapPosts, TextureFormat.Red32f));
+                _clipmapLevels[i].NormalTexture = Device.CreateTexture2DRectangle(new Texture2DDescription(_clipmapPosts * 2, _clipmapPosts * 2, TextureFormat.RedGreenBlue32f));
             }
 
             _shaderProgram = Device.CreateShaderProgram(
@@ -94,6 +95,7 @@ namespace OpenGlobe.Scene.Terrain
             _unblendedRegionSize = (Uniform<Vector2S>)_shaderProgram.Uniforms["u_unblendedRegionSize"];
             _oneOverBlendedRegionSize = (Uniform<Vector2S>)_shaderProgram.Uniforms["u_oneOverBlendedRegionSize"];
             _sunPositionRelativeToViewer = (Uniform<Vector3S>)_shaderProgram.Uniforms["u_sunPositionRelativeToViewer"];
+            _fineTextureOrigin = (Uniform<Vector2S>)_shaderProgram.Uniforms["u_fineTextureOrigin"];
 
             _renderState = new RenderState();
             _renderState.FacetCulling.FrontFaceWindingOrder = fieldBlockMesh.FrontFaceWindingOrder;
@@ -296,11 +298,13 @@ namespace OpenGlobe.Scene.Terrain
 
             int coarserWest = coarserLevel.CurrentOrigin.TerrainWest;
             int coarserSouth = coarserLevel.CurrentOrigin.TerrainSouth;
-            _fineLevelOriginInCoarse.Value = new Vector2S(west / 2 - coarserWest,
-                                                          south / 2 - coarserSouth);
+            _fineLevelOriginInCoarse.Value = new Vector2S(west / 2 - coarserWest + 0.5f,
+                                                          south / 2 - coarserSouth + 0.5f);
 
             _viewPosInClippedLevel.Value = new Vector2S((float)(level.Terrain.LongitudeToIndex(center.X) - level.CurrentOrigin.TerrainWest),
                                                         (float)(level.Terrain.LatitudeToIndex(center.Y) - level.CurrentOrigin.TerrainSouth));
+
+            _fineTextureOrigin.Value = new Vector2S(0.5f, 0.5f);
 
             DrawBlock(_fieldBlock, level, coarserLevel, west, south, west, south, context, sceneState);
             DrawBlock(_fieldBlock, level, coarserLevel, west, south, west + _fieldBlockSegments, south, context, sceneState);
@@ -460,6 +464,7 @@ namespace OpenGlobe.Scene.Terrain
 
             public RasterTerrainLevel Terrain;
             public Texture2D TerrainTexture;
+            public Texture2D NormalTexture;
 
             public bool OffsetStripOnNorth;
             public bool OffsetStripOnEast;
@@ -499,6 +504,7 @@ namespace OpenGlobe.Scene.Terrain
         private Uniform<Vector2S> _unblendedRegionSize;
         private Uniform<Vector2S> _oneOverBlendedRegionSize;
         private Uniform<Vector3S> _sunPositionRelativeToViewer;
+        private Uniform<Vector2S> _fineTextureOrigin;
 
         private bool _wireframe;
     }

@@ -21,14 +21,15 @@ uniform vec2 u_fineLevelOriginInCoarse;
 uniform vec2 u_viewPosInClippedLevel;
 uniform vec2 u_unblendedRegionSize;
 uniform vec2 u_oneOverBlendedRegionSize;
+uniform vec2 u_fineTextureOrigin;
 uniform float u_heightExaggeration;
 uniform sampler2DRect og_texture0;    // finer height map
 uniform sampler2DRect og_texture1;    // coarser height map
 
 float SampleHeight(vec2 clippedLevelCurrent)
 {
-	vec2 uvFine = clippedLevelCurrent + vec2(0.5, 0.5);
-	vec2 uvCoarse = clippedLevelCurrent * 0.5 + u_fineLevelOriginInCoarse + vec2(0.5, 0.5);
+	vec2 uvFine = clippedLevelCurrent + u_fineTextureOrigin;
+	vec2 uvCoarse = clippedLevelCurrent * 0.5 + u_fineLevelOriginInCoarse;
 
 	vec2 alpha = clamp((abs(clippedLevelCurrent - u_viewPosInClippedLevel) - u_unblendedRegionSize) * u_oneOverBlendedRegionSize, 0, 1);
 	float alphaScalar = max(alpha.x, alpha.y);
