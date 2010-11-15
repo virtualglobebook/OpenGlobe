@@ -112,6 +112,9 @@ namespace OpenGlobe.Scene.Terrain
             _oneOverClipmapSize.Value = 1.0f / clipmapPosts;
 
             HeightExaggeration = 0.00001f;
+
+            //string updateFS = EmbeddedResources.GetText("OpenGlobe.Scene.Terrain.ClipmapTerrain.ClipmapUpdateFS.glsl");
+            //_clipmapUpdater = new ViewportQuad(context, updateFS);
         }
 
         public bool Wireframe
@@ -191,7 +194,6 @@ namespace OpenGlobe.Scene.Terrain
                 Level thisLevel = _clipmapLevels[i];
                 Level coarserLevel = _clipmapLevels[i > 0 ? i - 1 : 0];
 
-                thisLevel.CurrentOrigin = null; // TODO: remove this
                 PreRenderLevel(thisLevel, coarserLevel, context, sceneState);
             }
         }
@@ -203,28 +205,99 @@ namespace OpenGlobe.Scene.Terrain
             public int South;
             public int East;
             public int North;
+            public int Width { get { return East - West + 1; } }
+            public int Height { get { return North - South + 1; } }
             public int DestinationX;
             public int DestinationY;
         }
 
         private void DoUpdate(Update update)
         {
-            int width = (update.East - update.West + 1);
-            int height = (update.North - update.South + 1);
-            float[] posts = new float[width * height];
-            update.Level.Terrain.GetPosts(update.West, update.South, update.East, update.North, posts, 0, width);
+            if (update.Width != 255 && update.Height != 255)
+                return;
+
+            if (update.DestinationX < 0)
+                update.DestinationX += _clipmapPosts;
+            if (update.DestinationY < 0)
+                update.DestinationY += _clipmapPosts;
+
+            // TODO: What if Width or Height is > _clipmapPosts;
+
+            int rightmostWrite = update.DestinationX + update.Width - 1;
+            int topmostWrite = update.DestinationY + update.Height - 1;
+
+            // We can't cross the texture boundary with one write, so split this
+            // into two updates if necessary.
+            if (rightmostWrite > _clipmapSegments)
+            {
+                Update leftUpdate = new Update()
+                {
+                    Level = update.Level,
+                    West = update.West,
+                    South = update.South,
+                    East = update.West + (_clipmapSegments - update.DestinationX),
+                    North = update.North,
+                    DestinationX = update.DestinationX,
+                    DestinationY = update.DestinationY,
+                };
+                DoUpdate(leftUpdate);
+                Update rightUpdate = new Update()
+                {
+                    Level = update.Level,
+                    West = update.West + (_clipmapSegments - update.DestinationX) + 1,
+                    South = update.South,
+                    East = update.East,
+                    North = update.North,
+                    DestinationX = 0,
+                    DestinationY = update.DestinationY,
+                };
+                DoUpdate(rightUpdate);
+                return;
+            }
+            else if (topmostWrite > _clipmapSegments)
+            {
+                Update bottomUpdate = new Update()
+                {
+                    Level = update.Level,
+                    West = update.West,
+                    South = update.South,
+                    East = update.West,
+                    North = update.North + (_clipmapSegments - update.DestinationY),
+                    DestinationX = update.DestinationX,
+                    DestinationY = update.DestinationY,
+                };
+                DoUpdate(bottomUpdate);
+                Update topUpdate = new Update()
+                {
+                    Level = update.Level,
+                    West = update.West,
+                    South = update.South + (_clipmapSegments - update.DestinationY) + 1,
+                    East = update.East,
+                    North = update.North,
+                    DestinationX = update.DestinationX,
+                    DestinationY = 0,
+                };
+                DoUpdate(topUpdate);
+                return;
+            }
+
+            float[] posts = new float[update.Width * update.Height];
+            update.Level.Terrain.GetPosts(update.West, update.South, update.East, update.North, posts, 0, update.Width);
 
             using (WritePixelBuffer pixelBuffer = Device.CreateWritePixelBuffer(PixelBufferHint.Stream, posts.Length * sizeof(float)))
             {
                 pixelBuffer.CopyFromSystemMemory(posts);
-                update.Level.TerrainTexture.CopyFromBuffer(pixelBuffer, update.DestinationX, update.DestinationY, width, height, ImageFormat.Red, ImageDatatype.Float, 4);
+                update.Level.TerrainTexture.CopyFromBuffer(pixelBuffer, update.DestinationX, update.DestinationY, update.Width, update.Height, ImageFormat.Red, ImageDatatype.Float, 4);
             }
 
-            Vector3S[] normals = ComputeNormals(update.Level, posts);
-            using (WritePixelBuffer normalBuffer = Device.CreateWritePixelBuffer(PixelBufferHint.Stream, normals.Length * SizeInBytes<Vector3S>.Value))
+            if (posts.Length == _clipmapPosts * _clipmapPosts)
             {
-                normalBuffer.CopyFromSystemMemory(normals);
-                update.Level.NormalTexture.CopyFromBuffer(normalBuffer, ImageFormat.RedGreenBlue, ImageDatatype.Float);
+                Vector3S[] normals = ComputeNormals(update.Level, posts);
+                using (WritePixelBuffer normalBuffer = Device.CreateWritePixelBuffer(PixelBufferHint.Stream, normals.Length * SizeInBytes<Vector3S>.Value))
+                {
+                    normalBuffer.CopyFromSystemMemory(normals);
+                    update.Level.NormalTexture.CopyFromBuffer(normalBuffer, ImageFormat.RedGreenBlue, ImageDatatype.Float);
+                }
             }
         }
 
@@ -250,36 +323,53 @@ namespace OpenGlobe.Scene.Terrain
             }
             else
             {
-                int deltaLongitude = level.DesiredOrigin.TerrainWest - level.CurrentOrigin.TerrainWest;
-                int deltaLatitude = level.DesiredOrigin.TerrainSouth - level.CurrentOrigin.TerrainSouth;
+                int deltaX = level.DesiredOrigin.TerrainWest - level.CurrentOrigin.TerrainWest;
+                int deltaY = level.DesiredOrigin.TerrainSouth - level.CurrentOrigin.TerrainSouth;
+                if (deltaX == 0 && deltaY == 0)
+                    return;
 
-                int newPostsLongitude = Math.Abs(deltaLongitude) + 1;
-                int newPostsLatitude = Math.Abs(deltaLatitude) + 1;
+                int minLongitude = deltaX > 0 ? level.CurrentOrigin.TerrainWest + 1 : level.DesiredOrigin.TerrainWest;
+                int maxLongitude = deltaX > 0 ? level.DesiredOrigin.TerrainWest : level.CurrentOrigin.TerrainWest - 1;
+                int minLatitude = deltaY > 0 ? level.CurrentOrigin.TerrainSouth + 1 : level.DesiredOrigin.TerrainSouth;
+                int maxLatitude = deltaY > 0 ? level.DesiredOrigin.TerrainSouth : level.CurrentOrigin.TerrainSouth - 1;
 
-                int minLongitude = Math.Min(level.DesiredOrigin.TerrainWest, level.CurrentOrigin.TerrainWest);
-                int maxLongitude = Math.Max(level.DesiredOrigin.TerrainWest, level.CurrentOrigin.TerrainWest);
-                int minLatitude = Math.Min(level.DesiredOrigin.TerrainSouth, level.CurrentOrigin.TerrainSouth);
-                int maxLatitude = Math.Max(level.DesiredOrigin.TerrainSouth, level.CurrentOrigin.TerrainSouth);
+                int width = maxLongitude - minLongitude + 1;
+                int height = maxLatitude - minLatitude + 1;
 
-                float[] verticalPosts = new float[(maxLongitude - minLongitude + 1) * _clipmapPosts];
-                level.Terrain.GetPosts(minLongitude, 0, maxLongitude, _clipmapSegments, verticalPosts, 0, maxLongitude - minLongitude + 1);
-
-                using (WritePixelBuffer pixelBuffer = Device.CreateWritePixelBuffer(PixelBufferHint.Stream, verticalPosts.Length * sizeof(float)))
+                if (height > 0)
                 {
-                    pixelBuffer.CopyFromSystemMemory(verticalPosts);
-                    level.TerrainTexture.CopyFromBuffer(pixelBuffer, level.OriginInTexture.X, 0, (maxLongitude - minLongitude + 1), _clipmapPosts, ImageFormat.Red, ImageDatatype.Float, 4);
+                    Update horizontalUpdate = new Update()
+                    {
+                        Level = level,
+                        West = 0,
+                        East = _clipmapSegments,
+                        South = minLatitude,
+                        North = maxLatitude,
+                        DestinationX = 0,
+                        DestinationY = deltaY > 0 ? level.OriginInTexture.Y : level.OriginInTexture.Y - height,
+                    };
+                    DoUpdate(horizontalUpdate);
                 }
 
-                float[] horizontalPosts = new float[_clipmapPosts * (maxLatitude - minLatitude + 1)];
-                level.Terrain.GetPosts(0, minLatitude, _clipmapSegments, maxLatitude, horizontalPosts, 0, _clipmapPosts);
-
-                using (WritePixelBuffer pixelBuffer = Device.CreateWritePixelBuffer(PixelBufferHint.Stream, horizontalPosts.Length * sizeof(float)))
+                if (width > 0)
                 {
-                    pixelBuffer.CopyFromSystemMemory(horizontalPosts);
-                    level.TerrainTexture.CopyFromBuffer(pixelBuffer, 0, level.OriginInTexture.Y, _clipmapPosts, (maxLatitude - minLatitude + 1), ImageFormat.Red, ImageDatatype.Float, 4);
+                    Update verticalUpdate = new Update()
+                    {
+                        Level = level,
+                        West = minLongitude,
+                        East = maxLongitude,
+                        South = 0,
+                        North = _clipmapSegments,
+                        DestinationX = deltaX > 0 ? level.OriginInTexture.X : level.OriginInTexture.X - width,
+                        DestinationY = 0,
+                    };
+                    DoUpdate(verticalUpdate);
                 }
 
-                level.OriginInTexture += new Vector2I(deltaLongitude, deltaLatitude);
+                int originX = (level.OriginInTexture.X + deltaX) % _clipmapPosts;
+                int originY = (level.OriginInTexture.Y + deltaY) % _clipmapPosts;
+                level.OriginInTexture = new Vector2I(originX, originY);
+
                 level.DesiredOrigin.CopyTo(level.CurrentOrigin);
             }
         }
@@ -370,7 +460,8 @@ namespace OpenGlobe.Scene.Terrain
 
             int coarserWest = coarserLevel.CurrentOrigin.TerrainWest;
             int coarserSouth = coarserLevel.CurrentOrigin.TerrainSouth;
-            _fineLevelOriginInCoarse.Value = new Vector2S(west / 2 - coarserWest + 0.5f,
+            _fineLevelOriginInCoarse.Value = level.OriginInTexture.ToVector2S() +
+                                             new Vector2S(west / 2 - coarserWest + 0.5f,
                                                           south / 2 - coarserSouth + 0.5f);
 
             _viewPosInClippedLevel.Value = new Vector2S((float)(level.Terrain.LongitudeToIndex(center.X) - level.CurrentOrigin.TerrainWest),
@@ -677,5 +768,7 @@ namespace OpenGlobe.Scene.Terrain
         private bool _wireframe;
         private bool _averagedNormals;
         private Uniform<float> _oneOverClipmapSize;
+
+        private ViewportQuad _clipmapUpdater;
     }
 }
