@@ -161,8 +161,8 @@ namespace OpenGlobe.Scene.Terrain
                 ++south;
             }
 
-            level.CurrentOrigin.TerrainWest = west;
-            level.CurrentOrigin.TerrainSouth = south;
+            level.DesiredOrigin.TerrainWest = west;
+            level.DesiredOrigin.TerrainSouth = south;
             level.OffsetStripOnEast = true;
             level.OffsetStripOnNorth = true;
 
@@ -171,18 +171,18 @@ namespace OpenGlobe.Scene.Terrain
                 level = _clipmapLevels[i];
                 Level finerLevel = _clipmapLevels[i + 1];
 
-                level.CurrentOrigin.TerrainWest = finerLevel.CurrentOrigin.TerrainWest / 2 - _fieldBlockSegments;
-                level.OffsetStripOnEast = (level.CurrentOrigin.TerrainWest % 2) == 0;
+                level.DesiredOrigin.TerrainWest = finerLevel.DesiredOrigin.TerrainWest / 2 - _fieldBlockSegments;
+                level.OffsetStripOnEast = (level.DesiredOrigin.TerrainWest % 2) == 0;
                 if (!level.OffsetStripOnEast)
                 {
-                    --level.CurrentOrigin.TerrainWest;
+                    --level.DesiredOrigin.TerrainWest;
                 }
 
-                level.CurrentOrigin.TerrainSouth = finerLevel.CurrentOrigin.TerrainSouth / 2 - _fieldBlockSegments;
-                level.OffsetStripOnNorth = (level.CurrentOrigin.TerrainSouth % 2) == 0;
+                level.DesiredOrigin.TerrainSouth = finerLevel.DesiredOrigin.TerrainSouth / 2 - _fieldBlockSegments;
+                level.OffsetStripOnNorth = (level.DesiredOrigin.TerrainSouth % 2) == 0;
                 if (!level.OffsetStripOnNorth)
                 {
-                    --level.CurrentOrigin.TerrainSouth;
+                    --level.DesiredOrigin.TerrainSouth;
                 }
             }
 
@@ -191,41 +191,96 @@ namespace OpenGlobe.Scene.Terrain
                 Level thisLevel = _clipmapLevels[i];
                 Level coarserLevel = _clipmapLevels[i > 0 ? i - 1 : 0];
 
+                thisLevel.CurrentOrigin = null; // TODO: remove this
                 PreRenderLevel(thisLevel, coarserLevel, context, sceneState);
             }
         }
 
-        private void PreRenderLevel(Level level, Level coarserLevel, Context context, SceneState sceneState)
+        private class Update
         {
-            int west = level.CurrentOrigin.TerrainWest;
-            int south = level.CurrentOrigin.TerrainSouth;
-            int east = west + _clipmapPosts - 1;
-            int north = south + _clipmapPosts - 1;
+            public Level Level;
+            public int West;
+            public int South;
+            public int East;
+            public int North;
+            public int DestinationX;
+            public int DestinationY;
+        }
 
-            float[] posts = new float[_clipmapPosts * _clipmapPosts];
-            level.Terrain.GetPosts(west, south, east, north, posts, 0, _clipmapPosts);
+        private void DoUpdate(Update update)
+        {
+            int width = (update.East - update.West + 1);
+            int height = (update.North - update.South + 1);
+            float[] posts = new float[width * height];
+            update.Level.Terrain.GetPosts(update.West, update.South, update.East, update.North, posts, 0, width);
 
-            /*Geodetic3D eye = Ellipsoid.ScaledWgs84.ToGeodetic3D(sceneState.Camera.Target);
-            double heightAboveTerrain = eye.Height - posts[(_clipmapPosts / 2) * (_clipmapPosts + 1)] / Ellipsoid.Wgs84.MaximumRadius;
-
-            double levelExtent = EstimateLevelExtent(level);
-            if (level != coarserLevel && levelExtent < heightAboveTerrain)
-            {
-                // Do not render this level.
-                //return false;
-            }*/
-
-            using (WritePixelBuffer pixelBuffer = Device.CreateWritePixelBuffer(PixelBufferHint.Stream, _clipmapPosts * _clipmapPosts * sizeof(float)))
+            using (WritePixelBuffer pixelBuffer = Device.CreateWritePixelBuffer(PixelBufferHint.Stream, posts.Length * sizeof(float)))
             {
                 pixelBuffer.CopyFromSystemMemory(posts);
-                level.TerrainTexture.CopyFromBuffer(pixelBuffer, ImageFormat.Red, ImageDatatype.Float);
+                update.Level.TerrainTexture.CopyFromBuffer(pixelBuffer, update.DestinationX, update.DestinationY, width, height, ImageFormat.Red, ImageDatatype.Float, 4);
             }
 
-            Vector3S[] normals = ComputeNormals(level, posts);
+            Vector3S[] normals = ComputeNormals(update.Level, posts);
             using (WritePixelBuffer normalBuffer = Device.CreateWritePixelBuffer(PixelBufferHint.Stream, normals.Length * SizeInBytes<Vector3S>.Value))
             {
                 normalBuffer.CopyFromSystemMemory(normals);
-                level.NormalTexture.CopyFromBuffer(normalBuffer, ImageFormat.RedGreenBlue, ImageDatatype.Float);
+                update.Level.NormalTexture.CopyFromBuffer(normalBuffer, ImageFormat.RedGreenBlue, ImageDatatype.Float);
+            }
+        }
+
+
+        private void PreRenderLevel(Level level, Level coarserLevel, Context context, SceneState sceneState)
+        {
+            if (level.CurrentOrigin == null)
+            {
+                level.CurrentOrigin = new IndexOrigin();
+                level.DesiredOrigin.CopyTo(level.CurrentOrigin);
+
+                Update update = new Update()
+                {
+                    Level = level,
+                    West = level.DesiredOrigin.TerrainWest,
+                    South = level.DesiredOrigin.TerrainSouth,
+                    East = level.DesiredOrigin.TerrainWest + _clipmapSegments,
+                    North = level.DesiredOrigin.TerrainSouth + _clipmapSegments,
+                    DestinationX = 0,
+                    DestinationY = 0,
+                };
+                DoUpdate(update);
+            }
+            else
+            {
+                int deltaLongitude = level.DesiredOrigin.TerrainWest - level.CurrentOrigin.TerrainWest;
+                int deltaLatitude = level.DesiredOrigin.TerrainSouth - level.CurrentOrigin.TerrainSouth;
+
+                int newPostsLongitude = Math.Abs(deltaLongitude) + 1;
+                int newPostsLatitude = Math.Abs(deltaLatitude) + 1;
+
+                int minLongitude = Math.Min(level.DesiredOrigin.TerrainWest, level.CurrentOrigin.TerrainWest);
+                int maxLongitude = Math.Max(level.DesiredOrigin.TerrainWest, level.CurrentOrigin.TerrainWest);
+                int minLatitude = Math.Min(level.DesiredOrigin.TerrainSouth, level.CurrentOrigin.TerrainSouth);
+                int maxLatitude = Math.Max(level.DesiredOrigin.TerrainSouth, level.CurrentOrigin.TerrainSouth);
+
+                float[] verticalPosts = new float[(maxLongitude - minLongitude + 1) * _clipmapPosts];
+                level.Terrain.GetPosts(minLongitude, 0, maxLongitude, _clipmapSegments, verticalPosts, 0, maxLongitude - minLongitude + 1);
+
+                using (WritePixelBuffer pixelBuffer = Device.CreateWritePixelBuffer(PixelBufferHint.Stream, verticalPosts.Length * sizeof(float)))
+                {
+                    pixelBuffer.CopyFromSystemMemory(verticalPosts);
+                    level.TerrainTexture.CopyFromBuffer(pixelBuffer, level.OriginInTexture.X, 0, (maxLongitude - minLongitude + 1), _clipmapPosts, ImageFormat.Red, ImageDatatype.Float, 4);
+                }
+
+                float[] horizontalPosts = new float[_clipmapPosts * (maxLatitude - minLatitude + 1)];
+                level.Terrain.GetPosts(0, minLatitude, _clipmapSegments, maxLatitude, horizontalPosts, 0, _clipmapPosts);
+
+                using (WritePixelBuffer pixelBuffer = Device.CreateWritePixelBuffer(PixelBufferHint.Stream, horizontalPosts.Length * sizeof(float)))
+                {
+                    pixelBuffer.CopyFromSystemMemory(horizontalPosts);
+                    level.TerrainTexture.CopyFromBuffer(pixelBuffer, 0, level.OriginInTexture.Y, _clipmapPosts, (maxLatitude - minLatitude + 1), ImageFormat.Red, ImageDatatype.Float, 4);
+                }
+
+                level.OriginInTexture += new Vector2I(deltaLongitude, deltaLatitude);
+                level.DesiredOrigin.CopyTo(level.CurrentOrigin);
             }
         }
 
@@ -551,6 +606,12 @@ namespace OpenGlobe.Scene.Terrain
         {
             public int TerrainWest;
             public int TerrainSouth;
+
+            public void CopyTo(IndexOrigin other)
+            {
+                other.TerrainWest = TerrainWest;
+                other.TerrainSouth = TerrainSouth;
+            }
         }
 
         private class Level
@@ -575,7 +636,7 @@ namespace OpenGlobe.Scene.Terrain
 
             public Vector2I OriginInTexture = new Vector2I(0, 0);
 
-            public IndexOrigin CurrentOrigin = new IndexOrigin();
+            public IndexOrigin CurrentOrigin;
             public IndexOrigin DesiredOrigin = new IndexOrigin();
         }
 
