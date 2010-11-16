@@ -27,6 +27,7 @@ uniform vec2 u_oneOverBlendedRegionSize;
 uniform vec2 u_fineTextureOrigin;
 uniform float u_heightExaggeration;
 uniform float u_oneOverClipmapSize;
+uniform bool u_useBlendRegions;
 uniform sampler2D og_texture0;    // finer height map
 uniform sampler2D og_texture1;    // coarser height map
 
@@ -37,8 +38,15 @@ void main()
 	fineUvFS = (levelPos + u_fineTextureOrigin) * u_oneOverClipmapSize;
 	coarseUvFS = (levelPos * 0.5 + u_fineLevelOriginInCoarse) * u_oneOverClipmapSize;
 
-	vec2 alpha = clamp((abs(levelPos - u_viewPosInClippedLevel) - u_unblendedRegionSize) * u_oneOverBlendedRegionSize, 0, 1);
-	alphaFS = max(alpha.x, alpha.y);
+    if (u_useBlendRegions)
+    {
+	    vec2 alpha = clamp((abs(levelPos - u_viewPosInClippedLevel) - u_unblendedRegionSize) * u_oneOverBlendedRegionSize, 0, 1);
+	    alphaFS = max(alpha.x, alpha.y);
+    }
+    else
+    {
+        alphaFS = 0.0;
+    }
 
 	float fineHeight = texture(og_texture0, fineUvFS).r;
 	float coarseHeight = texture(og_texture1, coarseUvFS).r;

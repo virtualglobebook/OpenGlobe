@@ -97,6 +97,7 @@ namespace OpenGlobe.Scene.Terrain
             _sunPositionRelativeToViewer = (Uniform<Vector3S>)_shaderProgram.Uniforms["u_sunPositionRelativeToViewer"];
             _fineTextureOrigin = (Uniform<Vector2S>)_shaderProgram.Uniforms["u_fineTextureOrigin"];
             _showBlendRegions = (Uniform<bool>)_shaderProgram.Uniforms["u_showBlendRegions"];
+            _useBlendRegions = (Uniform<bool>)_shaderProgram.Uniforms["u_useBlendRegions"];
             _oneOverClipmapSize = (Uniform<float>)_shaderProgram.Uniforms["u_oneOverClipmapSize"];
 
             _renderState = new RenderState();
@@ -120,6 +121,12 @@ namespace OpenGlobe.Scene.Terrain
         {
             get { return _wireframe; }
             set { _wireframe = value; }
+        }
+
+        public bool UseBlendRegions
+        {
+            get { return _useBlendRegions.Value; }
+            set { _useBlendRegions.Value = value; }
         }
 
         public bool ShowBlendRegions
@@ -168,7 +175,9 @@ namespace OpenGlobe.Scene.Terrain
             }
 
             level.DesiredOrigin.TerrainWest = west;
+            level.DesiredOrigin.TerrainEast = west + _clipmapSegments;
             level.DesiredOrigin.TerrainSouth = south;
+            level.DesiredOrigin.TerrainNorth = south + _clipmapSegments;
             level.OffsetStripOnEast = true;
             level.OffsetStripOnNorth = true;
 
@@ -183,6 +192,7 @@ namespace OpenGlobe.Scene.Terrain
                 {
                     --level.DesiredOrigin.TerrainWest;
                 }
+                level.DesiredOrigin.TerrainEast = level.DesiredOrigin.TerrainWest + _clipmapSegments;
 
                 level.DesiredOrigin.TerrainSouth = finerLevel.DesiredOrigin.TerrainSouth / 2 - _fieldBlockSegments;
                 level.OffsetStripOnNorth = (level.DesiredOrigin.TerrainSouth % 2) == 0;
@@ -190,6 +200,7 @@ namespace OpenGlobe.Scene.Terrain
                 {
                     --level.DesiredOrigin.TerrainSouth;
                 }
+                level.DesiredOrigin.TerrainNorth = level.DesiredOrigin.TerrainSouth + _clipmapSegments;
             }
 
             for (int i = _clipmapLevels.Length - 1; i >= 0; --i)
@@ -198,6 +209,7 @@ namespace OpenGlobe.Scene.Terrain
                 Level coarserLevel = _clipmapLevels[i > 0 ? i - 1 : 0];
 
                 PreRenderLevel(thisLevel, coarserLevel, context, sceneState);
+                break;
             }
         }
 
@@ -262,7 +274,7 @@ namespace OpenGlobe.Scene.Terrain
                     West = update.West,
                     South = update.South,
                     East = update.West,
-                    North = update.North + (_clipmapSegments - update.DestinationY),
+                    North = update.South + (_clipmapSegments - update.DestinationY),
                     DestinationX = update.DestinationX,
                     DestinationY = update.DestinationY,
                 };
@@ -281,6 +293,7 @@ namespace OpenGlobe.Scene.Terrain
                 return;
             }
 
+            Console.WriteLine("Writing to " + update.DestinationX + ", " + update.DestinationY);
 
             float[] posts = new float[update.Width * update.Height];
 
@@ -316,10 +329,10 @@ namespace OpenGlobe.Scene.Terrain
                 if (deltaX == 0 && deltaY == 0)
                     return;
 
-                int minLongitude = deltaX > 0 ? level.CurrentOrigin.TerrainWest + 1 : level.DesiredOrigin.TerrainWest;
-                int maxLongitude = deltaX > 0 ? level.DesiredOrigin.TerrainWest : level.CurrentOrigin.TerrainWest - 1;
-                int minLatitude = deltaY > 0 ? level.CurrentOrigin.TerrainSouth + 1 : level.DesiredOrigin.TerrainSouth;
-                int maxLatitude = deltaY > 0 ? level.DesiredOrigin.TerrainSouth : level.CurrentOrigin.TerrainSouth - 1;
+                int minLongitude = deltaX > 0 ? level.CurrentOrigin.TerrainEast + 1 : level.DesiredOrigin.TerrainWest;
+                int maxLongitude = deltaX > 0 ? level.DesiredOrigin.TerrainEast : level.CurrentOrigin.TerrainWest - 1;
+                int minLatitude = deltaY > 0 ? level.CurrentOrigin.TerrainNorth + 1 : level.DesiredOrigin.TerrainSouth;
+                int maxLatitude = deltaY > 0 ? level.DesiredOrigin.TerrainNorth : level.CurrentOrigin.TerrainSouth - 1;
 
                 int width = maxLongitude - minLongitude + 1;
                 int height = maxLatitude - minLatitude + 1;
@@ -329,11 +342,11 @@ namespace OpenGlobe.Scene.Terrain
                     Update horizontalUpdate = new Update()
                     {
                         Level = level,
-                        West = 0,
-                        East = _clipmapSegments,
+                        West = level.DesiredOrigin.TerrainWest,
+                        East = level.DesiredOrigin.TerrainEast,
                         South = minLatitude,
                         North = maxLatitude,
-                        DestinationX = 0,
+                        DestinationX = deltaX > 0 ? level.OriginInTexture.X : level.OriginInTexture.X - width,
                         DestinationY = deltaY > 0 ? level.OriginInTexture.Y : level.OriginInTexture.Y - height,
                     };
                     DoUpdate(context, horizontalUpdate);
@@ -346,10 +359,10 @@ namespace OpenGlobe.Scene.Terrain
                         Level = level,
                         West = minLongitude,
                         East = maxLongitude,
-                        South = 0,
-                        North = _clipmapSegments,
+                        South = level.DesiredOrigin.TerrainSouth,
+                        North = level.DesiredOrigin.TerrainNorth,
                         DestinationX = deltaX > 0 ? level.OriginInTexture.X : level.OriginInTexture.X - width,
-                        DestinationY = 0,
+                        DestinationY = deltaY > 0 ? level.OriginInTexture.Y : level.OriginInTexture.Y - height,
                     };
                     DoUpdate(context, verticalUpdate);
                 }
@@ -357,6 +370,12 @@ namespace OpenGlobe.Scene.Terrain
                 int originX = (level.OriginInTexture.X + deltaX) % _clipmapPosts;
                 int originY = (level.OriginInTexture.Y + deltaY) % _clipmapPosts;
                 level.OriginInTexture = new Vector2I(originX, originY);
+
+                if (Array.IndexOf(_clipmapLevels, level) == _clipmapLevels.Length - 1)
+                {
+                    Console.WriteLine("Moving " + deltaX + ", " + deltaY);
+                    Console.WriteLine("Origin " + level.OriginInTexture.X + ", " + level.OriginInTexture.Y);
+                }
 
                 level.DesiredOrigin.CopyTo(level.CurrentOrigin);
             }
@@ -415,7 +434,8 @@ namespace OpenGlobe.Scene.Terrain
                 Level thisLevel = _clipmapLevels[i];
                 Level coarserLevel = _clipmapLevels[i > 0 ? i - 1 : 0];
 
-                rendered = RenderLevel(i, thisLevel, coarserLevel, !rendered, center, context, sceneState);
+                rendered = RenderLevel(i, thisLevel, thisLevel, !rendered, center, context, sceneState);
+                break;
             }
 
             sceneState.Camera.Target = previousTarget;
@@ -435,8 +455,8 @@ namespace OpenGlobe.Scene.Terrain
 
             int west = level.CurrentOrigin.TerrainWest;
             int south = level.CurrentOrigin.TerrainSouth;
-            int east = west + _clipmapPosts - 1;
-            int north = south + _clipmapPosts - 1;
+            int east = level.CurrentOrigin.TerrainEast;
+            int north = level.CurrentOrigin.TerrainNorth;
 
             float levelScaleFactor = (float)Math.Pow(2.0, -levelIndex);
             _levelScaleFactor.Value = new Vector2S(levelScaleFactor, levelScaleFactor);
@@ -685,11 +705,15 @@ namespace OpenGlobe.Scene.Terrain
         {
             public int TerrainWest;
             public int TerrainSouth;
+            public int TerrainEast;
+            public int TerrainNorth;
 
             public void CopyTo(IndexOrigin other)
             {
                 other.TerrainWest = TerrainWest;
                 other.TerrainSouth = TerrainSouth;
+                other.TerrainEast = TerrainEast;
+                other.TerrainNorth = TerrainNorth;
             }
         }
 
@@ -752,6 +776,7 @@ namespace OpenGlobe.Scene.Terrain
         private Uniform<Vector3S> _sunPositionRelativeToViewer;
         private Uniform<Vector2S> _fineTextureOrigin;
         private Uniform<bool> _showBlendRegions;
+        private Uniform<bool> _useBlendRegions;
 
         private bool _wireframe;
         private bool _averagedNormals;
