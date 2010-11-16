@@ -111,10 +111,9 @@ namespace OpenGlobe.Scene.Terrain
 
             _oneOverClipmapSize.Value = 1.0f / clipmapPosts;
 
-            HeightExaggeration = 0.00001f;
+            _updater = new ClipmapUpdater(context, _clipmapPosts);
 
-            //string updateFS = EmbeddedResources.GetText("OpenGlobe.Scene.Terrain.ClipmapTerrain.ClipmapUpdateFS.glsl");
-            //_clipmapUpdater = new ViewportQuad(context, updateFS);
+            HeightExaggeration = 0.00001f;
         }
 
         public bool Wireframe
@@ -138,7 +137,11 @@ namespace OpenGlobe.Scene.Terrain
         public float HeightExaggeration
         {
             get { return _heightExaggeration.Value; }
-            set { _heightExaggeration.Value = value; }
+            set
+            {
+                _heightExaggeration.Value = value;
+                _updater.HeightExaggeration = value;
+            }
         }
 
         public void PreRender(Context context, SceneState sceneState)
@@ -211,11 +214,8 @@ namespace OpenGlobe.Scene.Terrain
             public int DestinationY;
         }
 
-        private void DoUpdate(Update update)
+        private void DoUpdate(Context context, Update update)
         {
-            if (update.Width != 255 && update.Height != 255)
-                return;
-
             if (update.DestinationX < 0)
                 update.DestinationX += _clipmapPosts;
             if (update.DestinationY < 0)
@@ -240,7 +240,7 @@ namespace OpenGlobe.Scene.Terrain
                     DestinationX = update.DestinationX,
                     DestinationY = update.DestinationY,
                 };
-                DoUpdate(leftUpdate);
+                DoUpdate(context, leftUpdate);
                 Update rightUpdate = new Update()
                 {
                     Level = update.Level,
@@ -251,7 +251,7 @@ namespace OpenGlobe.Scene.Terrain
                     DestinationX = 0,
                     DestinationY = update.DestinationY,
                 };
-                DoUpdate(rightUpdate);
+                DoUpdate(context, rightUpdate);
                 return;
             }
             else if (topmostWrite > _clipmapSegments)
@@ -266,7 +266,7 @@ namespace OpenGlobe.Scene.Terrain
                     DestinationX = update.DestinationX,
                     DestinationY = update.DestinationY,
                 };
-                DoUpdate(bottomUpdate);
+                DoUpdate(context, bottomUpdate);
                 Update topUpdate = new Update()
                 {
                     Level = update.Level,
@@ -277,28 +277,16 @@ namespace OpenGlobe.Scene.Terrain
                     DestinationX = update.DestinationX,
                     DestinationY = 0,
                 };
-                DoUpdate(topUpdate);
+                DoUpdate(context, topUpdate);
                 return;
             }
 
+
             float[] posts = new float[update.Width * update.Height];
-            update.Level.Terrain.GetPosts(update.West, update.South, update.East, update.North, posts, 0, update.Width);
 
-            using (WritePixelBuffer pixelBuffer = Device.CreateWritePixelBuffer(PixelBufferHint.Stream, posts.Length * sizeof(float)))
-            {
-                pixelBuffer.CopyFromSystemMemory(posts);
-                update.Level.TerrainTexture.CopyFromBuffer(pixelBuffer, update.DestinationX, update.DestinationY, update.Width, update.Height, ImageFormat.Red, ImageDatatype.Float, 4);
-            }
-
-            if (posts.Length == _clipmapPosts * _clipmapPosts)
-            {
-                Vector3S[] normals = ComputeNormals(update.Level, posts);
-                using (WritePixelBuffer normalBuffer = Device.CreateWritePixelBuffer(PixelBufferHint.Stream, normals.Length * SizeInBytes<Vector3S>.Value))
-                {
-                    normalBuffer.CopyFromSystemMemory(normals);
-                    update.Level.NormalTexture.CopyFromBuffer(normalBuffer, ImageFormat.RedGreenBlue, ImageDatatype.Float);
-                }
-            }
+            Level level = update.Level;
+            level.Terrain.GetPosts(update.West, update.South, update.East, update.North, posts, 0, update.Width);
+            _updater.Update(context, level.TerrainTexture, level.NormalTexture, (float)level.Terrain.PostDeltaLongitude, update.DestinationX, update.DestinationY, update.Width, update.Height, posts);
         }
 
 
@@ -319,7 +307,7 @@ namespace OpenGlobe.Scene.Terrain
                     DestinationX = 0,
                     DestinationY = 0,
                 };
-                DoUpdate(update);
+                DoUpdate(context, update);
             }
             else
             {
@@ -348,7 +336,7 @@ namespace OpenGlobe.Scene.Terrain
                         DestinationX = 0,
                         DestinationY = deltaY > 0 ? level.OriginInTexture.Y : level.OriginInTexture.Y - height,
                     };
-                    DoUpdate(horizontalUpdate);
+                    DoUpdate(context, horizontalUpdate);
                 }
 
                 if (width > 0)
@@ -363,7 +351,7 @@ namespace OpenGlobe.Scene.Terrain
                         DestinationX = deltaX > 0 ? level.OriginInTexture.X : level.OriginInTexture.X - width,
                         DestinationY = 0,
                     };
-                    DoUpdate(verticalUpdate);
+                    DoUpdate(context, verticalUpdate);
                 }
 
                 int originX = (level.OriginInTexture.X + deltaX) % _clipmapPosts;
@@ -769,6 +757,6 @@ namespace OpenGlobe.Scene.Terrain
         private bool _averagedNormals;
         private Uniform<float> _oneOverClipmapSize;
 
-        private ViewportQuad _clipmapUpdater;
+        private ClipmapUpdater _updater;
     }
 }
