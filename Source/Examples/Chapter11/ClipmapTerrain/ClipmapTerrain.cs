@@ -55,7 +55,7 @@ namespace OpenGlobe.Examples
             _sceneState.Camera.Target = _sceneState.Camera.Eye + Vector3D.UnitZ;
             _cameraFly = new CameraFly(_sceneState.Camera, _window);
             _cameraFly.UpdateParametersFromCamera();
-            _cameraFly.MovementRate = 100.0;
+            _cameraFly.MovementRate = 1000.0;
 
             _window.Keyboard.KeyDown += OnKeyDown;
 

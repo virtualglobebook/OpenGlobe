@@ -294,15 +294,13 @@ namespace OpenGlobe.Scene.Terrain
                 return;
             }
 
-            Console.WriteLine("Writing to " + update.DestinationX + ", " + update.DestinationY);
-
             float[] posts = new float[(update.Width + 2) * (update.Height + 2)];
 
             Level level = update.Level;
             level.Terrain.GetPosts(update.West - 1, update.South - 1, update.East + 1, update.North + 1, posts, 0, update.Width + 2);
             _updater.Update(context, level.TerrainTexture, level.NormalTexture, (float)level.Terrain.PostDeltaLongitude, update.DestinationX, update.DestinationY, update.Width, update.Height, posts);
-        }
 
+        }
 
         private void PreRenderLevel(Level level, Level coarserLevel, Context context, SceneState sceneState)
         {
@@ -377,15 +375,61 @@ namespace OpenGlobe.Scene.Terrain
 
                 level.OriginInTexture = new Vector2I(newOriginX, newOriginY);
 
-                if (Array.IndexOf(_clipmapLevels, level) == _clipmapLevels.Length - 1)
-                {
-                    Console.WriteLine("Moving " + deltaX + ", " + deltaY);
-                    Console.WriteLine("Origin " + level.OriginInTexture.X + ", " + level.OriginInTexture.Y);
-                }
-
                 level.DesiredOrigin.CopyTo(level.CurrentOrigin);
             }
+
+            //VerifyHeights(level);
         }
+
+        //private void VerifyHeights(Level level)
+        //{
+        //    ReadPixelBuffer rpb = level.TerrainTexture.CopyToBuffer(ImageFormat.Red, ImageDatatype.Float);
+        //    float[] postsFromTexture = rpb.CopyToSystemMemory<float>();
+
+        //    ReadPixelBuffer rpbNormals = level.NormalTexture.CopyToBuffer(ImageFormat.RedGreenBlue, ImageDatatype.Float);
+        //    Vector3S[] normalsFromTexture = rpbNormals.CopyToSystemMemory<Vector3S>();
+
+        //    float[] realPosts = new float[_clipmapPosts * _clipmapPosts];
+        //    level.Terrain.GetPosts(level.CurrentOrigin.TerrainWest, level.CurrentOrigin.TerrainSouth, level.CurrentOrigin.TerrainEast, level.CurrentOrigin.TerrainNorth, realPosts, 0, _clipmapPosts);
+
+        //    float heightExaggeration = HeightExaggeration;
+        //    float postDelta = (float)level.Terrain.PostDeltaLongitude;
+
+        //    for (int j = 0; j < _clipmapPosts; ++j)
+        //    {
+        //        int y = (j + level.OriginInTexture.Y) % _clipmapPosts;
+        //        for (int i = 0; i < _clipmapPosts; ++i)
+        //        {
+        //            int x = (i + level.OriginInTexture.X) % _clipmapPosts;
+
+        //            float realHeight = realPosts[j * _clipmapPosts + i];
+        //            float heightFromTexture = postsFromTexture[y * _clipmapPosts + x];
+
+        //            if (realHeight != heightFromTexture)
+        //                throw new Exception("bad");
+
+        //            if (i != 0 && i != _clipmapPosts - 1 &&
+        //                j != 0 && j != _clipmapPosts - 1)
+        //            {
+        //                int top = (j + 1) * _clipmapPosts + i;
+        //                float topHeight = realPosts[top] * heightExaggeration;
+        //                int bottom = (j - 1) * _clipmapPosts + i;
+        //                float bottomHeight = realPosts[bottom] * heightExaggeration;
+        //                int right = j * _clipmapPosts + i + 1;
+        //                float rightHeight = realPosts[right] * heightExaggeration;
+        //                int left = j * _clipmapPosts + i - 1;
+        //                float leftHeight = realPosts[left] * heightExaggeration;
+
+        //                Vector3S realNormal = new Vector3S(leftHeight - rightHeight, bottomHeight - topHeight, 2.0f * postDelta).Normalize();
+
+        //                Vector3S normalFromTexture = normalsFromTexture[y * _clipmapPosts + x].Normalize();
+
+        //                if (!realNormal.EqualsEpsilon(normalFromTexture, 1e-5f))
+        //                    throw new Exception("normal is bad.");
+        //            }
+        //        }
+        //    }
+        //}
 
         public void Render(Context context, SceneState sceneState)
         {
@@ -617,93 +661,6 @@ namespace OpenGlobe.Scene.Terrain
             Vector3D northeastCartesian = Ellipsoid.ScaledWgs84.ToVector3D(northeast);
 
             return (northeastCartesian - southwestCartesian).Magnitude;
-        }
-
-        private Vector3S[] ComputeNormals(Level level, float[] posts)
-        {
-            Vector3S[] normals = new Vector3S[_clipmapPosts * _clipmapPosts];
-
-            float heightExaggeration = HeightExaggeration;
-            float postDelta = (float)level.Terrain.PostDeltaLongitude;
-
-            if (_averagedNormals)
-            {
-                for (int j = 0; j < _clipmapSegments; ++j)
-                {
-                    for (int i = 0; i < _clipmapSegments; ++i)
-                    {
-                        int sw = j * _clipmapPosts + i;
-                        float swHeight = posts[sw] * heightExaggeration;
-                        int se = j * _clipmapPosts + i + 1;
-                        float seHeight = posts[se] * heightExaggeration;
-                        int nw = (j + 1) * _clipmapPosts + i;
-                        float nwHeight = posts[nw] * heightExaggeration;
-                        int ne = (j + 1) * _clipmapPosts + i + 1;
-                        float neHeight = posts[ne] * heightExaggeration;
-
-                        Vector3S lowerLeftNormal = new Vector3S(swHeight - seHeight, swHeight - nwHeight, postDelta);
-                        normals[sw] += lowerLeftNormal;
-                        normals[nw] += lowerLeftNormal;
-                        normals[se] += lowerLeftNormal;
-
-                        Vector3S upperRightNormal = new Vector3S(nwHeight - neHeight, seHeight - neHeight, postDelta);
-                        normals[nw] += upperRightNormal;
-                        normals[se] += upperRightNormal;
-                        normals[ne] += upperRightNormal;
-                    }
-                }
-
-                for (int j = 0; j < _clipmapPosts; ++j)
-                {
-                    for (int i = 0; i < _clipmapPosts; ++i)
-                    {
-                        float faces;
-                        if ((i == 0 || i == _clipmapPosts - 1) &&
-                            (j == 0 || j == _clipmapPosts - 1))
-                        {
-                            faces = 1.0f;
-                        }
-                        else if (i == 0 || j == 0 || i == _clipmapPosts - 1 || j == _clipmapPosts - 1)
-                        {
-                            faces = 3.0f;
-                        }
-                        else
-                        {
-                            faces = 6.0f;
-                        }
-                        normals[j * _clipmapPosts + i] /= faces;
-                    }
-                }
-            }
-            else
-            {
-                for (int j = 0; j < _clipmapPosts; ++j)
-                {
-                    for (int i = 0; i < _clipmapPosts; ++i)
-                    {
-                        if (i == 0 || i == _clipmapPosts - 1 ||
-                            j == 0 || j == _clipmapPosts - 1)
-                        {
-                            normals[j * _clipmapPosts + i] = Vector3S.UnitZ;
-                        }
-                        else
-                        {
-                            int top = (j + 1) * _clipmapPosts + i;
-                            float topHeight = posts[top] * heightExaggeration;
-                            int bottom = (j - 1) * _clipmapPosts + i;
-                            float bottomHeight = posts[bottom] * heightExaggeration;
-                            int right = j * _clipmapPosts + i + 1;
-                            float rightHeight = posts[right] * heightExaggeration;
-                            int left = j * _clipmapPosts + i - 1;
-                            float leftHeight = posts[left] * heightExaggeration;
-
-                            normals[j * _clipmapPosts + i] = new Vector3S(leftHeight - rightHeight, bottomHeight - topHeight, 2.0f * postDelta);
-                        }
-                    }
-                }
-            }
-
-            return normals;
         }
 
         private class IndexOrigin
