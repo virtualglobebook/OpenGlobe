@@ -338,6 +338,13 @@ namespace OpenGlobe.Scene.Terrain
                 int width = maxLongitude - minLongitude + 1;
                 int height = maxLatitude - minLatitude + 1;
 
+                int newOriginX = (level.OriginInTexture.X + deltaX) % _clipmapPosts;
+                if (newOriginX < 0)
+                    newOriginX += _clipmapPosts;
+                int newOriginY = (level.OriginInTexture.Y + deltaY) % _clipmapPosts;
+                if (newOriginY < 0)
+                    newOriginY += _clipmapPosts;
+
                 if (height > 0)
                 {
                     Update horizontalUpdate = new Update()
@@ -347,7 +354,7 @@ namespace OpenGlobe.Scene.Terrain
                         East = level.DesiredOrigin.TerrainEast,
                         South = minLatitude,
                         North = maxLatitude,
-                        DestinationX = deltaX > 0 ? level.OriginInTexture.X : level.OriginInTexture.X - width,
+                        DestinationX = newOriginX,
                         DestinationY = deltaY > 0 ? level.OriginInTexture.Y : level.OriginInTexture.Y - height,
                     };
                     DoUpdate(context, horizontalUpdate);
@@ -363,18 +370,12 @@ namespace OpenGlobe.Scene.Terrain
                         South = level.DesiredOrigin.TerrainSouth,
                         North = level.DesiredOrigin.TerrainNorth,
                         DestinationX = deltaX > 0 ? level.OriginInTexture.X : level.OriginInTexture.X - width,
-                        DestinationY = deltaY > 0 ? level.OriginInTexture.Y : level.OriginInTexture.Y - height,
+                        DestinationY = newOriginY,
                     };
                     DoUpdate(context, verticalUpdate);
                 }
 
-                int originX = (level.OriginInTexture.X + deltaX) % _clipmapPosts;
-                if (originX < 0)
-                    originX += _clipmapPosts;
-                int originY = (level.OriginInTexture.Y + deltaY) % _clipmapPosts;
-                if (originY < 0)
-                    originY += _clipmapPosts;
-                level.OriginInTexture = new Vector2I(originX, originY);
+                level.OriginInTexture = new Vector2I(newOriginX, newOriginY);
 
                 if (Array.IndexOf(_clipmapLevels, level) == _clipmapLevels.Length - 1)
                 {
