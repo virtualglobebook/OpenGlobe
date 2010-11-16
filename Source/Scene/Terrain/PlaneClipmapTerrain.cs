@@ -110,6 +110,8 @@ namespace OpenGlobe.Scene.Terrain
             float unblendedRegionSize = (float)(_clipmapSegments / 2 - _clipmapPosts / 10.0 - 1);
             _unblendedRegionSize.Value = new Vector2S(unblendedRegionSize, unblendedRegionSize);
 
+            _useBlendRegions.Value = true;
+
             _oneOverClipmapSize.Value = 1.0f / clipmapPosts;
 
             _updater = new ClipmapUpdater(context, _clipmapPosts + 2);
@@ -470,7 +472,7 @@ namespace OpenGlobe.Scene.Terrain
 
             int coarserWest = coarserLevel.CurrentOrigin.TerrainWest;
             int coarserSouth = coarserLevel.CurrentOrigin.TerrainSouth;
-            _fineLevelOriginInCoarse.Value = level.OriginInTexture.ToVector2S() +
+            _fineLevelOriginInCoarse.Value = coarserLevel.OriginInTexture.ToVector2S() +
                                              new Vector2S(west / 2 - coarserWest + 0.5f,
                                                           south / 2 - coarserSouth + 0.5f);
 
