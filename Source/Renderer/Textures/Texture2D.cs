@@ -68,6 +68,10 @@ namespace OpenGlobe.Renderer
             {
                 SaveDepth(filename);
             }
+            else if ((Description.TextureFormat == TextureFormat.Red32f))
+            {
+                SaveRed(filename);
+            }
             else
             {
                 Debug.Fail("Texture2D.Save() is not implement for this TextureFormat.");
@@ -85,7 +89,17 @@ namespace OpenGlobe.Renderer
 
         private void SaveDepth(string filename)
         {
-            using (ReadPixelBuffer pixelBuffer = CopyToBuffer(ImageFormat.DepthComponent, ImageDatatype.Float, 1))
+            SaveFloat(filename, ImageFormat.DepthComponent);
+        }
+
+        private void SaveRed(string filename)
+        {
+            SaveFloat(filename, ImageFormat.Red);
+        }
+
+        private void SaveFloat(string filename, ImageFormat imageFormat)
+        {
+            using (ReadPixelBuffer pixelBuffer = CopyToBuffer(imageFormat, ImageDatatype.Float, 1))
             {
                 float[] depths = pixelBuffer.CopyToSystemMemory<float>();
 

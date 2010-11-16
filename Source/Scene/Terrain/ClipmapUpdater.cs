@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using OpenGlobe.Renderer;
+using System.Drawing;
 using OpenGlobe.Core;
+using OpenGlobe.Renderer;
 
 namespace OpenGlobe.Scene.Terrain
 {
@@ -22,6 +20,7 @@ namespace OpenGlobe.Scene.Terrain
             _sourceDimensions = (Uniform<Vector2S>)shaderProgram.Uniforms["u_sourceDimensions"];
             _heightExaggeration = (Uniform<float>)shaderProgram.Uniforms["u_heightExaggeration"];
             _postDelta = (Uniform<float>)shaderProgram.Uniforms["u_postDelta"];
+            _updateOrigin = (Uniform<Vector2S>)shaderProgram.Uniforms["u_updateOrigin"];
 
             Mesh quad = RectangleTessellator.Compute(new RectangleD(new Vector2D(0.0, 0.0), new Vector2D(1.0, 1.0)), 1, 1);
             VertexArray quadVertexArray = context.CreateVertexArray(quad, shaderProgram.VertexAttributes, BufferHint.StaticDraw);
@@ -55,11 +54,17 @@ namespace OpenGlobe.Scene.Terrain
 
         public void Update(Context context, Texture2D heightMap, Texture2D normalMap, float postDelta, int x, int y, int width, int height, float[] posts)
         {
+            using (WritePixelBuffer pixelBuffer = Device.CreateWritePixelBuffer(PixelBufferHint.Stream, _maxUpdate * _maxUpdate * sizeof(float)))
+            {
+                pixelBuffer.CopyFromSystemMemory(new float[_maxUpdate * _maxUpdate]);
+                _sourceTexture.CopyFromBuffer(pixelBuffer, ImageFormat.Red, ImageDatatype.Float);
+            }
+
             // Copy the post data into the source texture.
             using (WritePixelBuffer pixelBuffer = Device.CreateWritePixelBuffer(PixelBufferHint.Stream, posts.Length * sizeof(float)))
             {
                 pixelBuffer.CopyFromSystemMemory(posts);
-                _sourceTexture.CopyFromBuffer(pixelBuffer, 0, 0, width, height, ImageFormat.Red, ImageDatatype.Float, 4);
+                _sourceTexture.CopyFromBuffer(pixelBuffer, 0, 0, width + 2, height + 2, ImageFormat.Red, ImageDatatype.Float, 4);
             }
 
             context.TextureUnits[0].Texture = _sourceTexture;
@@ -69,11 +74,11 @@ namespace OpenGlobe.Scene.Terrain
             // Set the target location
             _frameBuffer.ColorAttachments[_heightOutput] = heightMap;
             _frameBuffer.ColorAttachments[_normalOutput] = normalMap;
-            _sceneState.Camera.OrthographicLeft = x;
-            _sceneState.Camera.OrthographicTop = y;
-            _sceneState.Camera.OrthographicRight = x + width;
-            _sceneState.Camera.OrthographicBottom = y + height;
+            _updateOrigin.Value = new Vector2S(x, y);
             _sourceDimensions.Value = new Vector2S(width, height);
+
+            Rectangle oldViewport = context.Viewport;
+            context.Viewport = new Rectangle(0, 0, heightMap.Description.Width, heightMap.Description.Height);
 
             // Render to the frame buffer
             FrameBuffer oldFrameBuffer = context.FrameBuffer;
@@ -81,8 +86,16 @@ namespace OpenGlobe.Scene.Terrain
 
             context.Draw(_primitiveType, _drawState, _sceneState);
 
+            // Restore the context to its original state
             context.FrameBuffer = oldFrameBuffer;
+            context.Viewport = oldViewport;
+
+            //_sourceTexture.Save("source" + number + ".png");
+            //heightMap.Save("height" + number + ".png");
+            //++number;
         }
+
+        //private static int number = 0;
 
         private int _maxUpdate;
         private Texture2D _sourceTexture;
@@ -93,6 +106,7 @@ namespace OpenGlobe.Scene.Terrain
         private Uniform<Vector2S> _sourceDimensions;
         private Uniform<float> _heightExaggeration;
         private Uniform<float> _postDelta;
+        private Uniform<Vector2S> _updateOrigin;
         private int _heightOutput;
         private int _normalOutput;
     }

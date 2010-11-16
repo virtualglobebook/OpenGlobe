@@ -112,7 +112,7 @@ namespace OpenGlobe.Scene.Terrain
 
             _oneOverClipmapSize.Value = 1.0f / clipmapPosts;
 
-            _updater = new ClipmapUpdater(context, _clipmapPosts);
+            _updater = new ClipmapUpdater(context, _clipmapPosts + 2);
 
             HeightExaggeration = 0.00001f;
         }
@@ -209,7 +209,6 @@ namespace OpenGlobe.Scene.Terrain
                 Level coarserLevel = _clipmapLevels[i > 0 ? i - 1 : 0];
 
                 PreRenderLevel(thisLevel, coarserLevel, context, sceneState);
-                break;
             }
         }
 
@@ -273,7 +272,7 @@ namespace OpenGlobe.Scene.Terrain
                     Level = update.Level,
                     West = update.West,
                     South = update.South,
-                    East = update.West,
+                    East = update.East,
                     North = update.South + (_clipmapSegments - update.DestinationY),
                     DestinationX = update.DestinationX,
                     DestinationY = update.DestinationY,
@@ -295,10 +294,10 @@ namespace OpenGlobe.Scene.Terrain
 
             Console.WriteLine("Writing to " + update.DestinationX + ", " + update.DestinationY);
 
-            float[] posts = new float[update.Width * update.Height];
+            float[] posts = new float[(update.Width + 2) * (update.Height + 2)];
 
             Level level = update.Level;
-            level.Terrain.GetPosts(update.West, update.South, update.East, update.North, posts, 0, update.Width);
+            level.Terrain.GetPosts(update.West - 1, update.South - 1, update.East + 1, update.North + 1, posts, 0, update.Width + 2);
             _updater.Update(context, level.TerrainTexture, level.NormalTexture, (float)level.Terrain.PostDeltaLongitude, update.DestinationX, update.DestinationY, update.Width, update.Height, posts);
         }
 
@@ -368,7 +367,11 @@ namespace OpenGlobe.Scene.Terrain
                 }
 
                 int originX = (level.OriginInTexture.X + deltaX) % _clipmapPosts;
+                if (originX < 0)
+                    originX += _clipmapPosts;
                 int originY = (level.OriginInTexture.Y + deltaY) % _clipmapPosts;
+                if (originY < 0)
+                    originY += _clipmapPosts;
                 level.OriginInTexture = new Vector2I(originX, originY);
 
                 if (Array.IndexOf(_clipmapLevels, level) == _clipmapLevels.Length - 1)
@@ -434,8 +437,7 @@ namespace OpenGlobe.Scene.Terrain
                 Level thisLevel = _clipmapLevels[i];
                 Level coarserLevel = _clipmapLevels[i > 0 ? i - 1 : 0];
 
-                rendered = RenderLevel(i, thisLevel, thisLevel, !rendered, center, context, sceneState);
-                break;
+                rendered = RenderLevel(i, thisLevel, coarserLevel, !rendered, center, context, sceneState);
             }
 
             sceneState.Camera.Target = previousTarget;

@@ -99,6 +99,10 @@ namespace OpenGlobe.Examples
             {
                 _clipmap.ComputeAveragedNormals = !_clipmap.ComputeAveragedNormals;
             }
+            else if (e.Key == KeyboardKey.D)
+            {
+                _clipmap.UseBlendRegions = !_clipmap.UseBlendRegions;
+            }
         }
 
         private void OnRenderFrame()
