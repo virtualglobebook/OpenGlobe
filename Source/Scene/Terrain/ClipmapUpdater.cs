@@ -54,12 +54,6 @@ namespace OpenGlobe.Scene.Terrain
 
         public void Update(Context context, Texture2D heightMap, Texture2D normalMap, float postDelta, int x, int y, int width, int height, float[] posts)
         {
-            using (WritePixelBuffer pixelBuffer = Device.CreateWritePixelBuffer(PixelBufferHint.Stream, _maxUpdate * _maxUpdate * sizeof(float)))
-            {
-                pixelBuffer.CopyFromSystemMemory(new float[_maxUpdate * _maxUpdate]);
-                _sourceTexture.CopyFromBuffer(pixelBuffer, ImageFormat.Red, ImageDatatype.Float);
-            }
-
             // Copy the post data into the source texture.
             using (WritePixelBuffer pixelBuffer = Device.CreateWritePixelBuffer(PixelBufferHint.Stream, posts.Length * sizeof(float)))
             {
