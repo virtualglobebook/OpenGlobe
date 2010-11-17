@@ -125,22 +125,16 @@ namespace OpenGlobe.Scene.Terrain
             set { _wireframe = value; }
         }
 
-        public bool UseBlendRegions
+        public bool BlendRegionsEnabled
         {
-            get { return _useBlendRegions.Value; }
-            set { _useBlendRegions.Value = value; }
+            get { return _blendRegionsEnabled; }
+            set { _blendRegionsEnabled = value; }
         }
 
         public bool ShowBlendRegions
         {
             get { return _showBlendRegions.Value; }
             set { _showBlendRegions.Value = value; }
-        }
-
-        public bool ComputeAveragedNormals
-        {
-            get { return _averagedNormals; }
-            set { _averagedNormals = value; }
         }
 
         public float HeightExaggeration
@@ -526,6 +520,8 @@ namespace OpenGlobe.Scene.Terrain
 
             _fineTextureOrigin.Value = level.OriginInTexture.ToVector2S() + new Vector2S(0.5f, 0.5f);
 
+            _useBlendRegions.Value = _blendRegionsEnabled && level != coarserLevel;
+
             DrawBlock(_fieldBlock, level, coarserLevel, west, south, west, south, context, sceneState);
             DrawBlock(_fieldBlock, level, coarserLevel, west, south, west + _fieldBlockSegments, south, context, sceneState);
             DrawBlock(_fieldBlock, level, coarserLevel, west, south, east - 2 * _fieldBlockSegments, south, context, sceneState);
@@ -739,10 +735,10 @@ namespace OpenGlobe.Scene.Terrain
         private Uniform<Vector2S> _fineTextureOrigin;
         private Uniform<bool> _showBlendRegions;
         private Uniform<bool> _useBlendRegions;
+        private Uniform<float> _oneOverClipmapSize;
 
         private bool _wireframe;
-        private bool _averagedNormals;
-        private Uniform<float> _oneOverClipmapSize;
+        private bool _blendRegionsEnabled = true;
 
         private ClipmapUpdater _updater;
     }

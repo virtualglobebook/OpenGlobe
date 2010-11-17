@@ -95,13 +95,9 @@ namespace OpenGlobe.Examples
             {
                 _update = !_update;
             }
-            else if (e.Key == KeyboardKey.A)
-            {
-                _clipmap.ComputeAveragedNormals = !_clipmap.ComputeAveragedNormals;
-            }
             else if (e.Key == KeyboardKey.D)
             {
-                _clipmap.UseBlendRegions = !_clipmap.UseBlendRegions;
+                _clipmap.BlendRegionsEnabled = !_clipmap.BlendRegionsEnabled;
             }
         }
 
