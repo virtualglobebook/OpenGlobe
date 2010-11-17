@@ -66,7 +66,7 @@ namespace OpenGlobe.Examples
             }
 
             //_va = context.CreateVertexArray(mesh, _sp.VertexAttributes, BufferHint.StaticDraw);
-            _va = context.CreateVertexArray(mesh, _sp.VertexAttributes, BufferHint.StaticDraw, DouleAttributeConversion.ToEmulatedDouble);
+            _va = context.CreateVertexArray(mesh, _sp.VertexAttributes, BufferHint.StaticDraw);
 
             ///////////////////////////////////////////////////////////////////
 

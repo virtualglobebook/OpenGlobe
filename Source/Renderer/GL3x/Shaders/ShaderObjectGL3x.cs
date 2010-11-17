@@ -20,7 +20,7 @@ namespace OpenGlobe.Renderer.GL3x
     {
         public ShaderObjectGL3x(ShaderType shaderType, string source)
         {
-            string builtInConstants =
+            string builtinConstants =
                 "#version 330 \n" +
 
                 "#define og_positionVertexLocation          " + VertexLocations.Position.ToString(NumberFormatInfo.InvariantInfo) + " \n" +
@@ -41,6 +41,8 @@ namespace OpenGlobe.Renderer.GL3x
                 "const float og_halfPi =           " + Trig.HalfPi.ToString(NumberFormatInfo.InvariantInfo) + "; \n" +
                 "const float og_radiansPerDegree = " + Trig.RadiansPerDegree.ToString(NumberFormatInfo.InvariantInfo) + "; \n";
 
+            string builtinFunctions = EmbeddedResources.GetText("OpenGlobe.Renderer.GL3x.GLSL.BuiltinFunctions.glsl");
+
             string modifiedSource;
 
             //
@@ -58,15 +60,15 @@ namespace OpenGlobe.Renderer.GL3x
                 modifiedSource = source;
             }
 
-            string[] sources = new[] { builtInConstants, modifiedSource };
-            int[] lengths = new[] { builtInConstants.Length, modifiedSource.Length };
+            string[] sources = new[] { builtinConstants, builtinFunctions, modifiedSource };
+            int[] lengths = new[] { builtinConstants.Length, builtinFunctions.Length, modifiedSource.Length };
 
             _shaderObject = GL.CreateShader(shaderType);
             unsafe
             {
                 fixed (int *lengthPointer = lengths)
                 {
-                    GL.ShaderSource(_shaderObject, 2, sources, lengthPointer);
+                    GL.ShaderSource(_shaderObject, sources.Length, sources, lengthPointer);
                 }
             }
             GL.CompileShader(_shaderObject);

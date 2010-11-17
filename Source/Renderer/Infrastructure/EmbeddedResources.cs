@@ -10,7 +10,7 @@
 using System.IO;
 using System.Reflection;
 
-namespace OpenGlobe.Scene
+namespace OpenGlobe.Renderer
 {
     internal static class EmbeddedResources
     {
