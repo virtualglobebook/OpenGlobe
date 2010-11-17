@@ -97,7 +97,7 @@ namespace OpenGlobe.Core
         }
 
         [Test]
-        public void VertexAttributeEmulatedDoubleVector3()
+        public void VertexAttributeDoubleVector3()
         {
             Mesh mesh = new Mesh();
 

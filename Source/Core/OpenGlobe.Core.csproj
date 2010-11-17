@@ -52,7 +52,7 @@
     <Compile Include="Geometry\VertexAttributes\VertexAttribute.cs" />
     <Compile Include="Geometry\VertexAttributes\VertexAttributeByte.cs" />
     <Compile Include="Geometry\VertexAttributes\VertexAttributeCollection.cs" />
-    <Compile Include="Geometry\VertexAttributes\VertexAttributeEmulatedDoubleVector3.cs" />
+    <Compile Include="Geometry\VertexAttributes\VertexAttributeDoubleVector3.cs" />
     <Compile Include="Geometry\VertexAttributes\VertexAttributeFloat.cs" />
     <Compile Include="Geometry\VertexAttributes\VertexAttributeFloatVector2.cs" />
     <Compile Include="Geometry\VertexAttributes\VertexAttributeFloatVector3.cs" />
