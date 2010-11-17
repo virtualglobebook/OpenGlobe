@@ -33,6 +33,15 @@ namespace OpenGlobe.Renderer
             return CreateVertexArray(Device.CreateMeshBuffers(mesh, shaderAttributes, usageHint));
         }
 
+        public virtual VertexArray CreateVertexArray(
+            Mesh mesh, 
+            ShaderVertexAttributeCollection shaderAttributes, 
+            BufferHint usageHint,
+            DouleAttributeConversion doubleConversion)
+        {
+            return CreateVertexArray(Device.CreateMeshBuffers(mesh, shaderAttributes, usageHint, doubleConversion));
+        }
+
         public virtual VertexArray CreateVertexArray(MeshBuffers meshBuffers)
         {
             VertexArray va = CreateVertexArray();

@@ -29,7 +29,7 @@ namespace OpenGlobe.Examples
             ///////////////////////////////////////////////////////////////////
 
             Mesh mesh = new Mesh();
-            VertexAttributeDoubleVector3 positionsAttribute = new VertexAttributeDoubleVector3("position", positions.Length);
+            VertexAttributeFloatVector3 positionsAttribute = new VertexAttributeFloatVector3("position", positions.Length);
             VertexAttributeRGB colorAttribute = new VertexAttributeRGB("color", positions.Length);
             mesh.Attributes.Add(positionsAttribute);
             mesh.Attributes.Add(colorAttribute);
@@ -37,7 +37,7 @@ namespace OpenGlobe.Examples
             _center = new AxisAlignedBoundingBox(positions).Center;
             for (int i = 0; i < positions.Length; ++i)
             {
-                positionsAttribute.Values.Add(positions[i] - _center);
+                positionsAttribute.Values.Add((positions[i] - _center).ToVector3S());
             }
 
             for (int i = 0; i < colors.Length; ++i)

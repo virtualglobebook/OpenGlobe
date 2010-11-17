@@ -131,6 +131,25 @@ namespace OpenGlobe.Renderer
 
         public static MeshBuffers CreateMeshBuffers(Mesh mesh, ShaderVertexAttributeCollection shaderAttributes, BufferHint usageHint)
         {
+            return CreateMeshBuffers(mesh, shaderAttributes, usageHint, DouleAttributeConversion.ToFloat);
+        }
+
+        public static MeshBuffers CreateMeshBuffers(
+            Mesh mesh, 
+            ShaderVertexAttributeCollection shaderAttributes, 
+            BufferHint usageHint,
+            DouleAttributeConversion doubleConversion)
+        {
+            if (mesh == null)
+            {
+                throw new ArgumentNullException("mesh");
+            }
+
+            if (shaderAttributes == null)
+            {
+                throw new ArgumentNullException("shaderAttributes");
+            }
+
             MeshBuffers meshBuffers = new MeshBuffers();
 
             if (mesh.Indices != null)
@@ -174,71 +193,74 @@ namespace OpenGlobe.Renderer
             //
             HashSet<string> ignoreAttributes = new HashSet<string>();
 
-            foreach (VertexAttribute attribute in mesh.Attributes)
+            if (doubleConversion == DouleAttributeConversion.ToEmulatedDouble)
             {
-                if (attribute is VertexAttributeEmulatedDoubleVector3)
+                foreach (VertexAttribute attribute in mesh.Attributes)
                 {
-                    VertexAttributeEmulatedDoubleVector3 emulated = (VertexAttributeEmulatedDoubleVector3)attribute;
-
-                    int highLocation = -1;
-                    int lowLocation = -1;
-
-                    foreach (ShaderVertexAttribute shaderAttribute in shaderAttributes)
+                    if (attribute is VertexAttributeDoubleVector3)
                     {
-                        if (shaderAttribute.Name == emulated.HighName)
+                        VertexAttributeDoubleVector3 emulated = (VertexAttributeDoubleVector3)attribute;
+
+                        int highLocation = -1;
+                        int lowLocation = -1;
+
+                        foreach (ShaderVertexAttribute shaderAttribute in shaderAttributes)
                         {
-                            highLocation = shaderAttribute.Location;
-                        }
-                        else if (shaderAttribute.Name == emulated.LowName)
-                        {
-                            lowLocation = shaderAttribute.Location;
+                            if (shaderAttribute.Name == emulated.Name + "High")
+                            {
+                                highLocation = shaderAttribute.Location;
+                            }
+                            else if (shaderAttribute.Name == emulated.Name + "Low")
+                            {
+                                lowLocation = shaderAttribute.Location;
+                            }
+
+                            if ((highLocation != -1) && (lowLocation != -1))
+                            {
+                                break;
+                            }
                         }
 
-                        if ((highLocation != -1) && (lowLocation != -1))
+                        if ((highLocation == -1) && (lowLocation == -1))
                         {
-                            break;
+                            //
+                            // The shader did not have either attribute.  No problem.
+                            //
+                            continue;
                         }
-                    }
+                        else if ((highLocation == -1) || (lowLocation == -1))
+                        {
+                            throw new ArgumentException("An emulated double vec3 mesh attribute requires both " + emulated.Name + "High and " + emulated.Name + "Low vertex attributes, but the shader only contains one matching attribute.");
+                        }
 
-                    if ((highLocation == -1) && (lowLocation == -1))
-                    {
                         //
-                        // The shader did not have either attribute.  No problem.
+                        // Copy both high and low parts into a single vertex buffer.
                         //
-                        continue;
+                        IList<Vector3D> values = ((VertexAttribute<Vector3D>)attribute).Values;
+
+                        Vector3S[] vertices = new Vector3S[2 * values.Count];
+
+                        int j = 0;
+                        for (int i = 0; i < values.Count; ++i)
+                        {
+                            Vector3D value = values[i];
+                            Vector3S floatValue = value.ToVector3S();
+                            vertices[j++] = floatValue;
+                            vertices[j++] = (value - floatValue.ToVector3D()).ToVector3S();
+                        }
+
+                        VertexBuffer vertexBuffer = Device.CreateVertexBuffer(usageHint, ArraySizeInBytes.Size(vertices));
+                        vertexBuffer.CopyFromSystemMemory(vertices);
+
+                        int stride = 2 * SizeInBytes<Vector3S>.Value;
+                        meshBuffers.Attributes[highLocation] =
+                            new VertexBufferAttribute(vertexBuffer, ComponentDatatype.Float, 3, false, 0, stride);
+                        meshBuffers.Attributes[lowLocation] =
+                            new VertexBufferAttribute(vertexBuffer, ComponentDatatype.Float, 3, false, SizeInBytes<Vector3S>.Value, stride);
+
+                        ignoreAttributes.Add(emulated.Name + "High");
+                        ignoreAttributes.Add(emulated.Name + "Low");
                     }
-                    else if ((highLocation == -1) || (lowLocation == -1))
-                    {
-                        throw new ArgumentException("An emulated double vec3 mesh attribute contains both " + emulated.HighName + " and " + emulated.LowName + " names, but the shader only contains one matching attribute.");
-                    }
-
-                    //
-                    // Copy both high and low parts into a single vertex buffer.
-                    //
-                    IList<Vector3D> values = ((VertexAttribute<Vector3D>)attribute).Values;
-
-                    Vector3S[] vertices = new Vector3S[2 * values.Count];
-
-                    int j = 0;
-                    for (int i = 0; i < values.Count; ++i)
-                    {
-                        Vector3D value = values[i];
-                        Vector3S floatValue = value.ToVector3S();
-                        vertices[j++] = floatValue;
-                        vertices[j++] = (value - floatValue.ToVector3D()).ToVector3S();
-                    }
-
-                    VertexBuffer vertexBuffer = Device.CreateVertexBuffer(usageHint, ArraySizeInBytes.Size(vertices));
-                    vertexBuffer.CopyFromSystemMemory(vertices);
-
-                    int stride = 2 * SizeInBytes<Vector3S>.Value;
-                    meshBuffers.Attributes[highLocation] =
-                        new VertexBufferAttribute(vertexBuffer, ComponentDatatype.Float, 3, false, 0, stride);
-                    meshBuffers.Attributes[lowLocation] =
-                        new VertexBufferAttribute(vertexBuffer, ComponentDatatype.Float, 3, false, SizeInBytes<Vector3S>.Value, stride);
-
-                    ignoreAttributes.Add(emulated.HighName);
-                    ignoreAttributes.Add(emulated.LowName);
                 }
             }
 
@@ -257,37 +279,8 @@ namespace OpenGlobe.Renderer
 
                 VertexAttribute attribute = mesh.Attributes[shaderAttribute.Name];
 
-                if (attribute.Datatype == VertexAttributeType.Double)
-                {
-                    IList<double> values = ((VertexAttribute<double>)attribute).Values;
 
-                    float[] valuesArray = new float[values.Count];
-                    for (int i = 0; i < values.Count; ++i)
-                    {
-                        valuesArray[i] = (float)values[i];
-                    }
-
-                    VertexBuffer vertexBuffer = Device.CreateVertexBuffer(usageHint, valuesArray.Length * sizeof(float));
-                    vertexBuffer.CopyFromSystemMemory(valuesArray);
-                    meshBuffers.Attributes[shaderAttribute.Location] =
-                        new VertexBufferAttribute(vertexBuffer, ComponentDatatype.Float, 1);
-                }
-                else if (attribute.Datatype == VertexAttributeType.DoubleVector2)
-                {
-                    IList<Vector2D> values = ((VertexAttribute<Vector2D>)attribute).Values;
-
-                    Vector2S[] valuesArray = new Vector2S[values.Count];
-                    for (int i = 0; i < values.Count; ++i)
-                    {
-                        valuesArray[i] = values[i].ToVector2S();
-                    }
-
-                    VertexBuffer vertexBuffer = Device.CreateVertexBuffer(usageHint, ArraySizeInBytes.Size(valuesArray));
-                    vertexBuffer.CopyFromSystemMemory(valuesArray);
-                    meshBuffers.Attributes[shaderAttribute.Location] =
-                        new VertexBufferAttribute(vertexBuffer, ComponentDatatype.Float, 2);
-                }
-                else if (attribute.Datatype == VertexAttributeType.DoubleVector3)
+                if (attribute.Datatype == VertexAttributeType.EmulatedDoubleVector3)
                 {
                     IList<Vector3D> values = ((VertexAttribute<Vector3D>)attribute).Values;
 
@@ -301,21 +294,6 @@ namespace OpenGlobe.Renderer
                     vertexBuffer.CopyFromSystemMemory(valuesArray);
                     meshBuffers.Attributes[shaderAttribute.Location] =
                         new VertexBufferAttribute(vertexBuffer, ComponentDatatype.Float, 3);
-                }
-                else if (attribute.Datatype == VertexAttributeType.DoubleVector4)
-                {
-                    IList<Vector4D> values = ((VertexAttribute<Vector4D>)attribute).Values;
-
-                    Vector4S[] valuesArray = new Vector4S[values.Count];
-                    for (int i = 0; i < values.Count; ++i)
-                    {
-                        valuesArray[i] = values[i].ToVector4S();
-                    }
-
-                    VertexBuffer vertexBuffer = Device.CreateVertexBuffer(usageHint, ArraySizeInBytes.Size(valuesArray));
-                    vertexBuffer.CopyFromSystemMemory(valuesArray);
-                    meshBuffers.Attributes[shaderAttribute.Location] =
-                        new VertexBufferAttribute(vertexBuffer, ComponentDatatype.Float, 4);
                 }
                 else if (attribute.Datatype == VertexAttributeType.HalfFloat)
                 {

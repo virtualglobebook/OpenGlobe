@@ -605,8 +605,8 @@ namespace OpenGlobe.Scene.Terrain
             mesh.FrontFaceWindingOrder = WindingOrder.Counterclockwise;
 
             int numberOfPositions = _clipmapSegments * 4;
-            VertexAttributeDoubleVector2 positionsAttribute = new VertexAttributeDoubleVector2("position", numberOfPositions);
-            IList<Vector2D> positions = positionsAttribute.Values;
+            VertexAttributeFloatVector2 positionsAttribute = new VertexAttributeFloatVector2("position", numberOfPositions);
+            IList<Vector2S> positions = positionsAttribute.Values;
             mesh.Attributes.Add(positionsAttribute);
 
             int numberOfIndices = (_clipmapSegments / 2) * 3 * 4;
@@ -615,22 +615,22 @@ namespace OpenGlobe.Scene.Terrain
 
             for (int i = 0; i < _clipmapPosts; ++i)
             {
-                positions.Add(new Vector2D(0.0, i));
+                positions.Add(new Vector2S(0.0f, i));
             }
 
             for (int i = 1; i < _clipmapPosts; ++i)
             {
-                positions.Add(new Vector2D(i, _clipmapSegments));
+                positions.Add(new Vector2S(i, _clipmapSegments));
             }
 
             for (int i = _clipmapSegments - 1; i >= 0; --i)
             {
-                positions.Add(new Vector2D(_clipmapSegments, i));
+                positions.Add(new Vector2S(_clipmapSegments, i));
             }
 
             for (int i = _clipmapSegments - 1; i > 0; --i)
             {
-                positions.Add(new Vector2D(i, 0.0));
+                positions.Add(new Vector2S(i, 0.0f));
             }
 
             for (int i = 0; i < numberOfIndices; i += 2)

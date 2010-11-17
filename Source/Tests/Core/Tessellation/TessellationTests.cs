@@ -101,12 +101,12 @@ namespace OpenGlobe.Core
             Assert.AreEqual(PrimitiveType.Triangles, mesh.PrimitiveType);
             Assert.AreEqual(WindingOrder.Counterclockwise, mesh.FrontFaceWindingOrder);
 
-            IList<Vector2D> positions = ((VertexAttributeDoubleVector2)mesh.Attributes["position"]).Values;
+            IList<Vector2S> positions = ((VertexAttributeFloatVector2)mesh.Attributes["position"]).Values;
             Assert.AreEqual(4, positions.Count);
-            Assert.AreEqual(Vector2D.Zero, positions[0]);
-            Assert.AreEqual(Vector2D.UnitX, positions[1]);
-            Assert.AreEqual(Vector2D.UnitY, positions[2]);
-            Assert.AreEqual(new Vector2D(1, 1), positions[3]);
+            Assert.IsTrue(Vector2S.Zero.EqualsEpsilon(positions[0], 0.1e-7f));
+            Assert.IsTrue(Vector2S.UnitX.EqualsEpsilon(positions[1], 0.1e-7f));
+            Assert.IsTrue(Vector2S.UnitY.EqualsEpsilon(positions[2], 0.1e-7f));
+            Assert.IsTrue(new Vector2S(1, 1).EqualsEpsilon(positions[3], 0.1e-7f));
 
             IList<uint> indices = ((IndicesUnsignedInt)mesh.Indices).Values;
             Assert.AreEqual(6, indices.Count);

@@ -9,33 +9,16 @@
 
 namespace OpenGlobe.Core
 {
-    public class VertexAttributeEmulatedDoubleVector3 : VertexAttribute<Vector3D>
+    public class VertexAttributeDoubleVector3 : VertexAttribute<Vector3D>
     {
-        public VertexAttributeEmulatedDoubleVector3(string highName, string lowName)
-            : base(highName + " " + lowName, VertexAttributeType.EmulatedDoubleVector3)
+        public VertexAttributeDoubleVector3(string name)
+            : base(name, VertexAttributeType.EmulatedDoubleVector3)
         {
-            _highName = highName;
-            _lowName = lowName;
         }
 
-        public VertexAttributeEmulatedDoubleVector3(string highName, string lowName, int capacity)
-            : base(highName + " " + lowName, VertexAttributeType.EmulatedDoubleVector3, capacity)
+        public VertexAttributeDoubleVector3(string name, int capacity)
+            : base(name, VertexAttributeType.EmulatedDoubleVector3, capacity)
         {
-            _highName = highName;
-            _lowName = lowName;
         }
-
-        public string HighName
-        {
-            get { return _highName; }
-        }
-
-        public string LowName
-        {
-            get { return _lowName; }
-        }
-
-        private readonly string _highName;
-        private readonly string _lowName;
     }
 }

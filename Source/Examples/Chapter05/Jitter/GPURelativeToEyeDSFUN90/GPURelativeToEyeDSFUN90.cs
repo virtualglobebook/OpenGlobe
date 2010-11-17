@@ -53,7 +53,7 @@ namespace OpenGlobe.Examples
             //    positionsLowAttribute.Values.Add(positionLow);
             //}
 
-            VertexAttributeEmulatedDoubleVector3 emulatedPositions = new VertexAttributeEmulatedDoubleVector3("positionHigh", "positionLow", positions.Length);
+            VertexAttributeDoubleVector3 emulatedPositions = new VertexAttributeDoubleVector3("position", positions.Length);
             for (int i = 0; i < positions.Length; ++i)
             {
                 emulatedPositions.Values.Add(positions[i]);
@@ -65,7 +65,8 @@ namespace OpenGlobe.Examples
                 colorAttribute.Values.Add(colors[i]);
             }
 
-            _va = context.CreateVertexArray(mesh, _sp.VertexAttributes, BufferHint.StaticDraw);
+            //_va = context.CreateVertexArray(mesh, _sp.VertexAttributes, BufferHint.StaticDraw);
+            _va = context.CreateVertexArray(mesh, _sp.VertexAttributes, BufferHint.StaticDraw, DouleAttributeConversion.ToEmulatedDouble);
 
             ///////////////////////////////////////////////////////////////////
 

@@ -31,8 +31,8 @@ namespace OpenGlobe.Core
             mesh.FrontFaceWindingOrder = WindingOrder.Counterclockwise;
 
             int numberOfPositions = (numberOfPartitionsX + 1) * (numberOfPartitionsY + 1);
-            VertexAttributeDoubleVector2 positionsAttribute = new VertexAttributeDoubleVector2("position", numberOfPositions);
-            IList<Vector2D> positions = positionsAttribute.Values;
+            VertexAttributeFloatVector2 positionsAttribute = new VertexAttributeFloatVector2("position", numberOfPositions);
+            IList<Vector2S> positions = positionsAttribute.Values;
             mesh.Attributes.Add(positionsAttribute);
 
             int numberOfIndices = (numberOfPartitionsX * numberOfPartitionsY) * 6;
@@ -54,7 +54,7 @@ namespace OpenGlobe.Core
                 {
                     double deltaX = x / (double)numberOfPartitionsX;
                     double currentX = lowerLeft.X + (deltaX * toUpperRight.X);
-                    positions.Add(new Vector2D(currentX, currentY));
+                    positions.Add(new Vector2D(currentX, currentY).ToVector2S());
                 }
             }
 

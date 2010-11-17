@@ -125,7 +125,7 @@ namespace OpenGlobe.Examples
             Context context = _window.Context;
             context.Clear(_clearState);
             context.TextureUnits[0].Texture = _texture;
-            context.TextureUnits[0].TextureSampler = Device.TextureSamplers.NearestClamp;
+            context.TextureUnits[0].TextureSampler = Device.TextureSamplers.LinearClamp;
             context.Draw(_primitiveType, _drawState, _sceneState);
         }
 
