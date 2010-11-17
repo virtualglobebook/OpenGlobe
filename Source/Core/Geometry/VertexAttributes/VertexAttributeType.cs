@@ -22,10 +22,6 @@ namespace OpenGlobe.Core
         FloatVector2,
         FloatVector3,
         FloatVector4,
-        Double,
-        DoubleVector2,
-        DoubleVector3,
-        DoubleVector4,
         EmulatedDoubleVector3
     }
 }

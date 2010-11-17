@@ -43,8 +43,6 @@ namespace OpenGlobe.Renderer
                     return sizeof(uint);
                 case ComponentDatatype.Float:
                     return sizeof(float);
-                case ComponentDatatype.Double:
-                    return sizeof(double);
             }
 
             Debug.Assert(type == ComponentDatatype.HalfFloat);

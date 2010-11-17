@@ -18,7 +18,6 @@ namespace OpenGlobe.Renderer
         Int,
         UnsignedInt,
         Float,
-        Double,
         HalfFloat,
     }
 }

@@ -79,28 +79,6 @@ namespace OpenGlobe.Core
 
             ///////////////////////////////////////////////////////////////////
 
-            VertexAttributeDouble doubleAttribute = new VertexAttributeDouble("doubleAttribute");
-            mesh.Attributes.Add(doubleAttribute);
-            Assert.AreEqual("doubleAttribute", mesh.Attributes["doubleAttribute"].Name);
-            Assert.AreEqual(VertexAttributeType.Double, mesh.Attributes["doubleAttribute"].Datatype);
-
-            VertexAttributeDoubleVector2 doubleAttribute2 = new VertexAttributeDoubleVector2("doubleAttribute2");
-            mesh.Attributes.Add(doubleAttribute2);
-            Assert.AreEqual("doubleAttribute2", mesh.Attributes["doubleAttribute2"].Name);
-            Assert.AreEqual(VertexAttributeType.DoubleVector2, mesh.Attributes["doubleAttribute2"].Datatype);
-
-            VertexAttributeDoubleVector3 doubleAttribute3 = new VertexAttributeDoubleVector3("doubleAttribute3");
-            mesh.Attributes.Add(doubleAttribute3);
-            Assert.AreEqual("doubleAttribute3", mesh.Attributes["doubleAttribute3"].Name);
-            Assert.AreEqual(VertexAttributeType.DoubleVector3, mesh.Attributes["doubleAttribute3"].Datatype);
-
-            VertexAttributeDoubleVector4 doubleAttribute4 = new VertexAttributeDoubleVector4("doubleAttribute4");
-            mesh.Attributes.Add(doubleAttribute4);
-            Assert.AreEqual("doubleAttribute4", mesh.Attributes["doubleAttribute4"].Name);
-            Assert.AreEqual(VertexAttributeType.DoubleVector4, mesh.Attributes["doubleAttribute4"].Datatype);
-
-            ///////////////////////////////////////////////////////////////////
-
             VertexAttributeByte byteAttribute = new VertexAttributeByte("byteAttribute");
             mesh.Attributes.Add(byteAttribute);
             Assert.AreEqual("byteAttribute", mesh.Attributes["byteAttribute"].Name);
@@ -123,14 +101,10 @@ namespace OpenGlobe.Core
         {
             Mesh mesh = new Mesh();
 
-            string name = "high low";
-            VertexAttributeEmulatedDoubleVector3 attribute = new VertexAttributeEmulatedDoubleVector3("high", "low");
-            Assert.AreEqual("high", attribute.HighName);
-            Assert.AreEqual("low", attribute.LowName);
-
+            VertexAttributeDoubleVector3 attribute = new VertexAttributeDoubleVector3("position");
             mesh.Attributes.Add(attribute);
-            Assert.AreEqual(name, mesh.Attributes[name].Name);
-            Assert.AreEqual(VertexAttributeType.EmulatedDoubleVector3, mesh.Attributes[name].Datatype);
+            Assert.AreEqual("position", mesh.Attributes["position"].Name);
+            Assert.AreEqual(VertexAttributeType.EmulatedDoubleVector3, mesh.Attributes["position"].Datatype);
         }
 
         [Test]

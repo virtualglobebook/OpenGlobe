@@ -388,10 +388,6 @@ namespace OpenGlobe.Renderer.GL3x
             {
                 return VertexAttribPointerType.Float;
             }
-            else if (type == ComponentDatatype.Double)
-            {
-                return VertexAttribPointerType.Double;
-            }
 
             Debug.Assert(type == ComponentDatatype.HalfFloat);
             return VertexAttribPointerType.HalfFloat;
