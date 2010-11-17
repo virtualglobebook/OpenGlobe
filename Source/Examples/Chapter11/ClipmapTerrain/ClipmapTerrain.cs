@@ -23,10 +23,10 @@ namespace OpenGlobe.Examples
     {
         public ClipmapTerrain()
         {
-            _window = Device.CreateWindow(640, 480, "Chapter 11:  Clipmap Terrain");
+            _window = Device.CreateWindow(800, 600, "Chapter 11:  Clipmap Terrain");
 
             SimpleTerrainSource terrainSource = new SimpleTerrainSource(@"..\..\..\..\..\..\Data\Terrain\ps_height_16k");
-            _clipmap = new PlaneClipmapTerrain(_window.Context, terrainSource, 255);
+            _clipmap = new PlaneClipmapTerrain(_window.Context, terrainSource, 511);
             _clipmap.HeightExaggeration = 0.01f;
 
             _sceneState = new SceneState();
@@ -69,6 +69,11 @@ namespace OpenGlobe.Examples
             snap.ColorFilename = @"C:\Users\Kevin Ring\Documents\Book\svn\TerrainLevelOfDetail\Figures\HalfDome.png";
             snap.WidthInInches = 3;
             snap.DotsPerInch = 600;
+
+            _hudFont = new Font("Arial", 16);
+            _hud = new HeadsUpDisplay(_window.Context);
+            _hud.Color = Color.Blue;
+            UpdateHUD();
         }
 
         private void OnResize()
@@ -86,18 +91,28 @@ namespace OpenGlobe.Examples
             else if (e.Key == KeyboardKey.W)
             {
                 _clipmap.Wireframe = !_clipmap.Wireframe;
+                UpdateHUD();
             }
             else if (e.Key == KeyboardKey.B)
             {
-                _clipmap.ShowBlendRegions = !_clipmap.ShowBlendRegions;
+                if (!_clipmap.BlendRegionsEnabled)
+                {
+                    _clipmap.BlendRegionsEnabled = true;
+                    _clipmap.ShowBlendRegions = false;
+                }
+                else if (_clipmap.ShowBlendRegions)
+                {
+                    _clipmap.BlendRegionsEnabled = false;
+                }
+                else
+                {
+                    _clipmap.ShowBlendRegions = true;
+                }
+                UpdateHUD();
             }
             else if (e.Key == KeyboardKey.L)
             {
                 _update = !_update;
-            }
-            else if (e.Key == KeyboardKey.D)
-            {
-                _clipmap.BlendRegionsEnabled = !_clipmap.BlendRegionsEnabled;
             }
         }
 
@@ -106,6 +121,7 @@ namespace OpenGlobe.Examples
             Context context = _window.Context;
             context.Clear(_clearState);
             _clipmap.Render(context, _sceneState);
+            _hud.Render(context, _sceneState);
         }
 
         private void OnPreRenderFrame()
@@ -117,6 +133,33 @@ namespace OpenGlobe.Examples
             }
         }
 
+        private void UpdateHUD()
+        {
+            string text;
+
+            text = "Blending: " + GetBlendingString() + " (B)\n";
+            text += "Wireframe: " + (_clipmap.Wireframe ? "Enabled" : "Disabled") + " (W)\n";
+
+            if (_hud.Texture != null)
+            {
+                _hud.Texture.Dispose();
+                _hud.Texture = null;
+            }
+            _hud.Texture = Device.CreateTexture2D(
+                Device.CreateBitmapFromText(text, _hudFont),
+                TextureFormat.RedGreenBlueAlpha8, false);
+        }
+
+        private string GetBlendingString()
+        {
+            if (!_clipmap.BlendRegionsEnabled)
+                return "Disabled";
+            else if (_clipmap.ShowBlendRegions)
+                return "Enabled and Shown";
+            else
+                return "Enabled";
+        }
+
         #region IDisposable Members
 
         public void Dispose()
@@ -126,6 +169,9 @@ namespace OpenGlobe.Examples
             if (_cameraFly != null)
                 _cameraFly.Dispose();
             _clipmap.Dispose();
+            _hudFont.Dispose();
+            _hud.Texture.Dispose();
+            _hud.Dispose();
             _window.Dispose();
         }
 
@@ -151,5 +197,7 @@ namespace OpenGlobe.Examples
         private readonly ClearState _clearState;
         private readonly PlaneClipmapTerrain _clipmap;
         private bool _update = true;
+        private HeadsUpDisplay _hud;
+        private Font _hudFont;
     }
 }
