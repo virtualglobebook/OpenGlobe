@@ -19,16 +19,16 @@ namespace OpenGlobe.Core
     {
         public EmulatedVector3D(Vector3D v)
         {
-            _high = v.ToVector3S();
-            _low = (v - _high.ToVector3D()).ToVector3S();
+            _high = v.ToVector3F();
+            _low = (v - _high.ToVector3D()).ToVector3F();
         }
 
-        public Vector3S High
+        public Vector3F High
         {
             get { return _high; }
         }
 
-        public Vector3S Low
+        public Vector3F Low
         {
             get { return _low; }
         }
@@ -67,7 +67,7 @@ namespace OpenGlobe.Core
             return _high.GetHashCode() ^ _low.GetHashCode();
         }
 
-        private readonly Vector3S _high;
-        private readonly Vector3S _low;
+        private readonly Vector3F _high;
+        private readonly Vector3F _low;
     }
 }

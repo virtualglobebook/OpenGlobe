@@ -22,41 +22,41 @@ namespace OpenGlobe.Core
     /// </summary>
     [Serializable]
     [StructLayout(LayoutKind.Sequential)]
-    public struct Vector3S : IEquatable<Vector3S>
+    public struct Vector3F : IEquatable<Vector3F>
     {
-        public static Vector3S Zero
+        public static Vector3F Zero
         {
-            get { return new Vector3S(0.0f, 0.0f, 0.0f); }
+            get { return new Vector3F(0.0f, 0.0f, 0.0f); }
         }
 
-        public static Vector3S UnitX
+        public static Vector3F UnitX
         {
-            get { return new Vector3S(1.0f, 0.0f, 0.0f); }
+            get { return new Vector3F(1.0f, 0.0f, 0.0f); }
         }
 
-        public static Vector3S UnitY
+        public static Vector3F UnitY
         {
-            get { return new Vector3S(0.0f, 1.0f, 0.0f); }
+            get { return new Vector3F(0.0f, 1.0f, 0.0f); }
         }
 
-        public static Vector3S UnitZ
+        public static Vector3F UnitZ
         {
-            get { return new Vector3S(0.0f, 0.0f, 1.0f); }
+            get { return new Vector3F(0.0f, 0.0f, 1.0f); }
         }
 
-        public static Vector3S Undefined
+        public static Vector3F Undefined
         {
-            get { return new Vector3S(float.NaN, float.NaN, float.NaN); }
+            get { return new Vector3F(float.NaN, float.NaN, float.NaN); }
         }
 
-        public Vector3S(float x, float y, float z)
+        public Vector3F(float x, float y, float z)
         {
             _x = x;
             _y = y;
             _z = z;
         }
 
-        public Vector3S(Vector2S v, float z)
+        public Vector3F(Vector2F v, float z)
         {
             _x = v.X;
             _y = v.Y;
@@ -98,56 +98,56 @@ namespace OpenGlobe.Core
             get { return Double.IsNaN(_x); }
         }
 
-        public Vector3S Normalize(out float magnitude)
+        public Vector3F Normalize(out float magnitude)
         {
             magnitude = Magnitude;
             return this / magnitude;
         }
 
-        public Vector3S Normalize()
+        public Vector3F Normalize()
         {
             float magnitude;
             return Normalize(out magnitude);
         }
 
-        public Vector3S Cross(Vector3S other)
+        public Vector3F Cross(Vector3F other)
         {
-            return new Vector3S(Y * other.Z - Z * other.Y,
+            return new Vector3F(Y * other.Z - Z * other.Y,
                                 Z * other.X - X * other.Z,
                                 X * other.Y - Y * other.X);
         }
 
-        public float Dot(Vector3S other)
+        public float Dot(Vector3F other)
         {
             return X * other.X + Y * other.Y + Z * other.Z;
         }
 
-        public Vector3S Add(Vector3S addend)
+        public Vector3F Add(Vector3F addend)
         {
             return this + addend;
         }
 
-        public Vector3S Subtract(Vector3S subtrahend)
+        public Vector3F Subtract(Vector3F subtrahend)
         {
             return this - subtrahend;
         }
 
-        public Vector3S Multiply(float scalar)
+        public Vector3F Multiply(float scalar)
         {
             return this * scalar;
         }
 
-        public Vector3S MultiplyComponents(Vector3S scale)
+        public Vector3F MultiplyComponents(Vector3F scale)
         {
-            return new Vector3S(X * scale.X, Y * scale.Y, Z * scale.Z);
+            return new Vector3F(X * scale.X, Y * scale.Y, Z * scale.Z);
         }
 
-        public Vector3S Divide(float scalar)
+        public Vector3F Divide(float scalar)
         {
             return this / scalar;
         }
 
-        public Vector3S MostOrthogonalAxis
+        public Vector3F MostOrthogonalAxis
         {
             get
             {
@@ -170,12 +170,12 @@ namespace OpenGlobe.Core
             }
         }
 
-        public Vector3S Negate()
+        public Vector3F Negate()
         {
             return -this;
         }
 
-        public bool EqualsEpsilon(Vector3S other, float epsilon)
+        public bool EqualsEpsilon(Vector3F other, float epsilon)
         {
             return
                 (Math.Abs(_x - other._x) <= epsilon) &&
@@ -183,56 +183,56 @@ namespace OpenGlobe.Core
                 (Math.Abs(_z - other._z) <= epsilon);
         }
 
-        public bool Equals(Vector3S other)
+        public bool Equals(Vector3F other)
         {
             return _x == other._x && _y == other._y && _z == other._z;
         }
 
-        public static Vector3S operator -(Vector3S vector)
+        public static Vector3F operator -(Vector3F vector)
         {
-            return new Vector3S(-vector.X, -vector.Y, -vector.Z);
+            return new Vector3F(-vector.X, -vector.Y, -vector.Z);
         }
 
-        public static Vector3S operator +(Vector3S left, Vector3S right)
+        public static Vector3F operator +(Vector3F left, Vector3F right)
         {
-            return new Vector3S(left._x + right._x, left._y + right._y, left._z + right._z);
+            return new Vector3F(left._x + right._x, left._y + right._y, left._z + right._z);
         }
 
-        public static Vector3S operator -(Vector3S left, Vector3S right)
+        public static Vector3F operator -(Vector3F left, Vector3F right)
         {
-            return new Vector3S(left._x - right._x, left._y - right._y, left._z - right._z);
+            return new Vector3F(left._x - right._x, left._y - right._y, left._z - right._z);
         }
 
-        public static Vector3S operator *(Vector3S left, float right)
+        public static Vector3F operator *(Vector3F left, float right)
         {
-            return new Vector3S(left._x * right, left._y * right, left._z * right);
+            return new Vector3F(left._x * right, left._y * right, left._z * right);
         }
 
-        public static Vector3S operator *(float left, Vector3S right)
+        public static Vector3F operator *(float left, Vector3F right)
         {
             return right * left;
         }
 
-        public static Vector3S operator /(Vector3S left, float right)
+        public static Vector3F operator /(Vector3F left, float right)
         {
-            return new Vector3S(left._x / right, left._y / right, left._z / right);
+            return new Vector3F(left._x / right, left._y / right, left._z / right);
         }
 
-        public static bool operator ==(Vector3S left, Vector3S right)
+        public static bool operator ==(Vector3F left, Vector3F right)
         {
             return left.Equals(right);
         }
 
-        public static bool operator !=(Vector3S left, Vector3S right)
+        public static bool operator !=(Vector3F left, Vector3F right)
         {
             return !left.Equals(right);
         }
 
         public override bool Equals(object obj)
         {
-            if (obj is Vector3S)
+            if (obj is Vector3F)
             {
-                return Equals((Vector3S)obj);
+                return Equals((Vector3F)obj);
             }
             return false;
         }

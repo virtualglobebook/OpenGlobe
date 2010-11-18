@@ -146,9 +146,9 @@ namespace OpenGlobe.Core
             return new Vector3I((int)_x.ToDouble(), (int)_y.ToDouble(), (int)_z.ToDouble());
         }
 
-        public Vector3S ToVector3S()
+        public Vector3F ToVector3F()
         {
-            return new Vector3S(_x, _y, _z);
+            return new Vector3F(_x, _y, _z);
         }
 
         public Vector3B ToVector3B()

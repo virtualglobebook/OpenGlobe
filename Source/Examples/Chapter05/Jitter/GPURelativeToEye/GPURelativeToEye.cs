@@ -23,9 +23,9 @@ namespace OpenGlobe.Examples
             _sp = Device.CreateShaderProgram(
                 EmbeddedResources.GetText("OpenGlobe.Examples.GPURelativeToEye.Shaders.VS.glsl"),
                 EmbeddedResources.GetText("OpenGlobe.Examples.Shaders.FS.glsl"));
-            _cameraEyeHigh = (Uniform<Vector3S>)_sp.Uniforms["u_cameraEyeHigh"];
-            _cameraEyeLow = (Uniform<Vector3S>)_sp.Uniforms["u_cameraEyeLow"];
-            _modelViewPerspectiveMatrixRelativeToEye = (Uniform<Matrix4S>)(_sp.Uniforms["u_modelViewPerspectiveMatrixRelativeToEye"]);
+            _cameraEyeHigh = (Uniform<Vector3F>)_sp.Uniforms["u_cameraEyeHigh"];
+            _cameraEyeLow = (Uniform<Vector3F>)_sp.Uniforms["u_cameraEyeLow"];
+            _modelViewPerspectiveMatrixRelativeToEye = (Uniform<Matrix4F>)(_sp.Uniforms["u_modelViewPerspectiveMatrixRelativeToEye"]);
             _pointSize = (Uniform<float>)_sp.Uniforms["u_pointSize"];
 
             ///////////////////////////////////////////////////////////////////
@@ -40,9 +40,9 @@ namespace OpenGlobe.Examples
 
             for (int i = 0; i < positions.Length; ++i)
             {
-                Vector3S positionHigh;
-                Vector3S positionLow;
-                Vector3DToTwoVector3S(positions[i], out positionHigh, out positionLow);
+                Vector3F positionHigh;
+                Vector3F positionLow;
+                Vector3DToTwoVector3F(positions[i], out positionHigh, out positionLow);
 
                 positionsHighAttribute.Values.Add(positionHigh);
                 positionsLowAttribute.Values.Add(positionLow);
@@ -81,7 +81,7 @@ namespace OpenGlobe.Examples
             }
         }
 
-        private static void Vector3DToTwoVector3S(Vector3D value, out Vector3S high, out Vector3S low)
+        private static void Vector3DToTwoVector3F(Vector3D value, out Vector3F high, out Vector3F low)
         {
             float highX;
             float highY;
@@ -95,8 +95,8 @@ namespace OpenGlobe.Examples
             DoubleToTwoFloats(value.Y, out highY, out lowY);
             DoubleToTwoFloats(value.Z, out highZ, out lowZ);
 
-            high = new Vector3S(highX, highY, highZ);
-            low = new Vector3S(lowX, lowY, lowZ);
+            high = new Vector3F(highX, highY, highZ);
+            low = new Vector3F(lowX, lowY, lowZ);
         }
 
         private void Update(SceneState sceneState)
@@ -107,9 +107,9 @@ namespace OpenGlobe.Examples
             {
                 _eye = eye;
 
-                Vector3S eyeHigh;
-                Vector3S eyeLow;
-                Vector3DToTwoVector3S(eye, out eyeHigh, out eyeLow);
+                Vector3F eyeHigh;
+                Vector3F eyeLow;
+                Vector3DToTwoVector3F(eye, out eyeHigh, out eyeLow);
                 _cameraEyeHigh.Value = eyeHigh;
                 _cameraEyeLow.Value = eyeLow;
 
@@ -121,7 +121,7 @@ namespace OpenGlobe.Examples
                     m.Column0Row3, m.Column1Row3, m.Column2Row3, m.Column3Row3);
 
                 _modelViewPerspectiveMatrixRelativeToEye.Value =
-                    (sceneState.PerspectiveMatrix * mv).ToMatrix4S();
+                    (sceneState.PerspectiveMatrix * mv).ToMatrix4F();
             }
 
             _pointSize.Value = (float)(8.0 * sceneState.HighResolutionSnapScale);
@@ -151,9 +151,9 @@ namespace OpenGlobe.Examples
 
         private readonly VertexArray _va;
         private readonly ShaderProgram _sp;
-        private readonly Uniform<Vector3S> _cameraEyeHigh;
-        private readonly Uniform<Vector3S> _cameraEyeLow;
-        private readonly Uniform<Matrix4S> _modelViewPerspectiveMatrixRelativeToEye;
+        private readonly Uniform<Vector3F> _cameraEyeHigh;
+        private readonly Uniform<Vector3F> _cameraEyeLow;
+        private readonly Uniform<Matrix4F> _modelViewPerspectiveMatrixRelativeToEye;
         private readonly Uniform<float> _pointSize;
         private readonly DrawState _drawState;
 

@@ -23,14 +23,14 @@ namespace OpenGlobe.Examples
             _sp = Device.CreateShaderProgram(
                 EmbeddedResources.GetText("OpenGlobe.Examples.CPURelativeToEye.Shaders.VS.glsl"),
                 EmbeddedResources.GetText("OpenGlobe.Examples.Shaders.FS.glsl"));
-            _modelViewPerspectiveMatrixRelativeToEye = (Uniform<Matrix4S>)(_sp.Uniforms["u_modelViewPerspectiveMatrixRelativeToEye"]);
+            _modelViewPerspectiveMatrixRelativeToEye = (Uniform<Matrix4F>)(_sp.Uniforms["u_modelViewPerspectiveMatrixRelativeToEye"]);
             _pointSize = (Uniform<float>)_sp.Uniforms["u_pointSize"];
 
             ///////////////////////////////////////////////////////////////////
 
             _positions = new Vector3D[positions.Length];
             positions.CopyTo(_positions, 0);
-            _positionsRelativeToEye = new Vector3S[_positions.Length];
+            _positionsRelativeToEye = new Vector3F[_positions.Length];
             _eye = Vector3D.Zero;
 
             //
@@ -73,11 +73,11 @@ namespace OpenGlobe.Examples
                     m.Column0Row3, m.Column1Row3, m.Column2Row3, m.Column3Row3);
 
                 _modelViewPerspectiveMatrixRelativeToEye.Value = 
-                    (sceneState.PerspectiveMatrix * mv).ToMatrix4S();
+                    (sceneState.PerspectiveMatrix * mv).ToMatrix4F();
 
                 for (int i = 0; i < _positions.Length; ++i)
                 {
-                    _positionsRelativeToEye[i] = (_positions[i] - eye).ToVector3S();
+                    _positionsRelativeToEye[i] = (_positions[i] - eye).ToVector3F();
                 }
 
                 _positionBuffer.CopyFromSystemMemory(_positionsRelativeToEye);
@@ -112,14 +112,14 @@ namespace OpenGlobe.Examples
 
         private readonly VertexArray _va;
         private readonly ShaderProgram _sp;
-        private readonly Uniform<Matrix4S> _modelViewPerspectiveMatrixRelativeToEye;
+        private readonly Uniform<Matrix4F> _modelViewPerspectiveMatrixRelativeToEye;
         private readonly Uniform<float> _pointSize;
         private readonly DrawState _drawState;
 
         private readonly VertexBuffer _positionBuffer;
         private readonly VertexBuffer _colorBuffer;
         private readonly Vector3D[] _positions;
-        private readonly Vector3S[] _positionsRelativeToEye;
+        private readonly Vector3F[] _positionsRelativeToEye;
         private Vector3D _eye;
     }
 }

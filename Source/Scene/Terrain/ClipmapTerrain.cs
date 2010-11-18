@@ -105,14 +105,14 @@ namespace OpenGlobe.Scene.Terrain
             Mesh degenerateTriangleMesh = CreateDegenerateTriangleMesh();
             _degenerateTriangles = context.CreateVertexArray(degenerateTriangleMesh, _shaderProgram.VertexAttributes, BufferHint.StaticDraw);
 
-            _gridScaleFactor = (Uniform<Vector4S>)_shaderProgram.Uniforms["u_gridScaleFactor"];
-            _worldScaleFactor = (Uniform<Vector4S>)_shaderProgram.Uniforms["u_worldScaleFactor"];
-            _fineBlockOrigin = (Uniform<Vector4S>)_shaderProgram.Uniforms["u_fineBlockOrig"];
-            _coarseBlockOrigin = (Uniform<Vector4S>)_shaderProgram.Uniforms["u_coarseBlockOrig"];
-            _viewerPos = (Uniform<Vector2S>)_shaderProgram.Uniforms["u_viewerPos"];
-            _alphaOffset = (Uniform<Vector2S>)_shaderProgram.Uniforms["u_alphaOffset"];
+            _gridScaleFactor = (Uniform<Vector4F>)_shaderProgram.Uniforms["u_gridScaleFactor"];
+            _worldScaleFactor = (Uniform<Vector4F>)_shaderProgram.Uniforms["u_worldScaleFactor"];
+            _fineBlockOrigin = (Uniform<Vector4F>)_shaderProgram.Uniforms["u_fineBlockOrig"];
+            _coarseBlockOrigin = (Uniform<Vector4F>)_shaderProgram.Uniforms["u_coarseBlockOrig"];
+            _viewerPos = (Uniform<Vector2F>)_shaderProgram.Uniforms["u_viewerPos"];
+            _alphaOffset = (Uniform<Vector2F>)_shaderProgram.Uniforms["u_alphaOffset"];
             _oneOverTransitionWidth = (Uniform<float>)_shaderProgram.Uniforms["u_oneOverTransitionWidth"];
-            _textureOrigin = (Uniform<Vector4S>)_shaderProgram.Uniforms["u_textureOrigin"];
+            _textureOrigin = (Uniform<Vector4F>)_shaderProgram.Uniforms["u_textureOrigin"];
 
             _renderState = new RenderState();
             _renderState.FacetCulling.FrontFaceWindingOrder = fieldBlockMesh.FrontFaceWindingOrder;
@@ -261,7 +261,7 @@ namespace OpenGlobe.Scene.Terrain
             double imageryWestTerrainPostOffset = level.CurrentOrigin.ImageryWest - (int)level.CurrentOrigin.ImageryWest;
             double imagerySouthTerrainPostOffset = level.CurrentOrigin.ImagerySouth - (int)level.CurrentOrigin.ImagerySouth;
 
-            _textureOrigin.Value = new Vector4S((float)(level.Terrain.PostDeltaLongitude / level.Imagery.PostDeltaLongitude),
+            _textureOrigin.Value = new Vector4F((float)(level.Terrain.PostDeltaLongitude / level.Imagery.PostDeltaLongitude),
                                                 (float)(level.Terrain.PostDeltaLatitude / level.Imagery.PostDeltaLatitude),
                                                 (float)(imageryWestTerrainPostOffset + 0.5),
                                                 (float)(imagerySouthTerrainPostOffset + 0.5));
@@ -358,16 +358,16 @@ namespace OpenGlobe.Scene.Terrain
             double xOffset = _terrainSource.Extent.West;
             double yOffset = _terrainSource.Extent.South;
 
-            _gridScaleFactor.Value = new Vector4S((float)resolution, (float)resolution, (float)(blockWest * resolution), (float)(blockSouth * resolution));
-            _worldScaleFactor.Value = new Vector4S((float)xScale, (float)yScale, (float)xOffset, (float)yOffset);
-            _fineBlockOrigin.Value = new Vector4S((float)(1.0 / _clipmapPosts), (float)(1.0 / _clipmapPosts), (float)(textureWest + 0.5), (float)(textureSouth + 0.5));
-            _coarseBlockOrigin.Value = new Vector4S((float)(1.0 / (2 * _clipmapPosts)), (float)(1.0 / (2 * _clipmapPosts)), (float)(parentTextureWest / 2 + 0.5), (float)(parentTextureSouth / 2 + 0.5));
+            _gridScaleFactor.Value = new Vector4F((float)resolution, (float)resolution, (float)(blockWest * resolution), (float)(blockSouth * resolution));
+            _worldScaleFactor.Value = new Vector4F((float)xScale, (float)yScale, (float)xOffset, (float)yOffset);
+            _fineBlockOrigin.Value = new Vector4F((float)(1.0 / _clipmapPosts), (float)(1.0 / _clipmapPosts), (float)(textureWest + 0.5), (float)(textureSouth + 0.5));
+            _coarseBlockOrigin.Value = new Vector4F((float)(1.0 / (2 * _clipmapPosts)), (float)(1.0 / (2 * _clipmapPosts)), (float)(parentTextureWest / 2 + 0.5), (float)(parentTextureSouth / 2 + 0.5));
 
-            _viewerPos.Value = new Vector2S(_clipmapSegments / 2.0f - textureWest, _clipmapSegments / 2.0f - textureSouth);
+            _viewerPos.Value = new Vector2F(_clipmapSegments / 2.0f - textureWest, _clipmapSegments / 2.0f - textureSouth);
 
             double w = _clipmapPosts / 10.0f;
             double alphaOffset = (_clipmapPosts - 1) / 2.0f - w - 1.0f;
-            _alphaOffset.Value = new Vector2S((float)alphaOffset, (float)alphaOffset);
+            _alphaOffset.Value = new Vector2F((float)alphaOffset, (float)alphaOffset);
             if (level != coarserLevel)
                 _oneOverTransitionWidth.Value = (float)(1.0 / w);
             else
@@ -388,7 +388,7 @@ namespace OpenGlobe.Scene.Terrain
 
             int numberOfPositions = _clipmapSegments * 4;
             VertexAttributeFloatVector2 positionsAttribute = new VertexAttributeFloatVector2("position", numberOfPositions);
-            IList<Vector2S> positions = positionsAttribute.Values;
+            IList<Vector2F> positions = positionsAttribute.Values;
             mesh.Attributes.Add(positionsAttribute);
 
             int numberOfIndices = (_clipmapSegments / 2) * 3 * 4;
@@ -397,22 +397,22 @@ namespace OpenGlobe.Scene.Terrain
 
             for (int i = 0; i < _clipmapPosts; ++i)
             {
-                positions.Add(new Vector2S(0.0f, i));
+                positions.Add(new Vector2F(0.0f, i));
             }
 
             for (int i = 1; i < _clipmapPosts; ++i)
             {
-                positions.Add(new Vector2S(i, _clipmapSegments));
+                positions.Add(new Vector2F(i, _clipmapSegments));
             }
 
             for (int i = _clipmapSegments - 1; i >= 0; --i)
             {
-                positions.Add(new Vector2S(_clipmapSegments, i));
+                positions.Add(new Vector2F(_clipmapSegments, i));
             }
 
             for (int i = _clipmapSegments - 1; i > 0; --i)
             {
-                positions.Add(new Vector2S(i, 0.0f));
+                positions.Add(new Vector2F(i, 0.0f));
             }
 
             for (int i = 0; i < numberOfIndices; i += 2)
@@ -541,14 +541,14 @@ namespace OpenGlobe.Scene.Terrain
         private VertexArray _finestOffsetStripVertical;
         private VertexArray _degenerateTriangles;
 
-        private Uniform<Vector4S> _gridScaleFactor;
-        private Uniform<Vector4S> _worldScaleFactor;
-        private Uniform<Vector4S> _fineBlockOrigin;
-        private Uniform<Vector4S> _coarseBlockOrigin;
-        private Uniform<Vector2S> _viewerPos;
-        private Uniform<Vector2S> _alphaOffset;
+        private Uniform<Vector4F> _gridScaleFactor;
+        private Uniform<Vector4F> _worldScaleFactor;
+        private Uniform<Vector4F> _fineBlockOrigin;
+        private Uniform<Vector4F> _coarseBlockOrigin;
+        private Uniform<Vector2F> _viewerPos;
+        private Uniform<Vector2F> _alphaOffset;
         private Uniform<float> _oneOverTransitionWidth;
-        private Uniform<Vector4S> _textureOrigin;
+        private Uniform<Vector4F> _textureOrigin;
 
         private EsriRestImagery _imagery;
     }

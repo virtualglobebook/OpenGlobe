@@ -60,10 +60,10 @@ namespace OpenGlobe.Terrain
                 EmbeddedResources.GetText("OpenGlobe.Scene.Terrain.VertexDisplacementMapTerrainTile.TerrainVS.glsl"),
                 EmbeddedResources.GetText("OpenGlobe.Scene.Terrain.VertexDisplacementMapTerrainTile.TerrainFS.glsl"));
             _heightExaggerationUniform = (Uniform<float>)spTerrain.Uniforms["u_heightExaggeration"];
-            ((Uniform<Vector2S>)spTerrain.Uniforms["u_positionToTextureCoordinate"]).Value = new Vector2S(
+            ((Uniform<Vector2F>)spTerrain.Uniforms["u_positionToTextureCoordinate"]).Value = new Vector2F(
                 (float)(1.0 / (double)(tile.Resolution.X)), 
                 (float)( 1.0 / (double)(tile.Resolution.Y)));
-            ((Uniform<Vector2S>)spTerrain.Uniforms["u_positionToRepeatTextureCoordinate"]).Value = new Vector2S(
+            ((Uniform<Vector2F>)spTerrain.Uniforms["u_positionToRepeatTextureCoordinate"]).Value = new Vector2F(
                 (float)(4.0 / (double)tile.Resolution.X),
                 (float)(4.0 / (double)tile.Resolution.Y));
             
@@ -75,7 +75,7 @@ namespace OpenGlobe.Terrain
                 EmbeddedResources.GetText("OpenGlobe.Scene.Terrain.VertexDisplacementMapTerrainTile.NormalsFS.glsl"));
             _heightExaggerationNormals = (Uniform<float>)spNormals.Uniforms["u_heightExaggeration"];
             _fillDistanceNormals = (Uniform<float>)spNormals.Uniforms["u_fillDistance"];
-            ((Uniform<Vector3S>)spNormals.Uniforms["u_color"]).Value = Vector3S.Zero;
+            ((Uniform<Vector3F>)spNormals.Uniforms["u_color"]).Value = Vector3F.Zero;
 
             ///////////////////////////////////////////////////////////////////
 
@@ -85,7 +85,7 @@ namespace OpenGlobe.Terrain
                 EmbeddedResources.GetText("OpenGlobe.Scene.Terrain.VertexDisplacementMapTerrainTile.WireframeFS.glsl"));
             _lineWidthWireframe = (Uniform<float>)spWireframe.Uniforms["u_halfLineWidth"];
             _heightExaggerationWireframe = (Uniform<float>)spWireframe.Uniforms["u_heightExaggeration"];
-            ((Uniform<Vector3S>)spWireframe.Uniforms["u_color"]).Value = Vector3S.Zero;
+            ((Uniform<Vector3F>)spWireframe.Uniforms["u_color"]).Value = Vector3F.Zero;
             
             ///////////////////////////////////////////////////////////////////
 

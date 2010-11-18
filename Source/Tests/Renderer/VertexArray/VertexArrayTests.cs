@@ -18,11 +18,11 @@ namespace OpenGlobe.Renderer
         [Test]
         public void VertexArray()
         {
-            Vector3S[] positions = new Vector3S[] 
+            Vector3F[] positions = new Vector3F[] 
             { 
-                new Vector3S(0, 0, 0),
-                new Vector3S(1, 0, 0),
-                new Vector3S(0, 1, 0)
+                new Vector3F(0, 0, 0),
+                new Vector3F(1, 0, 0),
+                new Vector3F(0, 1, 0)
             };
             int vbSizeInBytes = ArraySizeInBytes.Size(positions);
 
@@ -47,7 +47,7 @@ namespace OpenGlobe.Renderer
                 Assert.AreEqual(3, vertexBufferAttribute.NumberOfComponents);
                 Assert.IsFalse(vertexBufferAttribute.Normalize);
                 Assert.AreEqual(0, vertexBufferAttribute.OffsetInBytes);
-                Assert.AreEqual(SizeInBytes<Vector3S>.Value, vertexBufferAttribute.StrideInBytes);
+                Assert.AreEqual(SizeInBytes<Vector3F>.Value, vertexBufferAttribute.StrideInBytes);
 
                 //
                 // Verify vertex array

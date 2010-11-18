@@ -15,18 +15,18 @@ namespace OpenGlobe.Renderer
     {
         public CameraEyeUniform(Uniform uniform)
         {
-            _uniform = (Uniform<Vector3S>)uniform;
+            _uniform = (Uniform<Vector3F>)uniform;
         }
 
         #region DrawAutomaticUniform Members
 
         public override void Set(Context context, DrawState drawState, SceneState sceneState)
         {
-            _uniform.Value = sceneState.Camera.Eye.ToVector3S();
+            _uniform.Value = sceneState.Camera.Eye.ToVector3F();
         }
 
         #endregion
 
-        private Uniform<Vector3S> _uniform;
+        private Uniform<Vector3F> _uniform;
     }
 }

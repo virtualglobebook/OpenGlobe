@@ -17,10 +17,10 @@ namespace OpenGlobe.Scene.Terrain
             _heightOutput = shaderProgram.FragmentOutputs["heightOutput"];
             _normalOutput = shaderProgram.FragmentOutputs["normalOutput"];
 
-            _sourceDimensions = (Uniform<Vector2S>)shaderProgram.Uniforms["u_sourceDimensions"];
+            _sourceDimensions = (Uniform<Vector2F>)shaderProgram.Uniforms["u_sourceDimensions"];
             _heightExaggeration = (Uniform<float>)shaderProgram.Uniforms["u_heightExaggeration"];
             _postDelta = (Uniform<float>)shaderProgram.Uniforms["u_postDelta"];
-            _updateOrigin = (Uniform<Vector2S>)shaderProgram.Uniforms["u_updateOrigin"];
+            _updateOrigin = (Uniform<Vector2F>)shaderProgram.Uniforms["u_updateOrigin"];
 
             Mesh quad = RectangleTessellator.Compute(new RectangleD(new Vector2D(0.0, 0.0), new Vector2D(1.0, 1.0)), 1, 1);
             VertexArray quadVertexArray = context.CreateVertexArray(quad, shaderProgram.VertexAttributes, BufferHint.StaticDraw);
@@ -68,8 +68,8 @@ namespace OpenGlobe.Scene.Terrain
             // Set the target location
             _frameBuffer.ColorAttachments[_heightOutput] = heightMap;
             _frameBuffer.ColorAttachments[_normalOutput] = normalMap;
-            _updateOrigin.Value = new Vector2S(x, y);
-            _sourceDimensions.Value = new Vector2S(width, height);
+            _updateOrigin.Value = new Vector2F(x, y);
+            _sourceDimensions.Value = new Vector2F(width, height);
 
             Rectangle oldViewport = context.Viewport;
             context.Viewport = new Rectangle(0, 0, heightMap.Description.Width, heightMap.Description.Height);
@@ -97,10 +97,10 @@ namespace OpenGlobe.Scene.Terrain
         private DrawState _drawState;
         private FrameBuffer _frameBuffer;
         private PrimitiveType _primitiveType;
-        private Uniform<Vector2S> _sourceDimensions;
+        private Uniform<Vector2F> _sourceDimensions;
         private Uniform<float> _heightExaggeration;
         private Uniform<float> _postDelta;
-        private Uniform<Vector2S> _updateOrigin;
+        private Uniform<Vector2F> _updateOrigin;
         private int _heightOutput;
         private int _normalOutput;
     }

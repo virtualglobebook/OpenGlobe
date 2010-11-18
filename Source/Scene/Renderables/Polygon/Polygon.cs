@@ -68,8 +68,8 @@ namespace OpenGlobe.Scene
             ShaderProgram sp = Device.CreateShaderProgram(
                 EmbeddedResources.GetText("OpenGlobe.Scene.Renderables.Polygon.Shaders.PolygonVS.glsl"),
                 EmbeddedResources.GetText("OpenGlobe.Scene.Renderables.Polygon.Shaders.PolygonFS.glsl"));
-            ((Uniform<Vector3S>)sp.Uniforms["u_globeOneOverRadiiSquared"]).Value = globeShape.OneOverRadiiSquared.ToVector3S();
-            _colorUniform = (Uniform<Vector4S>)sp.Uniforms["u_color"];
+            ((Uniform<Vector3F>)sp.Uniforms["u_globeOneOverRadiiSquared"]).Value = globeShape.OneOverRadiiSquared.ToVector3F();
+            _colorUniform = (Uniform<Vector4F>)sp.Uniforms["u_color"];
 
             _drawState = new DrawState();
             _drawState.RenderState.Blending.Enabled = true;
@@ -116,7 +116,7 @@ namespace OpenGlobe.Scene
             set
             {
                 _color = value;
-                _colorUniform.Value = new Vector4S(_color.R / 255.0f, _color.G / 255.0f, _color.B / 255.0f, _color.A / 255.0f);
+                _colorUniform.Value = new Vector4F(_color.R / 255.0f, _color.G / 255.0f, _color.B / 255.0f, _color.A / 255.0f);
             }
         }
 
@@ -149,7 +149,7 @@ namespace OpenGlobe.Scene
         #endregion
 
         private Color _color;
-        private readonly Uniform<Vector4S> _colorUniform;
+        private readonly Uniform<Vector4F> _colorUniform;
         private readonly DrawState _drawState;
         private readonly PrimitiveType _primitiveType;
         private MeshBuffers _meshBuffers;       // For passing between threads

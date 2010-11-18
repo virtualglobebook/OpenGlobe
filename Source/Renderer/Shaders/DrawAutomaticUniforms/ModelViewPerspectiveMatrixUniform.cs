@@ -15,18 +15,18 @@ namespace OpenGlobe.Renderer
     {
         public ModelViewPerspectiveMatrixUniform(Uniform uniform)
         {
-            _uniform = (Uniform<Matrix4S>)uniform;
+            _uniform = (Uniform<Matrix4F>)uniform;
         }
 
         #region DrawAutomaticUniform Members
 
         public override void Set(Context context, DrawState drawState, SceneState sceneState)
         {
-            _uniform.Value = sceneState.ModelViewPerspectiveMatrix.ToMatrix4S();
+            _uniform.Value = sceneState.ModelViewPerspectiveMatrix.ToMatrix4F();
         }
 
         #endregion
 
-        private Uniform<Matrix4S> _uniform;
+        private Uniform<Matrix4F> _uniform;
     }
 }

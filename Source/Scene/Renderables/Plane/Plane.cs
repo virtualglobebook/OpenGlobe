@@ -30,7 +30,7 @@ namespace OpenGlobe.Scene
             _lineLogarithmicDepth = (Uniform<bool>)lineSP.Uniforms["u_logarithmicDepth"];
             _lineLogarithmicDepthConstant = (Uniform<float>)lineSP.Uniforms["u_logarithmicDepthConstant"];
             _lineFillDistance = (Uniform<float>)lineSP.Uniforms["u_fillDistance"];
-            _lineColorUniform = (Uniform<Vector3S>)lineSP.Uniforms["u_color"];
+            _lineColorUniform = (Uniform<Vector3F>)lineSP.Uniforms["u_color"];
 
             OutlineWidth = 1;
             OutlineColor = Color.Gray;
@@ -50,7 +50,7 @@ namespace OpenGlobe.Scene
                 EmbeddedResources.GetText("OpenGlobe.Scene.Renderables.Plane.Shaders.FillFS.glsl"));
             _fillLogarithmicDepth = (Uniform<bool>)fillSP.Uniforms["u_logarithmicDepth"];
             _fillLogarithmicDepthConstant = (Uniform<float>)fillSP.Uniforms["u_logarithmicDepthConstant"];
-            _fillColorUniform = (Uniform<Vector3S>)fillSP.Uniforms["u_color"];
+            _fillColorUniform = (Uniform<Vector3F>)fillSP.Uniforms["u_color"];
             _fillAlphaUniform = (Uniform<float>)fillSP.Uniforms["u_alpha"];
 
             LogarithmicDepthConstant = 1;
@@ -59,7 +59,7 @@ namespace OpenGlobe.Scene
 
             ///////////////////////////////////////////////////////////////////
 
-            _positionBuffer = Device.CreateVertexBuffer(BufferHint.StaticDraw, 2 * 4 * SizeInBytes<Vector3S>.Value);
+            _positionBuffer = Device.CreateVertexBuffer(BufferHint.StaticDraw, 2 * 4 * SizeInBytes<Vector3F>.Value);
 
             ushort[] indices = new ushort[] 
             { 
@@ -69,12 +69,12 @@ namespace OpenGlobe.Scene
             IndexBuffer indexBuffer = Device.CreateIndexBuffer(BufferHint.StaticDraw, indices.Length * sizeof(ushort));
             indexBuffer.CopyFromSystemMemory(indices);
 
-            int stride = 2 * SizeInBytes<Vector3S>.Value;
+            int stride = 2 * SizeInBytes<Vector3F>.Value;
             _va = context.CreateVertexArray();
             _va.Attributes[VertexLocations.PositionHigh] =
                 new VertexBufferAttribute(_positionBuffer, ComponentDatatype.Float, 3, false, 0, stride);
             _va.Attributes[VertexLocations.PositionLow] =
-                new VertexBufferAttribute(_positionBuffer, ComponentDatatype.Float, 3, false, SizeInBytes<Vector3S>.Value, stride);
+                new VertexBufferAttribute(_positionBuffer, ComponentDatatype.Float, 3, false, SizeInBytes<Vector3F>.Value, stride);
             _va.IndexBuffer = indexBuffer;
 
             ShowOutline = true;
@@ -99,7 +99,7 @@ namespace OpenGlobe.Scene
                 EmulatedVector3D p2 = new EmulatedVector3D(_origin + _xAxis + _yAxis);
                 EmulatedVector3D p3 = new EmulatedVector3D(_origin - _xAxis + _yAxis);
 
-                Vector3S[] positions = new Vector3S[8];
+                Vector3F[] positions = new Vector3F[8];
                 positions[0] = p0.High;
                 positions[1] = p0.Low;
                 positions[2] = p1.High;
@@ -223,7 +223,7 @@ namespace OpenGlobe.Scene
             set
             {
                 _lineColor = value;
-                _lineColorUniform.Value = new Vector3S(value.R / 255.0f, value.G / 255.0f, value.B / 255.0f);
+                _lineColorUniform.Value = new Vector3F(value.R / 255.0f, value.G / 255.0f, value.B / 255.0f);
             }
         }
 
@@ -234,7 +234,7 @@ namespace OpenGlobe.Scene
             set
             {
                 _fillColor = value;
-                _fillColorUniform.Value = new Vector3S(value.R / 255.0f, value.G / 255.0f, value.B / 255.0f);
+                _fillColorUniform.Value = new Vector3F(value.R / 255.0f, value.G / 255.0f, value.B / 255.0f);
             }
         }
 
@@ -267,7 +267,7 @@ namespace OpenGlobe.Scene
         private readonly Uniform<float> _lineLogarithmicDepthConstant;
 
         private readonly Uniform<float> _lineFillDistance;
-        private readonly Uniform<Vector3S> _lineColorUniform;
+        private readonly Uniform<Vector3F> _lineColorUniform;
         private Color _lineColor;
 
         private readonly DrawState _drawStateFill;
@@ -282,7 +282,7 @@ namespace OpenGlobe.Scene
         private Vector3D _xAxis;
         private Vector3D _yAxis;
 
-        private readonly Uniform<Vector3S> _fillColorUniform;
+        private readonly Uniform<Vector3F> _fillColorUniform;
         private Color _fillColor;
         private readonly Uniform<float> _fillAlphaUniform;
         private float _fillTranslucency;

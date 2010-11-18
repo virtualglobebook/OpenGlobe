@@ -240,9 +240,9 @@ namespace OpenGlobe.Core
             return new Vector3D((double)_x, (double)_y, (double)_z);
         }
 
-        public Vector3S ToVector3S()
+        public Vector3F ToVector3F()
         {
-            return new Vector3S((float)_x, (float)_y, (float)_z);
+            return new Vector3F((float)_x, (float)_y, (float)_z);
         }
 
         public Vector3H ToVector3H()

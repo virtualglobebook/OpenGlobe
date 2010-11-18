@@ -86,17 +86,17 @@ namespace OpenGlobe.Scene.Terrain
             Mesh degenerateTriangleMesh = CreateDegenerateTriangleMesh();
             _degenerateTriangles = context.CreateVertexArray(degenerateTriangleMesh, _shaderProgram.VertexAttributes, BufferHint.StaticDraw);
 
-            _patchOriginInClippedLevel = (Uniform<Vector2S>)_shaderProgram.Uniforms["u_patchOriginInClippedLevel"];
-            _levelScaleFactor = (Uniform<Vector2S>)_shaderProgram.Uniforms["u_levelScaleFactor"];
-            _levelZeroWorldScaleFactor = (Uniform<Vector2S>)_shaderProgram.Uniforms["u_levelZeroWorldScaleFactor"];
-            _levelOffsetFromWorldOrigin = (Uniform<Vector2S>)_shaderProgram.Uniforms["u_levelOffsetFromWorldOrigin"];
+            _patchOriginInClippedLevel = (Uniform<Vector2F>)_shaderProgram.Uniforms["u_patchOriginInClippedLevel"];
+            _levelScaleFactor = (Uniform<Vector2F>)_shaderProgram.Uniforms["u_levelScaleFactor"];
+            _levelZeroWorldScaleFactor = (Uniform<Vector2F>)_shaderProgram.Uniforms["u_levelZeroWorldScaleFactor"];
+            _levelOffsetFromWorldOrigin = (Uniform<Vector2F>)_shaderProgram.Uniforms["u_levelOffsetFromWorldOrigin"];
             _heightExaggeration = (Uniform<float>)_shaderProgram.Uniforms["u_heightExaggeration"];
-            _viewPosInClippedLevel = (Uniform<Vector2S>)_shaderProgram.Uniforms["u_viewPosInClippedLevel"];
-            _fineLevelOriginInCoarse = (Uniform<Vector2S>)_shaderProgram.Uniforms["u_fineLevelOriginInCoarse"];
-            _unblendedRegionSize = (Uniform<Vector2S>)_shaderProgram.Uniforms["u_unblendedRegionSize"];
-            _oneOverBlendedRegionSize = (Uniform<Vector2S>)_shaderProgram.Uniforms["u_oneOverBlendedRegionSize"];
-            _sunPositionRelativeToViewer = (Uniform<Vector3S>)_shaderProgram.Uniforms["u_sunPositionRelativeToViewer"];
-            _fineTextureOrigin = (Uniform<Vector2S>)_shaderProgram.Uniforms["u_fineTextureOrigin"];
+            _viewPosInClippedLevel = (Uniform<Vector2F>)_shaderProgram.Uniforms["u_viewPosInClippedLevel"];
+            _fineLevelOriginInCoarse = (Uniform<Vector2F>)_shaderProgram.Uniforms["u_fineLevelOriginInCoarse"];
+            _unblendedRegionSize = (Uniform<Vector2F>)_shaderProgram.Uniforms["u_unblendedRegionSize"];
+            _oneOverBlendedRegionSize = (Uniform<Vector2F>)_shaderProgram.Uniforms["u_oneOverBlendedRegionSize"];
+            _sunPositionRelativeToViewer = (Uniform<Vector3F>)_shaderProgram.Uniforms["u_sunPositionRelativeToViewer"];
+            _fineTextureOrigin = (Uniform<Vector2F>)_shaderProgram.Uniforms["u_fineTextureOrigin"];
             _showBlendRegions = (Uniform<bool>)_shaderProgram.Uniforms["u_showBlendRegions"];
             _useBlendRegions = (Uniform<bool>)_shaderProgram.Uniforms["u_useBlendRegions"];
             _oneOverClipmapSize = (Uniform<float>)_shaderProgram.Uniforms["u_oneOverClipmapSize"];
@@ -106,10 +106,10 @@ namespace OpenGlobe.Scene.Terrain
             _primitiveType = fieldBlockMesh.PrimitiveType;
 
             float oneOverBlendedRegionSize = (float)(10.0 / _clipmapPosts);
-            _oneOverBlendedRegionSize.Value = new Vector2S(oneOverBlendedRegionSize, oneOverBlendedRegionSize);
+            _oneOverBlendedRegionSize.Value = new Vector2F(oneOverBlendedRegionSize, oneOverBlendedRegionSize);
 
             float unblendedRegionSize = (float)(_clipmapSegments / 2 - _clipmapPosts / 10.0 - 1);
-            _unblendedRegionSize.Value = new Vector2S(unblendedRegionSize, unblendedRegionSize);
+            _unblendedRegionSize.Value = new Vector2F(unblendedRegionSize, unblendedRegionSize);
 
             _useBlendRegions.Value = true;
 
@@ -382,7 +382,7 @@ namespace OpenGlobe.Scene.Terrain
         //    float[] postsFromTexture = rpb.CopyToSystemMemory<float>();
 
         //    ReadPixelBuffer rpbNormals = level.NormalTexture.CopyToBuffer(ImageFormat.RedGreenBlue, ImageDatatype.Float);
-        //    Vector3S[] normalsFromTexture = rpbNormals.CopyToSystemMemory<Vector3S>();
+        //    Vector3F[] normalsFromTexture = rpbNormals.CopyToSystemMemory<Vector3F>();
 
         //    float[] realPosts = new float[_clipmapPosts * _clipmapPosts];
         //    level.Terrain.GetPosts(level.CurrentOrigin.TerrainWest, level.CurrentOrigin.TerrainSouth, level.CurrentOrigin.TerrainEast, level.CurrentOrigin.TerrainNorth, realPosts, 0, _clipmapPosts);
@@ -415,9 +415,9 @@ namespace OpenGlobe.Scene.Terrain
         //                int left = j * _clipmapPosts + i - 1;
         //                float leftHeight = realPosts[left] * heightExaggeration;
 
-        //                Vector3S realNormal = new Vector3S(leftHeight - rightHeight, bottomHeight - topHeight, 2.0f * postDelta).Normalize();
+        //                Vector3F realNormal = new Vector3F(leftHeight - rightHeight, bottomHeight - topHeight, 2.0f * postDelta).Normalize();
 
-        //                Vector3S normalFromTexture = normalsFromTexture[y * _clipmapPosts + x].Normalize();
+        //                Vector3F normalFromTexture = normalsFromTexture[y * _clipmapPosts + x].Normalize();
 
         //                if (!realNormal.EqualsEpsilon(normalFromTexture, 1e-5f))
         //                    throw new Exception("normal is bad.");
@@ -442,13 +442,13 @@ namespace OpenGlobe.Scene.Terrain
             Vector3D previousTarget = sceneState.Camera.Target;
             Vector3D previousEye = sceneState.Camera.Eye;
 
-            _sunPositionRelativeToViewer.Value = (sceneState.SunPosition - clipmapCenter).ToVector3S();
+            _sunPositionRelativeToViewer.Value = (sceneState.SunPosition - clipmapCenter).ToVector3F();
 
             Vector3D toSubtract = new Vector3D(clipmapCenter.X, clipmapCenter.Y, 0.0);
             sceneState.Camera.Target -= toSubtract;
             sceneState.Camera.Eye -= toSubtract;
 
-            _levelZeroWorldScaleFactor.Value = new Vector2S((float)_clipmapLevels[0].Terrain.PostDeltaLongitude, (float)_clipmapLevels[0].Terrain.PostDeltaLatitude);
+            _levelZeroWorldScaleFactor.Value = new Vector2F((float)_clipmapLevels[0].Terrain.PostDeltaLongitude, (float)_clipmapLevels[0].Terrain.PostDeltaLatitude);
 
             int maxLevel = _clipmapLevels.Length - 1;
 
@@ -503,23 +503,23 @@ namespace OpenGlobe.Scene.Terrain
             int north = level.CurrentOrigin.TerrainNorth;
 
             float levelScaleFactor = (float)Math.Pow(2.0, -levelIndex);
-            _levelScaleFactor.Value = new Vector2S(levelScaleFactor, levelScaleFactor);
+            _levelScaleFactor.Value = new Vector2F(levelScaleFactor, levelScaleFactor);
 
             double originLongitude = level.Terrain.IndexToLongitude(level.CurrentOrigin.TerrainWest);
             double originLatitude = level.Terrain.IndexToLatitude(level.CurrentOrigin.TerrainSouth);
-            _levelOffsetFromWorldOrigin.Value = new Vector2S((float)(originLongitude - center.X),
+            _levelOffsetFromWorldOrigin.Value = new Vector2F((float)(originLongitude - center.X),
                                                              (float)(originLatitude - center.Y));
 
             int coarserWest = coarserLevel.CurrentOrigin.TerrainWest;
             int coarserSouth = coarserLevel.CurrentOrigin.TerrainSouth;
-            _fineLevelOriginInCoarse.Value = coarserLevel.OriginInTexture.ToVector2S() +
-                                             new Vector2S(west / 2 - coarserWest + 0.5f,
+            _fineLevelOriginInCoarse.Value = coarserLevel.OriginInTexture.ToVector2F() +
+                                             new Vector2F(west / 2 - coarserWest + 0.5f,
                                                           south / 2 - coarserSouth + 0.5f);
 
-            _viewPosInClippedLevel.Value = new Vector2S((float)(level.Terrain.LongitudeToIndex(center.X) - level.CurrentOrigin.TerrainWest),
+            _viewPosInClippedLevel.Value = new Vector2F((float)(level.Terrain.LongitudeToIndex(center.X) - level.CurrentOrigin.TerrainWest),
                                                         (float)(level.Terrain.LatitudeToIndex(center.Y) - level.CurrentOrigin.TerrainSouth));
 
-            _fineTextureOrigin.Value = level.OriginInTexture.ToVector2S() + new Vector2S(0.5f, 0.5f);
+            _fineTextureOrigin.Value = level.OriginInTexture.ToVector2F() + new Vector2F(0.5f, 0.5f);
 
             _useBlendRegions.Value = _blendRegionsEnabled && level != coarserLevel;
 
@@ -590,7 +590,7 @@ namespace OpenGlobe.Scene.Terrain
             int textureWest = blockWest - overallWest;
             int textureSouth = blockSouth - overallSouth;
 
-            _patchOriginInClippedLevel.Value = new Vector2S(textureWest, textureSouth);
+            _patchOriginInClippedLevel.Value = new Vector2F(textureWest, textureSouth);
             DrawState drawState = new DrawState(_renderState, _shaderProgram, block);
             context.Draw(_primitiveType, drawState, sceneState);
         }
@@ -607,7 +607,7 @@ namespace OpenGlobe.Scene.Terrain
 
             int numberOfPositions = _clipmapSegments * 4;
             VertexAttributeFloatVector2 positionsAttribute = new VertexAttributeFloatVector2("position", numberOfPositions);
-            IList<Vector2S> positions = positionsAttribute.Values;
+            IList<Vector2F> positions = positionsAttribute.Values;
             mesh.Attributes.Add(positionsAttribute);
 
             int numberOfIndices = (_clipmapSegments / 2) * 3 * 4;
@@ -616,22 +616,22 @@ namespace OpenGlobe.Scene.Terrain
 
             for (int i = 0; i < _clipmapPosts; ++i)
             {
-                positions.Add(new Vector2S(0.0f, i));
+                positions.Add(new Vector2F(0.0f, i));
             }
 
             for (int i = 1; i < _clipmapPosts; ++i)
             {
-                positions.Add(new Vector2S(i, _clipmapSegments));
+                positions.Add(new Vector2F(i, _clipmapSegments));
             }
 
             for (int i = _clipmapSegments - 1; i >= 0; --i)
             {
-                positions.Add(new Vector2S(_clipmapSegments, i));
+                positions.Add(new Vector2F(_clipmapSegments, i));
             }
 
             for (int i = _clipmapSegments - 1; i > 0; --i)
             {
-                positions.Add(new Vector2S(i, 0.0f));
+                positions.Add(new Vector2F(i, 0.0f));
             }
 
             for (int i = 0; i < numberOfIndices; i += 2)
@@ -723,17 +723,17 @@ namespace OpenGlobe.Scene.Terrain
         private VertexArray _finestOffsetStripVertical;
         private VertexArray _degenerateTriangles;
 
-        private Uniform<Vector2S> _patchOriginInClippedLevel;
-        private Uniform<Vector2S> _levelScaleFactor;
-        private Uniform<Vector2S> _levelZeroWorldScaleFactor;
-        private Uniform<Vector2S> _levelOffsetFromWorldOrigin;
+        private Uniform<Vector2F> _patchOriginInClippedLevel;
+        private Uniform<Vector2F> _levelScaleFactor;
+        private Uniform<Vector2F> _levelZeroWorldScaleFactor;
+        private Uniform<Vector2F> _levelOffsetFromWorldOrigin;
         private Uniform<float> _heightExaggeration;
-        private Uniform<Vector2S> _fineLevelOriginInCoarse;
-        private Uniform<Vector2S> _viewPosInClippedLevel;
-        private Uniform<Vector2S> _unblendedRegionSize;
-        private Uniform<Vector2S> _oneOverBlendedRegionSize;
-        private Uniform<Vector3S> _sunPositionRelativeToViewer;
-        private Uniform<Vector2S> _fineTextureOrigin;
+        private Uniform<Vector2F> _fineLevelOriginInCoarse;
+        private Uniform<Vector2F> _viewPosInClippedLevel;
+        private Uniform<Vector2F> _unblendedRegionSize;
+        private Uniform<Vector2F> _oneOverBlendedRegionSize;
+        private Uniform<Vector3F> _sunPositionRelativeToViewer;
+        private Uniform<Vector2F> _fineTextureOrigin;
         private Uniform<bool> _showBlendRegions;
         private Uniform<bool> _useBlendRegions;
         private Uniform<float> _oneOverClipmapSize;

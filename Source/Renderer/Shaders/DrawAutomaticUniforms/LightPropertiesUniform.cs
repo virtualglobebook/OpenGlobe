@@ -15,14 +15,14 @@ namespace OpenGlobe.Renderer
     {
         public LightPropertiesUniform(Uniform uniform)
         {
-            _uniform = (Uniform<Vector4S>)uniform;
+            _uniform = (Uniform<Vector4F>)uniform;
         }
 
         #region DrawAutomaticUniform Members
 
         public override void Set(Context context, DrawState drawState, SceneState sceneState)
         {
-            _uniform.Value = new Vector4S(
+            _uniform.Value = new Vector4F(
                 sceneState.DiffuseIntensity,
                 sceneState.SpecularIntensity,
                 sceneState.AmbientIntensity,
@@ -31,6 +31,6 @@ namespace OpenGlobe.Renderer
 
         #endregion
 
-        private Uniform<Vector4S> _uniform;
+        private Uniform<Vector4F> _uniform;
     }
 }

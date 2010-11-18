@@ -14,7 +14,7 @@ namespace OpenGlobe.Renderer
 {
     internal class VertexBufferFactory : Disposable
     {
-        public VertexBufferFactory(GraphicsWindow window, Vector3S[] positions)
+        public VertexBufferFactory(GraphicsWindow window, Vector3F[] positions)
         {
             _window = window;
             _positions = positions;
@@ -61,7 +61,7 @@ namespace OpenGlobe.Renderer
         #endregion
 
         private readonly GraphicsWindow _window;
-        private Vector3S[] _positions;
+        private Vector3F[] _positions;
         private VertexBuffer _vertexBuffer;
     }
 }

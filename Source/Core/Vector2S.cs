@@ -22,29 +22,29 @@ namespace OpenGlobe.Core
     /// </summary>
     [Serializable]
     [StructLayout(LayoutKind.Sequential)]
-    public struct Vector2S : IEquatable<Vector2S>
+    public struct Vector2F : IEquatable<Vector2F>
     {
-        public static Vector2S Zero
+        public static Vector2F Zero
         {
-            get { return new Vector2S(0.0f, 0.0f); }
+            get { return new Vector2F(0.0f, 0.0f); }
         }
 
-        public static Vector2S UnitX
+        public static Vector2F UnitX
         {
-            get { return new Vector2S(1.0f, 0.0f); }
+            get { return new Vector2F(1.0f, 0.0f); }
         }
 
-        public static Vector2S UnitY
+        public static Vector2F UnitY
         {
-            get { return new Vector2S(0.0f, 1.0f); }
+            get { return new Vector2F(0.0f, 1.0f); }
         }
 
-        public static Vector2S Undefined
+        public static Vector2F Undefined
         {
-            get { return new Vector2S(float.NaN, float.NaN); }
+            get { return new Vector2F(float.NaN, float.NaN); }
         }
 
-        public Vector2S(float x, float y)
+        public Vector2F(float x, float y)
         {
             _x = x;
             _y = y;
@@ -75,105 +75,105 @@ namespace OpenGlobe.Core
             get { return float.IsNaN(_x); }
         }
 
-        public Vector2S Normalize(out float magnitude)
+        public Vector2F Normalize(out float magnitude)
         {
             magnitude = Magnitude;
             return this / magnitude;
         }
 
-        public Vector2S Normalize()
+        public Vector2F Normalize()
         {
             float magnitude;
             return Normalize(out magnitude);
         }
 
-        public float Dot(Vector2S other)
+        public float Dot(Vector2F other)
         {
             return X * other.X + Y * other.Y;
         }
 
-        public Vector2S Add(Vector2S addend)
+        public Vector2F Add(Vector2F addend)
         {
             return this + addend;
         }
 
-        public Vector2S Subtract(Vector2S subtrahend)
+        public Vector2F Subtract(Vector2F subtrahend)
         {
             return this - subtrahend;
         }
 
-        public Vector2S Multiply(float scalar)
+        public Vector2F Multiply(float scalar)
         {
             return this * scalar;
         }
 
-        public Vector2S Divide(float scalar)
+        public Vector2F Divide(float scalar)
         {
             return this / scalar;
         }
 
-        public Vector2S Negate()
+        public Vector2F Negate()
         {
             return -this;
         }
 
-        public bool EqualsEpsilon(Vector2S other, float epsilon)
+        public bool EqualsEpsilon(Vector2F other, float epsilon)
         {
             return
                 (Math.Abs(_x - other._x) <= epsilon) &&
                 (Math.Abs(_y - other._y) <= epsilon);
         }
 
-        public bool Equals(Vector2S other)
+        public bool Equals(Vector2F other)
         {
             return _x == other._x && _y == other._y;
         }
 
-        public static Vector2S operator -(Vector2S vector)
+        public static Vector2F operator -(Vector2F vector)
         {
-            return new Vector2S(-vector.X, -vector.Y);
+            return new Vector2F(-vector.X, -vector.Y);
         }
 
-        public static Vector2S operator +(Vector2S left, Vector2S right)
+        public static Vector2F operator +(Vector2F left, Vector2F right)
         {
-            return new Vector2S(left._x + right._x, left._y + right._y);
+            return new Vector2F(left._x + right._x, left._y + right._y);
         }
 
-        public static Vector2S operator -(Vector2S left, Vector2S right)
+        public static Vector2F operator -(Vector2F left, Vector2F right)
         {
-            return new Vector2S(left._x - right._x, left._y - right._y);
+            return new Vector2F(left._x - right._x, left._y - right._y);
         }
 
-        public static Vector2S operator *(Vector2S left, float right)
+        public static Vector2F operator *(Vector2F left, float right)
         {
-            return new Vector2S(left._x * right, left._y * right);
+            return new Vector2F(left._x * right, left._y * right);
         }
 
-        public static Vector2S operator *(float left, Vector2S right)
+        public static Vector2F operator *(float left, Vector2F right)
         {
             return right * left;
         }
 
-        public static Vector2S operator /(Vector2S left, float right)
+        public static Vector2F operator /(Vector2F left, float right)
         {
-            return new Vector2S(left._x / right, left._y / right);
+            return new Vector2F(left._x / right, left._y / right);
         }
 
-        public static bool operator ==(Vector2S left, Vector2S right)
+        public static bool operator ==(Vector2F left, Vector2F right)
         {
             return left.Equals(right);
         }
 
-        public static bool operator !=(Vector2S left, Vector2S right)
+        public static bool operator !=(Vector2F left, Vector2F right)
         {
             return !left.Equals(right);
         }
 
         public override bool Equals(object obj)
         {
-            if (obj is Vector2S)
+            if (obj is Vector2F)
             {
-                return Equals((Vector2S)obj);
+                return Equals((Vector2F)obj);
             }
             return false;
         }

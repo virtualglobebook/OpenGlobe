@@ -32,7 +32,7 @@ namespace OpenGlobe.Core
 
             int numberOfPositions = (numberOfPartitionsX + 1) * (numberOfPartitionsY + 1);
             VertexAttributeFloatVector2 positionsAttribute = new VertexAttributeFloatVector2("position", numberOfPositions);
-            IList<Vector2S> positions = positionsAttribute.Values;
+            IList<Vector2F> positions = positionsAttribute.Values;
             mesh.Attributes.Add(positionsAttribute);
 
             int numberOfIndices = (numberOfPartitionsX * numberOfPartitionsY) * 6;
@@ -54,7 +54,7 @@ namespace OpenGlobe.Core
                 {
                     double deltaX = x / (double)numberOfPartitionsX;
                     double currentX = lowerLeft.X + (deltaX * toUpperRight.X);
-                    positions.Add(new Vector2D(currentX, currentY).ToVector2S());
+                    positions.Add(new Vector2D(currentX, currentY).ToVector2F());
                 }
             }
 

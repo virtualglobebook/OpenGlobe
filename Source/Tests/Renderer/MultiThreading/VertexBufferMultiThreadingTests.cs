@@ -25,7 +25,7 @@ namespace OpenGlobe.Renderer.Multithreading
         [Test]
         public void CreateVertexBuffer()
         {
-            Vector3S[] positions = new Vector3S[] { new Vector3S(1, 2, 3) };
+            Vector3F[] positions = new Vector3F[] { new Vector3F(1, 2, 3) };
 
             using (var threadWindow = Device.CreateWindow(1, 1))
             using (var window = Device.CreateWindow(1, 1))
@@ -35,7 +35,7 @@ namespace OpenGlobe.Renderer.Multithreading
                 t.Start();
                 t.Join();
 
-                Assert.AreEqual(positions[0], factory.VertexBuffer.CopyToSystemMemory<Vector3S>()[0]);
+                Assert.AreEqual(positions[0], factory.VertexBuffer.CopyToSystemMemory<Vector3F>()[0]);
             }
         }
 
@@ -47,8 +47,8 @@ namespace OpenGlobe.Renderer.Multithreading
         [Test]
         public void CreateVertexBuffersSequential()
         {
-            Vector3S[] positions0 = new Vector3S[] { new Vector3S(1, 2, 3) };
-            Vector3S[] positions1 = new Vector3S[] { new Vector3S(4, 5, 6) };
+            Vector3F[] positions0 = new Vector3F[] { new Vector3F(1, 2, 3) };
+            Vector3F[] positions1 = new Vector3F[] { new Vector3F(4, 5, 6) };
 
             using (var thread0Window = Device.CreateWindow(1, 1))
             using (var thread1Window = Device.CreateWindow(1, 1))
@@ -64,8 +64,8 @@ namespace OpenGlobe.Renderer.Multithreading
                 t1.Start();
                 t1.Join();
 
-                Assert.AreEqual(positions0[0], factory0.VertexBuffer.CopyToSystemMemory<Vector3S>()[0]);
-                Assert.AreEqual(positions1[0], factory1.VertexBuffer.CopyToSystemMemory<Vector3S>()[0]);
+                Assert.AreEqual(positions0[0], factory0.VertexBuffer.CopyToSystemMemory<Vector3F>()[0]);
+                Assert.AreEqual(positions1[0], factory1.VertexBuffer.CopyToSystemMemory<Vector3F>()[0]);
             }
         }
 
@@ -77,8 +77,8 @@ namespace OpenGlobe.Renderer.Multithreading
         [Test]
         public void CreateVertexBuffersParallel()
         {
-            Vector3S[] positions0 = new Vector3S[] { new Vector3S(1, 2, 3) };
-            Vector3S[] positions1 = new Vector3S[] { new Vector3S(4, 5, 6) };
+            Vector3F[] positions0 = new Vector3F[] { new Vector3F(1, 2, 3) };
+            Vector3F[] positions1 = new Vector3F[] { new Vector3F(4, 5, 6) };
 
             using (var thread0Window = Device.CreateWindow(1, 1))
             using (var thread1Window = Device.CreateWindow(1, 1))
@@ -95,8 +95,8 @@ namespace OpenGlobe.Renderer.Multithreading
                 t0.Join();
                 t1.Join();
 
-                Assert.AreEqual(positions0[0], factory0.VertexBuffer.CopyToSystemMemory<Vector3S>()[0]);
-                Assert.AreEqual(positions1[0], factory1.VertexBuffer.CopyToSystemMemory<Vector3S>()[0]);
+                Assert.AreEqual(positions0[0], factory0.VertexBuffer.CopyToSystemMemory<Vector3F>()[0]);
+                Assert.AreEqual(positions1[0], factory1.VertexBuffer.CopyToSystemMemory<Vector3F>()[0]);
             }
         }
     }

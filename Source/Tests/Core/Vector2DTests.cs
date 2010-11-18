@@ -239,10 +239,10 @@ namespace OpenGlobe.Core
         }
 
         [Test]
-        public void ToVector2S()
+        public void ToVector2F()
         {
             Vector2D a = new Vector2D(1.0, 2.0);
-            Vector2S sA = a.ToVector2S();
+            Vector2F sA = a.ToVector2F();
             Assert.AreEqual(1.0f, sA.X, 1e-7);
             Assert.AreEqual(2.0f, sA.Y, 1e-7);
         }

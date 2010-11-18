@@ -104,9 +104,9 @@ namespace OpenGlobe.Core
             return new Vector3D(Convert.ToDouble(_x), Convert.ToDouble(_y), Convert.ToDouble(_z));
         }
 
-        public Vector3S ToVector3S()
+        public Vector3F ToVector3F()
         {
-            return new Vector3S(Convert.ToSingle(_x), Convert.ToSingle(_y), Convert.ToSingle(_z));
+            return new Vector3F(Convert.ToSingle(_x), Convert.ToSingle(_y), Convert.ToSingle(_z));
         }
 
         public Vector3I ToVector3I()

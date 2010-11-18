@@ -74,7 +74,7 @@ namespace OpenGlobe.Core
                 4.0, 5.0, 6.0,
                 7.0, 8.0, 9.0);
 
-            Matrix3S mf = m.ToMatrix4S();
+            Matrix3S mf = m.ToMatrix4F();
 
             Assert.AreEqual(1.0, mf.ReadOnlyColumnMajorValues[0], 1e-7);
             Assert.AreEqual(4.0, mf.ReadOnlyColumnMajorValues[1], 1e-7);

@@ -15,7 +15,7 @@ namespace OpenGlobe.Renderer
     {
         public CameraEyeHighUniform(Uniform uniform)
         {
-            _uniform = (Uniform<Vector3S>)uniform;
+            _uniform = (Uniform<Vector3F>)uniform;
         }
 
         #region DrawAutomaticUniform Members
@@ -27,6 +27,6 @@ namespace OpenGlobe.Renderer
 
         #endregion
 
-        private Uniform<Vector3S> _uniform;
+        private Uniform<Vector3F> _uniform;
     }
 }

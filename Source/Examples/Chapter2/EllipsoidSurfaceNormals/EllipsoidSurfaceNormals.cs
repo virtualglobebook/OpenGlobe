@@ -87,10 +87,10 @@ namespace OpenGlobe.Examples
             Vector3D pCentric = p + (normalLength * centricNormal);
 
             VertexAttributeFloatVector3 positionAttribute = new VertexAttributeFloatVector3("position", 4);
-            positionAttribute.Values.Add(p.ToVector3S());
-            positionAttribute.Values.Add(pDetic.ToVector3S());
-            positionAttribute.Values.Add(p.ToVector3S());
-            positionAttribute.Values.Add(pCentric.ToVector3S());
+            positionAttribute.Values.Add(p.ToVector3F());
+            positionAttribute.Values.Add(pDetic.ToVector3F());
+            positionAttribute.Values.Add(p.ToVector3F());
+            positionAttribute.Values.Add(pCentric.ToVector3F());
 
             VertexAttributeRGBA colorAttribute = new VertexAttributeRGBA("color", 4);
             colorAttribute.AddColor(Color.DarkGreen);

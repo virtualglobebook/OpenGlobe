@@ -125,9 +125,9 @@ namespace OpenGlobe.Core
             return new Vector4D(Convert.ToDouble(_x), Convert.ToDouble(_y), Convert.ToDouble(_z), Convert.ToDouble(_w));
         }
 
-        public Vector4S ToVector4S()
+        public Vector4F ToVector4F()
         {
-            return new Vector4S(Convert.ToSingle(_x), Convert.ToSingle(_y), Convert.ToSingle(_z), Convert.ToSingle(_w));
+            return new Vector4F(Convert.ToSingle(_x), Convert.ToSingle(_y), Convert.ToSingle(_z), Convert.ToSingle(_w));
         }
 
         public Vector4I ToVector4I()

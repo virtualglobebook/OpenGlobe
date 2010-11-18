@@ -71,7 +71,7 @@ namespace OpenGlobe.Core
 
         public bool Equals(Matrix23<T> other)
         {
-            if (Matrix4S.ReferenceEquals(other, null))
+            if (Matrix4F.ReferenceEquals(other, null))
             {
                 return false;
             }

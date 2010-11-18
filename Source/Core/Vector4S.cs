@@ -22,39 +22,39 @@ namespace OpenGlobe.Core
     /// </summary>
     [Serializable]
     [StructLayout(LayoutKind.Sequential)]
-    public struct Vector4S : IEquatable<Vector4S>
+    public struct Vector4F : IEquatable<Vector4F>
     {
-        public static Vector4S Zero
+        public static Vector4F Zero
         {
-            get { return new Vector4S(0.0f, 0.0f, 0.0f, 0.0f); }
+            get { return new Vector4F(0.0f, 0.0f, 0.0f, 0.0f); }
         }
 
-        public static Vector4S UnitX
+        public static Vector4F UnitX
         {
-            get { return new Vector4S(1.0f, 0.0f, 0.0f, 0.0f); }
+            get { return new Vector4F(1.0f, 0.0f, 0.0f, 0.0f); }
         }
 
-        public static Vector4S UnitY
+        public static Vector4F UnitY
         {
-            get { return new Vector4S(0.0f, 1.0f, 0.0f, 0.0f); }
+            get { return new Vector4F(0.0f, 1.0f, 0.0f, 0.0f); }
         }
 
-        public static Vector4S UnitZ
+        public static Vector4F UnitZ
         {
-            get { return new Vector4S(0.0f, 0.0f, 1.0f, 0.0f); }
+            get { return new Vector4F(0.0f, 0.0f, 1.0f, 0.0f); }
         }
 
-        public static Vector4S UnitW
+        public static Vector4F UnitW
         {
-            get { return new Vector4S(0.0f, 0.0f, 0.0f, 1.0f); }
+            get { return new Vector4F(0.0f, 0.0f, 0.0f, 1.0f); }
         }
 
-        public static Vector4S Undefined
+        public static Vector4F Undefined
         {
-            get { return new Vector4S(float.NaN, float.NaN, float.NaN, float.NaN); }
+            get { return new Vector4F(float.NaN, float.NaN, float.NaN, float.NaN); }
         }
 
-        public Vector4S(float x, float y, float z, float w)
+        public Vector4F(float x, float y, float z, float w)
         {
             _x = x;
             _y = y;
@@ -62,7 +62,7 @@ namespace OpenGlobe.Core
             _w = w;
         }
 
-        public Vector4S(Vector3S v, float w)
+        public Vector4F(Vector3F v, float w)
         {
             _x = v.X;
             _y = v.Y;
@@ -70,7 +70,7 @@ namespace OpenGlobe.Core
             _w = w;
         }
 
-        public Vector4S(Vector2S v, float z, float w)
+        public Vector4F(Vector2F v, float z, float w)
         {
             _x = v.X;
             _y = v.Y;
@@ -98,14 +98,14 @@ namespace OpenGlobe.Core
             get { return _w; }
         }
 
-        public Vector2S XY
+        public Vector2F XY
         {
-            get { return new Vector2S(X, Y); }
+            get { return new Vector2F(X, Y); }
         }
 
-        public Vector3S XYZ
+        public Vector3F XYZ
         {
-            get { return new Vector3S(X, Y, Z); }
+            get { return new Vector3F(X, Y, Z); }
         }
 
         public float MagnitudeSquared
@@ -123,49 +123,49 @@ namespace OpenGlobe.Core
             get { return float.IsNaN(_x); }
         }
 
-        public Vector4S Normalize(out float magnitude)
+        public Vector4F Normalize(out float magnitude)
         {
             magnitude = Magnitude;
             return this / magnitude;
         }
 
-        public Vector4S Normalize()
+        public Vector4F Normalize()
         {
             float magnitude;
             return Normalize(out magnitude);
         }
 
-        public float Dot(Vector4S other)
+        public float Dot(Vector4F other)
         {
             return X * other.X + Y * other.Y + Z * other.Z + W * other.W;
         }
 
-        public Vector4S Add(Vector4S addend)
+        public Vector4F Add(Vector4F addend)
         {
             return this + addend;
         }
 
-        public Vector4S Subtract(Vector4S subtrahend)
+        public Vector4F Subtract(Vector4F subtrahend)
         {
             return this - subtrahend;
         }
 
-        public Vector4S Multiply(float scalar)
+        public Vector4F Multiply(float scalar)
         {
             return this * scalar;
         }
 
-        public Vector4S MultiplyComponents(Vector4S scale)
+        public Vector4F MultiplyComponents(Vector4F scale)
         {
-            return new Vector4S(X * scale.X, Y * scale.Y, Z * scale.Z, W * scale.W);
+            return new Vector4F(X * scale.X, Y * scale.Y, Z * scale.Z, W * scale.W);
         }
 
-        public Vector4S Divide(float scalar)
+        public Vector4F Divide(float scalar)
         {
             return this / scalar;
         }
 
-        public Vector4S MostOrthogonalAxis
+        public Vector4F MostOrthogonalAxis
         {
             get
             {
@@ -193,12 +193,12 @@ namespace OpenGlobe.Core
             }
         }
 
-        public Vector4S Negate()
+        public Vector4F Negate()
         {
             return -this;
         }
 
-        public bool EqualsEpsilon(Vector4S other, float epsilon)
+        public bool EqualsEpsilon(Vector4F other, float epsilon)
         {
             return (Math.Abs(_x - other._x) <= epsilon) &&
                    (Math.Abs(_y - other._y) <= epsilon) &&
@@ -206,56 +206,56 @@ namespace OpenGlobe.Core
                    (Math.Abs(_w - other._w) <= epsilon);
         }
 
-        public bool Equals(Vector4S other)
+        public bool Equals(Vector4F other)
         {
             return _x == other._x && _y == other._y && _z == other._z && _w == other._w;
         }
 
-        public static Vector4S operator -(Vector4S vector)
+        public static Vector4F operator -(Vector4F vector)
         {
-            return new Vector4S(-vector.X, -vector.Y, -vector.Z, -vector.W);
+            return new Vector4F(-vector.X, -vector.Y, -vector.Z, -vector.W);
         }
 
-        public static Vector4S operator +(Vector4S left, Vector4S right)
+        public static Vector4F operator +(Vector4F left, Vector4F right)
         {
-            return new Vector4S(left._x + right._x, left._y + right._y, left._z + right._z, left._w + right._w);
+            return new Vector4F(left._x + right._x, left._y + right._y, left._z + right._z, left._w + right._w);
         }
 
-        public static Vector4S operator -(Vector4S left, Vector4S right)
+        public static Vector4F operator -(Vector4F left, Vector4F right)
         {
-            return new Vector4S(left._x - right._x, left._y - right._y, left._z - right._z, left._w - right._w);
+            return new Vector4F(left._x - right._x, left._y - right._y, left._z - right._z, left._w - right._w);
         }
 
-        public static Vector4S operator *(Vector4S left, float right)
+        public static Vector4F operator *(Vector4F left, float right)
         {
-            return new Vector4S(left._x * right, left._y * right, left._z * right, left._w * right);
+            return new Vector4F(left._x * right, left._y * right, left._z * right, left._w * right);
         }
 
-        public static Vector4S operator *(float left, Vector4S right)
+        public static Vector4F operator *(float left, Vector4F right)
         {
             return right * left;
         }
 
-        public static Vector4S operator /(Vector4S left, float right)
+        public static Vector4F operator /(Vector4F left, float right)
         {
-            return new Vector4S(left._x / right, left._y / right, left._z / right, left._w / right);
+            return new Vector4F(left._x / right, left._y / right, left._z / right, left._w / right);
         }
 
-        public static bool operator ==(Vector4S left, Vector4S right)
+        public static bool operator ==(Vector4F left, Vector4F right)
         {
             return left.Equals(right);
         }
 
-        public static bool operator !=(Vector4S left, Vector4S right)
+        public static bool operator !=(Vector4F left, Vector4F right)
         {
             return !left.Equals(right);
         }
 
         public override bool Equals(object obj)
         {
-            if (obj is Vector4S)
+            if (obj is Vector4F)
             {
-                return Equals((Vector4S)obj);
+                return Equals((Vector4F)obj);
             }
             return false;
         }

@@ -14,7 +14,7 @@ using OpenGlobe.Renderer;
 
 namespace OpenGlobe.Renderer.GL3x
 {
-    internal class UniformFloatVector2GL3x : Uniform<Vector2S>, ICleanable
+    internal class UniformFloatVector2GL3x : Uniform<Vector2F>, ICleanable
     {
         internal UniformFloatVector2GL3x(string name, int location, ICleanableObserver observer)
             : base(name, UniformType.FloatVector2)
@@ -27,7 +27,7 @@ namespace OpenGlobe.Renderer.GL3x
 
         #region Uniform<> Members
 
-        public override Vector2S Value
+        public override Vector2F Value
         {
             set
             {
@@ -56,7 +56,7 @@ namespace OpenGlobe.Renderer.GL3x
         #endregion
 
         private int _location;
-        private Vector2S _value;
+        private Vector2F _value;
         private bool _dirty;
         private readonly ICleanableObserver _observer;
     }

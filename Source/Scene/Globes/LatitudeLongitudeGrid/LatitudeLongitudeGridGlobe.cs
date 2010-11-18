@@ -23,9 +23,9 @@ namespace OpenGlobe.Scene
             ShaderProgram sp = Device.CreateShaderProgram(
                 EmbeddedResources.GetText("OpenGlobe.Scene.Globes.LatitudeLongitudeGrid.Shaders.GlobeVS.glsl"),
                 EmbeddedResources.GetText("OpenGlobe.Scene.Globes.LatitudeLongitudeGrid.Shaders.GlobeFS.glsl"));
-            _gridWidth = (Uniform<Vector2S>)sp.Uniforms["u_gridLineWidth"];
-            _gridResolution = (Uniform<Vector2S>)sp.Uniforms["u_gridResolution"];
-            _globeOneOverRadiiSquared = (Uniform<Vector3S>)sp.Uniforms["u_globeOneOverRadiiSquared"];
+            _gridWidth = (Uniform<Vector2F>)sp.Uniforms["u_gridLineWidth"];
+            _gridResolution = (Uniform<Vector2F>)sp.Uniforms["u_gridResolution"];
+            _globeOneOverRadiiSquared = (Uniform<Vector3F>)sp.Uniforms["u_globeOneOverRadiiSquared"];
 
             _drawState = new DrawState();
             _drawState.ShaderProgram = sp;
@@ -49,7 +49,7 @@ namespace OpenGlobe.Scene
 
                 _drawState.RenderState.FacetCulling.FrontFaceWindingOrder = mesh.FrontFaceWindingOrder;
 
-                _globeOneOverRadiiSquared.Value = _shape.OneOverRadiiSquared.ToVector3S();
+                _globeOneOverRadiiSquared.Value = _shape.OneOverRadiiSquared.ToVector3F();
 
                 _dirty = false;
             }
@@ -76,13 +76,13 @@ namespace OpenGlobe.Scene
             {
                 if (GridResolutions[i].Interval.Contains(altitude))
                 {
-                    _gridResolution.Value = GridResolutions[i].Resolution.ToVector2S();
+                    _gridResolution.Value = GridResolutions[i].Resolution.ToVector2F();
                     break;
                 }
             }
 
             float width = (float)sceneState.HighResolutionSnapScale;
-            _gridWidth.Value = new Vector2S(width, width);
+            _gridWidth.Value = new Vector2F(width, width);
 
             context.TextureUnits[0].Texture = Texture;
             context.TextureUnits[0].TextureSampler = Device.TextureSamplers.LinearClamp;
@@ -114,9 +114,9 @@ namespace OpenGlobe.Scene
         #endregion
 
         private readonly DrawState _drawState;
-        private readonly Uniform<Vector2S> _gridWidth;
-        private readonly Uniform<Vector2S> _gridResolution;
-        private readonly Uniform<Vector3S> _globeOneOverRadiiSquared;
+        private readonly Uniform<Vector2F> _gridWidth;
+        private readonly Uniform<Vector2F> _gridResolution;
+        private readonly Uniform<Vector3F> _globeOneOverRadiiSquared;
 
         private PrimitiveType _primitiveType;
 

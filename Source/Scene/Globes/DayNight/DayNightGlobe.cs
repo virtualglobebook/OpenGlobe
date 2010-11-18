@@ -22,7 +22,7 @@ namespace OpenGlobe.Scene
             ShaderProgram sp = Device.CreateShaderProgram(
                 EmbeddedResources.GetText("OpenGlobe.Scene.Globes.DayNight.Shaders.GlobeVS.glsl"),
                 EmbeddedResources.GetText("OpenGlobe.Scene.Globes.DayNight.Shaders.GlobeFS.glsl"));
-            _cameraEyeSquaredSP = (Uniform<Vector3S>)sp.Uniforms["u_cameraEyeSquared"];
+            _cameraEyeSquaredSP = (Uniform<Vector3F>)sp.Uniforms["u_cameraEyeSquared"];
             _useAverageDepth = (Uniform<bool>)sp.Uniforms["u_useAverageDepth"];
 
             float blendDurationScale = 0.1f;
@@ -53,7 +53,7 @@ namespace OpenGlobe.Scene
                 _drawState.RenderState.FacetCulling.Face = CullFace.Front;
                 _drawState.RenderState.FacetCulling.FrontFaceWindingOrder = mesh.FrontFaceWindingOrder;
 
-                ((Uniform<Vector3S>)_drawState.ShaderProgram.Uniforms["u_globeOneOverRadiiSquared"]).Value = _shape.OneOverRadiiSquared.ToVector3S();
+                ((Uniform<Vector3F>)_drawState.ShaderProgram.Uniforms["u_globeOneOverRadiiSquared"]).Value = _shape.OneOverRadiiSquared.ToVector3F();
 
                 if (_wireframe != null)
                 {
@@ -79,7 +79,7 @@ namespace OpenGlobe.Scene
             if (ShowGlobe)
             {
                 Vector3D eye = sceneState.Camera.Eye;
-                Vector3S cameraEyeSquared = eye.MultiplyComponents(eye).ToVector3S();
+                Vector3F cameraEyeSquared = eye.MultiplyComponents(eye).ToVector3F();
                 _cameraEyeSquaredSP.Value = cameraEyeSquared;
 
                 context.TextureUnits[0].Texture = DayTexture;
@@ -141,7 +141,7 @@ namespace OpenGlobe.Scene
         #endregion
 
         private readonly DrawState _drawState;
-        private readonly Uniform<Vector3S> _cameraEyeSquaredSP;
+        private readonly Uniform<Vector3F> _cameraEyeSquaredSP;
         private readonly Uniform<bool> _useAverageDepth;
         
         private PrimitiveType _primitiveType;

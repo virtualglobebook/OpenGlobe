@@ -16,7 +16,7 @@ namespace OpenGlobe.Renderer
     {
         public InverseViewportDimensionsUniform(Uniform uniform)
         {
-            _uniform = (Uniform<Vector2S>)uniform;
+            _uniform = (Uniform<Vector2F>)uniform;
         }
 
         #region DrawAutomaticUniform Members
@@ -27,11 +27,11 @@ namespace OpenGlobe.Renderer
             // viewport.Bottom should really be used but Rectangle goes top to botom, not bottom to top.
             //
             Rectangle viewport = context.Viewport;
-            _uniform.Value = new Vector2S(1.0f / (float)viewport.Width, 1.0f / (float)viewport.Height);
+            _uniform.Value = new Vector2F(1.0f / (float)viewport.Width, 1.0f / (float)viewport.Height);
         }
 
         #endregion
 
-        private Uniform<Vector2S> _uniform;
+        private Uniform<Vector2F> _uniform;
     }
 }

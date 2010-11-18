@@ -133,26 +133,26 @@ namespace OpenGlobe.Renderer
                 exampleFloat.Value = 0.75f;
                 Assert.AreEqual(0.75f, exampleFloat.Value);
 
-                Uniform<Vector2S> exampleVec2 = (Uniform<Vector2S>)sp.Uniforms["exampleVec2"];
+                Uniform<Vector2F> exampleVec2 = (Uniform<Vector2F>)sp.Uniforms["exampleVec2"];
                 Assert.AreEqual("exampleVec2", exampleVec2.Name);
                 Assert.AreEqual(UniformType.FloatVector2, exampleVec2.Datatype);
-                Assert.AreEqual(new Vector2S(), exampleVec2.Value);
-                exampleVec2.Value = new Vector2S(1, 0.5f);
-                Assert.AreEqual(new Vector2S(1, 0.5f), exampleVec2.Value);
+                Assert.AreEqual(new Vector2F(), exampleVec2.Value);
+                exampleVec2.Value = new Vector2F(1, 0.5f);
+                Assert.AreEqual(new Vector2F(1, 0.5f), exampleVec2.Value);
 
-                Uniform<Vector3S> exampleVec3 = (Uniform<Vector3S>)sp.Uniforms["exampleVec3"];
+                Uniform<Vector3F> exampleVec3 = (Uniform<Vector3F>)sp.Uniforms["exampleVec3"];
                 Assert.AreEqual("exampleVec3", exampleVec3.Name);
                 Assert.AreEqual(UniformType.FloatVector3, exampleVec3.Datatype);
-                Assert.AreEqual(new Vector3S(), exampleVec3.Value);
-                exampleVec3.Value = new Vector3S(1, 0, 0);
-                Assert.AreEqual(new Vector3S(1, 0, 0), exampleVec3.Value);
+                Assert.AreEqual(new Vector3F(), exampleVec3.Value);
+                exampleVec3.Value = new Vector3F(1, 0, 0);
+                Assert.AreEqual(new Vector3F(1, 0, 0), exampleVec3.Value);
 
-                Uniform<Vector4S> exampleVec4 = (Uniform<Vector4S>)sp.Uniforms["exampleVec4"];
+                Uniform<Vector4F> exampleVec4 = (Uniform<Vector4F>)sp.Uniforms["exampleVec4"];
                 Assert.AreEqual("exampleVec4", exampleVec4.Name);
                 Assert.AreEqual(UniformType.FloatVector4, exampleVec4.Datatype);
-                Assert.AreEqual(new Vector4S(), exampleVec4.Value);
-                exampleVec4.Value = new Vector4S(1, 0, 0, 0);
-                Assert.AreEqual(new Vector4S(1, 0, 0, 0), exampleVec4.Value);
+                Assert.AreEqual(new Vector4F(), exampleVec4.Value);
+                exampleVec4.Value = new Vector4F(1, 0, 0, 0);
+                Assert.AreEqual(new Vector4F(1, 0, 0, 0), exampleVec4.Value);
 
                 ///////////////////////////////////////////////////////////////
 

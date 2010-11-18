@@ -16,7 +16,7 @@ namespace OpenGlobe.Renderer
     {
         public ViewportUniform(Uniform uniform)
         {
-            _uniform = (Uniform<Vector4S>)uniform;
+            _uniform = (Uniform<Vector4F>)uniform;
         }
 
         #region DrawAutomaticUniform Members
@@ -27,11 +27,11 @@ namespace OpenGlobe.Renderer
             // viewport.Bottom should really be used but Rectangle goes top to botom, not bottom to top.
             //
             Rectangle viewport = context.Viewport;
-            _uniform.Value = new Vector4S(viewport.Left, viewport.Top, viewport.Width, viewport.Height);
+            _uniform.Value = new Vector4F(viewport.Left, viewport.Top, viewport.Width, viewport.Height);
         }
 
         #endregion
 
-        private Uniform<Vector4S> _uniform;
+        private Uniform<Vector4F> _uniform;
     }
 }

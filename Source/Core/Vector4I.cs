@@ -243,9 +243,9 @@ namespace OpenGlobe.Core
             return new Vector4D((double)_x, (double)_y, (double)_z, (double)_w);
         }
 
-        public Vector4S ToVector4S()
+        public Vector4F ToVector4F()
         {
-            return new Vector4S((float)_x, (float)_y, (float)_z, (float)_w);
+            return new Vector4F((float)_x, (float)_y, (float)_z, (float)_w);
         }
 
         public Vector4H ToVector4H()

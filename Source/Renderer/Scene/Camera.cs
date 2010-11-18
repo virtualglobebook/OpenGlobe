@@ -42,14 +42,14 @@ namespace OpenGlobe.Renderer
         public Vector3D Target { get; set; }
         public Vector3D Up { get; set; }
 
-        public Vector3S EyeHigh
+        public Vector3F EyeHigh
         {
-            get { return Eye.ToVector3S(); }
+            get { return Eye.ToVector3F(); }
         }
 
-        public Vector3S EyeLow
+        public Vector3F EyeLow
         {
-            get { return (Eye - EyeHigh.ToVector3D()).ToVector3S(); }
+            get { return (Eye - EyeHigh.ToVector3D()).ToVector3F(); }
         }
         
         public Vector3D Forward

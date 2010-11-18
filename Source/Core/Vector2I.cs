@@ -136,9 +136,9 @@ namespace OpenGlobe.Core
             return new Vector2D(_x, _y);
         }
 
-        public Vector2S ToVector2S()
+        public Vector2F ToVector2F()
         {
-            return new Vector2S(_x, _y);
+            return new Vector2F(_x, _y);
         }
 
         public Vector2H ToVector2H()

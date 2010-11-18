@@ -9,7 +9,7 @@
 
 namespace OpenGlobe.Core
 {
-    public class VertexAttributeFloatVector2 : VertexAttribute<Vector2S>
+    public class VertexAttributeFloatVector2 : VertexAttribute<Vector2F>
     {
         public VertexAttributeFloatVector2(string name)
             : base(name, VertexAttributeType.FloatVector2)

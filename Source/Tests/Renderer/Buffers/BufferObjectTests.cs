@@ -20,11 +20,11 @@ namespace OpenGlobe.Renderer
         [Test]
         public void VertexBuffer()
         {
-            Vector3S[] positions = new Vector3S[] 
+            Vector3F[] positions = new Vector3F[] 
             { 
-                Vector3S.Zero,
-                new Vector3S(1, 0, 0),
-                new Vector3S(0, 1, 0)
+                Vector3F.Zero,
+                new Vector3F(1, 0, 0),
+                new Vector3F(0, 1, 0)
             };
             int sizeInBytes = ArraySizeInBytes.Size(positions);
 
@@ -43,7 +43,7 @@ namespace OpenGlobe.Renderer
                 //
                 vertexBuffer.CopyFromSystemMemory(positions);
 
-                Vector3S[] positions2 = vertexBuffer.CopyToSystemMemory<Vector3S>(0, vertexBuffer.SizeInBytes);
+                Vector3F[] positions2 = vertexBuffer.CopyToSystemMemory<Vector3F>(0, vertexBuffer.SizeInBytes);
                 Assert.AreEqual(positions[0], positions2[0]);
                 Assert.AreEqual(positions[1], positions2[1]);
                 Assert.AreEqual(positions[2], positions2[2]);
@@ -51,14 +51,14 @@ namespace OpenGlobe.Renderer
                 //
                 // Verify modiying a subset of the vertex buffer
                 //
-                Vector3S[] modifiedPositions = new Vector3S[] 
+                Vector3F[] modifiedPositions = new Vector3F[] 
                 { 
-                    new Vector3S(0, 1, 0),
-                    Vector3S.Zero
+                    new Vector3F(0, 1, 0),
+                    Vector3F.Zero
                 };
-                vertexBuffer.CopyFromSystemMemory(modifiedPositions, SizeInBytes<Vector3S>.Value, SizeInBytes<Vector3S>.Value);
+                vertexBuffer.CopyFromSystemMemory(modifiedPositions, SizeInBytes<Vector3F>.Value, SizeInBytes<Vector3F>.Value);
 
-                Vector3S[] positions3 = vertexBuffer.CopyToSystemMemory<Vector3S>(0, vertexBuffer.SizeInBytes);
+                Vector3F[] positions3 = vertexBuffer.CopyToSystemMemory<Vector3F>(0, vertexBuffer.SizeInBytes);
                 Assert.AreEqual(positions[0], positions3[0]);
                 Assert.AreEqual(modifiedPositions[0], positions3[1]);
                 Assert.AreEqual(positions[2], positions3[2]);

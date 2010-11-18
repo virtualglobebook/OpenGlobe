@@ -108,10 +108,10 @@ namespace OpenGlobe.Core
         }
 
         [Test]
-        public void ToVector3S()
+        public void ToVector3F()
         {
             Vector3B a = new Vector3B(false, true, false);
-            Vector3S sA = a.ToVector3S();
+            Vector3F sA = a.ToVector3F();
             Assert.AreEqual(0.0f, sA.X);
             Assert.AreEqual(1.0f, sA.Y);
             Assert.AreEqual(0.0f, sA.Z);

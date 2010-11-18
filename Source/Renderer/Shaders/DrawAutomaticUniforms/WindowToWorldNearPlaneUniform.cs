@@ -16,7 +16,7 @@ namespace OpenGlobe.Renderer
     {
         public WindowToWorldNearPlaneUniform(Uniform uniform)
         {
-            _uniform = (Uniform<Matrix4S>)uniform;
+            _uniform = (Uniform<Matrix4F>)uniform;
         }
 
         #region DrawAutomaticUniform Members
@@ -40,11 +40,11 @@ namespace OpenGlobe.Renderer
                     xAxis.X, yAxis.X, 0.0, origin.X,
                     xAxis.Y, yAxis.Y, 0.0, origin.Y,
                     xAxis.Z, yAxis.Z, 0.0, origin.Z,
-                    0.0,     0.0,     0.0, 1.0).ToMatrix4S();
+                    0.0,     0.0,     0.0, 1.0).ToMatrix4F();
         }
 
         #endregion
 
-        private Uniform<Matrix4S> _uniform;
+        private Uniform<Matrix4F> _uniform;
     }
 }

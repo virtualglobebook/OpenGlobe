@@ -74,9 +74,9 @@ namespace OpenGlobe.Core
         public double Column3Row2 { get { return _values[14]; } }
         public double Column3Row3 { get { return _values[15]; } }
 
-        public Matrix4S ToMatrix4S()
+        public Matrix4F ToMatrix4F()
         {
-            return new Matrix4S(
+            return new Matrix4F(
                 (float)Column0Row0,
                 (float)Column1Row0,
                 (float)Column2Row0,

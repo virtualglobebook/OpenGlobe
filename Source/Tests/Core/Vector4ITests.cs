@@ -312,10 +312,10 @@ namespace OpenGlobe.Core
         }
 
         [Test]
-        public void ToVector4S()
+        public void ToVector4F()
         {
             Vector4I a = new Vector4I(1, 2, 3, 4);
-            Vector4S sA = a.ToVector4S();
+            Vector4F sA = a.ToVector4F();
             Assert.AreEqual(1.0f, sA.X, 1e-7);
             Assert.AreEqual(2.0f, sA.Y, 1e-7);
             Assert.AreEqual(3.0f, sA.Z, 1e-7);

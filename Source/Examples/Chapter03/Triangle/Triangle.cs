@@ -47,7 +47,7 @@ namespace OpenGlobe.Examples
                       fragmentColor = u_color;
                   }";
             ShaderProgram sp = Device.CreateShaderProgram(vs, fs);
-            ((Uniform<Vector3S>)sp.Uniforms["u_color"]).Value = new Vector3S(1, 0, 0);
+            ((Uniform<Vector3F>)sp.Uniforms["u_color"]).Value = new Vector3F(1, 0, 0);
 
             ///////////////////////////////////////////////////////////////////
             
@@ -59,10 +59,10 @@ namespace OpenGlobe.Examples
             IndicesUnsignedShort indices = new IndicesUnsignedShort(3);
             mesh.Indices = indices;
 
-            IList<Vector3S> positions = positionsAttribute.Values;
-            positions.Add(new Vector3S(0, 0, 0));
-            positions.Add(new Vector3S(1, 0, 0));
-            positions.Add(new Vector3S(0, 0, 1));
+            IList<Vector3F> positions = positionsAttribute.Values;
+            positions.Add(new Vector3F(0, 0, 0));
+            positions.Add(new Vector3F(1, 0, 0));
+            positions.Add(new Vector3F(0, 0, 1));
 
             indices.AddTriangle(new TriangleIndicesUnsignedShort(0, 1, 2));
 

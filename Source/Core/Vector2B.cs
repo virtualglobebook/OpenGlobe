@@ -85,9 +85,9 @@ namespace OpenGlobe.Core
             return new Vector2D(Convert.ToDouble(_x), Convert.ToDouble(_y));
         }
 
-        public Vector2S ToVector2S()
+        public Vector2F ToVector2F()
         {
-            return new Vector2S(Convert.ToSingle(_x), Convert.ToSingle(_y));
+            return new Vector2F(Convert.ToSingle(_x), Convert.ToSingle(_y));
         }
 
         public Vector2I ToVector2I()

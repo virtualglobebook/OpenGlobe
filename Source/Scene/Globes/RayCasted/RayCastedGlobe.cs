@@ -24,11 +24,11 @@ namespace OpenGlobe.Scene
             string vs = EmbeddedResources.GetText("OpenGlobe.Scene.Globes.RayCasted.Shaders.GlobeVS.glsl");
 
             ShaderProgram sp = Device.CreateShaderProgram(vs, EmbeddedResources.GetText("OpenGlobe.Scene.Globes.RayCasted.Shaders.GlobeFS.glsl"));
-            _cameraEyeSquared = (Uniform<Vector3S>)sp.Uniforms["u_cameraEyeSquared"];
+            _cameraEyeSquared = (Uniform<Vector3F>)sp.Uniforms["u_cameraEyeSquared"];
             _useAverageDepth = (Uniform<bool>)sp.Uniforms["u_useAverageDepth"];
 
             ShaderProgram solidSP = Device.CreateShaderProgram(vs, EmbeddedResources.GetText("OpenGlobe.Scene.Globes.RayCasted.Shaders.SolidShadedGlobeFS.glsl"));
-            _cameraEyeSquaredSolid = (Uniform<Vector3S>)solidSP.Uniforms["u_cameraEyeSquared"];
+            _cameraEyeSquaredSolid = (Uniform<Vector3F>)solidSP.Uniforms["u_cameraEyeSquared"];
             _useAverageDepthSolid = (Uniform<bool>)solidSP.Uniforms["u_useAverageDepth"];
 
             _drawState = new DrawState(_renderState, sp, null);
@@ -59,8 +59,8 @@ namespace OpenGlobe.Scene
 
                 _renderState.FacetCulling.FrontFaceWindingOrder = mesh.FrontFaceWindingOrder;
 
-                ((Uniform<Vector3S>)_drawState.ShaderProgram.Uniforms["u_globeOneOverRadiiSquared"]).Value = _shape.OneOverRadiiSquared.ToVector3S();
-                ((Uniform<Vector3S>)_drawStateSolid.ShaderProgram.Uniforms["u_globeOneOverRadiiSquared"]).Value = _shape.OneOverRadiiSquared.ToVector3S();
+                ((Uniform<Vector3F>)_drawState.ShaderProgram.Uniforms["u_globeOneOverRadiiSquared"]).Value = _shape.OneOverRadiiSquared.ToVector3F();
+                ((Uniform<Vector3F>)_drawStateSolid.ShaderProgram.Uniforms["u_globeOneOverRadiiSquared"]).Value = _shape.OneOverRadiiSquared.ToVector3F();
 
                 if (_wireframe != null)
                 {
@@ -86,7 +86,7 @@ namespace OpenGlobe.Scene
             if (ShowGlobe)
             {
                 Vector3D eye = sceneState.Camera.Eye;
-                Vector3S cameraEyeSquared = eye.MultiplyComponents(eye).ToVector3S();
+                Vector3F cameraEyeSquared = eye.MultiplyComponents(eye).ToVector3F();
 
                 if (Shade)
                 {
@@ -154,9 +154,9 @@ namespace OpenGlobe.Scene
         #endregion
 
         private readonly DrawState _drawState;
-        private readonly Uniform<Vector3S> _cameraEyeSquared;
+        private readonly Uniform<Vector3F> _cameraEyeSquared;
         private readonly DrawState _drawStateSolid;
-        private readonly Uniform<Vector3S> _cameraEyeSquaredSolid;
+        private readonly Uniform<Vector3F> _cameraEyeSquaredSolid;
 
         private readonly Uniform<bool> _useAverageDepth;
         private readonly Uniform<bool> _useAverageDepthSolid;

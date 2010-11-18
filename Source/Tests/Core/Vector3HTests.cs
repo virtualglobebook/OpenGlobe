@@ -153,10 +153,10 @@ namespace OpenGlobe.Core
 #endif
 
         [Test]
-        public void ToVector3S()
+        public void ToVector3F()
         {
             Vector3H a = new Vector3H(1.0, 2.0, 3.0);
-            Vector3S sA = a.ToVector3S();
+            Vector3F sA = a.ToVector3F();
             Assert.AreEqual(1.0f, sA.X, 1e-7);
             Assert.AreEqual(2.0f, sA.Y, 1e-7);
             Assert.AreEqual(3.0f, sA.Z, 1e-7);

@@ -40,8 +40,8 @@ namespace OpenGlobe.Terrain
             _heightExaggeration = (Uniform<float>)sp.Uniforms["u_heightExaggeration"];
             _minimumHeight = (Uniform<float>)sp.Uniforms["u_minimumHeight"];
             _maximumHeight = (Uniform<float>)sp.Uniforms["u_maximumHeight"];
-            _aabbLowerLeft = (Uniform<Vector3S>)sp.Uniforms["u_aabbLowerLeft"];
-            _aabbUpperRight = (Uniform<Vector3S>)sp.Uniforms["u_aabbUpperRight"];
+            _aabbLowerLeft = (Uniform<Vector3F>)sp.Uniforms["u_aabbLowerLeft"];
+            _aabbUpperRight = (Uniform<Vector3F>)sp.Uniforms["u_aabbUpperRight"];
             _shadingAlgorithm = (Uniform<int>)sp.Uniforms["u_shadingAlgorithm"];
 
             HeightExaggeration = 1;
@@ -145,8 +145,8 @@ namespace OpenGlobe.Terrain
                     _heightExaggeration.Value = value;
                     _minimumHeight.Value = _tileMinimumHeight * value;
                     _maximumHeight.Value = _tileMaximumHeight * value;
-                    _aabbLowerLeft.Value = new Vector3S((float)_tileAABBLowerLeft.X, (float)_tileAABBLowerLeft.Y, (float)(_tileAABBLowerLeft.Z * value));
-                    _aabbUpperRight.Value = new Vector3S((float)_tileAABBUpperRight.X, (float)_tileAABBUpperRight.Y, (float)(_tileAABBUpperRight.Z * value));
+                    _aabbLowerLeft.Value = new Vector3F((float)_tileAABBLowerLeft.X, (float)_tileAABBLowerLeft.Y, (float)(_tileAABBLowerLeft.Z * value));
+                    _aabbUpperRight.Value = new Vector3F((float)_tileAABBUpperRight.X, (float)_tileAABBUpperRight.Y, (float)(_tileAABBUpperRight.Z * value));
 
                     _dirtyVA = true;
                 }
@@ -178,8 +178,8 @@ namespace OpenGlobe.Terrain
         private readonly Uniform<float> _heightExaggeration;
         private readonly Uniform<float> _minimumHeight;
         private readonly Uniform<float> _maximumHeight;
-        private readonly Uniform<Vector3S> _aabbLowerLeft;
-        private readonly Uniform<Vector3S> _aabbUpperRight;
+        private readonly Uniform<Vector3F> _aabbLowerLeft;
+        private readonly Uniform<Vector3F> _aabbUpperRight;
         private readonly Uniform<int> _shadingAlgorithm;
 
         private readonly Vector2I _tileResolution;

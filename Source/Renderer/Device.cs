@@ -227,7 +227,7 @@ namespace OpenGlobe.Renderer
                     //
                     IList<Vector3D> values = ((VertexAttribute<Vector3D>)attribute).Values;
 
-                    Vector3S[] vertices = new Vector3S[2 * values.Count];
+                    Vector3F[] vertices = new Vector3F[2 * values.Count];
 
                     int j = 0;
                     for (int i = 0; i < values.Count; ++i)
@@ -240,11 +240,11 @@ namespace OpenGlobe.Renderer
                     VertexBuffer vertexBuffer = Device.CreateVertexBuffer(usageHint, ArraySizeInBytes.Size(vertices));
                     vertexBuffer.CopyFromSystemMemory(vertices);
 
-                    int stride = 2 * SizeInBytes<Vector3S>.Value;
+                    int stride = 2 * SizeInBytes<Vector3F>.Value;
                     meshBuffers.Attributes[highLocation] =
                         new VertexBufferAttribute(vertexBuffer, ComponentDatatype.Float, 3, false, 0, stride);
                     meshBuffers.Attributes[lowLocation] =
-                        new VertexBufferAttribute(vertexBuffer, ComponentDatatype.Float, 3, false, SizeInBytes<Vector3S>.Value, stride);
+                        new VertexBufferAttribute(vertexBuffer, ComponentDatatype.Float, 3, false, SizeInBytes<Vector3F>.Value, stride);
 
                     ignoreAttributes.Add(emulated.Name + "High");
                     ignoreAttributes.Add(emulated.Name + "Low");
@@ -271,10 +271,10 @@ namespace OpenGlobe.Renderer
                 {
                     IList<Vector3D> values = ((VertexAttribute<Vector3D>)attribute).Values;
 
-                    Vector3S[] valuesArray = new Vector3S[values.Count];
+                    Vector3F[] valuesArray = new Vector3F[values.Count];
                     for (int i = 0; i < values.Count; ++i)
                     {
-                        valuesArray[i] = values[i].ToVector3S();
+                        valuesArray[i] = values[i].ToVector3F();
                     }
 
                     VertexBuffer vertexBuffer = Device.CreateVertexBuffer(usageHint, ArraySizeInBytes.Size(valuesArray));
@@ -319,21 +319,21 @@ namespace OpenGlobe.Renderer
                 }
                 else if (attribute.Datatype == VertexAttributeType.FloatVector2)
                 {
-                    VertexBuffer vertexBuffer = CreateVertexBuffer(((VertexAttribute<Vector2S>)attribute).Values, usageHint);
+                    VertexBuffer vertexBuffer = CreateVertexBuffer(((VertexAttribute<Vector2F>)attribute).Values, usageHint);
 
                     meshBuffers.Attributes[shaderAttribute.Location] =
                         new VertexBufferAttribute(vertexBuffer, ComponentDatatype.Float, 2);
                 }
                 else if (attribute.Datatype == VertexAttributeType.FloatVector3)
                 {
-                    VertexBuffer vertexBuffer = CreateVertexBuffer(((VertexAttribute<Vector3S>)attribute).Values, usageHint);
+                    VertexBuffer vertexBuffer = CreateVertexBuffer(((VertexAttribute<Vector3F>)attribute).Values, usageHint);
 
                     meshBuffers.Attributes[shaderAttribute.Location] =
                         new VertexBufferAttribute(vertexBuffer, ComponentDatatype.Float, 3);
                 }
                 else if (attribute.Datatype == VertexAttributeType.FloatVector4)
                 {
-                    VertexBuffer vertexBuffer = CreateVertexBuffer(((VertexAttribute<Vector4S>)attribute).Values, usageHint);
+                    VertexBuffer vertexBuffer = CreateVertexBuffer(((VertexAttribute<Vector4F>)attribute).Values, usageHint);
 
                     meshBuffers.Attributes[shaderAttribute.Location] =
                         new VertexBufferAttribute(vertexBuffer, ComponentDatatype.Float, 4);

@@ -66,11 +66,11 @@ namespace OpenGlobe.Renderer
         [Test]
         public void RenderTriangle()
         {
-            Vector4S[] positions = new[] 
+            Vector4F[] positions = new[] 
             { 
-                new Vector4S(-0.5f, -0.5f, 0, 1),
-                new Vector4S(0.5f, -0.5f, 0, 1),
-                new Vector4S(0.5f, 0.5f, 0, 1) 
+                new Vector4F(-0.5f, -0.5f, 0, 1),
+                new Vector4F(0.5f, -0.5f, 0, 1),
+                new Vector4F(0.5f, 0.5f, 0, 1) 
             };
 
             ushort[] indices = new ushort[] 
@@ -300,7 +300,7 @@ namespace OpenGlobe.Renderer
         [Test]
         public void RenderNonInterleavedVertexBuffer()
         {
-            Vector4S[] positions = new[] { new Vector4S(0, 0, 0, 1) };
+            Vector4F[] positions = new[] { new Vector4F(0, 0, 0, 1) };
             BlittableRGBA[] colors = new[] { new BlittableRGBA(Color.Red) };
             string vs = 
                 @"#version 330
@@ -351,7 +351,7 @@ namespace OpenGlobe.Renderer
         [StructLayout(LayoutKind.Sequential)]
         public struct InterleavedVertex
         {
-            public Vector4S Position { get; set; }
+            public Vector4F Position { get; set; }
             public BlittableRGBA Color { get; set; }
         }
 
@@ -386,12 +386,12 @@ namespace OpenGlobe.Renderer
             {
                 new InterleavedVertex()
                 {
-                    Position = new Vector4S(0, 0, 0, 1),
+                    Position = new Vector4F(0, 0, 0, 1),
                     Color = new BlittableRGBA(Color.Red)
                 },
                 new InterleavedVertex()
                 {
-                    Position = new Vector4S(0, 0, 0, 1),
+                    Position = new Vector4F(0, 0, 0, 1),
                     Color = new BlittableRGBA(Color.FromArgb(255, 0, 255, 0))
                 }
             };
@@ -402,7 +402,7 @@ namespace OpenGlobe.Renderer
             VertexBuffer vertexBuffer = Device.CreateVertexBuffer(BufferHint.StaticDraw, ArraySizeInBytes.Size(vertices));
             VertexArray va = window.Context.CreateVertexArray();
             {
-                int colorOffset = SizeInBytes<Vector4S>.Value;
+                int colorOffset = SizeInBytes<Vector4F>.Value;
                 vertexBuffer.CopyFromSystemMemory(vertices);
 
                 va.Attributes[sp.VertexAttributes["position"].Location] =

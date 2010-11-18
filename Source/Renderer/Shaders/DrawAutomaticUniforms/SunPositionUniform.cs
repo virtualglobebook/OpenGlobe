@@ -15,18 +15,18 @@ namespace OpenGlobe.Renderer
     {
         public SunPositionUniform(Uniform uniform)
         {
-            _uniform = (Uniform<Vector3S>)uniform;
+            _uniform = (Uniform<Vector3F>)uniform;
         }
 
         #region DrawAutomaticUniform Members
 
         public override void Set(Context context, DrawState drawState, SceneState sceneState)
         {
-            _uniform.Value = sceneState.SunPosition.ToVector3S();
+            _uniform.Value = sceneState.SunPosition.ToVector3F();
         }
 
         #endregion
 
-        private Uniform<Vector3S> _uniform;
+        private Uniform<Vector3F> _uniform;
     }
 }

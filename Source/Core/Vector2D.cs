@@ -193,9 +193,9 @@ namespace OpenGlobe.Core
             return _x.GetHashCode() ^ _y.GetHashCode();
         }
 
-        public Vector2S ToVector2S()
+        public Vector2F ToVector2F()
         {
-            return new Vector2S((float)_x, (float)_y);
+            return new Vector2F((float)_x, (float)_y);
         }
 
         public Vector2H ToVector2H()

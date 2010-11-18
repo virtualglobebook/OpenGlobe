@@ -12,13 +12,13 @@ using OpenTK.Graphics.OpenGL;
 
 namespace OpenGlobe.Renderer.GL3x
 {
-    internal class UniformFloatMatrix44GL3x : Uniform<Matrix4S>, ICleanable
+    internal class UniformFloatMatrix44GL3x : Uniform<Matrix4F>, ICleanable
     {
         internal UniformFloatMatrix44GL3x(string name, int location, ICleanableObserver observer)
             : base(name, UniformType.FloatMatrix44)
         {
             _location = location;
-            _value = new Matrix4S();
+            _value = new Matrix4F();
             _dirty = true;
             _observer = observer;
             _observer.NotifyDirty(this);
@@ -26,7 +26,7 @@ namespace OpenGlobe.Renderer.GL3x
 
         #region Uniform<> Members
 
-        public override Matrix4S Value
+        public override Matrix4F Value
         {
             set
             {
@@ -55,7 +55,7 @@ namespace OpenGlobe.Renderer.GL3x
         #endregion
 
         private int _location;
-        private Matrix4S _value;
+        private Matrix4F _value;
         private bool _dirty;
         private readonly ICleanableObserver _observer;
     }

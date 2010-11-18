@@ -18,7 +18,7 @@ namespace OpenGlobe.Scene
     {
         public ViewportQuadGeometry()
         {
-            _positionBuffer = Device.CreateVertexBuffer(BufferHint.StaticDraw, 4 * SizeInBytes<Vector2S>.Value);
+            _positionBuffer = Device.CreateVertexBuffer(BufferHint.StaticDraw, 4 * SizeInBytes<Vector2F>.Value);
             _textureCoordinatesBuffer = Device.CreateVertexBuffer(BufferHint.StaticDraw, 4 * SizeInBytes<Vector2H>.Value);
         }
 
@@ -46,12 +46,12 @@ namespace OpenGlobe.Scene
                 float right = context.Viewport.Right;
                 float top = context.Viewport.Bottom;
 
-                Vector2S[] positions = new Vector2S[] 
+                Vector2F[] positions = new Vector2F[] 
                 { 
-                    new Vector2S(left, bottom), 
-                    new Vector2S(right, bottom), 
-                    new Vector2S(left, top), 
-                    new Vector2S(right, top)
+                    new Vector2F(left, bottom), 
+                    new Vector2F(right, bottom), 
+                    new Vector2F(left, top), 
+                    new Vector2F(right, top)
                 };
                 _positionBuffer.CopyFromSystemMemory(positions);
 

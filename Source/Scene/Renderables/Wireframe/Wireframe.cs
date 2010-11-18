@@ -50,7 +50,7 @@ namespace OpenGlobe.Scene
             _lineWidth = (Uniform<float>)sp.Uniforms["u_halfLineWidth"];
             Width = 1;
 
-            _colorUniform = (Uniform<Vector3S>)sp.Uniforms["u_color"];
+            _colorUniform = (Uniform<Vector3F>)sp.Uniforms["u_color"];
             Color = Color.Black;
 
             _drawState = new DrawState(renderState, sp, context.CreateVertexArray(mesh, sp.VertexAttributes, BufferHint.StaticDraw));
@@ -75,7 +75,7 @@ namespace OpenGlobe.Scene
             set
             {
                 _color = value;
-                _colorUniform.Value = new Vector3S(_color.R / 255.0f, _color.G / 255.0f, _color.B / 255.0f);
+                _colorUniform.Value = new Vector3F(_color.R / 255.0f, _color.G / 255.0f, _color.B / 255.0f);
             }
         }
 
@@ -111,7 +111,7 @@ namespace OpenGlobe.Scene
         #endregion
 
         private readonly Uniform<float> _lineWidth;
-        private readonly Uniform<Vector3S> _colorUniform;
+        private readonly Uniform<Vector3F> _colorUniform;
         private Color _color;
         private readonly DrawState _drawState;
         private readonly PrimitiveType _primitiveType;

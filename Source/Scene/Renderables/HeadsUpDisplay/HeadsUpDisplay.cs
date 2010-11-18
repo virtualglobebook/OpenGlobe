@@ -33,8 +33,8 @@ namespace OpenGlobe.Scene
                 EmbeddedResources.GetText("OpenGlobe.Scene.Renderables.HeadsUpDisplay.Shaders.HeadsUpDisplayVS.glsl"),
                 EmbeddedResources.GetText("OpenGlobe.Scene.Renderables.HeadsUpDisplay.Shaders.HeadsUpDisplayGS.glsl"),
                 EmbeddedResources.GetText("OpenGlobe.Scene.Renderables.HeadsUpDisplay.Shaders.HeadsUpDisplayFS.glsl"));
-            _colorUniform = (Uniform<Vector3S>)sp.Uniforms["u_color"];
-            _originScaleUniform = (Uniform<Vector2S>)sp.Uniforms["u_originScale"];
+            _colorUniform = (Uniform<Vector3F>)sp.Uniforms["u_color"];
+            _originScaleUniform = (Uniform<Vector2F>)sp.Uniforms["u_originScale"];
 
             _drawState = new DrawState(renderState, sp, null);
 
@@ -47,7 +47,7 @@ namespace OpenGlobe.Scene
         private void CreateVertexArray(Context context)
         {
             // TODO:  Hint per buffer?  One hint?
-            _positionBuffer = Device.CreateVertexBuffer(BufferHint.StaticDraw, SizeInBytes<Vector2S>.Value);
+            _positionBuffer = Device.CreateVertexBuffer(BufferHint.StaticDraw, SizeInBytes<Vector2F>.Value);
 
             VertexBufferAttribute positionAttribute = new VertexBufferAttribute(
                 _positionBuffer, ComponentDatatype.Float, 2);
@@ -63,7 +63,7 @@ namespace OpenGlobe.Scene
                 DisposeVertexArray();
                 CreateVertexArray(context);
 
-                Vector2S[] positions = new Vector2S[] { _position.ToVector2S() };
+                Vector2F[] positions = new Vector2F[] { _position.ToVector2F() };
                 _positionBuffer.CopyFromSystemMemory(positions);
 
                 _positionDirty = false;
@@ -94,7 +94,7 @@ namespace OpenGlobe.Scene
             set
             {
                 _color = value;
-                _colorUniform.Value = new Vector3S(_color.R / 255.0f, _color.G / 255.0f, _color.B / 255.0f);
+                _colorUniform.Value = new Vector3F(_color.R / 255.0f, _color.G / 255.0f, _color.B / 255.0f);
             }
         }
 
@@ -104,7 +104,7 @@ namespace OpenGlobe.Scene
             set
             {
                 _horizontalOrigin = value;
-                _originScaleUniform.Value = new Vector2S(
+                _originScaleUniform.Value = new Vector2F(
                     _originScale[(int)value],
                     _originScaleUniform.Value.Y);
             }
@@ -116,7 +116,7 @@ namespace OpenGlobe.Scene
             set
             {
                 _verticalOrigin = value;
-                _originScaleUniform.Value = new Vector2S(
+                _originScaleUniform.Value = new Vector2F(
                     _originScaleUniform.Value.X,
                     _originScale[(int)value]);
             }
@@ -162,8 +162,8 @@ namespace OpenGlobe.Scene
         }
 
         private readonly DrawState _drawState;
-        private readonly Uniform<Vector3S> _colorUniform;
-        private readonly Uniform<Vector2S> _originScaleUniform;
+        private readonly Uniform<Vector3F> _colorUniform;
+        private readonly Uniform<Vector2F> _originScaleUniform;
         private Color _color;
 
         private Vector2D _position;

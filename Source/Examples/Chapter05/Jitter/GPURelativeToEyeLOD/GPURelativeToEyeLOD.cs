@@ -28,19 +28,19 @@ namespace OpenGlobe.Examples
             _spHigh = Device.CreateShaderProgram(
                 EmbeddedResources.GetText("OpenGlobe.Examples.GPURelativeToEyeLOD.Shaders.HighPrecisionVS.glsl"),
                 EmbeddedResources.GetText("OpenGlobe.Examples.Shaders.FS.glsl"));
-            _cameraEyeHigh = (Uniform<Vector3S>)_spHigh.Uniforms["u_cameraEyeHigh"];
-            _cameraEyeLow = (Uniform<Vector3S>)_spHigh.Uniforms["u_cameraEyeLow"];
-            _modelViewPerspectiveMatrixRelativeToEye = (Uniform<Matrix4S>)(_spHigh.Uniforms["u_modelViewPerspectiveMatrixRelativeToEye"]);
+            _cameraEyeHigh = (Uniform<Vector3F>)_spHigh.Uniforms["u_cameraEyeHigh"];
+            _cameraEyeLow = (Uniform<Vector3F>)_spHigh.Uniforms["u_cameraEyeLow"];
+            _modelViewPerspectiveMatrixRelativeToEye = (Uniform<Matrix4F>)(_spHigh.Uniforms["u_modelViewPerspectiveMatrixRelativeToEye"]);
             _pointSizeHigh = (Uniform<float>)_spHigh.Uniforms["u_pointSize"];
 
             ///////////////////////////////////////////////////////////////////
 
-            Vector3S[] positionsHigh = new Vector3S[positions.Length];
-            Vector3S[] positionsLow = new Vector3S[positions.Length];
+            Vector3F[] positionsHigh = new Vector3F[positions.Length];
+            Vector3F[] positionsLow = new Vector3F[positions.Length];
 
             for (int i = 0; i < positions.Length; ++i)
             {
-                Vector3DToTwoVector3S(positions[i], out positionsHigh[i], out positionsLow[i]);
+                Vector3DToTwoVector3F(positions[i], out positionsHigh[i], out positionsLow[i]);
             }
             _center = positions[6];
 
@@ -92,7 +92,7 @@ namespace OpenGlobe.Examples
             low = (float)(value - high);
         }
 
-        private static void Vector3DToTwoVector3S(Vector3D value, out Vector3S high, out Vector3S low)
+        private static void Vector3DToTwoVector3F(Vector3D value, out Vector3F high, out Vector3F low)
         {
             float highX;
             float highY;
@@ -106,8 +106,8 @@ namespace OpenGlobe.Examples
             DoubleToTwoFloats(value.Y, out highY, out lowY);
             DoubleToTwoFloats(value.Z, out highZ, out lowZ);
 
-            high = new Vector3S(highX, highY, highZ);
-            low = new Vector3S(lowX, lowY, lowZ);
+            high = new Vector3F(highX, highY, highZ);
+            low = new Vector3F(lowX, lowY, lowZ);
         }
 
         private void UpdateHigh(SceneState sceneState)
@@ -118,9 +118,9 @@ namespace OpenGlobe.Examples
             {
                 _eye = eye;
 
-                Vector3S eyeHigh;
-                Vector3S eyeLow;
-                Vector3DToTwoVector3S(eye, out eyeHigh, out eyeLow);
+                Vector3F eyeHigh;
+                Vector3F eyeLow;
+                Vector3DToTwoVector3F(eye, out eyeHigh, out eyeLow);
                 _cameraEyeHigh.Value = eyeHigh;
                 _cameraEyeLow.Value = eyeLow;
 
@@ -132,7 +132,7 @@ namespace OpenGlobe.Examples
                     m.Column0Row3, m.Column1Row3, m.Column2Row3, m.Column3Row3);
 
                 _modelViewPerspectiveMatrixRelativeToEye.Value =
-                    (sceneState.PerspectiveMatrix * mv).ToMatrix4S();
+                    (sceneState.PerspectiveMatrix * mv).ToMatrix4F();
             }
 
             _pointSizeHigh.Value = (float)(8.0 * sceneState.HighResolutionSnapScale);
@@ -192,9 +192,9 @@ namespace OpenGlobe.Examples
 
         private readonly VertexArray _vaHigh;
         private readonly ShaderProgram _spHigh;
-        private readonly Uniform<Vector3S> _cameraEyeHigh;
-        private readonly Uniform<Vector3S> _cameraEyeLow;
-        private readonly Uniform<Matrix4S> _modelViewPerspectiveMatrixRelativeToEye;
+        private readonly Uniform<Vector3F> _cameraEyeHigh;
+        private readonly Uniform<Vector3F> _cameraEyeLow;
+        private readonly Uniform<Matrix4F> _modelViewPerspectiveMatrixRelativeToEye;
         private readonly Uniform<float> _pointSizeHigh;
         private readonly DrawState _drawStateHigh;
 

@@ -58,7 +58,7 @@ namespace OpenGlobe.Scene
         private void CreateVertexArray(Context context)
         {
             // TODO:  Hint per buffer?  One hint?
-            _positionBuffer = Device.CreateVertexBuffer(BufferHint.StaticDraw, _billboards.Count * SizeInBytes<Vector3S>.Value);
+            _positionBuffer = Device.CreateVertexBuffer(BufferHint.StaticDraw, _billboards.Count * SizeInBytes<Vector3F>.Value);
             _colorBuffer = Device.CreateVertexBuffer(BufferHint.StaticDraw, _billboards.Count * SizeInBytes<BlittableRGBA>.Value);
             _originBuffer = Device.CreateVertexBuffer(BufferHint.StaticDraw, _billboards.Count);
             _pixelOffsetBuffer = Device.CreateVertexBuffer(BufferHint.StaticDraw, _billboards.Count * SizeInBytes<Vector2H>.Value);
@@ -118,7 +118,7 @@ namespace OpenGlobe.Scene
                 //
                 // Write vertex buffers
                 //
-                Vector3S[] positions = new Vector3S[_billboards.Count];
+                Vector3F[] positions = new Vector3F[_billboards.Count];
                 Vector4H[] textureCoordinates = new Vector4H[_billboards.Count];
                 BlittableRGBA[] colors = new BlittableRGBA[_billboards.Count];
                 byte[] origins = new byte[_billboards.Count];
@@ -128,7 +128,7 @@ namespace OpenGlobe.Scene
                 {
                     Billboard b = _billboards[i];
 
-                    positions[i] = b.Position.ToVector3S();
+                    positions[i] = b.Position.ToVector3F();
                     textureCoordinates[i] = new Vector4H(
                         b.TextureCoordinates.LowerLeft.X, b.TextureCoordinates.LowerLeft.Y,
                         b.TextureCoordinates.UpperRight.X, b.TextureCoordinates.UpperRight.Y);
@@ -151,7 +151,7 @@ namespace OpenGlobe.Scene
             // PERFORMANCE:  Map buffer range
             // PERFORMANCE:  Round robin multiple buffers
 
-            Vector3S[] positions = new Vector3S[_dirtyBillboards.Count];
+            Vector3F[] positions = new Vector3F[_dirtyBillboards.Count];
             Vector4H[] textureCoordinates = new Vector4H[_dirtyBillboards.Count];
             BlittableRGBA[] colors = new BlittableRGBA[_dirtyBillboards.Count];
             byte[] origins = new byte[_dirtyBillboards.Count];
@@ -173,7 +173,7 @@ namespace OpenGlobe.Scene
                     length = 0;
                 }
 
-                positions[length] = b.Position.ToVector3S();
+                positions[length] = b.Position.ToVector3F();
                 textureCoordinates[length] = new Vector4H(
                     b.TextureCoordinates.LowerLeft.X, b.TextureCoordinates.LowerLeft.Y,
                     b.TextureCoordinates.UpperRight.X, b.TextureCoordinates.UpperRight.Y);
@@ -191,7 +191,7 @@ namespace OpenGlobe.Scene
         }
 
         private void CopyBillboardsFromSystemMemory(
-            Vector3S[] positions,
+            Vector3F[] positions,
             Vector4H[] textureCoordinates,
             BlittableRGBA[] colors,
             byte[] origins,
@@ -200,8 +200,8 @@ namespace OpenGlobe.Scene
             int length)
         {
             _positionBuffer.CopyFromSystemMemory(positions,
-                bufferOffset * SizeInBytes<Vector3S>.Value,
-                length * SizeInBytes<Vector3S>.Value);
+                bufferOffset * SizeInBytes<Vector3F>.Value,
+                length * SizeInBytes<Vector3F>.Value);
             _textureCoordinatesBuffer.CopyFromSystemMemory(textureCoordinates,
                 bufferOffset * SizeInBytes<Vector4H>.Value,
                 length * SizeInBytes<Vector4H>.Value);

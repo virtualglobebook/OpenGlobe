@@ -51,7 +51,7 @@ namespace OpenGlobe
 
         public static VertexArray CreateVertexArray(Context context, int positionLocation)
         {
-            Vector4S[] positions = new[] { new Vector4S(0, 0, 0, 1) };
+            Vector4F[] positions = new[] { new Vector4F(0, 0, 0, 1) };
             VertexBuffer positionsBuffer = Device.CreateVertexBuffer(BufferHint.StaticDraw, ArraySizeInBytes.Size(positions));
             positionsBuffer.CopyFromSystemMemory(positions);
             

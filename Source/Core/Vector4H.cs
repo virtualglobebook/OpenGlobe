@@ -168,9 +168,9 @@ namespace OpenGlobe.Core
             return new Vector4D(_x, _y, _z, _w);
         }
 
-        public Vector4S ToVector4S()
+        public Vector4F ToVector4F()
         {
-            return new Vector4S(_x, _y, _z, _w);
+            return new Vector4F(_x, _y, _z, _w);
         }
 
         public Vector4I ToVector4I()

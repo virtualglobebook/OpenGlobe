@@ -270,9 +270,9 @@ namespace OpenGlobe.Core
             return _x.GetHashCode() ^ _y.GetHashCode() ^ _z.GetHashCode() ^ _w.GetHashCode();
         }
 
-        public Vector4S ToVector4S()
+        public Vector4F ToVector4F()
         {
-            return new Vector4S((float)_x, (float)_y, (float)_z, (float)_w);
+            return new Vector4F((float)_x, (float)_y, (float)_z, (float)_w);
         }
 
         public Vector4I ToVector4I()

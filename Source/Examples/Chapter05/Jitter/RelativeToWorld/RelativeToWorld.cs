@@ -35,7 +35,7 @@ namespace OpenGlobe.Examples
 
             for (int i = 0; i < positions.Length; ++i)
             {
-                positionsAttribute.Values.Add(positions[i].ToVector3S());
+                positionsAttribute.Values.Add(positions[i].ToVector3F());
             }
 
             for (int i = 0; i < colors.Length; ++i)

@@ -15,7 +15,7 @@ namespace OpenGlobe.Renderer
     {
         public ViewportTransformationMatrixUniform(Uniform uniform)
         {
-            _uniform = (Uniform<Matrix4S>)uniform;
+            _uniform = (Uniform<Matrix4F>)uniform;
         }
 
         #region DrawAutomaticUniform Members
@@ -23,11 +23,11 @@ namespace OpenGlobe.Renderer
         public override void Set(Context context, DrawState drawState, SceneState sceneState)
         {
             _uniform.Value = sceneState.ComputeViewportTransformationMatrix(context.Viewport,
-                drawState.RenderState.DepthRange.Near, drawState.RenderState.DepthRange.Far).ToMatrix4S();
+                drawState.RenderState.DepthRange.Near, drawState.RenderState.DepthRange.Far).ToMatrix4F();
         }
 
         #endregion
 
-        private Uniform<Matrix4S> _uniform;
+        private Uniform<Matrix4F> _uniform;
     }
 }
