@@ -6,7 +6,6 @@
 // See License.txt or http://www.boost.org/LICENSE_1_0.txt.
 //
 
-//in vec3 normalFS;
 in vec2 fineUvFS;
 in vec2 coarseUvFS;
 in vec3 positionToLightFS;
@@ -20,12 +19,16 @@ uniform sampler2D og_texture3;    // coarser normal map
 
 uniform bool u_showBlendRegions;
 
-void main()
+vec3 ComputeNormal()
 {
     vec3 fineNormal = normalize(texture(og_texture2, fineUvFS).rgb);
 	vec3 coarseNormal = normalize(texture(og_texture3, coarseUvFS).rgb);
-	vec3 normal = normalize(mix(fineNormal, coarseNormal, alphaFS));
+	return normalize(mix(fineNormal, coarseNormal, alphaFS));
+}
 
+void main()
+{
+    vec3 normal = ComputeNormal();
     vec3 positionToLight = normalize(positionToLightFS);
 
 	float diffuse = og_diffuseSpecularAmbientShininess.x * max(dot(positionToLight, normal), 0.0);

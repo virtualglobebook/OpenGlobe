@@ -72,6 +72,7 @@ namespace OpenGlobe.Scene.Terrain
                 1, 2 * _fieldBlockPosts - 1);
             _offsetStripVertical = context.CreateVertexArray(offsetStripVerticalMesh, _shaderProgram.VertexAttributes, BufferHint.StaticDraw);
 
+            // These finest offset strips are not necessary... use the horizontal and vertical fixups instead.
             Mesh finestOffsetStripHorizontalMesh = RectangleTessellator.Compute(
                 new RectangleD(new Vector2D(0.0, 0.0), new Vector2D(2 * _fieldBlockPosts, 2.0)),
                 2 * _fieldBlockPosts, 2);

@@ -8,7 +8,6 @@
 
 in vec2 position;
 
-//out vec3 normalFS;
 out vec2 fineUvFS;
 out vec2 coarseUvFS;
 out vec3 positionToLightFS;
@@ -31,10 +30,8 @@ uniform bool u_useBlendRegions;
 uniform sampler2D og_texture0;    // finer height map
 uniform sampler2D og_texture1;    // coarser height map
 
-void main()
+float SampleHeight(vec2 levelPos)
 {
-	vec2 levelPos = position + u_patchOriginInClippedLevel;
-
 	fineUvFS = (levelPos + u_fineTextureOrigin) * u_oneOverClipmapSize;
 	coarseUvFS = (levelPos * 0.5 + u_fineLevelOriginInCoarse) * u_oneOverClipmapSize;
 
@@ -50,8 +47,14 @@ void main()
 
 	float fineHeight = texture(og_texture0, fineUvFS).r;
 	float coarseHeight = texture(og_texture1, coarseUvFS).r;
-	float height = mix(fineHeight, coarseHeight, alphaFS) * u_heightExaggeration;
+	return mix(fineHeight, coarseHeight, alphaFS) * u_heightExaggeration;
+}
 
+void main()
+{
+	vec2 levelPos = position + u_patchOriginInClippedLevel;
+
+    float height = SampleHeight(levelPos);
 	vec2 worldPos = levelPos * u_levelScaleFactor * u_levelZeroWorldScaleFactor + u_levelOffsetFromWorldOrigin;
 	vec3 displacedPosition = vec3(worldPos, height);
 
