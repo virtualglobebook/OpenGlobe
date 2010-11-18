@@ -45,7 +45,7 @@
     <Compile Include="Cameras\CameraFly.cs" />
     <Compile Include="Cameras\CameraLookAtPoint.cs" />
     <Compile Include="Terrain\ChunkedTerrain.cs" />
-    <Compile Include="Terrain\ChunkTerrainTree.cs" />
+    <Compile Include="Terrain\ChunkedTerrainTree.cs" />
     <Compile Include="Terrain\ClipmapUpdate.cs" />
     <Compile Include="Terrain\ClipmapUpdater.cs" />
     <Compile Include="Terrain\PlaneClipmapTerrain.cs" />
