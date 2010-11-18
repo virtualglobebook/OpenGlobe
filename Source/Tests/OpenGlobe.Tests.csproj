@@ -76,7 +76,7 @@
     <Compile Include="Core\Vector2DTests.cs" />
     <Compile Include="Core\Vector2HTests.cs" />
     <Compile Include="Core\Vector2ITests.cs" />
-    <Compile Include="Core\Vector2STests.cs">
+    <Compile Include="Core\Vector2FTests.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Core\Vector3BTests.cs" />
@@ -87,7 +87,7 @@
     <Compile Include="Core\Vector4DTests.cs" />
     <Compile Include="Core\Vector4HTests.cs" />
     <Compile Include="Core\Vector4ITests.cs" />
-    <Compile Include="Core\Vector4STests.cs" />
+    <Compile Include="Core\Vector4FTests.cs" />
     <Compile Include="IntervalTests.cs" />
     <Compile Include="GraphicsAssert.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -117,7 +117,7 @@
     <Compile Include="Scene\Terrain\CreateMipmapTiles.cs" />
     <Compile Include="Scene\Terrain\WorldWindTerrainSourceTest.cs" />
     <Compile Include="TestUtility.cs" />
-    <Compile Include="Core\Vector3STests.cs" />
+    <Compile Include="Core\Vector3FTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Core\OpenGlobe.Core.csproj">

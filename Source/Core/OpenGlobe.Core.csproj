@@ -73,11 +73,11 @@
     <Compile Include="Matrices\Matrix32.cs" />
     <Compile Include="Matrices\Matrix34.cs" />
     <Compile Include="Matrices\Matrix3D.cs" />
-    <Compile Include="Matrices\Matrix3S.cs" />
+    <Compile Include="Matrices\Matrix3F.cs" />
     <Compile Include="Matrices\Matrix42.cs" />
     <Compile Include="Matrices\Matrix43.cs" />
     <Compile Include="Matrices\Matrix4D.cs" />
-    <Compile Include="Matrices\Matrix4S.cs" />
+    <Compile Include="Matrices\Matrix4F.cs" />
     <Compile Include="MessageQueue.cs" />
     <Compile Include="MessageQueueEventArgs.cs" />
     <Compile Include="Polygons\EarClipping.cs" />
@@ -104,19 +104,19 @@
     <Compile Include="Utility.cs" />
     <Compile Include="Vector2B.cs" />
     <Compile Include="Vector2D.cs" />
+    <Compile Include="Vector2F.cs" />
     <Compile Include="Vector2H.cs" />
     <Compile Include="Vector2I.cs" />
-    <Compile Include="Vector2S.cs" />
     <Compile Include="Vector3B.cs" />
     <Compile Include="Vector3D.cs" />
+    <Compile Include="Vector3F.cs" />
     <Compile Include="Vector3H.cs" />
     <Compile Include="Vector3I.cs" />
-    <Compile Include="Vector3S.cs" />
     <Compile Include="Vector4B.cs" />
     <Compile Include="Vector4D.cs" />
+    <Compile Include="Vector4F.cs" />
     <Compile Include="Vector4H.cs" />
     <Compile Include="Vector4I.cs" />
-    <Compile Include="Vector4S.cs" />
     <Compile Include="EmulatedVector3D.cs" />
   </ItemGroup>
   <ItemGroup>
