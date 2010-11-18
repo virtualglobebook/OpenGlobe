@@ -16,14 +16,14 @@ namespace OpenGlobe.Core
     /// <summary>
     /// 3x3 matrix - 3 columns and 3 rows.
     /// </summary>
-    public class Matrix3S
+    public class Matrix3F
     {
-        public Matrix3S()
+        public Matrix3F()
         {
             _values = new float[NumberOfComponents];
         }
 
-        public Matrix3S(float value)
+        public Matrix3F(float value)
         {
             _values = new float[] 
             { 
@@ -33,7 +33,7 @@ namespace OpenGlobe.Core
             };
         }
 
-        public Matrix3S(
+        public Matrix3F(
             float column0row0, float column1row0, float column2row0,
             float column0row1, float column1row1, float column2row1,
             float column0row2, float column1row2, float column2row2)
@@ -63,9 +63,9 @@ namespace OpenGlobe.Core
         public float Column2Row1 { get { return _values[7]; } }
         public float Column2Row2 { get { return _values[8]; } }
 
-        public bool Equals(Matrix3S other)
+        public bool Equals(Matrix3F other)
         {
-            if (Matrix3S.ReferenceEquals(other, null))
+            if (Matrix3F.ReferenceEquals(other, null))
             {
                 return false;
             }
@@ -81,21 +81,21 @@ namespace OpenGlobe.Core
             return true;
         }
 
-        public static bool operator ==(Matrix3S left, Matrix3S right)
+        public static bool operator ==(Matrix3F left, Matrix3F right)
         {
             return left.Equals(right);
         }
 
-        public static bool operator !=(Matrix3S left, Matrix3S right)
+        public static bool operator !=(Matrix3F left, Matrix3F right)
         {
             return !left.Equals(right);
         }
 
         public override bool Equals(object obj)
         {
-            if (obj is Matrix3S)
+            if (obj is Matrix3F)
             {
-                return Equals((Matrix3S)obj);
+                return Equals((Matrix3F)obj);
             }
             return false;
         }
@@ -127,7 +127,7 @@ namespace OpenGlobe.Core
         /// </summary>
         public float[] ReadOnlyColumnMajorValues { get { return _values; } }
 
-        public static readonly Matrix3S Identity = new Matrix3S(
+        public static readonly Matrix3F Identity = new Matrix3F(
             1.0f, 0.0f, 0.0f,
             0.0f, 1.0f, 0.0f,
             0.0f, 0.0f, 1.0f);

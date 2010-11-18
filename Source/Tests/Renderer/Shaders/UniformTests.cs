@@ -322,14 +322,14 @@ namespace OpenGlobe.Renderer
             using (ShaderProgram sp = Device.CreateShaderProgram(ShaderSources.PassThroughVertexShader(), fs))
             using (VertexArray va = TestUtility.CreateVertexArray(window.Context, sp.VertexAttributes["position"].Location))
             {
-                Matrix3S m3 = new Matrix3S(
+                Matrix3F m3 = new Matrix3F(
                         0.0f, 0.0f, 1.0f,
                         1.0f, 0.0f, 0.0f,
                         0.0f, 0.0f, 0.0f);
-                Uniform<Matrix3S> exampleMat3 = (Uniform<Matrix3S>)sp.Uniforms["exampleMat3"];
+                Uniform<Matrix3F> exampleMat3 = (Uniform<Matrix3F>)sp.Uniforms["exampleMat3"];
                 Assert.AreEqual("exampleMat3", exampleMat3.Name);
                 Assert.AreEqual(UniformType.FloatMatrix33, exampleMat3.Datatype);
-                Assert.AreEqual(new Matrix3S(), exampleMat3.Value);
+                Assert.AreEqual(new Matrix3F(), exampleMat3.Value);
                 exampleMat3.Value = m3;
                 Assert.AreEqual(m3, exampleMat3.Value);
 
