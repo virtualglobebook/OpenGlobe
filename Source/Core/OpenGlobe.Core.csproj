@@ -117,6 +117,7 @@
     <Compile Include="Vector4H.cs" />
     <Compile Include="Vector4I.cs" />
     <Compile Include="Vector4S.cs" />
+    <Compile Include="EmulatedVector3D.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

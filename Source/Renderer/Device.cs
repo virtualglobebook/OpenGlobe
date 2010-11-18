@@ -232,10 +232,9 @@ namespace OpenGlobe.Renderer
                     int j = 0;
                     for (int i = 0; i < values.Count; ++i)
                     {
-                        Vector3D value = values[i];
-                        Vector3S floatValue = value.ToVector3S();
-                        vertices[j++] = floatValue;
-                        vertices[j++] = (value - floatValue.ToVector3D()).ToVector3S();
+                        EmulatedVector3D v = new EmulatedVector3D(values[i]);
+                        vertices[j++] = v.High;
+                        vertices[j++] = v.Low;
                     }
 
                     VertexBuffer vertexBuffer = Device.CreateVertexBuffer(usageHint, ArraySizeInBytes.Size(vertices));

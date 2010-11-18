@@ -90,34 +90,24 @@ namespace OpenGlobe.Scene
             YAxis = Vector3D.UnitY;
         }
 
-        private void DoubleToTwoFloats(Vector3D value, out Vector3S high, out Vector3S low)
-        {
-            Vector3S floatValue = value.ToVector3S();
-            high = floatValue;
-            low = (value - floatValue.ToVector3D()).ToVector3S();
-        }
-
         private void Update()
         {
             if (_dirty)
             {
+                EmulatedVector3D p0 = new EmulatedVector3D(_origin - _xAxis - _yAxis);
+                EmulatedVector3D p1 = new EmulatedVector3D(_origin + _xAxis - _yAxis);
+                EmulatedVector3D p2 = new EmulatedVector3D(_origin + _xAxis + _yAxis);
+                EmulatedVector3D p3 = new EmulatedVector3D(_origin - _xAxis + _yAxis);
+
                 Vector3S[] positions = new Vector3S[8];
-
-                Vector3S high;
-                Vector3S low;
-
-                DoubleToTwoFloats(_origin - _xAxis - _yAxis, out high, out low);
-                positions[0] = high;
-                positions[1] = low;
-                DoubleToTwoFloats(_origin + _xAxis - _yAxis, out high, out low);
-                positions[2] = high;
-                positions[3] = low;
-                DoubleToTwoFloats(_origin + _xAxis + _yAxis, out high, out low);
-                positions[4] = high;
-                positions[5] = low;
-                DoubleToTwoFloats(_origin - _xAxis + _yAxis, out high, out low);
-                positions[6] = high;
-                positions[7] = low;
+                positions[0] = p0.High;
+                positions[1] = p0.Low;
+                positions[2] = p1.High;
+                positions[3] = p1.Low;
+                positions[4] = p2.High;
+                positions[5] = p2.Low;
+                positions[6] = p3.High;
+                positions[7] = p3.Low;
 
                 _positionBuffer.CopyFromSystemMemory(positions);
 

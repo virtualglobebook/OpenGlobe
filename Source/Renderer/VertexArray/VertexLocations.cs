@@ -16,10 +16,13 @@ namespace OpenGlobe.Renderer
         public const int TextureCoordinate = 2;
         public const int Color = 3;
 
-        //public const int PositionHigh = 4;
-        //public const int PositionLow = 5;
-
-        public const int PositionHigh = 1;
-        public const int PositionLow = 2;
+        //
+        // We would prefer these not overlap Position and Normal above.
+        // There is a potential bug on ATI:
+        //
+        // http://www.opengl.org/discussion_boards/ubbthreads.php?ubb=showflat&Number=286280
+        //
+        public const int PositionHigh = 0;
+        public const int PositionLow = 1;
     }
 }
