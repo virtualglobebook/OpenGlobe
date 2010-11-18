@@ -15,5 +15,11 @@ namespace OpenGlobe.Renderer
         public const int Normal = 1;
         public const int TextureCoordinate = 2;
         public const int Color = 3;
+
+        //public const int PositionHigh = 4;
+        //public const int PositionLow = 5;
+
+        public const int PositionHigh = 1;
+        public const int PositionLow = 2;
     }
 }

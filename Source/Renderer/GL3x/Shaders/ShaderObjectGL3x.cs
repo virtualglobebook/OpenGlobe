@@ -27,7 +27,9 @@ namespace OpenGlobe.Renderer.GL3x
                 "#define og_normalVertexLocation            " + VertexLocations.Normal.ToString(NumberFormatInfo.InvariantInfo) + " \n" +
                 "#define og_textureCoordinateVertexLocation " + VertexLocations.TextureCoordinate.ToString(NumberFormatInfo.InvariantInfo) + " \n" +
                 "#define og_colorVertexLocation             " + VertexLocations.Color.ToString(NumberFormatInfo.InvariantInfo) + " \n" +
-               
+                "#define og_positionHighVertexLocation      " + VertexLocations.PositionHigh.ToString(NumberFormatInfo.InvariantInfo) + " \n" +
+                "#define og_positionLowVertexLocation       " + VertexLocations.PositionLow.ToString(NumberFormatInfo.InvariantInfo) + " \n" +
+
                 "const float og_E =                " + Math.E.ToString(NumberFormatInfo.InvariantInfo) + "; \n" +
                 "const float og_pi =               " + Math.PI.ToString(NumberFormatInfo.InvariantInfo) + "; \n" +
                 "const float og_oneOverPi =        " + Trig.OneOverPi.ToString(NumberFormatInfo.InvariantInfo) + "; \n" +

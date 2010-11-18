@@ -59,7 +59,7 @@ namespace OpenGlobe.Scene
 
             ///////////////////////////////////////////////////////////////////
 
-            _positionBuffer = Device.CreateVertexBuffer(BufferHint.StaticDraw, 4 * SizeInBytes<Vector3S>.Value);
+            _positionBuffer = Device.CreateVertexBuffer(BufferHint.StaticDraw, 2 * 4 * SizeInBytes<Vector3S>.Value);
 
             ushort[] indices = new ushort[] 
             { 
@@ -69,10 +69,12 @@ namespace OpenGlobe.Scene
             IndexBuffer indexBuffer = Device.CreateIndexBuffer(BufferHint.StaticDraw, indices.Length * sizeof(ushort));
             indexBuffer.CopyFromSystemMemory(indices);
 
-            VertexBufferAttribute positionAttribute = new VertexBufferAttribute(
-                _positionBuffer, ComponentDatatype.Float, 3);
+            int stride = 2 * SizeInBytes<Vector3S>.Value;
             _va = context.CreateVertexArray();
-            _va.Attributes[lineSP.VertexAttributes["position"].Location] = positionAttribute;
+            _va.Attributes[VertexLocations.PositionHigh] =
+                new VertexBufferAttribute(_positionBuffer, ComponentDatatype.Float, 3, false, 0, stride);
+            _va.Attributes[VertexLocations.PositionLow] =
+                new VertexBufferAttribute(_positionBuffer, ComponentDatatype.Float, 3, false, SizeInBytes<Vector3S>.Value, stride);
             _va.IndexBuffer = indexBuffer;
 
             ShowOutline = true;
@@ -88,17 +90,35 @@ namespace OpenGlobe.Scene
             YAxis = Vector3D.UnitY;
         }
 
+        private void DoubleToTwoFloats(Vector3D value, out Vector3S high, out Vector3S low)
+        {
+            Vector3S floatValue = value.ToVector3S();
+            high = floatValue;
+            low = (value - floatValue.ToVector3D()).ToVector3S();
+        }
+
         private void Update()
         {
             if (_dirty)
             {
-                Vector3S[] positions = new Vector3S[] 
-                { 
-                    (_origin - _xAxis - _yAxis).ToVector3S(), 
-                    (_origin + _xAxis - _yAxis).ToVector3S(), 
-                    (_origin + _xAxis + _yAxis).ToVector3S(), 
-                    (_origin - _xAxis + _yAxis).ToVector3S()
-                };
+                Vector3S[] positions = new Vector3S[8];
+
+                Vector3S high;
+                Vector3S low;
+
+                DoubleToTwoFloats(_origin - _xAxis - _yAxis, out high, out low);
+                positions[0] = high;
+                positions[1] = low;
+                DoubleToTwoFloats(_origin + _xAxis - _yAxis, out high, out low);
+                positions[2] = high;
+                positions[3] = low;
+                DoubleToTwoFloats(_origin + _xAxis + _yAxis, out high, out low);
+                positions[4] = high;
+                positions[5] = low;
+                DoubleToTwoFloats(_origin - _xAxis + _yAxis, out high, out low);
+                positions[6] = high;
+                positions[7] = low;
+
                 _positionBuffer.CopyFromSystemMemory(positions);
 
                 _dirty = false;
@@ -117,8 +137,8 @@ namespace OpenGlobe.Scene
                 //
                 // Pass 1:  Outline
                 //
-                _lineFillDistance.Value = (float)(OutlineWidth * 0.5 * sceneState.HighResolutionSnapScale);
-                context.Draw(PrimitiveType.LineLoop, 0, 4, _drawStateLine, sceneState);
+//                _lineFillDistance.Value = (float)(OutlineWidth * 0.5 * sceneState.HighResolutionSnapScale);
+//                context.Draw(PrimitiveType.LineLoop, 0, 4, _drawStateLine, sceneState);
             }
 
             if (ShowFill)

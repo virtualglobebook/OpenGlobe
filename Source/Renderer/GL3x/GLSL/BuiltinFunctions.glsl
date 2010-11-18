@@ -34,6 +34,15 @@ vec3 ogEmulatedDoubleSubtract(
 vec4 ogTransformEmulatedDoublePosition(
 	vec3 positionHigh,  vec3 positionLow, 
 	vec3 cameraEyeHigh, vec3 cameraEyeLow,
+	mat4 modelViewPerspectiveMatrixRelativeToEye)
+{
+    vec3 positionEye = ogEmulatedDoubleSubtract(positionHigh, positionLow, cameraEyeHigh, cameraEyeLow);
+    return modelViewPerspectiveMatrixRelativeToEye * vec4(positionEye, 1.0);
+}
+
+vec4 ogTransformEmulatedDoublePosition(
+	vec3 positionHigh,  vec3 positionLow, 
+	vec3 cameraEyeHigh, vec3 cameraEyeLow,
 	mat4 modelViewPerspectiveMatrixRelativeToEye,
 	out vec3 positionInModelCoordinates)
 {
