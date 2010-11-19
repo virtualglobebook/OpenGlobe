@@ -52,6 +52,31 @@ namespace OpenGlobe.Scene.Terrain
             set { _heightExaggeration.Value = value; }
         }
 
+        public void ApplyNewData(Context context, ClipmapLevel leve)
+        {
+
+        }
+
+        public void Update2(Context context, ClipmapLevel level, ClipmapUpdate update)
+        {
+            RasterTerrainTileRegion[] tileRegions = level.Terrain.GetTilesInExtent(update.West, update.South, update.East, update.North);
+            foreach (RasterTerrainTileRegion region in tileRegions)
+            {
+                UpdateTile(context, level, update, region);
+            }
+        }
+
+        private void UpdateTile(Context context, ClipmapLevel level, ClipmapUpdate update, RasterTerrainTileRegion region)
+        {
+            //if (region.Tile.IsLoaded)
+            //{
+            //}
+            //else
+            //{
+
+            //}
+        }
+
         public void Update(Context context, ClipmapLevel level, ClipmapUpdate update)
         {
             int clipmapSize = level.NextExtent.East - level.NextExtent.West + 1;

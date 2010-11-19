@@ -28,5 +28,12 @@ namespace OpenGlobe.Scene.Terrain
 
         public abstract double IndexToLongitude(int longitudeIndex);
         public abstract double IndexToLatitude(int latitudeIndex);
+
+        public abstract RasterTerrainSource Source { get; }
+
+        internal RasterTerrainTileRegion[] GetTilesInExtent(int west, int south, int east, int north)
+        {
+            return null;
+        }
     }
 }

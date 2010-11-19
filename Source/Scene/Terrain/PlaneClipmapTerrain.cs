@@ -242,7 +242,7 @@ namespace OpenGlobe.Scene.Terrain
                 newOriginY += _clipmapPosts;
 
             if (level.CurrentExtent.West > level.CurrentExtent.East || // initial update
-                width >= _clipmapPosts || height >= _clipmapPosts)
+                width >= _clipmapPosts || height >= _clipmapPosts) // complete update
             {
                 // Initial or complete update.
                 width = _clipmapPosts;
@@ -567,22 +567,6 @@ namespace OpenGlobe.Scene.Terrain
             Vector3D northeastCartesian = Ellipsoid.ScaledWgs84.ToVector3D(northeast);
 
             return (northeastCartesian - southwestCartesian).Magnitude;
-        }
-
-        private class IndexOrigin
-        {
-            public int TerrainWest;
-            public int TerrainSouth;
-            public int TerrainEast;
-            public int TerrainNorth;
-
-            public void CopyTo(IndexOrigin other)
-            {
-                other.TerrainWest = TerrainWest;
-                other.TerrainSouth = TerrainSouth;
-                other.TerrainEast = TerrainEast;
-                other.TerrainNorth = TerrainNorth;
-            }
         }
 
         private RasterTerrainSource _terrainSource;

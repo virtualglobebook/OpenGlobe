@@ -25,6 +25,11 @@ namespace OpenGlobe.Scene.Terrain
             _postDeltaLatitude = (extent.North - extent.South) / _latitudePosts;
         }
 
+        public override RasterTerrainSource Source
+        {
+            get { return _terrainSource; }
+        }
+
         public override double PostDeltaLongitude
         {
             get { return _postDeltaLongitude; }
