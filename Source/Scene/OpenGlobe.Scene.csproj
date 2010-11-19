@@ -83,6 +83,9 @@
     <Compile Include="Terrain\RasterTerrainLevel.cs" />
     <Compile Include="Terrain\RasterTerrainLevelCollection.cs" />
     <Compile Include="Terrain\RasterTerrainSource.cs" />
+    <Compile Include="Terrain\RasterTerrainTile.cs" />
+    <Compile Include="Terrain\RasterTerrainTileIdentifier.cs" />
+    <Compile Include="Terrain\RasterTerrainTileStatus.cs" />
     <Compile Include="Terrain\RayCastedTerrainTile.cs" />
     <Compile Include="Terrain\SimpleTerrainLevel.cs" />
     <Compile Include="Terrain\SimpleTerrainSource.cs" />
