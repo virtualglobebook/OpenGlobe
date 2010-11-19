@@ -5,7 +5,7 @@ using OpenGlobe.Renderer;
 
 namespace OpenGlobe.Scene.Terrain
 {
-    public class ClipmapUpdater : IDisposable
+    internal class ClipmapUpdater : IDisposable
     {
         public ClipmapUpdater(Context context, int maxUpdate)
         {
@@ -52,6 +52,62 @@ namespace OpenGlobe.Scene.Terrain
             set { _heightExaggeration.Value = value; }
         }
 
+        public void Update(Context context, ClipmapLevel level, ClipmapUpdate update)
+        {
+            int clipmapSize = level.NextExtent.East - level.NextExtent.West + 1;
+
+            int west = (level.OriginInTextures.X + (update.West - level.NextExtent.West)) % clipmapSize;
+            int east = (level.OriginInTextures.X + (update.East - level.NextExtent.West)) % clipmapSize;
+            int south = (level.OriginInTextures.Y + (update.South - level.NextExtent.South)) % clipmapSize;
+            int north = (level.OriginInTextures.Y + (update.North - level.NextExtent.South)) % clipmapSize;
+
+            // We can't cross the texture boundary with one write, so split this
+            // into two updates if necessary.
+            if (east < west)
+            {
+                ClipmapUpdate leftUpdate = new ClipmapUpdate(
+                    level,
+                    update.West,
+                    update.South,
+                    level.NextExtent.West + (clipmapSize - level.OriginInTextures.X - 1),
+                    update.North);
+                Update(context, level, leftUpdate);
+
+                ClipmapUpdate rightUpdate = new ClipmapUpdate(
+                    level,
+                    level.NextExtent.West + clipmapSize - level.OriginInTextures.X,
+                    update.South,
+                    update.East,
+                    update.North);
+                Update(context, level, rightUpdate);
+                return;
+            }
+            else if (north < south)
+            {
+                ClipmapUpdate bottomUpdate = new ClipmapUpdate(
+                    level,
+                    update.West,
+                    update.South,
+                    update.East,
+                    level.NextExtent.South + (clipmapSize - level.OriginInTextures.Y - 1));
+                Update(context, level, bottomUpdate);
+
+                ClipmapUpdate topUpdate = new ClipmapUpdate(
+                    level,
+                    update.West,
+                    level.NextExtent.South + clipmapSize - level.OriginInTextures.Y,
+                    update.East,
+                    update.North);
+                Update(context, level, topUpdate);
+                return;
+            }
+
+            float[] posts = new float[(update.Width + 2) * (update.Height + 2)];
+
+            level.Terrain.GetPosts(update.West - 1, update.South - 1, update.East + 1, update.North + 1, posts, 0, update.Width + 2);
+            Update(context, level.HeightTexture, level.NormalTexture, (float)level.Terrain.PostDeltaLongitude, west, south, update.Width, update.Height, posts);
+        }
+
         public void Update(Context context, Texture2D heightMap, Texture2D normalMap, float postDelta, int x, int y, int width, int height, float[] posts)
         {
             // Copy the post data into the source texture.
@@ -83,13 +139,7 @@ namespace OpenGlobe.Scene.Terrain
             // Restore the context to its original state
             context.FrameBuffer = oldFrameBuffer;
             context.Viewport = oldViewport;
-
-            //_sourceTexture.Save("source" + number + ".png");
-            //heightMap.Save("height" + number + ".png");
-            //++number;
         }
-
-        //private static int number = 0;
 
         private int _maxUpdate;
         private Texture2D _sourceTexture;

@@ -7,10 +7,16 @@ namespace OpenGlobe.Scene.Terrain
 {
     public struct RasterTerrainTileIdentifier : IEquatable<RasterTerrainTileIdentifier>
     {
-        public RasterTerrainTileIdentifier(int x, int y)
+        public RasterTerrainTileIdentifier(int level, int x, int y)
         {
+            _level = level;
             _x = x;
             _y = y;
+        }
+
+        public int Level
+        {
+            get { return _level; }
         }
 
         public int X
@@ -25,7 +31,7 @@ namespace OpenGlobe.Scene.Terrain
 
         public bool Equals(RasterTerrainTileIdentifier other)
         {
-            return _x == other._x && _y == other._y;
+            return _level == other._level && _x == other._x && _y == other._y;
         }
 
         public override bool Equals(object obj)
@@ -37,10 +43,11 @@ namespace OpenGlobe.Scene.Terrain
 
         public override int GetHashCode()
         {
-            return _x.GetHashCode() ^ _y.GetHashCode();
+            return _level.GetHashCode() ^ _x.GetHashCode() ^ _y.GetHashCode();
         }
 
         private int _x;
         private int _y;
+        private int _level;
     }
 }

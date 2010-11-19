@@ -18,5 +18,35 @@ namespace OpenGlobe.Scene.Terrain
     {
         public abstract GeodeticExtent Extent { get; }
         public abstract RasterTerrainLevelCollection Levels { get; }
-    }
+
+        public RasterTerrainTile GetTile(RasterTerrainTileIdentifier identifier)
+        {
+            RasterTerrainTile tile;
+            if (m_activeTiles.TryGetValue(identifier, out tile))
+            {
+                return tile;
+            }
+
+            // New tiles are not initially active.  They become active when loaded.
+            tile = CreateTile(identifier);
+            return tile;
+        }
+
+        public void ActivateTile(RasterTerrainTile tile)
+        {
+            m_activeTiles.Add(tile.Identifier, tile);
+        }
+
+        public void DeactivateTile(RasterTerrainTile tile)
+        {
+            m_activeTiles.Remove(tile.Identifier);
+        }
+
+        protected /*abstract*/ RasterTerrainTile CreateTile(RasterTerrainTileIdentifier identifier)
+        {
+            return null;
+        }
+
+        private Dictionary<RasterTerrainTileIdentifier, RasterTerrainTile> m_activeTiles = new Dictionary<RasterTerrainTileIdentifier, RasterTerrainTile>();
+}
 }

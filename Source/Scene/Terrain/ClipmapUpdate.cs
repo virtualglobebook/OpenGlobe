@@ -6,9 +6,9 @@ using OpenGlobe.Renderer;
 
 namespace OpenGlobe.Scene.Terrain
 {
-    public class ClipmapUpdate
+    internal class ClipmapUpdate
     {
-        public ClipmapUpdate(int level, int west, int south, int east, int north)
+        public ClipmapUpdate(ClipmapLevel level, int west, int south, int east, int north)
         {
             _level = level;
             _west = west;
@@ -17,7 +17,7 @@ namespace OpenGlobe.Scene.Terrain
             _north = north;
         }
 
-        public int Level
+        public ClipmapLevel Level
         {
             get { return _level; }
         }
@@ -52,12 +52,7 @@ namespace OpenGlobe.Scene.Terrain
             get { return North - South + 1; }
         }
 
-        public Texture2D Load(Context context)
-        {
-            return null;
-        }
-
-        private int _level;
+        private ClipmapLevel _level;
         private int _west;
         private int _south;
         private int _east;
