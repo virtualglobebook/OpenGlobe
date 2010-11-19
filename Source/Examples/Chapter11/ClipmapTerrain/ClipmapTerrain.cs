@@ -112,7 +112,8 @@ namespace OpenGlobe.Examples
             }
             else if (e.Key == KeyboardKey.L)
             {
-                _update = !_update;
+                _clipmap.LodUpdateEnabled = !_clipmap.LodUpdateEnabled;
+                UpdateHUD();
             }
         }
 
@@ -126,11 +127,8 @@ namespace OpenGlobe.Examples
 
         private void OnPreRenderFrame()
         {
-            if (_update)
-            {
-                Context context = _window.Context;
-                _clipmap.PreRender(context, _sceneState);
-            }
+            Context context = _window.Context;
+            _clipmap.PreRender(context, _sceneState);
         }
 
         private void UpdateHUD()
@@ -139,6 +137,7 @@ namespace OpenGlobe.Examples
 
             text = "Blending: " + GetBlendingString() + " (B)\n";
             text += "Wireframe: " + (_clipmap.Wireframe ? "Enabled" : "Disabled") + " (W)\n";
+            text += "LOD Update: " + (_clipmap.LodUpdateEnabled ? "Enabled" : "Disabled") + " (L)\n";
 
             if (_hud.Texture != null)
             {
@@ -196,7 +195,6 @@ namespace OpenGlobe.Examples
         private readonly CameraFly _cameraFly;
         private readonly ClearState _clearState;
         private readonly PlaneClipmapTerrain _clipmap;
-        private bool _update = true;
         private HeadsUpDisplay _hud;
         private Font _hudFont;
     }

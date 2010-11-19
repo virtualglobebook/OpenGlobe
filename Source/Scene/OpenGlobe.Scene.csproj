@@ -86,6 +86,7 @@
     <Compile Include="Terrain\RayCastedTerrainTile.cs" />
     <Compile Include="Terrain\SimpleTerrainLevel.cs" />
     <Compile Include="Terrain\SimpleTerrainSource.cs" />
+    <Compile Include="Terrain\TextureQuadTree.cs" />
     <Compile Include="Terrain\TriangleMeshTerrainTile.cs" />
     <Compile Include="Terrain\VertexDisplacementMapTerrainTile.cs" />
     <Compile Include="Terrain\ClipmapTerrain.cs" />

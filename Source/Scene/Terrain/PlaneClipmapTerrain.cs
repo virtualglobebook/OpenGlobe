@@ -148,11 +148,21 @@ namespace OpenGlobe.Scene.Terrain
             }
         }
 
+        public bool LodUpdateEnabled
+        {
+            get { return _lodUpdateEnabled; }
+            set { _lodUpdateEnabled = value; }
+        }
+
         public void PreRender(Context context, SceneState sceneState)
         {
-            Vector3D clipmapCenter = sceneState.Camera.Eye;
+            if (!_lodUpdateEnabled)
+                return;
+
+            _clipmapCenter = sceneState.Camera.Eye;
+
             //Geodetic2D center = Ellipsoid.ScaledWgs84.ToGeodetic2D(sceneState.Camera.Target / Ellipsoid.Wgs84.MaximumRadius);
-            Geodetic2D center = new Geodetic2D(clipmapCenter.X, clipmapCenter.Y);
+            Geodetic2D center = new Geodetic2D(_clipmapCenter.X, _clipmapCenter.Y);
             double centerLongitude = center.Longitude; //Trig.ToDegrees(center.Longitude);
             double centerLatitude = center.Latitude; //Trig.ToDegrees(center.Latitude);
 
@@ -437,14 +447,12 @@ namespace OpenGlobe.Scene.Terrain
                 _renderState.RasterizationMode = RasterizationMode.Fill;
             }
 
-            Vector3D clipmapCenter = sceneState.Camera.Eye;
-
             Vector3D previousTarget = sceneState.Camera.Target;
             Vector3D previousEye = sceneState.Camera.Eye;
 
-            _sunPositionRelativeToViewer.Value = (sceneState.SunPosition - clipmapCenter).ToVector3F();
+            _sunPositionRelativeToViewer.Value = (sceneState.SunPosition - _clipmapCenter).ToVector3F();
 
-            Vector3D toSubtract = new Vector3D(clipmapCenter.X, clipmapCenter.Y, 0.0);
+            Vector3D toSubtract = new Vector3D(_clipmapCenter.X, _clipmapCenter.Y, 0.0);
             sceneState.Camera.Target -= toSubtract;
             sceneState.Camera.Eye -= toSubtract;
 
@@ -452,8 +460,8 @@ namespace OpenGlobe.Scene.Terrain
 
             int maxLevel = _clipmapLevels.Length - 1;
 
-            int longitudeIndex = (int)_clipmapLevels[0].Terrain.LongitudeToIndex(clipmapCenter.X);
-            int latitudeIndex = (int)_clipmapLevels[0].Terrain.LatitudeToIndex(clipmapCenter.Y);
+            int longitudeIndex = (int)_clipmapLevels[0].Terrain.LongitudeToIndex(_clipmapCenter.X);
+            int latitudeIndex = (int)_clipmapLevels[0].Terrain.LatitudeToIndex(_clipmapCenter.Y);
 
             float[] heightSample = new float[1];
             _clipmapLevels[0].Terrain.GetPosts(longitudeIndex, latitudeIndex, longitudeIndex, latitudeIndex, heightSample, 0, 1);
@@ -740,7 +748,9 @@ namespace OpenGlobe.Scene.Terrain
 
         private bool _wireframe;
         private bool _blendRegionsEnabled = true;
+        private bool _lodUpdateEnabled = true;
 
         private ClipmapUpdater _updater;
+        private Vector3D _clipmapCenter;
     }
 }
