@@ -2,6 +2,7 @@
 using System.Drawing;
 using OpenGlobe.Core;
 using OpenGlobe.Renderer;
+using System.Collections.Generic;
 
 namespace OpenGlobe.Scene.Terrain
 {
@@ -37,10 +38,15 @@ namespace OpenGlobe.Scene.Terrain
             _frameBuffer = context.CreateFrameBuffer();
 
             HeightExaggeration = 1.0f;
+
+            _requestQueue.MessageReceived += TileLoadRequestReceived;
+            _requestQueue.StartInAnotherThread();
         }
 
         public void Dispose()
         {
+            _requestQueue.Dispose();
+            _doneQueue.Dispose();
             _frameBuffer.Dispose();
             _drawState.ShaderProgram.Dispose();
             _drawState.VertexArray.Dispose();
@@ -53,14 +59,81 @@ namespace OpenGlobe.Scene.Terrain
             set { _heightExaggeration.Value = value; }
         }
 
-        public void ApplyNewData(Context context, ClipmapLevel level)
+        public void ApplyNewData(Context context, ClipmapLevel[] levels)
         {
-            // How do we compute normals at the edges of a new tile?
-            // We'll need the adjacent tile as well.
-            // And we should update the normals on the edge of that adjacent tile as well, in case
-            // this tile wasn't available when those normals were computed, so they were computed from
-            // less detailed heights.
-            // A corner post might have two adjacent tiles.
+            // TODO: it would be nice if the MessageQueue gave us a way to do this directly without anonymous delegate trickery.
+            List<RasterTerrainTile> tiles = new List<RasterTerrainTile>();
+            EventHandler<MessageQueueEventArgs> handler = delegate(object sender, MessageQueueEventArgs e)
+            {
+                RasterTerrainTile tile = (RasterTerrainTile)e.Message;
+                tiles.Add(tile);
+                tile.IsLoading = false;
+            };
+            _doneQueue.MessageReceived += handler;
+            _doneQueue.ProcessQueue();
+            _doneQueue.MessageReceived -= handler;
+
+            foreach (RasterTerrainTile tile in tiles)
+            {
+                int levelIndex = Array.FindIndex(levels, potentialLevel => potentialLevel.Terrain == tile.Level);
+                if (levelIndex >= 0)
+                {
+                    ApplyNewTile(context, levels, levelIndex, tile);
+                }
+            }
+        }
+
+        public void ApplyNewTile(Context context, ClipmapLevel[] levels, int levelIndex, RasterTerrainTile tile)
+        {
+            ClipmapLevel level = levels[levelIndex];
+            ClipmapUpdate entireLevel = new ClipmapUpdate(
+                level,
+                level.NextExtent.West,
+                level.NextExtent.South,
+                level.NextExtent.East,
+                level.NextExtent.North);
+
+            // Pad the tile extent by one post on all sides.
+            // Normals in this larger extent could be affected by this tile's data.
+            ClipmapUpdate thisTile = new ClipmapUpdate(
+                level,
+                tile.West - 1,
+                tile.South - 1,
+                tile.East + 1,
+                tile.North + 1);
+
+            ClipmapUpdate intersection = IntersectUpdates(entireLevel, thisTile);
+            if (intersection.Width > 0 && intersection.Height > 0)
+            {
+                Update(context, intersection);
+
+                // Recurse on child tiles if they're NOT loaded.  Unloaded children will use data from this tile.
+                int childLevel = levelIndex + 1;
+                if (childLevel < levels.Length)
+                {
+                    RasterTerrainTile southwest = tile.SouthwestChild;
+                    if (southwest.Status != RasterTerrainTileStatus.Loaded)
+                        ApplyNewTile(context, levels, levelIndex + 1, southwest);
+                    RasterTerrainTile southeast = tile.SoutheastChild;
+                    if (southeast.Status != RasterTerrainTileStatus.Loaded)
+                        ApplyNewTile(context, levels, levelIndex + 1, southeast);
+                    RasterTerrainTile northwest = tile.NorthwestChild;
+                    if (northwest.Status != RasterTerrainTileStatus.Loaded)
+                        ApplyNewTile(context, levels, levelIndex + 1, northwest);
+                    RasterTerrainTile northeast = tile.NortheastChild;
+                    if (northeast.Status != RasterTerrainTileStatus.Loaded)
+                        ApplyNewTile(context, levels, levelIndex + 1, northeast);
+                }
+            }
+        }
+
+        private ClipmapUpdate IntersectUpdates(ClipmapUpdate first, ClipmapUpdate second)
+        {
+            int west = Math.Max(first.West, second.West);
+            int south = Math.Max(first.South, second.South);
+            int east = Math.Min(first.East, second.East);
+            int north = Math.Min(first.North, second.North);
+            return new ClipmapUpdate(first.Level, west, south, east, north);
         }
 
         public void Update(Context context, ClipmapUpdate update)
@@ -122,7 +195,7 @@ namespace OpenGlobe.Scene.Terrain
 
                 foreach (RasterTerrainTileRegion region in tileRegions)
                 {
-                    if (region.Tile.IsLoaded)
+                    if (region.Tile.Status == RasterTerrainTileStatus.Loaded)
                     {
                         UpdateTile(context, level, withBuffer, region, posts);
                     }
@@ -153,10 +226,44 @@ namespace OpenGlobe.Scene.Terrain
 
         private void RequestTileLoad(RasterTerrainTile tile)
         {
+            if (!tile.IsLoading)
+            {
+                tile.IsLoading = true;
+                _requestQueue.Post(tile);
+            }
         }
 
         private void UpsampleTileData(Context context, ClipmapLevel level, ClipmapUpdate update, RasterTerrainTileRegion region, float[] posts)
         {
+            int west = region.Tile.West + region.West;
+            int south = region.Tile.South + region.South;
+            int east = region.Tile.West + region.East;
+            int north = region.Tile.South + region.North;
+
+            int tileWest = west - update.West;
+            int tileSouth = south - update.South;
+            int tileEast = east - update.West;
+            int tileNorth = north - update.North;
+
+            int stride = update.Width;
+            int startIndex = tileSouth * stride + tileWest;
+
+            int tileLongitudePosts = level.Terrain.LongitudePosts / level.Terrain.LongitudeTiles;
+            int tileLatitudePosts = level.Terrain.LatitudePosts / level.Terrain.LatitudeTiles;
+
+            int longitudePosts = tileEast - tileWest + 1;
+
+            int writeIndex = startIndex;
+            for (int j = tileSouth; j <= tileNorth; ++j)
+            {
+                int row = (tileLatitudePosts - j - 1) * (tileLongitudePosts + 1);
+                for (int i = tileWest; i <= tileEast; ++i)
+                {
+                    posts[writeIndex] = 0.0f;
+                    ++writeIndex;
+                }
+                writeIndex += stride - longitudePosts;
+            }
         }
 
         private void RenderToLevelTextures(Context context, ClipmapUpdate update, ClipmapUpdate withBuffer, float[] posts)
@@ -198,22 +305,14 @@ namespace OpenGlobe.Scene.Terrain
             context.Viewport = oldViewport;
         }
 
-        private float[] GetPostSubset(float[] posts, int sourceStride, int xMin, int yMin, int xMax, int yMax)
+        /// <summary>
+        /// Invoked in the <see cref="_requestQueue"/> thread when a tile load request is received.
+        /// </summary>
+        private void TileLoadRequestReceived(object sender, MessageQueueEventArgs e)
         {
-            int width = xMax - xMin + 1;
-            int height = yMax - yMin + 1;
-
-            float[] result = new float[width * height];
-
-            for (int j = 0; j < height; ++j)
-            {
-                for (int i = 0; i < width; ++i)
-                {
-                    result[j * width + i] = posts[(j + yMin) * sourceStride + i + xMin];
-                }
-            }
-            
-            return result;
+            RasterTerrainTile tile = (RasterTerrainTile)e.Message;
+            tile.Load();
+            _doneQueue.Post(tile);
         }
 
         private int _maxUpdate;
@@ -228,5 +327,8 @@ namespace OpenGlobe.Scene.Terrain
         private Uniform<Vector2F> _updateSize;
         private int _heightOutput;
         private int _normalOutput;
+
+        private MessageQueue _requestQueue = new MessageQueue();
+        private MessageQueue _doneQueue = new MessageQueue();
     }
 }

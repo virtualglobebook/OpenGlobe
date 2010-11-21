@@ -210,7 +210,9 @@ namespace OpenGlobe.Scene.Terrain
                 level.NextExtent.North = level.NextExtent.South + _clipmapSegments;
             }
 
-            for (int i = _clipmapLevels.Length - 1; i >= 0; --i)
+            _updater.ApplyNewData(context, _clipmapLevels);
+
+            for (int i = 0; i <_clipmapLevels.Length; ++i)
             {
                 ClipmapLevel thisLevel = _clipmapLevels[i];
                 ClipmapLevel coarserLevel = _clipmapLevels[i > 0 ? i - 1 : 0];

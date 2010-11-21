@@ -28,12 +28,34 @@ namespace OpenGlobe.Scene.Terrain
             get { return _identifier; }
         }
 
-        public bool IsLoaded
+        public RasterTerrainTileStatus Status
         {
-            get { return true; }
+            get
+            {
+                if (_isLoading)
+                {
+                    return RasterTerrainTileStatus.Loading;
+                }
+                else if (_posts != null)
+                {
+                    return RasterTerrainTileStatus.Loaded;
+                }
+                else
+                {
+                    return RasterTerrainTileStatus.Unloaded;
+                }
+            }
         }
 
-        public abstract RasterTerrainTileStatus Status { get; }
+        public bool IsLoading
+        {
+            get { return _isLoading; }
+            internal set
+            {
+                _isLoading = value;
+                UpdateActivation();
+            }
+        }
 
         public abstract RasterTerrainTile SouthwestChild { get; }
         public abstract RasterTerrainTile SoutheastChild { get; }
@@ -80,9 +102,41 @@ namespace OpenGlobe.Scene.Terrain
         /// <exception cref="InvalidOperationException">
         /// The tile is not loaded.
         /// </exception>
-        public abstract void GetPosts(int west, int south, int east, int north, float[] destination, int startIndex, int stride);
+        public void GetPosts(int west, int south, int east, int north, float[] destination, int startIndex, int stride)
+        {
+            if (Posts == null)
+            {
+                throw new InvalidOperationException("Tile is not loaded.");
+            }
+
+            Level.GetPosts(West + west, South + south, West + east, South + north, destination, startIndex, stride);
+        }
+
+        protected float[] Posts
+        {
+            get { return _posts; }
+            set
+            {
+                _posts = value;
+                UpdateActivation();
+            }
+        }
+
+        private void UpdateActivation()
+        {
+            if (_posts != null || _isLoading == true)
+            {
+                Level.Source.ActivateTile(this);
+            }
+            else
+            {
+                Level.Source.DeactivateTile(this);
+            }
+        }
 
         private RasterTerrainTileIdentifier _identifier;
         private RasterTerrainSource _terrainSource;
+        private float[] _posts;
+        private bool _isLoading;
     }
 }

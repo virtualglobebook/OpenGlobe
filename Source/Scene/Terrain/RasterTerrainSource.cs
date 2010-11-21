@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using OpenGlobe.Core;
+using System.Threading;
 
 namespace OpenGlobe.Scene.Terrain
 {
@@ -34,7 +35,7 @@ namespace OpenGlobe.Scene.Terrain
 
         public void ActivateTile(RasterTerrainTile tile)
         {
-            m_activeTiles.Add(tile.Identifier, tile);
+            m_activeTiles[tile.Identifier] = tile;
         }
 
         public void DeactivateTile(RasterTerrainTile tile)
@@ -56,29 +57,44 @@ namespace OpenGlobe.Scene.Terrain
             {
             }
 
-            public override RasterTerrainTileStatus Status
-            {
-                get { throw new NotImplementedException(); }
-            }
-
             public override RasterTerrainTile SouthwestChild
             {
-                get { throw new NotImplementedException(); }
+                get
+                {
+                    RasterTerrainTileIdentifier current = Identifier;
+                    RasterTerrainTileIdentifier child = new RasterTerrainTileIdentifier(current.Level + 1, current.X * 2, current.Y * 2);
+                    return Source.GetTile(child);
+                }
             }
 
             public override RasterTerrainTile SoutheastChild
             {
-                get { throw new NotImplementedException(); }
+                get
+                {
+                    RasterTerrainTileIdentifier current = Identifier;
+                    RasterTerrainTileIdentifier child = new RasterTerrainTileIdentifier(current.Level + 1, current.X * 2 + 1, current.Y * 2);
+                    return Source.GetTile(child);
+                }
             }
 
             public override RasterTerrainTile NorthwestChild
             {
-                get { throw new NotImplementedException(); }
+                get
+                {
+                    RasterTerrainTileIdentifier current = Identifier;
+                    RasterTerrainTileIdentifier child = new RasterTerrainTileIdentifier(current.Level + 1, current.X * 2, current.Y * 2 + 1);
+                    return Source.GetTile(child);
+                }
             }
 
             public override RasterTerrainTile NortheastChild
             {
-                get { throw new NotImplementedException(); }
+                get
+                {
+                    RasterTerrainTileIdentifier current = Identifier;
+                    RasterTerrainTileIdentifier child = new RasterTerrainTileIdentifier(current.Level + 1, current.X * 2 + 1, current.Y * 2 + 1);
+                    return Source.GetTile(child);
+                }
             }
 
             public override int West
@@ -103,12 +119,12 @@ namespace OpenGlobe.Scene.Terrain
 
             public override void Load()
             {
-                throw new NotImplementedException();
-            }
+                Thread.Sleep(200);
+                int width = Level.LongitudePosts / Level.LongitudeTiles;
+                int height = Level.LatitudePosts / Level.LatitudeTiles;
 
-            public override void GetPosts(int west, int south, int east, int north, float[] destination, int startIndex, int stride)
-            {
-                Level.GetPosts(West + west, South + south, West + east, South + north, destination, startIndex, stride);
+                Posts = new float[width * height];
+                Level.GetPosts(West, South, East, North, Posts, 0, width);
             }
         }
     }
