@@ -52,6 +52,16 @@ namespace OpenGlobe.Scene.Terrain
             get { return North - South + 1; }
         }
 
+        /// <summary>
+        /// Creates a new region which is equivalent to this one but with a one post buffer added
+        /// around the perimeter.
+        /// </summary>
+        /// <returns>The new region.</returns>
+        public ClipmapUpdate AddBuffer()
+        {
+            return new ClipmapUpdate(_level, _west - 1, _south - 1, _east + 1, _north + 1);
+        }
+
         private ClipmapLevel _level;
         private int _west;
         private int _south;

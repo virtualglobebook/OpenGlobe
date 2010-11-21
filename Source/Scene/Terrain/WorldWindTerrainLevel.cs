@@ -36,6 +36,11 @@ namespace OpenGlobe.Scene.Terrain
             get { return _terrainSource; }
         }
 
+        public override int LevelID
+        {
+            get { return _level; }
+        }
+
         public double TileDeltaLongitude
         {
             get { return _tileDeltaLongitude; }
@@ -64,6 +69,16 @@ namespace OpenGlobe.Scene.Terrain
         public override int LatitudePosts
         {
             get { return _latitudePosts; }
+        }
+
+        public override int LongitudeTiles
+        {
+            get { return (int)Math.Round(360.0 / TileDeltaLongitude); }
+        }
+
+        public override int LatitudeTiles
+        {
+            get { return (int)Math.Round(180.0 / TileDeltaLatitude);; }
         }
 
         public override void GetPosts(int west, int south, int east, int north, float[] destination, int startIndex, int stride)

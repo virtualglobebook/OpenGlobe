@@ -11,12 +11,12 @@ in vec2 position;
 out vec2 fsTextureCoordinates;
 
 uniform mat4 og_viewportOrthographicMatrix;
-uniform vec2 u_sourceDimensions;
 uniform vec2 u_updateOrigin;
+uniform vec2 u_updateSize;
 
 void main()                     
 {
-    vec2 sourcePosition = position * u_sourceDimensions;
+    vec2 sourcePosition = position * u_updateSize;
     gl_Position = og_viewportOrthographicMatrix * vec4(sourcePosition + u_updateOrigin, 0.0, 1.0);
     fsTextureCoordinates = sourcePosition + vec2(1.0, 1.0);
 }
