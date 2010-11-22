@@ -26,7 +26,7 @@ namespace OpenGlobe.Examples
             _window = Device.CreateWindow(800, 600, "Chapter 11:  Clipmap Terrain");
 
             SimpleTerrainSource terrainSource = new SimpleTerrainSource(@"..\..\..\..\..\..\Data\Terrain\ps_height_16k");
-            _clipmap = new PlaneClipmapTerrain(_window.Context, terrainSource, 511);
+            _clipmap = new PlaneClipmapTerrain(_window, _window.Context, terrainSource, 511);
             _clipmap.HeightExaggeration = 0.01f;
 
             _sceneState = new SceneState();

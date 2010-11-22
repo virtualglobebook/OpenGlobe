@@ -116,16 +116,6 @@ namespace OpenGlobe.Scene.Terrain
             {
                 get { return (Level.LatitudePosts / Level.LatitudeTiles) * (Identifier.Y + 1) - 1; }
             }
-
-            public override void Load()
-            {
-                Thread.Sleep(200);
-                int width = Level.LongitudePosts / Level.LongitudeTiles;
-                int height = Level.LatitudePosts / Level.LatitudeTiles;
-
-                Posts = new float[width * height];
-                Level.GetPosts(West, South, East, North, Posts, 0, width);
-            }
         }
     }
 }

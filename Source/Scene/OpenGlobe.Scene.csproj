@@ -231,6 +231,14 @@
   <ItemGroup>
     <EmbeddedResource Include="Terrain\ClipmapTerrain\ClipmapUpdateVS.glsl" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Terrain\ClipmapTerrain\ClipmapUpsampleFS.glsl" />
+    <EmbeddedResource Include="Terrain\ClipmapTerrain\ClipmapUpsampleVS.glsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Terrain\ClipmapTerrain\ClipmapComputeNormalsFS.glsl" />
+    <EmbeddedResource Include="Terrain\ClipmapTerrain\ClipmapComputeNormalsVS.glsl" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

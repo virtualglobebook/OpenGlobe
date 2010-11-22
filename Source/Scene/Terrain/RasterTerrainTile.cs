@@ -28,35 +28,6 @@ namespace OpenGlobe.Scene.Terrain
             get { return _identifier; }
         }
 
-        public RasterTerrainTileStatus Status
-        {
-            get
-            {
-                if (_isLoading)
-                {
-                    return RasterTerrainTileStatus.Loading;
-                }
-                else if (_posts != null)
-                {
-                    return RasterTerrainTileStatus.Loaded;
-                }
-                else
-                {
-                    return RasterTerrainTileStatus.Unloaded;
-                }
-            }
-        }
-
-        public bool IsLoading
-        {
-            get { return _isLoading; }
-            internal set
-            {
-                _isLoading = value;
-                UpdateActivation();
-            }
-        }
-
         public abstract RasterTerrainTile SouthwestChild { get; }
         public abstract RasterTerrainTile SoutheastChild { get; }
         public abstract RasterTerrainTile NorthwestChild { get; }
@@ -83,12 +54,6 @@ namespace OpenGlobe.Scene.Terrain
         public abstract int North { get; }
 
         /// <summary>
-        /// Loads the tile into system memory, reading it from disk or a network server as necessary.
-        /// This method does not return until the tile is loaded.
-        /// </summary>
-        public abstract void Load();
-
-        /// <summary>
         /// Gets a subset of posts from the tile and copies them into destination array.  This method should
         /// only be called when <see cref="Status"/> is <see cref="RasterTerrainTileStatus.Loaded"/>.
         /// </summary>
@@ -104,39 +69,10 @@ namespace OpenGlobe.Scene.Terrain
         /// </exception>
         public void GetPosts(int west, int south, int east, int north, float[] destination, int startIndex, int stride)
         {
-            if (Posts == null)
-            {
-                throw new InvalidOperationException("Tile is not loaded.");
-            }
-
             Level.GetPosts(West + west, South + south, West + east, South + north, destination, startIndex, stride);
-        }
-
-        protected float[] Posts
-        {
-            get { return _posts; }
-            set
-            {
-                _posts = value;
-                UpdateActivation();
-            }
-        }
-
-        private void UpdateActivation()
-        {
-            if (_posts != null || _isLoading == true)
-            {
-                Level.Source.ActivateTile(this);
-            }
-            else
-            {
-                Level.Source.DeactivateTile(this);
-            }
         }
 
         private RasterTerrainTileIdentifier _identifier;
         private RasterTerrainSource _terrainSource;
-        private float[] _posts;
-        private bool _isLoading;
     }
 }

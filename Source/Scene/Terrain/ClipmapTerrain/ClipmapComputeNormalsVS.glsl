@@ -11,13 +11,13 @@ layout(location = og_positionVertexLocation) in vec2 position;
 out vec2 fsTextureCoordinates;
 
 uniform mat4 og_viewportOrthographicMatrix;
-uniform vec2 u_destinationOffset;
 uniform vec2 u_updateSize;
-uniform vec2 u_sourceOrigin;
+uniform vec2 u_origin;
+uniform vec2 u_oneOverHeightMapSize;
 
 void main()                     
 {
-    vec2 sourcePosition = position * u_updateSize;
-    gl_Position = og_viewportOrthographicMatrix * vec4(sourcePosition + u_destinationOffset, 0.0, 1.0);
-    fsTextureCoordinates = sourcePosition + u_sourceOrigin;
+    vec2 sourcePosition = position * u_updateSize + u_origin;
+    gl_Position = og_viewportOrthographicMatrix * vec4(sourcePosition, 0.0, 1.0);
+    fsTextureCoordinates = sourcePosition * u_oneOverHeightMapSize;
 }
