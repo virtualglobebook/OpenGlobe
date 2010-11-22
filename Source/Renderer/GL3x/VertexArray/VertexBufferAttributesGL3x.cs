@@ -148,8 +148,6 @@ namespace OpenGlobe.Renderer.GL3x
         private static void Detach(int index)
         {
             GL.DisableVertexAttribArray(index);
-            VertexBufferGL3x.UnBind();
-            GL.VertexAttribPointer(index, 0, VertexAttribPointerType.Float, false, 0, 0);
         }
 
         internal int MaximumArrayIndex
