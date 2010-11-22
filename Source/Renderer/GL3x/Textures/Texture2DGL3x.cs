@@ -160,7 +160,6 @@ namespace OpenGlobe.Renderer.GL3x
             TextureWrapMode wrapS = TypeConverterGL3x.To(sampler.WrapS);
             TextureWrapMode wrapT = TypeConverterGL3x.To(sampler.WrapT);
 
-            BindToLastTextureUnit();
             GL.TexParameter(_target, TextureParameterName.TextureMinFilter, (int)minFilter);
             GL.TexParameter(_target, TextureParameterName.TextureMagFilter, (int)magFilter);
             GL.TexParameter(_target, TextureParameterName.TextureWrapS, (int)wrapS);
