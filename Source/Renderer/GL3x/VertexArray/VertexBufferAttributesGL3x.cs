@@ -37,18 +37,21 @@ namespace OpenGlobe.Renderer.GL3x
 
             set
             {
-                if ((_attributes[index].VertexBufferAttribute != null) && (value == null))
+                if (_attributes[index].VertexBufferAttribute != value)
                 {
-                    --_count;
-                }
-                else if ((_attributes[index].VertexBufferAttribute == null) && (value != null))
-                {
-                    ++_count;
-                }
+                    if ((_attributes[index].VertexBufferAttribute != null) && (value == null))
+                    {
+                        --_count;
+                    }
+                    else if ((_attributes[index].VertexBufferAttribute == null) && (value != null))
+                    {
+                        ++_count;
+                    }
 
-                _attributes[index].VertexBufferAttribute = value;
-                _attributes[index].Dirty = true;
-                _dirty = true;
+                    _attributes[index].VertexBufferAttribute = value;
+                    _attributes[index].Dirty = true;
+                    _dirty = true;
+                }
             }
         }
 
