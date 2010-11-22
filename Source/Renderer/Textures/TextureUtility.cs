@@ -65,7 +65,6 @@ namespace OpenGlobe.Renderer
                      (pixelFormat == ImagingPixelFormat.Format32bppArgb) ||
                      (pixelFormat == ImagingPixelFormat.Format64bppArgb))
             {
-                // TODO:  Test a Bitmap with alpha channel
                 return ImageFormat.BlueGreenRedAlpha;
             }
 
