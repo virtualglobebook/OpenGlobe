@@ -190,7 +190,7 @@ namespace OpenGlobe.Scene.Terrain
 
                     Texture2D tileTexture;
                     bool loadingOrLoaded = _loadedTiles.TryGetValue(region.Tile.Identifier, out tileTexture);
-                    if (level.FinerLevel != null && loadingOrLoaded && tileTexture != null)
+                    if (loadingOrLoaded && tileTexture != null)
                     {
                         RenderTileToLevelHeightTexture(context, nonWrappingUpdate, region, tileTexture);
                     }
@@ -496,7 +496,6 @@ namespace OpenGlobe.Scene.Terrain
         /// </summary>
         private void TileLoadRequestReceived(object sender, MessageQueueEventArgs e)
         {
-            Thread.Sleep(200);
             TileLoadRequest request = (TileLoadRequest)e.Message;
             RasterTerrainTile tile = request.Tile;
             request.Texture = CreateTextureFromTile(tile);
