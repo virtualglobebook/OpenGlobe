@@ -285,6 +285,8 @@ namespace OpenGlobe.Scene.Terrain
                 _updater.Update(context, verticalUpdate);
             }
 
+            //_updater.VerifyHeights(level);
+
             level.CurrentExtent.West = level.NextExtent.West;
             level.CurrentExtent.South = level.NextExtent.South;
             level.CurrentExtent.East = level.NextExtent.East;

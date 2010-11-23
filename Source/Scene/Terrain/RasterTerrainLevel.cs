@@ -43,8 +43,26 @@ namespace OpenGlobe.Scene.Terrain
             int tileXStart = west / tileLongitudePosts;
             int tileXStop = east / tileLongitudePosts;
 
+            if (west < 0)
+            {
+                --tileXStart;
+            }
+            if (east < 0)
+            {
+                --tileXStop;
+            }
+
             int tileYStart = south / tileLatitudePosts;
             int tileYStop = north / tileLatitudePosts;
+
+            if (south < 0)
+            {
+                --tileYStart;
+            }
+            if (north < 0)
+            {
+                --tileYStop;
+            }
 
             int tileWidth = tileXStop - tileXStart + 1;
             int tileHeight = tileYStop - tileYStart + 1;

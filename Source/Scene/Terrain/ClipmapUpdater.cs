@@ -204,8 +204,6 @@ namespace OpenGlobe.Scene.Terrain
             {
                 UpdateNormals(context, normalUpdate);
             }
-
-            VerifyHeights(level);
         }
 
         private ClipmapUpdate[] SplitUpdateToAvoidWrapping(ClipmapUpdate update)
@@ -383,10 +381,10 @@ namespace OpenGlobe.Scene.Terrain
             context.FrameBuffer = oldFrameBuffer;
             context.Viewport = oldViewport;
 
-            ReadPixelBuffer rpb = level.NormalTexture.CopyToBuffer(ImageFormat.RedGreenBlue, ImageDatatype.Float);
+            /*ReadPixelBuffer rpb = level.NormalTexture.CopyToBuffer(ImageFormat.RedGreenBlue, ImageDatatype.Float);
             Vector3F[] postsFromTexture = rpb.CopyToSystemMemory<Vector3F>();
             if (postsFromTexture == null)
-                throw new Exception();
+                throw new Exception();*/
         }
 
         private void RequestTileLoad(RasterTerrainTile tile)
@@ -444,7 +442,7 @@ namespace OpenGlobe.Scene.Terrain
             _doneQueue.Post(message);
         }
 
-        private void VerifyHeights(ClipmapLevel level)
+        public void VerifyHeights(ClipmapLevel level)
         {
             ReadPixelBuffer rpb = level.HeightTexture.CopyToBuffer(ImageFormat.Red, ImageDatatype.Float);
             float[] postsFromTexture = rpb.CopyToSystemMemory<float>();
