@@ -1,8 +1,11 @@
-﻿using System;
+﻿//#define SingleThreaded
+using System;
 using System.Drawing;
 using OpenGlobe.Core;
 using OpenGlobe.Renderer;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Threading;
 
 namespace OpenGlobe.Scene.Terrain
 {
@@ -66,8 +69,11 @@ namespace OpenGlobe.Scene.Terrain
             window.MakeCurrent();
 
             _requestQueue.MessageReceived += TileLoadRequestReceived;
+
+#if !SingleThreaded
             _requestQueue.Post(x => _workerWindow.MakeCurrent(), null);
             _requestQueue.StartInAnotherThread();
+#endif
         }
 
         public void Dispose()
@@ -91,6 +97,9 @@ namespace OpenGlobe.Scene.Terrain
 
         public void ApplyNewData(Context context, ClipmapLevel[] levels)
         {
+#if SingleThreaded
+            _requestQueue.ProcessQueue();
+#endif
             // TODO: it would be nice if the MessageQueue gave us a way to do this directly without anonymous delegate trickery.
             List<LoadedTile> tiles = new List<LoadedTile>();
             EventHandler<MessageQueueEventArgs> handler = delegate(object sender, MessageQueueEventArgs e)
@@ -111,6 +120,12 @@ namespace OpenGlobe.Scene.Terrain
                     ApplyNewTile(context, levels, levelIndex, tile.Tile);
                 }
             }
+
+            //if (tiles.Count > 0)
+            //    foreach (ClipmapLevel level in levels)
+            //    {
+            //        VerifyHeights(level);
+            //    }
         }
 
         public void ApplyNewTile(Context context, ClipmapLevel[] levels, int levelIndex, RasterTerrainTile tile)
@@ -137,14 +152,14 @@ namespace OpenGlobe.Scene.Terrain
                 Update(context, intersection);
 
                 // Recurse on child tiles if they're NOT loaded.  Unloaded children will use data from this tile.
-                int childLevel = levelIndex + 1;
+                /*int childLevel = levelIndex + 1;
                 if (childLevel < levels.Length)
                 {
                     ApplyIfNotLoaded(context, levels, childLevel, tile.SouthwestChild);
                     ApplyIfNotLoaded(context, levels, childLevel, tile.SoutheastChild);
                     ApplyIfNotLoaded(context, levels, childLevel, tile.NorthwestChild);
                     ApplyIfNotLoaded(context, levels, childLevel, tile.NortheastChild);
-                }
+                }*/
             }
         }
 
@@ -177,7 +192,7 @@ namespace OpenGlobe.Scene.Terrain
                 foreach (RasterTerrainTileRegion region in tileRegions)
                 {
                     // TODO: Remove this
-                    _loadedTiles[region.Tile.Identifier] = CreateTextureFromTile(region.Tile);
+                    //_loadedTiles[region.Tile.Identifier] = CreateTextureFromTile(region.Tile);
 
                     Texture2D tileTexture;
                     bool loadingOrLoaded = _loadedTiles.TryGetValue(region.Tile.Identifier, out tileTexture);
@@ -311,6 +326,10 @@ namespace OpenGlobe.Scene.Terrain
         {
             ClipmapLevel level = update.Level;
 
+            foreach (TextureUnit unit in context.TextureUnits)
+            {
+                unit.Texture = null;
+            }
             context.TextureUnits[0].Texture = texture;
             context.TextureUnits[0].TextureSampler = Device.TextureSamplers.NearestClamp;
 
@@ -410,8 +429,10 @@ namespace OpenGlobe.Scene.Terrain
                 texture.CopyFromBuffer(wpb, ImageFormat.Red, ImageDatatype.Float);
             }
 
-            //ReadPixelBuffer rpb = texture.CopyToBuffer(ImageFormat.Red, ImageDatatype.Float);
-            //float[] postsFromTexture = rpb.CopyToSystemMemory<float>();
+            ReadPixelBuffer rpb = texture.CopyToBuffer(ImageFormat.Red, ImageDatatype.Float);
+            float[] postsFromTexture = rpb.CopyToSystemMemory<float>();
+
+            Debug.Assert(postsFromTexture != null);
 
             //if (postsFromTexture.Length != posts.Length)
             //    throw new Exception();
@@ -429,6 +450,7 @@ namespace OpenGlobe.Scene.Terrain
         /// </summary>
         private void TileLoadRequestReceived(object sender, MessageQueueEventArgs e)
         {
+            Thread.Sleep(200);
             RasterTerrainTile tile = (RasterTerrainTile)e.Message;
             Texture2D texture = CreateTextureFromTile(tile);
 

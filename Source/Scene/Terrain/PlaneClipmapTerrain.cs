@@ -190,6 +190,8 @@ namespace OpenGlobe.Scene.Terrain
             level.OffsetStripOnEast = true;
             level.OffsetStripOnNorth = true;
 
+            UpdateOriginInTextures(level);
+
             for (int i = _clipmapLevels.Length - 2; i >= 0; --i)
             {
                 level = _clipmapLevels[i];
@@ -210,6 +212,8 @@ namespace OpenGlobe.Scene.Terrain
                     --level.NextExtent.South;
                 }
                 level.NextExtent.North = level.NextExtent.South + _clipmapSegments;
+
+                UpdateOriginInTextures(level);
             }
 
             _updater.ApplyNewData(context, _clipmapLevels);
@@ -220,6 +224,30 @@ namespace OpenGlobe.Scene.Terrain
                 ClipmapLevel coarserLevel = _clipmapLevels[i > 0 ? i - 1 : 0];
 
                 PreRenderLevel(thisLevel, coarserLevel, context, sceneState);
+            }
+        }
+
+        private void UpdateOriginInTextures(ClipmapLevel level)
+        {
+            int deltaX = level.NextExtent.West - level.CurrentExtent.West;
+            int deltaY = level.NextExtent.South - level.CurrentExtent.South;
+            if (deltaX == 0 && deltaY == 0)
+                return;
+
+            if (level.CurrentExtent.West > level.CurrentExtent.East ||  // initial update
+                Math.Abs(deltaX) >= _clipmapPosts || Math.Abs(deltaY) >= _clipmapPosts)      // complete update
+            {
+                level.OriginInTextures = new Vector2I(0, 0);
+            }
+            else
+            {
+                int newOriginX = (level.OriginInTextures.X + deltaX) % _clipmapPosts;
+                if (newOriginX < 0)
+                    newOriginX += _clipmapPosts;
+                int newOriginY = (level.OriginInTextures.Y + deltaY) % _clipmapPosts;
+                if (newOriginY < 0)
+                    newOriginY += _clipmapPosts;
+                level.OriginInTextures = new Vector2I(newOriginX, newOriginY);
             }
         }
 
@@ -238,13 +266,6 @@ namespace OpenGlobe.Scene.Terrain
             int width = maxLongitude - minLongitude + 1;
             int height = maxLatitude - minLatitude + 1;
 
-            int newOriginX = (level.OriginInTextures.X + deltaX) % _clipmapPosts;
-            if (newOriginX < 0)
-                newOriginX += _clipmapPosts;
-            int newOriginY = (level.OriginInTextures.Y + deltaY) % _clipmapPosts;
-            if (newOriginY < 0)
-                newOriginY += _clipmapPosts;
-
             if (level.CurrentExtent.West > level.CurrentExtent.East || // initial update
                 width >= _clipmapPosts || height >= _clipmapPosts) // complete update
             {
@@ -257,11 +278,7 @@ namespace OpenGlobe.Scene.Terrain
                 maxLongitude = level.NextExtent.East;
                 minLatitude = level.NextExtent.South;
                 maxLatitude = level.NextExtent.North;
-                newOriginX = 0;
-                newOriginY = 0;
             }
-
-            level.OriginInTextures = new Vector2I(newOriginX, newOriginY);
 
             if (height > 0)
             {
