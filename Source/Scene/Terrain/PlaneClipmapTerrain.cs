@@ -32,11 +32,17 @@ namespace OpenGlobe.Scene.Terrain
 
             for (int i = 0; i < _clipmapLevels.Length; ++i)
             {
-                RasterTerrainLevel terrainLevel = _terrainSource.Levels[i];
                 _clipmapLevels[i] = new ClipmapLevel();
+            }
+
+            for (int i = 0; i < _clipmapLevels.Length; ++i)
+            {
+                RasterTerrainLevel terrainLevel = _terrainSource.Levels[i];
                 _clipmapLevels[i].Terrain = terrainLevel;
                 _clipmapLevels[i].HeightTexture = Device.CreateTexture2D(new Texture2DDescription(_clipmapPosts, _clipmapPosts, TextureFormat.Red32f));
                 _clipmapLevels[i].NormalTexture = Device.CreateTexture2D(new Texture2DDescription(_clipmapPosts, _clipmapPosts, TextureFormat.RedGreenBlue32f));
+                _clipmapLevels[i].CoarserLevel = i == 0 ? null : _clipmapLevels[i - 1];
+                _clipmapLevels[i].FinerLevel = i == _clipmapLevels.Length - 1 ? null : _clipmapLevels[i + 1];
             }
 
             _shaderProgram = Device.CreateShaderProgram(
@@ -216,7 +222,7 @@ namespace OpenGlobe.Scene.Terrain
                 UpdateOriginInTextures(level);
             }
 
-            _updater.ApplyNewData(context, _clipmapLevels);
+            _updater.ApplyNewData(context);
 
             for (int i = 0; i <_clipmapLevels.Length; ++i)
             {

@@ -46,5 +46,8 @@ namespace OpenGlobe.Scene.Terrain
 
         public Extent CurrentExtent = new Extent(1, 1, 0, 0);
         public Extent NextExtent = new Extent();
+
+        public ClipmapLevel FinerLevel;
+        public ClipmapLevel CoarserLevel;
     }
 }

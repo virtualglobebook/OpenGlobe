@@ -11,9 +11,9 @@ layout(location = og_positionVertexLocation) in vec2 position;
 out vec2 fsTextureCoordinates;
 
 uniform mat4 og_viewportOrthographicMatrix;
-uniform vec2 u_destinationOffset;
-uniform vec2 u_updateSize;
 uniform vec2 u_sourceOrigin;
+uniform vec2 u_updateSize;
+uniform vec2 u_destinationOffset;
 
 void main()                     
 {

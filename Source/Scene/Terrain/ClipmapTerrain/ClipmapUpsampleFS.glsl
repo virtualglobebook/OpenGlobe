@@ -9,20 +9,10 @@
 in vec2 fsTextureCoordinates;
 
 out float heightOutput;
-out vec3 normalOutput;
 
-uniform float u_heightExaggeration;
-uniform float u_postDelta;
-uniform sampler2DRect og_texture0;
+uniform sampler2D og_texture0; // coarse height map
 
 void main()
 {
     heightOutput = texture(og_texture0, fsTextureCoordinates).r;
-
-    float top = texture(og_texture0, fsTextureCoordinates + vec2(0.0, 1.0)).r * u_heightExaggeration;
-    float bottom = texture(og_texture0, fsTextureCoordinates + vec2(0.0, -1.0)).r * u_heightExaggeration;
-    float left = texture(og_texture0, fsTextureCoordinates + vec2(-1.0, 0.0)).r * u_heightExaggeration;
-    float right = texture(og_texture0, fsTextureCoordinates + vec2(1.0, 0.0)).r * u_heightExaggeration;
-
-    normalOutput = vec3(left - right, bottom - top, 2.0 * u_postDelta);
 }
