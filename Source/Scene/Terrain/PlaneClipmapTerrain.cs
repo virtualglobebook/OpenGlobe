@@ -291,56 +291,6 @@ namespace OpenGlobe.Scene.Terrain
             level.CurrentExtent.North = level.NextExtent.North;
         }
 
-        //private void VerifyHeights(Level level)
-        //{
-        //    ReadPixelBuffer rpb = level.TerrainTexture.CopyToBuffer(ImageFormat.Red, ImageDatatype.Float);
-        //    float[] postsFromTexture = rpb.CopyToSystemMemory<float>();
-
-        //    ReadPixelBuffer rpbNormals = level.NormalTexture.CopyToBuffer(ImageFormat.RedGreenBlue, ImageDatatype.Float);
-        //    Vector3F[] normalsFromTexture = rpbNormals.CopyToSystemMemory<Vector3F>();
-
-        //    float[] realPosts = new float[_clipmapPosts * _clipmapPosts];
-        //    level.Terrain.GetPosts(level.CurrentOrigin.TerrainWest, level.CurrentOrigin.TerrainSouth, level.CurrentOrigin.TerrainEast, level.CurrentOrigin.TerrainNorth, realPosts, 0, _clipmapPosts);
-
-        //    float heightExaggeration = HeightExaggeration;
-        //    float postDelta = (float)level.Terrain.PostDeltaLongitude;
-
-        //    for (int j = 0; j < _clipmapPosts; ++j)
-        //    {
-        //        int y = (j + level.OriginInTexture.Y) % _clipmapPosts;
-        //        for (int i = 0; i < _clipmapPosts; ++i)
-        //        {
-        //            int x = (i + level.OriginInTexture.X) % _clipmapPosts;
-
-        //            float realHeight = realPosts[j * _clipmapPosts + i];
-        //            float heightFromTexture = postsFromTexture[y * _clipmapPosts + x];
-
-        //            if (realHeight != heightFromTexture)
-        //                throw new Exception("bad");
-
-        //            if (i != 0 && i != _clipmapPosts - 1 &&
-        //                j != 0 && j != _clipmapPosts - 1)
-        //            {
-        //                int top = (j + 1) * _clipmapPosts + i;
-        //                float topHeight = realPosts[top] * heightExaggeration;
-        //                int bottom = (j - 1) * _clipmapPosts + i;
-        //                float bottomHeight = realPosts[bottom] * heightExaggeration;
-        //                int right = j * _clipmapPosts + i + 1;
-        //                float rightHeight = realPosts[right] * heightExaggeration;
-        //                int left = j * _clipmapPosts + i - 1;
-        //                float leftHeight = realPosts[left] * heightExaggeration;
-
-        //                Vector3F realNormal = new Vector3F(leftHeight - rightHeight, bottomHeight - topHeight, 2.0f * postDelta).Normalize();
-
-        //                Vector3F normalFromTexture = normalsFromTexture[y * _clipmapPosts + x].Normalize();
-
-        //                if (!realNormal.EqualsEpsilon(normalFromTexture, 1e-5f))
-        //                    throw new Exception("normal is bad.");
-        //            }
-        //        }
-        //    }
-        //}
-
         public void Render(Context context, SceneState sceneState)
         {
             if (_wireframe)

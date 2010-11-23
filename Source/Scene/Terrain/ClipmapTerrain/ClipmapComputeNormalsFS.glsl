@@ -7,6 +7,7 @@
 //
               
 in vec2 fsTextureCoordinates;
+in vec2 fsPosition;
 
 out vec3 normalOutput;
 
@@ -14,6 +15,7 @@ uniform float u_heightExaggeration;
 uniform float u_postDelta;
 uniform vec2 u_oneOverHeightMapSize;
 uniform sampler2D og_texture0;
+uniform bool u_realNormal;
 
 void main()
 {
@@ -22,5 +24,12 @@ void main()
     float left = texture(og_texture0, fsTextureCoordinates + vec2(-u_oneOverHeightMapSize.x, 0.0)).r * u_heightExaggeration;
     float right = texture(og_texture0, fsTextureCoordinates + vec2(u_oneOverHeightMapSize.x, 0.0)).r * u_heightExaggeration;
 
-    normalOutput = vec3(left - right, bottom - top, 2.0 * u_postDelta);
+    if (u_realNormal)
+    {
+        normalOutput = vec3(left - right, bottom - top, 2.0 * u_postDelta);
+    }
+    else
+    {
+        normalOutput = vec3(fsPosition, normalOutput.x + normalOutput.y + normalOutput.z);
+    }
 }

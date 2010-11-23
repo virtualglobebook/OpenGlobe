@@ -17,7 +17,7 @@ uniform vec2 u_sourceOrigin;
 
 void main()                     
 {
-    vec2 sourcePosition = position * u_updateSize;
-    gl_Position = og_viewportOrthographicMatrix * vec4(sourcePosition + u_destinationOffset, 0.0, 1.0);
-    fsTextureCoordinates = sourcePosition + u_sourceOrigin;
+    vec2 scaledPosition = position * u_updateSize;
+    gl_Position = og_viewportOrthographicMatrix * vec4(scaledPosition + u_destinationOffset, 0.0, 1.0);
+    fsTextureCoordinates = scaledPosition + u_sourceOrigin;
 }

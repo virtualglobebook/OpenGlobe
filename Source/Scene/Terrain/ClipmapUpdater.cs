@@ -56,6 +56,9 @@ namespace OpenGlobe.Scene.Terrain
             _computeNormalsOneOverHeightMapSize = (Uniform<Vector2F>)_computeNormalsShader.Uniforms["u_oneOverHeightMapSize"];
             _heightExaggeration = (Uniform<float>)_computeNormalsShader.Uniforms["u_heightExaggeration"];
             _postDelta = (Uniform<float>)_computeNormalsShader.Uniforms["u_postDelta"];
+            _realNormal = (Uniform<bool>)_computeNormalsShader.Uniforms["u_realNormal"];
+
+            _realNormal.Value = true;
 
             HeightExaggeration = 1.0f;
 
@@ -166,6 +169,48 @@ namespace OpenGlobe.Scene.Terrain
         public void Update(Context context, ClipmapUpdate update)
         {
             ClipmapLevel level = update.Level;
+
+            ClipmapUpdate[] updates = SplitUpdateToAvoidWrapping(update);
+            foreach (ClipmapUpdate nonWrappingUpdate in updates)
+            {
+                RasterTerrainTileRegion[] tileRegions = level.Terrain.GetTilesInExtent(nonWrappingUpdate.West, nonWrappingUpdate.South, nonWrappingUpdate.East, nonWrappingUpdate.North);
+                foreach (RasterTerrainTileRegion region in tileRegions)
+                {
+                    // TODO: Remove this
+                    _loadedTiles[region.Tile.Identifier] = CreateTextureFromTile(region.Tile);
+
+                    Texture2D tileTexture;
+                    bool loadingOrLoaded = _loadedTiles.TryGetValue(region.Tile.Identifier, out tileTexture);
+                    if (loadingOrLoaded && tileTexture != null)
+                    {
+                        RenderTileToLevelHeightTexture(context, nonWrappingUpdate, region, tileTexture);
+                    }
+                    else
+                    {
+                        if (!loadingOrLoaded)
+                        {
+                            RequestTileLoad(region.Tile);
+                        }
+                        UpsampleTileData(context, nonWrappingUpdate, region);
+                    }
+                }
+            }
+
+            // Normals at edges are incorrect, so include a one-post buffer around the update region
+            // when updating normals in order to update normals that were previously at the edge.
+            ClipmapUpdate updateWithBuffer = update.AddBufferWithinLevelNextExtent();
+            ClipmapUpdate[] normalUpdates = SplitUpdateToAvoidWrapping(updateWithBuffer);
+            foreach (ClipmapUpdate normalUpdate in normalUpdates)
+            {
+                UpdateNormals(context, normalUpdate);
+            }
+
+            VerifyHeights(level);
+        }
+
+        private ClipmapUpdate[] SplitUpdateToAvoidWrapping(ClipmapUpdate update)
+        {
+            ClipmapLevel level = update.Level;
             int clipmapSize = level.NextExtent.East - level.NextExtent.West + 1;
 
             int west = (level.OriginInTextures.X + (update.West - level.NextExtent.West)) % clipmapSize;
@@ -173,7 +218,45 @@ namespace OpenGlobe.Scene.Terrain
             int south = (level.OriginInTextures.Y + (update.South - level.NextExtent.South)) % clipmapSize;
             int north = (level.OriginInTextures.Y + (update.North - level.NextExtent.South)) % clipmapSize;
 
-            if (east < west)
+            if (east < west && north < south)
+            {
+                // Horizontal AND vertical wrap
+                ClipmapUpdate bottomLeftUpdate = new ClipmapUpdate(
+                    level,
+                    update.West,
+                    update.South,
+                    level.NextExtent.West + (clipmapSize - level.OriginInTextures.X - 1),
+                    level.NextExtent.South + (clipmapSize - level.OriginInTextures.Y - 1));
+
+                ClipmapUpdate bottomRightUpdate = new ClipmapUpdate(
+                    level,
+                    level.NextExtent.West + clipmapSize - level.OriginInTextures.X,
+                    update.South,
+                    update.East,
+                    level.NextExtent.South + (clipmapSize - level.OriginInTextures.Y - 1));
+
+                ClipmapUpdate topLeftUpdate = new ClipmapUpdate(
+                    level,
+                    update.West,
+                    level.NextExtent.South + clipmapSize - level.OriginInTextures.Y,
+                    level.NextExtent.West + (clipmapSize - level.OriginInTextures.X - 1),
+                    update.North);
+
+                ClipmapUpdate topRightUpdate = new ClipmapUpdate(
+                    level,
+                    level.NextExtent.West + clipmapSize - level.OriginInTextures.X,
+                    level.NextExtent.South + clipmapSize - level.OriginInTextures.Y,
+                    update.East,
+                    update.North);
+
+                ClipmapUpdate[] result = new ClipmapUpdate[4];
+                result[0] = bottomLeftUpdate;
+                result[1] = bottomRightUpdate;
+                result[2] = topLeftUpdate;
+                result[3] = topRightUpdate;
+                return result;
+            }
+            else if (east < west)
             {
                 // Horizontal wrap
                 ClipmapUpdate leftUpdate = new ClipmapUpdate(
@@ -182,7 +265,6 @@ namespace OpenGlobe.Scene.Terrain
                     update.South,
                     level.NextExtent.West + (clipmapSize - level.OriginInTextures.X - 1),
                     update.North);
-                Update(context, leftUpdate);
 
                 ClipmapUpdate rightUpdate = new ClipmapUpdate(
                     level,
@@ -190,7 +272,11 @@ namespace OpenGlobe.Scene.Terrain
                     update.South,
                     update.East,
                     update.North);
-                Update(context, rightUpdate);
+
+                ClipmapUpdate[] result = new ClipmapUpdate[2];
+                result[0] = leftUpdate;
+                result[1] = rightUpdate;
+                return result;
             }
             else if (north < south)
             {
@@ -201,7 +287,6 @@ namespace OpenGlobe.Scene.Terrain
                     update.South,
                     update.East,
                     level.NextExtent.South + (clipmapSize - level.OriginInTextures.Y - 1));
-                Update(context, bottomUpdate);
 
                 ClipmapUpdate topUpdate = new ClipmapUpdate(
                     level,
@@ -209,33 +294,18 @@ namespace OpenGlobe.Scene.Terrain
                     level.NextExtent.South + clipmapSize - level.OriginInTextures.Y,
                     update.East,
                     update.North);
-                Update(context, topUpdate);
+
+                ClipmapUpdate[] result = new ClipmapUpdate[2];
+                result[0] = bottomUpdate;
+                result[1] = topUpdate;
+                return result;
             }
             else
             {
-                RasterTerrainTileRegion[] tileRegions = level.Terrain.GetTilesInExtent(update.West, update.South, update.East, update.North);
-                foreach (RasterTerrainTileRegion region in tileRegions)
-                {
-                    // TODO: Remove this
-                    _loadedTiles[region.Tile.Identifier] = CreateTextureFromTile(region.Tile);
-
-                    Texture2D tileTexture;
-                    bool loadingOrLoaded = _loadedTiles.TryGetValue(region.Tile.Identifier, out tileTexture);
-                    if (loadingOrLoaded && tileTexture != null)
-                    {
-                        RenderTileToLevelHeightTexture(context, update, region, tileTexture);
-                    }
-                    else
-                    {
-                        if (!loadingOrLoaded)
-                        {
-                            RequestTileLoad(region.Tile);
-                        }
-                        UpsampleTileData(context, update, region);
-                    }
-                }
-
-                UpdateNormals(context, update);
+                // No wrap
+                ClipmapUpdate[] result = new ClipmapUpdate[1];
+                result[0] = update;
+                return result;
             }
         }
 
@@ -245,7 +315,7 @@ namespace OpenGlobe.Scene.Terrain
 
             context.TextureUnits[0].Texture = texture;
             context.TextureUnits[0].TextureSampler = Device.TextureSamplers.NearestClamp;
-            
+
             _frameBuffer.ColorAttachments[_updateHeightOutput] = level.HeightTexture;
 
             int clipmapSize = level.NextExtent.East - level.NextExtent.West + 1;
@@ -271,6 +341,11 @@ namespace OpenGlobe.Scene.Terrain
             // Restore the context to its original state
             context.FrameBuffer = oldFrameBuffer;
             context.Viewport = oldViewport;
+
+            //ReadPixelBuffer rpb = level.HeightTexture.CopyToBuffer(ImageFormat.Red, ImageDatatype.Float);
+            //float[] postsFromTexture = rpb.CopyToSystemMemory<float>();
+            //if (postsFromTexture == null)
+            //    throw new Exception();
         }
 
         private void UpsampleTileData(Context context, ClipmapUpdate update, RasterTerrainTileRegion region)
@@ -279,16 +354,10 @@ namespace OpenGlobe.Scene.Terrain
 
         private void UpdateNormals(Context context, ClipmapUpdate update)
         {
-            // TODO: There are artifacts in the normal because normals on the edge are computed based on the texture wrap.  We don't care about the normals
-            // on the edge, so this is ok so far.  However, when the viewer moves, those normals move away from the edge, and then we do care about them.
-            // So we need to update them when they move away from the edge.  The AddBuffer call does this, sorta kinda maybe in theory, but
-            // something still isn't working quite right.
-            update = update.AddBuffer();
-
             ClipmapLevel level = update.Level;
 
             context.TextureUnits[0].Texture = update.Level.HeightTexture;
-            context.TextureUnits[0].TextureSampler = Device.TextureSamplers.NearestClamp;
+            context.TextureUnits[0].TextureSampler = Device.TextureSamplers.NearestRepeat;
 
             _frameBuffer.ColorAttachments[_normalOutput] = level.NormalTexture;
 
@@ -313,6 +382,11 @@ namespace OpenGlobe.Scene.Terrain
             // Restore the context to its original state
             context.FrameBuffer = oldFrameBuffer;
             context.Viewport = oldViewport;
+
+            ReadPixelBuffer rpb = level.NormalTexture.CopyToBuffer(ImageFormat.RedGreenBlue, ImageDatatype.Float);
+            Vector3F[] postsFromTexture = rpb.CopyToSystemMemory<Vector3F>();
+            if (postsFromTexture == null)
+                throw new Exception();
         }
 
         private void RequestTileLoad(RasterTerrainTile tile)
@@ -326,17 +400,28 @@ namespace OpenGlobe.Scene.Terrain
             int width = tile.East - tile.West + 1;
             int height = tile.North - tile.South + 1;
 
-            Texture2DDescription description = new Texture2DDescription(width, height, TextureFormat.Red16f, false);
+            Texture2DDescription description = new Texture2DDescription(width, height, TextureFormat.Red32f, false);
             Texture2D texture = Device.CreateTexture2DRectangle(description);
+
+            float[] posts = new float[width * height];
+            tile.GetPosts(0, 0, width - 1, height - 1, posts, 0, width);
 
             using (WritePixelBuffer wpb = Device.CreateWritePixelBuffer(PixelBufferHint.Stream, width * height * sizeof(float)))
             {
-                float[] posts = new float[width * height];
-                tile.GetPosts(0, 0, width - 1, height - 1, posts, 0, width);
-
                 wpb.CopyFromSystemMemory(posts);
                 texture.CopyFromBuffer(wpb, ImageFormat.Red, ImageDatatype.Float);
             }
+
+            //ReadPixelBuffer rpb = texture.CopyToBuffer(ImageFormat.Red, ImageDatatype.Float);
+            //float[] postsFromTexture = rpb.CopyToSystemMemory<float>();
+
+            //if (postsFromTexture.Length != posts.Length)
+            //    throw new Exception();
+            //for (int i = 0; i < posts.Length; ++i)
+            //{
+            //    if (postsFromTexture[i] != posts[i])
+            //        throw new Exception();
+            //}
 
             return texture;
         }
@@ -348,7 +433,7 @@ namespace OpenGlobe.Scene.Terrain
         {
             RasterTerrainTile tile = (RasterTerrainTile)e.Message;
             Texture2D texture = CreateTextureFromTile(tile);
-            
+
             Fence fence = Device.CreateFence();
             fence.ClientWait();
 
@@ -357,6 +442,58 @@ namespace OpenGlobe.Scene.Terrain
             message.Texture = texture;
 
             _doneQueue.Post(message);
+        }
+
+        private void VerifyHeights(ClipmapLevel level)
+        {
+            ReadPixelBuffer rpb = level.HeightTexture.CopyToBuffer(ImageFormat.Red, ImageDatatype.Float);
+            float[] postsFromTexture = rpb.CopyToSystemMemory<float>();
+
+            ReadPixelBuffer rpbNormals = level.NormalTexture.CopyToBuffer(ImageFormat.RedGreenBlue, ImageDatatype.Float);
+            Vector3F[] normalsFromTexture = rpbNormals.CopyToSystemMemory<Vector3F>();
+
+            int clipmapPosts = level.NextExtent.East - level.NextExtent.West + 1;
+
+            float[] realPosts = new float[clipmapPosts * clipmapPosts];
+            level.Terrain.GetPosts(level.NextExtent.West, level.NextExtent.South, level.NextExtent.East, level.NextExtent.North, realPosts, 0, clipmapPosts);
+
+            float heightExaggeration = HeightExaggeration;
+            float postDelta = (float)level.Terrain.PostDeltaLongitude;
+
+            for (int j = 0; j < clipmapPosts; ++j)
+            {
+                int y = (j + level.OriginInTextures.Y) % clipmapPosts;
+                for (int i = 0; i < clipmapPosts; ++i)
+                {
+                    int x = (i + level.OriginInTextures.X) % clipmapPosts;
+
+                    float realHeight = realPosts[j * clipmapPosts + i];
+                    float heightFromTexture = postsFromTexture[y * clipmapPosts + x];
+
+                    if (realHeight != heightFromTexture)
+                        throw new Exception("bad");
+
+                    if (i != 0 && i != clipmapPosts - 1 &&
+                        j != 0 && j != clipmapPosts - 1)
+                    {
+                        int top = (j + 1) * clipmapPosts + i;
+                        float topHeight = realPosts[top] * heightExaggeration;
+                        int bottom = (j - 1) * clipmapPosts + i;
+                        float bottomHeight = realPosts[bottom] * heightExaggeration;
+                        int right = j * clipmapPosts + i + 1;
+                        float rightHeight = realPosts[right] * heightExaggeration;
+                        int left = j * clipmapPosts + i - 1;
+                        float leftHeight = realPosts[left] * heightExaggeration;
+
+                        Vector3F realNormal = new Vector3F(leftHeight - rightHeight, bottomHeight - topHeight, 2.0f * postDelta).Normalize();
+
+                        Vector3F normalFromTexture = normalsFromTexture[y * clipmapPosts + x].Normalize();
+
+                        if (!realNormal.EqualsEpsilon(normalFromTexture, 1e-5f))
+                            throw new Exception("normal is bad.");
+                    }
+                }
+            }
         }
 
         private class LoadedTile
@@ -397,5 +534,6 @@ namespace OpenGlobe.Scene.Terrain
         private MessageQueue _requestQueue = new MessageQueue();
         private MessageQueue _doneQueue = new MessageQueue();
         private Uniform<Vector2F> _computeNormalsOneOverHeightMapSize;
+        private Uniform<bool> _realNormal;
     }
 }

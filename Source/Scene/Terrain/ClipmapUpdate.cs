@@ -54,12 +54,18 @@ namespace OpenGlobe.Scene.Terrain
 
         /// <summary>
         /// Creates a new region which is equivalent to this one but with a one post buffer added
-        /// around the perimeter.
+        /// around the perimeter.  The buffer will not cause the update region to exceed the bounds
+        /// of the level's <see cref="ClipmapLevel.NextExtent"/>.
         /// </summary>
         /// <returns>The new region.</returns>
-        public ClipmapUpdate AddBuffer()
+        public ClipmapUpdate AddBufferWithinLevelNextExtent()
         {
-            return new ClipmapUpdate(_level, _west - 1, _south - 1, _east + 1, _north + 1);
+            return new ClipmapUpdate(
+                _level,
+                Math.Max(_west - 1, Level.NextExtent.West),
+                Math.Max(_south - 1, Level.NextExtent.South),
+                Math.Min(_east + 1, Level.NextExtent.East),
+                Math.Min(_north + 1, Level.NextExtent.North));
         }
 
         private ClipmapLevel _level;
