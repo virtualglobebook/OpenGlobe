@@ -7,7 +7,7 @@ using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
 using System.IO;
 
-namespace OpenGlobe.Tests.Scene.Terrain
+namespace OpenGlobe.Scene.Terrain
 {
     [TestFixture]
     public class CreateMipmapTiles
