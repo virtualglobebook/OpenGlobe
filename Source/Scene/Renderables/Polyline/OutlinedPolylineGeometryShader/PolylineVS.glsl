@@ -1,4 +1,4 @@
-﻿#version 330
+#version 330
 //
 // (C) Copyright 2010 Patrick Cozzi and Deron Ohlarik
 //
@@ -8,7 +8,7 @@
 
 layout(location = og_positionVertexLocation) in vec4 position;
 layout(location = og_colorVertexLocation) in vec4 color;
-layout(location = 4) in vec4 outlineColor;
+in vec4 outlineColor;
 
 out vec4 gsColor;
 out vec4 gsOutlineColor;

@@ -1,4 +1,4 @@
-﻿#version 330
+#version 330
 //
 // (C) Copyright 2010 Patrick Cozzi and Deron Ohlarik
 //
@@ -9,8 +9,8 @@
 layout(location = og_positionVertexLocation) in vec4 position;
 layout(location = og_textureCoordinateVertexLocation) in vec4 textureCoordinates;
 layout(location = og_colorVertexLocation) in vec4 color;
-layout(location = 4) in float origin;                  // TODO:  Why does this not work when float is int?
-layout(location = 5) in vec2 pixelOffset;
+in float origin;                  // TODO:  Why does this not work when float is int?
+in vec2 pixelOffset;
 
 out vec4 gsTextureCoordinates;
 out vec4 gsColor;
