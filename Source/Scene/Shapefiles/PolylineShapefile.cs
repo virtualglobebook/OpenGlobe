@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 //
 // (C) Copyright 2010 Patrick Cozzi and Deron Ohlarik
 //
@@ -100,6 +100,7 @@ namespace OpenGlobe.Scene
             OutlineWidth = _polyline.OutlineWidth;
         }
 
+		/*
         private static void PolylineCapacities(Shapefile shapefile, out int positionsCount, out int indicesCount)
         {
             int numberOfPositions = 0;
@@ -129,6 +130,7 @@ namespace OpenGlobe.Scene
             positionsCount = numberOfPositions;
             indicesCount = numberOfIndices;
         }
+        */
 
         #region IRenderable Members
 

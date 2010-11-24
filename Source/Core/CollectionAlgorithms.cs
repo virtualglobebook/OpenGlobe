@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 //
 // (C) Copyright 2010 Patrick Cozzi and Deron Ohlarik
 //
@@ -29,10 +29,12 @@ namespace OpenGlobe.Core
             }
 
             int count = 0;
+            #pragma warning disable 219
             foreach (T t in enumerable)
             {
                 ++count;
             }
+            #pragma warning restore 219
 
             return count;
         }
@@ -57,6 +59,7 @@ namespace OpenGlobe.Core
             }
 
             int count = 0;
+            #pragma warning disable 219
             foreach (T t in enumerable)
             {
                 if (++count >= minimumCount)
@@ -64,6 +67,7 @@ namespace OpenGlobe.Core
                     return true;
                 }
             }
+            #pragma warning restore 219
 
             return false;
         }

@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 //
 // (C) Copyright 2010 Patrick Cozzi and Kevin Ring
 //
@@ -56,6 +56,7 @@ namespace OpenGlobe.Renderer
 
         public override IEnumerator GetEnumerator()
         {
+            #pragma warning disable 219
             foreach (VertexBufferAttribute vb in _attributes)
             {
                 if (_attributes != null)
@@ -63,6 +64,7 @@ namespace OpenGlobe.Renderer
                     yield return _attributes;
                 }
             }
+            #pragma warning restore 219
         }
 
         #endregion
