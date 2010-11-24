@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 //
 // (C) Copyright 2010 Patrick Cozzi and Kevin Ring
 //
@@ -85,7 +85,7 @@ namespace OpenGlobe.Scene.Terrain
             };
             window.PreRenderFrame += delegate()
             {
-                Context context = window.Context;
+                //Context context = window.Context;
                 //clipmap.PreRender(context, sceneState);
             };
 

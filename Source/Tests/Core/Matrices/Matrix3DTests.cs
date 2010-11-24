@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 //
 // (C) Copyright 2010 Patrick Cozzi and Kevin Ring
 //
@@ -155,6 +155,7 @@ namespace OpenGlobe.Core
         {
             Matrix3D m = null;
             Vector3D result = m * new Vector3D();
+			GC.KeepAlive(result);	// Fix MonoDevelop 2.2.1 CS0219 Warning
         }
 
         [Test]

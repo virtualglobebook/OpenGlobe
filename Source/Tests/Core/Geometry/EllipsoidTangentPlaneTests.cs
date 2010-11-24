@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 //
 // (C) Copyright 2010 Patrick Cozzi and Deron Ohlarik
 //
@@ -40,14 +40,14 @@ namespace OpenGlobe.Core
         [Test]
         public void TangentPlane()
         {
-            EllipsoidTangentPlane plane = new EllipsoidTangentPlane(
+            new EllipsoidTangentPlane(
                 Ellipsoid.UnitSphere, new Vector3D[] { new Vector3D(1, 0, 0) });
         }
 
         [Test]
         public void TangentPlane2()
         {
-            EllipsoidTangentPlane plane = new EllipsoidTangentPlane(
+            new EllipsoidTangentPlane(
                 Ellipsoid.UnitSphere, new Vector3D[] { new Vector3D(0, 0, 1) });
         }
     }

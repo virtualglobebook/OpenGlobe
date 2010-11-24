@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 //
 // (C) Copyright 2010 Patrick Cozzi and Kevin Ring
 //
@@ -201,6 +201,7 @@ namespace OpenGlobe.Core
         public void Multiply3()
         {
             Matrix4D m = null * new Matrix4D();
+			GC.KeepAlive(m);	// Fix MonoDevelop 2.2.1 CS0219 Warning
         }
 
         [Test]
@@ -208,6 +209,7 @@ namespace OpenGlobe.Core
         public void Multiply4()
         {
             Matrix4D m = new Matrix4D() * null;
+			GC.KeepAlive(m);	// Fix MonoDevelop 2.2.1 CS0219 Warning
         }
 
         [Test]
@@ -244,6 +246,7 @@ namespace OpenGlobe.Core
         {
             Matrix4D m = null;
             Vector4D result = m * new Vector4D();
+			GC.KeepAlive(result);	// Fix MonoDevelop 2.2.1 CS0219 Warning
         }
 
         [Test]
