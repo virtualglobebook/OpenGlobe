@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 //
 // (C) Copyright 2010 Patrick Cozzi and Kevin Ring
 //
@@ -530,6 +530,7 @@ namespace OpenGlobe.Scene.Terrain
             return mesh;
         }
 
+		/*
         private double EstimateLevelExtent(ClipmapLevel level)
         {
             int east = level.CurrentExtent.West + _clipmapSegments;
@@ -547,6 +548,7 @@ namespace OpenGlobe.Scene.Terrain
 
             return (northeastCartesian - southwestCartesian).Magnitude;
         }
+		*/
 
         private RasterTerrainSource _terrainSource;
         private int _clipmapPosts;

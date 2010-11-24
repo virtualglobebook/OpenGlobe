@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Drawing;
 using System.IO;
 using System.Net;
@@ -65,17 +65,17 @@ namespace OpenGlobe.Scene.Terrain
                 Directory.CreateDirectory(cachePath);
             }
 
-            int heightsToRead = TileWidth * TileHeight;
-            short[] result = new short[heightsToRead];
+            //int heightsToRead = TileWidth * TileHeight;
+            //short[] result = new short[heightsToRead];
 
             if (File.Exists(cacheFilename))
             {
                 return new Bitmap(cacheFilename);
             }
 
-            double divisor = Math.Pow(2.0, level);
-            double longitudeResolution = LevelZeroDeltaLongitudeDegrees / divisor;
-            double latitudeResolution = LevelZeroDeltaLatitudeDegrees / divisor;
+            //double divisor = Math.Pow(2.0, level);
+            //double longitudeResolution = LevelZeroDeltaLongitudeDegrees / divisor;
+            //double latitudeResolution = LevelZeroDeltaLatitudeDegrees / divisor;
 
             // Esri tiles are numbered from the northwest instead of from the southwest.
 

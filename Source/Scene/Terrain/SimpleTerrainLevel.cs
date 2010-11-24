@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using OpenGlobe.Core;
@@ -11,8 +11,8 @@ namespace OpenGlobe.Scene.Terrain
         {
             _terrainSource = terrainSource;
             _level = level;
-            _tileDeltaLongitude = tileDeltaLongitude;
-            _tileDeltaLatitude = tileDeltaLatitude;
+            //_tileDeltaLongitude = tileDeltaLongitude;
+            //_tileDeltaLatitude = tileDeltaLatitude;
 
             GeodeticExtent extent = terrainSource.Extent;
             _longitudeTiles = (int)Math.Round((extent.East - extent.West) / tileDeltaLongitude);
@@ -124,7 +124,7 @@ namespace OpenGlobe.Scene.Terrain
                 _cache.Add(tile);
             }
 
-            int latitudePosts = tileNorth - tileSouth + 1;
+            //int latitudePosts = tileNorth - tileSouth + 1;
             int longitudePosts = tileEast - tileWest + 1;
 
             int writeIndex = startIndex;
@@ -171,8 +171,8 @@ namespace OpenGlobe.Scene.Terrain
             public int TileLatitudeIndex;
         }
 
-        private double _tileDeltaLongitude;
-        private double _tileDeltaLatitude;
+        //private double _tileDeltaLongitude;
+        //private double _tileDeltaLatitude;
         private int _level;
         private SimpleTerrainSource _terrainSource;
         private int _longitudePosts;

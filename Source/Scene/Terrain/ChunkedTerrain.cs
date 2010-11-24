@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 //
 // (C) Copyright 2010 Patrick Cozzi and Kevin Ring
 //
@@ -19,9 +19,9 @@ namespace OpenGlobe.Scene.Terrain
 
         public ChunkedTerrain(ChunkedTerrainTree tree)
         {
-            _tree = tree;
+            //_tree = tree;
         }
 
-        private ChunkedTerrainTree _tree;
+        //private ChunkedTerrainTree _tree;
     }
 }

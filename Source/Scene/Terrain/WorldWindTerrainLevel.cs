@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 //
 // (C) Copyright 2010 Patrick Cozzi and Kevin Ring
 //
@@ -131,7 +131,7 @@ namespace OpenGlobe.Scene.Terrain
                 _cache.Add(tile);
             }
 
-            int latitudePosts = tileNorth - tileSouth + 1;
+            //int latitudePosts = tileNorth - tileSouth + 1;
             int longitudePosts = tileEast - tileWest + 1;
 
             int writeIndex = startIndex;

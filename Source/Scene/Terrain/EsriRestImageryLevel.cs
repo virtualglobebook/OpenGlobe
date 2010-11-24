@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -115,8 +115,8 @@ namespace OpenGlobe.Scene.Terrain
                 _cache.Add(tile);
             }
 
-            int postsIndex = tileSouth * _imagerySource.TileLongitudePosts + tileWest;
-            int latitudePosts = tileNorth - tileSouth + 1;
+            //int postsIndex = tileSouth * _imagerySource.TileLongitudePosts + tileWest;
+            //int latitudePosts = tileNorth - tileSouth + 1;
             int longitudePosts = tileEast - tileWest + 1;
 
             //Rectangle rectangle = new Rectangle(tileWest, tile.Image.Height - tileNorth - 1, longitudePosts, latitudePosts);

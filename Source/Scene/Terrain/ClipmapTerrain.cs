@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 //
 // (C) Copyright 2010 Patrick Cozzi and Kevin Ring
 //
@@ -330,11 +330,11 @@ namespace OpenGlobe.Scene.Terrain
 
         private void DrawBlock(VertexArray block, Level level, Level coarserLevel, int overallWest, int overallSouth, int blockWest, int blockSouth, Context context, SceneState sceneState)
         {
-            double blockOriginLongitude = level.Terrain.IndexToLongitude(blockWest);
-            double blockOriginLatitude = level.Terrain.IndexToLatitude(blockSouth);
+            //double blockOriginLongitude = level.Terrain.IndexToLongitude(blockWest);
+            //double blockOriginLatitude = level.Terrain.IndexToLatitude(blockSouth);
 
-            double overallOriginLongitude = level.Terrain.IndexToLongitude(overallWest);
-            double overallOriginLatitude = level.Terrain.IndexToLatitude(overallSouth);
+            //double overallOriginLongitude = level.Terrain.IndexToLongitude(overallWest);
+            //double overallOriginLatitude = level.Terrain.IndexToLatitude(overallSouth);
 
             int textureWest = blockWest - overallWest;
             int textureSouth = blockSouth - overallSouth;
@@ -423,6 +423,7 @@ namespace OpenGlobe.Scene.Terrain
             return mesh;
         }
 
+        #pragma warning disable 169
         private void PostsToBitmap(string filename, float[] posts, int width, int height)
         {
             Bitmap bmp = new Bitmap(width, height);
@@ -462,6 +463,7 @@ namespace OpenGlobe.Scene.Terrain
 
             bmp.Save(filename, System.Drawing.Imaging.ImageFormat.Png);
         }
+        #pragma warning restore 169
 
         private double EstimateLevelExtent(Level level)
         {
