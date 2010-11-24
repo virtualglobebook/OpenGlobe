@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 //
 // (C) Copyright 2009 Patrick Cozzi and Deron Ohlarik
 //
@@ -33,21 +33,21 @@ namespace OpenGlobe.Renderer.GL3x
                 width = DisplayDevice.Default.Width;
                 height = DisplayDevice.Default.Height;
             }
-
-            _gameWindw = new GameWindow(width, height, new GraphicsMode(32, 24, 8), title, gameWindowFlags,
+            
+            _gameWindow = new GameWindow(width, height, new GraphicsMode(24, 24, 8), title, gameWindowFlags,
                 DisplayDevice.Default, 3, 3, GraphicsContextFlags.ForwardCompatible | GraphicsContextFlags.Debug);
 
             FinalizerThreadContextGL3x.Initialize();
-            _gameWindw.MakeCurrent();
+            _gameWindow.MakeCurrent();
 
-            _gameWindw.Resize += new EventHandler<EventArgs>(this.OnResize);
-            _gameWindw.UpdateFrame += new EventHandler<FrameEventArgs>(this.OnUpdateFrame);
-            _gameWindw.RenderFrame += new EventHandler<FrameEventArgs>(this.OnRenderFrame);
+            _gameWindow.Resize += new EventHandler<EventArgs>(this.OnResize);
+            _gameWindow.UpdateFrame += new EventHandler<FrameEventArgs>(this.OnUpdateFrame);
+            _gameWindow.RenderFrame += new EventHandler<FrameEventArgs>(this.OnRenderFrame);
 
             _context = new ContextGL3x(width, height);
 
-            _mouse = new MouseGL3x(_gameWindw.Mouse);
-            _keyboard = new KeyboardGL3x(_gameWindw.Keyboard);
+            _mouse = new MouseGL3x(_gameWindow.Mouse);
+            _keyboard = new KeyboardGL3x(_gameWindow.Keyboard);
         }
 
         private void OnResize<T>(object sender, T e)
@@ -65,19 +65,19 @@ namespace OpenGlobe.Renderer.GL3x
             OnPreRenderFrame();
             OnRenderFrame();
             OnPostRenderFrame();
-            _gameWindw.SwapBuffers();      
+            _gameWindow.SwapBuffers();      
         }
 
         #region GraphicsWindow Members
 
         public override void MakeCurrent()
         {
-            _gameWindw.MakeCurrent();
+            _gameWindow.MakeCurrent();
         }
 
         public override void Run(double updateRate)
         {
-            _gameWindw.Run(updateRate);
+            _gameWindow.Run(updateRate);
         }
 
         public override Context Context
@@ -87,12 +87,12 @@ namespace OpenGlobe.Renderer.GL3x
 
         public override int Width
         {
-            get { return _gameWindw.Width; }
+            get { return _gameWindow.Width; }
         }
 
         public override int Height
         {
-            get { return _gameWindw.Height; }
+            get { return _gameWindow.Height; }
         }
 
         public override Mouse Mouse
@@ -113,14 +113,14 @@ namespace OpenGlobe.Renderer.GL3x
         {
             if (disposing)
             {
-                _gameWindw.Dispose();
+                _gameWindow.Dispose();
             }
             base.Dispose(disposing);
         }
 
         #endregion
 
-        private GameWindow _gameWindw;
+        private GameWindow _gameWindow;
         private ContextGL3x _context;
         private MouseGL3x _mouse;
         private KeyboardGL3x _keyboard;
