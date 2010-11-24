@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 //
 // (C) Copyright 2010 Patrick Cozzi and Kevin Ring
 //
@@ -12,17 +12,20 @@ namespace OpenGlobe.Renderer
     public static class VertexLocations
     {
         public const int Position = 0;
-        public const int Normal = 1;
-        public const int TextureCoordinate = 2;
-        public const int Color = 3;
+        public const int Normal = 2;
+        public const int TextureCoordinate = 3;
+        public const int Color = 4;
 
         //
-        // We would prefer these not overlap Position and Normal above.
-        // There is a potential bug on ATI:
+        // Having Position and PositionHigh share the same location
+        // allows different shaders to share the same vertex array,
+        // even if one is using DSFUN90 and one is not.
+        //
+        // FYI There is/was an ATI bug where location was required:
         //
         // http://www.opengl.org/discussion_boards/ubbthreads.php?ubb=showflat&Number=286280
         //
-        public const int PositionHigh = 0;
+        public const int PositionHigh = Position;
         public const int PositionLow = 1;
     }
 }

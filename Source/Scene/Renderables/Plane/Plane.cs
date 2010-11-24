@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 //
 // (C) Copyright 2010 Patrick Cozzi and Deron Ohlarik
 //
@@ -127,8 +127,8 @@ namespace OpenGlobe.Scene
                 //
                 // Pass 1:  Outline
                 //
-//                _lineFillDistance.Value = (float)(OutlineWidth * 0.5 * sceneState.HighResolutionSnapScale);
-//                context.Draw(PrimitiveType.LineLoop, 0, 4, _drawStateLine, sceneState);
+                _lineFillDistance.Value = (float)(OutlineWidth * 0.5 * sceneState.HighResolutionSnapScale);
+                context.Draw(PrimitiveType.LineLoop, 0, 4, _drawStateLine, sceneState);
             }
 
             if (ShowFill)
