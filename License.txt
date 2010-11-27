@@ -1,6 +1,6 @@
 (C) Copyright 2009-2010 Contributors
 
-MiniGlobe is distributed under the Boost Software License, Version 1.0.
+OpenGlobe is distributed under the Boost Software License, Version 1.0.
 ---------------------------------------------------------------------------
 
 Permission is hereby granted, free of charge, to any person or organization
@@ -33,7 +33,7 @@ Third Parties
 ---------------------------------------------------------------------------
 
 
-MiniGlobe uses OpenTK:
+OpenGlobe uses OpenTK:
 
   Copyright (c) 2006 - 2009 The Open Toolkit library.
 
@@ -59,7 +59,7 @@ MiniGlobe uses OpenTK:
   Also available at http://www.opentk.com/project/license
 
 
-MiniGlobe uses ESRI Shapefile Reader (Catfood.Shapefile.dll):
+OpenGlobe uses ESRI Shapefile Reader (Catfood.Shapefile.dll):
 
   (c)copyright 2009 Catfood Software - http://www.catfood.net
 
@@ -115,7 +115,7 @@ MiniGlobe uses ESRI Shapefile Reader (Catfood.Shapefile.dll):
   Available at http://shapefile.codeplex.com/
 
 
-MiniGlobe tests use NUnit:
+OpenGlobe tests use NUnit:
 
   Copyright (c) 2002-2008 Charlie Poole
   Copyright (c) 2002-2004 James W. Newkirk, Michael C. Two, 
@@ -152,7 +152,7 @@ Data
 ---------------------------------------------------------------------------
 
 
-MiniGlobe uses data from NASA Visible Earth:
+OpenGlobe uses data from NASA Visible Earth:
 
    Data\Imagery\NASA\world.topo.200412.3x5400x2700.jpg
       Reto Stockli, NASA Earth Observatory 
@@ -170,7 +170,7 @@ MiniGlobe uses data from NASA Visible Earth:
    Terms of use:  http://visibleearth.nasa.gov/useterms.php
 
 
-MiniGlobe uses images created by Dave Pape, while a federal employee 
+OpenGlobe uses images created by Dave Pape, while a federal employee 
 at NASA/GSFC:
 
    Data\Imagery\NASA\DavePape\MapperWDB.jpg
@@ -181,7 +181,7 @@ at NASA/GSFC:
       MP_Photo_Guidelines.html
 
 
-MiniGlobe uses data from Natural Earth:
+OpenGlobe uses data from Natural Earth:
 
    Free vector and raster map data @ naturalearthdata.com.
 
@@ -208,7 +208,7 @@ MiniGlobe uses data from Natural Earth:
    Terms of use:  http://www.naturalearthdata.com/about/terms-of-use/
 
 
-MiniGlobe uses data from the National Atlas of the United States of America:
+OpenGlobe uses data from the National Atlas of the United States of America:
 
    Data\Vector\NationalAtlasOfTheUnitedStatesOfAmerica\airprtx020
 
@@ -220,7 +220,7 @@ MiniGlobe uses data from the National Atlas of the United States of America:
    http://www.nationalatlas.gov/atlasftp.html
 
 
-MiniGlobe uses data from USGS and The University of Washington:
+OpenGlobe uses data from USGS and The University of Washington:
 
    Terrain\ps-e.lg.jpg
    Imagery\USGS\ps_texture_1k.png
@@ -235,7 +235,7 @@ MiniGlobe uses data from USGS and The University of Washington:
       http://duff.geology.washington.edu/data/raster/tenmeter/onebytwo10/
 
 
-MiniGlobe uses icons from Yusuke Kamiyamane
+OpenGlobe uses icons from Yusuke Kamiyamane
 
    http://pinvoke.com/
 
