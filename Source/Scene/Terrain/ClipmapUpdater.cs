@@ -185,14 +185,11 @@ namespace OpenGlobe.Scene.Terrain
                 RasterTerrainTileRegion[] tileRegions = level.Terrain.GetTilesInExtent(nonWrappingUpdate.West, nonWrappingUpdate.South, nonWrappingUpdate.East, nonWrappingUpdate.North);
                 foreach (RasterTerrainTileRegion region in tileRegions)
                 {
-                    // TODO: Remove this
-                    //_loadedTiles[region.Tile.Identifier] = CreateTextureFromTile(region.Tile);
-
                     Texture2D tileTexture;
                     bool loadingOrLoaded = _loadedTiles.TryGetValue(region.Tile.Identifier, out tileTexture);
                     if (loadingOrLoaded && tileTexture != null)
                     {
-                        RenderTileToLevelHeightTexture(context, nonWrappingUpdate, region, tileTexture);
+                        RenderTileToLevelHeightTexture(context, level, region, tileTexture);
                     }
                     else
                     {
@@ -200,7 +197,7 @@ namespace OpenGlobe.Scene.Terrain
                         {
                             RequestTileLoad(level, region.Tile);
                         }
-                        UpsampleTileData(context, nonWrappingUpdate, region);
+                        UpsampleTileData(context, level, region);
                     }
                 }
             }
@@ -316,10 +313,8 @@ namespace OpenGlobe.Scene.Terrain
             }
         }
 
-        private void RenderTileToLevelHeightTexture(Context context, ClipmapUpdate update, RasterTerrainTileRegion region, Texture2D texture)
+        private void RenderTileToLevelHeightTexture(Context context, ClipmapLevel level, RasterTerrainTileRegion region, Texture2D texture)
         {
-            ClipmapLevel level = update.Level;
-
             foreach (TextureUnit unit in context.TextureUnits)
             {
                 unit.Texture = null;
@@ -359,10 +354,9 @@ namespace OpenGlobe.Scene.Terrain
             //    throw new Exception();
         }
 
-        private void UpsampleTileData(Context context, ClipmapUpdate update, RasterTerrainTileRegion region)
+        private void UpsampleTileData(Context context, ClipmapLevel level, RasterTerrainTileRegion region)
         {
-            ClipmapLevel level = update.Level;
-            ClipmapLevel coarserLevel = update.Level.CoarserLevel;
+            ClipmapLevel coarserLevel = level.CoarserLevel;
 
             if (coarserLevel == null)
                 return;
@@ -474,19 +468,6 @@ namespace OpenGlobe.Scene.Terrain
                 wpb.CopyFromSystemMemory(posts);
                 texture.CopyFromBuffer(wpb, ImageFormat.Red, ImageDatatype.Float);
             }
-
-            ReadPixelBuffer rpb = texture.CopyToBuffer(ImageFormat.Red, ImageDatatype.Float);
-            float[] postsFromTexture = rpb.CopyToSystemMemory<float>();
-
-            Debug.Assert(postsFromTexture != null);
-
-            //if (postsFromTexture.Length != posts.Length)
-            //    throw new Exception();
-            //for (int i = 0; i < posts.Length; ++i)
-            //{
-            //    if (postsFromTexture[i] != posts[i])
-            //        throw new Exception();
-            //}
 
             return texture;
         }
