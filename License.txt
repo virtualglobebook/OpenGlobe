@@ -170,17 +170,6 @@ OpenGlobe uses data from NASA Visible Earth:
    Terms of use:  http://visibleearth.nasa.gov/useterms.php
 
 
-OpenGlobe uses images created by Dave Pape, while a federal employee 
-at NASA/GSFC:
-
-   Data\Imagery\NASA\DavePape\MapperWDB.jpg
-   Data\Imagery\NASA\DavePape\Topography.jpg
-      http://www.evl.uic.edu/pape/data/Earth/
-
-   Terms of use: http://www.nasa.gov/audience/formedia/features/
-      MP_Photo_Guidelines.html
-
-
 OpenGlobe uses data from Natural Earth:
 
    Free vector and raster map data @ naturalearthdata.com.
