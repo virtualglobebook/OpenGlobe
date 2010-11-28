@@ -48,11 +48,11 @@ namespace OpenGlobe.Renderer
         }
 
         public abstract VertexArray CreateVertexArray();
-        public abstract FrameBuffer CreateFrameBuffer();
+        public abstract Framebuffer CreateFramebuffer();
 
         public abstract TextureUnits TextureUnits { get; }
         public abstract Rectangle Viewport { get; set; }
-        public abstract FrameBuffer FrameBuffer { get; set; }
+        public abstract Framebuffer Framebuffer { get; set; }
 
         public abstract void Clear(ClearState clearState);
         public abstract void Draw(PrimitiveType primitiveType, int offset, int count, DrawState drawState, SceneState sceneState);

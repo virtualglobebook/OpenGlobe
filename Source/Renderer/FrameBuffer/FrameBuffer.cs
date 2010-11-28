@@ -11,7 +11,7 @@ using OpenGlobe.Core;
 
 namespace OpenGlobe.Renderer
 {
-    public abstract class FrameBuffer : Disposable
+    public abstract class Framebuffer : Disposable
     {
         public abstract ColorAttachments ColorAttachments { get; }
         public abstract Texture2D DepthAttachment { get; set; }

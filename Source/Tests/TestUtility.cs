@@ -19,15 +19,15 @@ namespace OpenGlobe
         /// <summary>
         /// Creates a frame buffer with a 1x1 RGB color attachment.
         /// </summary>
-        public static FrameBuffer CreateFrameBuffer(Context context)
+        public static Framebuffer CreateFramebuffer(Context context)
         {
-            FrameBuffer frameBuffer = context.CreateFrameBuffer();
-            frameBuffer.ColorAttachments[0] = Device.CreateTexture2D(
+            Framebuffer framebuffer = context.CreateFramebuffer();
+            framebuffer.ColorAttachments[0] = Device.CreateTexture2D(
                 new Texture2DDescription(1, 1, TextureFormat.RedGreenBlue8, false));
-            frameBuffer.DepthAttachment = Device.CreateTexture2D(
+            framebuffer.DepthAttachment = Device.CreateTexture2D(
                 new Texture2DDescription(1, 1, TextureFormat.Depth24, false));
 
-            return frameBuffer;
+            return framebuffer;
         }
 
         /// <summary>

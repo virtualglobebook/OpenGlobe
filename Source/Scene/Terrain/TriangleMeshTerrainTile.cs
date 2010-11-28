@@ -134,14 +134,14 @@ namespace OpenGlobe.Terrain
             //
             // Depth texture
             //
-            context.FrameBuffer =_terrainFrameBuffer;
+            context.Framebuffer = _terrainFramebuffer;
             context.Clear(_clearDepthStencil);
             Render(context, sceneState);
 
             //
             // Silhouette texture
             //
-            context.FrameBuffer = _silhouetteFrameBuffer;
+            context.Framebuffer = _silhouetteFramebuffer;
             context.Clear(_clearColor);
             if (silhouette)
             {
@@ -180,22 +180,22 @@ namespace OpenGlobe.Terrain
                 //
                 // Terrain FBO
                 //
-                if (_terrainFrameBuffer == null)
+                if (_terrainFramebuffer == null)
                 {
-                    _terrainFrameBuffer = context.CreateFrameBuffer();
+                    _terrainFramebuffer = context.CreateFramebuffer();
                 }
-                _terrainFrameBuffer.DepthAttachment = _depthTexture;
-                _terrainFrameBuffer.ColorAttachments[0] = _colorTexture;
+                _terrainFramebuffer.DepthAttachment = _depthTexture;
+                _terrainFramebuffer.ColorAttachments[0] = _colorTexture;
 
                 //
                 // Silhouette FBO
                 //
-                if (_silhouetteFrameBuffer == null)
+                if (_silhouetteFramebuffer == null)
                 {
-                    _silhouetteFrameBuffer = context.CreateFrameBuffer();
+                    _silhouetteFramebuffer = context.CreateFramebuffer();
                 }
-                _silhouetteFrameBuffer.DepthAttachment = _depthTexture;
-                _silhouetteFrameBuffer.ColorAttachments[0] = _silhouetteTexture;
+                _silhouetteFramebuffer.DepthAttachment = _depthTexture;
+                _silhouetteFramebuffer.ColorAttachments[0] = _silhouetteTexture;
             }
         }
 
@@ -243,13 +243,13 @@ namespace OpenGlobe.Terrain
             {
                 _colorTexture.Dispose();
             }
-            if (_silhouetteFrameBuffer != null)
+            if (_silhouetteFramebuffer != null)
             {
-                _silhouetteFrameBuffer.Dispose();
+                _silhouetteFramebuffer.Dispose();
             }
-            if (_terrainFrameBuffer != null)
+            if (_terrainFramebuffer != null)
             {
-                _terrainFrameBuffer.Dispose();
+                _terrainFramebuffer.Dispose();
             }
         }
 
@@ -268,8 +268,8 @@ namespace OpenGlobe.Terrain
         private readonly DrawState _drawState;
         private readonly DrawState _silhouetteDrawState;
 
-        private FrameBuffer _silhouetteFrameBuffer;
-        private FrameBuffer _terrainFrameBuffer;
+        private Framebuffer _silhouetteFramebuffer;
+        private Framebuffer _terrainFramebuffer;
 
         private readonly Uniform<float> _heightExaggeration;
         private readonly Uniform<float> _minimumHeight;

@@ -34,13 +34,13 @@ namespace OpenGlobe.Renderer.Multithreading
 
                 ///////////////////////////////////////////////////////////////////
 
-                using (FrameBuffer frameBuffer = TestUtility.CreateFrameBuffer(window.Context))
+                using (Framebuffer framebuffer = TestUtility.CreateFramebuffer(window.Context))
                 using (VertexArray va = TestUtility.CreateVertexArray(window.Context, factory.ShaderProgram.VertexAttributes["position"].Location))
                 {
-                    window.Context.FrameBuffer = frameBuffer;
+                    window.Context.Framebuffer = framebuffer;
                     window.Context.Draw(PrimitiveType.Points, 0, 1, new DrawState(TestUtility.CreateRenderStateWithoutDepthTest(), factory.ShaderProgram, va), new SceneState());
 
-                    TestUtility.ValidateColor(frameBuffer.ColorAttachments[0], 255, 0, 0);
+                    TestUtility.ValidateColor(framebuffer.ColorAttachments[0], 255, 0, 0);
                 }
             }
         }
@@ -67,16 +67,16 @@ namespace OpenGlobe.Renderer.Multithreading
                 t1.Start();
                 t1.Join();
 
-                using (FrameBuffer frameBuffer = TestUtility.CreateFrameBuffer(window.Context))
+                using (Framebuffer framebuffer = TestUtility.CreateFramebuffer(window.Context))
                 using (VertexArray va = TestUtility.CreateVertexArray(window.Context, factory0.ShaderProgram.VertexAttributes["position"].Location))
                 {
-                    window.Context.FrameBuffer = frameBuffer;
+                    window.Context.Framebuffer = framebuffer;
                     window.Context.Draw(PrimitiveType.Points, 0, 1, new DrawState(TestUtility.CreateRenderStateWithoutDepthTest(), factory0.ShaderProgram, va), new SceneState());
-                    TestUtility.ValidateColor(frameBuffer.ColorAttachments[0], 255, 0, 0);
+                    TestUtility.ValidateColor(framebuffer.ColorAttachments[0], 255, 0, 0);
 
                     window.Context.Clear(new ClearState());
                     window.Context.Draw(PrimitiveType.Points, 0, 1, new DrawState(TestUtility.CreateRenderStateWithoutDepthTest(), factory1.ShaderProgram, va), new SceneState());
-                    TestUtility.ValidateColor(frameBuffer.ColorAttachments[0], 255, 0, 0);
+                    TestUtility.ValidateColor(framebuffer.ColorAttachments[0], 255, 0, 0);
                 }
             }
         }
@@ -104,16 +104,16 @@ namespace OpenGlobe.Renderer.Multithreading
                 t0.Join();
                 t1.Join();
 
-                using (FrameBuffer frameBuffer = TestUtility.CreateFrameBuffer(window.Context))
+                using (Framebuffer framebuffer = TestUtility.CreateFramebuffer(window.Context))
                 using (VertexArray va = TestUtility.CreateVertexArray(window.Context, factory0.ShaderProgram.VertexAttributes["position"].Location))
                 {
-                    window.Context.FrameBuffer = frameBuffer;
+                    window.Context.Framebuffer = framebuffer;
                     window.Context.Draw(PrimitiveType.Points, 0, 1, new DrawState(TestUtility.CreateRenderStateWithoutDepthTest(), factory0.ShaderProgram, va), new SceneState());
-                    TestUtility.ValidateColor(frameBuffer.ColorAttachments[0], 255, 0, 0);
+                    TestUtility.ValidateColor(framebuffer.ColorAttachments[0], 255, 0, 0);
 
                     window.Context.Clear(new ClearState());
                     window.Context.Draw(PrimitiveType.Points, 0, 1, new DrawState(TestUtility.CreateRenderStateWithoutDepthTest(), factory1.ShaderProgram, va), new SceneState());
-                    TestUtility.ValidateColor(frameBuffer.ColorAttachments[0], 255, 0, 0);
+                    TestUtility.ValidateColor(framebuffer.ColorAttachments[0], 255, 0, 0);
                 }
             }
         }

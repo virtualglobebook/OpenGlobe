@@ -24,7 +24,7 @@ namespace OpenGlobe.Scene.Terrain
             _unitQuad = context.CreateVertexArray(unitQuad, vertexAttributes, BufferHint.StaticDraw);
             _unitQuadPrimitiveType = unitQuad.PrimitiveType;
             _sceneState = new SceneState();
-            _frameBuffer = context.CreateFrameBuffer();
+            _framebuffer = context.CreateFramebuffer();
 
             _updateShader = Device.CreateShaderProgram(
                 EmbeddedResources.GetText("OpenGlobe.Scene.Terrain.ClipmapTerrain.ClipmapUpdateVS.glsl"),
@@ -84,7 +84,7 @@ namespace OpenGlobe.Scene.Terrain
             _upsampleShader.Dispose();
             _updateShader.Dispose();
 
-            _frameBuffer.Dispose();
+            _framebuffer.Dispose();
             _unitQuad.Dispose();
         }
 
@@ -322,7 +322,7 @@ namespace OpenGlobe.Scene.Terrain
             context.TextureUnits[0].Texture = texture;
             context.TextureUnits[0].TextureSampler = Device.TextureSamplers.NearestClamp;
 
-            _frameBuffer.ColorAttachments[_updateHeightOutput] = level.HeightTexture;
+            _framebuffer.ColorAttachments[_updateHeightOutput] = level.HeightTexture;
 
             int clipmapSize = level.NextExtent.East - level.NextExtent.West + 1;
             int destWest = (level.OriginInTextures.X + (region.Tile.West + region.West - level.NextExtent.West)) % clipmapSize;
@@ -337,15 +337,15 @@ namespace OpenGlobe.Scene.Terrain
 
             // Save the current state of the context
             Rectangle oldViewport = context.Viewport;
-            FrameBuffer oldFrameBuffer = context.FrameBuffer;
+            Framebuffer oldFramebuffer = context.Framebuffer;
 
             // Update the context and draw
             context.Viewport = new Rectangle(0, 0, level.HeightTexture.Description.Width, level.HeightTexture.Description.Height);
-            context.FrameBuffer = _frameBuffer;
+            context.Framebuffer = _framebuffer;
             context.Draw(_unitQuadPrimitiveType, _updateDrawState, _sceneState);
 
             // Restore the context to its original state
-            context.FrameBuffer = oldFrameBuffer;
+            context.Framebuffer = oldFramebuffer;
             context.Viewport = oldViewport;
 
             //ReadPixelBuffer rpb = level.HeightTexture.CopyToBuffer(ImageFormat.Red, ImageDatatype.Float);
@@ -368,7 +368,7 @@ namespace OpenGlobe.Scene.Terrain
             context.TextureUnits[0].Texture = coarserLevel.HeightTexture;
             context.TextureUnits[0].TextureSampler = Device.TextureSamplers.LinearRepeat; // TODO: change to NearestRepeat
 
-            _frameBuffer.ColorAttachments[_upsampleHeightOutput] = level.HeightTexture;
+            _framebuffer.ColorAttachments[_upsampleHeightOutput] = level.HeightTexture;
 
             int fineClipmapSize = level.NextExtent.East - level.NextExtent.West + 1;
             int destWest = (level.OriginInTextures.X + (region.Tile.West + region.West - level.NextExtent.West)) % fineClipmapSize;
@@ -388,15 +388,15 @@ namespace OpenGlobe.Scene.Terrain
 
             // Save the current state of the context
             Rectangle oldViewport = context.Viewport;
-            FrameBuffer oldFrameBuffer = context.FrameBuffer;
+            Framebuffer oldFramebuffer = context.Framebuffer;
 
             // Update the context and draw
             context.Viewport = new Rectangle(0, 0, level.HeightTexture.Description.Width, level.HeightTexture.Description.Height);
-            context.FrameBuffer = _frameBuffer;
+            context.Framebuffer = _framebuffer;
             context.Draw(_unitQuadPrimitiveType, _upsampleDrawState, _sceneState);
 
             // Restore the context to its original state
-            context.FrameBuffer = oldFrameBuffer;
+            context.Framebuffer = oldFramebuffer;
             context.Viewport = oldViewport;
 
             //ReadPixelBuffer rpb = level.HeightTexture.CopyToBuffer(ImageFormat.Red, ImageDatatype.Float);
@@ -412,7 +412,7 @@ namespace OpenGlobe.Scene.Terrain
             context.TextureUnits[0].Texture = update.Level.HeightTexture;
             context.TextureUnits[0].TextureSampler = Device.TextureSamplers.NearestRepeat;
 
-            _frameBuffer.ColorAttachments[_normalOutput] = level.NormalTexture;
+            _framebuffer.ColorAttachments[_normalOutput] = level.NormalTexture;
 
             int clipmapSize = level.NextExtent.East - level.NextExtent.West + 1;
             int west = (level.OriginInTextures.X + (update.West - level.NextExtent.West)) % clipmapSize;
@@ -425,15 +425,15 @@ namespace OpenGlobe.Scene.Terrain
 
             // Save the current state of the context
             Rectangle oldViewport = context.Viewport;
-            FrameBuffer oldFrameBuffer = context.FrameBuffer;
+            Framebuffer oldFramebuffer = context.Framebuffer;
 
             // Update the context and draw
             context.Viewport = new Rectangle(0, 0, level.NormalTexture.Description.Width, level.NormalTexture.Description.Height);
-            context.FrameBuffer = _frameBuffer;
+            context.Framebuffer = _framebuffer;
             context.Draw(_unitQuadPrimitiveType, _computeNormalsDrawState, _sceneState);
 
             // Restore the context to its original state
-            context.FrameBuffer = oldFrameBuffer;
+            context.Framebuffer = oldFramebuffer;
             context.Viewport = oldViewport;
 
             /*ReadPixelBuffer rpb = level.NormalTexture.CopyToBuffer(ImageFormat.RedGreenBlue, ImageDatatype.Float);
@@ -549,7 +549,7 @@ namespace OpenGlobe.Scene.Terrain
         private VertexArray _unitQuad;
         private PrimitiveType _unitQuadPrimitiveType;
         private SceneState _sceneState;
-        private FrameBuffer _frameBuffer;
+        private Framebuffer _framebuffer;
 
         private ShaderProgram _updateShader;
         private int _updateHeightOutput;

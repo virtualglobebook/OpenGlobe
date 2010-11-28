@@ -107,9 +107,9 @@ namespace OpenGlobe.Renderer.GL3x
             return new VertexArrayGL3x();
         }
 
-        public override FrameBuffer CreateFrameBuffer()
+        public override Framebuffer CreateFramebuffer()
         {
-            return new FrameBufferGL3x();
+            return new FramebufferGL3x();
         }
 
         public override TextureUnits TextureUnits
@@ -138,15 +138,15 @@ namespace OpenGlobe.Renderer.GL3x
             }
         }
 
-        public override FrameBuffer FrameBuffer
+        public override Framebuffer Framebuffer
         {
-            get { return _setFrameBuffer; }
-            set { _setFrameBuffer = (FrameBufferGL3x)value; }
+            get { return _setFramebuffer; }
+            set { _setFramebuffer = (FramebufferGL3x)value; }
         }
 
         public override void Clear(ClearState clearState)
         {
-            ApplyFrameBuffer();
+            ApplyFramebuffer();
 
             ApplyScissorTest(clearState.ScissorTest);
             ApplyColorMask(clearState.ColorMask);
@@ -482,13 +482,13 @@ namespace OpenGlobe.Renderer.GL3x
                 throw new ArgumentNullException("sceneState");
             }
 
-            if (_setFrameBuffer != null)
+            if (_setFramebuffer != null)
             {
                 if (drawState.RenderState.DepthTest.Enabled &&
-                    !((_setFrameBuffer.DepthAttachment != null) || 
-                      (_setFrameBuffer.DepthStencilAttachment != null)))
+                    !((_setFramebuffer.DepthAttachment != null) || 
+                      (_setFramebuffer.DepthStencilAttachment != null)))
                 {
-                    throw new ArgumentException("The depth test is enabled (drawState.RenderState.DepthTest.Enabled) but the context's FrameBuffer property doesn't have a depth or depth/stencil attachment (DepthAttachment or DepthStencilAttachment).", "drawState");
+                    throw new ArgumentException("The depth test is enabled (drawState.RenderState.DepthTest.Enabled) but the context's Framebuffer property doesn't have a depth or depth/stencil attachment (DepthAttachment or DepthStencilAttachment).", "drawState");
                 }
             }
         }
@@ -500,7 +500,7 @@ namespace OpenGlobe.Renderer.GL3x
             ApplyShaderProgram(drawState, sceneState);
 
             _textureUnits.Clean();
-            ApplyFrameBuffer();
+            ApplyFramebuffer();
         }
 
         private void ApplyRenderState(RenderState renderState)
@@ -548,25 +548,25 @@ namespace OpenGlobe.Renderer.GL3x
 #endif
         }
 
-        private void ApplyFrameBuffer()
+        private void ApplyFramebuffer()
         {
-            if (_boundFrameBuffer != _setFrameBuffer)
+            if (_boundFramebuffer != _setFramebuffer)
             {
-                if (_setFrameBuffer != null)
+                if (_setFramebuffer != null)
                 {
-                    _setFrameBuffer.Bind();
+                    _setFramebuffer.Bind();
                 }
                 else
                 {
-                    FrameBufferGL3x.UnBind();
+                    FramebufferGL3x.UnBind();
                 }
 
-                _boundFrameBuffer = _setFrameBuffer;
+                _boundFramebuffer = _setFramebuffer;
             }
 
-            if (_setFrameBuffer != null)
+            if (_setFramebuffer != null)
             {
-                _setFrameBuffer.Clean();
+                _setFramebuffer.Clean();
 #if DEBUG
                 FramebufferErrorCode errorCode = GL.CheckFramebufferStatus(FramebufferTarget.Framebuffer);
                 Debug.Assert(errorCode == FramebufferErrorCode.FramebufferComplete);
@@ -580,8 +580,8 @@ namespace OpenGlobe.Renderer.GL3x
 
         private RenderState _renderState;
         private ShaderProgramGL3x _boundShaderProgram;
-        private FrameBufferGL3x _boundFrameBuffer;
-        private FrameBufferGL3x _setFrameBuffer;
+        private FramebufferGL3x _boundFramebuffer;
+        private FramebufferGL3x _setFramebuffer;
 
         private TextureUnitsGL3x _textureUnits;
     }

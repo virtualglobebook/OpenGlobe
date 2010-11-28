@@ -128,7 +128,7 @@ namespace OpenGlobe.Examples
             //
             // Terrain to framebuffer
             //
-            _window.Context.FrameBuffer = null;
+            _window.Context.Framebuffer = null;
              _window.Context.Clear(_clearState);
             _tile.Render(_window.Context, _sceneState);
 

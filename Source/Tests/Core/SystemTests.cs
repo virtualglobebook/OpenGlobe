@@ -47,15 +47,15 @@ namespace OpenGlobe.Core
         private static void Render(Mesh mesh)
         {
             using (GraphicsWindow window = Device.CreateWindow(1, 1))
-            using (FrameBuffer frameBuffer = TestUtility.CreateFrameBuffer(window.Context))
+            using (Framebuffer framebuffer = TestUtility.CreateFramebuffer(window.Context))
             using (ShaderProgram sp = Device.CreateShaderProgram(ShaderSources.PassThroughVertexShader(), ShaderSources.PassThroughFragmentShader()))
             using (VertexArray va = window.Context.CreateVertexArray(mesh, sp.VertexAttributes, BufferHint.StaticDraw))
             {
-                window.Context.FrameBuffer = frameBuffer;
+                window.Context.Framebuffer = framebuffer;
                 window.Context.Clear(new ClearState());
                 window.Context.Draw(PrimitiveType.Triangles, new DrawState(TestUtility.CreateRenderStateWithoutDepthTest(), sp, va), new SceneState());
 
-                TestUtility.ValidateColor(frameBuffer.ColorAttachments[0], 255, 0, 0);
+                TestUtility.ValidateColor(framebuffer.ColorAttachments[0], 255, 0, 0);
             }
         }
     }

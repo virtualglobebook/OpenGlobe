@@ -67,7 +67,7 @@ namespace OpenGlobe.Renderer.Multithreading
                 TestUtility.ValidateColor(factory0.Texture, 127, 0, 0);
                 TestUtility.ValidateColor(factory1.Texture, 0, 255, 0);
 
-                using (FrameBuffer frameBuffer = TestUtility.CreateFrameBuffer(window.Context))
+                using (Framebuffer framebuffer = TestUtility.CreateFramebuffer(window.Context))
                 using (ShaderProgram sp = Device.CreateShaderProgram(ShaderSources.PassThroughVertexShader(), ShaderSources.MultitextureFragmentShader()))
                 using (VertexArray va = TestUtility.CreateVertexArray(window.Context, sp.VertexAttributes["position"].Location))
                 {
@@ -75,10 +75,10 @@ namespace OpenGlobe.Renderer.Multithreading
                     window.Context.TextureUnits[0].TextureSampler = Device.TextureSamplers.NearestClamp;
                     window.Context.TextureUnits[1].Texture = factory1.Texture;
                     window.Context.TextureUnits[1].TextureSampler = Device.TextureSamplers.NearestClamp;
-                    window.Context.FrameBuffer = frameBuffer;
+                    window.Context.Framebuffer = framebuffer;
                     window.Context.Draw(PrimitiveType.Points, 0, 1, new DrawState(TestUtility.CreateRenderStateWithoutDepthTest(), sp, va), new SceneState());
 
-                    TestUtility.ValidateColor(frameBuffer.ColorAttachments[0], 127, 255, 0);
+                    TestUtility.ValidateColor(framebuffer.ColorAttachments[0], 127, 255, 0);
                 }
             }
         }
@@ -112,7 +112,7 @@ namespace OpenGlobe.Renderer.Multithreading
                 TestUtility.ValidateColor(factory0.Texture, 255, 0, 0);
                 TestUtility.ValidateColor(factory1.Texture, 0, 255, 0);
 
-                using (FrameBuffer frameBuffer = TestUtility.CreateFrameBuffer(window.Context))
+                using (Framebuffer framebuffer = TestUtility.CreateFramebuffer(window.Context))
                 using (ShaderProgram sp = Device.CreateShaderProgram(ShaderSources.PassThroughVertexShader(), ShaderSources.MultitextureFragmentShader()))
                 using (VertexArray va = TestUtility.CreateVertexArray(window.Context, sp.VertexAttributes["position"].Location))
                 {
@@ -120,10 +120,10 @@ namespace OpenGlobe.Renderer.Multithreading
                     window.Context.TextureUnits[0].TextureSampler = Device.TextureSamplers.NearestClamp;
                     window.Context.TextureUnits[1].Texture = factory1.Texture;
                     window.Context.TextureUnits[1].TextureSampler = Device.TextureSamplers.NearestClamp;
-                    window.Context.FrameBuffer = frameBuffer;
+                    window.Context.Framebuffer = framebuffer;
                     window.Context.Draw(PrimitiveType.Points, 0, 1, new DrawState(TestUtility.CreateRenderStateWithoutDepthTest(), sp, va), new SceneState());
 
-                    TestUtility.ValidateColor(frameBuffer.ColorAttachments[0], 255, 255, 0);
+                    TestUtility.ValidateColor(framebuffer.ColorAttachments[0], 255, 255, 0);
                 }
             }
         }

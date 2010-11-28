@@ -33,7 +33,7 @@ namespace OpenGlobe.Examples.Chapter7
 
             Context context = _window.Context;
 
-            _frameBuffer = context.CreateFrameBuffer();
+            _framebuffer = context.CreateFramebuffer();
 
             _clearBlack = new ClearState();
             _clearBlack.Color = Color.Black;
@@ -173,12 +173,12 @@ namespace OpenGlobe.Examples.Chapter7
             _window.Context.Viewport = new Rectangle(0, 0, _window.Width, _window.Height);
             _sceneState.Camera.AspectRatio = _window.Width / (double)_window.Height;
 
-            UpdateFrameBufferAttachments();
+            UpdateFramebufferAttachments();
         }
 
-        private void UpdateFrameBufferAttachments()
+        private void UpdateFramebufferAttachments()
         {
-            DisposeFrameBufferAttachments();
+            DisposeFramebufferAttachments();
             _dayTexture = Device.CreateTexture2D(new Texture2DDescription(_window.Width, _window.Height, TextureFormat.RedGreenBlueAlpha8, false));
             _nightTexture = Device.CreateTexture2D(new Texture2DDescription(_window.Width, _window.Height, TextureFormat.RedGreenBlueAlpha8, false));
             _blendTexture = Device.CreateTexture2D(new Texture2DDescription(_window.Width, _window.Height, TextureFormat.Red32f, false));
@@ -209,23 +209,23 @@ namespace OpenGlobe.Examples.Chapter7
             //
             // Render to frame buffer
             //
-            context.FrameBuffer = _frameBuffer;
+            context.Framebuffer = _framebuffer;
 
-            SetFrameBufferAttachments(_dayTexture, _nightTexture, null);
+            SetFramebufferAttachments(_dayTexture, _nightTexture, null);
             _window.Context.Clear(_clearBlack);
 
-            SetFrameBufferAttachments(null, null, _blendTexture);
+            SetFramebufferAttachments(null, null, _blendTexture);
             _window.Context.Clear(_clearWhite);
 
             //
             // Render globe to day, night, and blend buffers
             //
-            SetFrameBufferAttachments(_dayTexture, _nightTexture, _blendTexture);
+            SetFramebufferAttachments(_dayTexture, _nightTexture, _blendTexture);
             _globe.Render(context, _sceneState);
 
             if (_showVectorData)
             {
-                SetFrameBufferAttachments(_dayTexture, null, null);
+                SetFramebufferAttachments(_dayTexture, null, null);
 
                 //
                 // Render vector data, layered bottom to top, to the day buffer only
@@ -241,17 +241,17 @@ namespace OpenGlobe.Examples.Chapter7
             //
             // Render viewport quad to composite buffers
             //
-            context.FrameBuffer = null;
+            context.Framebuffer = null;
             _quad.Render(context, _sceneState);
             _hud.Render(context, _sceneState);
         }
 
-        private void SetFrameBufferAttachments(Texture2D day, Texture2D night, Texture2D blend)
+        private void SetFramebufferAttachments(Texture2D day, Texture2D night, Texture2D blend)
         {
-            _frameBuffer.ColorAttachments[_globe.FragmentOutputs("dayColor")] = day;
-            _frameBuffer.ColorAttachments[_globe.FragmentOutputs("nightColor")] = night;
-            _frameBuffer.ColorAttachments[_globe.FragmentOutputs("blendAlpha")] = blend;
-            _frameBuffer.DepthAttachment = _depthTexture;
+            _framebuffer.ColorAttachments[_globe.FragmentOutputs("dayColor")] = day;
+            _framebuffer.ColorAttachments[_globe.FragmentOutputs("nightColor")] = night;
+            _framebuffer.ColorAttachments[_globe.FragmentOutputs("blendAlpha")] = blend;
+            _framebuffer.DepthAttachment = _depthTexture;
         }
 
         #region IDisposable Members
@@ -259,8 +259,8 @@ namespace OpenGlobe.Examples.Chapter7
         public void Dispose()
         {
             _camera.Dispose();
-            DisposeFrameBufferAttachments();
-            _frameBuffer.Dispose();
+            DisposeFramebufferAttachments();
+            _framebuffer.Dispose();
             _quad.Dispose();
             _globe.DayTexture.Dispose();
             _globe.NightTexture.Dispose();
@@ -279,7 +279,7 @@ namespace OpenGlobe.Examples.Chapter7
 
         #endregion
 
-        private void DisposeFrameBufferAttachments()
+        private void DisposeFramebufferAttachments()
         {
             if (_dayTexture != null)
             {
@@ -329,7 +329,7 @@ namespace OpenGlobe.Examples.Chapter7
         private Texture2D _nightTexture;
         private Texture2D _blendTexture;
         private Texture2D _depthTexture;
-        private readonly FrameBuffer _frameBuffer;
+        private readonly Framebuffer _framebuffer;
         private readonly DayNightViewportQuad _quad;
 
         private readonly DayNightGlobe _globe;

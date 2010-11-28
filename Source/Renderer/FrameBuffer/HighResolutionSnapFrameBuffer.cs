@@ -11,9 +11,9 @@ using System;
 
 namespace OpenGlobe.Renderer
 {
-    public sealed class HighResolutionSnapFrameBuffer : IDisposable
+    public sealed class HighResolutionSnapFramebuffer : IDisposable
     {
-        public HighResolutionSnapFrameBuffer(Context context, double widthInInches, int dotsPerInch, double aspectRatio)
+        public HighResolutionSnapFramebuffer(Context context, double widthInInches, int dotsPerInch, double aspectRatio)
         {
             _widthInInches = widthInInches;
             _dotsPerInch = dotsPerInch;
@@ -25,9 +25,9 @@ namespace OpenGlobe.Renderer
             Texture2DDescription depthDescription = new Texture2DDescription(WidthInPixels, HeightInPixels, TextureFormat.Depth24, false);
             _depthTexture = Device.CreateTexture2D(depthDescription);
 
-            _frameBuffer = context.CreateFrameBuffer();
-            _frameBuffer.ColorAttachments[0] = _colorTexture;
-            _frameBuffer.DepthAttachment = _depthTexture;
+            _framebuffer = context.CreateFramebuffer();
+            _framebuffer.ColorAttachments[0] = _colorTexture;
+            _framebuffer.DepthAttachment = _depthTexture;
         }
 
         public double WidthInInches
@@ -60,19 +60,19 @@ namespace OpenGlobe.Renderer
             get { return _aspectRatio; }
         }
 
-        public FrameBuffer FrameBuffer
+        public Framebuffer Framebuffer
         {
-            get { return _frameBuffer; }
+            get { return _framebuffer; }
         }
 
         public void SaveColorBuffer(string filename)
         {
-            _frameBuffer.ColorAttachments[0].Save(filename);
+            _framebuffer.ColorAttachments[0].Save(filename);
         }
 
         public void SaveDepthBuffer(string filename)
         {
-            _frameBuffer.DepthAttachment.Save(filename);
+            _framebuffer.DepthAttachment.Save(filename);
         }
 
         #region IDisposable Members
@@ -81,7 +81,7 @@ namespace OpenGlobe.Renderer
         {
             _colorTexture.Dispose();
             _depthTexture.Dispose();
-            _frameBuffer.Dispose();
+            _framebuffer.Dispose();
         }
 
         #endregion
@@ -92,6 +92,6 @@ namespace OpenGlobe.Renderer
 
         private Texture2D _colorTexture;
         private Texture2D _depthTexture;
-        private FrameBuffer _frameBuffer;
+        private Framebuffer _framebuffer;
     }
 }

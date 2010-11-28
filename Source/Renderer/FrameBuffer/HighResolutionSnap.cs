@@ -32,8 +32,8 @@ namespace OpenGlobe.Renderer
         {
             Context context = _window.Context;
 
-            _snapBuffer = new HighResolutionSnapFrameBuffer(context, WidthInInches, DotsPerInch, _sceneState.Camera.AspectRatio);
-            context.FrameBuffer = _snapBuffer.FrameBuffer;
+            _snapBuffer = new HighResolutionSnapFramebuffer(context, WidthInInches, DotsPerInch, _sceneState.Camera.AspectRatio);
+            context.Framebuffer = _snapBuffer.Framebuffer;
 
             _previousViewport = context.Viewport;
             context.Viewport = new Rectangle(0, 0, _snapBuffer.WidthInPixels, _snapBuffer.HeightInPixels);
@@ -54,7 +54,7 @@ namespace OpenGlobe.Renderer
                 _snapBuffer.SaveDepthBuffer(DepthFilename);
             }
 
-            _window.Context.FrameBuffer = null;
+            _window.Context.Framebuffer = null;
             _window.Context.Viewport = _previousViewport;
             _sceneState.HighResolutionSnapScale = _previousSnapScale;
 
@@ -101,7 +101,7 @@ namespace OpenGlobe.Renderer
         public double WidthInInches { get; set; }
         public int DotsPerInch { get; set; }
 
-        public HighResolutionSnapFrameBuffer SnapBuffer
+        public HighResolutionSnapFramebuffer SnapBuffer
         {
             get { return _snapBuffer; }
         }
@@ -109,7 +109,7 @@ namespace OpenGlobe.Renderer
         private GraphicsWindow _window;
         private SceneState _sceneState;
         private bool _enabled;
-        private HighResolutionSnapFrameBuffer _snapBuffer;
+        private HighResolutionSnapFramebuffer _snapBuffer;
 
         private Rectangle _previousViewport;
         private double _previousSnapScale;

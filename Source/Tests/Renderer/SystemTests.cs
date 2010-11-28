@@ -26,15 +26,15 @@ namespace OpenGlobe.Renderer
         public void ClearColorDepth()
         {
             using (GraphicsWindow window = Device.CreateWindow(1, 1))
-            using (FrameBuffer frameBuffer = TestUtility.CreateFrameBuffer(window.Context))
+            using (Framebuffer framebuffer = TestUtility.CreateFramebuffer(window.Context))
             using (Texture2D depthTexture = Device.CreateTexture2D(new Texture2DDescription(1, 1, TextureFormat.Depth32f, false)))
             {
-                frameBuffer.DepthAttachment = depthTexture;
+                framebuffer.DepthAttachment = depthTexture;
 
-                window.Context.FrameBuffer = frameBuffer;
+                window.Context.Framebuffer = framebuffer;
                 window.Context.Clear(new ClearState() { Buffers = ClearBuffers.All, Color = Color.Red, Depth = 0.5f });
-                TestUtility.ValidateColor(frameBuffer.ColorAttachments[0], 255, 0, 0);
-                ValidateDepth(frameBuffer.DepthAttachment, 0.5f);
+                TestUtility.ValidateColor(framebuffer.ColorAttachments[0], 255, 0, 0);
+                ValidateDepth(framebuffer.DepthAttachment, 0.5f);
 
                 //
                 // Scissor out window and verify clear doesn't modify contents
@@ -44,8 +44,8 @@ namespace OpenGlobe.Renderer
                 scissorTest.Rectangle = new Rectangle(0, 0, 0, 0);
 
                 window.Context.Clear(new ClearState() { ScissorTest = scissorTest, Buffers = ClearBuffers.All, Color = Color.Blue, Depth = 1 });
-                TestUtility.ValidateColor(frameBuffer.ColorAttachments[0], 255, 0, 0);
-                ValidateDepth(frameBuffer.DepthAttachment, 0.5f);
+                TestUtility.ValidateColor(framebuffer.ColorAttachments[0], 255, 0, 0);
+                ValidateDepth(framebuffer.DepthAttachment, 0.5f);
             }
         }
 
@@ -53,13 +53,13 @@ namespace OpenGlobe.Renderer
         public void RenderPoint()
         {
             using (GraphicsWindow window = Device.CreateWindow(1, 1))
-            using (FrameBuffer frameBuffer = TestUtility.CreateFrameBuffer(window.Context))
+            using (Framebuffer framebuffer = TestUtility.CreateFramebuffer(window.Context))
             using (ShaderProgram sp = Device.CreateShaderProgram(ShaderSources.PassThroughVertexShader(), ShaderSources.PassThroughFragmentShader()))
             using (VertexArray va = TestUtility.CreateVertexArray(window.Context, sp.VertexAttributes["position"].Location))
             {
-                window.Context.FrameBuffer = frameBuffer;
+                window.Context.Framebuffer = framebuffer;
                 window.Context.Draw(PrimitiveType.Points, 0, 1, new DrawState(TestUtility.CreateRenderStateWithoutDepthTest(), sp, va), new SceneState());
-                TestUtility.ValidateColor(frameBuffer.ColorAttachments[0], 255, 0, 0);
+                TestUtility.ValidateColor(framebuffer.ColorAttachments[0], 255, 0, 0);
             }
         }
 
@@ -79,7 +79,7 @@ namespace OpenGlobe.Renderer
             };
 
             using (GraphicsWindow window = Device.CreateWindow(1, 1))
-            using (FrameBuffer frameBuffer = TestUtility.CreateFrameBuffer(window.Context))
+            using (Framebuffer framebuffer = TestUtility.CreateFramebuffer(window.Context))
             using (ShaderProgram sp = Device.CreateShaderProgram(ShaderSources.PassThroughVertexShader(), ShaderSources.PassThroughFragmentShader()))
             using (VertexBuffer positionsBuffer = Device.CreateVertexBuffer(BufferHint.StaticDraw, ArraySizeInBytes.Size(positions)))
             using (IndexBuffer indexBuffer = Device.CreateIndexBuffer(BufferHint.StaticDraw, indices.Length * sizeof(ushort)))
@@ -92,9 +92,9 @@ namespace OpenGlobe.Renderer
                     new VertexBufferAttribute(positionsBuffer, ComponentDatatype.Float, 4);
                 va.IndexBuffer = indexBuffer;
 
-                window.Context.FrameBuffer = frameBuffer;
+                window.Context.Framebuffer = framebuffer;
                 window.Context.Draw(PrimitiveType.Triangles, 0, 3, new DrawState(TestUtility.CreateRenderStateWithoutDepthTest(), sp, va), new SceneState());
-                TestUtility.ValidateColor(frameBuffer.ColorAttachments[0], 255, 0, 0);
+                TestUtility.ValidateColor(framebuffer.ColorAttachments[0], 255, 0, 0);
 
                 //
                 // Verify detach
@@ -103,7 +103,7 @@ namespace OpenGlobe.Renderer
                 va.Attributes[sp.VertexAttributes["position"].Location] = null;
                 va.IndexBuffer = null;
                 window.Context.Draw(PrimitiveType.Triangles, 0, 0, new DrawState(TestUtility.CreateRenderStateWithoutDepthTest(), sp, va), new SceneState());
-                TestUtility.ValidateColor(frameBuffer.ColorAttachments[0], 0, 255, 0);
+                TestUtility.ValidateColor(framebuffer.ColorAttachments[0], 0, 255, 0);
 
                 //
                 // Verify rendering without indices
@@ -111,7 +111,7 @@ namespace OpenGlobe.Renderer
                 va.Attributes[sp.VertexAttributes["position"].Location] =
                     new VertexBufferAttribute(positionsBuffer, ComponentDatatype.Float, 4);
                 window.Context.Draw(PrimitiveType.Triangles, 0, 3, new DrawState(TestUtility.CreateRenderStateWithoutDepthTest(), sp, va), new SceneState());
-                TestUtility.ValidateColor(frameBuffer.ColorAttachments[0], 255, 0, 0);
+                TestUtility.ValidateColor(framebuffer.ColorAttachments[0], 255, 0, 0);
             }
         }
 
@@ -133,7 +133,7 @@ namespace OpenGlobe.Renderer
                   }";
 
             using (GraphicsWindow window = Device.CreateWindow(1, 1))
-            using (FrameBuffer frameBuffer = TestUtility.CreateFrameBuffer(window.Context))
+            using (Framebuffer framebuffer = TestUtility.CreateFramebuffer(window.Context))
             using (ShaderProgram sp = Device.CreateShaderProgram(ShaderSources.PassThroughVertexShader(), fs))
             using (Texture2D texture = TestUtility.CreateTexture(new BlittableRGBA(Color.FromArgb(0, 255, 0, 0))))
             using (VertexArray va = TestUtility.CreateVertexArray(window.Context, sp.VertexAttributes["position"].Location))
@@ -143,10 +143,10 @@ namespace OpenGlobe.Renderer
 
                 window.Context.TextureUnits[0].Texture = texture;
                 window.Context.TextureUnits[0].TextureSampler = Device.TextureSamplers.NearestClamp;
-                window.Context.FrameBuffer = frameBuffer;
+                window.Context.Framebuffer = framebuffer;
                 window.Context.Draw(PrimitiveType.Points, 0, 1, new DrawState(TestUtility.CreateRenderStateWithoutDepthTest(), sp, va), new SceneState());
 
-                TestUtility.ValidateColor(frameBuffer.ColorAttachments[0], 255, 0, 0);
+                TestUtility.ValidateColor(framebuffer.ColorAttachments[0], 255, 0, 0);
             }
         }
 
@@ -168,17 +168,17 @@ namespace OpenGlobe.Renderer
                   }";
 
             using (GraphicsWindow window = Device.CreateWindow(1, 1))
-            using (FrameBuffer frameBuffer = window.Context.CreateFrameBuffer())
+            using (Framebuffer framebuffer = window.Context.CreateFramebuffer())
             using (Texture2D redTexture = Device.CreateTexture2D(description))
             using (Texture2D greenTexture = Device.CreateTexture2D(description))
             using (ShaderProgram sp = Device.CreateShaderProgram(ShaderSources.PassThroughVertexShader(), fs))
             using (VertexArray va = TestUtility.CreateVertexArray(window.Context, sp.VertexAttributes["position"].Location))
             {
                 Assert.AreNotEqual(sp.FragmentOutputs["RedColor"], sp.FragmentOutputs["GreenColor"]);
-                frameBuffer.ColorAttachments[sp.FragmentOutputs["RedColor"]] = redTexture;
-                frameBuffer.ColorAttachments[sp.FragmentOutputs["GreenColor"]] = greenTexture;
+                framebuffer.ColorAttachments[sp.FragmentOutputs["RedColor"]] = redTexture;
+                framebuffer.ColorAttachments[sp.FragmentOutputs["GreenColor"]] = greenTexture;
 
-                window.Context.FrameBuffer = frameBuffer;
+                window.Context.Framebuffer = framebuffer;
                 window.Context.Draw(PrimitiveType.Points, 0, 1, new DrawState(TestUtility.CreateRenderStateWithoutDepthTest(), sp, va), new SceneState());
 
                 TestUtility.ValidateColor(redTexture, 255, 0, 0);
@@ -193,7 +193,7 @@ namespace OpenGlobe.Renderer
         public void RenderMultitexturedPoint()
         {
             using (GraphicsWindow window = Device.CreateWindow(1, 1))
-            using (FrameBuffer frameBuffer = TestUtility.CreateFrameBuffer(window.Context))
+            using (Framebuffer framebuffer = TestUtility.CreateFramebuffer(window.Context))
             using (ShaderProgram sp = Device.CreateShaderProgram(ShaderSources.PassThroughVertexShader(), ShaderSources.MultitextureFragmentShader()))
             using (Texture2D texture0 = TestUtility.CreateTexture(new BlittableRGBA(Color.FromArgb(0, 255, 0, 0))))
             using (Texture2D texture1 = TestUtility.CreateTexture(new BlittableRGBA(Color.FromArgb(0, 0, 255, 0))))
@@ -203,10 +203,10 @@ namespace OpenGlobe.Renderer
                 window.Context.TextureUnits[0].TextureSampler = Device.TextureSamplers.NearestClamp;
                 window.Context.TextureUnits[1].Texture = texture1;
                 window.Context.TextureUnits[1].TextureSampler = Device.TextureSamplers.NearestClamp;
-                window.Context.FrameBuffer = frameBuffer;
+                window.Context.Framebuffer = framebuffer;
                 window.Context.Draw(PrimitiveType.Points, 0, 1, new DrawState(TestUtility.CreateRenderStateWithoutDepthTest(), sp, va), new SceneState());
 
-                TestUtility.ValidateColor(frameBuffer.ColorAttachments[0], 255, 255, 0);
+                TestUtility.ValidateColor(framebuffer.ColorAttachments[0], 255, 255, 0);
             }
         }
 
@@ -217,12 +217,12 @@ namespace OpenGlobe.Renderer
         public void RenderPointWithStencil()
         {
             using (GraphicsWindow window = Device.CreateWindow(1, 1))
-            using (FrameBuffer frameBuffer = TestUtility.CreateFrameBuffer(window.Context))
+            using (Framebuffer framebuffer = TestUtility.CreateFramebuffer(window.Context))
             using (Texture2D depthStencilTexture = Device.CreateTexture2D(new Texture2DDescription(1, 1, TextureFormat.Depth24Stencil8, false)))
             using (ShaderProgram sp = Device.CreateShaderProgram(ShaderSources.PassThroughVertexShader(), ShaderSources.PassThroughFragmentShader()))
             using (VertexArray va = TestUtility.CreateVertexArray(window.Context, sp.VertexAttributes["position"].Location))
             {
-                frameBuffer.DepthStencilAttachment = depthStencilTexture;
+                framebuffer.DepthStencilAttachment = depthStencilTexture;
 
                 StencilTest stencilTest = new StencilTest();
                 stencilTest.Enabled = true;
@@ -234,12 +234,12 @@ namespace OpenGlobe.Renderer
                 RenderState renderState = new RenderState();
                 renderState.StencilTest = stencilTest;
 
-                window.Context.FrameBuffer = frameBuffer;
+                window.Context.Framebuffer = framebuffer;
                 window.Context.Clear(new ClearState());
                 window.Context.Draw(PrimitiveType.Points, 0, 1, new DrawState(renderState, sp, va), new SceneState());
 
-                TestUtility.ValidateColor(frameBuffer.ColorAttachments[0], 255, 0, 0);
-                ValidateStencil(frameBuffer.DepthStencilAttachment, stencilTest.FrontFace.ReferenceValue);
+                TestUtility.ValidateColor(framebuffer.ColorAttachments[0], 255, 0, 0);
+                ValidateStencil(framebuffer.DepthStencilAttachment, stencilTest.FrontFace.ReferenceValue);
             }
         }
 
@@ -282,7 +282,7 @@ namespace OpenGlobe.Renderer
         private void RenderPoint(string vs)
         {
             using (GraphicsWindow window = Device.CreateWindow(1, 1))
-            using (FrameBuffer frameBuffer = TestUtility.CreateFrameBuffer(window.Context))
+            using (Framebuffer framebuffer = TestUtility.CreateFramebuffer(window.Context))
             using (ShaderProgram sp = Device.CreateShaderProgram(vs, ShaderSources.PassThroughFragmentShader()))
             using (VertexArray va = TestUtility.CreateVertexArray(window.Context, sp.VertexAttributes["position"].Location))
             {
@@ -291,9 +291,9 @@ namespace OpenGlobe.Renderer
                 sceneState.Camera.Target = Vector3D.Zero;
                 sceneState.Camera.Up = Vector3D.UnitZ;
 
-                window.Context.FrameBuffer = frameBuffer;
+                window.Context.Framebuffer = framebuffer;
                 window.Context.Draw(PrimitiveType.Points, new DrawState(TestUtility.CreateRenderStateWithoutDepthTest(), sp, va), sceneState);
-                TestUtility.ValidateColor(frameBuffer.ColorAttachments[0], 255, 0, 0);
+                TestUtility.ValidateColor(framebuffer.ColorAttachments[0], 255, 0, 0);
             }
         }
 
@@ -326,7 +326,7 @@ namespace OpenGlobe.Renderer
                   }";
 
             using (GraphicsWindow window = Device.CreateWindow(1, 1))
-            using (FrameBuffer frameBuffer = TestUtility.CreateFrameBuffer(window.Context))
+            using (Framebuffer framebuffer = TestUtility.CreateFramebuffer(window.Context))
             using (ShaderProgram sp = Device.CreateShaderProgram(vs, fs))
             using (VertexBuffer vertexBuffer = Device.CreateVertexBuffer(BufferHint.StaticDraw,
                     ArraySizeInBytes.Size(positions) + ArraySizeInBytes.Size(colors)))
@@ -341,10 +341,10 @@ namespace OpenGlobe.Renderer
                 va.Attributes[sp.VertexAttributes["color"].Location] =
                     new VertexBufferAttribute(vertexBuffer, ComponentDatatype.UnsignedByte, 4, true, colorsOffset, 0);
             
-                window.Context.FrameBuffer = frameBuffer;
+                window.Context.Framebuffer = framebuffer;
                 window.Context.Draw(PrimitiveType.Points, 0, 1, new DrawState(TestUtility.CreateRenderStateWithoutDepthTest(), sp, va), new SceneState());
 
-                TestUtility.ValidateColor(frameBuffer.ColorAttachments[0], 255, 0, 0);
+                TestUtility.ValidateColor(framebuffer.ColorAttachments[0], 255, 0, 0);
             }
         }
 
@@ -397,7 +397,7 @@ namespace OpenGlobe.Renderer
             };
 
             GraphicsWindow window = Device.CreateWindow(1, 1);
-            FrameBuffer frameBuffer = TestUtility.CreateFrameBuffer(window.Context);
+            Framebuffer framebuffer = TestUtility.CreateFramebuffer(window.Context);
             ShaderProgram sp = Device.CreateShaderProgram(vs, fs);
             VertexBuffer vertexBuffer = Device.CreateVertexBuffer(BufferHint.StaticDraw, ArraySizeInBytes.Size(vertices));
             VertexArray va = window.Context.CreateVertexArray();
@@ -410,12 +410,12 @@ namespace OpenGlobe.Renderer
                 va.Attributes[sp.VertexAttributes["color"].Location] =
                     new VertexBufferAttribute(vertexBuffer, ComponentDatatype.UnsignedByte, 4, true, colorOffset, SizeInBytes<InterleavedVertex>.Value);
 
-                window.Context.FrameBuffer = frameBuffer;
+                window.Context.Framebuffer = framebuffer;
                 window.Context.Draw(PrimitiveType.Points, 0, 1, new DrawState(TestUtility.CreateRenderStateWithoutDepthTest(), sp, va), new SceneState());
-                TestUtility.ValidateColor(frameBuffer.ColorAttachments[0], 255, 0, 0);
+                TestUtility.ValidateColor(framebuffer.ColorAttachments[0], 255, 0, 0);
 
                 window.Context.Draw(PrimitiveType.Points, 1, 1, new DrawState(TestUtility.CreateRenderStateWithoutDepthTest(), sp, va), new SceneState());
-                TestUtility.ValidateColor(frameBuffer.ColorAttachments[0], 0, 255, 0);
+                TestUtility.ValidateColor(framebuffer.ColorAttachments[0], 0, 255, 0);
             }
         }
 

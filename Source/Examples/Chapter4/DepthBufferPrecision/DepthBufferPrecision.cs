@@ -58,7 +58,7 @@ namespace OpenGlobe.Examples
 
             _viewportQuad = new ViewportQuad(_window.Context, null);
 
-            _frameBuffer = _window.Context.CreateFrameBuffer();
+            _framebuffer = _window.Context.CreateFramebuffer();
             _depthFormatIndex = 1;
             _depthTestLess = true;
             _logarithmicDepthConstant = 1;
@@ -79,7 +79,7 @@ namespace OpenGlobe.Examples
             _window.Context.Viewport = new Rectangle(0, 0, _window.Width, _window.Height);
             _sceneState.Camera.AspectRatio = _window.Width / (double)_window.Height;
 
-            UpdateFrameBufferAttachments();
+            UpdateFramebufferAttachments();
         }
 
         private void OnKeyUp(object sender, KeyboardKeyEventArgs e)
@@ -143,7 +143,7 @@ namespace OpenGlobe.Examples
                     _depthFormatIndex = 0;
                 }
 
-                UpdateFrameBufferAttachments();
+                UpdateFramebufferAttachments();
             }
             else if (e.Key == KeyboardKey.D)
             {
@@ -173,13 +173,13 @@ namespace OpenGlobe.Examples
                 (_cubeRootPlaneHeight * _cubeRootPlaneHeight * _cubeRootPlaneHeight * Vector3D.UnitY));
         }
 
-        private void UpdateFrameBufferAttachments()
+        private void UpdateFramebufferAttachments()
         {
-            DisposeFrameBufferAttachments();
+            DisposeFramebufferAttachments();
             _colorTexture = Device.CreateTexture2D(new Texture2DDescription(_window.Width, _window.Height, TextureFormat.RedGreenBlue8, false));
             _depthTexture = Device.CreateTexture2D(new Texture2DDescription(_window.Width, _window.Height, _depthFormats[_depthFormatIndex], false));
-            _frameBuffer.ColorAttachments[0] = _colorTexture;
-            _frameBuffer.DepthAttachment = _depthTexture;
+            _framebuffer.ColorAttachments[0] = _colorTexture;
+            _framebuffer.DepthAttachment = _depthTexture;
             _viewportQuad.Texture = _colorTexture;
         }
 
@@ -248,7 +248,7 @@ namespace OpenGlobe.Examples
             //
             // Render to frame buffer
             //
-            context.FrameBuffer = _frameBuffer;
+            context.Framebuffer = _framebuffer;
 
             _clearState.Depth = _depthTestLess ? 1 : 0;
             context.Clear(_clearState);
@@ -259,7 +259,7 @@ namespace OpenGlobe.Examples
             //
             // Render viewport quad to show contents of frame buffer's color buffer
             //
-            context.FrameBuffer = null;
+            context.Framebuffer = null;
             _viewportQuad.Render(context, _sceneState);
             _hud.Render(context, _sceneState);
         }
@@ -274,8 +274,8 @@ namespace OpenGlobe.Examples
             _plane.Dispose();
             _viewportQuad.Dispose();
 
-            DisposeFrameBufferAttachments();
-            _frameBuffer.Dispose();
+            DisposeFramebufferAttachments();
+            _framebuffer.Dispose();
 
             _hudFont.Dispose();
             _hud.Texture.Dispose();
@@ -285,7 +285,7 @@ namespace OpenGlobe.Examples
 
         #endregion
 
-        private void DisposeFrameBufferAttachments()
+        private void DisposeFramebufferAttachments()
         {
             if (_colorTexture != null)
             {
@@ -329,7 +329,7 @@ namespace OpenGlobe.Examples
 
         private Texture2D _colorTexture;
         private Texture2D _depthTexture;
-        private readonly FrameBuffer _frameBuffer;
+        private readonly Framebuffer _framebuffer;
         private int _depthFormatIndex;
         private bool _depthTestLess;
         private bool _logarithmicDepthBuffer;

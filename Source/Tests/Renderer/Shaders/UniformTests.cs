@@ -30,7 +30,7 @@ namespace OpenGlobe.Renderer
                   }";
 
             using (GraphicsWindow window = Device.CreateWindow(1, 1))
-            using (FrameBuffer frameBuffer = TestUtility.CreateFrameBuffer(window.Context))
+            using (Framebuffer framebuffer = TestUtility.CreateFramebuffer(window.Context))
             using (ShaderProgram sp = Device.CreateShaderProgram(ShaderSources.PassThroughVertexShader(), fs))
             using (VertexArray va = TestUtility.CreateVertexArray(window.Context, sp.VertexAttributes["position"].Location))
             {
@@ -44,9 +44,9 @@ namespace OpenGlobe.Renderer
                 exampleMat42.Value = m42;
                 Assert.AreEqual(m42, exampleMat42.Value);
 
-                window.Context.FrameBuffer = frameBuffer;
+                window.Context.Framebuffer = framebuffer;
                 window.Context.Draw(PrimitiveType.Points, 0, 1, new DrawState(TestUtility.CreateRenderStateWithoutDepthTest(), sp, va), new SceneState());
-                TestUtility.ValidateColor(frameBuffer.ColorAttachments[0], 255, 255, 0);
+                TestUtility.ValidateColor(framebuffer.ColorAttachments[0], 255, 255, 0);
             }
         }
 
@@ -65,7 +65,7 @@ namespace OpenGlobe.Renderer
                   }";
 
             using (GraphicsWindow window = Device.CreateWindow(1, 1))
-            using (FrameBuffer frameBuffer = TestUtility.CreateFrameBuffer(window.Context))
+            using (Framebuffer framebuffer = TestUtility.CreateFramebuffer(window.Context))
             using (ShaderProgram sp = Device.CreateShaderProgram(ShaderSources.PassThroughVertexShader(), fs))
             using (VertexArray va = TestUtility.CreateVertexArray(window.Context, sp.VertexAttributes["position"].Location))
             {
@@ -81,9 +81,9 @@ namespace OpenGlobe.Renderer
                 exampleMat24.Value = m24;
                 Assert.AreEqual(m24, exampleMat24.Value);
 
-                window.Context.FrameBuffer = frameBuffer;
+                window.Context.Framebuffer = framebuffer;
                 window.Context.Draw(PrimitiveType.Points, 0, 1, new DrawState(TestUtility.CreateRenderStateWithoutDepthTest(), sp, va), new SceneState());
-                TestUtility.ValidateColor(frameBuffer.ColorAttachments[0], 255, 255, 0);
+                TestUtility.ValidateColor(framebuffer.ColorAttachments[0], 255, 255, 0);
             }
         }
 
@@ -102,7 +102,7 @@ namespace OpenGlobe.Renderer
                   }";
 
             using (GraphicsWindow window = Device.CreateWindow(1, 1))
-            using (FrameBuffer frameBuffer = TestUtility.CreateFrameBuffer(window.Context))
+            using (Framebuffer framebuffer = TestUtility.CreateFramebuffer(window.Context))
             using (ShaderProgram sp = Device.CreateShaderProgram(ShaderSources.PassThroughVertexShader(), fs))
             using (VertexArray va = TestUtility.CreateVertexArray(window.Context, sp.VertexAttributes["position"].Location))
             {
@@ -116,9 +116,9 @@ namespace OpenGlobe.Renderer
                 exampleMat32.Value = m32;
                 Assert.AreEqual(m32, exampleMat32.Value);
 
-                window.Context.FrameBuffer = frameBuffer;
+                window.Context.Framebuffer = framebuffer;
                 window.Context.Draw(PrimitiveType.Points, 0, 1, new DrawState(TestUtility.CreateRenderStateWithoutDepthTest(), sp, va), new SceneState());
-                TestUtility.ValidateColor(frameBuffer.ColorAttachments[0], 255, 255, 0);
+                TestUtility.ValidateColor(framebuffer.ColorAttachments[0], 255, 255, 0);
             }
         }
 
@@ -137,7 +137,7 @@ namespace OpenGlobe.Renderer
                   }";
 
             using (GraphicsWindow window = Device.CreateWindow(1, 1))
-            using (FrameBuffer frameBuffer = TestUtility.CreateFrameBuffer(window.Context))
+            using (Framebuffer framebuffer = TestUtility.CreateFramebuffer(window.Context))
             using (ShaderProgram sp = Device.CreateShaderProgram(ShaderSources.PassThroughVertexShader(), fs))
             using (VertexArray va = TestUtility.CreateVertexArray(window.Context, sp.VertexAttributes["position"].Location))
             {
@@ -152,9 +152,9 @@ namespace OpenGlobe.Renderer
                 exampleMat23.Value = m23;
                 Assert.AreEqual(m23, exampleMat23.Value);
 
-                window.Context.FrameBuffer = frameBuffer;
+                window.Context.Framebuffer = framebuffer;
                 window.Context.Draw(PrimitiveType.Points, 0, 1, new DrawState(TestUtility.CreateRenderStateWithoutDepthTest(), sp, va), new SceneState());
-                TestUtility.ValidateColor(frameBuffer.ColorAttachments[0], 255, 255, 0);
+                TestUtility.ValidateColor(framebuffer.ColorAttachments[0], 255, 255, 0);
             }
         }
 
@@ -173,7 +173,7 @@ namespace OpenGlobe.Renderer
                   }";
 
             using (GraphicsWindow window = Device.CreateWindow(1, 1))
-            using (FrameBuffer frameBuffer = TestUtility.CreateFrameBuffer(window.Context))
+            using (Framebuffer framebuffer = TestUtility.CreateFramebuffer(window.Context))
             using (ShaderProgram sp = Device.CreateShaderProgram(ShaderSources.PassThroughVertexShader(), fs))
             using (VertexArray va = TestUtility.CreateVertexArray(window.Context, sp.VertexAttributes["position"].Location))
             {
@@ -188,9 +188,9 @@ namespace OpenGlobe.Renderer
                 exampleMat43.Value = m42;
                 Assert.AreEqual(m42, exampleMat43.Value);
 
-                window.Context.FrameBuffer = frameBuffer;
+                window.Context.Framebuffer = framebuffer;
                 window.Context.Draw(PrimitiveType.Points, 0, 1, new DrawState(TestUtility.CreateRenderStateWithoutDepthTest(), sp, va), new SceneState());
-                TestUtility.ValidateColor(frameBuffer.ColorAttachments[0], 255, 255, 0);
+                TestUtility.ValidateColor(framebuffer.ColorAttachments[0], 255, 255, 0);
             }
         }
 
@@ -209,7 +209,7 @@ namespace OpenGlobe.Renderer
                   }";
 
             using (GraphicsWindow window = Device.CreateWindow(1, 1))
-            using (FrameBuffer frameBuffer = TestUtility.CreateFrameBuffer(window.Context))
+            using (Framebuffer framebuffer = TestUtility.CreateFramebuffer(window.Context))
             using (ShaderProgram sp = Device.CreateShaderProgram(ShaderSources.PassThroughVertexShader(), fs))
             using (VertexArray va = TestUtility.CreateVertexArray(window.Context, sp.VertexAttributes["position"].Location))
             {
@@ -225,9 +225,9 @@ namespace OpenGlobe.Renderer
                 exampleMat34.Value = m34;
                 Assert.AreEqual(m34, exampleMat34.Value);
 
-                window.Context.FrameBuffer = frameBuffer;
+                window.Context.Framebuffer = framebuffer;
                 window.Context.Draw(PrimitiveType.Points, 0, 1, new DrawState(TestUtility.CreateRenderStateWithoutDepthTest(), sp, va), new SceneState());
-                TestUtility.ValidateColor(frameBuffer.ColorAttachments[0], 255, 255, 0);
+                TestUtility.ValidateColor(framebuffer.ColorAttachments[0], 255, 255, 0);
             }
         }
 
@@ -246,7 +246,7 @@ namespace OpenGlobe.Renderer
                   }";
 
             using (GraphicsWindow window = Device.CreateWindow(1, 1))
-            using (FrameBuffer frameBuffer = TestUtility.CreateFrameBuffer(window.Context))
+            using (Framebuffer framebuffer = TestUtility.CreateFramebuffer(window.Context))
             using (ShaderProgram sp = Device.CreateShaderProgram(ShaderSources.PassThroughVertexShader(), fs))
             using (VertexArray va = TestUtility.CreateVertexArray(window.Context, sp.VertexAttributes["position"].Location))
             {
@@ -260,9 +260,9 @@ namespace OpenGlobe.Renderer
                 exampleMat2.Value = m2;
                 Assert.AreEqual(m2, exampleMat2.Value);
 
-                window.Context.FrameBuffer = frameBuffer;
+                window.Context.Framebuffer = framebuffer;
                 window.Context.Draw(PrimitiveType.Points, 0, 1, new DrawState(TestUtility.CreateRenderStateWithoutDepthTest(), sp, va), new SceneState());
-                TestUtility.ValidateColor(frameBuffer.ColorAttachments[0], 255, 255, 0);
+                TestUtility.ValidateColor(framebuffer.ColorAttachments[0], 255, 255, 0);
             }
         }
 
@@ -281,7 +281,7 @@ namespace OpenGlobe.Renderer
                   }";
 
             using (GraphicsWindow window = Device.CreateWindow(1, 1))
-            using (FrameBuffer frameBuffer = TestUtility.CreateFrameBuffer(window.Context))
+            using (Framebuffer framebuffer = TestUtility.CreateFramebuffer(window.Context))
             using (ShaderProgram sp = Device.CreateShaderProgram(ShaderSources.PassThroughVertexShader(), fs))
             using (VertexArray va = TestUtility.CreateVertexArray(window.Context, sp.VertexAttributes["position"].Location))
             {
@@ -297,9 +297,9 @@ namespace OpenGlobe.Renderer
                 exampleMat4.Value = m4;
                 Assert.AreEqual(m4, exampleMat4.Value);
 
-                window.Context.FrameBuffer = frameBuffer;
+                window.Context.Framebuffer = framebuffer;
                 window.Context.Draw(PrimitiveType.Points, 0, 1, new DrawState(TestUtility.CreateRenderStateWithoutDepthTest(), sp, va), new SceneState());
-                TestUtility.ValidateColor(frameBuffer.ColorAttachments[0], 255, 255, 0);
+                TestUtility.ValidateColor(framebuffer.ColorAttachments[0], 255, 255, 0);
             }
         }
 
@@ -318,7 +318,7 @@ namespace OpenGlobe.Renderer
                   }";
 
             using (GraphicsWindow window = Device.CreateWindow(1, 1))
-            using (FrameBuffer frameBuffer = TestUtility.CreateFrameBuffer(window.Context))
+            using (Framebuffer framebuffer = TestUtility.CreateFramebuffer(window.Context))
             using (ShaderProgram sp = Device.CreateShaderProgram(ShaderSources.PassThroughVertexShader(), fs))
             using (VertexArray va = TestUtility.CreateVertexArray(window.Context, sp.VertexAttributes["position"].Location))
             {
@@ -333,9 +333,9 @@ namespace OpenGlobe.Renderer
                 exampleMat3.Value = m3;
                 Assert.AreEqual(m3, exampleMat3.Value);
 
-                window.Context.FrameBuffer = frameBuffer;
+                window.Context.Framebuffer = framebuffer;
                 window.Context.Draw(PrimitiveType.Points, 0, 1, new DrawState(TestUtility.CreateRenderStateWithoutDepthTest(), sp, va), new SceneState());
-                TestUtility.ValidateColor(frameBuffer.ColorAttachments[0], 255, 255, 0);
+                TestUtility.ValidateColor(framebuffer.ColorAttachments[0], 255, 255, 0);
             }
         }
     }
