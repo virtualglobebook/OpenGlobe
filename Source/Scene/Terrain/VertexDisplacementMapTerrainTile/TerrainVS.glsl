@@ -8,9 +8,9 @@
 
 layout(location = og_positionVertexLocation) in vec2 position;
                   
-out vec3 normalFS;
-out vec3 positionToLightFS;
-out vec3 positionToEyeFS;
+out vec3 fsNormal;
+out vec3 fsPositionToLight;
+out vec3 fsPositionToEye;
 out vec2 textureCoordinate;
 out vec2 repeatTextureCoordinate;
 out float height;
@@ -125,26 +125,26 @@ void main()
 
     if (u_normalAlgorithm == 1)       // TerrainNormalsAlgorithm.ThreeForward
     {
-        normalFS = ComputeNormalForwardDifference(displacedPosition, og_texture0, u_heightExaggeration);
+        fsNormal = ComputeNormalForwardDifference(displacedPosition, og_texture0, u_heightExaggeration);
     }
     else if (u_normalAlgorithm == 2)  // TerrainNormalsAlgorithm.FourSamples
     {
-        normalFS = ComputeNormalCentralDifference(displacedPosition, og_texture0, u_heightExaggeration);
+        fsNormal = ComputeNormalCentralDifference(displacedPosition, og_texture0, u_heightExaggeration);
     }
     else if (u_normalAlgorithm == 3)  // TerrainNormalsAlgorithm.SobelFilter
     {
-        normalFS = ComputeNormalSobelFilter(displacedPosition, og_texture0, u_heightExaggeration);
+        fsNormal = ComputeNormalSobelFilter(displacedPosition, og_texture0, u_heightExaggeration);
     }
     else
     {
 	    //
         // Even if lighting isn't used, shading algorithms based on terrain slope require the normal.
 		//
-        normalFS = ComputeNormalForwardDifference(displacedPosition, og_texture0, u_heightExaggeration);
+        fsNormal = ComputeNormalForwardDifference(displacedPosition, og_texture0, u_heightExaggeration);
     }
 
-    positionToLightFS = og_cameraLightPosition - displacedPosition;
-    positionToEyeFS = og_cameraEye - displacedPosition;
+    fsPositionToLight = og_cameraLightPosition - displacedPosition;
+    fsPositionToEye = og_cameraEye - displacedPosition;
 
     textureCoordinate = position * u_positionToTextureCoordinate;
     repeatTextureCoordinate = position * u_positionToRepeatTextureCoordinate;

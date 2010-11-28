@@ -6,7 +6,7 @@
 // See License.txt or http://www.boost.org/LICENSE_1_0.txt.
 //
                  
-in float distanceToEyeFS;
+in float fsDistanceToEye;
 out vec4 fragmentColor;
 uniform vec3 u_color;
 
@@ -15,7 +15,7 @@ void main()
     //
     // Apply linear attenuation to alpha
     //
-    float a = min(1.0 / (0.015 * distanceToEyeFS), 1.0);
+    float a = min(1.0 / (0.015 * fsDistanceToEye), 1.0);
     if (a == 0.0)
     {
         discard;

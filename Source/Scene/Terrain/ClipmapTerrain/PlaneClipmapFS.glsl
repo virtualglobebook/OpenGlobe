@@ -6,10 +6,10 @@
 // See License.txt or http://www.boost.org/LICENSE_1_0.txt.
 //
 
-in vec2 fineUvFS;
-in vec2 coarseUvFS;
-in vec3 positionToLightFS;
-in float alphaFS;
+in vec2 fsFineUv;
+in vec2 fsCoarseUv;
+in vec3 fsPositionToLight;
+in float fsAlpha;
                  
 out vec3 fragmentColor;
 
@@ -21,21 +21,21 @@ uniform bool u_showBlendRegions;
 
 vec3 ComputeNormal()
 {
-    vec3 fineNormal = normalize(texture(og_texture2, fineUvFS).rgb);
-	vec3 coarseNormal = normalize(texture(og_texture3, coarseUvFS).rgb);
-	return normalize(mix(fineNormal, coarseNormal, alphaFS));
+    vec3 fineNormal = normalize(texture(og_texture2, fsFineUv).rgb);
+	vec3 coarseNormal = normalize(texture(og_texture3, fsCoarseUv).rgb);
+	return normalize(mix(fineNormal, coarseNormal, fsAlpha));
 }
 
 void main()
 {
     vec3 normal = ComputeNormal();
-    vec3 positionToLight = normalize(positionToLightFS);
+    vec3 positionToLight = normalize(fsPositionToLight);
 
 	float diffuse = og_diffuseSpecularAmbientShininess.x * max(dot(positionToLight, normal), 0.0);
 	float intensity = diffuse + og_diffuseSpecularAmbientShininess.z;
 
 	if (u_showBlendRegions)
-		fragmentColor = mix(vec3(0.0, intensity, 0.0), vec3(0.0, 0.0, intensity), alphaFS);
+		fragmentColor = mix(vec3(0.0, intensity, 0.0), vec3(0.0, 0.0, intensity), fsAlpha);
 	else
 		fragmentColor = vec3(0.0, intensity, 0.0);
 }

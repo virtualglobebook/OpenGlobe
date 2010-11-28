@@ -10,7 +10,7 @@ uniform float u_halfLineWidth;
 uniform vec3 u_color;
 
 noperspective in vec3 distanceToEdges;
-in float distanceToEyeFS;
+in float fsDistanceToEye;
 
 out vec4 fragmentColor;
 
@@ -29,7 +29,7 @@ void main()
     //
     // Apply linear attenuation to alpha
     //
-    a *= min(1.0 / (0.015 * distanceToEyeFS), 1.0);
+    a *= min(1.0 / (0.015 * fsDistanceToEye), 1.0);
     if (a == 0.0)
     {
         discard;

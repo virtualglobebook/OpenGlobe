@@ -10,7 +10,7 @@ layout(points) in;
 layout(triangle_strip, max_vertices = 4) out;
 
 in float distanceToEyeGS[];
-out float distanceToEyeFS;
+out float fsDistanceToEye;
 
 uniform mat4 og_modelViewPerspectiveMatrix;
 uniform mat4 og_viewportTransformationMatrix;
@@ -152,18 +152,18 @@ void main()
     vec4 v3 = vec4(windowP1.xy + (normal * u_fillDistance), -windowP1.z, 1.0);
 
     gl_Position = og_viewportOrthographicMatrix * v0;
-    distanceToEyeFS = distanceToEyeGS[0];
+    fsDistanceToEye = distanceToEyeGS[0];
     EmitVertex();
 
     gl_Position = og_viewportOrthographicMatrix * v1;
-    distanceToEyeFS = distanceToEyeGS[0];
+    fsDistanceToEye = distanceToEyeGS[0];
     EmitVertex();
 
     gl_Position = og_viewportOrthographicMatrix * v2;
-    distanceToEyeFS = distanceToEyeGS[0];
+    fsDistanceToEye = distanceToEyeGS[0];
     EmitVertex();
 
     gl_Position = og_viewportOrthographicMatrix * v3;
-    distanceToEyeFS = distanceToEyeGS[0];
+    fsDistanceToEye = distanceToEyeGS[0];
     EmitVertex();
 }

@@ -6,9 +6,9 @@
 // See License.txt or http://www.boost.org/LICENSE_1_0.txt.
 //
                  
-in vec3 normalFS;
-in vec3 positionToLightFS;
-in vec3 positionToEyeFS;
+in vec3 fsNormal;
+in vec3 fsPositionToLight;
+in vec3 fsPositionToEye;
 in vec2 textureCoordinate;
 in vec2 repeatTextureCoordinate;
 in float height;
@@ -46,9 +46,9 @@ float LightIntensity(vec3 normal, vec3 toLight, vec3 toEye, vec4 diffuseSpecular
 
 void main()
 {
-    vec3 normal = normalize(normalFS);
-    vec3 positionToLight = normalize(positionToLightFS);
-    vec3 positionToEye = normalize(positionToEyeFS);
+    vec3 normal = normalize(fsNormal);
+    vec3 positionToLight = normalize(fsPositionToLight);
+    vec3 positionToEye = normalize(fsPositionToEye);
 
     if (u_showSilhouette)
     {

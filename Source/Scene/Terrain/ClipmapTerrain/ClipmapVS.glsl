@@ -8,10 +8,10 @@
 
 layout(location = og_positionVertexLocation) in vec2 position;
 
-out vec3 normalFS;
-out vec3 positionToLightFS;
-out vec3 positionToEyeFS;
-out vec2 textureCoordinateFS;
+out vec3 fsNormal;
+out vec3 fsPositionToLight;
+out vec3 fsPositionToEye;
+out vec2 fsTextureCoordinate;
 
 uniform mat4 og_modelViewPerspectiveMatrix;
 uniform vec3 og_cameraEye;
@@ -82,14 +82,14 @@ void main()
     vec2 worldPos = GridToWorld(position);
     float height = SampleHeight(position);
 
-    textureCoordinateFS = (position + u_fineBlockOrig.zw) * u_textureOrigin.xy + u_textureOrigin.zw;
+    fsTextureCoordinate = (position + u_fineBlockOrig.zw) * u_textureOrigin.xy + u_textureOrigin.zw;
 
     const float heightExaggeration = 1.0 / 6378137.0;
     vec3 displacedPosition = vec3(worldPos, height * heightExaggeration);
-    normalFS = ComputeNormalForwardDifference(position, displacedPosition, heightExaggeration);
+    fsNormal = ComputeNormalForwardDifference(position, displacedPosition, heightExaggeration);
 
-    positionToLightFS = og_sunPosition - displacedPosition;
-    positionToEyeFS = og_cameraEye - displacedPosition;
+    fsPositionToLight = og_sunPosition - displacedPosition;
+    fsPositionToEye = og_cameraEye - displacedPosition;
 
     displacedPosition = GeodeticToCartesian(displacedPosition);
     gl_Position = og_modelViewPerspectiveMatrix * vec4(displacedPosition, 1.0);
