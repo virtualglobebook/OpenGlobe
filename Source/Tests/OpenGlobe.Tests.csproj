@@ -103,7 +103,7 @@
     <Compile Include="Renderer\Shaders\UniformTests.cs" />
     <Compile Include="Renderer\VertexArray\VertexArrayTests.cs" />
     <Compile Include="Renderer\Buffers\BufferObjectTests.cs" />
-    <Compile Include="Renderer\FrameBuffer\FrameBufferTests.cs" />
+    <Compile Include="Renderer\Framebuffer\FramebufferTests.cs" />
     <Compile Include="Renderer\Context\ContextTest.cs" />
     <Compile Include="Renderer\RenderState\RenderStateTests.cs" />
     <Compile Include="Renderer\ShaderSources.cs" />

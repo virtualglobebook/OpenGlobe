@@ -66,8 +66,8 @@
     <Compile Include="Extensions.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="FrameBuffer\HighResolutionSnap.cs" />
-    <Compile Include="FrameBuffer\HighResolutionSnapFrameBuffer.cs" />
+    <Compile Include="Framebuffer\HighResolutionSnap.cs" />
+    <Compile Include="Framebuffer\HighResolutionSnapFramebuffer.cs" />
     <Compile Include="GL3x\Buffers\PixelBufferGL3x.cs" />
     <Compile Include="GL3x\ExtensionsGL3x.cs" />
     <Compile Include="GL3x\Names\BufferNameGL3x.cs" />
@@ -76,7 +76,7 @@
     <Compile Include="GL3x\Names\TextureNameGL3x.cs" />
     <Compile Include="GL3x\Names\ShaderProgramNameGL3x.cs" />
     <Compile Include="GL3x\Names\FinalizerThreadContextGL3x.cs" />
-    <Compile Include="GL3x\Names\FrameBufferNameGL3x.cs" />
+    <Compile Include="GL3x\Names\FramebufferNameGL3x.cs" />
     <Compile Include="GL3x\ICleanable.cs" />
     <Compile Include="GL3x\ICleanableObserver.cs" />
     <Compile Include="GL3x\Input\KeyboardGL3x.cs" />
@@ -172,8 +172,8 @@
     <Compile Include="Context.cs" />
     <Compile Include="CouldNotCreateVideoCardResourceException.cs" />
     <Compile Include="Device.cs" />
-    <Compile Include="FrameBuffer\ColorAttachments.cs" />
-    <Compile Include="FrameBuffer\FrameBuffer.cs" />
+    <Compile Include="Framebuffer\ColorAttachments.cs" />
+    <Compile Include="Framebuffer\Framebuffer.cs" />
     <Compile Include="GL3x\VertexArray\VertexBufferAttributesGL3x.cs" />
     <Compile Include="GL3x\VertexArray\VertexArrayGL3x.cs" />
     <Compile Include="GL3x\Buffers\BufferGL3x.cs" />
@@ -183,8 +183,8 @@
     <Compile Include="GL3x\Buffers\VertexBufferGL3x.cs" />
     <Compile Include="GL3x\Buffers\WritePixelBufferGL3x.cs" />
     <Compile Include="GL3x\ContextGL3x.cs" />
-    <Compile Include="GL3x\FrameBuffer\ColorAttachmentsGL3x.cs" />
-    <Compile Include="GL3x\FrameBuffer\FrameBufferGL3x.cs" />
+    <Compile Include="GL3x\Framebuffer\ColorAttachmentsGL3x.cs" />
+    <Compile Include="GL3x\Framebuffer\FramebufferGL3x.cs" />
     <Compile Include="GL3x\GraphicsWindowGL3x.cs" />
     <Compile Include="GL3x\Shaders\ShaderObjectGL3x.cs" />
     <Compile Include="GL3x\Shaders\ShaderProgramGL3x.cs" />
