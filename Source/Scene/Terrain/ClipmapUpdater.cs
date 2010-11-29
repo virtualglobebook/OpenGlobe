@@ -160,7 +160,7 @@ namespace OpenGlobe.Scene.Terrain
         private void ApplyIfNotLoaded(Context context, ClipmapLevel level, RasterTerrainTile tile)
         {
             Texture2D texture;
-            if (_loadedTiles.TryGetValue(tile.Identifier, out texture) && texture != null)
+            if (!_loadedTiles.TryGetValue(tile.Identifier, out texture) || texture == null)
             {
                 ApplyNewTile(context, level, tile);
             }
