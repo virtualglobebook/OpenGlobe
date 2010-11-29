@@ -61,5 +61,39 @@ namespace OpenGlobe.Core
                 Assert.AreEqual(positions[j++], ((PointShape)shape).Position);
             }
         }
+
+        [Test]
+        [Category("RequiresData")]
+        public void Polyline()
+        {
+            Shapefile sf = new Shapefile("50m-rivers-lake-centerlines.shp");
+
+            //
+            // Verify header
+            //
+            Assert.AreEqual(ShapeType.Polyline, sf.ShapeType);
+            Assert.AreEqual(-165.243939175492, sf.Extent.LowerLeft.X, 1e-11);
+            Assert.AreEqual(-50.240137221344, sf.Extent.LowerLeft.Y, 1e-11);
+            Assert.AreEqual(176.325806105729, sf.Extent.UpperRight.X, 1e-11);
+            Assert.AreEqual(73.3349038760715, sf.Extent.UpperRight.Y, 1e-12);
+
+            //
+            // Verify records
+            //
+            Assert.AreEqual(458, sf.Count);
+
+            foreach (Shape shape in sf)
+            {
+                Assert.AreEqual(ShapeType.Polyline, shape.ShapeType);
+
+                PolylineShape polylineShape = (PolylineShape)shape;
+
+                Assert.Greater(polylineShape.Count, 0);
+                foreach (ShapePart part in polylineShape)
+                {
+                    Assert.Greater(part.Count, 0);
+                }
+            }
+        }
     }
 }

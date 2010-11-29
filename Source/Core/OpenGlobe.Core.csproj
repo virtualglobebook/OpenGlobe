@@ -91,7 +91,9 @@
     <Compile Include="RectangleD.cs" />
     <Compile Include="RectangleH.cs" />
     <Compile Include="Shapefile\PointShape.cs" />
+    <Compile Include="Shapefile\PolylineShape.cs" />
     <Compile Include="Shapefile\Shape.cs" />
+    <Compile Include="Shapefile\ShapePart.cs" />
     <Compile Include="Shapefile\ShapeType.cs" />
     <Compile Include="Shapefile\Shapfile.cs" />
     <Compile Include="SizeInBytes.cs" />

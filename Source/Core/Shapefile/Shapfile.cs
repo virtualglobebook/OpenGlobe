@@ -143,6 +143,38 @@ namespace OpenGlobe.Core
                                     ToDouble(record, 4, ByteOrder.LittleEndian),
                                     ToDouble(record, 12, ByteOrder.LittleEndian))));
                             break;
+                        case ShapeType.Polyline:
+                            RectangleD extent = new RectangleD(
+                                new Vector2D(
+                                    ToDouble(record, 4, ByteOrder.LittleEndian),
+                                    ToDouble(record, 12, ByteOrder.LittleEndian)),
+                                new Vector2D(
+                                    ToDouble(record, 20, ByteOrder.LittleEndian),
+                                    ToDouble(record, 28, ByteOrder.LittleEndian)));
+                            int numberOfParts = ToInteger(record, 36, ByteOrder.LittleEndian);
+                            int numberOfPoints = ToInteger(record, 40, ByteOrder.LittleEndian);
+
+                            int[] parts = new int[numberOfParts];
+                            Vector2D[] points = new Vector2D[numberOfPoints];
+
+                            //
+                            // These two loops can be optimized if the machine is little endian.
+                            //
+                            for (int i = 0; i < numberOfParts; ++i)
+                            {
+                                parts[i] = ToInteger(record, 44 + (4 * i), ByteOrder.LittleEndian);
+                            }
+
+                            int pointsOffset = 44 + (4 * numberOfParts);
+                            for (int i = 0; i < numberOfPoints; ++i)
+                            {
+                                points[i] = new Vector2D(
+                                    ToDouble(record, pointsOffset + (16 * i), ByteOrder.LittleEndian),
+                                    ToDouble(record, pointsOffset + (16 * i) + 8, ByteOrder.LittleEndian));
+                            }
+
+                            _shapes.Add(new PolylineShape(recordNumber, extent, parts, points));
+                            break;
                     }
                 }
             }
