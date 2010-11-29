@@ -13,6 +13,8 @@ using System.Collections.Generic;
 using OpenGlobe.Core;
 using OpenGlobe.Renderer;
 using Catfood.Shapefile;
+using Shapefile = Catfood.Shapefile.Shapefile;
+using Shape = Catfood.Shapefile.Shape;
 
 namespace OpenGlobe.Scene
 {
@@ -25,7 +27,7 @@ namespace OpenGlobe.Scene
 
             using (Shapefile shapefile = new Shapefile(filename))
             {
-                if (shapefile.Type == ShapeType.Polygon)
+                if (shapefile.Type == Catfood.Shapefile.ShapeType.Polygon)
                 {
                     _polyline = new OutlinedPolylineTexture();
                     _polygons = new List<Polygon>();
@@ -51,12 +53,12 @@ namespace OpenGlobe.Scene
 
             foreach (Shape shape in shapefile)
             {
-                if (shape.Type == ShapeType.Null)
+                if (shape.Type == Catfood.Shapefile.ShapeType.Null)
                 {
                     continue;
                 }
 
-                if (shape.Type != ShapeType.Polygon)
+                if (shape.Type != Catfood.Shapefile.ShapeType.Polygon)
                 {
                     throw new NotSupportedException("The type of an individual shape does not match the Shapefile type.");
                 }

@@ -70,6 +70,7 @@
     <Compile Include="Core\Polygons\EarClippingTests.cs" />
     <Compile Include="Core\Polygons\SimplePolygonAlgorithms.cs" />
     <Compile Include="Core\Polygons\TriangleMeshSubdivisionTests.cs" />
+    <Compile Include="Core\Shapefile\ShapefileTests.cs" />
     <Compile Include="Core\SystemTests.cs" />
     <Compile Include="Core\Tessellation\TessellationTests.cs" />
     <Compile Include="Core\Vector2BTests.cs" />
@@ -138,6 +139,11 @@
       <Link>NE2_50M_SR_W_4096.jpg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\Data\Vector\NationalAtlasOfTheUnitedStatesOfAmerica\amtrakx020\amtrakx020.shp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

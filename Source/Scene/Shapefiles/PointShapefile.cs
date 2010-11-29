@@ -13,6 +13,8 @@ using System.Collections.Generic;
 using OpenGlobe.Core;
 using OpenGlobe.Renderer;
 using Catfood.Shapefile;
+using Shapefile = Catfood.Shapefile.Shapefile;
+using Shape = Catfood.Shapefile.Shape;
 
 namespace OpenGlobe.Scene
 {
@@ -25,7 +27,7 @@ namespace OpenGlobe.Scene
 
             using (Shapefile shapefile = new Shapefile(filename))
             {
-                if (shapefile.Type == ShapeType.Point)
+                if (shapefile.Type == Catfood.Shapefile.ShapeType.Point)
                 {
                     _billboards = new BillboardCollection(context);
                     CreateBillboards(labelName, globeShape, shapefile, icon);
@@ -46,12 +48,12 @@ namespace OpenGlobe.Scene
 
             foreach (Shape shape in shapefile)
             {
-                if (shape.Type == ShapeType.Null)
+                if (shape.Type == Catfood.Shapefile.ShapeType.Null)
                 {
                     continue;
                 }
 
-                if (shape.Type != ShapeType.Point)
+                if (shape.Type != Catfood.Shapefile.ShapeType.Point)
                 {
                     throw new NotSupportedException("The type of an individual shape does not match the Shapefile type.");
                 }

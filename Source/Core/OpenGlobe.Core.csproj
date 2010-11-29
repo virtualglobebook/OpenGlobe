@@ -90,6 +90,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RectangleD.cs" />
     <Compile Include="RectangleH.cs" />
+    <Compile Include="Shapefile\PointShape.cs" />
+    <Compile Include="Shapefile\Shape.cs" />
+    <Compile Include="Shapefile\ShapeType.cs" />
+    <Compile Include="Shapefile\Shapfile.cs" />
     <Compile Include="SizeInBytes.cs" />
     <Compile Include="Terrain\TerrainTile.cs" />
     <Compile Include="Tessellation\BoxTessellator.cs" />
