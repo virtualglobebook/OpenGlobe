@@ -31,9 +31,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Catfood.Shapefile">
-      <HintPath>..\..\ThirdParty\Catfood.Shapefile.1.10\Catfood.Shapefile\bin\Release\Catfood.Shapefile.dll</HintPath>
-    </Reference>
     <Reference Include="OpenTK, Version=1.0.0.201, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\ThirdParty\OpenTKGL4\Binaries\OpenTK\Release\OpenTK.dll</HintPath>
