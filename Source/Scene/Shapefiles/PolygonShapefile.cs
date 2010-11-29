@@ -12,9 +12,6 @@ using System.Drawing;
 using System.Collections.Generic;
 using OpenGlobe.Core;
 using OpenGlobe.Renderer;
-using Catfood.Shapefile;
-using Shapefile = Catfood.Shapefile.Shapefile;
-using Shape = Catfood.Shapefile.Shape;
 
 namespace OpenGlobe.Scene
 {
@@ -25,19 +22,18 @@ namespace OpenGlobe.Scene
             Verify.ThrowIfNull(context);
             Verify.ThrowIfNull(globeShape);
 
-            using (Shapefile shapefile = new Shapefile(filename))
-            {
-                if (shapefile.Type == Catfood.Shapefile.ShapeType.Polygon)
-                {
-                    _polyline = new OutlinedPolylineTexture();
-                    _polygons = new List<Polygon>();
+            Shapefile shapefile = new Shapefile(filename);
 
-                    CreatePolygons(context, globeShape, shapefile);
-                }
-                else
-                {
-                    throw new NotSupportedException("Shapefile type \"" + shapefile.Type.ToString() + "\" is not a polygon shape file.");
-                }
+            if (shapefile.ShapeType == ShapeType.Polygon)
+            {
+                _polyline = new OutlinedPolylineTexture();
+                _polygons = new List<Polygon>();
+
+                CreatePolygons(context, globeShape, shapefile);
+            }
+            else
+            {
+                throw new NotSupportedException("Shapefile type \"" + shapefile.ShapeType.ToString() + "\" is not a polygon shape file.");
             }
         }
 
@@ -53,29 +49,24 @@ namespace OpenGlobe.Scene
 
             foreach (Shape shape in shapefile)
             {
-                if (shape.Type == Catfood.Shapefile.ShapeType.Null)
-                {
-                    continue;
-                }
-
-                if (shape.Type != Catfood.Shapefile.ShapeType.Polygon)
+                if (shape.ShapeType != ShapeType.Polygon)
                 {
                     throw new NotSupportedException("The type of an individual shape does not match the Shapefile type.");
                 }
 
-                IList<PointD[]> parts = ((ShapePolygon)shape).Parts;
+                PolygonShape polygonShape = (PolygonShape)shape;
 
-                for (int j = 0; j < parts.Count; ++j)
+                for (int j = 0; j < polygonShape.Count; ++j)
                 {
                     Color color = Color.FromArgb(127, r.Next(256), r.Next(256), r.Next(256));
 
                     positions.Clear();
 
-                    PointD[] part = parts[j];
+                    ShapePart part = polygonShape[j];
 
-                    for (int i = 0; i < part.Length; ++i)
+                    for (int i = 0; i < part.Count; ++i)
                     {
-                        PointD point = part[i];
+                        Vector2D point = part[i];
 
                         positions.Add(globeShape.ToVector3D(Trig.ToRadians(new Geodetic3D(point.X, point.Y))));
 
