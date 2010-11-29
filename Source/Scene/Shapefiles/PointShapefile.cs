@@ -12,9 +12,6 @@ using System.Drawing;
 using System.Collections.Generic;
 using OpenGlobe.Core;
 using OpenGlobe.Renderer;
-using Catfood.Shapefile;
-using Shapefile = Catfood.Shapefile.Shapefile;
-using Shape = Catfood.Shapefile.Shape;
 
 namespace OpenGlobe.Scene
 {
@@ -25,82 +22,76 @@ namespace OpenGlobe.Scene
             Verify.ThrowIfNull(context);
             Verify.ThrowIfNull(globeShape);
 
-            using (Shapefile shapefile = new Shapefile(filename))
+            Shapefile shapefile = new Shapefile(filename);
+
+            if (shapefile.ShapeType == ShapeType.Point)
             {
-                if (shapefile.Type == Catfood.Shapefile.ShapeType.Point)
-                {
-                    _billboards = new BillboardCollection(context);
-                    CreateBillboards(labelName, globeShape, shapefile, icon);
-                }
-                else
-                {
-                    throw new NotSupportedException("Shapefile type \"" + shapefile.Type.ToString() + "\" is not a point shape file.");
-                }
+                _billboards = new BillboardCollection(context);
+                CreateBillboards(labelName, globeShape, shapefile, icon);
+            }
+            else
+            {
+                throw new NotSupportedException("Shapefile type \"" + shapefile.ShapeType.ToString() + "\" is not a point shape file.");
             }
         }
 
         private void CreateBillboards(string labelName, Ellipsoid globeShape, Shapefile shapefile, Bitmap iconBitmap)
         {
-            Font font = new Font("Arial", 16);
+            //Font font = new Font("Arial", 16);
             IList<Bitmap> bitmaps = new List<Bitmap>();
             bitmaps.Add(iconBitmap);
-            int labelPixelOffset = iconBitmap.Width / 2;
+            //int labelPixelOffset = iconBitmap.Width / 2;
 
             foreach (Shape shape in shapefile)
             {
-                if (shape.Type == Catfood.Shapefile.ShapeType.Null)
-                {
-                    continue;
-                }
-
-                if (shape.Type != Catfood.Shapefile.ShapeType.Point)
+                if (shape.ShapeType != ShapeType.Point)
                 {
                     throw new NotSupportedException("The type of an individual shape does not match the Shapefile type.");
                 }
 
-                PointD point = ((ShapePoint)shape).Point;
+                Vector2D point = ((PointShape)shape).Position;
                 Vector3D position = globeShape.ToVector3D(Trig.ToRadians(new Geodetic3D(point.X, point.Y))); ;
 
                 Billboard icon = new Billboard();
                 icon.Position = position;
                 _billboards.Add(icon);
 
-                if (labelName != null)
-                {
-                    string labelText = shape.GetMetadata(labelName);
+                //if (labelName != null)
+                //{
+                //    string labelText = shape.GetMetadata(labelName);
 
-                    bitmaps.Add(Device.CreateBitmapFromText(labelText, font));
+                //    bitmaps.Add(Device.CreateBitmapFromText(labelText, font));
 
-                    Billboard label = new Billboard();
-                    label.Position = position;
-                    label.HorizontalOrigin = HorizontalOrigin.Left;
-                    label.PixelOffset = new Vector2H(labelPixelOffset, 0);
-                    _billboards.Add(label);
-                }
+                //    Billboard label = new Billboard();
+                //    label.Position = position;
+                //    label.HorizontalOrigin = HorizontalOrigin.Left;
+                //    label.PixelOffset = new Vector2H(labelPixelOffset, 0);
+                //    _billboards.Add(label);
+                //}
             }
 
-            if (labelName != null)
-            {
-                TextureAtlas labelAtlas = new TextureAtlas(bitmaps);
-                int j = 1;
-                for (int i = 0; i < _billboards.Count; i += 2)
-                {
-                    _billboards[i].TextureCoordinates = labelAtlas.TextureCoordinates[0];
-                    _billboards[i + 1].TextureCoordinates = labelAtlas.TextureCoordinates[j];
-                    ++j;
-                }
-                _billboards.Texture = Device.CreateTexture2D(labelAtlas.Bitmap, TextureFormat.RedGreenBlueAlpha8, false);
-            }
-            else
-            {
+            //if (labelName != null)
+            //{
+            //    TextureAtlas labelAtlas = new TextureAtlas(bitmaps);
+            //    int j = 1;
+            //    for (int i = 0; i < _billboards.Count; i += 2)
+            //    {
+            //        _billboards[i].TextureCoordinates = labelAtlas.TextureCoordinates[0];
+            //        _billboards[i + 1].TextureCoordinates = labelAtlas.TextureCoordinates[j];
+            //        ++j;
+            //    }
+            //    _billboards.Texture = Device.CreateTexture2D(labelAtlas.Bitmap, TextureFormat.RedGreenBlueAlpha8, false);
+            //}
+            //else
+            //{
                 _billboards.Texture = Device.CreateTexture2D(iconBitmap, TextureFormat.RedGreenBlueAlpha8, false);
-            }
+            //}
 
             for (int i = 1; i < bitmaps.Count; ++i)
             {
                 bitmaps[i].Dispose();
             }
-            font.Dispose();
+            //font.Dispose();
         }
 
         #region IRenderable Members
