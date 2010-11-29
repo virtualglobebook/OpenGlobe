@@ -12,9 +12,6 @@ using System.Drawing;
 using System.Collections.Generic;
 using OpenGlobe.Core;
 using OpenGlobe.Renderer;
-using Catfood.Shapefile;
-using Shapefile = Catfood.Shapefile.Shapefile;
-using Shape = Catfood.Shapefile.Shape;
 
 namespace OpenGlobe.Scene
 {
@@ -30,17 +27,16 @@ namespace OpenGlobe.Scene
             Verify.ThrowIfNull(context);
             Verify.ThrowIfNull(globeShape);
 
-            using (Shapefile shapefile = new Shapefile(filename))
+            Shapefile shapefile = new Shapefile(filename);
+
+            if (shapefile.ShapeType == ShapeType.Polyline)
             {
-                if (shapefile.Type == Catfood.Shapefile.ShapeType.PolyLine)
-                {
-                    _polyline = new OutlinedPolylineTexture();
-                    CreatePolylines(context, globeShape, shapefile, color, outlineColor);
-                }
-                else
-                {
-                    throw new NotSupportedException("Shapefile type \"" + shapefile.Type.ToString() + "\" is not a polyline shape file.");
-                }
+                _polyline = new OutlinedPolylineTexture();
+                CreatePolylines(context, globeShape, shapefile, color, outlineColor);
+            }
+            else
+            {
+                throw new NotSupportedException("Shapefile type \"" + shapefile.ShapeType.ToString() + "\" is not a polyline shape file.");
             }
         }
 
@@ -48,7 +44,7 @@ namespace OpenGlobe.Scene
         {
             int positionsCount = 0;
             int indicesCount = 0;
-            //PolylineCapacities(shapefile, out positionsCount, out indicesCount);
+            PolylineCapacities(shapefile, out positionsCount, out indicesCount);
 
             VertexAttributeDoubleVector3 positionAttribute = new VertexAttributeDoubleVector3("position", positionsCount);
             VertexAttributeRGBA colorAttribute = new VertexAttributeRGBA("color", positionsCount);
@@ -57,25 +53,20 @@ namespace OpenGlobe.Scene
 
             foreach (Shape shape in shapefile)
             {
-                if (shape.Type == Catfood.Shapefile.ShapeType.Null)
-                {
-                    continue;
-                }
-
-                if (shape.Type != Catfood.Shapefile.ShapeType.PolyLine)
+                if (shape.ShapeType != ShapeType.Polyline)
                 {
                     throw new NotSupportedException("The type of an individual shape does not match the Shapefile type.");
                 }
 
-                IList<PointD[]> parts = ((ShapePolyLine)shape).Parts;
+                PolylineShape polylineShape = (PolylineShape)shape;
 
-                for (int j = 0; j < parts.Count; ++j)
+                for (int j = 0; j < polylineShape.Count; ++j)
                 {
-                    PointD[] part = parts[j];
+                    ShapePart part = polylineShape[j];
 
-                    for (int i = 0; i < part.Length; ++i)
+                    for (int i = 0; i < part.Count; ++i)
                     {
-                        PointD point = part[i];
+                        Vector2D point = part[i];
 
                         positionAttribute.Values.Add(globeShape.ToVector3D(Trig.ToRadians(new Geodetic3D(point.X, point.Y))));
                         colorAttribute.AddColor(color);
@@ -102,7 +93,6 @@ namespace OpenGlobe.Scene
             OutlineWidth = _polyline.OutlineWidth;
         }
 
-		/*
         private static void PolylineCapacities(Shapefile shapefile, out int positionsCount, out int indicesCount)
         {
             int numberOfPositions = 0;
@@ -110,29 +100,25 @@ namespace OpenGlobe.Scene
 
             foreach (Shape shape in shapefile)
             {
-                if (shape.Type == ShapeType.Null)
-                {
-                    continue;
-                }
-
-                if (shape.Type != ShapeType.PolyLine)
+                if (shape.ShapeType != ShapeType.Polyline)
                 {
                     throw new NotSupportedException("The type of an individual shape does not match the Shapefile type.");
                 }
 
-                IList<PointD[]> parts = ((ShapePolyLine)shape).Parts;
+                PolylineShape polylineShape = (PolylineShape)shape;
 
-                for (int i = 0; i < parts.Count; ++i)
+                for (int j = 0; j < polylineShape.Count; ++j)
                 {
-                    numberOfPositions += parts[i].Length;
-                    numberOfIndices += (parts[i].Length - 1) * 2;
+                    ShapePart part = polylineShape[j];
+
+                    numberOfPositions += part.Count;
+                    numberOfIndices += (part.Count - 1) * 2;
                 }
             }
 
             positionsCount = numberOfPositions;
             indicesCount = numberOfIndices;
         }
-        */
 
         #region IRenderable Members
 
