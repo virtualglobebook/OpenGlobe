@@ -85,11 +85,12 @@ namespace OpenGlobe.Core
                 double yMin = ToDouble(fileHeader, 44, ByteOrder.LittleEndian);
                 double xMax = ToDouble(fileHeader, 52, ByteOrder.LittleEndian);
                 double yMax = ToDouble(fileHeader, 60, ByteOrder.LittleEndian);
-                // TODO: use these next four
-                double zMin = NoDataToZero(ToDouble(fileHeader, 68, ByteOrder.LittleEndian));
-                double zMax = NoDataToZero(ToDouble(fileHeader, 76, ByteOrder.LittleEndian));
-                double mMin = NoDataToZero(ToDouble(fileHeader, 84, ByteOrder.LittleEndian));
-                double mMax = NoDataToZero(ToDouble(fileHeader, 92, ByteOrder.LittleEndian));
+
+                // TODO: Publicly expose these
+                //double zMin = NoDataToZero(ToDouble(fileHeader, 68, ByteOrder.LittleEndian));
+                //double zMax = NoDataToZero(ToDouble(fileHeader, 76, ByteOrder.LittleEndian));
+                //double mMin = NoDataToZero(ToDouble(fileHeader, 84, ByteOrder.LittleEndian));
+                //double mMax = NoDataToZero(ToDouble(fileHeader, 92, ByteOrder.LittleEndian));
 
                 if (fileLengthInBytes == _fileHeaderLength)
                 {
@@ -137,13 +138,16 @@ namespace OpenGlobe.Core
                             // would have to deal with them.
                             //
                             break;
+
                         case ShapeType.Point:
                             _shapes.Add(new PointShape(recordNumber, 
                                 new Vector2D(
                                     ToDouble(record, 4, ByteOrder.LittleEndian),
                                     ToDouble(record, 12, ByteOrder.LittleEndian))));
                             break;
+
                         case ShapeType.Polyline:
+                        case ShapeType.Polygon:
                             RectangleD extent = new RectangleD(
                                 new Vector2D(
                                     ToDouble(record, 4, ByteOrder.LittleEndian),
@@ -173,8 +177,19 @@ namespace OpenGlobe.Core
                                     ToDouble(record, pointsOffset + (16 * i) + 8, ByteOrder.LittleEndian));
                             }
 
-                            _shapes.Add(new PolylineShape(recordNumber, extent, parts, points));
+                            if (recordShapeType == ShapeType.Polyline)
+                            {
+                                _shapes.Add(new PolylineShape(recordNumber, extent, parts, points));
+                            }
+                            else
+                            {
+                                _shapes.Add(new PolygonShape(recordNumber, extent, parts, points));
+                            }
+
                             break;
+
+                        default:
+                            throw new NotImplementedException("The shapefile type is not supported.  Only null, point, polyline, and polygon are supported.");
                     }
                 }
             }

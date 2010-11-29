@@ -72,14 +72,6 @@ namespace OpenGlobe.Core
             // Verify header
             //
             Assert.AreEqual(ShapeType.Polyline, sf.ShapeType);
-            Assert.AreEqual(-165.243939175492, sf.Extent.LowerLeft.X, 1e-11);
-            Assert.AreEqual(-50.240137221344, sf.Extent.LowerLeft.Y, 1e-11);
-            Assert.AreEqual(176.325806105729, sf.Extent.UpperRight.X, 1e-11);
-            Assert.AreEqual(73.3349038760715, sf.Extent.UpperRight.Y, 1e-12);
-
-            //
-            // Verify records
-            //
             Assert.AreEqual(458, sf.Count);
 
             foreach (Shape shape in sf)
@@ -92,6 +84,30 @@ namespace OpenGlobe.Core
                 foreach (ShapePart part in polylineShape)
                 {
                     Assert.Greater(part.Count, 0);
+                }
+            }
+        }
+
+        [Test]
+        [Category("RequiresData")]
+        public void Polygon()
+        {
+            Shapefile sf = new Shapefile(@"110m_admin_0_countries.shp");
+
+            Assert.AreEqual(ShapeType.Polygon, sf.ShapeType);
+            Assert.AreEqual(177, sf.Count);
+
+            foreach (Shape shape in sf)
+            {
+                Assert.AreEqual(ShapeType.Polygon, shape.ShapeType);
+
+                PolygonShape polygonShape = (PolygonShape)shape;
+
+                Assert.Greater(polygonShape.Count, 0);
+                foreach (ShapePart part in polygonShape)
+                {
+                    Assert.GreaterOrEqual(part.Count, 4);
+                    Assert.AreEqual(part[0], part[part.Count - 1]);
                 }
             }
         }

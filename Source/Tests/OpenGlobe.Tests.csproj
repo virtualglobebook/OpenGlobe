@@ -147,6 +147,10 @@
     <None Include="..\..\Data\Vector\NaturalEarth\50m-rivers-lake-centerlines\50m-rivers-lake-centerlines.shp">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+
+    <None Include="..\..\Data\Vector\NaturalEarth\110m-admin-0-countries\110m_admin_0_countries.shp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
