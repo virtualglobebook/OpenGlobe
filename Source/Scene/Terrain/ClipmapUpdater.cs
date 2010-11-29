@@ -134,10 +134,10 @@ namespace OpenGlobe.Scene.Terrain
 
             ClipmapUpdate thisTile = new ClipmapUpdate(
                 level,
-                tile.West,
-                tile.South,
-                tile.East,
-                tile.North);
+                tile.West - 1,
+                tile.South - 1,
+                tile.East + 1,
+                tile.North + 1);
 
             ClipmapUpdate intersection = IntersectUpdates(entireLevel, thisTile);
 
@@ -315,10 +315,6 @@ namespace OpenGlobe.Scene.Terrain
 
         private void RenderTileToLevelHeightTexture(Context context, ClipmapLevel level, RasterTerrainTileRegion region, Texture2D texture)
         {
-            foreach (TextureUnit unit in context.TextureUnits)
-            {
-                unit.Texture = null;
-            }
             context.TextureUnits[0].Texture = texture;
             context.TextureUnits[0].TextureSampler = Device.TextureSamplers.NearestClamp;
 
@@ -347,11 +343,6 @@ namespace OpenGlobe.Scene.Terrain
             // Restore the context to its original state
             context.Framebuffer = oldFramebuffer;
             context.Viewport = oldViewport;
-
-            //ReadPixelBuffer rpb = level.HeightTexture.CopyToBuffer(ImageFormat.Red, ImageDatatype.Float);
-            //float[] postsFromTexture = rpb.CopyToSystemMemory<float>();
-            //if (postsFromTexture == null)
-            //    throw new Exception();
         }
 
         private void UpsampleTileData(Context context, ClipmapLevel level, RasterTerrainTileRegion region)
@@ -361,10 +352,6 @@ namespace OpenGlobe.Scene.Terrain
             if (coarserLevel == null)
                 return;
 
-            foreach (TextureUnit unit in context.TextureUnits)
-            {
-                unit.Texture = null;
-            }
             context.TextureUnits[0].Texture = coarserLevel.HeightTexture;
             context.TextureUnits[0].TextureSampler = Device.TextureSamplers.LinearRepeat; // TODO: change to NearestRepeat
 
@@ -398,11 +385,6 @@ namespace OpenGlobe.Scene.Terrain
             // Restore the context to its original state
             context.Framebuffer = oldFramebuffer;
             context.Viewport = oldViewport;
-
-            //ReadPixelBuffer rpb = level.HeightTexture.CopyToBuffer(ImageFormat.Red, ImageDatatype.Float);
-            //float[] postsFromTexture = rpb.CopyToSystemMemory<float>();
-            //if (postsFromTexture == null)
-            //    throw new Exception();
         }
 
         private void UpdateNormals(Context context, ClipmapUpdate update)
@@ -435,11 +417,6 @@ namespace OpenGlobe.Scene.Terrain
             // Restore the context to its original state
             context.Framebuffer = oldFramebuffer;
             context.Viewport = oldViewport;
-
-            /*ReadPixelBuffer rpb = level.NormalTexture.CopyToBuffer(ImageFormat.RedGreenBlue, ImageDatatype.Float);
-            Vector3F[] postsFromTexture = rpb.CopyToSystemMemory<Vector3F>();
-            if (postsFromTexture == null)
-                throw new Exception();*/
         }
 
         private void RequestTileLoad(ClipmapLevel level, RasterTerrainTile tile)
