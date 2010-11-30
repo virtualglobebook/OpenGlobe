@@ -108,6 +108,8 @@ namespace OpenGlobe.Scene.Terrain
             _showBlendRegions = (Uniform<bool>)_shaderProgram.Uniforms["u_showBlendRegions"];
             _useBlendRegions = (Uniform<bool>)_shaderProgram.Uniforms["u_useBlendRegions"];
             _oneOverClipmapSize = (Uniform<float>)_shaderProgram.Uniforms["u_oneOverClipmapSize"];
+            _color = (Uniform<Vector3F>)_shaderProgram.Uniforms["u_color"];
+            _blendRegionColor = (Uniform<Vector3F>)_shaderProgram.Uniforms["u_blendRegionColor"];
 
             _renderState = new RenderState();
             _renderState.FacetCulling.FrontFaceWindingOrder = fieldBlockMesh.FrontFaceWindingOrder;
@@ -385,6 +387,9 @@ namespace OpenGlobe.Scene.Terrain
             context.TextureUnits[3].Texture = coarserLevel.NormalTexture;
             context.TextureUnits[3].TextureSampler = Device.TextureSamplers.LinearRepeat;
 
+            _color.Value = _colors[levelIndex];
+            _blendRegionColor.Value = levelIndex == 0 ? _colors[levelIndex] : _colors[levelIndex - 1];
+
             int west = level.CurrentExtent.West;
             int south = level.CurrentExtent.South;
             int east = level.CurrentExtent.East;
@@ -550,6 +555,36 @@ namespace OpenGlobe.Scene.Terrain
         }
 		*/
 
+        private static Vector3F[] CreateColors()
+        {
+            Vector3F[] colors = new Vector3F[]
+            {
+                new Vector3F(1.0f, 0.42f, 0.0f),
+                new Vector3F(0.0f, 0.58f, 1.0f),
+                new Vector3F(0.0f, 0.5f, 0.05f),
+                new Vector3F(0.7f, 0.0f, 1.0f),
+                new Vector3F(0.0f, 0.78f, 0.78f),
+                new Vector3F(1.0f, 0.85f, 0.0f),
+
+                new Vector3F(1.0f, 1.0f, 0.0f),
+                new Vector3F(0.0f, 1.0f, 1.0f),
+                new Vector3F(1.0f, 0.0f, 0.0f),
+                new Vector3F(0.0f, 0.0f, 1.0f),
+                new Vector3F(1.0f, 0.0f, 1.0f),
+                new Vector3F(0.0f, 1.0f, 0.0f),
+            };
+            return colors;
+
+            /*Random random = new Random();
+
+            Vector3F[] colors = new Vector3F[20];
+            for (int i = 0; i < colors.Length; ++i)
+            {
+                colors[i] = new Vector3F((float)random.NextDouble(), (float)random.NextDouble(), (float)random.NextDouble());
+            }
+            return colors;*/
+        }
+
         private RasterTerrainSource _terrainSource;
         private int _clipmapPosts;
         private int _clipmapSegments;
@@ -585,6 +620,8 @@ namespace OpenGlobe.Scene.Terrain
         private Uniform<bool> _showBlendRegions;
         private Uniform<bool> _useBlendRegions;
         private Uniform<float> _oneOverClipmapSize;
+        private Uniform<Vector3F> _color;
+        private Uniform<Vector3F> _blendRegionColor;
 
         private bool _wireframe;
         private bool _blendRegionsEnabled = true;
@@ -592,5 +629,7 @@ namespace OpenGlobe.Scene.Terrain
 
         private ClipmapUpdater _updater;
         private Vector3D _clipmapCenter;
+
+        private static readonly Vector3F[] _colors = CreateColors();
     }
 }

@@ -23,7 +23,7 @@ namespace OpenGlobe.Examples
     {
         public ClipmapTerrain()
         {
-            _window = Device.CreateWindow(800, 600, "Chapter 13:  Clipmap Terrain");
+            _window = Device.CreateWindow(800, 600, "Chapter 11:  Clipmap Terrain");
 
             SimpleTerrainSource terrainSource = new SimpleTerrainSource(@"..\..\..\..\..\..\Data\Terrain\ps_height_16k");
             //WorldWindTerrainSource terrainSource = new WorldWindTerrainSource();
@@ -67,16 +67,16 @@ namespace OpenGlobe.Examples
             _window.RenderFrame += OnRenderFrame;
             _window.PreRenderFrame += OnPreRenderFrame;
 
-            PersistentView.Execute(@"C:\Users\Kevin Ring\Documents\Book\svn\TerrainLevelOfDetail\Figures\HalfDome.xml", _window, _sceneState.Camera);
+            PersistentView.Execute(@"C:\Users\Kevin Ring\Documents\Book\svn\GeometryClipmapping\Figures\ClipmapNestedLevels.xml", _window, _sceneState.Camera);
 
             HighResolutionSnap snap = new HighResolutionSnap(_window, _sceneState);
-            snap.ColorFilename = @"C:\Users\Kevin Ring\Documents\Book\svn\TerrainLevelOfDetail\Figures\HalfDome.png";
+            snap.ColorFilename = @"C:\Users\Kevin Ring\Documents\Book\svn\GeometryClipmapping\Figures\ClipmapNestedLevels.png";
             snap.WidthInInches = 3;
             snap.DotsPerInch = 600;
 
-            _hudFont = new Font("Arial", 16);
-            _hud = new HeadsUpDisplay(_window.Context);
-            _hud.Color = Color.Blue;
+            //_hudFont = new Font("Arial", 16);
+            //_hud = new HeadsUpDisplay(_window.Context);
+            //_hud.Color = Color.Blue;
             UpdateHUD();
         }
 
@@ -119,6 +119,14 @@ namespace OpenGlobe.Examples
                 _clipmap.LodUpdateEnabled = !_clipmap.LodUpdateEnabled;
                 UpdateHUD();
             }
+            else if (e.Key == KeyboardKey.Q)
+            {
+                _sceneState.Camera.Eye = new Vector3D(1384.34902986009, 2506.6619530376, _sceneState.Camera.Eye.Z);
+                _cameraFly.Dispose();
+                _cameraFly = new CameraFly(_sceneState.Camera, _window);
+                _cameraFly.UpdateParametersFromCamera();
+                _cameraFly.MovementRate = 1000.0;
+            }
         }
 
         private void OnRenderFrame()
@@ -126,7 +134,11 @@ namespace OpenGlobe.Examples
             Context context = _window.Context;
             context.Clear(_clearState);
             _clipmap.Render(context, _sceneState);
-            _hud.Render(context, _sceneState);
+
+            if (_hud != null)
+            {
+                _hud.Render(context, _sceneState);
+            }
         }
 
         private void OnPreRenderFrame()
@@ -137,6 +149,9 @@ namespace OpenGlobe.Examples
 
         private void UpdateHUD()
         {
+            if (_hud == null)
+                return;
+
             string text;
 
             text = "Blending: " + GetBlendingString() + " (B)\n";
@@ -172,9 +187,13 @@ namespace OpenGlobe.Examples
             if (_cameraFly != null)
                 _cameraFly.Dispose();
             _clipmap.Dispose();
-            _hudFont.Dispose();
-            _hud.Texture.Dispose();
-            _hud.Dispose();
+            if (_hudFont != null)
+                _hudFont.Dispose();
+            if (_hud != null)
+            {
+                _hud.Texture.Dispose();
+                _hud.Dispose();
+            }
             _window.Dispose();
         }
 
@@ -196,7 +215,7 @@ namespace OpenGlobe.Examples
         private readonly GraphicsWindow _window;
         private readonly SceneState _sceneState;
         private readonly CameraLookAtPoint _camera;
-        private readonly CameraFly _cameraFly;
+        private CameraFly _cameraFly;
         private readonly ClearState _clearState;
         private readonly PlaneClipmapTerrain _clipmap;
         private HeadsUpDisplay _hud;

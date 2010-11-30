@@ -18,6 +18,8 @@ uniform sampler2D og_texture2;    // finer normal map
 uniform sampler2D og_texture3;    // coarser normal map
 
 uniform bool u_showBlendRegions;
+uniform vec3 u_color;
+uniform vec3 u_blendRegionColor;
 
 vec3 ComputeNormal()
 {
@@ -35,7 +37,7 @@ void main()
 	float intensity = diffuse + og_diffuseSpecularAmbientShininess.z;
 
 	if (u_showBlendRegions)
-		fragmentColor = mix(vec3(0.0, intensity, 0.0), vec3(0.0, 0.0, intensity), fsAlpha);
+		fragmentColor = mix(u_color, u_blendRegionColor, fsAlpha) * intensity;
 	else
-		fragmentColor = vec3(0.0, intensity, 0.0);
+		fragmentColor = u_color * intensity;
 }
