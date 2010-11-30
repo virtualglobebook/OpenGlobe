@@ -24,13 +24,13 @@ using OpenGlobe.Terrain;
 // wall normal angle is not a good way to determine which shader to use
 //
 
-namespace OpenGlobe.Examples
+namespace OpenGlobe.Research
 {
     sealed class LinesOnTerrain : IDisposable
     {
         public LinesOnTerrain()
         {
-            _window = Device.CreateWindow(800, 600, "Chapter 8:  Lines on Terrain");
+            _window = Device.CreateWindow(800, 600, "Research:  Lines on Terrain");
             _window.Resize += OnResize;
             _window.RenderFrame += OnRenderFrame;
             _window.Keyboard.KeyDown += OnKeyDown;

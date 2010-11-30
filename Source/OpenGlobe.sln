@@ -35,7 +35,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chapter5VertexDisplacementM
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chapter5TriangleMesh", "Examples\Chapter5\TriangleMesh\Chapter5TriangleMesh.csproj", "{E78F07C0-90CB-42CD-A83F-ED5A27AC8ED5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chapter8LinesOnTerrain", "Examples\Chapter8\LinesOnTerrain\Chapter8LinesOnTerrain.csproj", "{2F86841E-018F-4FB7-A428-981B34A2F9F8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ResearchLinesOnTerrain", "Research\LinesOnTerrain\ResearchLinesOnTerrain.csproj", "{2F86841E-018F-4FB7-A428-981B34A2F9F8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chapter7VectorData", "Examples\Chapter7\VectorData\Chapter7VectorData.csproj", "{A13EB11D-AA8D-4CB0-9822-56A20A431CE6}"
 EndProject

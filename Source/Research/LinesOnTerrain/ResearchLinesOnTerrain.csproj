@@ -8,8 +8,8 @@
     <ProjectGuid>{2F86841E-018F-4FB7-A428-981B34A2F9F8}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>OpenGlobe.Examples</RootNamespace>
-    <AssemblyName>Chapter8LinesOnTerrain</AssemblyName>
+    <RootNamespace>OpenGlobe.Research</RootNamespace>
+    <AssemblyName>ResearchLinesOnTerrain</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <StartupObject>
@@ -49,26 +49,26 @@
     <Compile Include="LinesOnTerrain.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\..\..\ThirdParty\OpenTKGL4\Binaries\OpenTK\Release\OpenTK.dll.config">
+    <None Include="..\..\..\ThirdParty\OpenTKGL4\Binaries\OpenTK\Release\OpenTK.dll.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Core\OpenGlobe.Core.csproj">
+    <ProjectReference Include="..\..\Core\OpenGlobe.Core.csproj">
       <Project>{51502B9C-1A97-4F2C-8541-7D9D61ED6C6D}</Project>
       <Name>OpenGlobe.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Renderer\OpenGlobe.Renderer.csproj">
+    <ProjectReference Include="..\..\Renderer\OpenGlobe.Renderer.csproj">
       <Project>{E735AB3A-EB92-4C51-814E-E5E1F2173AA4}</Project>
       <Name>OpenGlobe.Renderer</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Scene\OpenGlobe.Scene.csproj">
+    <ProjectReference Include="..\..\Scene\OpenGlobe.Scene.csproj">
       <Project>{71ABD41E-1545-45DF-B016-58E89111A4F3}</Project>
       <Name>OpenGlobe.Scene</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\..\..\..\Data\Terrain\ps-e.lg.png">
+    <Content Include="..\..\..\Data\Terrain\ps-e.lg.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
