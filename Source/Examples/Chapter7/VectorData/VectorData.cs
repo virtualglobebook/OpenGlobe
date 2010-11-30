@@ -49,25 +49,33 @@ namespace OpenGlobe.Examples.Chapter7
             _globe.DayTexture = Device.CreateTexture2D(new Bitmap("NE2_50M_SR_W_4096.jpg"), TextureFormat.RedGreenBlue8, false);
             _globe.NightTexture = Device.CreateTexture2D(new Bitmap("land_ocean_ice_lights_2048.jpg"), TextureFormat.RedGreenBlue8, false);
 
-            _countries = new PolygonShapefile("110m_admin_0_countries.shp", context, globeShape);
-            _countries.Width = 1;
-            _countries.OutlineWidth = 1;
-            _countries.DepthWrite = false;
-            _states = new PolylineShapefile("110m_admin_1_states_provinces_lines_shp.shp", context, globeShape);
-            _states.Width = 1;
-            _states.OutlineWidth = 1;
-            _states.DepthWrite = false;
-            _rivers = new PolylineShapefile("50m-rivers-lake-centerlines.shp", context, globeShape, Color.LightBlue, Color.LightBlue);
-            _rivers.Width = 1;
-            _rivers.OutlineWidth = 0;
-            _rivers.DepthWrite = false;
-
-            _populatedPlaces = new PointShapefile("110m_populated_places_simple.shp", /*"nameascii"*/null, context, globeShape, new Bitmap(@"032.png"));
-            _populatedPlaces.DepthWrite = false;
-            _airports = new PointShapefile("airprtx020.shp", /*"name"*/null, context, globeShape, new Bitmap("car-red.png"));
-            _airports.DepthWrite = false;
-            _amtrakStations = new PointShapefile("amtrakx020.shp", /*"descript"*/null, context, globeShape, new Bitmap("paper-plane--arrow.png"));
-            _amtrakStations.DepthWrite = false;
+            _countries = new ShapefileRenderer("110m_admin_0_countries.shp", context, globeShape,
+                new ShapefileAppearance()
+                {
+                    PolylineWidth = 1.0,
+                    PolylineOutlineWidth = 1.0
+                });
+            _states = new ShapefileRenderer("110m_admin_1_states_provinces_lines_shp.shp", context, globeShape,
+                new ShapefileAppearance()
+                {
+                    PolylineWidth = 1.0,
+                    PolylineOutlineWidth = 1.0
+                });
+            _rivers = new ShapefileRenderer("50m-rivers-lake-centerlines.shp", context, globeShape,
+                new ShapefileAppearance()
+                {
+                    PolylineColor = Color.LightBlue,
+                    PolylineOutlineColor = Color.LightBlue,
+                    PolylineWidth = 1.0,
+                    PolylineOutlineWidth = 0.0
+                });
+            
+            _populatedPlaces = new ShapefileRenderer("110m_populated_places_simple.shp", context, globeShape,
+                new ShapefileAppearance() { Bitmap = new Bitmap("032.png") });
+            _airports = new ShapefileRenderer("airprtx020.shp", context, globeShape, 
+                new ShapefileAppearance() { Bitmap = new Bitmap("car-red.png") });
+            _amtrakStations = new ShapefileRenderer("amtrakx020.shp", context, globeShape, 
+                new ShapefileAppearance() { Bitmap = new Bitmap("paper-plane--arrow.png") });
 
             _hudFont = new Font("Arial", 16);
             _hud = new HeadsUpDisplay(context);
@@ -333,12 +341,12 @@ namespace OpenGlobe.Examples.Chapter7
         private readonly DayNightViewportQuad _quad;
 
         private readonly DayNightGlobe _globe;
-        private readonly PolygonShapefile _countries;
-        private readonly PolylineShapefile _states;
-        private readonly PolylineShapefile _rivers;
-        private readonly PointShapefile _populatedPlaces;
-        private readonly PointShapefile _airports;
-        private readonly PointShapefile _amtrakStations;
+        private readonly ShapefileRenderer _countries;
+        private readonly ShapefileRenderer _states;
+        private readonly ShapefileRenderer _rivers;
+        private readonly ShapefileRenderer _populatedPlaces;
+        private readonly ShapefileRenderer _airports;
+        private readonly ShapefileRenderer _amtrakStations;
         
         private readonly Font _hudFont;
         private readonly HeadsUpDisplay _hud;

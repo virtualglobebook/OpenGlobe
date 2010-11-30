@@ -15,30 +15,21 @@ using OpenGlobe.Renderer;
 
 namespace OpenGlobe.Scene
 {
-    public class PolygonShapefile : IRenderable, IDisposable
+    internal class PolygonShapefile : ShapefileGraphics
     {
-        public PolygonShapefile(string filename, Context context, Ellipsoid globeShape)
+        public PolygonShapefile(
+            Shapefile shapefile, 
+            Context context, 
+            Ellipsoid globeShape,
+            ShapefileAppearance appearance)
         {
+            Verify.ThrowIfNull(shapefile);
             Verify.ThrowIfNull(context);
             Verify.ThrowIfNull(globeShape);
 
-            Shapefile shapefile = new Shapefile(filename);
+            _polyline = new OutlinedPolylineTexture();
+            _polygons = new List<Polygon>();
 
-            if (shapefile.ShapeType == ShapeType.Polygon)
-            {
-                _polyline = new OutlinedPolylineTexture();
-                _polygons = new List<Polygon>();
-
-                CreatePolygons(context, globeShape, shapefile);
-            }
-            else
-            {
-                throw new NotSupportedException("Shapefile type \"" + shapefile.ShapeType.ToString() + "\" is not a polygon shape file.");
-            }
-        }
-
-        private void CreatePolygons(Context context, Ellipsoid globeShape, Shapefile shapefile)
-        {
             VertexAttributeDoubleVector3 positionAttribute = new VertexAttributeDoubleVector3("position");
             VertexAttributeRGBA colorAttribute = new VertexAttributeRGBA("color");
             VertexAttributeRGBA outlineColorAttribute = new VertexAttributeRGBA("outlineColor");
@@ -105,9 +96,9 @@ namespace OpenGlobe.Scene
             _polyline.Set(context, mesh);
         }
 
-        #region IRenderable Members
+        #region ShapefileGraphics Members
 
-        public void Render(Context context, SceneState sceneState)
+        public override void Render(Context context, SceneState sceneState)
         {
             _polyline.Render(context, sceneState);
 
@@ -117,8 +108,36 @@ namespace OpenGlobe.Scene
             }
         }
 
+        public override void Dispose()
+        {
+            if (_polyline != null)
+            {
+                _polyline.Dispose();
+            }
+
+            foreach (Polygon polygon in _polygons)
+            {
+                polygon.Dispose();
+            }
+        }
+
+        public override bool Wireframe
+        {
+            get { return _polyline.Wireframe; }
+            set
+            {
+                _polyline.Wireframe = value;
+
+                foreach (Polygon polygon in _polygons)
+                {
+                    polygon.Wireframe = value;
+                }
+            }
+        }
+
         #endregion
 
+        /*
         public double Width 
         {
             get { return _polyline.Width;  }
@@ -130,7 +149,8 @@ namespace OpenGlobe.Scene
             get { return _polyline.OutlineWidth; }
             set { _polyline.OutlineWidth = value; }
         }
-        
+        */
+
         public bool DepthWrite 
         {
             get { return _polyline.DepthWrite;  }
@@ -144,37 +164,6 @@ namespace OpenGlobe.Scene
                 }
             }
         }
-
-        public bool Wireframe
-        {
-            get { return _polyline.Wireframe; }
-            set 
-            {
-                _polyline.Wireframe = value;
-
-                foreach (Polygon polygon in _polygons)
-                {
-                    polygon.Wireframe = value;
-                }
-            }
-        }
-
-        #region IDisposable Members
-
-        public void Dispose()
-        {
-            if (_polyline != null)
-            {
-                _polyline.Dispose();
-            }
-
-            foreach (Polygon polygon in _polygons)
-            {
-                polygon.Dispose();
-            }
-        }
-
-        #endregion
 
         private readonly OutlinedPolylineTexture _polyline;
         private readonly IList<Polygon> _polygons;

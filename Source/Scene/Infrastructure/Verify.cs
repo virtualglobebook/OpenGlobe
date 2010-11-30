@@ -46,5 +46,21 @@ namespace OpenGlobe.Scene
                 throw new ArgumentNullException("globeShape");
             }
         }
+
+        public static void ThrowIfNull(Shapefile shapefile)
+        {
+            if (shapefile == null)
+            {
+                throw new ArgumentNullException("shapefile");
+            }
+        }
+
+        public static void ThrowIfNull(ShapefileAppearance appearance)
+        {
+            if (appearance == null)
+            {
+                throw new ArgumentNullException("appearance");
+            }
+        }
     }
 }

@@ -9,39 +9,27 @@
 
 using System;
 using System.Drawing;
-using System.Collections.Generic;
 using OpenGlobe.Core;
 using OpenGlobe.Renderer;
 
 namespace OpenGlobe.Scene
 {
-    public class PointShapefile : IRenderable, IDisposable
+    internal class PointShapefile : ShapefileGraphics
     {
-        public PointShapefile(string filename, string labelName, Context context, Ellipsoid globeShape, Bitmap icon)
+        public PointShapefile(
+            Shapefile shapefile, 
+            Context context, 
+            Ellipsoid globeShape,
+            ShapefileAppearance appearance)
         {
+            Verify.ThrowIfNull(shapefile);
             Verify.ThrowIfNull(context);
             Verify.ThrowIfNull(globeShape);
+            Verify.ThrowIfNull(appearance);
 
-            Shapefile shapefile = new Shapefile(filename);
-
-            if (shapefile.ShapeType == ShapeType.Point)
-            {
-                _billboards = new BillboardCollection(context);
-                CreateBillboards(labelName, globeShape, shapefile, icon);
-            }
-            else
-            {
-                throw new NotSupportedException("Shapefile type \"" + shapefile.ShapeType.ToString() + "\" is not a point shape file.");
-            }
-        }
-
-        private void CreateBillboards(string labelName, Ellipsoid globeShape, Shapefile shapefile, Bitmap iconBitmap)
-        {
-            //Font font = new Font("Arial", 16);
-            IList<Bitmap> bitmaps = new List<Bitmap>();
-            bitmaps.Add(iconBitmap);
-            //int labelPixelOffset = iconBitmap.Width / 2;
-
+            _billboards = new BillboardCollection(context);
+            _billboards.Texture = Device.CreateTexture2D(appearance.Bitmap, TextureFormat.RedGreenBlueAlpha8, false);
+            
             foreach (Shape shape in shapefile)
             {
                 if (shape.ShapeType != ShapeType.Point)
@@ -50,55 +38,33 @@ namespace OpenGlobe.Scene
                 }
 
                 Vector2D point = ((PointShape)shape).Position;
-                Vector3D position = globeShape.ToVector3D(Trig.ToRadians(new Geodetic3D(point.X, point.Y))); ;
+                Vector3D position = globeShape.ToVector3D(Trig.ToRadians(new Geodetic3D(point.X, point.Y)));
 
-                Billboard icon = new Billboard();
-                icon.Position = position;
-                _billboards.Add(icon);
-
-                //if (labelName != null)
-                //{
-                //    string labelText = shape.GetMetadata(labelName);
-
-                //    bitmaps.Add(Device.CreateBitmapFromText(labelText, font));
-
-                //    Billboard label = new Billboard();
-                //    label.Position = position;
-                //    label.HorizontalOrigin = HorizontalOrigin.Left;
-                //    label.PixelOffset = new Vector2H(labelPixelOffset, 0);
-                //    _billboards.Add(label);
-                //}
+                Billboard billboard = new Billboard();
+                billboard.Position = position;
+                _billboards.Add(billboard);
             }
-
-            //if (labelName != null)
-            //{
-            //    TextureAtlas labelAtlas = new TextureAtlas(bitmaps);
-            //    int j = 1;
-            //    for (int i = 0; i < _billboards.Count; i += 2)
-            //    {
-            //        _billboards[i].TextureCoordinates = labelAtlas.TextureCoordinates[0];
-            //        _billboards[i + 1].TextureCoordinates = labelAtlas.TextureCoordinates[j];
-            //        ++j;
-            //    }
-            //    _billboards.Texture = Device.CreateTexture2D(labelAtlas.Bitmap, TextureFormat.RedGreenBlueAlpha8, false);
-            //}
-            //else
-            //{
-                _billboards.Texture = Device.CreateTexture2D(iconBitmap, TextureFormat.RedGreenBlueAlpha8, false);
-            //}
-
-            for (int i = 1; i < bitmaps.Count; ++i)
-            {
-                bitmaps[i].Dispose();
-            }
-            //font.Dispose();
         }
 
-        #region IRenderable Members
+        #region ShapefileGraphics Members
 
-        public void Render(Context context, SceneState sceneState)
+        public override void Render(Context context, SceneState sceneState)
         {
             _billboards.Render(context, sceneState);
+        }
+
+        public override void Dispose()
+        {
+            if (_billboards != null)
+            {
+                _billboards.Dispose();
+            }
+        }
+
+        public override bool Wireframe
+        {
+            get { return _billboards.Wireframe; }
+            set { _billboards.Wireframe = value; }
         }
 
         #endregion
@@ -108,24 +74,6 @@ namespace OpenGlobe.Scene
             get { return _billboards.DepthWrite; }
             set { _billboards.DepthWrite = value; }
         }
-
-        public bool Wireframe
-        {
-            get { return _billboards.Wireframe; }
-            set { _billboards.Wireframe = value; }
-        }
-
-        #region IDisposable Members
-
-        public void Dispose()
-        {
-            if (_billboards != null)
-            {
-                _billboards.Dispose();
-            }
-        }
-
-        #endregion
 
         private readonly BillboardCollection _billboards;
     }

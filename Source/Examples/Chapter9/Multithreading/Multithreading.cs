@@ -22,20 +22,17 @@ namespace OpenGlobe.Examples
 {
     internal class ShapefileRequest
     {
-        public ShapefileRequest(string filename, string bitmapFilename, ShapefileType type)
+        public ShapefileRequest(string filename, ShapefileAppearance appearance)
         {
             _filename = filename;
-            _bitmapFilename = bitmapFilename;
-            _type = type;
+            _appearance = appearance;
         }
 
         public string Filename { get { return _filename; } }
-        public string BitmapFilename { get { return _bitmapFilename; } }
-        public ShapefileType Type { get { return _type; } }
+        public ShapefileAppearance Appearance { get { return _appearance; } }
 
         private string _filename;
-        private string _bitmapFilename;
-        private ShapefileType _type;
+        private ShapefileAppearance _appearance;
     }
 
     internal class ShapefileWorker
@@ -54,30 +51,8 @@ namespace OpenGlobe.Examples
 #endif
 
             ShapefileRequest request = (ShapefileRequest)e.Message;
-            IRenderable shapefile = null;
-
-            if (request.Type == ShapefileType.Polyline)
-            {
-                PolylineShapefile polylineShapefile = new PolylineShapefile(request.Filename, _window.Context, _globeShape);
-                polylineShapefile.DepthWrite = false;
-                shapefile = polylineShapefile;
-            }
-            else if (request.Type == ShapefileType.Polygon)
-            {
-                PolygonShapefile polygonShapefile = new PolygonShapefile(request.Filename, _window.Context, _globeShape);
-                polygonShapefile.DepthWrite = false;
-                shapefile = polygonShapefile;
-            }
-            else if (request.Type == ShapefileType.Point)
-            {
-                PointShapefile pointShapefile = new PointShapefile(request.Filename, null, _window.Context, _globeShape, new Bitmap(request.BitmapFilename));
-                pointShapefile.DepthWrite = false;
-                shapefile = pointShapefile;
-            }
-            else
-            {
-                throw new ArgumentException("request.Type");
-            }
+            ShapefileRenderer shapefile = new ShapefileRenderer(
+                request.Filename, _window.Context, _globeShape, request.Appearance);
 
 #if !SINGLE_THREADED
             Fence fence = Device.CreateFence();
@@ -101,7 +76,7 @@ namespace OpenGlobe.Examples
         {
             Ellipsoid globeShape = Ellipsoid.ScaledWgs84;
 
-            _workerWindow = Device.CreateWindow(1, 1);                                  // Needs to be created first for whatever reason
+            _workerWindow = Device.CreateWindow(1, 1);
             _window = Device.CreateWindow(800, 600, "Chapter 9:  Multithreading");
             _window.Resize += OnResize;
             _window.RenderFrame += OnRenderFrame;
@@ -123,12 +98,17 @@ namespace OpenGlobe.Examples
 
             _requestQueue.MessageReceived += new ShapefileWorker(_workerWindow, globeShape, _doneQueue).Process;
 
-            // TODO:  Draw order
-            _requestQueue.Post(new ShapefileRequest("110m_admin_0_countries.shp", "", ShapefileType.Polygon));
-            _requestQueue.Post(new ShapefileRequest("110m_admin_1_states_provinces_lines_shp.shp", "", ShapefileType.Polyline));
-            _requestQueue.Post(new ShapefileRequest("airprtx020.shp", "paper-plane--arrow.png", ShapefileType.Point));
-            _requestQueue.Post(new ShapefileRequest("amtrakx020.shp", "car-red.png", ShapefileType.Point));
-            _requestQueue.Post(new ShapefileRequest("110m_populated_places_simple.shp", "032.png", ShapefileType.Point));
+            // 2ND_EDITION:  Draw order
+            _requestQueue.Post(new ShapefileRequest("110m_admin_0_countries.shp", 
+                new ShapefileAppearance()));
+            _requestQueue.Post(new ShapefileRequest("110m_admin_1_states_provinces_lines_shp.shp", 
+                new ShapefileAppearance()));
+            _requestQueue.Post(new ShapefileRequest("airprtx020.shp", 
+                new ShapefileAppearance() { Bitmap = new Bitmap("paper-plane--arrow.png") }));
+            _requestQueue.Post(new ShapefileRequest("amtrakx020.shp", 
+                new ShapefileAppearance() { Bitmap = new Bitmap("car-red.png") }));
+            _requestQueue.Post(new ShapefileRequest("110m_populated_places_simple.shp", 
+                new ShapefileAppearance() { Bitmap = new Bitmap("032.png") }));
 
 #if SINGLE_THREADED
             _requestQueue.ProcessQueue();

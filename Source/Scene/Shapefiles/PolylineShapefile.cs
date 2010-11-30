@@ -9,39 +9,26 @@
 
 using System;
 using System.Drawing;
-using System.Collections.Generic;
 using OpenGlobe.Core;
 using OpenGlobe.Renderer;
 
 namespace OpenGlobe.Scene
 {
-    public class PolylineShapefile : IRenderable, IDisposable
+    internal class PolylineShapefile : ShapefileGraphics
     {
-        public PolylineShapefile(string filename, Context context, Ellipsoid globeShape)
-            : this(filename, context, globeShape, Color.Yellow, Color.Black)
+        public PolylineShapefile(
+            Shapefile shapefile, 
+            Context context, 
+            Ellipsoid globeShape, 
+            ShapefileAppearance appearance)
         {
-        }
-
-        public PolylineShapefile(string filename, Context context, Ellipsoid globeShape, Color color, Color outlineColor)
-        {
+            Verify.ThrowIfNull(shapefile);
             Verify.ThrowIfNull(context);
             Verify.ThrowIfNull(globeShape);
+            Verify.ThrowIfNull(appearance);
+            
+            _polyline = new OutlinedPolylineTexture();
 
-            Shapefile shapefile = new Shapefile(filename);
-
-            if (shapefile.ShapeType == ShapeType.Polyline)
-            {
-                _polyline = new OutlinedPolylineTexture();
-                CreatePolylines(context, globeShape, shapefile, color, outlineColor);
-            }
-            else
-            {
-                throw new NotSupportedException("Shapefile type \"" + shapefile.ShapeType.ToString() + "\" is not a polyline shape file.");
-            }
-        }
-
-        private void CreatePolylines(Context context, Ellipsoid globeShape, Shapefile shapefile, Color color, Color outlineColor)
-        {
             int positionsCount = 0;
             int indicesCount = 0;
             PolylineCapacities(shapefile, out positionsCount, out indicesCount);
@@ -69,8 +56,8 @@ namespace OpenGlobe.Scene
                         Vector2D point = part[i];
 
                         positionAttribute.Values.Add(globeShape.ToVector3D(Trig.ToRadians(new Geodetic3D(point.X, point.Y))));
-                        colorAttribute.AddColor(color);
-                        outlineColorAttribute.AddColor(outlineColor);
+                        colorAttribute.AddColor(appearance.PolylineColor);
+                        outlineColorAttribute.AddColor(appearance.PolylineOutlineColor);
 
                         if (i != 0)
                         {
@@ -88,9 +75,8 @@ namespace OpenGlobe.Scene
             mesh.Attributes.Add(outlineColorAttribute);
             mesh.Indices = indices;
             _polyline.Set(context, mesh);
-
-            Width = _polyline.Width;
-            OutlineWidth = _polyline.OutlineWidth;
+            _polyline.Width = appearance.PolylineWidth;
+            _polyline.OutlineWidth = appearance.PolylineOutlineWidth;
         }
 
         private static void PolylineCapacities(Shapefile shapefile, out int positionsCount, out int indicesCount)
@@ -120,42 +106,14 @@ namespace OpenGlobe.Scene
             indicesCount = numberOfIndices;
         }
 
-        #region IRenderable Members
+        #region ShapefileGraphics Members
 
-        public void Render(Context context, SceneState sceneState)
+        public override void Render(Context context, SceneState sceneState)
         {
             _polyline.Render(context, sceneState);
         }
 
-        #endregion
-
-        public double Width 
-        {
-            get { return _polyline.Width;  }
-            set { _polyline.Width = value;  }
-        }
-        
-        public double OutlineWidth 
-        {
-            get { return _polyline.OutlineWidth; }
-            set { _polyline.OutlineWidth = value; }
-        }
-        
-        public bool DepthWrite 
-        {
-            get { return _polyline.DepthWrite;  }
-            set { _polyline.DepthWrite = value;  }
-        }
-
-        public bool Wireframe
-        {
-            get { return _polyline.Wireframe; }
-            set { _polyline.Wireframe = value; }
-        }
-
-        #region IDisposable Members
-
-        public void Dispose()
+        public override void Dispose()
         {
             if (_polyline != null)
             {
@@ -163,7 +121,19 @@ namespace OpenGlobe.Scene
             }
         }
 
+        public override bool Wireframe
+        {
+            get { return _polyline.Wireframe; }
+            set { _polyline.Wireframe = value; }
+        }
+
         #endregion
+
+        public bool DepthWrite 
+        {
+            get { return _polyline.DepthWrite;  }
+            set { _polyline.DepthWrite = value;  }
+        }
 
         private readonly OutlinedPolylineTexture _polyline;
     }
