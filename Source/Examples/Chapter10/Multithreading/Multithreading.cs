@@ -77,7 +77,7 @@ namespace OpenGlobe.Examples
             Ellipsoid globeShape = Ellipsoid.ScaledWgs84;
 
             _workerWindow = Device.CreateWindow(1, 1);
-            _window = Device.CreateWindow(800, 600, "Chapter 9:  Multithreading");
+            _window = Device.CreateWindow(800, 600, "Chapter 10:  Multithreading");
             _window.Resize += OnResize;
             _window.RenderFrame += OnRenderFrame;
             _sceneState = new SceneState();

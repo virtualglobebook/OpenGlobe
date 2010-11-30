@@ -39,7 +39,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chapter8LinesOnTerrain", "E
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chapter7VectorData", "Examples\Chapter7\VectorData\Chapter7VectorData.csproj", "{A13EB11D-AA8D-4CB0-9822-56A20A431CE6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chapter9Multithreading", "Examples\Chapter9\Multithreading\Chapter9Multithreading.csproj", "{1DEAD09B-0473-4C83-8AF7-7FA178AC6067}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chapter10Multithreading", "Examples\Chapter10\Multithreading\Chapter10Multithreading.csproj", "{1DEAD09B-0473-4C83-8AF7-7FA178AC6067}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chapter03Triangle", "Examples\Chapter03\Triangle\Chapter03Triangle.csproj", "{F837D516-6C6F-4612-847A-22CC13B13AF3}"
 EndProject
