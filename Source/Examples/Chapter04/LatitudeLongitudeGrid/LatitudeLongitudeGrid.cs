@@ -22,7 +22,7 @@ namespace OpenGlobe.Examples
         public LatitudeLongitudeGrid()
         {
             Ellipsoid globeShape = Ellipsoid.Wgs84;
-            _window = Device.CreateWindow(800, 600, "Chapter 3:  Latitude Longitude Grid");
+            _window = Device.CreateWindow(800, 600, "Chapter 4:  Latitude Longitude Grid");
             _window.Resize += OnResize;
             _window.RenderFrame += OnRenderFrame;
             _sceneState = new SceneState();

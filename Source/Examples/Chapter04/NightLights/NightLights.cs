@@ -20,7 +20,7 @@ namespace OpenGlobe.Examples
     {
         public NightLights()
         {
-            _window = Device.CreateWindow(800, 600, "Chapter 3:  Night Lights");
+            _window = Device.CreateWindow(800, 600, "Chapter 4:  Night Lights");
             _window.Resize += OnResize;
             _window.RenderFrame += OnRenderFrame;
             _sceneState = new SceneState();

@@ -16,11 +16,11 @@ using OpenGlobe.Scene;
 
 namespace OpenGlobe.Examples
 {
-    sealed class SubdivisionSphere2 : IDisposable
+    sealed class SubdivisionSphere1 : IDisposable
     {
-        public SubdivisionSphere2()
+        public SubdivisionSphere1()
         {
-            _window = Device.CreateWindow(800, 600, "Chapter 3:  Subdivision Sphere 2");
+            _window = Device.CreateWindow(800, 600, "Chapter 4:  Subdivision Sphere 1");
             _window.Resize += OnResize;
             _window.RenderFrame += OnRenderFrame;
             _sceneState = new SceneState();
@@ -31,13 +31,9 @@ namespace OpenGlobe.Examples
                 @"#version 330
 
                   layout(location = og_positionVertexLocation) in vec4 position;
-                  layout(location = og_normalVertexLocation) in vec3 normal;
-                  layout(location = og_textureCoordinateVertexLocation) in vec2 textureCoordinate;
-
+                  out vec3 worldPosition;
                   out vec3 positionToLight;
                   out vec3 positionToEye;
-                  out vec3 surfaceNormal;
-                  out vec2 surfaceTextureCoordinate;
 
                   uniform mat4 og_modelViewPerspectiveMatrix;
                   uniform vec3 og_cameraEye;
@@ -47,20 +43,17 @@ namespace OpenGlobe.Examples
                   {
                         gl_Position = og_modelViewPerspectiveMatrix * position; 
 
-                        positionToLight = og_cameraLightPosition - position.xyz;
-                        positionToEye = og_cameraEye - position.xyz;
-
-                        surfaceNormal = normal;
-                        surfaceTextureCoordinate = textureCoordinate;
+                        worldPosition = position.xyz;
+                        positionToLight = og_cameraLightPosition - worldPosition;
+                        positionToEye = og_cameraEye - worldPosition;
                   }";
+
             string fs =
                 @"#version 330
                  
+                  in vec3 worldPosition;
                   in vec3 positionToLight;
                   in vec3 positionToEye;
-                  in vec3 surfaceNormal;
-                  in vec2 surfaceTextureCoordinate;
-
                   out vec3 fragmentColor;
 
                   uniform vec4 og_diffuseSpecularAmbientShininess;
@@ -79,32 +72,52 @@ namespace OpenGlobe.Examples
                               diffuseSpecularAmbientShininess.z;
                   }
 
+                  vec2 ComputeTextureCoordinates(vec3 normal)
+                  {
+                      return vec2(atan(normal.y, normal.x) * og_oneOverTwoPi + 0.5, asin(normal.z) * og_oneOverPi + 0.5);
+                  }
+
                   void main()
                   {
-                      vec3 normal = normalize(surfaceNormal);
+                      vec3 normal = normalize(worldPosition);
                       float intensity = LightIntensity(normal,  normalize(positionToLight), normalize(positionToEye), og_diffuseSpecularAmbientShininess);
-                      fragmentColor = intensity * texture(og_texture0, surfaceTextureCoordinate).rgb;
+                      fragmentColor = intensity * texture(og_texture0, ComputeTextureCoordinates(normal)).rgb;
                   }";
             ShaderProgram sp = Device.CreateShaderProgram(vs, fs);
 
-            Mesh mesh = SubdivisionSphereTessellator.Compute(5, SubdivisionSphereVertexAttributes.All);
+            ///////////////////////////////////////////////////////////////////
+
+            Mesh mesh = SubdivisionSphereTessellatorSimple.Compute(5);
             VertexArray va = _window.Context.CreateVertexArray(mesh, sp.VertexAttributes, BufferHint.StaticDraw);
             _primitiveType = mesh.PrimitiveType;
 
+            ///////////////////////////////////////////////////////////////////
+
             RenderState renderState = new RenderState();
+            //_renderState.RasterizationMode = RasterizationMode.Line;
             renderState.FacetCulling.FrontFaceWindingOrder = mesh.FrontFaceWindingOrder;
 
             _drawState = new DrawState(renderState, sp, va);
 
+            ///////////////////////////////////////////////////////////////////
+
             Bitmap bitmap = new Bitmap("NE2_50M_SR_W_4096.jpg");
+            //Bitmap bitmap = new Bitmap("world_topo_bathy_200411_3x5400x2700.jpg");
+            //Bitmap bitmap = new Bitmap("world.topo.200412.3x5400x2700.jpg");
             _texture = Device.CreateTexture2D(bitmap, TextureFormat.RedGreenBlue8, false);
+
+            _sceneState.Camera.ZoomToTarget(1);
+
+            HighResolutionSnap snap = new HighResolutionSnap(_window, _sceneState);
+            snap.ColorFilename = @"E:\Manuscript\GlobeRendering\Figures\GeographicGridEllipsoidTessellationPol.png";
+            snap.WidthInInches = 3;
+            snap.DotsPerInch = 600;
         }
 
         private void OnResize()
         {
             _window.Context.Viewport = new Rectangle(0, 0, _window.Width, _window.Height);
             _sceneState.Camera.AspectRatio = _window.Width / (double)_window.Height;
-            _sceneState.Camera.ZoomToTarget(1);
         }
 
         private void OnRenderFrame()
@@ -136,7 +149,7 @@ namespace OpenGlobe.Examples
 
         static void Main()
         {
-            using (SubdivisionSphere2 example = new SubdivisionSphere2())
+            using (SubdivisionSphere1 example = new SubdivisionSphere1())
             {
                 example.Run(30.0);
             }

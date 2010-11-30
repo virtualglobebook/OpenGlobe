@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual C# Express 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chapter3SubdivisionSphere1", "Examples\Chapter3\SubdivisionSphere1\Chapter3SubdivisionSphere1.csproj", "{2665F0CA-8D86-4486-916C-2E49799C244B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chapter04SubdivisionSphere1", "Examples\Chapter04\SubdivisionSphere1\Chapter04SubdivisionSphere1.csproj", "{2665F0CA-8D86-4486-916C-2E49799C244B}"
 	ProjectSection(ProjectDependencies) = postProject
 		{51502B9C-1A97-4F2C-8541-7D9D61ED6C6D} = {51502B9C-1A97-4F2C-8541-7D9D61ED6C6D}
 	EndProjectSection
@@ -15,15 +15,15 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenGlobe.Tests", "Tests\Op
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenGlobe.Core", "Core\OpenGlobe.Core.csproj", "{51502B9C-1A97-4F2C-8541-7D9D61ED6C6D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chapter3SubdivisionSphere2", "Examples\Chapter3\SubdivisionSphere2\Chapter3SubdivisionSphere2.csproj", "{72B5E11E-40F4-4881-9706-75DD864BF45E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chapter04SubdivisionSphere2", "Examples\Chapter04\SubdivisionSphere2\Chapter04SubdivisionSphere2.csproj", "{72B5E11E-40F4-4881-9706-75DD864BF45E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenGlobe.Scene", "Scene\OpenGlobe.Scene.csproj", "{71ABD41E-1545-45DF-B016-58E89111A4F3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chapter3RayCasting", "Examples\Chapter3\RayCasting\Chapter3RayCasting.csproj", "{2ABF9F7F-B818-44DC-9237-C1D1DC22ADE7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chapter04GlobeRayCasting", "Examples\Chapter04\GlobeRayCasting\Chapter04GlobeRayCasting.csproj", "{2ABF9F7F-B818-44DC-9237-C1D1DC22ADE7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chapter3LatitudeLongitudeGrid", "Examples\Chapter3\LatitudeLongitudeGrid\Chapter3LatitudeLongitudeGrid.csproj", "{89A86599-4C34-4016-BD0B-23AA6511EB03}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chapter04LatitudeLongitudeGrid", "Examples\Chapter04\LatitudeLongitudeGrid\Chapter04LatitudeLongitudeGrid.csproj", "{89A86599-4C34-4016-BD0B-23AA6511EB03}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chapter3NightLights", "Examples\Chapter3\NightLights\Chapter3NightLights.csproj", "{C084FBCF-6C79-47DD-9440-A829F3D534FB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chapter04NightLights", "Examples\Chapter04\NightLights\Chapter04NightLights.csproj", "{C084FBCF-6C79-47DD-9440-A829F3D534FB}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chapter02EllipsoidSurfaceNormals", "Examples\Chapter02\EllipsoidSurfaceNormals\Chapter02EllipsoidSurfaceNormals.csproj", "{C0198B9E-97B8-4075-912E-70D231EE9D8E}"
 EndProject

@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{89A86599-4C34-4016-BD0B-23AA6511EB03}</ProjectGuid>
+    <ProjectGuid>{2ABF9F7F-B818-44DC-9237-C1D1DC22ADE7}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>OpenGlobe.Examples</RootNamespace>
-    <AssemblyName>Chapter3LatitudeLongitudeGrid</AssemblyName>
+    <AssemblyName>Chapter04GlobeRayCasting</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <StartupObject>
@@ -46,7 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="LatitudeLongitudeGrid.cs" />
+    <Compile Include="GlobeRayCasting.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\..\ThirdParty\OpenTKGL4\Binaries\OpenTK\Release\OpenTK.dll.config">
@@ -69,9 +69,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="..\..\..\..\Data\Imagery\NaturalEarth\NE2_50M_SR_W_4096.jpg">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\..\..\Data\Icons\YusukeKamiyamane\building.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

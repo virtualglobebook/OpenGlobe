@@ -16,13 +16,13 @@ using OpenGlobe.Scene;
 
 namespace OpenGlobe.Examples
 {
-    sealed class RayCasting : IDisposable
+    sealed class GlobeRayCasting : IDisposable
     {
-        public RayCasting()
+        public GlobeRayCasting()
         {
             Ellipsoid globeShape = Ellipsoid.ScaledWgs84;
 
-            _window = Device.CreateWindow(800, 600, "Chapter 3:  Ray Casting");
+            _window = Device.CreateWindow(800, 600, "Chapter 4:  Globe Ray Casting");
             _window.Resize += OnResize;
             _window.RenderFrame += OnRenderFrame;
             _sceneState = new SceneState();
@@ -56,7 +56,7 @@ namespace OpenGlobe.Examples
             PersistentView.Execute(@"E:\Manuscript\GlobeRendering\Figures\GPURayCasting.xml", _window, _sceneState.Camera);
 
             HighResolutionSnap snap = new HighResolutionSnap(_window, _sceneState);
-            snap.ColorFilename = @"E:\Manuscript\GlobeRendering\Figures\RayCasting.png";
+            snap.ColorFilename = @"E:\Manuscript\GlobeRendering\Figures\GlobeRayCasting.png";
             snap.WidthInInches = 3;
             snap.DotsPerInch = 600;
         }
@@ -110,7 +110,7 @@ namespace OpenGlobe.Examples
 
         static void Main()
         {
-            using (RayCasting example = new RayCasting())
+            using (GlobeRayCasting example = new GlobeRayCasting())
             {
                 example.Run(30.0);
             }
