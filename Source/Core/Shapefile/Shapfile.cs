@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 //
 // (C) Copyright 2010 Patrick Cozzi and Kevin Ring
 //
@@ -231,10 +231,10 @@ namespace OpenGlobe.Core
             return BitConverter.ToDouble(swapped, 0);
         }
 
-        private double NoDataToZero(double value)
-        {
-            return (value < _noData) ? 0.0 : value;
-        }
+        //private double NoDataToZero(double value)
+        //{
+        //    return (value < _noData) ? 0.0 : value;
+        //}
 
         private static byte[] Read(FileStream fileStream, int count)
         {
@@ -294,7 +294,7 @@ namespace OpenGlobe.Core
         private readonly RectangleD _extent;
         private readonly IList<Shape> _shapes;
 
-        private static readonly double _noData = Math.Pow(-10, 38);
+        //private static readonly double _noData = Math.Pow(-10, 38);
         private const int _fileHeaderLength = 100;
         private const int _fileCode = 9994;
         private const int _version = 1000;
