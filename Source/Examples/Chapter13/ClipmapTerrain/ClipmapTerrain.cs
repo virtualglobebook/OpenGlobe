@@ -119,6 +119,11 @@ namespace OpenGlobe.Examples
                 _clipmap.LodUpdateEnabled = !_clipmap.LodUpdateEnabled;
                 UpdateHUD();
             }
+            else if (e.Key == KeyboardKey.C)
+            {
+                _clipmap.ColorClipmapLevels = !_clipmap.ColorClipmapLevels;
+                UpdateHUD();
+            }
         }
 
         private void OnRenderFrame()
@@ -149,6 +154,7 @@ namespace OpenGlobe.Examples
             text = "Blending: " + GetBlendingString() + " (B)\n";
             text += "Wireframe: " + (_clipmap.Wireframe ? "Enabled" : "Disabled") + " (W)\n";
             text += "LOD Update: " + (_clipmap.LodUpdateEnabled ? "Enabled" : "Disabled") + " (L)\n";
+            text += "Color Clipmap Levels: " + (_clipmap.ColorClipmapLevels ? "Enabled" : "Disabled") + " (C)\n";
 
             if (_hud.Texture != null)
             {

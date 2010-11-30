@@ -164,6 +164,13 @@ namespace OpenGlobe.Scene.Terrain
             set { _lodUpdateEnabled = value; }
         }
 
+        public bool ColorClipmapLevels
+        {
+            get { return _colorClipmapLevels; }
+            set { _colorClipmapLevels = value; }
+        }
+
+
         public void PreRender(Context context, SceneState sceneState)
         {
             if (!_lodUpdateEnabled)
@@ -387,8 +394,16 @@ namespace OpenGlobe.Scene.Terrain
             context.TextureUnits[3].Texture = coarserLevel.NormalTexture;
             context.TextureUnits[3].TextureSampler = Device.TextureSamplers.LinearRepeat;
 
-            _color.Value = _colors[levelIndex];
-            _blendRegionColor.Value = levelIndex == 0 ? _colors[levelIndex] : _colors[levelIndex - 1];
+            if (_colorClipmapLevels)
+            {
+                _color.Value = _colors[levelIndex];
+                _blendRegionColor.Value = levelIndex == 0 ? _colors[levelIndex] : _colors[levelIndex - 1];
+            }
+            else
+            {
+                _color.Value = new Vector3F(0.0f, 1.0f, 0.0f);
+                _blendRegionColor.Value = new Vector3F(0.0f, 0.0f, 1.0f);
+            }
 
             int west = level.CurrentExtent.West;
             int south = level.CurrentExtent.South;
@@ -557,32 +572,21 @@ namespace OpenGlobe.Scene.Terrain
 
         private static Vector3F[] CreateColors()
         {
-            Vector3F[] colors = new Vector3F[]
-            {
-                new Vector3F(1.0f, 0.42f, 0.0f),
-                new Vector3F(0.0f, 0.58f, 1.0f),
-                new Vector3F(0.0f, 0.5f, 0.05f),
-                new Vector3F(0.7f, 0.0f, 1.0f),
-                new Vector3F(0.0f, 0.78f, 0.78f),
-                new Vector3F(1.0f, 0.85f, 0.0f),
-
-                new Vector3F(1.0f, 1.0f, 0.0f),
-                new Vector3F(0.0f, 1.0f, 1.0f),
-                new Vector3F(1.0f, 0.0f, 0.0f),
-                new Vector3F(0.0f, 0.0f, 1.0f),
-                new Vector3F(1.0f, 0.0f, 1.0f),
-                new Vector3F(0.0f, 1.0f, 0.0f),
-            };
-            return colors;
-
-            /*Random random = new Random();
-
+            int i = 0;
             Vector3F[] colors = new Vector3F[20];
-            for (int i = 0; i < colors.Length; ++i)
+            colors[i++] = new Vector3F(1.0f, 0.42f, 0.0f);
+            colors[i++] = new Vector3F(0.0f, 0.58f, 1.0f);
+            colors[i++] = new Vector3F(0.0f, 0.5f, 0.05f);
+            colors[i++] = new Vector3F(0.7f, 0.0f, 1.0f);
+            colors[i++] = new Vector3F(0.0f, 0.78f, 0.78f);
+            colors[i++] = new Vector3F(1.0f, 0.85f, 0.0f);
+
+            Random random = new Random();
+            for (; i < colors.Length; ++i)
             {
                 colors[i] = new Vector3F((float)random.NextDouble(), (float)random.NextDouble(), (float)random.NextDouble());
             }
-            return colors;*/
+            return colors;
         }
 
         private RasterTerrainSource _terrainSource;
@@ -626,6 +630,7 @@ namespace OpenGlobe.Scene.Terrain
         private bool _wireframe;
         private bool _blendRegionsEnabled = true;
         private bool _lodUpdateEnabled = true;
+        private bool _colorClipmapLevels;
 
         private ClipmapUpdater _updater;
         private Vector3D _clipmapCenter;
