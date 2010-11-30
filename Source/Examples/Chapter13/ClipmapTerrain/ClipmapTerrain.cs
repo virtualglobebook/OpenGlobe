@@ -54,12 +54,12 @@ namespace OpenGlobe.Examples
             _camera.Azimuth = 0.0;
             _camera.Elevation = Trig.ToRadians(30.0);
             _camera.Range = 0.05;
-            //_camera.Dispose();
-            //_sceneState.Camera.Eye = new Vector3D(-119.5326056, 37.74451389, _clipmap.HeightExaggeration * 2700.0);
-            //_sceneState.Camera.Target = _sceneState.Camera.Eye + Vector3D.UnitZ;
-            //_cameraFly = new CameraFly(_sceneState.Camera, _window);
-            //_cameraFly.UpdateParametersFromCamera();
-            //_cameraFly.MovementRate = _clipmap.HeightExaggeration * 10000.0;
+            _camera.Dispose();
+            _sceneState.Camera.Eye = new Vector3D(-119.5326056, 37.74451389, _clipmap.HeightExaggeration * 2700.0);
+            _sceneState.Camera.Target = _sceneState.Camera.Eye + Vector3D.UnitZ;
+            _cameraFly = new CameraFly(_sceneState.Camera, _window);
+            _cameraFly.UpdateParametersFromCamera();
+            _cameraFly.MovementRate = _clipmap.HeightExaggeration * 100000.0;
 
             _window.Keyboard.KeyDown += OnKeyDown;
 
@@ -74,9 +74,9 @@ namespace OpenGlobe.Examples
             snap.WidthInInches = 3;
             snap.DotsPerInch = 600;
 
-            //_hudFont = new Font("Arial", 16);
-            //_hud = new HeadsUpDisplay(_window.Context);
-            //_hud.Color = Color.Blue;
+            _hudFont = new Font("Arial", 16);
+            _hud = new HeadsUpDisplay(_window.Context);
+            _hud.Color = Color.Blue;
             UpdateHUD();
         }
 
@@ -118,14 +118,6 @@ namespace OpenGlobe.Examples
             {
                 _clipmap.LodUpdateEnabled = !_clipmap.LodUpdateEnabled;
                 UpdateHUD();
-            }
-            else if (e.Key == KeyboardKey.Q)
-            {
-                _sceneState.Camera.Eye = new Vector3D(1384.34902986009, 2506.6619530376, _sceneState.Camera.Eye.Z);
-                _cameraFly.Dispose();
-                _cameraFly = new CameraFly(_sceneState.Camera, _window);
-                _cameraFly.UpdateParametersFromCamera();
-                _cameraFly.MovementRate = 1000.0;
             }
         }
 
