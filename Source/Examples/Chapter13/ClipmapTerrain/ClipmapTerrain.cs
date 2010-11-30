@@ -23,7 +23,7 @@ namespace OpenGlobe.Examples
     {
         public ClipmapTerrain()
         {
-            _window = Device.CreateWindow(800, 600, "Chapter 11:  Clipmap Terrain");
+            _window = Device.CreateWindow(800, 600, "Chapter 13:  Clipmap Terrain");
 
             SimpleTerrainSource terrainSource = new SimpleTerrainSource(@"..\..\..\..\..\..\Data\Terrain\ps_height_16k");
             //WorldWindTerrainSource terrainSource = new WorldWindTerrainSource();

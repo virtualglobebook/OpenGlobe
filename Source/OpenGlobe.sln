@@ -45,7 +45,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chapter03Triangle", "Exampl
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chapter05Jitter", "Examples\Chapter05\Jitter\Chapter05Jitter.csproj", "{B1DBCA8C-DB77-4E11-BCE9-589681E497C8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chapter11ClipmapTerrain", "Examples\Chapter11\ClipmapTerrain\Chapter11ClipmapTerrain.csproj", "{16C79B80-4411-4CDF-BBF9-0C207BCAFDB6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chapter13ClipmapTerrain", "Examples\Chapter13\ClipmapTerrain\Chapter13ClipmapTerrain.csproj", "{16C79B80-4411-4CDF-BBF9-0C207BCAFDB6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
