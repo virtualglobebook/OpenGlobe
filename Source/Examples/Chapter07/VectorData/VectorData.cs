@@ -15,7 +15,7 @@ using OpenGlobe.Renderer;
 using OpenGlobe.Scene;
 using System.IO;
 
-namespace OpenGlobe.Examples.Chapter7
+namespace OpenGlobe.Examples
 {
     sealed class VectorData : IDisposable
     {

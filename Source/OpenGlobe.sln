@@ -37,7 +37,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chapter5TriangleMesh", "Exa
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ResearchLinesOnTerrain", "Research\LinesOnTerrain\ResearchLinesOnTerrain.csproj", "{2F86841E-018F-4FB7-A428-981B34A2F9F8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chapter7VectorData", "Examples\Chapter7\VectorData\Chapter7VectorData.csproj", "{A13EB11D-AA8D-4CB0-9822-56A20A431CE6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chapter07VectorData", "Examples\Chapter07\VectorData\Chapter07VectorData.csproj", "{A13EB11D-AA8D-4CB0-9822-56A20A431CE6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chapter10Multithreading", "Examples\Chapter10\Multithreading\Chapter10Multithreading.csproj", "{1DEAD09B-0473-4C83-8AF7-7FA178AC6067}"
 EndProject
