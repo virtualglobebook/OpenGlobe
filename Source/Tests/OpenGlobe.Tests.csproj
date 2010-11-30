@@ -73,22 +73,20 @@
     <Compile Include="Core\Shapefile\ShapefileTests.cs" />
     <Compile Include="Core\SystemTests.cs" />
     <Compile Include="Core\Tessellation\TessellationTests.cs" />
-    <Compile Include="Core\Vector2BTests.cs" />
-    <Compile Include="Core\Vector2DTests.cs" />
-    <Compile Include="Core\Vector2HTests.cs" />
-    <Compile Include="Core\Vector2ITests.cs" />
-    <Compile Include="Core\Vector2FTests.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Core\Vector3BTests.cs" />
-    <Compile Include="Core\Vector3DTests.cs" />
-    <Compile Include="Core\Vector3HTests.cs" />
-    <Compile Include="Core\Vector3ITests.cs" />
-    <Compile Include="Core\Vector4BTests.cs" />
-    <Compile Include="Core\Vector4DTests.cs" />
-    <Compile Include="Core\Vector4HTests.cs" />
-    <Compile Include="Core\Vector4ITests.cs" />
-    <Compile Include="Core\Vector4FTests.cs" />
+    <Compile Include="Core\Vectors\Vector2BTests.cs" />
+    <Compile Include="Core\Vectors\Vector2DTests.cs" />
+    <Compile Include="Core\Vectors\Vector2HTests.cs" />
+    <Compile Include="Core\Vectors\Vector2ITests.cs" />
+    <Compile Include="Core\Vectors\Vector2FTests.cs" />
+    <Compile Include="Core\Vectors\Vector3BTests.cs" />
+    <Compile Include="Core\Vectors\Vector3DTests.cs" />
+    <Compile Include="Core\Vectors\Vector3HTests.cs" />
+    <Compile Include="Core\Vectors\Vector3ITests.cs" />
+    <Compile Include="Core\Vectors\Vector4BTests.cs" />
+    <Compile Include="Core\Vectors\Vector4DTests.cs" />
+    <Compile Include="Core\Vectors\Vector4HTests.cs" />
+    <Compile Include="Core\Vectors\Vector4ITests.cs" />
+    <Compile Include="Core\Vectors\Vector4FTests.cs" />
     <Compile Include="IntervalTests.cs" />
     <Compile Include="GraphicsAssert.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -118,7 +116,7 @@
     <Compile Include="Scene\Terrain\CreateMipmapTiles.cs" />
     <Compile Include="Scene\Terrain\WorldWindTerrainSourceTest.cs" />
     <Compile Include="TestUtility.cs" />
-    <Compile Include="Core\Vector3FTests.cs" />
+    <Compile Include="Core\Vectors\Vector3FTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Core\OpenGlobe.Core.csproj">
