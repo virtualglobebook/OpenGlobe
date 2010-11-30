@@ -25,7 +25,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chapter3LatitudeLongitudeGr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chapter3NightLights", "Examples\Chapter3\NightLights\Chapter3NightLights.csproj", "{C084FBCF-6C79-47DD-9440-A829F3D534FB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chapter2EllipsoidSurfaceNormals", "Examples\Chapter2\EllipsoidSurfaceNormals\Chapter2EllipsoidSurfaceNormals.csproj", "{C0198B9E-97B8-4075-912E-70D231EE9D8E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chapter02EllipsoidSurfaceNormals", "Examples\Chapter02\EllipsoidSurfaceNormals\Chapter02EllipsoidSurfaceNormals.csproj", "{C0198B9E-97B8-4075-912E-70D231EE9D8E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chapter5RayCasting", "Examples\Chapter5\RayCasting\Chapter5RayCasting.csproj", "{D51BA9B4-A2D5-41E5-BACC-3869C35F9C68}"
 EndProject
