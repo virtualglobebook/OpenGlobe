@@ -26,6 +26,7 @@ namespace OpenGlobe.Examples
             _window = Device.CreateWindow(800, 600, "Chapter 11:  Clipmap Terrain");
 
             SimpleTerrainSource terrainSource = new SimpleTerrainSource(@"..\..\..\..\..\..\Data\Terrain\ps_height_16k");
+            //WorldWindTerrainSource terrainSource = new WorldWindTerrainSource();
             _clipmap = new PlaneClipmapTerrain(_window, _window.Context, terrainSource, 511);
             _clipmap.HeightExaggeration = 0.01f;
 
@@ -38,23 +39,27 @@ namespace OpenGlobe.Examples
             _clearState = new ClearState();
             _clearState.Color = Color.LightSkyBlue;
 
-            _sceneState.Camera.PerspectiveNearPlaneDistance = 0.1;
-            _sceneState.Camera.PerspectiveFarPlaneDistance = 20000.0;
+            _sceneState.Camera.PerspectiveNearPlaneDistance = _clipmap.HeightExaggeration * 10.0;
+            _sceneState.Camera.PerspectiveFarPlaneDistance = _clipmap.HeightExaggeration * 8000000.0;
             _sceneState.SunPosition = new Vector3D(200000, 300000, 200000);
 
+            //double longitude = -119.5326056;
+            //double latitude = 37.74451389;
+            double longitude = 0.0;
+            double latitude = 0.0;
+
             _camera = new CameraLookAtPoint(_sceneState.Camera, _window, Ellipsoid.UnitSphere);
-            _camera.CenterPoint = new Vector3D(0.0, 0.0, _clipmap.HeightExaggeration * 2700.0);
+            _camera.CenterPoint = new Vector3D(longitude, latitude, _clipmap.HeightExaggeration * 2700.0);
             _camera.ZoomRateRangeAdjustment = 0.0;
             _camera.Azimuth = 0.0;
             _camera.Elevation = Trig.ToRadians(30.0);
-            _camera.Range = 0.1;
-
-            _camera.Dispose();
-            _sceneState.Camera.Eye = new Vector3D(0.0, 0.0, _clipmap.HeightExaggeration * 2700.0);
-            _sceneState.Camera.Target = _sceneState.Camera.Eye + Vector3D.UnitZ;
-            _cameraFly = new CameraFly(_sceneState.Camera, _window);
-            _cameraFly.UpdateParametersFromCamera();
-            _cameraFly.MovementRate = 1000.0;
+            _camera.Range = 0.05;
+            //_camera.Dispose();
+            //_sceneState.Camera.Eye = new Vector3D(-119.5326056, 37.74451389, _clipmap.HeightExaggeration * 2700.0);
+            //_sceneState.Camera.Target = _sceneState.Camera.Eye + Vector3D.UnitZ;
+            //_cameraFly = new CameraFly(_sceneState.Camera, _window);
+            //_cameraFly.UpdateParametersFromCamera();
+            //_cameraFly.MovementRate = _clipmap.HeightExaggeration * 10000.0;
 
             _window.Keyboard.KeyDown += OnKeyDown;
 
