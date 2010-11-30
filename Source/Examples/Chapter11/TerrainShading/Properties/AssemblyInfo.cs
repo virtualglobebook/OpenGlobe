@@ -12,11 +12,11 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
-[assembly: AssemblyTitle("OpenGlobe.Examples.VertexDisplacementMap")]
+[assembly: AssemblyTitle("OpenGlobe.Examples.TerrainShading")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("OpenGlobe.Examples.VertexDisplacementMap")]
+[assembly: AssemblyProduct("OpenGlobe.Examples.TerrainShading")]
 [assembly: AssemblyCopyright("Copyright ©  2010")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

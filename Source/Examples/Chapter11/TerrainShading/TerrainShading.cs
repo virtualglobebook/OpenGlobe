@@ -18,11 +18,11 @@ using OpenGlobe.Terrain;
 
 namespace OpenGlobe.Examples
 {
-    sealed class VertexDisplacementMap : IDisposable
+    sealed class TerrainShading : IDisposable
     {
-        public VertexDisplacementMap()
+        public TerrainShading()
         {
-            _window = Device.CreateWindow(800, 600, "Chapter 5:  Vertex Shader Displacement Mapping");
+            _window = Device.CreateWindow(800, 600, "Chapter 11:  Terrain Shading");
             _window.Resize += OnResize;
             _window.RenderFrame += OnRenderFrame;
             _window.Keyboard.KeyDown += OnKeyDown;
@@ -252,7 +252,7 @@ namespace OpenGlobe.Examples
 
         static void Main()
         {
-            using (VertexDisplacementMap example = new VertexDisplacementMap())
+            using (TerrainShading example = new TerrainShading())
             {
                 example.Run(30.0);
             }

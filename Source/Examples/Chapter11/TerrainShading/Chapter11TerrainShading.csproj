@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{E78F07C0-90CB-42CD-A83F-ED5A27AC8ED5}</ProjectGuid>
+    <ProjectGuid>{35405C20-1149-4941-99E3-5EC639B1086A}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>OpenGlobe.Examples</RootNamespace>
-    <AssemblyName>Chapter5TriangleMesh</AssemblyName>
+    <AssemblyName>Chapter11TerrainShading</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <StartupObject>
@@ -46,7 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TriangleMesh.cs" />
+    <Compile Include="TerrainShading.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\..\ThirdParty\OpenTKGL4\Binaries\OpenTK\Release\OpenTK.dll.config">
@@ -69,6 +69,27 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="..\..\..\..\Data\Terrain\ps-e.lg.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\..\..\Data\Imagery\USGS\ps_texture_1k.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\..\..\Data\Textures\ColorRamp.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\..\..\Data\Textures\ColorRampSlope.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\..\..\Data\Textures\BlendRamp.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\..\..\Data\Textures\Grass.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\..\..\Data\Textures\Stone.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\..\..\Data\Textures\BlendMask.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

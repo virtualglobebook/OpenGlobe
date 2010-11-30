@@ -17,11 +17,11 @@ using OpenGlobe.Terrain;
 
 namespace OpenGlobe.Examples
 {
-    sealed class RayCasting : IDisposable
+    sealed class TerrainRayCasting : IDisposable
     {
-        public RayCasting()
+        public TerrainRayCasting()
         {
-            _window = Device.CreateWindow(800, 600, "Chapter 5:  Ray Casting");
+            _window = Device.CreateWindow(800, 600, "Chapter 11:  Terrain Ray Casting");
             _window.Resize += OnResize;
             _window.RenderFrame += OnRenderFrame;
             _window.Keyboard.KeyDown += OnKeyDown;
@@ -145,7 +145,7 @@ namespace OpenGlobe.Examples
 
         static void Main()
         {
-            using (RayCasting example = new RayCasting())
+            using (TerrainRayCasting example = new TerrainRayCasting())
             {
                 example.Run(30.0);
             }

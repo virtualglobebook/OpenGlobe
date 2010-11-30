@@ -9,7 +9,7 @@
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>OpenGlobe.Examples</RootNamespace>
-    <AssemblyName>Chapter5RayCasting</AssemblyName>
+    <AssemblyName>Chapter11TerrainRayCasting</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <StartupObject>
@@ -46,7 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RayCasting.cs" />
+    <Compile Include="TerrainRayCasting.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\..\ThirdParty\OpenTKGL4\Binaries\OpenTK\Release\OpenTK.dll.config">

@@ -12,11 +12,11 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
-[assembly: AssemblyTitle("OpenGlobe.Examples.RayCasting")]
+[assembly: AssemblyTitle("OpenGlobe.Examples.TerrainTriangleMesh")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("OpenGlobe.Examples.RayCasting")]
+[assembly: AssemblyProduct("OpenGlobe.Examples.TerrainTriangleMesh")]
 [assembly: AssemblyCopyright("Copyright ©  2010")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -24,7 +24,7 @@ using System.Runtime.InteropServices;
 [assembly: CLSCompliant(true)]
 [assembly: ComVisible(false)]
 
-[assembly: Guid("cff5b0d7-9d33-425f-95b9-fe6df02c38c2")]
+[assembly: Guid("63c9d6f1-cc14-4c79-a771-fd9400455029")]
 
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]

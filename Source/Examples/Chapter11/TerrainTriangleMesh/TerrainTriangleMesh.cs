@@ -18,11 +18,11 @@ using OpenGlobe.Terrain;
 
 namespace OpenGlobe.Examples
 {
-    sealed class TriangleMesh : IDisposable
+    sealed class TerrainTriangleMesh : IDisposable
     {
-        public TriangleMesh()
+        public TerrainTriangleMesh()
         {
-            _window = Device.CreateWindow(800, 600, "Chapter 5:  Triangle Mesh");
+            _window = Device.CreateWindow(800, 600, "Chapter 5:  Terrain Triangle Mesh");
             _window.Resize += OnResize;
             _window.RenderFrame += OnRenderFrame;
             _sceneState = new SceneState();
@@ -47,7 +47,7 @@ namespace OpenGlobe.Examples
             _sceneState.Camera.ZoomToTarget(tileRadius);
             
             HighResolutionSnap snap = new HighResolutionSnap(_window, _sceneState);
-            snap.ColorFilename = @"E:\Manuscript\TerrainRendering\Figures\TriangleMesh.png";
+            snap.ColorFilename = @"E:\Manuscript\TerrainRendering\Figures\TerrainTriangleMesh.png";
             snap.WidthInInches = 3;
             snap.DotsPerInch = 600;
         }
@@ -86,7 +86,7 @@ namespace OpenGlobe.Examples
 
         static void Main()
         {
-            using (TriangleMesh example = new TriangleMesh())
+            using (TerrainTriangleMesh example = new TerrainTriangleMesh())
             {
                 example.Run(30.0);
             }

@@ -27,13 +27,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chapter04NightLights", "Exa
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chapter02EllipsoidSurfaceNormals", "Examples\Chapter02\EllipsoidSurfaceNormals\Chapter02EllipsoidSurfaceNormals.csproj", "{C0198B9E-97B8-4075-912E-70D231EE9D8E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chapter5RayCasting", "Examples\Chapter5\RayCasting\Chapter5RayCasting.csproj", "{D51BA9B4-A2D5-41E5-BACC-3869C35F9C68}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chapter11TerrainRayCasting", "Examples\Chapter11\TerrainRayCasting\Chapter11TerrainRayCasting.csproj", "{D51BA9B4-A2D5-41E5-BACC-3869C35F9C68}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chapter06DepthBufferPrecision", "Examples\Chapter06\DepthBufferPrecision\Chapter06DepthBufferPrecision.csproj", "{203127FC-537A-4CC1-A69C-69E6DFE29EB5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chapter5VertexDisplacementMap", "Examples\Chapter5\VertexDisplacementMap\Chapter5VertexDisplacementMap.csproj", "{35405C20-1149-4941-99E3-5EC639B1086A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chapter11TerrainShading", "Examples\Chapter11\TerrainShading\Chapter11TerrainShading.csproj", "{35405C20-1149-4941-99E3-5EC639B1086A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chapter5TriangleMesh", "Examples\Chapter5\TriangleMesh\Chapter5TriangleMesh.csproj", "{E78F07C0-90CB-42CD-A83F-ED5A27AC8ED5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chapter11TerrainTriangleMesh", "Examples\Chapter11\TerrainTriangleMesh\Chapter11TerrainTriangleMesh.csproj", "{E78F07C0-90CB-42CD-A83F-ED5A27AC8ED5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ResearchLinesOnTerrain", "Research\LinesOnTerrain\ResearchLinesOnTerrain.csproj", "{2F86841E-018F-4FB7-A428-981B34A2F9F8}"
 EndProject
