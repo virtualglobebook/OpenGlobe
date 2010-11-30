@@ -25,7 +25,7 @@ namespace OpenGlobe.Examples
             _nearDistance = 1;
             _cubeRootFarDistance = 300;
 
-            _window = Device.CreateWindow(800, 600, "Chapter 4:  Depth Buffer Precision");
+            _window = Device.CreateWindow(800, 600, "Chapter 6:  Depth Buffer Precision");
             _window.Resize += OnResize;
             _window.RenderFrame += OnRenderFrame;
             _window.Keyboard.KeyUp += OnKeyUp;

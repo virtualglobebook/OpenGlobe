@@ -29,7 +29,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chapter02EllipsoidSurfaceNo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chapter5RayCasting", "Examples\Chapter5\RayCasting\Chapter5RayCasting.csproj", "{D51BA9B4-A2D5-41E5-BACC-3869C35F9C68}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chapter4DepthBufferPrecision", "Examples\Chapter4\DepthBufferPrecision\Chapter4DepthBufferPrecision.csproj", "{203127FC-537A-4CC1-A69C-69E6DFE29EB5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chapter06DepthBufferPrecision", "Examples\Chapter06\DepthBufferPrecision\Chapter06DepthBufferPrecision.csproj", "{203127FC-537A-4CC1-A69C-69E6DFE29EB5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chapter5VertexDisplacementMap", "Examples\Chapter5\VertexDisplacementMap\Chapter5VertexDisplacementMap.csproj", "{35405C20-1149-4941-99E3-5EC639B1086A}"
 EndProject
