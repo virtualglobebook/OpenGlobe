@@ -5,6 +5,25 @@
 // See License.txt or http://www.boost.org/LICENSE_1_0.txt.
 //
 
+vec4 og_ClipToWindowCoordinates(vec4 v, mat4 viewportTransformationMatrix)
+{
+    v.xyz /= v.w;                                                  // normalized device coordinates
+    v.xyz = (viewportTransformationMatrix * vec4(v.xyz, 1.0)).xyz; // window coordinates
+    return v;
+}
+
+float og_distanceToLine(vec2 f, vec2 p0, vec2 p1)
+{
+    vec2 l = f - p0;
+    vec2 d = p1 - p0;
+
+    //
+    // Closed point on line to f
+    //
+    vec2 p = p0 + (d * (dot(l, d) / dot(d, d)));
+    return distance(f, p);
+}
+
 //
 // Emulates double precision subtraction.
 // Returns left - right.

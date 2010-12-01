@@ -21,13 +21,6 @@ uniform float u_heightExaggeration;
 uniform float u_fillDistance;
 uniform int u_normalAlgorithm;
 
-vec4 ClipToWindowCoordinates(vec4 v, mat4 viewportTransformationMatrix)
-{
-    v.xyz /= v.w;                                                  // normalized device coordinates
-    v.xyz = (viewportTransformationMatrix * vec4(v.xyz, 1.0)).xyz; // window coordinates
-    return v;
-}
-
 void ClipLineSegmentToNearPlane(
     float nearPlaneDistance, 
     mat4 modelViewPerspectiveMatrix,
@@ -140,8 +133,8 @@ void main()
 		return;
 	}
 
-    vec4 windowP0 = ClipToWindowCoordinates(clipP0, og_viewportTransformationMatrix);
-    vec4 windowP1 = ClipToWindowCoordinates(clipP1, og_viewportTransformationMatrix);
+    vec4 windowP0 = og_ClipToWindowCoordinates(clipP0, og_viewportTransformationMatrix);
+    vec4 windowP1 = og_ClipToWindowCoordinates(clipP1, og_viewportTransformationMatrix);
 
     vec2 direction = windowP1.xy - windowP0.xy;
     vec2 normal = normalize(vec2(direction.y, -direction.x));

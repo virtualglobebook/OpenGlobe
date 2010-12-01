@@ -15,18 +15,6 @@ in float gsDistanceToEye[];
 noperspective out vec3 distanceToEdges;
 out float fsDistanceToEye;
 
-float distanceToLine(vec2 f, vec2 p0, vec2 p1)
-{
-    vec2 l = f - p0;
-    vec2 d = p1 - p0;
-
-    //
-    // Closed point on line to f
-    //
-    vec2 p = p0 + (d * (dot(l, d) / dot(d, d)));
-    return distance(f, p);
-}
-
 void main()
 {
     vec2 p0 = windowPosition[0];
@@ -34,17 +22,17 @@ void main()
     vec2 p2 = windowPosition[2];
 
     gl_Position = gl_in[0].gl_Position;
-    distanceToEdges = vec3(distanceToLine(p0, p1, p2), 0.0, 0.0);
+    distanceToEdges = vec3(og_distanceToLine(p0, p1, p2), 0.0, 0.0);
     fsDistanceToEye = gsDistanceToEye[0];
     EmitVertex();
 
     gl_Position = gl_in[1].gl_Position;
-    distanceToEdges = vec3(0.0, distanceToLine(p1, p2, p0), 0.0);
+    distanceToEdges = vec3(0.0, og_distanceToLine(p1, p2, p0), 0.0);
     fsDistanceToEye = gsDistanceToEye[1];
     EmitVertex();
 
     gl_Position = gl_in[2].gl_Position;
-    distanceToEdges = vec3(0.0, 0.0, distanceToLine(p2, p0, p1));
+    distanceToEdges = vec3(0.0, 0.0, og_distanceToLine(p2, p0, p1));
     fsDistanceToEye = gsDistanceToEye[2];
     EmitVertex();
 }
