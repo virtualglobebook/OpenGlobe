@@ -161,7 +161,7 @@ namespace OpenGlobe.Renderer.GL3x
 
             if (_clearDepth != clearState.Depth)
             {
-                GL.ClearDepth(clearState.Depth);
+                GL.ClearDepth((double)clearState.Depth);
                 _clearDepth = clearState.Depth;
             }
 
