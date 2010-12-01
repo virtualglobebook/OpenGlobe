@@ -37,10 +37,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Tools\NUnit-2.4.8-net-2.0\bin\nunit.framework.dll</HintPath>
     </Reference>
-    <Reference Include="OpenTK, Version=0.9.9.5, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\ThirdParty\OpenTKGL4\Binaries\OpenTK\Release\OpenTK.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Drawing" />
   </ItemGroup>
@@ -145,7 +141,6 @@
     <None Include="..\..\Data\Vector\NaturalEarth\50m-rivers-lake-centerlines\50m-rivers-lake-centerlines.shp">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-
     <None Include="..\..\Data\Vector\NaturalEarth\110m-admin-0-countries\110m_admin_0_countries.shp">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

@@ -120,6 +120,11 @@ namespace OpenGlobe.Renderer.GL3x
             ImageDatatype dataType,
             int rowAlignment)
         {
+            if (format == ImageFormat.StencilIndex)
+            {
+                throw new ArgumentException("StencilIndex is not supported by CopyToBuffer.  Try DepthStencil instead.", "format");
+            }
+
             Debug.Assert((rowAlignment == 1) || (rowAlignment == 2) || (rowAlignment == 4) || (rowAlignment == 8));
 
             ReadPixelBufferGL3x pixelBuffer = new ReadPixelBufferGL3x(PixelBufferHint.Stream,

@@ -229,7 +229,7 @@ namespace OpenGlobe.Renderer
                 stencilTest.FrontFace.DepthFailStencilPassOperation = StencilOperation.Replace;
                 stencilTest.FrontFace.DepthPassStencilPassOperation = StencilOperation.Replace;
                 stencilTest.FrontFace.StencilFailOperation = StencilOperation.Replace;
-                stencilTest.FrontFace.ReferenceValue = 1;
+                stencilTest.FrontFace.ReferenceValue = 2;
 
                 RenderState renderState = new RenderState();
                 renderState.StencilTest = stencilTest;
@@ -239,7 +239,12 @@ namespace OpenGlobe.Renderer
                 window.Context.Draw(PrimitiveType.Points, 0, 1, new DrawState(renderState, sp, va), new SceneState());
 
                 TestUtility.ValidateColor(framebuffer.ColorAttachments[0], 255, 0, 0);
-                ValidateStencil(framebuffer.DepthStencilAttachment, stencilTest.FrontFace.ReferenceValue);
+
+                using (ReadPixelBuffer readPixelBuffer = depthStencilTexture.CopyToBuffer(ImageFormat.DepthStencil, ImageDatatype.Float32UnsignedInt248Reversed, 1))
+                {
+                    int[] depthStencil = readPixelBuffer.CopyToSystemMemory<int>();
+                    Assert.AreEqual(stencilTest.FrontFace.ReferenceValue, depthStencil[1]);
+                }
             }
         }
 
@@ -428,17 +433,6 @@ namespace OpenGlobe.Renderer
                 float[] readDepth = readPixelBuffer.CopyToSystemMemory<float>();
                 Assert.AreEqual (depth, readDepth[0]);
             }
-        }
-
-        private static void ValidateStencil(Texture2D depthStencilTexture, int stencil)
-        {
-            // TODO:  Don't call ReadPixels directly.  Reading back the FBO's depth/stencil is
-            // not supported according to the spec.
-            byte readStencil = 0;
-            OpenTK.Graphics.OpenGL.GL.ReadPixels(0, 0, 1, 1, 
-                OpenTK.Graphics.OpenGL.PixelFormat.StencilIndex,
-                OpenTK.Graphics.OpenGL.PixelType.UnsignedByte, ref readStencil);
-            Assert.AreEqual(stencil, readStencil);
         }
     }
 }

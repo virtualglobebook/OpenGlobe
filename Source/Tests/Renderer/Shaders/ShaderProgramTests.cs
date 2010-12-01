@@ -9,7 +9,6 @@
 
 using NUnit.Framework;
 using OpenGlobe.Core;
-using OpenTK;
 
 namespace OpenGlobe.Renderer
 {

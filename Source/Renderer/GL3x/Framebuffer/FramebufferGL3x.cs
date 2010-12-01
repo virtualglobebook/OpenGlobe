@@ -66,6 +66,17 @@ namespace OpenGlobe.Renderer.GL3x
                     Attach(FramebufferAttachment.DepthAttachment, _depthAttachment);
                 }
 
+                //
+                // The depth-stencil attachment overrides the depth attachment:
+                //
+                //    "Attaching a level of a texture to GL_DEPTH_STENCIL_ATTACHMENT 
+                //     is equivalent to attaching that level to both the 
+                //     GL_DEPTH_ATTACHMENT and the GL_STENCIL_ATTACHMENT attachment 
+                //     points simultaneously."
+                //
+                // We do not expose just a stencil attachment because TextureFormat
+                // does not contain a stencil only format.
+                //
                 if ((_dirtyFlags & DirtyFlags.DepthStencilAttachment) == DirtyFlags.DepthStencilAttachment)
                 {
                     Attach(FramebufferAttachment.DepthStencilAttachment, _depthStencilAttachment);

@@ -7,6 +7,7 @@
 //
 #endregion
 
+using System;
 using System.Diagnostics;
 using OpenGlobe.Core;
 
@@ -113,28 +114,49 @@ namespace OpenGlobe.Renderer
 
         public static int NumberOfChannels(ImageFormat format)
         {
-            Debug.Assert(
-                (format == ImageFormat.StencilIndex) ||
-                (format == ImageFormat.DepthComponent) ||
-                (format == ImageFormat.Red) ||
-                (format == ImageFormat.Green) ||
-                (format == ImageFormat.Blue) ||
-                (format == ImageFormat.RedGreenBlue) ||
-                (format == ImageFormat.RedGreenBlueAlpha) ||
-                (format == ImageFormat.BlueGreenRed) ||
-                (format == ImageFormat.BlueGreenRedAlpha) ||
-                (format == ImageFormat.RedGreen) ||
-                (format == ImageFormat.RedGreenInteger) ||
-                (format == ImageFormat.DepthStencil) ||
-                (format == ImageFormat.RedInteger) ||
-                (format == ImageFormat.GreenInteger) ||
-                (format == ImageFormat.BlueInteger) ||
-                (format == ImageFormat.RedGreenBlueInteger) ||
-                (format == ImageFormat.RedGreenBlueAlphaInteger) ||
-                (format == ImageFormat.BlueGreenRedInteger) ||
-                (format == ImageFormat.BlueGreenRedAlphaInteger));
+            switch (format)
+            {
+                case ImageFormat.StencilIndex:
+                    return 1;
+                case ImageFormat.DepthComponent:
+                    return 1;
+                case ImageFormat.Red:
+                    return 1;
+                case ImageFormat.Green:
+                    return 1;
+                case ImageFormat.Blue:
+                    return 1;
+                case ImageFormat.RedGreenBlue:
+                    return 3;
+                case ImageFormat.RedGreenBlueAlpha:
+                    return 4;
+                case ImageFormat.BlueGreenRed:
+                    return 3;
+                case ImageFormat.BlueGreenRedAlpha:
+                    return 4;
+                case ImageFormat.RedGreen:
+                    return 2;
+                case ImageFormat.RedGreenInteger:
+                    return 2;
+                case ImageFormat.DepthStencil:
+                    return 2;
+                case ImageFormat.RedInteger:
+                    return 1;
+                case ImageFormat.GreenInteger:
+                    return 1;
+                case ImageFormat.BlueInteger:
+                    return 1;
+                case ImageFormat.RedGreenBlueInteger:
+                    return 3;
+                case ImageFormat.RedGreenBlueAlphaInteger:
+                    return 4;
+                case ImageFormat.BlueGreenRedInteger:
+                    return 3;
+                case ImageFormat.BlueGreenRedAlphaInteger:
+                    return 4;
+            }
 
-            return _numberOfChannels[(int)format];
+            throw new ArgumentException("format");
         }
 
         public static int SizeInBytes(ImageDatatype dataType)
@@ -168,29 +190,6 @@ namespace OpenGlobe.Renderer
             return _sizeInBytes[(int)dataType];
         }
 
-        private static readonly int[] _numberOfChannels = new int[]
-        {
-            1, // StencilIndex
-            1, // DepthComponent
-            1, // Red
-            1, // Green
-            1, // Blue
-            3, // Rgb
-            4, // Rgba
-            3, // Bgr
-            4, // Bgra
-            2, // Rg
-            2, // RgInteger
-            2, // DepthStencil
-            1, // RedInteger
-            1, // GreenInteger
-            1, // BlueInteger
-            3, // RgbInteger
-            4, // RgbaInteger
-            3, // BgrInteger
-            4, // BgraInteger
-        };
-
         private static readonly int[] _sizeInBytes = new int[]
         {
             1, // Byte
@@ -216,7 +215,7 @@ namespace OpenGlobe.Renderer
             4, // UnsignedInt248
             4, // UnsignedInt10F11F11FReversed
             4, // UnsignedInt5999Reversed
-            8  // Float32UnsignedInt248Reversed
+            4  // Float32UnsignedInt248Reversed
         };
     }
 }
