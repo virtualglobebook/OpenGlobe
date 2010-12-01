@@ -8,9 +8,7 @@
 #endregion
 
 using System;
-using System.Diagnostics;
 using OpenGlobe.Core;
-
 using ImagingPixelFormat = System.Drawing.Imaging.PixelFormat;
 
 namespace OpenGlobe.Renderer
@@ -19,58 +17,54 @@ namespace OpenGlobe.Renderer
     {
         public static ImageDatatype ImagingPixelFormatToDatatype(ImagingPixelFormat pixelFormat)
         {
+            if (!Supported(pixelFormat))
+            {
+                throw new ArgumentException("Pixel format is not supported.", "pixelFormat");
+            }
+
             // TODO:  Not tested exhaustively
-            Debug.Assert(Supported(pixelFormat));
-
-            if (pixelFormat == ImagingPixelFormat.Format16bppRgb555)
+            switch (pixelFormat)
             {
-                return ImageDatatype.UnsignedShort5551;
-            }
-            else if (pixelFormat == ImagingPixelFormat.Format16bppRgb565)
-            {
-                return ImageDatatype.UnsignedShort565;
-            }
-            else if ((pixelFormat == ImagingPixelFormat.Format24bppRgb) ||
-                     (pixelFormat == ImagingPixelFormat.Format32bppRgb) ||
-                     (pixelFormat == ImagingPixelFormat.Format32bppArgb))
-            {
-                return ImageDatatype.UnsignedByte;
-            }
-            else if ((pixelFormat == ImagingPixelFormat.Format48bppRgb) ||
-                     (pixelFormat == ImagingPixelFormat.Format64bppArgb))
-            {
-                return ImageDatatype.UnsignedShort;
-            }
-            else if (pixelFormat == ImagingPixelFormat.Format16bppArgb1555)
-            {
-                return ImageDatatype.UnsignedShort1555Reversed;
+                case ImagingPixelFormat.Format16bppRgb555:
+                    return ImageDatatype.UnsignedShort5551;
+                case ImagingPixelFormat.Format16bppRgb565:
+                    return ImageDatatype.UnsignedShort565;
+                case ImagingPixelFormat.Format24bppRgb:
+                case ImagingPixelFormat.Format32bppRgb:
+                case ImagingPixelFormat.Format32bppArgb:
+                    return ImageDatatype.UnsignedByte;
+                case ImagingPixelFormat.Format48bppRgb:
+                case ImagingPixelFormat.Format64bppArgb:
+                    return ImageDatatype.UnsignedShort;
+                case ImagingPixelFormat.Format16bppArgb1555:
+                    return ImageDatatype.UnsignedShort1555Reversed;
             }
 
-            Debug.Fail("pixelFormat");
-            return ImageDatatype.UnsignedByte;
+            throw new ArgumentException("pixelFormat");
         }
 
         public static ImageFormat ImagingPixelFormatToImageFormat(ImagingPixelFormat pixelFormat)
         {
-            Debug.Assert(Supported(pixelFormat));
-
-            if ((pixelFormat == ImagingPixelFormat.Format16bppRgb555) ||
-                (pixelFormat == ImagingPixelFormat.Format16bppRgb565) ||
-                (pixelFormat == ImagingPixelFormat.Format24bppRgb) ||
-                (pixelFormat == ImagingPixelFormat.Format32bppRgb) ||
-                (pixelFormat == ImagingPixelFormat.Format48bppRgb))
+            if (!Supported(pixelFormat))
             {
-                return ImageFormat.BlueGreenRed;
-            }
-            else if ((pixelFormat == ImagingPixelFormat.Format16bppArgb1555) ||
-                     (pixelFormat == ImagingPixelFormat.Format32bppArgb) ||
-                     (pixelFormat == ImagingPixelFormat.Format64bppArgb))
-            {
-                return ImageFormat.BlueGreenRedAlpha;
+                throw new ArgumentException("Pixel format is not supported.", "pixelFormat");
             }
 
-            Debug.Fail("pixelFormat");
-            return ImageFormat.BlueGreenRed;
+            switch (pixelFormat)
+            {
+                case ImagingPixelFormat.Format16bppRgb555:
+                case ImagingPixelFormat.Format16bppRgb565:
+                case ImagingPixelFormat.Format24bppRgb:
+                case ImagingPixelFormat.Format32bppRgb:
+                case ImagingPixelFormat.Format48bppRgb:
+                    return ImageFormat.BlueGreenRed;
+                case ImagingPixelFormat.Format16bppArgb1555:
+                case ImagingPixelFormat.Format32bppArgb:
+                case ImagingPixelFormat.Format64bppArgb:
+                    return ImageFormat.BlueGreenRedAlpha;
+            }
+
+            throw new ArgumentException("pixelFormat");
         }
 
         private static bool Supported(ImagingPixelFormat pixelFormat)
@@ -161,61 +155,59 @@ namespace OpenGlobe.Renderer
 
         public static int SizeInBytes(ImageDatatype dataType)
         {
-            Debug.Assert(
-                (dataType == ImageDatatype.Byte) ||
-                (dataType == ImageDatatype.UnsignedByte) ||
-                (dataType == ImageDatatype.Short) ||
-                (dataType == ImageDatatype.UnsignedShort) ||
-                (dataType == ImageDatatype.Int) ||
-                (dataType == ImageDatatype.UnsignedInt) ||
-                (dataType == ImageDatatype.Float) ||
-                (dataType == ImageDatatype.HalfFloat) ||
-                (dataType == ImageDatatype.UnsignedByte332) ||
-                (dataType == ImageDatatype.UnsignedShort4444) ||
-                (dataType == ImageDatatype.UnsignedShort5551) ||
-                (dataType == ImageDatatype.UnsignedInt8888) ||
-                (dataType == ImageDatatype.UnsignedInt1010102) ||
-                (dataType == ImageDatatype.UnsignedByte233Reversed) ||
-                (dataType == ImageDatatype.UnsignedShort565) ||
-                (dataType == ImageDatatype.UnsignedShort565Reversed) ||
-                (dataType == ImageDatatype.UnsignedShort4444Reversed) ||
-                (dataType == ImageDatatype.UnsignedShort1555Reversed) ||
-                (dataType == ImageDatatype.UnsignedInt8888Reversed) ||
-                (dataType == ImageDatatype.UnsignedInt2101010Reversed) ||
-                (dataType == ImageDatatype.UnsignedInt248) ||
-                (dataType == ImageDatatype.UnsignedInt10F11F11FReversed) ||
-                (dataType == ImageDatatype.UnsignedInt5999Reversed) ||
-                (dataType == ImageDatatype.Float32UnsignedInt248Reversed));
+            switch (dataType)
+            {
+                case ImageDatatype.Byte:
+                    return 1;
+                case ImageDatatype.UnsignedByte:
+                    return 1;
+                case ImageDatatype.Short:
+                    return 2;
+                case ImageDatatype.UnsignedShort:
+                    return 2;
+                case ImageDatatype.Int:
+                    return 4;
+                case ImageDatatype.UnsignedInt:
+                    return 4;
+                case ImageDatatype.Float:
+                    return 4;
+                case ImageDatatype.HalfFloat:
+                    return 2;
+                case ImageDatatype.UnsignedByte332:
+                    return 1;
+                case ImageDatatype.UnsignedShort4444:
+                    return 2;
+                case ImageDatatype.UnsignedShort5551:
+                    return 2;
+                case ImageDatatype.UnsignedInt8888:
+                    return 4;
+                case ImageDatatype.UnsignedInt1010102:
+                    return 4;
+                case ImageDatatype.UnsignedByte233Reversed:
+                    return 1;
+                case ImageDatatype.UnsignedShort565:
+                    return 2;
+                case ImageDatatype.UnsignedShort565Reversed:
+                    return 2;
+                case ImageDatatype.UnsignedShort4444Reversed:
+                    return 2;
+                case ImageDatatype.UnsignedShort1555Reversed:
+                    return 2;
+                case ImageDatatype.UnsignedInt8888Reversed:
+                    return 4;
+                case ImageDatatype.UnsignedInt2101010Reversed:
+                    return 4;
+                case ImageDatatype.UnsignedInt248:
+                    return 4;
+                case ImageDatatype.UnsignedInt10F11F11FReversed:
+                    return 4;
+                case ImageDatatype.UnsignedInt5999Reversed:
+                    return 4;
+                case ImageDatatype.Float32UnsignedInt248Reversed:
+                    return 4;
+            }
 
-            return _sizeInBytes[(int)dataType];
+            throw new ArgumentException("dataType");
         }
-
-        private static readonly int[] _sizeInBytes = new int[]
-        {
-            1, // Byte
-            1, // UnsignedByte
-            2, // Short
-            2, // UnsignedShort
-            4, // Int
-            4, // UnsignedInt
-            4, // Float
-            2, // HalfFloat
-            1, // UnsignedByte332
-            2, // UnsignedShort4444
-            2, // UnsignedShort5551
-            4, // UnsignedInt8888
-            4, // UnsignedInt1010102
-            1, // UnsignedByte233Reversed
-            2, // UnsignedShort565
-            2, // UnsignedShort565Reversed
-            2, // UnsignedShort4444Reversed
-            2, // UnsignedShort1555Reversed
-            4, // UnsignedInt8888Reversed
-            4, // UnsignedInt2101010Reversed
-            4, // UnsignedInt248
-            4, // UnsignedInt10F11F11FReversed
-            4, // UnsignedInt5999Reversed
-            4  // Float32UnsignedInt248Reversed
-        };
     }
 }

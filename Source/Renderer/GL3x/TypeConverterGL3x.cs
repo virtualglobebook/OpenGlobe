@@ -7,7 +7,7 @@
 //
 #endregion
 
-using System.Diagnostics;
+using System;
 using OpenTK.Graphics.OpenGL;
 using OpenGlobe.Core;
 using OpenGlobe.Renderer;
@@ -40,690 +40,884 @@ namespace OpenGlobe.Renderer.GL3x
 
         public static ShaderVertexAttributeType To(ActiveAttribType type)
         {
-            if (type == ActiveAttribType.Float)
+            switch (type)
             {
-                return ShaderVertexAttributeType.Float;
-            }
-            else if (type == ActiveAttribType.FloatVec2)
-            {
-                return ShaderVertexAttributeType.FloatVector2;
-            }
-            else if (type == ActiveAttribType.FloatVec3)
-            {
-                return ShaderVertexAttributeType.FloatVector3;
-            }
-            else if (type == ActiveAttribType.FloatVec4)
-            {
-                return ShaderVertexAttributeType.FloatVector4;
-            }
-            else if (type == ActiveAttribType.FloatMat2)
-            {
-                return ShaderVertexAttributeType.FloatMatrix22;
-            }
-            else if (type == ActiveAttribType.FloatMat3)
-            {
-                return ShaderVertexAttributeType.FloatMatrix33;
-            }
-            else if (type == ActiveAttribType.FloatMat4)
-            {
-                return ShaderVertexAttributeType.FloatMatrix44;
-            }
-            else if (type == (ActiveAttribType)All.Int)
-            {
-                return ShaderVertexAttributeType.Int;
-            }
-            else if (type == (ActiveAttribType)All.IntVec2)
-            {
-                return ShaderVertexAttributeType.IntVector2;
-            }
-            else if (type == (ActiveAttribType)All.IntVec3)
-            {
-                return ShaderVertexAttributeType.IntVector3;
+                case ActiveAttribType.Float:
+                    return ShaderVertexAttributeType.Float;
+                case ActiveAttribType.FloatVec2:
+                    return ShaderVertexAttributeType.FloatVector2;
+                case ActiveAttribType.FloatVec3:
+                    return ShaderVertexAttributeType.FloatVector3;
+                case ActiveAttribType.FloatVec4:
+                    return ShaderVertexAttributeType.FloatVector4;
+                case ActiveAttribType.FloatMat2:
+                    return ShaderVertexAttributeType.FloatMatrix22;
+                case ActiveAttribType.FloatMat3:
+                    return ShaderVertexAttributeType.FloatMatrix33;
+                case ActiveAttribType.FloatMat4:
+                    return ShaderVertexAttributeType.FloatMatrix44;
+                case (ActiveAttribType)All.Int:
+                    return ShaderVertexAttributeType.Int;
+                case (ActiveAttribType)All.IntVec2:
+                    return ShaderVertexAttributeType.IntVector2;
+                case (ActiveAttribType)All.IntVec3:
+                    return ShaderVertexAttributeType.IntVector3;
+                case (ActiveAttribType)All.IntVec4:
+                    return ShaderVertexAttributeType.IntVector4;
             }
 
-            Debug.Assert(type == (ActiveAttribType)All.IntVec4);
-            return ShaderVertexAttributeType.IntVector4;
+            throw new ArgumentException("type");
         }
 
         public static UniformType To(ActiveUniformType type)
         {
-            if (type == ActiveUniformType.Int)
+            switch (type)
             {
-                return UniformType.Int;
-            }
-            else if (type == ActiveUniformType.Float)
-            {
-                return UniformType.Float;
-            }
-            else if (type == ActiveUniformType.FloatVec2)
-            {
-                return UniformType.FloatVector2;
-            }
-            else if (type == ActiveUniformType.FloatVec3)
-            {
-                return UniformType.FloatVector3;
-            }
-            else if (type == ActiveUniformType.FloatVec4)
-            {
-                return UniformType.FloatVector4;
-            }
-            else if (type == ActiveUniformType.IntVec2)
-            {
-                return UniformType.IntVector2;
-            }
-            else if (type == ActiveUniformType.IntVec3)
-            {
-                return UniformType.IntVector3;
-            }
-            else if (type == ActiveUniformType.IntVec4)
-            {
-                return UniformType.IntVector4;
-            }
-            else if (type == ActiveUniformType.Bool)
-            {
-                return UniformType.Bool;
-            }
-            else if (type == ActiveUniformType.BoolVec2)
-            {
-                return UniformType.BoolVector2;
-            }
-            else if (type == ActiveUniformType.BoolVec3)
-            {
-                return UniformType.BoolVector3;
-            }
-            else if (type == ActiveUniformType.BoolVec4)
-            {
-                return UniformType.BoolVector4;
-            }
-            else if (type == ActiveUniformType.FloatMat2)
-            {
-                return UniformType.FloatMatrix22;
-            }
-            else if (type == ActiveUniformType.FloatMat3)
-            {
-                return UniformType.FloatMatrix33;
-            }
-            else if (type == ActiveUniformType.FloatMat4)
-            {
-                return UniformType.FloatMatrix44;
-            }
-            else if (type == ActiveUniformType.Sampler1D)
-            {
-                return UniformType.Sampler1D;
-            }
-            else if (type == ActiveUniformType.Sampler2D)
-            {
-                return UniformType.Sampler2D;
-            }
-            else if (type == ActiveUniformType.Sampler2DRect)
-            {
-                return UniformType.Sampler2DRectangle;
-            }
-            else if (type == ActiveUniformType.Sampler2DRectShadow)
-            {
-                return UniformType.Sampler2DRectangleShadow;
-            }
-            else if (type == ActiveUniformType.Sampler3D)
-            {
-                return UniformType.Sampler3D;
-            }
-            else if (type == ActiveUniformType.SamplerCube)
-            {
-                return UniformType.SamplerCube;
-            }
-            else if (type == ActiveUniformType.Sampler1DShadow)
-            {
-                return UniformType.Sampler1DShadow;
-            }
-            else if (type == ActiveUniformType.Sampler2DShadow)
-            {
-                return UniformType.Sampler2DShadow;
-            }
-            else if (type == ActiveUniformType.FloatMat2x3)
-            {
-                return UniformType.FloatMatrix23;
-            }
-            else if (type == ActiveUniformType.FloatMat2x4)
-            {
-                return UniformType.FloatMatrix24;
-            }
-            else if (type == ActiveUniformType.FloatMat3x2)
-            {
-                return UniformType.FloatMatrix32;
-            }
-            else if (type == ActiveUniformType.FloatMat3x4)
-            {
-                return UniformType.FloatMatrix34;
-            }
-            else if (type == ActiveUniformType.FloatMat4x2)
-            {
-                return UniformType.FloatMatrix42;
-            }
-            else if (type == ActiveUniformType.FloatMat4x3)
-            {
-                return UniformType.FloatMatrix43;
-            }
-            else if (type == ActiveUniformType.Sampler1DArray)
-            {
-                return UniformType.Sampler1DArray;
-            }
-            else if (type == ActiveUniformType.Sampler2DArray)
-            {
-                return UniformType.Sampler2DArray;
-            }
-            else if (type == ActiveUniformType.Sampler1DArrayShadow)
-            {
-                return UniformType.Sampler1DArrayShadow;
-            }
-            else if (type == ActiveUniformType.Sampler2DArrayShadow)
-            {
-                return UniformType.Sampler2DArrayShadow;
-            }
-            else if (type == ActiveUniformType.SamplerCubeShadow)
-            {
-                return UniformType.SamplerCubeShadow;
-            }
-            else if (type == ActiveUniformType.IntSampler1D)
-            {
-                return UniformType.IntSampler1D;
-            }
-            else if (type == ActiveUniformType.IntSampler2D)
-            {
-                return UniformType.IntSampler2D;
-            }
-            else if (type == ActiveUniformType.IntSampler2DRect)
-            {
-                return UniformType.IntSampler2DRectangle;
-            }
-            else if (type == ActiveUniformType.IntSampler3D)
-            {
-                return UniformType.IntSampler3D;
-            }
-            else if (type == ActiveUniformType.IntSamplerCube)
-            {
-                return UniformType.IntSamplerCube;
-            }
-            else if (type == ActiveUniformType.IntSampler1DArray)
-            {
-                return UniformType.IntSampler1DArray;
-            }
-            else if (type == ActiveUniformType.IntSampler2DArray)
-            {
-                return UniformType.IntSampler2DArray;
-            }
-            else if (type == ActiveUniformType.UnsignedIntSampler1D)
-            {
-                return UniformType.UnsignedIntSampler1D;
-            }
-            else if (type == ActiveUniformType.UnsignedIntSampler2D)
-            {
-                return UniformType.UnsignedIntSampler2D;
-            }
-            else if (type == ActiveUniformType.UnsignedIntSampler2DRect)
-            {
-                return UniformType.UnsignedIntSampler2DRectangle;
-            }
-            else if (type == ActiveUniformType.UnsignedIntSampler3D)
-            {
-                return UniformType.UnsignedIntSampler3D;
-            }
-            else if (type == ActiveUniformType.UnsignedIntSamplerCube)
-            {
-                return UniformType.UnsignedIntSamplerCube;
-            }
-            else if (type == ActiveUniformType.UnsignedIntSampler1DArray)
-            {
-                return UniformType.UnsignedIntSampler1DArray;
+                case ActiveUniformType.Int:
+                    return UniformType.Int;
+                case ActiveUniformType.Float:
+                    return UniformType.Float;
+                case ActiveUniformType.FloatVec2:
+                    return UniformType.FloatVector2;
+                case ActiveUniformType.FloatVec3:
+                    return UniformType.FloatVector3;
+                case ActiveUniformType.FloatVec4:
+                    return UniformType.FloatVector4;
+                case ActiveUniformType.IntVec2:
+                    return UniformType.IntVector2;
+                case ActiveUniformType.IntVec3:
+                    return UniformType.IntVector3;
+                case ActiveUniformType.IntVec4:
+                    return UniformType.IntVector4;
+                case ActiveUniformType.Bool:
+                    return UniformType.Bool;
+                case ActiveUniformType.BoolVec2:
+                    return UniformType.BoolVector2;
+                case ActiveUniformType.BoolVec3:
+                    return UniformType.BoolVector3;
+                case ActiveUniformType.BoolVec4:
+                    return UniformType.BoolVector4;
+                case ActiveUniformType.FloatMat2:
+                    return UniformType.FloatMatrix22;
+                case ActiveUniformType.FloatMat3:
+                    return UniformType.FloatMatrix33;
+                case ActiveUniformType.FloatMat4:
+                    return UniformType.FloatMatrix44;
+                case ActiveUniformType.Sampler1D:
+                    return UniformType.Sampler1D;
+                case ActiveUniformType.Sampler2D:
+                    return UniformType.Sampler2D;
+                case ActiveUniformType.Sampler2DRect:
+                    return UniformType.Sampler2DRectangle;
+                case ActiveUniformType.Sampler2DRectShadow:
+                    return UniformType.Sampler2DRectangleShadow;
+                case ActiveUniformType.Sampler3D:
+                    return UniformType.Sampler3D;
+                case ActiveUniformType.SamplerCube:
+                    return UniformType.SamplerCube;
+                case ActiveUniformType.Sampler1DShadow:
+                    return UniformType.Sampler1DShadow;
+                case ActiveUniformType.Sampler2DShadow:
+                    return UniformType.Sampler2DShadow;
+                case ActiveUniformType.FloatMat2x3:
+                    return UniformType.FloatMatrix23;
+                case ActiveUniformType.FloatMat2x4:
+                    return UniformType.FloatMatrix24;
+                case ActiveUniformType.FloatMat3x2:
+                    return UniformType.FloatMatrix32;
+                case ActiveUniformType.FloatMat3x4:
+                    return UniformType.FloatMatrix34;
+                case ActiveUniformType.FloatMat4x2:
+                    return UniformType.FloatMatrix42;
+                case ActiveUniformType.FloatMat4x3:
+                    return UniformType.FloatMatrix43;
+                case ActiveUniformType.Sampler1DArray:
+                    return UniformType.Sampler1DArray;
+                case ActiveUniformType.Sampler2DArray:
+                    return UniformType.Sampler2DArray;
+                case ActiveUniformType.Sampler1DArrayShadow:
+                    return UniformType.Sampler1DArrayShadow;
+                case ActiveUniformType.Sampler2DArrayShadow:
+                    return UniformType.Sampler2DArrayShadow;
+                case ActiveUniformType.SamplerCubeShadow:
+                    return UniformType.SamplerCubeShadow;
+                case ActiveUniformType.IntSampler1D:
+                    return UniformType.IntSampler1D;
+                case ActiveUniformType.IntSampler2D:
+                    return UniformType.IntSampler2D;
+                case ActiveUniformType.IntSampler2DRect:
+                    return UniformType.IntSampler2DRectangle;
+                case ActiveUniformType.IntSampler3D:
+                    return UniformType.IntSampler3D;
+                case ActiveUniformType.IntSamplerCube:
+                    return UniformType.IntSamplerCube;
+                case ActiveUniformType.IntSampler1DArray:
+                    return UniformType.IntSampler1DArray;
+                case ActiveUniformType.IntSampler2DArray:
+                    return UniformType.IntSampler2DArray;
+                case ActiveUniformType.UnsignedIntSampler1D:
+                    return UniformType.UnsignedIntSampler1D;
+                case ActiveUniformType.UnsignedIntSampler2D:
+                    return UniformType.UnsignedIntSampler2D;
+                case ActiveUniformType.UnsignedIntSampler2DRect:
+                    return UniformType.UnsignedIntSampler2DRectangle;
+                case ActiveUniformType.UnsignedIntSampler3D:
+                    return UniformType.UnsignedIntSampler3D;
+                case ActiveUniformType.UnsignedIntSamplerCube:
+                    return UniformType.UnsignedIntSamplerCube;
+                case ActiveUniformType.UnsignedIntSampler1DArray:
+                    return UniformType.UnsignedIntSampler1DArray;
             }
 
-            Debug.Assert(type == ActiveUniformType.UnsignedIntSampler2DArray);
-            return UniformType.UnsignedIntSampler2DArray;
+            throw new ArgumentException("type");
         }
 
         public static BufferHint To(BufferUsageHint hint)
         {
-            if (hint == BufferUsageHint.StreamDraw)
+            switch (hint)
             {
-                return BufferHint.StreamDraw;
-            }
-            else if (hint == BufferUsageHint.StreamRead)
-            {
-                return BufferHint.StreamRead;
-            }
-            else if (hint == BufferUsageHint.StreamCopy)
-            {
-                return BufferHint.StreamCopy;
-            }
-            else if (hint == BufferUsageHint.StaticDraw)
-            {
-                return BufferHint.StaticDraw;
-            }
-            else if (hint == BufferUsageHint.StaticRead)
-            {
-                return BufferHint.StaticRead;
-            }
-            else if (hint == BufferUsageHint.StaticCopy)
-            {
-                return BufferHint.StaticCopy;
-            }
-            else if (hint == BufferUsageHint.DynamicDraw)
-            {
-                return BufferHint.DynamicDraw;
-            }
-            else if (hint == BufferUsageHint.DynamicRead)
-            {
-                return BufferHint.DynamicRead;
+                case BufferUsageHint.StreamDraw:
+                    return BufferHint.StreamDraw;
+                case BufferUsageHint.StreamRead:
+                    return BufferHint.StreamRead;
+                case BufferUsageHint.StreamCopy:
+                    return BufferHint.StreamCopy;
+                case BufferUsageHint.StaticDraw:
+                    return BufferHint.StaticDraw;
+                case BufferUsageHint.StaticRead:
+                    return BufferHint.StaticRead;
+                case BufferUsageHint.StaticCopy:
+                    return BufferHint.StaticCopy;
+                case BufferUsageHint.DynamicDraw:
+                    return BufferHint.DynamicDraw;
+                case BufferUsageHint.DynamicRead:
+                    return BufferHint.DynamicRead;
+                case BufferUsageHint.DynamicCopy:
+                    return BufferHint.DynamicCopy;
             }
 
-            Debug.Assert(hint == BufferUsageHint.DynamicCopy);
-            return BufferHint.DynamicCopy;
+            throw new ArgumentException("type");
         }
 
         public static BufferUsageHint To(BufferHint hint)
         {
-            if (hint == BufferHint.StreamDraw)
+            switch (hint)
             {
-                return BufferUsageHint.StreamDraw;
-            }
-            else if (hint == BufferHint.StreamRead)
-            {
-                return BufferUsageHint.StreamRead;
-            }
-            else if (hint == BufferHint.StreamCopy)
-            {
-                return BufferUsageHint.StreamCopy;
-            }
-            else if (hint == BufferHint.StaticDraw)
-            {
-                return BufferUsageHint.StaticDraw;
-            }
-            else if (hint == BufferHint.StaticRead)
-            {
-                return BufferUsageHint.StaticRead;
-            }
-            else if (hint == BufferHint.StaticCopy)
-            {
-                return BufferUsageHint.StaticCopy;
-            }
-            else if (hint == BufferHint.DynamicDraw)
-            {
-                return BufferUsageHint.DynamicDraw;
-            }
-            else if (hint == BufferHint.DynamicRead)
-            {
-                return BufferUsageHint.DynamicRead;
+                case BufferHint.StreamDraw:
+                    return BufferUsageHint.StreamDraw;
+                case BufferHint.StreamRead:
+                    return BufferUsageHint.StreamRead;
+                case BufferHint.StreamCopy:
+                    return BufferUsageHint.StreamCopy;
+                case BufferHint.StaticDraw:
+                    return BufferUsageHint.StaticDraw;
+                case BufferHint.StaticRead:
+                    return BufferUsageHint.StaticRead;
+                case BufferHint.StaticCopy:
+                    return BufferUsageHint.StaticCopy;
+                case BufferHint.DynamicDraw:
+                    return BufferUsageHint.DynamicDraw;
+                case BufferHint.DynamicRead:
+                    return BufferUsageHint.DynamicRead;
+                case BufferHint.DynamicCopy:
+                    return BufferUsageHint.DynamicCopy;
             }
 
-            Debug.Assert(hint == BufferHint.DynamicCopy);
-            return BufferUsageHint.DynamicCopy;
+            throw new ArgumentException("type");
         }
 
         public static VertexAttribPointerType To(ComponentDatatype type)
         {
-            if (type == ComponentDatatype.Byte)
+            switch (type)
             {
-                return VertexAttribPointerType.Byte;
-            }
-            else if (type == ComponentDatatype.UnsignedByte)
-            {
-                return VertexAttribPointerType.UnsignedByte;
-            }
-            else if (type == ComponentDatatype.Short)
-            {
-                return VertexAttribPointerType.Short;
-            }
-            else if (type == ComponentDatatype.UnsignedShort)
-            {
-                return VertexAttribPointerType.UnsignedShort;
-            }
-            else if (type == ComponentDatatype.Int)
-            {
-                return VertexAttribPointerType.Int;
-            }
-            else if (type == ComponentDatatype.UnsignedInt)
-            {
-                return VertexAttribPointerType.UnsignedInt;
-            }
-            else if (type == ComponentDatatype.Float)
-            {
-                return VertexAttribPointerType.Float;
+                case ComponentDatatype.Byte:
+                    return VertexAttribPointerType.Byte;
+                case ComponentDatatype.UnsignedByte:
+                    return VertexAttribPointerType.UnsignedByte;
+                case ComponentDatatype.Short:
+                    return VertexAttribPointerType.Short;
+                case ComponentDatatype.UnsignedShort:
+                    return VertexAttribPointerType.UnsignedShort;
+                case ComponentDatatype.Int:
+                    return VertexAttribPointerType.Int;
+                case ComponentDatatype.UnsignedInt:
+                    return VertexAttribPointerType.UnsignedInt;
+                case ComponentDatatype.Float:
+                    return VertexAttribPointerType.Float;
+                case ComponentDatatype.HalfFloat:
+                    return VertexAttribPointerType.HalfFloat;
             }
 
-            Debug.Assert(type == ComponentDatatype.HalfFloat);
-            return VertexAttribPointerType.HalfFloat;
+            throw new ArgumentException("type");
         }
 
         public static BeginMode To(PrimitiveType type)
         {
-            if (type == PrimitiveType.Points)
+            switch (type)
             {
-                return BeginMode.Points;
-            }
-            else if (type == PrimitiveType.Lines)
-            {
-                return BeginMode.Lines;
-            }
-            else if (type == PrimitiveType.LineLoop)
-            {
-                return BeginMode.LineLoop;
-            }
-            else if (type == PrimitiveType.LineStrip)
-            {
-                return BeginMode.LineStrip;
-            }
-            else if (type == PrimitiveType.Triangles)
-            {
-                return BeginMode.Triangles;
-            }
-            else if (type == PrimitiveType.TriangleStrip)
-            {
-                return BeginMode.TriangleStrip;
-            }
-            else if (type == PrimitiveType.LinesAdjacency)
-            {
-                return BeginMode.LinesAdjacency;
-            }
-            else if (type == PrimitiveType.LineStripAdjacency)
-            {
-                return BeginMode.LineStripAdjacency;
-            }
-            else if (type == PrimitiveType.TrianglesAdjacency)
-            {
-                return BeginMode.TrianglesAdjacency;
-            }
-            else if (type == PrimitiveType.TriangleStripAdjacency)
-            {
-                return BeginMode.TriangleStripAdjacency;
+                case PrimitiveType.Points:
+                    return BeginMode.Points;
+                case PrimitiveType.Lines:
+                    return BeginMode.Lines;
+                case PrimitiveType.LineLoop:
+                    return BeginMode.LineLoop;
+                case PrimitiveType.LineStrip:
+                    return BeginMode.LineStrip;
+                case PrimitiveType.Triangles:
+                    return BeginMode.Triangles;
+                case PrimitiveType.TriangleStrip:
+                    return BeginMode.TriangleStrip;
+                case PrimitiveType.LinesAdjacency:
+                    return BeginMode.LinesAdjacency;;
+                case PrimitiveType.LineStripAdjacency:
+                    return BeginMode.LineStripAdjacency;
+                case PrimitiveType.TrianglesAdjacency:
+                    return BeginMode.TrianglesAdjacency;
+                case PrimitiveType.TriangleStripAdjacency:
+                    return BeginMode.TriangleStripAdjacency;
+                case PrimitiveType.TriangleFan:
+                    return BeginMode.TriangleFan;
             }
 
-            Debug.Assert(type == PrimitiveType.TriangleFan);
-            return BeginMode.TriangleFan;
+            throw new ArgumentException("type");
         }
 
         public static DrawElementsType To(IndexBufferDatatype type)
         {
-            if (type == IndexBufferDatatype.UnsignedShort)
+            switch (type)
             {
-                return DrawElementsType.UnsignedShort;
+                case IndexBufferDatatype.UnsignedShort:
+                    return DrawElementsType.UnsignedShort;
+                case IndexBufferDatatype.UnsignedInt:
+                    return DrawElementsType.UnsignedInt;
             }
 
-            Debug.Assert(type == IndexBufferDatatype.UnsignedInt);
-            return DrawElementsType.UnsignedInt;
+            throw new ArgumentException("type");
         }
 
         public static DepthFunction To(DepthTestFunction function)
         {
-            if (function == DepthTestFunction.Never)
+            switch (function)
             {
-                return DepthFunction.Never;
-            }
-            else if (function == DepthTestFunction.Less)
-            {
-                return DepthFunction.Less;
-            }
-            else if (function == DepthTestFunction.Equal)
-            {
-                return DepthFunction.Equal;
-            }
-            else if (function == DepthTestFunction.LessThanOrEqual)
-            {
-                return DepthFunction.Lequal;
-            }
-            else if (function == DepthTestFunction.Greater)
-            {
-                return DepthFunction.Greater;
-            }
-            else if (function == DepthTestFunction.NotEqual)
-            {
-                return DepthFunction.Notequal;
-            }
-            else if (function == DepthTestFunction.GreaterThanOrEqual)
-            {
-                return DepthFunction.Gequal;
+                case DepthTestFunction.Never:
+                    return DepthFunction.Never;
+                case DepthTestFunction.Less:
+                    return DepthFunction.Less;
+                case DepthTestFunction.Equal:
+                    return DepthFunction.Equal;
+                case DepthTestFunction.LessThanOrEqual:
+                    return DepthFunction.Lequal;
+                case DepthTestFunction.Greater:
+                    return DepthFunction.Greater;
+                case DepthTestFunction.NotEqual:
+                    return DepthFunction.Notequal;
+                case DepthTestFunction.GreaterThanOrEqual:
+                    return DepthFunction.Gequal;
+                case DepthTestFunction.Always:
+                    return DepthFunction.Always;
             }
 
-            Debug.Assert(function == DepthTestFunction.Always);
-            return DepthFunction.Always;
+            throw new ArgumentException("function");
         }
 
         public static CullFaceMode To(CullFace face)
         {
-            Debug.Assert(
-                (face == CullFace.Front) ||
-                (face == CullFace.Back) ||
-                (face == CullFace.FrontAndBack));
+            switch (face)
+            {
+                case CullFace.Front:
+                    return CullFaceMode.Front;
+                case CullFace.Back:
+                    return CullFaceMode.Back;
+                case CullFace.FrontAndBack:
+                    return CullFaceMode.FrontAndBack;
+            }
 
-            return _cullFaceModes[(int)face];
+            throw new ArgumentException("face");
         }
 
         public static FrontFaceDirection To(WindingOrder windingOrder)
         {
-            Debug.Assert(
-                (windingOrder == WindingOrder.Clockwise) || 
-                (windingOrder == WindingOrder.Counterclockwise));
+            switch (windingOrder)
+            {
+                case WindingOrder.Clockwise:
+                    return FrontFaceDirection.Cw;
+                case WindingOrder.Counterclockwise:
+                    return FrontFaceDirection.Ccw;
+            }
 
-            return _frontFaceDirections[(int)windingOrder];
+            throw new ArgumentException("windingOrder");
         }
 
         public static PolygonMode To(RasterizationMode mode)
         {
-            Debug.Assert(
-                (mode == RasterizationMode.Point) ||
-                (mode == RasterizationMode.Line) ||
-                (mode == RasterizationMode.Fill));
+            switch (mode)
+            {
+                case RasterizationMode.Point:
+                    return PolygonMode.Point;
+                case RasterizationMode.Line:
+                    return PolygonMode.Line;
+                case RasterizationMode.Fill:
+                    return PolygonMode.Fill;
+            }
 
-            return _polygonModes[(int)mode];
+            throw new ArgumentException("mode");
         }
 
         public static StencilOp To(StencilOperation operation)
         {
-            Debug.Assert(
-                (operation == StencilOperation.Zero) ||
-                (operation == StencilOperation.Invert) ||
-                (operation == StencilOperation.Keep) ||
-                (operation == StencilOperation.Replace) ||
-                (operation == StencilOperation.Increment) ||
-                (operation == StencilOperation.Decrement) ||
-                (operation == StencilOperation.IncrementWrap) ||
-                (operation == StencilOperation.DecrementWrap));
+            switch (operation)
+            {
+                case StencilOperation.Zero:
+                    return StencilOp.Zero;
+                case StencilOperation.Invert:
+                    return StencilOp.Invert;
+                case StencilOperation.Keep:
+                    return StencilOp.Keep;
+                case StencilOperation.Replace:
+                    return StencilOp.Replace;
+                case StencilOperation.Increment:
+                    return StencilOp.Incr;
+                case StencilOperation.Decrement:
+                    return StencilOp.Decr;
+                case StencilOperation.IncrementWrap:
+                    return StencilOp.IncrWrap;
+                case StencilOperation.DecrementWrap:
+                    return StencilOp.DecrWrap;
+            }
 
-            return _stencilOp[(int)operation];
+            throw new ArgumentException("operation");
         }
 
         public static StencilFunction To(StencilTestFunction function)
         {
-            Debug.Assert(
-                (function == StencilTestFunction.Never) ||
-                (function == StencilTestFunction.Less) ||
-                (function == StencilTestFunction.Equal) ||
-                (function == StencilTestFunction.LessThanOrEqual) ||
-                (function == StencilTestFunction.Greater) ||
-                (function == StencilTestFunction.NotEqual) ||
-                (function == StencilTestFunction.GreaterThanOrEqual) ||
-                (function == StencilTestFunction.Always));
+            switch (function)
+            {
+                case StencilTestFunction.Never:
+                    return StencilFunction.Never;
+                case StencilTestFunction.Less:
+                    return StencilFunction.Less;
+                case StencilTestFunction.Equal:
+                    return StencilFunction.Equal;
+                case StencilTestFunction.LessThanOrEqual:
+                    return StencilFunction.Lequal;
+                case StencilTestFunction.Greater:
+                    return StencilFunction.Greater;
+                case StencilTestFunction.NotEqual:
+                    return StencilFunction.Notequal;
+                case StencilTestFunction.GreaterThanOrEqual:
+                    return StencilFunction.Gequal;
+                case StencilTestFunction.Always:
+                    return StencilFunction.Always;
+            }
 
-            return _stencilFunction[(int)function];
+            throw new ArgumentException("function");
         }
 
         public static BlendEquationMode To(BlendEquation equation)
         {
-            Debug.Assert(
-                (equation == BlendEquation.Add) ||
-                (equation == BlendEquation.Minimum) ||
-                (equation == BlendEquation.Maximum) ||
-                (equation == BlendEquation.Subtract) ||
-                (equation == BlendEquation.ReverseSubtract));
-            
-            return _blendEquationModes[(int)equation];
+            switch (equation)
+            {
+                case BlendEquation.Add:
+                    return BlendEquationMode.FuncAdd;
+                case BlendEquation.Minimum:
+                    return BlendEquationMode.Min;
+                case BlendEquation.Maximum:
+                    return BlendEquationMode.Max;
+                case BlendEquation.Subtract:
+                    return BlendEquationMode.FuncSubtract;
+                case BlendEquation.ReverseSubtract:
+                    return BlendEquationMode.FuncReverseSubtract;
+            }
+
+            throw new ArgumentException("equation");
         }
 
         public static BlendingFactorSrc To(SourceBlendingFactor factor)
         {
-            Debug.Assert(
-                (factor == SourceBlendingFactor.Zero) ||
-                (factor == SourceBlendingFactor.One) ||
-                (factor == SourceBlendingFactor.SourceAlpha) ||
-                (factor == SourceBlendingFactor.OneMinusSourceAlpha) ||
-                (factor == SourceBlendingFactor.DestinationAlpha) ||
-                (factor == SourceBlendingFactor.OneMinusDestinationAlpha) ||
-                (factor == SourceBlendingFactor.DestinationColor) ||
-                (factor == SourceBlendingFactor.OneMinusDestinationColor) ||
-                (factor == SourceBlendingFactor.SourceAlphaSaturate) ||
-                (factor == SourceBlendingFactor.ConstantColor) ||
-                (factor == SourceBlendingFactor.OneMinusConstantColor) ||
-                (factor == SourceBlendingFactor.ConstantAlpha) ||
-                (factor == SourceBlendingFactor.OneMinusConstantAlpha));
+            switch (factor)
+            {
+                case SourceBlendingFactor.Zero:
+                    return BlendingFactorSrc.Zero;
+                case SourceBlendingFactor.One:
+                    return BlendingFactorSrc.One;
+                case SourceBlendingFactor.SourceAlpha:
+                    return BlendingFactorSrc.SrcAlpha;
+                case SourceBlendingFactor.OneMinusSourceAlpha:
+                    return BlendingFactorSrc.OneMinusSrcAlpha;
+                case SourceBlendingFactor.DestinationAlpha:
+                    return BlendingFactorSrc.DstAlpha;
+                case SourceBlendingFactor.OneMinusDestinationAlpha:
+                    return BlendingFactorSrc.OneMinusDstAlpha;
+                case SourceBlendingFactor.DestinationColor:
+                    return BlendingFactorSrc.DstColor;
+                case SourceBlendingFactor.OneMinusDestinationColor:
+                    return BlendingFactorSrc.OneMinusDstColor;
+                case SourceBlendingFactor.SourceAlphaSaturate:
+                    return BlendingFactorSrc.SrcAlphaSaturate;
+                case SourceBlendingFactor.ConstantColor:
+                    return BlendingFactorSrc.ConstantColor;
+                case SourceBlendingFactor.OneMinusConstantColor:
+                    return BlendingFactorSrc.OneMinusConstantColor;
+                case SourceBlendingFactor.ConstantAlpha:
+                    return BlendingFactorSrc.ConstantAlpha;
+                case SourceBlendingFactor.OneMinusConstantAlpha:
+                    return BlendingFactorSrc.OneMinusConstantAlpha;
+            }
 
-            return _blendingFactorSrc[(int)factor];
+            throw new ArgumentException("factor");
         }
 
         public static BlendingFactorDest To(DestinationBlendingFactor factor)
         {
-            Debug.Assert(
-                (factor == DestinationBlendingFactor.Zero) ||
-                (factor == DestinationBlendingFactor.One) ||
-                (factor == DestinationBlendingFactor.SourceColor) ||
-                (factor == DestinationBlendingFactor.OneMinusSourceColor) ||
-                (factor == DestinationBlendingFactor.SourceAlpha) ||
-                (factor == DestinationBlendingFactor.OneMinusSourceAlpha) ||
-                (factor == DestinationBlendingFactor.DestinationAlpha) ||
-                (factor == DestinationBlendingFactor.OneMinusDestinationAlpha) ||
-                (factor == DestinationBlendingFactor.DestinationColor) ||
-                (factor == DestinationBlendingFactor.OneMinusDestinationColor) ||
-                (factor == DestinationBlendingFactor.ConstantColor) ||
-                (factor == DestinationBlendingFactor.OneMinusConstantColor) ||
-                (factor == DestinationBlendingFactor.ConstantAlpha) ||
-                (factor == DestinationBlendingFactor.OneMinusConstantAlpha));
+            switch (factor)
+            {
+                case DestinationBlendingFactor.Zero:
+                    return BlendingFactorDest.Zero;
+                case DestinationBlendingFactor.One:
+                    return BlendingFactorDest.One;
+                case DestinationBlendingFactor.SourceColor:
+                    return BlendingFactorDest.SrcColor;
+                case DestinationBlendingFactor.OneMinusSourceColor:
+                    return BlendingFactorDest.OneMinusSrcColor;
+                case DestinationBlendingFactor.SourceAlpha:
+                    return BlendingFactorDest.SrcAlpha;
+                case DestinationBlendingFactor.OneMinusSourceAlpha:
+                    return BlendingFactorDest.OneMinusSrcAlpha;
+                case DestinationBlendingFactor.DestinationAlpha:
+                    return BlendingFactorDest.DstAlpha;
+                case DestinationBlendingFactor.OneMinusDestinationAlpha:
+                    return BlendingFactorDest.OneMinusDstAlpha;
+                case DestinationBlendingFactor.DestinationColor:
+                    return BlendingFactorDest.DstColor;
+                case DestinationBlendingFactor.OneMinusDestinationColor:
+                    return BlendingFactorDest.OneMinusDstColor;
+                case DestinationBlendingFactor.ConstantColor:
+                    return BlendingFactorDest.ConstantColor;
+                case DestinationBlendingFactor.OneMinusConstantColor:
+                    return BlendingFactorDest.OneMinusConstantColor;
+                case DestinationBlendingFactor.ConstantAlpha:
+                    return BlendingFactorDest.ConstantAlpha;
+                case DestinationBlendingFactor.OneMinusConstantAlpha:
+                    return BlendingFactorDest.OneMinusConstantAlpha;
+            }
 
-            return _blendingFactorDest[(int)factor];
+            throw new ArgumentException("factor");
         }
 
         public static PixelInternalFormat To(TextureFormat format)
         {
-            Debug.Assert(
-                (format == TextureFormat.RedGreenBlue8) ||
-                (format == TextureFormat.RedGreenBlue16) ||
-                (format == TextureFormat.RedGreenBlueAlpha8) ||
-                (format == TextureFormat.RedGreenBlue10A2) ||
-                (format == TextureFormat.RedGreenBlueAlpha16) ||
-                (format == TextureFormat.Depth16) ||
-                (format == TextureFormat.Depth24) ||
-                (format == TextureFormat.Red8) ||
-                (format == TextureFormat.Red16) ||
-                (format == TextureFormat.RedGreen8) ||
-                (format == TextureFormat.RedGreen16) ||
-                (format == TextureFormat.Red16f) ||
-                (format == TextureFormat.Red32f) ||
-                (format == TextureFormat.RedGreen16f) ||
-                (format == TextureFormat.RedGreen32f) ||
-                (format == TextureFormat.Red8i) ||
-                (format == TextureFormat.Red8ui) ||
-                (format == TextureFormat.Red16i) ||
-                (format == TextureFormat.Red16ui) ||
-                (format == TextureFormat.Red32i) ||
-                (format == TextureFormat.Red32ui) ||
-                (format == TextureFormat.RedGreen8i) ||
-                (format == TextureFormat.RedGreen8ui) ||
-                (format == TextureFormat.RedGreen16i) ||
-                (format == TextureFormat.RedGreen16ui) ||
-                (format == TextureFormat.RedGreen32i) ||
-                (format == TextureFormat.RedGreen32ui) ||
-                (format == TextureFormat.RedGreenBlueAlpha32f) ||
-                (format == TextureFormat.RedGreenBlue32f) ||
-                (format == TextureFormat.RedGreenBlueAlpha16f) ||
-                (format == TextureFormat.RedGreenBlue16f) ||
-                (format == TextureFormat.Depth24Stencil8) ||
-                (format == TextureFormat.Red11fGreen11fBlue10f) ||
-                (format == TextureFormat.RedGreenBlue9E5) ||
-                (format == TextureFormat.SRedGreenBlue8) ||
-                (format == TextureFormat.SRedGreenBlue8Alpha8) ||
-                (format == TextureFormat.Depth32f) ||
-                (format == TextureFormat.Depth32fStencil8) ||
-                (format == TextureFormat.RedGreenBlueAlpha32ui) ||
-                (format == TextureFormat.RedGreenBlue32ui) ||
-                (format == TextureFormat.RedGreenBlueAlpha16ui) ||
-                (format == TextureFormat.RedGreenBlue16ui) ||
-                (format == TextureFormat.RedGreenBlueAlpha8ui) ||
-                (format == TextureFormat.RedGreenBlue8ui) ||
-                (format == TextureFormat.RedGreenBlueAlpha32i) ||
-                (format == TextureFormat.RedGreenBlue32i) ||
-                (format == TextureFormat.RedGreenBlueAlpha16i) ||
-                (format == TextureFormat.RedGreenBlue16i) ||
-                (format == TextureFormat.RedGreenBlueAlpha8i) ||
-                (format == TextureFormat.RedGreenBlue8i));
+            switch (format)
+            {
+                case TextureFormat.RedGreenBlue8:
+                    return PixelInternalFormat.Rgb8;
+                case TextureFormat.RedGreenBlue16:
+                    return PixelInternalFormat.Rgb16;
+                case TextureFormat.RedGreenBlueAlpha8:
+                    return PixelInternalFormat.Rgba8;
+                case TextureFormat.RedGreenBlue10A2:
+                    return PixelInternalFormat.Rgb10A2;
+                case TextureFormat.RedGreenBlueAlpha16:
+                    return PixelInternalFormat.Rgba16;
+                case TextureFormat.Depth16:
+                    return PixelInternalFormat.DepthComponent16;
+                case TextureFormat.Depth24:
+                    return PixelInternalFormat.DepthComponent24;
+                case TextureFormat.Red8:
+                    return PixelInternalFormat.R8;
+                case TextureFormat.Red16:
+                    return PixelInternalFormat.R16;
+                case TextureFormat.RedGreen8:
+                    return PixelInternalFormat.Rg8;
+                case TextureFormat.RedGreen16:
+                    return PixelInternalFormat.Rg16;
+                case TextureFormat.Red16f:
+                    return PixelInternalFormat.R16f;
+                case TextureFormat.Red32f:
+                    return PixelInternalFormat.R32f;
+                case TextureFormat.RedGreen16f:
+                    return PixelInternalFormat.Rg16f;
+                case TextureFormat.RedGreen32f:
+                    return PixelInternalFormat.Rg32f;
+                case TextureFormat.Red8i:
+                    return PixelInternalFormat.R8i;
+                case TextureFormat.Red8ui:
+                    return PixelInternalFormat.R8ui;
+                case TextureFormat.Red16i:
+                    return PixelInternalFormat.R16i;
+                case TextureFormat.Red16ui:
+                    return PixelInternalFormat.R16ui;
+                case TextureFormat.Red32i:
+                    return PixelInternalFormat.R32i;
+                case TextureFormat.Red32ui:
+                    return PixelInternalFormat.R32ui;
+                case TextureFormat.RedGreen8i:
+                    return PixelInternalFormat.Rg8i;
+                case TextureFormat.RedGreen8ui:
+                    return PixelInternalFormat.Rg8ui;
+                case TextureFormat.RedGreen16i:
+                    return PixelInternalFormat.Rg16i;
+                case TextureFormat.RedGreen16ui:
+                    return PixelInternalFormat.Rg16ui;
+                case TextureFormat.RedGreen32i:
+                    return PixelInternalFormat.Rg32i;
+                case TextureFormat.RedGreen32ui:
+                    return PixelInternalFormat.Rg32ui;
+                case TextureFormat.RedGreenBlueAlpha32f:
+                    return PixelInternalFormat.Rgba32f;
+                case TextureFormat.RedGreenBlue32f:
+                    return PixelInternalFormat.Rgb32f;
+                case TextureFormat.RedGreenBlueAlpha16f:
+                    return PixelInternalFormat.Rgba16f;
+                case TextureFormat.RedGreenBlue16f:
+                    return PixelInternalFormat.Rgb16f;
+                case TextureFormat.Depth24Stencil8:
+                    return PixelInternalFormat.Depth24Stencil8;
+                case TextureFormat.Red11fGreen11fBlue10f:
+                    return PixelInternalFormat.R11fG11fB10f;
+                case TextureFormat.RedGreenBlue9E5:
+                    return PixelInternalFormat.Rgb9E5;
+                case TextureFormat.SRedGreenBlue8:
+                    return PixelInternalFormat.Srgb8;
+                case TextureFormat.SRedGreenBlue8Alpha8:
+                    return PixelInternalFormat.Srgb8Alpha8;
+                case TextureFormat.Depth32f:
+                    return PixelInternalFormat.DepthComponent32f;
+                case TextureFormat.Depth32fStencil8:
+                    return PixelInternalFormat.Depth32fStencil8;
+                case TextureFormat.RedGreenBlueAlpha32ui:
+                    return PixelInternalFormat.Rgba32ui;
+                case TextureFormat.RedGreenBlue32ui:
+                    return PixelInternalFormat.Rgb32ui;
+                case TextureFormat.RedGreenBlueAlpha16ui:
+                    return PixelInternalFormat.Rgba16ui;
+                case TextureFormat.RedGreenBlue16ui:
+                    return PixelInternalFormat.Rgb16ui;
+                case TextureFormat.RedGreenBlueAlpha8ui:
+                    return PixelInternalFormat.Rgba8ui;
+                case TextureFormat.RedGreenBlue8ui:
+                    return PixelInternalFormat.Rgb8ui;
+                case TextureFormat.RedGreenBlueAlpha32i:
+                    return PixelInternalFormat.Rgba32i;
+                case TextureFormat.RedGreenBlue32i:
+                    return PixelInternalFormat.Rgb32i;
+                case TextureFormat.RedGreenBlueAlpha16i:
+                    return PixelInternalFormat.Rgba16i;
+                case TextureFormat.RedGreenBlue16i:
+                    return PixelInternalFormat.Rgb16i;
+                case TextureFormat.RedGreenBlueAlpha8i:
+                    return PixelInternalFormat.Rgba8i;
+                case TextureFormat.RedGreenBlue8i:
+                    return PixelInternalFormat.Rgb8i;
+            }
 
-            return _pixelInternalFormat[(int)format];
+            throw new ArgumentException("format");
         }
 
         public static PixelFormat To(ImageFormat format)
         {
-            Debug.Assert(
-                (format == ImageFormat.StencilIndex) ||
-                (format == ImageFormat.DepthComponent) ||
-                (format == ImageFormat.Red) ||
-                (format == ImageFormat.Green) ||
-                (format == ImageFormat.Blue) ||
-                (format == ImageFormat.RedGreenBlue) ||
-                (format == ImageFormat.RedGreenBlueAlpha) ||
-                (format == ImageFormat.BlueGreenRed) ||
-                (format == ImageFormat.BlueGreenRedAlpha) ||
-                (format == ImageFormat.RedGreen) ||
-                (format == ImageFormat.RedGreenInteger) ||
-                (format == ImageFormat.DepthStencil) ||
-                (format == ImageFormat.RedInteger) ||
-                (format == ImageFormat.GreenInteger) ||
-                (format == ImageFormat.BlueInteger) ||
-                (format == ImageFormat.RedGreenBlueInteger) ||
-                (format == ImageFormat.RedGreenBlueAlphaInteger) ||
-                (format == ImageFormat.BlueGreenRedInteger) ||
-                (format == ImageFormat.BlueGreenRedAlphaInteger));
+            switch (format)
+            {
+                case ImageFormat.StencilIndex:
+                    return PixelFormat.StencilIndex;
+                case ImageFormat.DepthComponent:
+                    return PixelFormat.DepthComponent;
+                case ImageFormat.Red:
+                    return PixelFormat.Red;
+                case ImageFormat.Green:
+                    return PixelFormat.Green;
+                case ImageFormat.Blue:
+                    return PixelFormat.Blue;
+                case ImageFormat.RedGreenBlue:
+                    return PixelFormat.Rgb;
+                case ImageFormat.RedGreenBlueAlpha:
+                    return PixelFormat.Rgba;
+                case ImageFormat.BlueGreenRed:
+                    return PixelFormat.Bgr;
+                case ImageFormat.BlueGreenRedAlpha:
+                    return PixelFormat.Bgra;
+                case ImageFormat.RedGreen:
+                    return PixelFormat.Rg;
+                case ImageFormat.RedGreenInteger:
+                    return PixelFormat.RgInteger;
+                case ImageFormat.DepthStencil:
+                    return PixelFormat.DepthStencil;
+                case ImageFormat.RedInteger:
+                    return PixelFormat.RedInteger;
+                case ImageFormat.GreenInteger:
+                    return PixelFormat.GreenInteger;
+                case ImageFormat.BlueInteger:
+                    return PixelFormat.BlueInteger;
+                case ImageFormat.RedGreenBlueInteger:
+                    return PixelFormat.RgbInteger;
+                case ImageFormat.RedGreenBlueAlphaInteger:
+                    return PixelFormat.RgbaInteger;
+                case ImageFormat.BlueGreenRedInteger:
+                    return PixelFormat.BgrInteger;
+                case ImageFormat.BlueGreenRedAlphaInteger:
+                    return PixelFormat.BgraInteger;
+            }
 
-            return _pixelFormat[(int)format];
+            throw new ArgumentException("format");
         }
 
         public static PixelType To(ImageDatatype type)
         {
-            Debug.Assert(
-                (type == ImageDatatype.Byte) ||
-                (type == ImageDatatype.UnsignedByte) ||
-                (type == ImageDatatype.Short) ||
-                (type == ImageDatatype.UnsignedShort) ||
-                (type == ImageDatatype.Int) ||
-                (type == ImageDatatype.UnsignedInt) ||
-                (type == ImageDatatype.Float) ||
-                (type == ImageDatatype.HalfFloat) ||
-                (type == ImageDatatype.UnsignedByte332) ||
-                (type == ImageDatatype.UnsignedShort4444) ||
-                (type == ImageDatatype.UnsignedShort5551) ||
-                (type == ImageDatatype.UnsignedInt8888) ||
-                (type == ImageDatatype.UnsignedInt1010102) ||
-                (type == ImageDatatype.UnsignedByte233Reversed) ||
-                (type == ImageDatatype.UnsignedShort565) ||
-                (type == ImageDatatype.UnsignedShort565Reversed) ||
-                (type == ImageDatatype.UnsignedShort4444Reversed) ||
-                (type == ImageDatatype.UnsignedShort1555Reversed) ||
-                (type == ImageDatatype.UnsignedInt8888Reversed) ||
-                (type == ImageDatatype.UnsignedInt2101010Reversed) ||
-                (type == ImageDatatype.UnsignedInt248) ||
-                (type == ImageDatatype.UnsignedInt10F11F11FReversed) ||
-                (type == ImageDatatype.UnsignedInt5999Reversed) ||
-                (type == ImageDatatype.Float32UnsignedInt248Reversed));
+            switch (type)
+            {
+                case ImageDatatype.Byte:
+                    return PixelType.Byte;
+                case ImageDatatype.UnsignedByte:
+                    return PixelType.UnsignedByte;
+                case ImageDatatype.Short:
+                    return PixelType.Short;
+                case ImageDatatype.UnsignedShort:
+                    return PixelType.UnsignedShort;
+                case ImageDatatype.Int:
+                    return PixelType.Int;
+                case ImageDatatype.UnsignedInt:
+                    return PixelType.UnsignedInt;
+                case ImageDatatype.Float:
+                    return PixelType.Float;
+                case ImageDatatype.HalfFloat:
+                    return PixelType.HalfFloat;
+                case ImageDatatype.UnsignedByte332:
+                    return PixelType.UnsignedByte332;
+                case ImageDatatype.UnsignedShort4444:
+                    return PixelType.UnsignedShort4444;
+                case ImageDatatype.UnsignedShort5551:
+                    return PixelType.UnsignedShort5551;
+                case ImageDatatype.UnsignedInt8888:
+                    return PixelType.UnsignedInt8888;
+                case ImageDatatype.UnsignedInt1010102:
+                    return PixelType.UnsignedInt1010102;
+                case ImageDatatype.UnsignedByte233Reversed:
+                    return PixelType.UnsignedByte233Reversed;
+                case ImageDatatype.UnsignedShort565:
+                    return PixelType.UnsignedShort565;
+                case ImageDatatype.UnsignedShort565Reversed:
+                    return PixelType.UnsignedShort565Reversed;
+                case ImageDatatype.UnsignedShort4444Reversed:
+                    return PixelType.UnsignedShort4444Reversed;
+                case ImageDatatype.UnsignedShort1555Reversed:
+                    return PixelType.UnsignedShort1555Reversed;
+                case ImageDatatype.UnsignedInt8888Reversed:
+                    return PixelType.UnsignedInt8888Reversed;
+                case ImageDatatype.UnsignedInt2101010Reversed:
+                    return PixelType.UnsignedInt2101010Reversed;
+                case ImageDatatype.UnsignedInt248:
+                    return PixelType.UnsignedInt248;
+                case ImageDatatype.UnsignedInt10F11F11FReversed:
+                    return PixelType.UnsignedInt10F11F11FRev;
+                case ImageDatatype.UnsignedInt5999Reversed:
+                    return PixelType.UnsignedInt5999Rev;
+                case ImageDatatype.Float32UnsignedInt248Reversed:
+                    return PixelType.Float32UnsignedInt248Rev;
+            }
 
-            return _pixelType[(int)type];
+            throw new ArgumentException("type");
         }
 
         public static PixelFormat TextureToPixelFormat(TextureFormat textureFormat)
         {
+            if (!IsTextureFormatValid(textureFormat))
+            {
+                throw new ArgumentException("Invalid texture format.", "textureFormat");
+            }
+
             // TODO:  Not tested exhaustively
-            Debug.Assert(IsTextureFormatValid(textureFormat));
-            return _textureToPixelFormats[(int)textureFormat];
+            switch (textureFormat)
+            {
+                case TextureFormat.RedGreenBlue8:
+                case TextureFormat.RedGreenBlue16:
+                    return PixelFormat.Rgb;
+                case TextureFormat.RedGreenBlueAlpha8:
+                case TextureFormat.RedGreenBlue10A2:
+                case TextureFormat.RedGreenBlueAlpha16:
+                    return PixelFormat.Rgba;
+                case TextureFormat.Depth16:
+                case TextureFormat.Depth24:
+                    return PixelFormat.DepthComponent;
+                case TextureFormat.Red8:
+                case TextureFormat.Red16:
+                    return PixelFormat.Red;
+                case TextureFormat.RedGreen8:
+                case TextureFormat.RedGreen16:
+                    return PixelFormat.Rg;
+                case TextureFormat.Red16f:
+                case TextureFormat.Red32f:
+                    return PixelFormat.Red;
+                case TextureFormat.RedGreen16f:
+                case TextureFormat.RedGreen32f:
+                    return PixelFormat.Rg;
+                case TextureFormat.Red8i:
+                case TextureFormat.Red8ui:
+                case TextureFormat.Red16i:
+                case TextureFormat.Red16ui:
+                case TextureFormat.Red32i:
+                case TextureFormat.Red32ui:
+                    return PixelFormat.RedInteger;
+                case TextureFormat.RedGreen8i:
+                case TextureFormat.RedGreen8ui:
+                case TextureFormat.RedGreen16i:
+                case TextureFormat.RedGreen16ui:
+                case TextureFormat.RedGreen32i:
+                case TextureFormat.RedGreen32ui:
+                    return PixelFormat.RgInteger;
+                case TextureFormat.RedGreenBlueAlpha32f:
+                    return PixelFormat.Rgba;
+                case TextureFormat.RedGreenBlue32f:
+                    return PixelFormat.Rgb;
+                case TextureFormat.RedGreenBlueAlpha16f:
+                    return PixelFormat.Rgba;
+                case TextureFormat.RedGreenBlue16f:
+                    return PixelFormat.Rgb;
+                case TextureFormat.Depth24Stencil8:
+                    return PixelFormat.DepthStencil;
+                case TextureFormat.Red11fGreen11fBlue10f:
+                case TextureFormat.RedGreenBlue9E5:
+                    return PixelFormat.Rgb;
+                case TextureFormat.SRedGreenBlue8:
+                    return PixelFormat.RgbInteger;
+                case TextureFormat.SRedGreenBlue8Alpha8:
+                    return PixelFormat.RgbaInteger;
+                case TextureFormat.Depth32f:
+                    return PixelFormat.DepthComponent;
+                case TextureFormat.Depth32fStencil8:
+                    return PixelFormat.DepthStencil;
+                case TextureFormat.RedGreenBlueAlpha32ui:
+                    return PixelFormat.RgbaInteger;
+                case TextureFormat.RedGreenBlue32ui:
+                    return PixelFormat.RgbInteger;
+                case TextureFormat.RedGreenBlueAlpha16ui:
+                    return PixelFormat.RgbaInteger;
+                case TextureFormat.RedGreenBlue16ui:
+                    return PixelFormat.RgbInteger;
+                case TextureFormat.RedGreenBlueAlpha8ui:
+                    return PixelFormat.RgbaInteger;
+                case TextureFormat.RedGreenBlue8ui:
+                    return PixelFormat.RgbInteger;
+                case TextureFormat.RedGreenBlueAlpha32i:
+                    return PixelFormat.RgbaInteger;
+                case TextureFormat.RedGreenBlue32i:
+                    return PixelFormat.RgbInteger;
+                case TextureFormat.RedGreenBlueAlpha16i:
+                    return PixelFormat.RgbaInteger;
+                case TextureFormat.RedGreenBlue16i:
+                    return PixelFormat.RgbInteger;
+                case TextureFormat.RedGreenBlueAlpha8i:
+                    return PixelFormat.RgbaInteger;
+                case TextureFormat.RedGreenBlue8i:
+                    return PixelFormat.RgbInteger;
+            }
+
+            throw new ArgumentException("textureFormat");
         }
 
         public static PixelType TextureToPixelType(TextureFormat textureFormat)
         {
+            if (!IsTextureFormatValid(textureFormat))
+            {
+                throw new ArgumentException("Invalid texture format.", "textureFormat");
+            }
+
             // TODO:  Not tested exhaustively
-            Debug.Assert(IsTextureFormatValid(textureFormat));
-            return _textureToPixelTypes[(int)textureFormat];
+            switch (textureFormat)
+            {
+                case TextureFormat.RedGreenBlue8:
+                    return PixelType.UnsignedByte;
+                case TextureFormat.RedGreenBlue16:
+                    return PixelType.UnsignedShort;
+                case TextureFormat.RedGreenBlueAlpha8:
+                    return PixelType.UnsignedByte;
+                case TextureFormat.RedGreenBlue10A2:
+                    return PixelType.UnsignedInt1010102;
+                case TextureFormat.RedGreenBlueAlpha16:
+                    return PixelType.UnsignedShort;
+                case TextureFormat.Depth16:
+                    return PixelType.HalfFloat;
+                case TextureFormat.Depth24:
+                    return PixelType.Float;
+                case TextureFormat.Red8:
+                    return PixelType.UnsignedByte;
+                case TextureFormat.Red16:
+                    return PixelType.UnsignedShort;
+                case TextureFormat.RedGreen8:
+                    return PixelType.UnsignedByte;
+                case TextureFormat.RedGreen16:
+                    return PixelType.UnsignedShort;
+                case TextureFormat.Red16f:
+                    return PixelType.HalfFloat;
+                case TextureFormat.Red32f:
+                    return PixelType.Float;
+                case TextureFormat.RedGreen16f:
+                    return PixelType.HalfFloat;
+                case TextureFormat.RedGreen32f:
+                    return PixelType.Float;
+                case TextureFormat.Red8i:
+                    return PixelType.Byte;
+                case TextureFormat.Red8ui:
+                    return PixelType.UnsignedByte;
+                case TextureFormat.Red16i:
+                    return PixelType.Short;
+                case TextureFormat.Red16ui:
+                    return PixelType.UnsignedShort;
+                case TextureFormat.Red32i:
+                    return PixelType.Int;
+                case TextureFormat.Red32ui:
+                    return PixelType.UnsignedInt;
+                case TextureFormat.RedGreen8i:
+                    return PixelType.Byte;
+                case TextureFormat.RedGreen8ui:
+                    return PixelType.UnsignedByte;
+                case TextureFormat.RedGreen16i:
+                    return PixelType.Short;
+                case TextureFormat.RedGreen16ui:
+                    return PixelType.UnsignedShort;
+                case TextureFormat.RedGreen32i:
+                    return PixelType.Int;
+                case TextureFormat.RedGreen32ui:
+                    return PixelType.UnsignedInt;
+                case TextureFormat.RedGreenBlueAlpha32f:
+                    return PixelType.Float;
+                case TextureFormat.RedGreenBlue32f:
+                    return PixelType.Float;
+                case TextureFormat.RedGreenBlueAlpha16f:
+                    return PixelType.HalfFloat;
+                case TextureFormat.RedGreenBlue16f:
+                    return PixelType.HalfFloat;
+                case TextureFormat.Depth24Stencil8:
+                    return PixelType.UnsignedInt248;
+                case TextureFormat.Red11fGreen11fBlue10f:
+                    return PixelType.Float;
+                case TextureFormat.RedGreenBlue9E5:
+                    return PixelType.Float;
+                case TextureFormat.SRedGreenBlue8:
+                case TextureFormat.SRedGreenBlue8Alpha8:
+                    return PixelType.Byte;
+                case TextureFormat.Depth32f:
+                case TextureFormat.Depth32fStencil8:
+                    return PixelType.Float;
+                case TextureFormat.RedGreenBlueAlpha32ui:
+                case TextureFormat.RedGreenBlue32ui:
+                    return PixelType.UnsignedInt;
+                case TextureFormat.RedGreenBlueAlpha16ui:
+                case TextureFormat.RedGreenBlue16ui:
+                    return PixelType.UnsignedShort;
+                case TextureFormat.RedGreenBlueAlpha8ui:
+                case TextureFormat.RedGreenBlue8ui:
+                    return PixelType.UnsignedByte;
+                case TextureFormat.RedGreenBlueAlpha32i:
+                case TextureFormat.RedGreenBlue32i:
+                    return PixelType.UnsignedInt;
+                case TextureFormat.RedGreenBlueAlpha16i:
+                case TextureFormat.RedGreenBlue16i:
+                    return PixelType.UnsignedShort;
+                case TextureFormat.RedGreenBlueAlpha8i:
+                case TextureFormat.RedGreenBlue8i:
+                    return PixelType.UnsignedByte;
+            }
+
+            throw new ArgumentException("textureFormat");
         }
 
         private static bool IsTextureFormatValid(TextureFormat textureFormat)
@@ -782,358 +976,51 @@ namespace OpenGlobe.Renderer.GL3x
 
         public static TextureMinFilter To(TextureMinificationFilter filter)
         {
-            Debug.Assert(
-                (filter == TextureMinificationFilter.Nearest) ||
-                (filter == TextureMinificationFilter.Linear) ||
-                (filter == TextureMinificationFilter.NearestMipmapNearest) ||
-                (filter == TextureMinificationFilter.LinearMipmapNearest) ||
-                (filter == TextureMinificationFilter.NearestMipmapLinear) ||
-                (filter == TextureMinificationFilter.LinearMipmapLinear));
+            switch (filter)
+            {
+                case TextureMinificationFilter.Nearest:
+                    return TextureMinFilter.Nearest;
+                case TextureMinificationFilter.Linear:
+                    return TextureMinFilter.Linear;
+                case TextureMinificationFilter.NearestMipmapNearest:
+                    return TextureMinFilter.NearestMipmapNearest;
+                case TextureMinificationFilter.LinearMipmapNearest:
+                    return TextureMinFilter.LinearMipmapNearest;
+                case TextureMinificationFilter.NearestMipmapLinear:
+                    return TextureMinFilter.NearestMipmapLinear;
+                case TextureMinificationFilter.LinearMipmapLinear:
+                    return TextureMinFilter.LinearMipmapLinear;
+            }
 
-            return _textureMinFilter[(int)filter];
+            throw new ArgumentException("filter");
         }
 
         public static TextureMagFilter To(TextureMagnificationFilter filter)
         {
-            Debug.Assert(
-                (filter == TextureMagnificationFilter.Nearest) ||
-                (filter == TextureMagnificationFilter.Linear));
+            switch (filter)
+            {
+                case TextureMagnificationFilter.Nearest:
+                    return TextureMagFilter.Nearest;
+                case TextureMagnificationFilter.Linear:
+                    return TextureMagFilter.Linear;
+            }
 
-            return _textureMagFilter[(int)filter];
+            throw new ArgumentException("filter");
         }
 
         public static TextureWrapMode To(TextureWrap wrap)
         {
-            Debug.Assert(
-                (wrap == TextureWrap.Clamp) ||
-                (wrap == TextureWrap.Repeat) ||
-                (wrap == TextureWrap.MirroredRepeat));
+            switch (wrap)
+            {
+                case TextureWrap.Clamp:
+                    return TextureWrapMode.ClampToEdge;
+                case TextureWrap.Repeat:
+                    return TextureWrapMode.Repeat;
+                case TextureWrap.MirroredRepeat:
+                    return TextureWrapMode.MirroredRepeat;
+            }
 
-            return _textureWrapMode[(int)wrap];
+            throw new ArgumentException("wrap");
         }
-
-        private static CullFaceMode[] _cullFaceModes =
-        {
-            CullFaceMode.Front,
-            CullFaceMode.Back,
-            CullFaceMode.FrontAndBack
-        };
-
-        private static FrontFaceDirection[] _frontFaceDirections =
-        {
-            FrontFaceDirection.Cw,
-            FrontFaceDirection.Ccw
-        };
-
-        private static PolygonMode[] _polygonModes =
-        {
-            PolygonMode.Point,
-            PolygonMode.Line,
-            PolygonMode.Fill
-        };
-
-        private static StencilOp[] _stencilOp =
-        {
-            StencilOp.Zero,
-            StencilOp.Invert,
-            StencilOp.Keep,
-            StencilOp.Replace,
-            StencilOp.Incr,
-            StencilOp.Decr,
-            StencilOp.IncrWrap,
-            StencilOp.DecrWrap
-        };
-
-        private static StencilFunction[] _stencilFunction =
-        {
-            StencilFunction.Never,
-            StencilFunction.Less,
-            StencilFunction.Equal,
-            StencilFunction.Lequal,
-            StencilFunction.Greater,
-            StencilFunction.Notequal,
-            StencilFunction.Gequal,
-            StencilFunction.Always
-        };
-
-        private static BlendEquationMode[] _blendEquationModes =
-        {
-            BlendEquationMode.FuncAdd,
-            BlendEquationMode.Min,
-            BlendEquationMode.Max,
-            BlendEquationMode.FuncSubtract,
-            BlendEquationMode.FuncReverseSubtract
-        };
-
-        private static BlendingFactorSrc[] _blendingFactorSrc =
-        {
-            BlendingFactorSrc.Zero,
-            BlendingFactorSrc.One,
-            BlendingFactorSrc.SrcAlpha,
-            BlendingFactorSrc.OneMinusSrcAlpha,
-            BlendingFactorSrc.DstAlpha,
-            BlendingFactorSrc.OneMinusDstAlpha,
-            BlendingFactorSrc.DstColor,
-            BlendingFactorSrc.OneMinusDstColor,
-            BlendingFactorSrc.SrcAlphaSaturate,
-            BlendingFactorSrc.ConstantColor,
-            BlendingFactorSrc.OneMinusConstantColor,
-            BlendingFactorSrc.ConstantAlpha,
-            BlendingFactorSrc.OneMinusConstantAlpha
-        };
-
-        private static BlendingFactorDest[] _blendingFactorDest =
-        {
-            BlendingFactorDest.Zero,
-            BlendingFactorDest.One,
-            BlendingFactorDest.SrcColor,
-            BlendingFactorDest.OneMinusSrcColor,
-            BlendingFactorDest.SrcAlpha,
-            BlendingFactorDest.OneMinusSrcAlpha,
-            BlendingFactorDest.DstAlpha,
-            BlendingFactorDest.OneMinusDstAlpha,
-            BlendingFactorDest.DstColor,
-            BlendingFactorDest.OneMinusDstColor,
-            BlendingFactorDest.ConstantColor,
-            BlendingFactorDest.OneMinusConstantColor,
-            BlendingFactorDest.ConstantAlpha,
-            BlendingFactorDest.OneMinusConstantAlpha
-        };
-
-        private static PixelInternalFormat[] _pixelInternalFormat = 
-        {
-            PixelInternalFormat.Rgb8,
-            PixelInternalFormat.Rgb16,
-            PixelInternalFormat.Rgba8,
-            PixelInternalFormat.Rgb10A2,
-            PixelInternalFormat.Rgba16,
-            PixelInternalFormat.DepthComponent16,
-            PixelInternalFormat.DepthComponent24,
-            PixelInternalFormat.R8,
-            PixelInternalFormat.R16,
-            PixelInternalFormat.Rg8,
-            PixelInternalFormat.Rg16,
-            PixelInternalFormat.R16f,
-            PixelInternalFormat.R32f,
-            PixelInternalFormat.Rg16f,
-            PixelInternalFormat.Rg32f,
-            PixelInternalFormat.R8i,
-            PixelInternalFormat.R8ui,
-            PixelInternalFormat.R16i,
-            PixelInternalFormat.R16ui,
-            PixelInternalFormat.R32i,
-            PixelInternalFormat.R32ui,
-            PixelInternalFormat.Rg8i,
-            PixelInternalFormat.Rg8ui,
-            PixelInternalFormat.Rg16i,
-            PixelInternalFormat.Rg16ui,
-            PixelInternalFormat.Rg32i,
-            PixelInternalFormat.Rg32ui,
-            PixelInternalFormat.Rgba32f,
-            PixelInternalFormat.Rgb32f,
-            PixelInternalFormat.Rgba16f,
-            PixelInternalFormat.Rgb16f,
-            PixelInternalFormat.Depth24Stencil8,
-            PixelInternalFormat.R11fG11fB10f,
-            PixelInternalFormat.Rgb9E5,
-            PixelInternalFormat.Srgb8,
-            PixelInternalFormat.Srgb8Alpha8,
-            PixelInternalFormat.DepthComponent32f,
-            PixelInternalFormat.Depth32fStencil8,
-            PixelInternalFormat.Rgba32ui,
-            PixelInternalFormat.Rgb32ui,
-            PixelInternalFormat.Rgba16ui,
-            PixelInternalFormat.Rgb16ui,
-            PixelInternalFormat.Rgba8ui,
-            PixelInternalFormat.Rgb8ui,
-            PixelInternalFormat.Rgba32i,
-            PixelInternalFormat.Rgb32i,
-            PixelInternalFormat.Rgba16i,
-            PixelInternalFormat.Rgb16i,
-            PixelInternalFormat.Rgba8i,
-            PixelInternalFormat.Rgb8i
-        };
-
-        private static PixelFormat[] _pixelFormat = 
-        {
-            PixelFormat.StencilIndex,
-            PixelFormat.DepthComponent,
-            PixelFormat.Red,
-            PixelFormat.Green,
-            PixelFormat.Blue,
-            PixelFormat.Rgb,
-            PixelFormat.Rgba,
-            PixelFormat.Bgr,
-            PixelFormat.Bgra,
-            PixelFormat.Rg,
-            PixelFormat.RgInteger,
-            PixelFormat.DepthStencil,
-            PixelFormat.RedInteger,
-            PixelFormat.GreenInteger,
-            PixelFormat.BlueInteger,
-            PixelFormat.RgbInteger,
-            PixelFormat.RgbaInteger,
-            PixelFormat.BgrInteger,
-            PixelFormat.BgraInteger
-        };
-
-        private static PixelType[] _pixelType = 
-        {
-            PixelType.Byte,
-            PixelType.UnsignedByte,
-            PixelType.Short,
-            PixelType.UnsignedShort,
-            PixelType.Int,
-            PixelType.UnsignedInt,
-            PixelType.Float,
-            PixelType.HalfFloat,
-            PixelType.UnsignedByte332,
-            PixelType.UnsignedShort4444,
-            PixelType.UnsignedShort5551,
-            PixelType.UnsignedInt8888,
-            PixelType.UnsignedInt1010102,
-            PixelType.UnsignedByte233Reversed,
-            PixelType.UnsignedShort565,
-            PixelType.UnsignedShort565Reversed,
-            PixelType.UnsignedShort4444Reversed,
-            PixelType.UnsignedShort1555Reversed,
-            PixelType.UnsignedInt8888Reversed,
-            PixelType.UnsignedInt2101010Reversed,
-            PixelType.UnsignedInt248,
-            PixelType.UnsignedInt10F11F11FRev,
-            PixelType.UnsignedInt5999Rev,
-            PixelType.Float32UnsignedInt248Rev
-        };
-
-        static readonly PixelFormat[] _textureToPixelFormats = new PixelFormat[]
-        {
-            PixelFormat.Rgb,            // TextureFormat.RedGreenBlue8
-            PixelFormat.Rgb,            // TextureFormat.RedGreenBlue16
-            PixelFormat.Rgba,           // TextureFormat.RedGreenBlueAlpha8
-            PixelFormat.Rgba,           // TextureFormat.RedGreenBlue10A2
-            PixelFormat.Rgba,           // TextureFormat.RedGreenBlueAlpha16
-            PixelFormat.DepthComponent, // TextureFormat.Depth16
-            PixelFormat.DepthComponent, // TextureFormat.Depth24
-            PixelFormat.Red,            // TextureFormat.Red8
-            PixelFormat.Red,            // TextureFormat.Red16
-            PixelFormat.Rg,             // TextureFormat.RedGreen8
-            PixelFormat.Rg,             // TextureFormat.RedGreen16
-            PixelFormat.Red,            // TextureFormat.Red16f
-            PixelFormat.Red,            // TextureFormat.Red32f
-            PixelFormat.Rg,             // TextureFormat.RedGreen16f
-            PixelFormat.Rg,             // TextureFormat.RedGreen32f
-            PixelFormat.RedInteger,     // TextureFormat.Red8i
-            PixelFormat.RedInteger,     // TextureFormat.Red8ui
-            PixelFormat.RedInteger,     // TextureFormat.Red16i
-            PixelFormat.RedInteger,     // TextureFormat.Red16ui
-            PixelFormat.RedInteger,     // TextureFormat.Red32i
-            PixelFormat.RedInteger,     // TextureFormat.Red32ui
-            PixelFormat.RgInteger,      // TextureFormat.RedGreen8i
-            PixelFormat.RgInteger,      // TextureFormat.RedGreen8ui
-            PixelFormat.RgInteger,      // TextureFormat.RedGreen16i
-            PixelFormat.RgInteger,      // TextureFormat.RedGreen16ui
-            PixelFormat.RgInteger,      // TextureFormat.RedGreen32i
-            PixelFormat.RgInteger,      // TextureFormat.RedGreen32ui
-            PixelFormat.Rgba,           // TextureFormat.RedGreenBlueAlpha32f
-            PixelFormat.Rgb,            // TextureFormat.RedGreenBlue32f
-            PixelFormat.Rgba,           // TextureFormat.RedGreenBlueAlpha16f
-            PixelFormat.Rgb,            // TextureFormat.RedGreenBlue16f
-            PixelFormat.DepthStencil,   // TextureFormat.Depth24Stencil8
-            PixelFormat.Rgb,            // TextureFormat.Red11fGreen11fBlue10f
-            PixelFormat.Rgb,            // TextureFormat.RedGreenBlue9E5
-            PixelFormat.RgbInteger,     // TextureFormat.SRedGreenBlue8
-            PixelFormat.RgbaInteger,    // TextureFormat.SRedGreenBlue8Alpha8
-            PixelFormat.DepthComponent, // TextureFormat.Depth32f
-            PixelFormat.DepthStencil,   // TextureFormat.Depth32fStencil8
-            PixelFormat.RgbaInteger,    // TextureFormat.RedGreenBlueAlpha32ui
-            PixelFormat.RgbInteger,     // TextureFormat.RedGreenBlue32ui
-            PixelFormat.RgbaInteger,    // TextureFormat.RedGreenBlueAlpha16ui
-            PixelFormat.RgbInteger,     // TextureFormat.RedGreenBlue16ui
-            PixelFormat.RgbaInteger,    // TextureFormat.RedGreenBlueAlpha8ui
-            PixelFormat.RgbInteger,     // TextureFormat.RedGreenBlue8ui
-            PixelFormat.RgbaInteger,    // TextureFormat.RedGreenBlueAlpha32i
-            PixelFormat.RgbInteger,     // TextureFormat.RedGreenBlue32i
-            PixelFormat.RgbaInteger,    // TextureFormat.RedGreenBlueAlpha16i
-            PixelFormat.RgbInteger,     // TextureFormat.RedGreenBlue16i
-            PixelFormat.RgbaInteger,    // TextureFormat.RedGreenBlueAlpha8i
-            PixelFormat.RgbInteger      // TextureFormat.RedGreenBlue8i
-        };
-
-        static readonly PixelType[] _textureToPixelTypes = new PixelType[]
-        {
-            PixelType.UnsignedByte,         // TextureFormat.RedGreenBlue8
-            PixelType.UnsignedShort,        // TextureFormat.RedGreenBlue16
-            PixelType.UnsignedByte,         // TextureFormat.RedGreenBlueAlpha8
-            PixelType.UnsignedInt1010102,   // TextureFormat.RedGreenBlue10A2
-            PixelType.UnsignedInt,          // TextureFormat.RedGreenBlueAlpha16
-            PixelType.HalfFloat,            // TextureFormat.Depth16
-            PixelType.Float,                // TextureFormat.Depth24
-            PixelType.UnsignedByte,         // TextureFormat.Red8
-            PixelType.UnsignedShort,        // TextureFormat.Red16
-            PixelType.UnsignedByte,         // TextureFormat.RedGreen8
-            PixelType.UnsignedShort,        // TextureFormat.RedGreen16
-            PixelType.HalfFloat,            // TextureFormat.Red16f
-            PixelType.Float,                // TextureFormat.Red32f
-            PixelType.HalfFloat,            // TextureFormat.RedGreen16f
-            PixelType.Float,                // TextureFormat.RedGreen32f
-            PixelType.Byte,                 // TextureFormat.Red8i
-            PixelType.UnsignedByte,         // TextureFormat.Red8ui
-            PixelType.Short,                // TextureFormat.Red16i
-            PixelType.UnsignedShort,        // TextureFormat.Red16ui
-            PixelType.Int,                  // TextureFormat.Red32i
-            PixelType.UnsignedInt,          // TextureFormat.Red32ui
-            PixelType.Byte,                 // TextureFormat.RedGreen8i
-            PixelType.UnsignedByte,         // TextureFormat.RedGreen8ui
-            PixelType.Short,                // TextureFormat.RedGreen16i
-            PixelType.UnsignedShort,        // TextureFormat.RedGreen16ui
-            PixelType.Int,                  // TextureFormat.RedGreen32i
-            PixelType.UnsignedInt,          // TextureFormat.RedGreen32ui
-            PixelType.Float,                // TextureFormat.RedGreenBlueAlpha32f
-            PixelType.Float,                // TextureFormat.RedGreenBlue32f
-            PixelType.HalfFloat,            // TextureFormat.RedGreenBlueAlpha16f
-            PixelType.HalfFloat,            // TextureFormat.RedGreenBlue16f
-            PixelType.UnsignedInt248,       // TextureFormat.Depth24Stencil8
-            PixelType.Float,                // TextureFormat.Red11fGreen11fBlue10f
-            PixelType.Float,                // TextureFormat.RedGreenBlue9E5
-            PixelType.Byte,                 // TextureFormat.SRedGreenBlue8
-            PixelType.Byte,                 // TextureFormat.SRedGreenBlue8Alpha8
-            PixelType.Float,                // TextureFormat.Depth32f
-            PixelType.Float,                // TextureFormat.Depth32fStencil8
-            PixelType.UnsignedInt,          // TextureFormat.RedGreenBlueAlpha32ui
-            PixelType.UnsignedInt,          // TextureFormat.RedGreenBlue32ui
-            PixelType.UnsignedShort,        // TextureFormat.RedGreenBlueAlpha16ui
-            PixelType.UnsignedShort,        // TextureFormat.RedGreenBlue16ui
-            PixelType.UnsignedByte,         // TextureFormat.RedGreenBlueAlpha8ui
-            PixelType.UnsignedByte,         // TextureFormat.RedGreenBlue8ui
-            PixelType.UnsignedInt,          // TextureFormat.RedGreenBlueAlpha32i
-            PixelType.UnsignedInt,          // TextureFormat.RedGreenBlue32i
-            PixelType.UnsignedShort,        // TextureFormat.RedGreenBlueAlpha16i
-            PixelType.UnsignedShort,        // TextureFormat.RedGreenBlue16i
-            PixelType.UnsignedByte,         // TextureFormat.RedGreenBlueAlpha8i
-            PixelType.UnsignedByte          // TextureFormat.RedGreenBlue8i
-        };
-
-        private static TextureMinFilter[] _textureMinFilter = 
-        {
-            TextureMinFilter.Nearest,
-            TextureMinFilter.Linear,
-            TextureMinFilter.NearestMipmapNearest,
-            TextureMinFilter.LinearMipmapNearest,
-            TextureMinFilter.NearestMipmapLinear,
-            TextureMinFilter.LinearMipmapLinear,
-        };
-
-        private static TextureMagFilter[] _textureMagFilter = 
-        {
-            TextureMagFilter.Nearest,
-            TextureMagFilter.Linear
-        };
-
-        private static TextureWrapMode[] _textureWrapMode = 
-        {
-            TextureWrapMode.ClampToEdge,
-            TextureWrapMode.Repeat,
-            TextureWrapMode.MirroredRepeat
-        };
     }
 }
