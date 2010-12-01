@@ -10,7 +10,7 @@ layout(triangles) in;
 layout(triangle_strip, max_vertices = 3) out;
 
 in vec2 windowPosition[];
-in float distanceToEyeGS[];
+in float gsDistanceToEye[];
 
 noperspective out vec3 distanceToEdges;
 out float fsDistanceToEye;
@@ -35,16 +35,16 @@ void main()
 
     gl_Position = gl_in[0].gl_Position;
     distanceToEdges = vec3(distanceToLine(p0, p1, p2), 0.0, 0.0);
-    fsDistanceToEye = distanceToEyeGS[0];
+    fsDistanceToEye = gsDistanceToEye[0];
     EmitVertex();
 
     gl_Position = gl_in[1].gl_Position;
     distanceToEdges = vec3(0.0, distanceToLine(p1, p2, p0), 0.0);
-    fsDistanceToEye = distanceToEyeGS[1];
+    fsDistanceToEye = gsDistanceToEye[1];
     EmitVertex();
 
     gl_Position = gl_in[2].gl_Position;
     distanceToEdges = vec3(0.0, 0.0, distanceToLine(p2, p0, p1));
-    fsDistanceToEye = distanceToEyeGS[2];
+    fsDistanceToEye = gsDistanceToEye[2];
     EmitVertex();
 }

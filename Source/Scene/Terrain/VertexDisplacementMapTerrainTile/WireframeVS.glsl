@@ -8,7 +8,7 @@
 
 layout(location = og_positionVertexLocation) in vec2 position;
 out vec2 windowPosition;
-out float distanceToEyeGS;
+out float gsDistanceToEye;
 
 uniform mat4 og_modelViewPerspectiveMatrix;
 uniform mat4 og_viewportTransformationMatrix;
@@ -29,5 +29,5 @@ void main()
 
     gl_Position = og_modelViewPerspectiveMatrix * displacedPosition;
     windowPosition = ClipToWindowCoordinates(gl_Position, og_viewportTransformationMatrix).xy;
-    distanceToEyeGS = distance(displacedPosition.xyz, og_cameraEye);
+    gsDistanceToEye = distance(displacedPosition.xyz, og_cameraEye);
 }

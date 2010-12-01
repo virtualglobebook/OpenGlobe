@@ -8,7 +8,7 @@
 
 layout(location = og_positionVertexLocation) in vec2 position;
                   
-out float distanceToEyeGS;
+out float gsDistanceToEye;
 
 uniform mat4 og_modelViewPerspectiveMatrix;
 uniform vec3 og_cameraEye;
@@ -20,5 +20,5 @@ void main()
     vec3 displacedPosition = vec3(position, texture(og_texture0, position).r * u_heightExaggeration);
 
     gl_Position = vec4(displacedPosition, 1.0);
-    distanceToEyeGS = distance(displacedPosition, og_cameraEye);
+    gsDistanceToEye = distance(displacedPosition, og_cameraEye);
 }
