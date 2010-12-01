@@ -240,10 +240,10 @@ namespace OpenGlobe.Renderer
 
                 TestUtility.ValidateColor(framebuffer.ColorAttachments[0], 255, 0, 0);
 
-                using (ReadPixelBuffer readPixelBuffer = depthStencilTexture.CopyToBuffer(ImageFormat.DepthStencil, ImageDatatype.Float32UnsignedInt248Reversed, 1))
+                using (ReadPixelBuffer readPixelBuffer = depthStencilTexture.CopyToBuffer(ImageFormat.DepthStencil, ImageDatatype.UnsignedInt248, 1))
                 {
-                    int[] depthStencil = readPixelBuffer.CopyToSystemMemory<int>();
-                    Assert.AreEqual(stencilTest.FrontFace.ReferenceValue, depthStencil[1]);
+                    byte[] depthStencil = readPixelBuffer.CopyToSystemMemory<byte>();
+                    Assert.AreEqual(stencilTest.FrontFace.ReferenceValue, depthStencil[0]);
                 }
             }
         }
