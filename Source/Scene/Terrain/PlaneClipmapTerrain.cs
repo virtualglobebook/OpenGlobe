@@ -49,50 +49,42 @@ namespace OpenGlobe.Scene.Terrain
                 EmbeddedResources.GetText("OpenGlobe.Scene.Terrain.ClipmapTerrain.PlaneClipmapVS.glsl"),
                 EmbeddedResources.GetText("OpenGlobe.Scene.Terrain.ClipmapTerrain.PlaneClipmapFS.glsl"));
 
-            _fieldBlockPosts = (clipmapPosts + 1) / 4; // M
-            _fieldBlockSegments = _fieldBlockPosts - 1;
+            _fillBlockPosts = (clipmapPosts + 1) / 4; // M
+            _fillBlockSegments = _fillBlockPosts - 1;
 
             // Create the MxM block used to fill the ring and the field.
             Mesh fieldBlockMesh = RectangleTessellator.Compute(
-                new RectangleD(new Vector2D(0.0, 0.0), new Vector2D(_fieldBlockSegments, _fieldBlockSegments)),
-                _fieldBlockSegments, _fieldBlockSegments);
-            _fieldBlock = context.CreateVertexArray(fieldBlockMesh, _shaderProgram.VertexAttributes, BufferHint.StaticDraw);
+                new RectangleD(new Vector2D(0.0, 0.0), new Vector2D(_fillBlockSegments, _fillBlockSegments)),
+                _fillBlockSegments, _fillBlockSegments);
+            _fillPatch = context.CreateVertexArray(fieldBlockMesh, _shaderProgram.VertexAttributes, BufferHint.StaticDraw);
 
             // Create the Mx3 block used to fill the space between the MxM blocks in the ring
             Mesh ringFixupHorizontalMesh = RectangleTessellator.Compute(
-                new RectangleD(new Vector2D(0.0, 0.0), new Vector2D(_fieldBlockSegments, 2.0)),
-                _fieldBlockSegments, 2);
-            _ringFixupHorizontal = context.CreateVertexArray(ringFixupHorizontalMesh, _shaderProgram.VertexAttributes, BufferHint.StaticDraw);
+                new RectangleD(new Vector2D(0.0, 0.0), new Vector2D(_fillBlockSegments, 2.0)),
+                _fillBlockSegments, 2);
+            _horizontalFixupPatch = context.CreateVertexArray(ringFixupHorizontalMesh, _shaderProgram.VertexAttributes, BufferHint.StaticDraw);
 
             // Create the 3xM block used to fill the space between the MxM blocks in the ring
             Mesh ringFixupVerticalMesh = RectangleTessellator.Compute(
-                new RectangleD(new Vector2D(0.0, 0.0), new Vector2D(2.0, _fieldBlockSegments)),
-                2, _fieldBlockSegments);
-            _ringFixupVertical = context.CreateVertexArray(ringFixupVerticalMesh, _shaderProgram.VertexAttributes, BufferHint.StaticDraw);
+                new RectangleD(new Vector2D(0.0, 0.0), new Vector2D(2.0, _fillBlockSegments)),
+                2, _fillBlockSegments);
+            _verticalFixupPatch = context.CreateVertexArray(ringFixupVerticalMesh, _shaderProgram.VertexAttributes, BufferHint.StaticDraw);
 
             Mesh offsetStripHorizontalMesh = RectangleTessellator.Compute(
-                new RectangleD(new Vector2D(0.0, 0.0), new Vector2D(2 * _fieldBlockPosts, 1.0)),
-                2 * _fieldBlockPosts, 1);
-            _offsetStripHorizontal = context.CreateVertexArray(offsetStripHorizontalMesh, _shaderProgram.VertexAttributes, BufferHint.StaticDraw);
+                new RectangleD(new Vector2D(0.0, 0.0), new Vector2D(2 * _fillBlockPosts, 1.0)),
+                2 * _fillBlockPosts, 1);
+            _horizontalOffsetPatch = context.CreateVertexArray(offsetStripHorizontalMesh, _shaderProgram.VertexAttributes, BufferHint.StaticDraw);
 
             Mesh offsetStripVerticalMesh = RectangleTessellator.Compute(
-                new RectangleD(new Vector2D(0.0, 0.0), new Vector2D(1.0, 2 * _fieldBlockPosts - 1)),
-                1, 2 * _fieldBlockPosts - 1);
-            _offsetStripVertical = context.CreateVertexArray(offsetStripVerticalMesh, _shaderProgram.VertexAttributes, BufferHint.StaticDraw);
+                new RectangleD(new Vector2D(0.0, 0.0), new Vector2D(1.0, 2 * _fillBlockPosts - 1)),
+                1, 2 * _fillBlockPosts - 1);
+            _verticalOffsetPatch = context.CreateVertexArray(offsetStripVerticalMesh, _shaderProgram.VertexAttributes, BufferHint.StaticDraw);
 
-            // These finest offset strips are not necessary... use the horizontal and vertical fixups instead.
-            Mesh finestOffsetStripHorizontalMesh = RectangleTessellator.Compute(
-                new RectangleD(new Vector2D(0.0, 0.0), new Vector2D(2 * _fieldBlockPosts, 2.0)),
-                2 * _fieldBlockPosts, 2);
-            _finestOffsetStripHorizontal = context.CreateVertexArray(finestOffsetStripHorizontalMesh, _shaderProgram.VertexAttributes, BufferHint.StaticDraw);
-
-            Mesh finestOffsetStripVerticalMesh = RectangleTessellator.Compute(
-                new RectangleD(new Vector2D(0.0, 0.0), new Vector2D(2.0, 2 * _fieldBlockPosts - 1)),
-                2, 2 * _fieldBlockPosts - 1);
-            _finestOffsetStripVertical = context.CreateVertexArray(finestOffsetStripVerticalMesh, _shaderProgram.VertexAttributes, BufferHint.StaticDraw);
+            Mesh centerMesh = RectangleTessellator.Compute(new RectangleD(new Vector2D(0.0, 0.0), new Vector2D(2.0, 2.0)), 2, 2);
+            _centerPatch = context.CreateVertexArray(centerMesh, _shaderProgram.VertexAttributes, BufferHint.StaticDraw);
 
             Mesh degenerateTriangleMesh = CreateDegenerateTriangleMesh();
-            _degenerateTriangles = context.CreateVertexArray(degenerateTriangleMesh, _shaderProgram.VertexAttributes, BufferHint.StaticDraw);
+            _degenerateTrianglePatch = context.CreateVertexArray(degenerateTriangleMesh, _shaderProgram.VertexAttributes, BufferHint.StaticDraw);
 
             _patchOriginInClippedLevel = (Uniform<Vector2F>)_shaderProgram.Uniforms["u_patchOriginInClippedLevel"];
             _levelScaleFactor = (Uniform<Vector2F>)_shaderProgram.Uniforms["u_levelScaleFactor"];
@@ -212,7 +204,7 @@ namespace OpenGlobe.Scene.Terrain
                 level = _clipmapLevels[i];
                 ClipmapLevel finerLevel = _clipmapLevels[i + 1];
 
-                level.NextExtent.West = finerLevel.NextExtent.West / 2 - _fieldBlockSegments;
+                level.NextExtent.West = finerLevel.NextExtent.West / 2 - _fillBlockSegments;
                 level.OffsetStripOnEast = (level.NextExtent.West % 2) == 0;
                 if (!level.OffsetStripOnEast)
                 {
@@ -220,7 +212,7 @@ namespace OpenGlobe.Scene.Terrain
                 }
                 level.NextExtent.East = level.NextExtent.West + _clipmapSegments;
 
-                level.NextExtent.South = finerLevel.NextExtent.South / 2 - _fieldBlockSegments;
+                level.NextExtent.South = finerLevel.NextExtent.South / 2 - _fillBlockSegments;
                 level.OffsetStripOnNorth = (level.NextExtent.South % 2) == 0;
                 if (!level.OffsetStripOnNorth)
                 {
@@ -431,63 +423,58 @@ namespace OpenGlobe.Scene.Terrain
 
             _useBlendRegions.Value = _blendRegionsEnabled && level != coarserLevel;
 
-            DrawBlock(_fieldBlock, level, coarserLevel, west, south, west, south, context, sceneState);
-            DrawBlock(_fieldBlock, level, coarserLevel, west, south, west + _fieldBlockSegments, south, context, sceneState);
-            DrawBlock(_fieldBlock, level, coarserLevel, west, south, east - 2 * _fieldBlockSegments, south, context, sceneState);
-            DrawBlock(_fieldBlock, level, coarserLevel, west, south, east - _fieldBlockSegments, south, context, sceneState);
+            DrawBlock(_fillPatch, level, coarserLevel, west, south, west, south, context, sceneState);
+            DrawBlock(_fillPatch, level, coarserLevel, west, south, west + _fillBlockSegments, south, context, sceneState);
+            DrawBlock(_fillPatch, level, coarserLevel, west, south, east - 2 * _fillBlockSegments, south, context, sceneState);
+            DrawBlock(_fillPatch, level, coarserLevel, west, south, east - _fillBlockSegments, south, context, sceneState);
 
-            DrawBlock(_fieldBlock, level, coarserLevel, west, south, west, south + _fieldBlockSegments, context, sceneState);
-            DrawBlock(_fieldBlock, level, coarserLevel, west, south, east - _fieldBlockSegments, south + _fieldBlockSegments, context, sceneState);
+            DrawBlock(_fillPatch, level, coarserLevel, west, south, west, south + _fillBlockSegments, context, sceneState);
+            DrawBlock(_fillPatch, level, coarserLevel, west, south, east - _fillBlockSegments, south + _fillBlockSegments, context, sceneState);
 
-            DrawBlock(_fieldBlock, level, coarserLevel, west, south, west, north - 2 * _fieldBlockSegments, context, sceneState);
-            DrawBlock(_fieldBlock, level, coarserLevel, west, south, east - _fieldBlockSegments, north - 2 * _fieldBlockSegments, context, sceneState);
+            DrawBlock(_fillPatch, level, coarserLevel, west, south, west, north - 2 * _fillBlockSegments, context, sceneState);
+            DrawBlock(_fillPatch, level, coarserLevel, west, south, east - _fillBlockSegments, north - 2 * _fillBlockSegments, context, sceneState);
 
-            DrawBlock(_fieldBlock, level, coarserLevel, west, south, west, north - _fieldBlockSegments, context, sceneState);
-            DrawBlock(_fieldBlock, level, coarserLevel, west, south, west + _fieldBlockSegments, north - _fieldBlockSegments, context, sceneState);
-            DrawBlock(_fieldBlock, level, coarserLevel, west, south, east - 2 * _fieldBlockSegments, north - _fieldBlockSegments, context, sceneState);
-            DrawBlock(_fieldBlock, level, coarserLevel, west, south, east - _fieldBlockSegments, north - _fieldBlockSegments, context, sceneState);
+            DrawBlock(_fillPatch, level, coarserLevel, west, south, west, north - _fillBlockSegments, context, sceneState);
+            DrawBlock(_fillPatch, level, coarserLevel, west, south, west + _fillBlockSegments, north - _fillBlockSegments, context, sceneState);
+            DrawBlock(_fillPatch, level, coarserLevel, west, south, east - 2 * _fillBlockSegments, north - _fillBlockSegments, context, sceneState);
+            DrawBlock(_fillPatch, level, coarserLevel, west, south, east - _fillBlockSegments, north - _fillBlockSegments, context, sceneState);
 
-            DrawBlock(_ringFixupHorizontal, level, coarserLevel, west, south, west, south + 2 * _fieldBlockSegments, context, sceneState);
-            DrawBlock(_ringFixupHorizontal, level, coarserLevel, west, south, east - _fieldBlockSegments, south + 2 * _fieldBlockSegments, context, sceneState);
+            DrawBlock(_horizontalFixupPatch, level, coarserLevel, west, south, west, south + 2 * _fillBlockSegments, context, sceneState);
+            DrawBlock(_horizontalFixupPatch, level, coarserLevel, west, south, east - _fillBlockSegments, south + 2 * _fillBlockSegments, context, sceneState);
 
-            DrawBlock(_ringFixupVertical, level, coarserLevel, west, south, west + 2 * _fieldBlockSegments, south, context, sceneState);
-            DrawBlock(_ringFixupVertical, level, coarserLevel, west, south, west + 2 * _fieldBlockSegments, north - _fieldBlockSegments, context, sceneState);
+            DrawBlock(_verticalFixupPatch, level, coarserLevel, west, south, west + 2 * _fillBlockSegments, south, context, sceneState);
+            DrawBlock(_verticalFixupPatch, level, coarserLevel, west, south, west + 2 * _fillBlockSegments, north - _fillBlockSegments, context, sceneState);
 
-            DrawBlock(_degenerateTriangles, level, coarserLevel, west, south, west, south, context, sceneState);
+            DrawBlock(_degenerateTrianglePatch, level, coarserLevel, west, south, west, south, context, sceneState);
 
             // Fill the center of the highest-detail ring
             if (fillRing)
             {
-                int westOffset = level.OffsetStripOnEast ? 0 : 2;
-                int southOffset = level.OffsetStripOnNorth ? 0 : 2;
+                DrawBlock(_fillPatch, level, coarserLevel, west, south, west + _fillBlockSegments, south + _fillBlockSegments, context, sceneState);
+                DrawBlock(_fillPatch, level, coarserLevel, west, south, west + 2 * _fillBlockPosts, south + _fillBlockSegments, context, sceneState);
+                DrawBlock(_fillPatch, level, coarserLevel, west, south, west + _fillBlockSegments, south + 2 * _fillBlockPosts, context, sceneState);
+                DrawBlock(_fillPatch, level, coarserLevel, west, south, west + 2 * _fillBlockPosts, south + 2 * _fillBlockPosts, context, sceneState);
 
-                DrawBlock(_fieldBlock, level, coarserLevel, west, south, west + _fieldBlockSegments + westOffset, south + _fieldBlockSegments + southOffset, context, sceneState);
-                DrawBlock(_fieldBlock, level, coarserLevel, west, south, west + 2 * _fieldBlockSegments + westOffset, south + _fieldBlockSegments + southOffset, context, sceneState);
-                DrawBlock(_fieldBlock, level, coarserLevel, west, south, west + _fieldBlockSegments + westOffset, south + 2 * _fieldBlockSegments + southOffset, context, sceneState);
-                DrawBlock(_fieldBlock, level, coarserLevel, west, south, west + 2 * _fieldBlockSegments + westOffset, south + 2 * _fieldBlockSegments + southOffset, context, sceneState);
+                DrawBlock(_horizontalFixupPatch, level, coarserLevel, west, south, west + _fillBlockSegments, south + 2 * _fillBlockSegments, context, sceneState);
+                DrawBlock(_horizontalFixupPatch, level, coarserLevel, west, south, west + 2 * _fillBlockPosts, south + 2 * _fillBlockSegments, context, sceneState);
 
-                int offset = level.OffsetStripOnNorth
-                                ? north - _fieldBlockPosts - 1
-                                : south + _fieldBlockSegments;
-                DrawBlock(_finestOffsetStripHorizontal, level, coarserLevel, west, south, west + _fieldBlockSegments, offset, context, sceneState);
+                DrawBlock(_verticalFixupPatch, level, coarserLevel, west, south, west + 2 * _fillBlockSegments, south + _fillBlockSegments, context, sceneState);
+                DrawBlock(_verticalFixupPatch, level, coarserLevel, west, south, west + 2 * _fillBlockSegments, south + 2 * _fillBlockPosts, context, sceneState);
 
-                offset = level.OffsetStripOnEast
-                                ? east - _fieldBlockPosts - 1
-                                : west + _fieldBlockSegments;
-                DrawBlock(_finestOffsetStripVertical, level, coarserLevel, west, south, offset, south + _fieldBlockSegments + southOffset, context, sceneState);
+                DrawBlock(_centerPatch, level, coarserLevel, west, south, west + 2 * _fillBlockSegments, south + 2 * _fillBlockSegments, context, sceneState);
             }
             else
             {
                 int offset = level.OffsetStripOnNorth
-                                ? north - _fieldBlockPosts
-                                : south + _fieldBlockSegments;
-                DrawBlock(_offsetStripHorizontal, level, coarserLevel, west, south, west + _fieldBlockSegments, offset, context, sceneState);
+                                ? north - _fillBlockPosts
+                                : south + _fillBlockSegments;
+                DrawBlock(_horizontalOffsetPatch, level, coarserLevel, west, south, west + _fillBlockSegments, offset, context, sceneState);
 
                 int southOffset = level.OffsetStripOnNorth ? 0 : 1;
                 offset = level.OffsetStripOnEast
-                                ? east - _fieldBlockPosts
-                                : west + _fieldBlockSegments;
-                DrawBlock(_offsetStripVertical, level, coarserLevel, west, south, offset, south + _fieldBlockSegments + southOffset, context, sceneState);
+                                ? east - _fillBlockPosts
+                                : west + _fillBlockSegments;
+                DrawBlock(_verticalOffsetPatch, level, coarserLevel, west, south, offset, south + _fillBlockSegments + southOffset, context, sceneState);
             }
 
             return true;
@@ -598,17 +585,16 @@ namespace OpenGlobe.Scene.Terrain
         private RenderState _renderState;
         private PrimitiveType _primitiveType;
 
-        private int _fieldBlockPosts;
-        private int _fieldBlockSegments;
+        private int _fillBlockPosts;
+        private int _fillBlockSegments;
 
-        private VertexArray _fieldBlock;
-        private VertexArray _ringFixupHorizontal;
-        private VertexArray _ringFixupVertical;
-        private VertexArray _offsetStripHorizontal;
-        private VertexArray _offsetStripVertical;
-        private VertexArray _finestOffsetStripHorizontal;
-        private VertexArray _finestOffsetStripVertical;
-        private VertexArray _degenerateTriangles;
+        private VertexArray _fillPatch;
+        private VertexArray _horizontalFixupPatch;
+        private VertexArray _verticalFixupPatch;
+        private VertexArray _horizontalOffsetPatch;
+        private VertexArray _verticalOffsetPatch;
+        private VertexArray _centerPatch;
+        private VertexArray _degenerateTrianglePatch;
 
         private Uniform<Vector2F> _patchOriginInClippedLevel;
         private Uniform<Vector2F> _levelScaleFactor;
