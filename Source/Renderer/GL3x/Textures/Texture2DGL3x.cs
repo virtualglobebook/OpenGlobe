@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 //
 // (C) Copyright 2009 Patrick Cozzi and Deron Ohlarik
 //
@@ -8,7 +8,6 @@
 #endregion
 
 using System;
-using System.Diagnostics;
 using OpenGlobe.Renderer;
 using OpenTK.Graphics.OpenGL;
 using OpenTKTextureUnit = OpenTK.Graphics.OpenGL.TextureUnit;
@@ -19,14 +18,34 @@ namespace OpenGlobe.Renderer.GL3x
     {
         public Texture2DGL3x(Texture2DDescription description, TextureTarget textureTarget)
         {
-            Debug.Assert(description.Width > 0);
-            Debug.Assert(description.Height > 0);
-
-            if (description.GenerateMipmaps && (textureTarget == TextureTarget.TextureRectangle))
+            if (description.Width <= 0)
             {
-                throw new ArgumentException("description.GenerateMipmaps cannot be true for texture rectangles.", "description");
+                throw new ArgumentOutOfRangeException("description.Width", "description.Width must be greater than zero.");
             }
 
+            if (description.Height <= 0)
+            {
+                throw new ArgumentOutOfRangeException("description.Height", "description.Height must be greater than zero.");
+            }
+
+            if (description.GenerateMipmaps)
+            {
+                if (textureTarget == TextureTarget.TextureRectangle)
+                {
+                    throw new ArgumentException("description.GenerateMipmaps cannot be true for texture rectangles.", "description");
+                }
+                
+                if (!TextureUtility.IsPowerOfTwo(Convert.ToUInt32(description.Width)))
+                {
+                    throw new ArgumentException("When description.GenerateMipmaps is true, the width must be a power of two.", "description");
+                }
+
+                if (!TextureUtility.IsPowerOfTwo(Convert.ToUInt32(description.Height)))
+                {
+                    throw new ArgumentException("When description.GenerateMipmaps is true, the height must be a power of two.", "description");
+                }
+            }
+            
             _name = new TextureNameGL3x();
             _target = textureTarget;
             _description = description;
@@ -91,12 +110,33 @@ namespace OpenGlobe.Renderer.GL3x
             ImageDatatype dataType,
             int rowAlignment)
         {
-            Debug.Assert(xOffset >= 0);
-            Debug.Assert(yOffset >= 0);
-            Debug.Assert(xOffset + width <= _description.Width);
-            Debug.Assert(yOffset + height <= _description.Height);
-            Debug.Assert(pixelBuffer.SizeInBytes >= TextureUtility.RequiredSizeInBytes(width, height, format, dataType, rowAlignment));
-            Debug.Assert((rowAlignment == 1) || (rowAlignment == 2) || (rowAlignment == 4) || (rowAlignment == 8));
+            if (pixelBuffer.SizeInBytes < TextureUtility.RequiredSizeInBytes(
+                width, height, format, dataType, rowAlignment))
+            {
+                throw new ArgumentException("Pixel buffer is not big enough for provided width, height, format, and datatype.");
+            }
+            
+            if (xOffset < 0)
+            {
+                throw new ArgumentOutOfRangeException("xOffset", "xOffset must be greater than or equal to zero.");
+            }
+
+            if (yOffset < 0)
+            {
+                throw new ArgumentOutOfRangeException("yOffset", "yOffset must be greater than or equal to zero.");
+            }
+
+            if (xOffset + width > _description.Width)
+            {
+                throw new ArgumentOutOfRangeException("xOffset + width must be less than or equal to Description.Width");
+            }
+            
+            if (yOffset + height > _description.Height)
+            {
+                throw new ArgumentOutOfRangeException("yOffset + height must be less than or equal to Description.Height");
+            }
+            
+            VerifyRowAlignment(rowAlignment);
 
             WritePixelBufferGL3x bufferObjectGL = (WritePixelBufferGL3x)pixelBuffer;
 
@@ -125,7 +165,7 @@ namespace OpenGlobe.Renderer.GL3x
                 throw new ArgumentException("StencilIndex is not supported by CopyToBuffer.  Try DepthStencil instead.", "format");
             }
 
-            Debug.Assert((rowAlignment == 1) || (rowAlignment == 2) || (rowAlignment == 4) || (rowAlignment == 8));
+            VerifyRowAlignment(rowAlignment);
 
             ReadPixelBufferGL3x pixelBuffer = new ReadPixelBufferGL3x(PixelBufferHint.Stream,
                 TextureUtility.RequiredSizeInBytes(_description.Width, _description.Height, format, dataType, rowAlignment));
@@ -141,6 +181,17 @@ namespace OpenGlobe.Renderer.GL3x
             return pixelBuffer;
         }
 
+        private void VerifyRowAlignment(int rowAlignment)
+        {
+            if ((rowAlignment != 1) && 
+                (rowAlignment != 2) && 
+                (rowAlignment != 4) && 
+                (rowAlignment != 8))
+            {
+                throw new ArgumentException("rowAlignment");
+            }
+        }
+
         public override Texture2DDescription Description
         {
             get { return _description; }
@@ -152,8 +203,6 @@ namespace OpenGlobe.Renderer.GL3x
         {
             if (_description.GenerateMipmaps)
             {
-                Debug.Assert(TextureUtility.IsPowerOfTwo(Convert.ToUInt32(_description.Width)));
-                Debug.Assert(TextureUtility.IsPowerOfTwo(Convert.ToUInt32(_description.Height)));
                 GL.GenerateMipmap(GenerateMipmapTarget.Texture2D);
             }
         }
