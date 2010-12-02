@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 //
 // (C) Copyright 2009 Patrick Cozzi and Deron Ohlarik
 //
@@ -7,9 +7,7 @@
 //
 #endregion
 
-using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using OpenTK.Graphics.OpenGL;
 using OpenGlobe.Renderer;
 

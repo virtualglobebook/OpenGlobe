@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 //
 // (C) Copyright 2010 Patrick Cozzi and Kevin Ring
 //
@@ -12,7 +12,6 @@ using System.Collections;
 using System.Diagnostics;
 using OpenTK.Graphics.OpenGL;
 using OpenGlobe.Renderer;
-using OpenGlobe.Core;
 
 namespace OpenGlobe.Renderer.GL3x
 {
@@ -39,6 +38,29 @@ namespace OpenGlobe.Renderer.GL3x
             {
                 if (_attributes[index].VertexBufferAttribute != value)
                 {
+                    if (value != null)
+                    {
+                        if (value.NumberOfComponents < 1 || value.NumberOfComponents > 4)
+                        {
+                            throw new ArgumentException(
+                                "NumberOfComponents must be between one and four.");
+                        }
+
+                        if (value.Normalize)
+                        {
+                            if ((value.ComponentDatatype != ComponentDatatype.Byte) &&
+                                (value.ComponentDatatype != ComponentDatatype.UnsignedByte) &&
+                                (value.ComponentDatatype != ComponentDatatype.Short) &&
+                                (value.ComponentDatatype != ComponentDatatype.UnsignedShort) &&
+                                (value.ComponentDatatype != ComponentDatatype.Int) &&
+                                (value.ComponentDatatype != ComponentDatatype.UnsignedInt))
+                            {
+                                throw new ArgumentException(
+                                    "When Normalize is true, ComponentDatatype must be Byte, UnsignedByte, Short, UnsignedShort, Int, or UnsignedInt.");
+                            }
+                        }
+                    }
+                    
                     if ((_attributes[index].VertexBufferAttribute != null) && (value == null))
                     {
                         --_count;
@@ -115,25 +137,9 @@ namespace OpenGlobe.Renderer.GL3x
 
         private void Attach(int index)
         {
-            VertexBufferAttribute attribute = _attributes[index].VertexBufferAttribute;
-
-            Debug.Assert(attribute.NumberOfComponents >= 1);
-            Debug.Assert(attribute.NumberOfComponents <= 4);
-#if DEBUG
-            if (attribute.Normalize)
-            {
-                Debug.Assert(
-                    (attribute.ComponentDatatype == ComponentDatatype.Byte) ||
-                    (attribute.ComponentDatatype == ComponentDatatype.UnsignedByte) ||
-                    (attribute.ComponentDatatype == ComponentDatatype.Short) ||
-                    (attribute.ComponentDatatype == ComponentDatatype.UnsignedShort) ||
-                    (attribute.ComponentDatatype == ComponentDatatype.Int) ||
-                    (attribute.ComponentDatatype == ComponentDatatype.UnsignedInt));
-            }
-#endif
-
             GL.EnableVertexAttribArray(index);
 
+            VertexBufferAttribute attribute = _attributes[index].VertexBufferAttribute;
             VertexBufferGL3x bufferObjectGL = (VertexBufferGL3x)attribute.VertexBuffer;
             
             bufferObjectGL.Bind();
