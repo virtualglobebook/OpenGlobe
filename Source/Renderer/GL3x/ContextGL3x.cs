@@ -9,11 +9,9 @@
 
 using System;
 using System.Drawing;
-using System.Diagnostics;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
 using OpenGlobe.Core;
-using OpenGlobe.Renderer;
 
 namespace OpenGlobe.Renderer.GL3x
 {
@@ -281,8 +279,20 @@ namespace OpenGlobe.Renderer.GL3x
         private void ApplyScissorTest(ScissorTest scissorTest)
         {
             Rectangle rectangle = scissorTest.Rectangle;
-            Debug.Assert(rectangle.Width >= 0);
-            Debug.Assert(rectangle.Height >= 0);
+
+            if (rectangle.Width < 0)
+            {
+                throw new ArgumentOutOfRangeException(
+                    "renderState.ScissorTest.Rectangle.Width must be greater than or equal to zero.", 
+                    "renderState");
+            }
+
+            if (rectangle.Height < 0)
+            {
+                throw new ArgumentOutOfRangeException(
+                    "renderState.ScissorTest.Rectangle.Height must be greater than or equal to zero.",
+                    "renderState");
+            }
 
             if (_renderState.ScissorTest.Enabled != scissorTest.Enabled)
             {
@@ -366,8 +376,19 @@ namespace OpenGlobe.Renderer.GL3x
 
         private void ApplyDepthRange(DepthRange depthRange)
         {
-            Debug.Assert(depthRange.Near >= 0.0 && depthRange.Near <= 1.0);
-            Debug.Assert(depthRange.Far >= 0.0 && depthRange.Far <= 1.0);
+            if (depthRange.Near < 0.0 || depthRange.Near > 1.0)
+            {
+                throw new ArgumentOutOfRangeException(
+                    "renderState.DepthRange.Near must be between zero and one.",
+                    "depthRange");
+            }
+
+            if (depthRange.Far < 0.0 || depthRange.Far > 1.0)
+            {
+                throw new ArgumentOutOfRangeException(
+                    "renderState.DepthRange.Far must be between zero and one.",
+                    "depthRange");
+            }
 
             if ((_renderState.DepthRange.Near != depthRange.Near) ||
                 (_renderState.DepthRange.Far != depthRange.Far))
@@ -543,7 +564,9 @@ namespace OpenGlobe.Renderer.GL3x
             GL.GetProgram(_boundShaderProgram.Handle.Value, ProgramParameter.ValidateStatus, out validateStatus);
             if (validateStatus == 0)
             {
-                Debug.Fail("Shader program validation failed: " + _boundShaderProgram.Log);
+                throw new ArgumentException(
+                    "Shader program validation failed: " + _boundShaderProgram.Log, 
+                    "drawState.ShaderProgram");
             }
 #endif
         }
@@ -569,7 +592,11 @@ namespace OpenGlobe.Renderer.GL3x
                 _setFramebuffer.Clean();
 #if DEBUG
                 FramebufferErrorCode errorCode = GL.CheckFramebufferStatus(FramebufferTarget.Framebuffer);
-                Debug.Assert(errorCode == FramebufferErrorCode.FramebufferComplete);
+                if (errorCode != FramebufferErrorCode.FramebufferComplete)
+                {
+                    throw new InvalidOperationException("Frame buffer is incomplete.  Error code: " +
+                        errorCode.ToString());
+                }
 #endif
             }
         }

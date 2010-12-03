@@ -10,9 +10,7 @@
 using System;
 using System.Text;
 using System.Collections.Generic;
-using System.Diagnostics;
 using OpenTK.Graphics.OpenGL;
-using OpenGlobe.Renderer;
 
 namespace OpenGlobe.Renderer.GL3x
 {
@@ -147,8 +145,11 @@ namespace OpenGlobe.Renderer.GL3x
                     continue;
                 }
 
-                // TODO:  Support arrays
-                Debug.Assert(uniformSize == 1);
+                if (uniformSize != 1)
+                {
+                    // TODO:  Support arrays
+                    throw new NotSupportedException("Uniform arrays are not supported.");
+                }
 
                 int uniformLocation = GL.GetUniformLocation(programHandle, uniformName);
                 uniforms.Add(CreateUniform(uniformName, uniformLocation, uniformType));
@@ -162,126 +163,84 @@ namespace OpenGlobe.Renderer.GL3x
             int location, 
             ActiveUniformType type)
         {
-            if (type == ActiveUniformType.Float)
+            switch (type)
             {
-                return new UniformFloatGL3x(name, location, this);
-            }
-            else if (type == ActiveUniformType.FloatVec2)
-            {
-                return new UniformFloatVector2GL3x(name, location, this);
-            }
-            else if (type == ActiveUniformType.FloatVec3)
-            {
-                return new UniformFloatVector3GL3x(name, location, this);
-            }
-            else if (type == ActiveUniformType.FloatVec4)
-            {
-                return new UniformFloatVector4GL3x(name, location, this);
-            }
-            else if (type == ActiveUniformType.Int)
-            {
-                return new UniformIntGL3x(name, location, UniformType.Int, this);
-            }
-            else if (type == ActiveUniformType.IntVec2)
-            {
-                return new UniformIntVector2GL3x(name, location, this);
-            }
-            else if (type == ActiveUniformType.IntVec3)
-            {
-                return new UniformIntVector3GL3x(name, location, this);
-            }
-            else if (type == ActiveUniformType.IntVec4)
-            {
-                return new UniformIntVector4GL3x(name, location, this);
-            }
-            else if (type == ActiveUniformType.Bool)
-            {
-                return new UniformBoolGL3x(name, location, this);
-            }
-            else if (type == ActiveUniformType.BoolVec2)
-            {
-                return new UniformBoolVector2GL3x(name, location, this);
-            }
-            else if (type == ActiveUniformType.BoolVec3)
-            {
-                return new UniformBoolVector3GL3x(name, location, this);
-            }
-            else if (type == ActiveUniformType.BoolVec4)
-            {
-                return new UniformBoolVector4GL3x(name, location, this);
-            }
-            else if (type == ActiveUniformType.FloatMat2)
-            {
-                return new UniformFloatMatrix22GL3x(name, location, this);
-            }
-            else if (type == ActiveUniformType.FloatMat3)
-            {
-                return new UniformFloatMatrix33GL3x(name, location, this);
-            }
-            else if (type == ActiveUniformType.FloatMat4)
-            {
-                return new UniformFloatMatrix44GL3x(name, location, this);
-            }
-            else if (type == ActiveUniformType.FloatMat2x3)
-            {
-                return new UniformFloatMatrix23GL3x(name, location, this);
-            }
-            else if (type == ActiveUniformType.FloatMat2x4)
-            {
-                return new UniformFloatMatrix24GL3x(name, location, this);
-            }
-            else if (type == ActiveUniformType.FloatMat3x2)
-            {
-                return new UniformFloatMatrix32GL3x(name, location, this);
-            }
-            else if (type == ActiveUniformType.FloatMat3x4)
-            {
-                return new UniformFloatMatrix34GL3x(name, location, this);
-            }
-            else if (type == ActiveUniformType.FloatMat4x2)
-            {
-                return new UniformFloatMatrix42GL3x(name, location, this);
-            }
-            else if (type == ActiveUniformType.FloatMat4x3)
-            {
-                return new UniformFloatMatrix43GL3x(name, location, this);
-            }
-            else if ((type == ActiveUniformType.Sampler1D) ||
-                     (type == ActiveUniformType.Sampler2D) ||
-                     (type == ActiveUniformType.Sampler2DRect) ||
-                     (type == ActiveUniformType.Sampler2DRectShadow) ||
-                     (type == ActiveUniformType.Sampler3D) ||
-                     (type == ActiveUniformType.SamplerCube) ||
-                     (type == ActiveUniformType.Sampler1DShadow) ||
-                     (type == ActiveUniformType.Sampler2DShadow) ||
-                     (type == ActiveUniformType.Sampler1DArray) ||
-                     (type == ActiveUniformType.Sampler2DArray) ||
-                     (type == ActiveUniformType.Sampler1DArrayShadow) ||
-                     (type == ActiveUniformType.Sampler2DArrayShadow) ||
-                     (type == ActiveUniformType.SamplerCubeShadow) ||
-                     (type == ActiveUniformType.IntSampler1D) ||
-                     (type == ActiveUniformType.IntSampler2D) ||
-                     (type == ActiveUniformType.IntSampler2DRect) ||
-                     (type == ActiveUniformType.IntSampler3D) ||
-                     (type == ActiveUniformType.IntSamplerCube) ||
-                     (type == ActiveUniformType.IntSampler1DArray) ||
-                     (type == ActiveUniformType.IntSampler2DArray) ||
-                     (type == ActiveUniformType.UnsignedIntSampler1D) ||
-                     (type == ActiveUniformType.UnsignedIntSampler2D) ||
-                     (type == ActiveUniformType.UnsignedIntSampler2DRect) ||
-                     (type == ActiveUniformType.UnsignedIntSampler3D) ||
-                     (type == ActiveUniformType.UnsignedIntSamplerCube) ||
-                     (type == ActiveUniformType.UnsignedIntSampler1DArray) ||
-                     (type == ActiveUniformType.UnsignedIntSampler2DArray))
-            {
-                return new UniformIntGL3x(name, location, TypeConverterGL3x.To(type), this);
+                case ActiveUniformType.Float:
+                    return new UniformFloatGL3x(name, location, this);
+                case ActiveUniformType.FloatVec2:
+                    return new UniformFloatVector2GL3x(name, location, this);
+                case ActiveUniformType.FloatVec3:
+                    return new UniformFloatVector3GL3x(name, location, this);
+                case ActiveUniformType.FloatVec4:
+                    return new UniformFloatVector4GL3x(name, location, this);
+                case ActiveUniformType.Int:
+                    return new UniformIntGL3x(name, location, UniformType.Int, this);
+                case ActiveUniformType.IntVec2:
+                    return new UniformIntVector2GL3x(name, location, this);
+                case ActiveUniformType.IntVec3:
+                    return new UniformIntVector3GL3x(name, location, this);
+                case ActiveUniformType.IntVec4:
+                    return new UniformIntVector4GL3x(name, location, this);
+                case ActiveUniformType.Bool:
+                    return new UniformBoolGL3x(name, location, this);
+                case ActiveUniformType.BoolVec2:
+                    return new UniformBoolVector2GL3x(name, location, this);
+                case ActiveUniformType.BoolVec3:
+                    return new UniformBoolVector3GL3x(name, location, this);
+                case ActiveUniformType.BoolVec4:
+                    return new UniformBoolVector4GL3x(name, location, this);
+                case ActiveUniformType.FloatMat2:
+                    return new UniformFloatMatrix22GL3x(name, location, this);
+                case ActiveUniformType.FloatMat3:
+                    return new UniformFloatMatrix33GL3x(name, location, this);
+                case ActiveUniformType.FloatMat4:
+                    return new UniformFloatMatrix44GL3x(name, location, this);
+                case ActiveUniformType.FloatMat2x3:
+                    return new UniformFloatMatrix23GL3x(name, location, this);
+                case ActiveUniformType.FloatMat2x4:
+                    return new UniformFloatMatrix24GL3x(name, location, this);
+                case ActiveUniformType.FloatMat3x2:
+                    return new UniformFloatMatrix32GL3x(name, location, this);
+                case ActiveUniformType.FloatMat3x4:
+                    return new UniformFloatMatrix34GL3x(name, location, this);
+                case ActiveUniformType.FloatMat4x2:
+                    return new UniformFloatMatrix42GL3x(name, location, this);
+                case ActiveUniformType.FloatMat4x3:
+                    return new UniformFloatMatrix43GL3x(name, location, this);
+                case ActiveUniformType.Sampler1D:
+                case ActiveUniformType.Sampler2D:
+                case ActiveUniformType.Sampler2DRect:
+                case ActiveUniformType.Sampler2DRectShadow:
+                case ActiveUniformType.Sampler3D:
+                case ActiveUniformType.SamplerCube:
+                case ActiveUniformType.Sampler1DShadow:
+                case ActiveUniformType.Sampler2DShadow:
+                case ActiveUniformType.Sampler1DArray:
+                case ActiveUniformType.Sampler2DArray:
+                case ActiveUniformType.Sampler1DArrayShadow:
+                case ActiveUniformType.Sampler2DArrayShadow:
+                case ActiveUniformType.SamplerCubeShadow:
+                case ActiveUniformType.IntSampler1D:
+                case ActiveUniformType.IntSampler2D:
+                case ActiveUniformType.IntSampler2DRect:
+                case ActiveUniformType.IntSampler3D:
+                case ActiveUniformType.IntSamplerCube:
+                case ActiveUniformType.IntSampler1DArray:
+                case ActiveUniformType.IntSampler2DArray:
+                case ActiveUniformType.UnsignedIntSampler1D:
+                case ActiveUniformType.UnsignedIntSampler2D:
+                case ActiveUniformType.UnsignedIntSampler2DRect:
+                case ActiveUniformType.UnsignedIntSampler3D:
+                case ActiveUniformType.UnsignedIntSamplerCube:
+                case ActiveUniformType.UnsignedIntSampler1DArray:
+                case ActiveUniformType.UnsignedIntSampler2DArray:
+                    return new UniformIntGL3x(name, location, TypeConverterGL3x.To(type), this);
             }
 
             //
             // A new Uniform derived class needs to be added to support this uniform type.
             //
-            Debug.Assert(false);
-            return null;
+            throw new NotSupportedException("An implementation for uniform type " + type.ToString() + " does not exist.");
         }
 
         private static UniformBlockCollection FindUniformBlocks(ShaderProgramNameGL3x program)

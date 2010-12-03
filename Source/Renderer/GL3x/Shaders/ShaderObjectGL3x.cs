@@ -8,9 +8,7 @@
 #endregion
 
 using System;
-using System.Diagnostics;
 using System.Globalization;
-using OpenTK;
 using OpenTK.Graphics.OpenGL;
 using OpenGlobe.Core;
 
@@ -54,7 +52,11 @@ namespace OpenGlobe.Renderer.GL3x
             //
             if (source.StartsWith("#version", StringComparison.InvariantCulture))
             {
-                Debug.Assert(source.StartsWith("#version 330", StringComparison.InvariantCulture));
+                if (!source.StartsWith("#version 330", StringComparison.InvariantCulture))
+                {
+                    throw new ArgumentException("Only GLSL version 330 is supported.");
+                }
+
                 modifiedSource = "//" + source;
             }
             else

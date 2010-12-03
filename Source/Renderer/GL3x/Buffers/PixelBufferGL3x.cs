@@ -10,7 +10,6 @@
 using System;
 using System.Drawing;
 using System.Drawing.Imaging;
-using System.Diagnostics;
 using OpenTK.Graphics.OpenGL;
 using OpenGlobe.Core;
 using ImagingPixelFormat = System.Drawing.Imaging.PixelFormat;
@@ -24,7 +23,10 @@ namespace OpenGlobe.Renderer.GL3x
             BufferHint usageHint,
             int sizeInBytes)
         {
-            Debug.Assert(sizeInBytes > 0);
+            if (sizeInBytes <= 0)
+            {
+                throw new ArgumentOutOfRangeException("sizeInBytes", "sizeInBytes must be greater than zero.");
+            }
 
             _name = new BufferNameGL3x();
 
@@ -50,11 +52,29 @@ namespace OpenGlobe.Renderer.GL3x
             int destinationOffsetInBytes,
             int lengthInBytes) where T : struct
         {
-            Debug.Assert(destinationOffsetInBytes >= 0);
-            Debug.Assert(destinationOffsetInBytes + lengthInBytes <= _sizeInBytes);
+            if (destinationOffsetInBytes < 0)
+            {
+                throw new ArgumentOutOfRangeException("destinationOffsetInBytes", 
+                    "destinationOffsetInBytes must be greater than or equal to zero.");
+            }
 
-            Debug.Assert(lengthInBytes >= 0);
-            Debug.Assert(lengthInBytes <= ArraySizeInBytes.Size(bufferInSystemMemory));
+            if (destinationOffsetInBytes + lengthInBytes > _sizeInBytes)
+            {
+                throw new ArgumentOutOfRangeException(
+                    "destinationOffsetInBytes + lengthInBytes must be less than or equal to SizeInBytes.");
+            }
+
+            if (lengthInBytes < 0)
+            {
+                throw new ArgumentOutOfRangeException("lengthInBytes",
+                    "lengthInBytes must be greater than or equal to zero.");
+            }
+
+            if (lengthInBytes > ArraySizeInBytes.Size(bufferInSystemMemory))
+            {
+                throw new ArgumentOutOfRangeException("lengthInBytes",
+                    "lengthInBytes must be less than or equal to the size of bufferInSystemMemory in bytes.");
+            }
 
             Bind();
             GL.BufferSubData<T>(_type,
@@ -86,7 +106,13 @@ namespace OpenGlobe.Renderer.GL3x
                 ImageLockMode.ReadOnly, lockedBitmap.PixelFormat);
 
             int sizeInBytes = lockedPixels.Stride * lockedPixels.Height;
-            Debug.Assert(sizeInBytes <= _sizeInBytes);
+
+            if (sizeInBytes > _sizeInBytes)
+            {
+                throw new ArgumentException(
+                    "bitmap's size in bytes must be less than or equal to SizeInBytes.", 
+                    "bitmap");
+            }
 
             Bind();
             GL.BufferSubData(_type,
@@ -99,9 +125,23 @@ namespace OpenGlobe.Renderer.GL3x
 
         public T[] CopyToSystemMemory<T>(int offsetInBytes, int lengthInBytes) where T : struct
         {
-            Debug.Assert(offsetInBytes >= 0);
-            Debug.Assert(lengthInBytes > 0);
-            Debug.Assert(offsetInBytes + lengthInBytes <= _sizeInBytes);
+            if (offsetInBytes < 0)
+            {
+                throw new ArgumentOutOfRangeException("offsetInBytes",
+                    "offsetInBytes must be greater than or equal to zero.");
+            }
+
+            if (lengthInBytes <= 0)
+            {
+                throw new ArgumentOutOfRangeException("lengthInBytes",
+                    "lengthInBytes must be greater than zero.");
+            }
+
+            if (offsetInBytes + lengthInBytes > _sizeInBytes)
+            {
+                throw new ArgumentOutOfRangeException(
+                    "offsetInBytes + lengthInBytes must be less than or equal to SizeInBytes.");
+            }
 
             T[] bufferInSystemMemory = new T[lengthInBytes / SizeInBytes<T>.Value];
 
@@ -112,8 +152,17 @@ namespace OpenGlobe.Renderer.GL3x
 
         public Bitmap CopyToBitmap(int width, int height, ImagingPixelFormat pixelFormat)
         {
-            Debug.Assert(width > 0);
-            Debug.Assert(height > 0);
+            if (width <= 0)
+            {
+                throw new ArgumentOutOfRangeException("width",
+                    "width must be greater than zero.");
+            }
+
+            if (height <= 0)
+            {
+                throw new ArgumentOutOfRangeException("height",
+                    "height must be greater than zero.");
+            }
 
             Bitmap bitmap = new Bitmap(width, height, pixelFormat);
 

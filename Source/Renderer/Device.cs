@@ -10,7 +10,6 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Drawing.Imaging;
 using System.Diagnostics;
 using OpenGlobe.Core;
 using OpenGlobe.Renderer.GL3x;
@@ -159,10 +158,8 @@ namespace OpenGlobe.Renderer
                     indexBuffer.CopyFromSystemMemory(indices);
                     meshBuffers.IndexBuffer = indexBuffer;
                 }
-                else
+                else if (mesh.Indices.Datatype == IndicesType.UnsignedInt)
                 {
-                    Debug.Assert(mesh.Indices.Datatype == IndicesType.UnsignedInt);
-
                     IList<uint> meshIndices = ((IndicesUnsignedInt)mesh.Indices).Values;
 
                     uint[] indices = new uint[meshIndices.Count];
@@ -174,6 +171,11 @@ namespace OpenGlobe.Renderer
                     IndexBuffer indexBuffer = Device.CreateIndexBuffer(usageHint, indices.Length * sizeof(uint));
                     indexBuffer.CopyFromSystemMemory(indices);
                     meshBuffers.IndexBuffer = indexBuffer;
+                }
+                else
+                {
+                    throw new NotSupportedException("mesh.Indices.Datatype " +
+                        mesh.Indices.Datatype.ToString() + " is not supported.");
                 }
             }
 

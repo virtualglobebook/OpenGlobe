@@ -8,8 +8,6 @@
 #endregion
 
 using System.Drawing;
-using System.Diagnostics;
-using OpenGlobe.Renderer;
 using OpenTK.Graphics.OpenGL;
 using ImagingPixelFormat = System.Drawing.Imaging.PixelFormat;
 
@@ -80,11 +78,6 @@ namespace OpenGlobe.Renderer.GL3x
 
         static BufferHint ToBufferHint(PixelBufferHint usageHint)
         {
-            Debug.Assert(
-                (usageHint == PixelBufferHint.Stream) ||
-                (usageHint == PixelBufferHint.Static) ||
-                (usageHint == PixelBufferHint.Dynamic));
-
             return _bufferHints[(int)usageHint];
         }
 

@@ -7,7 +7,7 @@
 //
 #endregion
 
-using System.Diagnostics;
+using System;
 using OpenGlobe.Core;
 
 namespace OpenGlobe.Renderer
@@ -20,10 +20,11 @@ namespace OpenGlobe.Renderer
             {
                 case IndexBufferDatatype.UnsignedShort:
                     return sizeof(ushort);
+                case IndexBufferDatatype.UnsignedInt:
+                    return sizeof(uint);
             }
 
-            Debug.Assert(type == IndexBufferDatatype.UnsignedInt);
-            return sizeof(uint);
+            throw new ArgumentException("type");
         }
 
         public static int SizeOf(ComponentDatatype type)
@@ -43,10 +44,11 @@ namespace OpenGlobe.Renderer
                     return sizeof(uint);
                 case ComponentDatatype.Float:
                     return sizeof(float);
+                case ComponentDatatype.HalfFloat:
+                    return SizeInBytes<Half>.Value;
             }
 
-            Debug.Assert(type == ComponentDatatype.HalfFloat);
-            return OpenGlobe.Core.SizeInBytes<Half>.Value;
+            throw new ArgumentException("type");
         }
     }
 }

@@ -7,11 +7,9 @@
 //
 #endregion
 
-using System.Diagnostics;
 using OpenGlobe.Core;
-using OpenGlobe.Renderer;
 using OpenTK.Graphics.OpenGL;
-using System.Runtime.InteropServices;
+using System;
 
 namespace OpenGlobe.Renderer.GL3x
 {
@@ -48,11 +46,17 @@ namespace OpenGlobe.Renderer.GL3x
             {
                 _dataType = IndexBufferDatatype.UnsignedShort;
             }
-            else
+            else if (typeof(T) == typeof(uint))
             {
-                Debug.Assert(typeof(T) == typeof(uint));
                 _dataType = IndexBufferDatatype.UnsignedInt;
             }
+            else
+            {
+                throw new ArgumentException(
+                    "bufferInSystemMemory must be an array of ushort or uint.", 
+                    "bufferInSystemMemory");
+            }
+
             _count = _bufferObject.SizeInBytes / SizeInBytes<T>.Value;
             _bufferObject.CopyFromSystemMemory(bufferInSystemMemory, destinationOffsetInBytes, lengthInBytes);
         }

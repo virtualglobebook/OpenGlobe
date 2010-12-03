@@ -9,7 +9,6 @@
 
 using System;
 using System.Collections;
-using System.Diagnostics;
 using OpenTK.Graphics.OpenGL;
 using OpenGlobe.Renderer;
 
@@ -160,7 +159,11 @@ namespace OpenGlobe.Renderer.GL3x
         {
             get 
             {
-                Debug.Assert(!_dirty);
+                if (_dirty)
+                {
+                    throw new InvalidOperationException("MaximumArrayIndex is not valid until Clean() is called.");
+                }
+
                 return _maximumArrayIndex; 
             }
         }
