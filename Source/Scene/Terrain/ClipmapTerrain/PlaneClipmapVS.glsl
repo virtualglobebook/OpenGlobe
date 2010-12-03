@@ -8,12 +8,17 @@
 
 in vec2 position;
 
-out vec2 fsFineUv;
-out vec2 fsCoarseUv;
-out vec3 fsPositionToLight;
-out float fsAlpha;
+out vec2 gsFineUv;
+out vec2 gsCoarseUv;
+out vec3 gsPositionToLight;
+out float gsAlpha;
+
+out vec2 gsWindowPosition;
+out float gsDistanceToEye;
 
 uniform mat4 og_modelViewPerspectiveMatrix;
+uniform mat4 og_viewportTransformationMatrix;
+uniform vec3 og_cameraEye;
 uniform vec3 og_sunPosition;
 uniform vec3 u_sunPositionRelativeToViewer;
 uniform vec2 u_patchOriginInClippedLevel;
@@ -33,22 +38,22 @@ uniform sampler2D og_texture1;    // coarser height map
 
 float SampleHeight(vec2 levelPos)
 {
-	fsFineUv = (levelPos + u_fineTextureOrigin) * u_oneOverClipmapSize;
-	fsCoarseUv = (levelPos * 0.5 + u_fineLevelOriginInCoarse) * u_oneOverClipmapSize;
+	gsFineUv = (levelPos + u_fineTextureOrigin) * u_oneOverClipmapSize;
+	gsCoarseUv = (levelPos * 0.5 + u_fineLevelOriginInCoarse) * u_oneOverClipmapSize;
 
     if (u_useBlendRegions)
     {
 	    vec2 alpha = clamp((abs(levelPos - u_viewPosInClippedLevel) - u_unblendedRegionSize) * u_oneOverBlendedRegionSize, 0, 1);
-	    fsAlpha = max(alpha.x, alpha.y);
+	    gsAlpha = max(alpha.x, alpha.y);
     }
     else
     {
-        fsAlpha = 0.0;
+        gsAlpha = 0.0;
     }
 
-	float fineHeight = texture(og_texture0, fsFineUv).r;
-	float coarseHeight = texture(og_texture1, fsCoarseUv).r;
-	return mix(fineHeight, coarseHeight, fsAlpha) * u_heightExaggeration;
+	float fineHeight = texture(og_texture0, gsFineUv).r;
+	float coarseHeight = texture(og_texture1, gsCoarseUv).r;
+	return mix(fineHeight, coarseHeight, gsAlpha) * u_heightExaggeration;
 }
 
 void main()
@@ -59,7 +64,10 @@ void main()
 	vec2 worldPos = levelPos * u_levelScaleFactor * u_levelZeroWorldScaleFactor + u_levelOffsetFromWorldOrigin;
 	vec3 displacedPosition = vec3(worldPos, height);
 
-    fsPositionToLight = og_sunPosition - displacedPosition;
+    gsPositionToLight = u_sunPositionRelativeToViewer - displacedPosition;
 
     gl_Position = og_modelViewPerspectiveMatrix * vec4(displacedPosition, 1.0);
+
+    gsWindowPosition = og_ClipToWindowCoordinates(gl_Position, og_viewportTransformationMatrix).xy;
+    gsDistanceToEye = distance(displacedPosition.xyz, og_cameraEye);
 }

@@ -47,6 +47,7 @@ namespace OpenGlobe.Scene.Terrain
 
             _shaderProgram = Device.CreateShaderProgram(
                 EmbeddedResources.GetText("OpenGlobe.Scene.Terrain.ClipmapTerrain.PlaneClipmapVS.glsl"),
+                EmbeddedResources.GetText("OpenGlobe.Scene.Terrain.ClipmapTerrain.PlaneClipmapGS.glsl"),
                 EmbeddedResources.GetText("OpenGlobe.Scene.Terrain.ClipmapTerrain.PlaneClipmapFS.glsl"));
 
             _fillPatchPosts = (clipmapPosts + 1) / 4; // M
@@ -101,6 +102,7 @@ namespace OpenGlobe.Scene.Terrain
             _oneOverClipmapSize = (Uniform<float>)_shaderProgram.Uniforms["u_oneOverClipmapSize"];
             _color = (Uniform<Vector3F>)_shaderProgram.Uniforms["u_color"];
             _blendRegionColor = (Uniform<Vector3F>)_shaderProgram.Uniforms["u_blendRegionColor"];
+            _wireFrame = (Uniform<bool>)_shaderProgram.Uniforms["u_wireFrame"];
 
             _renderState = new RenderState();
             _renderState.FacetCulling.FrontFaceWindingOrder = fieldBlockMesh.FrontFaceWindingOrder;
@@ -123,8 +125,8 @@ namespace OpenGlobe.Scene.Terrain
 
         public bool Wireframe
         {
-            get { return _wireframe; }
-            set { _wireframe = value; }
+            get { return _wireFrame.Value; }
+            set { _wireFrame.Value = value; }
         }
 
         public bool BlendRegionsEnabled
@@ -316,15 +318,6 @@ namespace OpenGlobe.Scene.Terrain
 
         public void Render(Context context, SceneState sceneState)
         {
-            if (_wireframe)
-            {
-                _renderState.RasterizationMode = RasterizationMode.Line;
-            }
-            else
-            {
-                _renderState.RasterizationMode = RasterizationMode.Fill;
-            }
-
             Vector3D previousTarget = sceneState.Camera.Target;
             Vector3D previousEye = sceneState.Camera.Eye;
             Vector3D previousSun = sceneState.SunPosition;
@@ -609,8 +602,8 @@ namespace OpenGlobe.Scene.Terrain
         private Uniform<float> _oneOverClipmapSize;
         private Uniform<Vector3F> _color;
         private Uniform<Vector3F> _blendRegionColor;
+        private Uniform<bool> _wireFrame;
 
-        private bool _wireframe;
         private bool _blendRegionsEnabled = true;
         private bool _lodUpdateEnabled = true;
         private bool _colorClipmapLevels;
