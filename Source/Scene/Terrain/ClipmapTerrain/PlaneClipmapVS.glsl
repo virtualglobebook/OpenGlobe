@@ -64,8 +64,8 @@ void main()
 	vec2 worldPos = levelPos * u_levelScaleFactor * u_levelZeroWorldScaleFactor + u_levelOffsetFromWorldOrigin;
 	vec3 displacedPosition = vec3(worldPos, height);
 
-    gsPositionToLight = u_sunPositionRelativeToViewer - displacedPosition;
-
+    gsPositionToLight = og_sunPosition - displacedPosition;
+	
     gl_Position = og_modelViewPerspectiveMatrix * vec4(displacedPosition, 1.0);
 
     gsWindowPosition = og_ClipToWindowCoordinates(gl_Position, og_viewportTransformationMatrix).xy;
