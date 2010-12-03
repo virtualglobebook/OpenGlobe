@@ -14,6 +14,7 @@ out vec3 fsPositionToLight;
 out float fsAlpha;
 
 uniform mat4 og_modelViewPerspectiveMatrix;
+uniform vec3 og_sunPosition;
 uniform vec3 u_sunPositionRelativeToViewer;
 uniform vec2 u_patchOriginInClippedLevel;
 uniform vec2 u_levelScaleFactor;
@@ -58,7 +59,7 @@ void main()
 	vec2 worldPos = levelPos * u_levelScaleFactor * u_levelZeroWorldScaleFactor + u_levelOffsetFromWorldOrigin;
 	vec3 displacedPosition = vec3(worldPos, height);
 
-    fsPositionToLight = u_sunPositionRelativeToViewer - displacedPosition;
+    fsPositionToLight = og_sunPosition - displacedPosition;
 
     gl_Position = og_modelViewPerspectiveMatrix * vec4(displacedPosition, 1.0);
 }

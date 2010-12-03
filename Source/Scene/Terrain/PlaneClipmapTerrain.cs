@@ -95,7 +95,6 @@ namespace OpenGlobe.Scene.Terrain
             _fineLevelOriginInCoarse = (Uniform<Vector2F>)_shaderProgram.Uniforms["u_fineLevelOriginInCoarse"];
             _unblendedRegionSize = (Uniform<Vector2F>)_shaderProgram.Uniforms["u_unblendedRegionSize"];
             _oneOverBlendedRegionSize = (Uniform<Vector2F>)_shaderProgram.Uniforms["u_oneOverBlendedRegionSize"];
-            _sunPositionRelativeToViewer = (Uniform<Vector3F>)_shaderProgram.Uniforms["u_sunPositionRelativeToViewer"];
             _fineTextureOrigin = (Uniform<Vector2F>)_shaderProgram.Uniforms["u_fineTextureOrigin"];
             _showBlendRegions = (Uniform<bool>)_shaderProgram.Uniforms["u_showBlendRegions"];
             _useBlendRegions = (Uniform<bool>)_shaderProgram.Uniforms["u_useBlendRegions"];
@@ -328,13 +327,12 @@ namespace OpenGlobe.Scene.Terrain
 
             Vector3D previousTarget = sceneState.Camera.Target;
             Vector3D previousEye = sceneState.Camera.Eye;
-
+            Vector3D previousSun = sceneState.SunPosition;
 
             Vector3D toSubtract = new Vector3D(_clipmapCenter.X, _clipmapCenter.Y, 0.0);
             sceneState.Camera.Target -= toSubtract;
             sceneState.Camera.Eye -= toSubtract;
-
-            _sunPositionRelativeToViewer.Value = (sceneState.SunPosition - toSubtract).ToVector3F();
+            sceneState.SunPosition -= toSubtract;
 
             _levelZeroWorldScaleFactor.Value = new Vector2F((float)_clipmapLevels[0].Terrain.PostDeltaLongitude, (float)_clipmapLevels[0].Terrain.PostDeltaLatitude);
 
@@ -372,6 +370,7 @@ namespace OpenGlobe.Scene.Terrain
 
             sceneState.Camera.Target = previousTarget;
             sceneState.Camera.Eye = previousEye;
+            sceneState.SunPosition = previousSun;
         }
 
         private bool RenderLevel(int levelIndex, ClipmapLevel level, ClipmapLevel coarserLevel, bool fillRing, Vector2D center, Context context, SceneState sceneState)
@@ -604,7 +603,6 @@ namespace OpenGlobe.Scene.Terrain
         private Uniform<Vector2F> _viewPosInClippedLevel;
         private Uniform<Vector2F> _unblendedRegionSize;
         private Uniform<Vector2F> _oneOverBlendedRegionSize;
-        private Uniform<Vector3F> _sunPositionRelativeToViewer;
         private Uniform<Vector2F> _fineTextureOrigin;
         private Uniform<bool> _showBlendRegions;
         private Uniform<bool> _useBlendRegions;
