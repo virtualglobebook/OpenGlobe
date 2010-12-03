@@ -49,6 +49,7 @@
     <Compile Include="Terrain\ClipmapLevel.cs" />
     <Compile Include="Terrain\ClipmapUpdate.cs" />
     <Compile Include="Terrain\ClipmapUpdater.cs" />
+    <Compile Include="Terrain\GlobeClipmapTerrain.cs" />
     <Compile Include="Terrain\PlaneClipmapTerrain.cs" />
     <Compile Include="Terrain\EsriRestImagery.cs" />
     <Compile Include="Globes\DayNight\DayNightGlobe.cs" />
@@ -240,6 +241,10 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Terrain\ClipmapTerrain\PlaneClipmapGS.glsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Terrain\ClipmapTerrain\GlobeClipmapFS.glsl" />
+    <EmbeddedResource Include="Terrain\ClipmapTerrain\GlobeClipmapVS.glsl" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
