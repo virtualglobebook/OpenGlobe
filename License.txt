@@ -170,7 +170,7 @@ OpenGlobe uses data from USGS and The University of Washington:
 
 OpenGlobe uses icons from Yusuke Kamiyamane
 
-   http://pinvoke.com/
+   http://p.yusukekamiyamane.com/
 
    Data\Icons\YusukeKamiyamane
       Copyright (C) 2010 Yusuke Kamiyamane. All rights reserved.
