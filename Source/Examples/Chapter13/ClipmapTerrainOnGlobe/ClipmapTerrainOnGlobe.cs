@@ -40,7 +40,7 @@ namespace OpenGlobe.Examples
             _clearState.Color = Color.LightSkyBlue;
 
             _sceneState.Camera.PerspectiveNearPlaneDistance = 0.00001;
-            _sceneState.Camera.PerspectiveFarPlaneDistance = 10.0;
+            _sceneState.Camera.PerspectiveFarPlaneDistance = 100.0;
             _sceneState.SunPosition = new Vector3D(200000, 300000, 200000);
 
             double longitude = -119.5326056;
@@ -52,12 +52,12 @@ namespace OpenGlobe.Examples
             Ellipsoid ellipsoid = Ellipsoid.ScaledWgs84;
 
              _camera = new CameraLookAtPoint(_sceneState.Camera, _window, ellipsoid);
-            _camera.CenterPoint = ellipsoid.ToVector3D(viewer);
-            _camera.ZoomRateRangeAdjustment = 0.0;
-            _camera.Azimuth = 0.0;
-            _camera.Elevation = Trig.ToRadians(30.0);
-            _camera.Range = 0.005;
-            _camera.ViewPoint(ellipsoid, viewer);
+            // _camera.CenterPoint = new Vector3D(0.0, 0.0, 0.0); //ellipsoid.ToVector3D(viewer);
+            //_camera.ZoomRateRangeAdjustment = 0.0;
+            //_camera.Azimuth = 0.0;
+            //_camera.Elevation = Trig.ToRadians(30.0);
+            //_camera.Range = 0.005;
+            //_camera.ViewPoint(ellipsoid, viewer);
             //_camera.Dispose();
             //_sceneState.Camera.Eye = ellipsoid.ToVector3D(viewer);
             //_sceneState.Camera.Target = _sceneState.Camera.Eye + Vector3D.UnitZ;

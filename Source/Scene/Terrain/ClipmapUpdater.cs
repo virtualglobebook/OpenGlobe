@@ -66,8 +66,9 @@ namespace OpenGlobe.Scene.Terrain
             _requestQueue.MessageReceived += TileLoadRequestReceived;
 
 #if !SingleThreaded
-            _requestQueue.Post(x => _workerWindow.Context.MakeCurrent(), null);
-            _requestQueue.StartInAnotherThread();
+            Thread requestThread = new Thread(RequestThreadEntryPoint);
+            requestThread.IsBackground = true;
+            requestThread.Start();
 #endif
         }
 
@@ -88,6 +89,11 @@ namespace OpenGlobe.Scene.Terrain
         {
             get { return _heightExaggeration.Value; }
             set { _heightExaggeration.Value = value; }
+        }
+
+        public void SetNewViewerPosition(double longitude, double latitude)
+        {
+            _lastViewerPosition = new LastViewerPosition(longitude, latitude);
         }
 
         public void ApplyNewData(Context context)
@@ -445,19 +451,66 @@ namespace OpenGlobe.Scene.Terrain
             return texture;
         }
 
+        private List<TileLoadRequest> _currentRequests = new List<TileLoadRequest>();
+
         /// <summary>
         /// Invoked in the <see cref="_requestQueue"/> thread when a tile load request is received.
         /// </summary>
         private void TileLoadRequestReceived(object sender, MessageQueueEventArgs e)
         {
             TileLoadRequest request = (TileLoadRequest)e.Message;
-            RasterTerrainTile tile = request.Tile;
-            request.Texture = CreateTextureFromTile(tile);
+            _currentRequests.Add(request);
+        }
 
-            Fence fence = Device.CreateFence();
-            fence.ClientWait();
+        private void RequestThreadEntryPoint()
+        {
+            _workerWindow.Context.MakeCurrent();
 
-            _doneQueue.Post(request);
+            while (true)
+            {
+                _requestQueue.ProcessQueue();
+
+                if (_currentRequests.Count == 0)
+                {
+                    _requestQueue.WaitForMessage();
+                }
+                else
+                {
+                    _currentRequests.Sort(TilePriorityComparer);
+
+                    TileLoadRequest request = _currentRequests[0];
+                    _currentRequests.RemoveAt(0);
+
+                    RasterTerrainTile tile = request.Tile;
+                    request.Texture = CreateTextureFromTile(tile);
+
+                    Fence fence = Device.CreateFence();
+                    fence.ClientWait();
+
+                    _doneQueue.Post(request);
+                }
+            }
+        }
+
+        private int TilePriorityComparer(TileLoadRequest a, TileLoadRequest b)
+        {
+            if (a.Tile.Identifier.Level != b.Tile.Identifier.Level)
+            {
+                return a.Tile.Identifier.Level.CompareTo(b.Tile.Identifier.Level);
+            }
+            else
+            {
+                LastViewerPosition lastViewerPos = _lastViewerPosition;
+                double centerLongitudeA = a.Tile.Level.IndexToLongitude((a.Tile.West + a.Tile.East) / 2) - lastViewerPos.Longitude;
+                double centerLatitudeA = a.Tile.Level.IndexToLatitude((a.Tile.South + a.Tile.North) / 2) - lastViewerPos.Latitude;
+                double distanceA = Math.Sqrt(centerLongitudeA * centerLongitudeA + centerLatitudeA * centerLatitudeA);
+
+                double centerLongitudeB = a.Tile.Level.IndexToLongitude((b.Tile.West + b.Tile.East) / 2) - lastViewerPos.Longitude;
+                double centerLatitudeB = a.Tile.Level.IndexToLatitude((b.Tile.South + b.Tile.North) / 2) - lastViewerPos.Latitude;
+                double distanceB = Math.Sqrt(centerLongitudeB * centerLongitudeB + centerLatitudeB * centerLatitudeB);
+
+                return distanceA.CompareTo(distanceB);
+            }
         }
 
         public void VerifyHeights(ClipmapLevel level)
@@ -553,5 +606,29 @@ namespace OpenGlobe.Scene.Terrain
         private GraphicsWindow _workerWindow;
         private MessageQueue _requestQueue = new MessageQueue();
         private MessageQueue _doneQueue = new MessageQueue();
+
+        private class LastViewerPosition
+        {
+            public LastViewerPosition(double longitude, double latitude)
+            {
+                _longitude = longitude;
+                _latitude = latitude;
+            }
+
+            public double Longitude
+            {
+                get { return _longitude; }
+            }
+
+            public double Latitude
+            {
+                get { return _latitude; }
+            }
+
+            private double _longitude;
+            private double _latitude;
+        }
+
+        private volatile LastViewerPosition _lastViewerPosition;
     }
 }

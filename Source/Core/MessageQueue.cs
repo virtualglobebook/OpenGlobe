@@ -192,6 +192,22 @@ namespace OpenGlobe.Core
         }
 
         /// <summary>
+        /// Blocks the calling thread until a message is waiting in the queue.
+        /// This message should only be called on queues for which messages are processed
+        /// explicitly with a call to <see cref="ProcessQueue"/>.
+        /// </summary>
+        public void WaitForMessage()
+        {
+            lock (_queue)
+            {
+                while (_queue.Count == 0)
+                {
+                    Monitor.Wait(_queue);
+                }
+            }
+        }
+
+        /// <summary>
         /// Calls <see cref="Terminate"/>.
         /// </summary>
         public void Dispose()

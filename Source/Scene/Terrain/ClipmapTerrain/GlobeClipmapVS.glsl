@@ -12,6 +12,7 @@ out vec2 fsFineUv;
 out vec2 fsCoarseUv;
 out vec3 fsPositionToLight;
 out float fsAlpha;
+out float fsHeight;
 
 uniform mat4 og_modelViewPerspectiveMatrix;
 uniform vec3 og_sunPosition;
@@ -70,6 +71,7 @@ void main()
     vec2 levelPos = position + u_patchOriginInClippedLevel;
 
     float height = SampleHeight(levelPos);
+	fsHeight = height;
     vec2 worldPos = (levelPos + u_levelOffsetFromWorldOrigin) * u_levelScaleFactor * u_levelZeroWorldScaleFactor;
     vec3 displacedPosition = GeodeticToCartesian(vec3(worldPos, height));
 
