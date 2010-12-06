@@ -1,12 +1,12 @@
 ﻿#version 330
 //
-// (C) Copyright 2010 Patrick Cozzi and Kevin Ring
+// (C) Copyright 2010 Patrick Cozzi and Deron Ohlarik
 //
 // Distributed under the Boost Software License, Version 1.0.
 // See License.txt or http://www.boost.org/LICENSE_1_0.txt.
 //
-in vec3 positionHigh;
-in vec3 positionLow;
+
+layout(location = og_positionVertexLocation) in vec4 position;
 out vec3 worldPosition;
 out vec3 positionToLight;
 out vec3 positionToEye;
@@ -18,34 +18,30 @@ uniform vec3 og_cameraLightPosition;
 uniform bool u_logarithmicDepth;
 uniform float u_logarithmicDepthConstant;
 
-uniform vec3 og_cameraEyeHigh;
-uniform vec3 og_cameraEyeLow;
-uniform mat4 og_modelViewPerspectiveMatrixRelativeToEye;
-
-vec4 applyLogarithmicDepth(
-    vec4 clipPosition,
+vec4 ModelToClipCoordinates(
+    vec4 position,
+    mat4 modelViewPerspectiveMatrix,
     bool logarithmicDepth,
     float logarithmicDepthConstant,
     float perspectiveFarPlaneDistance)
 {
+    vec4 clip = modelViewPerspectiveMatrix * position; 
+
     if (logarithmicDepth)
     {
-        clipPosition.z = ((2.0 * log((logarithmicDepthConstant * clipPosition.z) + 1.0) / 
-                   log((logarithmicDepthConstant * perspectiveFarPlaneDistance) + 1.0)) - 1.0) * clipPosition.w;
+        clip.z = ((2.0 * log((logarithmicDepthConstant * clip.z) + 1.0) / 
+                   log((logarithmicDepthConstant * perspectiveFarPlaneDistance) + 1.0)) - 1.0) * clip.w;
     }
 
-    return clipPosition;
+    return clip;
 }
 
 void main()                     
 {
-	vec3 positionModel;
-	vec4 clipPosition = ogTransformEmulatedDoublePosition(
-		positionHigh, positionLow, og_cameraEyeHigh, og_cameraEyeLow,
-		og_modelViewPerspectiveMatrixRelativeToEye, positionModel);
-	gl_Position = applyLogarithmicDepth(clipPosition, u_logarithmicDepth, u_logarithmicDepthConstant, og_perspectiveFarPlaneDistance);
+    gl_Position = ModelToClipCoordinates(position, og_modelViewPerspectiveMatrix,
+        u_logarithmicDepth, u_logarithmicDepthConstant, og_perspectiveFarPlaneDistance);
 
-    worldPosition = positionModel.xyz;
-    positionToLight = og_cameraLightPosition - positionModel;
-    positionToEye = og_cameraEye - positionModel + og_cameraEyeHigh.z;
+    worldPosition = position.xyz;
+    positionToLight = og_cameraLightPosition - worldPosition;
+    positionToEye = og_cameraEye - worldPosition;
 }
