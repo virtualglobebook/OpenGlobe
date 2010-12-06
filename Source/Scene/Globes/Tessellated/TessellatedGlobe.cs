@@ -15,10 +15,8 @@ namespace OpenGlobe.Scene
 {
     public sealed class TessellatedGlobe : IDisposable
     {
-        public TessellatedGlobe(Context context)
+        public TessellatedGlobe()
         {
-            Verify.ThrowIfNull(context);
-
             ShaderProgram sp = Device.CreateShaderProgram(
                 EmbeddedResources.GetText("OpenGlobe.Scene.Globes.Tessellated.Shaders.GlobeVS.glsl"),
                 EmbeddedResources.GetText("OpenGlobe.Scene.Globes.Tessellated.Shaders.GlobeFS.glsl"));
@@ -136,8 +134,16 @@ namespace OpenGlobe.Scene
         {
             get 
             {
-                // TODO: This is wrong unless Clean is called.
-                //Clean();
+                if (_dirty)
+                {
+                    //
+                    // Not very efficient.
+                    //
+                    Mesh mesh = GeographicGridEllipsoidTessellator.Compute(Shape,
+                        _numberOfSlicePartitions, _numberOfStackPartitions, GeographicGridEllipsoidVertexAttributes.Position);
+                    _numberOfTriangles = (((IndicesUnsignedInt)mesh.Indices).Values.Count / 3);
+                }
+
                 return _numberOfTriangles; 
             }
         }

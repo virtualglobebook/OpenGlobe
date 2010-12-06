@@ -30,7 +30,7 @@ namespace OpenGlobe.Examples
             _sceneState = new SceneState();
             _camera = new CameraLookAtPoint(_sceneState.Camera, _window, _globeShape);
 
-            _instructions = new HeadsUpDisplay(_window.Context);
+            _instructions = new HeadsUpDisplay();
             _instructions.Texture = Device.CreateTexture2D(
                 Device.CreateBitmapFromText("Up - Increase semi-minor axis\nDown - Decrease semi-minor axis", 
                     new Font("Arial", 24)),
@@ -57,7 +57,7 @@ namespace OpenGlobe.Examples
         {
             DisposeScene();
 
-            _ellipsoid = new TessellatedGlobe(_window.Context);
+            _ellipsoid = new TessellatedGlobe();
             _ellipsoid.Shape = _globeShape;
             _ellipsoid.NumberOfSlicePartitions = 64;
             _ellipsoid.NumberOfStackPartitions = 32;

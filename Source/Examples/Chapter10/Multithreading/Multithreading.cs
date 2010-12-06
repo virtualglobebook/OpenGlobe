@@ -58,7 +58,7 @@ namespace OpenGlobe.Examples
             Fence fence = Device.CreateFence();
             while (fence.ClientWait(0) == ClientWaitResult.TimeoutExpired)
             {
-                Thread.Sleep(10);   // TODO:  Other work
+                Thread.Sleep(10);   // Other work, etc.
             }
 #endif
 

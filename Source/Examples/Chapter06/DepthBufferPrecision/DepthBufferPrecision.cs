@@ -42,7 +42,7 @@ namespace OpenGlobe.Examples
 
             ///////////////////////////////////////////////////////////////////
 
-            _globe = new TessellatedGlobe(_window.Context);
+            _globe = new TessellatedGlobe();
             _globe.Shape = _globeShape;
             _globe.NumberOfSlicePartitions = 64;
             _globe.NumberOfStackPartitions = 32;
@@ -69,7 +69,7 @@ namespace OpenGlobe.Examples
             ///////////////////////////////////////////////////////////////////
 
             _hudFont = new Font("Arial", 16);
-            _hud = new HeadsUpDisplay(_window.Context);
+            _hud = new HeadsUpDisplay();
             _hud.Color = Color.Black;
             UpdateHUD();
         }

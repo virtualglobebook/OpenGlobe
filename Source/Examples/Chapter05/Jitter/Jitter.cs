@@ -39,7 +39,7 @@ namespace OpenGlobe.Examples
             _clearState = new ClearState();
 
             _hudFont = new Font("Arial", 16);
-            _hud = new HeadsUpDisplay(_window.Context);
+            _hud = new HeadsUpDisplay();
             _hud.Color = Color.Black;
 
             CreateCamera();

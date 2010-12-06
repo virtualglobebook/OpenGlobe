@@ -106,8 +106,8 @@ Intersection RayIntersectsAABB(vec3 origin, vec3 direction, vec3 aabbLowerLeft, 
     // Implementation of http://www.siggraph.org/education/materials/HyperGraph/raytrace/rtinter3.htm
     //
 
-    float tNear = -100000.0;    // TODO:  How to get float max?
-    float tFar = 100000.0;
+    float tNear = og_minimumFloat;
+    float tFar = og_maximumFloat;
 
     if (PlanePairTest(origin.x, direction.x, aabbLowerLeft.x, aabbUpperRight.x, tNear, tFar) &&
         PlanePairTest(origin.y, direction.y, aabbLowerLeft.y, aabbUpperRight.y, tNear, tFar) &&

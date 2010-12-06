@@ -75,7 +75,7 @@ namespace OpenGlobe.Examples
             snap.DotsPerInch = 600;
 
             _hudFont = new Font("Arial", 16);
-            _hud = new HeadsUpDisplay(_window.Context);
+            _hud = new HeadsUpDisplay();
             _hud.Color = Color.Blue;
             UpdateHUD();
         }

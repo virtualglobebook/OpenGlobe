@@ -38,7 +38,7 @@ namespace OpenGlobe.Research
             _sceneState.Camera.PerspectiveFarPlaneDistance = 4096;
             _sceneState.Camera.PerspectiveNearPlaneDistance = 10;
             
-            _instructions = new HeadsUpDisplay(_window.Context);
+            _instructions = new HeadsUpDisplay();
             _instructions.Texture = Device.CreateTexture2D(
                 Device.CreateBitmapFromText(
                     "u - Use silhouette\ns - Show silhouette\n",

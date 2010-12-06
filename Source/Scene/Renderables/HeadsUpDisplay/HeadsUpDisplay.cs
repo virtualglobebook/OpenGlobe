@@ -16,10 +16,8 @@ namespace OpenGlobe.Scene
 {
     public sealed class HeadsUpDisplay : IDisposable
     {
-        public HeadsUpDisplay(Context context)
+        public HeadsUpDisplay()
         {
-            Verify.ThrowIfNull(context);
-
             RenderState renderState = new RenderState();
             renderState.FacetCulling.Enabled = false;
             renderState.DepthTest.Enabled = false;
@@ -46,7 +44,7 @@ namespace OpenGlobe.Scene
 
         private void CreateVertexArray(Context context)
         {
-            // TODO:  Hint per buffer?  One hint?
+            // TODO:  Buffer hint.
             _positionBuffer = Device.CreateVertexBuffer(BufferHint.StaticDraw, SizeInBytes<Vector2F>.Value);
 
             VertexBufferAttribute positionAttribute = new VertexBufferAttribute(

@@ -78,7 +78,7 @@ namespace OpenGlobe.Examples
                 new ShapefileAppearance() { Bitmap = new Bitmap("paper-plane--arrow.png") });
 
             _hudFont = new Font("Arial", 16);
-            _hud = new HeadsUpDisplay(context);
+            _hud = new HeadsUpDisplay();
 
             _showVectorData = true;
 

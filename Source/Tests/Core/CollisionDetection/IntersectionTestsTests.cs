@@ -50,7 +50,6 @@ namespace OpenGlobe.Core
                 normal, planeD(Vector3D.UnitX, normal), out intersectionPoint));
         }
 
-        // TODO:  where to put this?
         private static double planeD(Vector3D origin, Vector3D normal)
         {
             return -origin.Dot(normal);
