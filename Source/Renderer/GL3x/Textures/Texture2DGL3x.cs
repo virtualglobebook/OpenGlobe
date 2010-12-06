@@ -70,6 +70,8 @@ namespace OpenGlobe.Renderer.GL3x
             // texture to a frame buffer object.
             //
             ApplySampler(Device.TextureSamplers.LinearClamp);
+
+            GC.AddMemoryPressure(description.ApproximateSizeInBytes);
         }
 
         internal TextureNameGL3x Handle
@@ -227,6 +229,7 @@ namespace OpenGlobe.Renderer.GL3x
             if (disposing)
             {
                 _name.Dispose();
+                GC.RemoveMemoryPressure(_description.ApproximateSizeInBytes);
             }
             base.Dispose(disposing);
         }

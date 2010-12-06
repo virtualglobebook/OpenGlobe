@@ -45,6 +45,8 @@ namespace OpenGlobe.Renderer.GL3x
             //
             Bind();
             GL.BufferData(_type, new IntPtr(sizeInBytes), new IntPtr(), _usageHint);
+
+            GC.AddMemoryPressure(sizeInBytes);
         }
 
         public void CopyFromSystemMemory<T>(
@@ -210,6 +212,7 @@ namespace OpenGlobe.Renderer.GL3x
         public void Dispose()
         {
             _name.Dispose();
+            GC.RemoveMemoryPressure(_sizeInBytes);
         }
 
         private BufferNameGL3x _name;
