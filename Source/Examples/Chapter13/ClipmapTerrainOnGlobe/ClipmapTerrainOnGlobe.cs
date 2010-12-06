@@ -186,8 +186,8 @@ namespace OpenGlobe.Examples
         {
             if (_camera != null)
                 _camera.Dispose();
-            if (_cameraFly != null)
-                _cameraFly.Dispose();
+            //if (_cameraFly != null)
+            //    _cameraFly.Dispose();
             _clipmap.Dispose();
             if (_hudFont != null)
                 _hudFont.Dispose();
@@ -217,7 +217,7 @@ namespace OpenGlobe.Examples
         private readonly GraphicsWindow _window;
         private readonly SceneState _sceneState;
         private readonly CameraLookAtPoint _camera;
-        private CameraFly _cameraFly;
+        //private CameraFly _cameraFly;
         private readonly ClearState _clearState;
         private readonly GlobeClipmapTerrain _clipmap;
         private HeadsUpDisplay _hud;
