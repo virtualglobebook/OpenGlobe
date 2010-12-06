@@ -14,15 +14,15 @@ namespace OpenGlobe.Renderer
 {
     internal class VertexBufferFactory : Disposable
     {
-        public VertexBufferFactory(GraphicsWindow window, Vector3F[] positions)
+        public VertexBufferFactory(Context context, Vector3F[] positions)
         {
-            _window = window;
+            _context = context;
             _positions = positions;
         }
 
         public void Create()
         {
-            _window.MakeCurrent();
+            _context.MakeCurrent();
 
             int vbSizeInBytes = ArraySizeInBytes.Size(_positions);
             _vertexBuffer = Device.CreateVertexBuffer(BufferHint.StaticDraw, vbSizeInBytes);
@@ -52,15 +52,13 @@ namespace OpenGlobe.Renderer
                     _vertexBuffer.Dispose();
                     _vertexBuffer = null;
                 }
-
-                _window.Dispose();
             }
             base.Dispose(disposing);
         }
 
         #endregion
 
-        private readonly GraphicsWindow _window;
+        private readonly Context _context;
         private Vector3F[] _positions;
         private VertexBuffer _vertexBuffer;
     }

@@ -28,6 +28,8 @@ namespace OpenGlobe.Renderer
 
     public abstract class Context
     {
+        public abstract void MakeCurrent();
+
         public virtual VertexArray CreateVertexArray(Mesh mesh, ShaderVertexAttributeCollection shaderAttributes, BufferHint usageHint)
         {
             return CreateVertexArray(Device.CreateMeshBuffers(mesh, shaderAttributes, usageHint));

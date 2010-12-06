@@ -27,7 +27,7 @@ namespace OpenGlobe.Examples
 
             SimpleTerrainSource terrainSource = new SimpleTerrainSource(@"..\..\..\..\..\..\Data\Terrain\ps_height_16k");
             //WorldWindTerrainSource terrainSource = new WorldWindTerrainSource();
-            _clipmap = new PlaneClipmapTerrain(_window, _window.Context, terrainSource, 511);
+            _clipmap = new PlaneClipmapTerrain(_window.Context, terrainSource, 511);
             _clipmap.HeightExaggeration = 0.01f;
 
             _sceneState = new SceneState();

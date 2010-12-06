@@ -14,16 +14,16 @@ namespace OpenGlobe.Renderer
 {
     internal class ShaderProgramFactory : Disposable
     {
-        public ShaderProgramFactory(GraphicsWindow window, string vertexShader, string fragmentShader)
+        public ShaderProgramFactory(Context context, string vertexShader, string fragmentShader)
         {
-            _window = window;
+            _context = context;
             _vs = vertexShader;
             _fs = fragmentShader;
         }
 
         public void Create()
         {
-            _window.MakeCurrent();
+            _context.MakeCurrent();
 
             _sp = Device.CreateShaderProgram(_vs, _fs);
 
@@ -56,7 +56,7 @@ namespace OpenGlobe.Renderer
 
         #endregion
 
-        private readonly GraphicsWindow _window;
+        private readonly Context _context;
         private readonly string _vs;
         private readonly string _fs;
         private ShaderProgram _sp;

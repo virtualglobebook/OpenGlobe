@@ -14,15 +14,15 @@ namespace OpenGlobe.Renderer
 {
     internal class TextureFactory : Disposable
     {
-        public TextureFactory(GraphicsWindow window, BlittableRGBA rgba)
+        public TextureFactory(Context context, BlittableRGBA rgba)
         {
-            _window = window;
+            _context = context;
             _rgba = rgba;
         }
 
         public void Create()
         {
-            _window.MakeCurrent();
+            _context.MakeCurrent();
 
             _texture = TestUtility.CreateTexture(_rgba);
 
@@ -55,7 +55,7 @@ namespace OpenGlobe.Renderer
 
         #endregion
 
-        private readonly GraphicsWindow _window;
+        private readonly Context _context;
         private readonly BlittableRGBA _rgba;
         private Texture2D _texture;
     }
