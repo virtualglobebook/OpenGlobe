@@ -37,9 +37,9 @@ namespace OpenGlobe.Examples
 
     internal class ShapefileWorker
     {
-        public ShapefileWorker(GraphicsWindow window, Ellipsoid globeShape, MessageQueue doneQueue)
+        public ShapefileWorker(Context context, Ellipsoid globeShape, MessageQueue doneQueue)
         {
-            _window = window;
+            _context = context;
             _globeShape = globeShape;
             _doneQueue = doneQueue;
         }
@@ -47,12 +47,12 @@ namespace OpenGlobe.Examples
         public void Process(object sender, MessageQueueEventArgs e)
         {
 #if !SINGLE_THREADED
-            _window.MakeCurrent();
+            _context.MakeCurrent();
 #endif
 
             ShapefileRequest request = (ShapefileRequest)e.Message;
             ShapefileRenderer shapefile = new ShapefileRenderer(
-                request.Filename, _window.Context, _globeShape, request.Appearance);
+                request.Filename, _context, _globeShape, request.Appearance);
 
 #if !SINGLE_THREADED
             Fence fence = Device.CreateFence();
@@ -65,7 +65,7 @@ namespace OpenGlobe.Examples
             _doneQueue.Post(shapefile);
         }
 
-        private readonly GraphicsWindow _window;
+        private readonly Context _context;
         private readonly Ellipsoid _globeShape;
         private readonly MessageQueue _doneQueue;
     }
@@ -96,7 +96,7 @@ namespace OpenGlobe.Examples
 
             _doneQueue.MessageReceived += ProcessNewShapefile;
 
-            _requestQueue.MessageReceived += new ShapefileWorker(_workerWindow, globeShape, _doneQueue).Process;
+            _requestQueue.MessageReceived += new ShapefileWorker(_workerWindow.Context, globeShape, _doneQueue).Process;
 
             // 2ND_EDITION:  Draw order
             _requestQueue.Post(new ShapefileRequest("110m_admin_0_countries.shp", 

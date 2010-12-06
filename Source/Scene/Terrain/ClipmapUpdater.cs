@@ -11,12 +11,8 @@ namespace OpenGlobe.Scene.Terrain
 {
     internal class ClipmapUpdater : IDisposable
     {
-        public ClipmapUpdater(GraphicsWindow window, Context context)
+        public ClipmapUpdater(Context context)
         {
-            // TODO: We shouldn't have to pass in 'window'.  It's only need so that we can restore its context to being the
-            // current one in the thread after we create a new context for the background loader thread.
-            // Probably need some minor OpenTK work here.
-
             ShaderVertexAttributeCollection vertexAttributes = new ShaderVertexAttributeCollection();
             vertexAttributes.Add(new ShaderVertexAttribute("position", VertexLocations.Position, ShaderVertexAttributeType.FloatVector2, 1));
 
@@ -65,12 +61,12 @@ namespace OpenGlobe.Scene.Terrain
             HeightExaggeration = 1.0f;
 
             _workerWindow = Device.CreateWindow(1, 1);
-            window.MakeCurrent();
+            context.MakeCurrent();
 
             _requestQueue.MessageReceived += TileLoadRequestReceived;
 
 #if !SingleThreaded
-            _requestQueue.Post(x => _workerWindow.MakeCurrent(), null);
+            _requestQueue.Post(x => _workerWindow.Context.MakeCurrent(), null);
             _requestQueue.StartInAnotherThread();
 #endif
         }

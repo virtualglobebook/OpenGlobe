@@ -29,7 +29,7 @@ namespace OpenGlobe.Renderer.Multithreading
 
             using (var threadWindow = Device.CreateWindow(1, 1))
             using (var window = Device.CreateWindow(1, 1))
-            using (VertexBufferFactory factory = new VertexBufferFactory(threadWindow, positions))
+            using (VertexBufferFactory factory = new VertexBufferFactory(threadWindow.Context, positions))
             {
                 Thread t = new Thread(factory.Create);
                 t.Start();
@@ -53,8 +53,8 @@ namespace OpenGlobe.Renderer.Multithreading
             using (var thread0Window = Device.CreateWindow(1, 1))
             using (var thread1Window = Device.CreateWindow(1, 1))
             using (var window = Device.CreateWindow(1, 1))
-            using (VertexBufferFactory factory0 = new VertexBufferFactory(thread0Window, positions0))
-            using (VertexBufferFactory factory1 = new VertexBufferFactory(thread1Window, positions1))
+            using (VertexBufferFactory factory0 = new VertexBufferFactory(thread0Window.Context, positions0))
+            using (VertexBufferFactory factory1 = new VertexBufferFactory(thread1Window.Context, positions1))
             {
                 Thread t0 = new Thread(factory0.Create);
                 t0.Start();
@@ -83,8 +83,8 @@ namespace OpenGlobe.Renderer.Multithreading
             using (var thread0Window = Device.CreateWindow(1, 1))
             using (var thread1Window = Device.CreateWindow(1, 1))
             using (var window = Device.CreateWindow(1, 1))
-            using (VertexBufferFactory factory0 = new VertexBufferFactory(thread0Window, positions0))
-            using (VertexBufferFactory factory1 = new VertexBufferFactory(thread1Window, positions1))
+            using (VertexBufferFactory factory0 = new VertexBufferFactory(thread0Window.Context, positions0))
+            using (VertexBufferFactory factory1 = new VertexBufferFactory(thread1Window.Context, positions1))
             {
                 Thread t0 = new Thread(factory0.Create);
                 Thread t1 = new Thread(factory1.Create);

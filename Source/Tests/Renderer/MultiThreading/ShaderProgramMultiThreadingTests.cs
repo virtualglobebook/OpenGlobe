@@ -26,7 +26,7 @@ namespace OpenGlobe.Renderer.Multithreading
         {
             using (var threadWindow = Device.CreateWindow(1, 1))
             using (var window = Device.CreateWindow(1, 1))
-            using (var factory = new ShaderProgramFactory(threadWindow, ShaderSources.PassThroughVertexShader(), ShaderSources.PassThroughFragmentShader()))
+            using (var factory = new ShaderProgramFactory(threadWindow.Context, ShaderSources.PassThroughVertexShader(), ShaderSources.PassThroughFragmentShader()))
             {
                 Thread t = new Thread(factory.Create);
                 t.Start();
@@ -56,8 +56,8 @@ namespace OpenGlobe.Renderer.Multithreading
             using (var thread0Window = Device.CreateWindow(1, 1))
             using (var thread1Window = Device.CreateWindow(1, 1))
             using (var window = Device.CreateWindow(1, 1))
-            using (ShaderProgramFactory factory0 = new ShaderProgramFactory(thread0Window, ShaderSources.PassThroughVertexShader(), ShaderSources.PassThroughFragmentShader()))
-            using (ShaderProgramFactory factory1 = new ShaderProgramFactory(thread1Window, ShaderSources.PassThroughVertexShader(), ShaderSources.PassThroughFragmentShader()))
+            using (ShaderProgramFactory factory0 = new ShaderProgramFactory(thread0Window.Context, ShaderSources.PassThroughVertexShader(), ShaderSources.PassThroughFragmentShader()))
+            using (ShaderProgramFactory factory1 = new ShaderProgramFactory(thread1Window.Context, ShaderSources.PassThroughVertexShader(), ShaderSources.PassThroughFragmentShader()))
             {
                 Thread t0 = new Thread(factory0.Create);
                 t0.Start();
@@ -92,8 +92,8 @@ namespace OpenGlobe.Renderer.Multithreading
             using (var thread0Window = Device.CreateWindow(1, 1))
             using (var thread1Window = Device.CreateWindow(1, 1))
             using (var window = Device.CreateWindow(1, 1))
-            using (ShaderProgramFactory factory0 = new ShaderProgramFactory(thread0Window, ShaderSources.PassThroughVertexShader(), ShaderSources.PassThroughFragmentShader()))
-            using (ShaderProgramFactory factory1 = new ShaderProgramFactory(thread1Window, ShaderSources.PassThroughVertexShader(), ShaderSources.PassThroughFragmentShader()))
+            using (ShaderProgramFactory factory0 = new ShaderProgramFactory(thread0Window.Context, ShaderSources.PassThroughVertexShader(), ShaderSources.PassThroughFragmentShader()))
+            using (ShaderProgramFactory factory1 = new ShaderProgramFactory(thread1Window.Context, ShaderSources.PassThroughVertexShader(), ShaderSources.PassThroughFragmentShader()))
             {
                 Thread t0 = new Thread(factory0.Create);
                 t0.Start();

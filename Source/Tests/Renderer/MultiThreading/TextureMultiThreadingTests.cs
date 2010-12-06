@@ -28,7 +28,7 @@ namespace OpenGlobe.Renderer.Multithreading
             using (var threadWindow = Device.CreateWindow(1, 1))
             using (var window = Device.CreateWindow(1, 1))
             {
-                TextureFactory factory = new TextureFactory(threadWindow, new BlittableRGBA(Color.FromArgb(0, 1, 2, 3)));
+                TextureFactory factory = new TextureFactory(threadWindow.Context, new BlittableRGBA(Color.FromArgb(0, 1, 2, 3)));
 
                 Thread t = new Thread(factory.Create);
                 t.Start();
@@ -51,8 +51,8 @@ namespace OpenGlobe.Renderer.Multithreading
             using (var thread1Window = Device.CreateWindow(1, 1))
             using (var window = Device.CreateWindow(1, 1))
             {
-                TextureFactory factory0 = new TextureFactory(thread0Window, new BlittableRGBA(Color.FromArgb(0, 127, 0, 0)));
-                TextureFactory factory1 = new TextureFactory(thread1Window, new BlittableRGBA(Color.FromArgb(0, 0, 255, 0)));
+                TextureFactory factory0 = new TextureFactory(thread0Window.Context, new BlittableRGBA(Color.FromArgb(0, 127, 0, 0)));
+                TextureFactory factory1 = new TextureFactory(thread1Window.Context, new BlittableRGBA(Color.FromArgb(0, 0, 255, 0)));
 
                 Thread t0 = new Thread(factory0.Create);
                 t0.Start();
@@ -95,8 +95,8 @@ namespace OpenGlobe.Renderer.Multithreading
             using (var thread1Window = Device.CreateWindow(1, 1))
             using (var window = Device.CreateWindow(1, 1))
             {
-                TextureFactory factory0 = new TextureFactory(thread0Window, new BlittableRGBA(Color.FromArgb(0, 255, 0, 0)));
-                TextureFactory factory1 = new TextureFactory(thread1Window, new BlittableRGBA(Color.FromArgb(0, 0, 255, 0)));
+                TextureFactory factory0 = new TextureFactory(thread0Window.Context, new BlittableRGBA(Color.FromArgb(0, 255, 0, 0)));
+                TextureFactory factory1 = new TextureFactory(thread1Window.Context, new BlittableRGBA(Color.FromArgb(0, 0, 255, 0)));
 
                 Thread t0 = new Thread(factory0.Create);
                 Thread t1 = new Thread(factory1.Create);

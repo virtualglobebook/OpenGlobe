@@ -39,12 +39,12 @@ namespace OpenGlobe.Renderer.GL3x
 
             FinalizerThreadContextGL3x.Initialize();
             _gameWindow.MakeCurrent();
-
+            
             _gameWindow.Resize += new EventHandler<EventArgs>(this.OnResize);
             _gameWindow.UpdateFrame += new EventHandler<FrameEventArgs>(this.OnUpdateFrame);
             _gameWindow.RenderFrame += new EventHandler<FrameEventArgs>(this.OnRenderFrame);
 
-            _context = new ContextGL3x(width, height);
+            _context = new ContextGL3x(_gameWindow, width, height);
 
             _mouse = new MouseGL3x(_gameWindow.Mouse);
             _keyboard = new KeyboardGL3x(_gameWindow.Keyboard);
@@ -69,11 +69,6 @@ namespace OpenGlobe.Renderer.GL3x
         }
 
         #region GraphicsWindow Members
-
-        public override void MakeCurrent()
-        {
-            _gameWindow.MakeCurrent();
-        }
 
         public override void Run(double updateRate)
         {

@@ -19,10 +19,8 @@ namespace OpenGlobe.Scene.Terrain
 {
     public class PlaneClipmapTerrain : IRenderable, IDisposable
     {
-        public PlaneClipmapTerrain(GraphicsWindow window, Context context, RasterTerrainSource terrainSource, int clipmapPosts)
+        public PlaneClipmapTerrain(Context context, RasterTerrainSource terrainSource, int clipmapPosts)
         {
-            // TODO: Shouldn't need to pass in 'window'.
-
             _terrainSource = terrainSource;
             _clipmapPosts = clipmapPosts;
             _clipmapSegments = _clipmapPosts - 1;
@@ -118,7 +116,7 @@ namespace OpenGlobe.Scene.Terrain
 
             _oneOverClipmapSize.Value = 1.0f / clipmapPosts;
 
-            _updater = new ClipmapUpdater(window, context);
+            _updater = new ClipmapUpdater(context);
 
             HeightExaggeration = 0.00001f;
         }

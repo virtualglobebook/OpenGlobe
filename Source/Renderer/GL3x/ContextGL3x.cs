@@ -17,7 +17,7 @@ namespace OpenGlobe.Renderer.GL3x
 {
     internal class ContextGL3x : Context
     {
-        public ContextGL3x(int width, int height)
+        public ContextGL3x(GameWindow gameWindow, int width, int height)
         {
             Vector4 clearColor = new Vector4();
             GL.GetFloat(GetPName.DepthClearValue, out _clearDepth);
@@ -38,6 +38,7 @@ namespace OpenGlobe.Renderer.GL3x
             ForceApplyRenderState(_renderState);
 
             Viewport = new Rectangle(0, 0, width, height);
+            _gameWindow = gameWindow;
         }
 
         #region ForceApplyRenderState
@@ -99,6 +100,11 @@ namespace OpenGlobe.Renderer.GL3x
         #endregion
 
         #region Context Members
+
+        public override void MakeCurrent()
+        {
+            _gameWindow.MakeCurrent();
+        }
 
         public override VertexArray CreateVertexArray()
         {
@@ -611,5 +617,7 @@ namespace OpenGlobe.Renderer.GL3x
         private FramebufferGL3x _setFramebuffer;
 
         private TextureUnitsGL3x _textureUnits;
+
+        private GameWindow _gameWindow;
     }
 }
