@@ -80,7 +80,11 @@ namespace OpenGlobe.Renderer
 
         private void SaveColor(string filename)
         {
-            using (ReadPixelBuffer pixelBuffer = CopyToBuffer(ImageFormat.BlueGreenRed, ImageDatatype.UnsignedByte, 1))
+            //
+            // The pixel buffer uses four byte row alignment because it matches
+            // a bitmap's row alignment (BitmapData.Stride).
+            //
+            using (ReadPixelBuffer pixelBuffer = CopyToBuffer(ImageFormat.BlueGreenRed, ImageDatatype.UnsignedByte, 4))
             {
                 Bitmap bitmap = pixelBuffer.CopyToBitmap(Description.Width, Description.Height, PixelFormat.Format24bppRgb);
                 bitmap.Save(filename);

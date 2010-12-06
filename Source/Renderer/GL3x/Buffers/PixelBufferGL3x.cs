@@ -171,11 +171,8 @@ namespace OpenGlobe.Renderer.GL3x
             BitmapData lockedPixels = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height),
                 ImageLockMode.WriteOnly, bitmap.PixelFormat);
 
-            // TODO:  Does the row have padding?  e.g. 4 byte aligned, not tightly packed
             int sizeInBytes = lockedPixels.Stride * lockedPixels.Height;
 
-            // TODO:  If sizeInBytes is wrong because of either the format or row padding 
-            // (above), GetBufferSubData will throw InvalidEnum.
             Bind();
             GL.GetBufferSubData(_type, new IntPtr(), new IntPtr(sizeInBytes), lockedPixels.Scan0);
 
