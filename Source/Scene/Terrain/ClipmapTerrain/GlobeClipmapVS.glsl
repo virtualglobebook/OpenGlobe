@@ -47,31 +47,31 @@ vec3 GeodeticToCartesian(vec3 geodetic)
 
 float SampleHeight(vec2 levelPos)
 {
-	fsFineUv = (levelPos + u_fineTextureOrigin) * u_oneOverClipmapSize;
-	fsCoarseUv = (levelPos * 0.5 + u_fineLevelOriginInCoarse) * u_oneOverClipmapSize;
+    fsFineUv = (levelPos + u_fineTextureOrigin) * u_oneOverClipmapSize;
+    fsCoarseUv = (levelPos * 0.5 + u_fineLevelOriginInCoarse) * u_oneOverClipmapSize;
 
     if (u_useBlendRegions)
     {
-	    vec2 alpha = clamp((abs(levelPos - u_viewPosInClippedLevel) - u_unblendedRegionSize) * u_oneOverBlendedRegionSize, 0, 1);
-	    fsAlpha = max(alpha.x, alpha.y);
+        vec2 alpha = clamp((abs(levelPos - u_viewPosInClippedLevel) - u_unblendedRegionSize) * u_oneOverBlendedRegionSize, 0, 1);
+        fsAlpha = max(alpha.x, alpha.y);
     }
     else
     {
         fsAlpha = 0.0;
     }
 
-	float fineHeight = texture(og_texture0, fsFineUv).r;
-	float coarseHeight = texture(og_texture1, fsCoarseUv).r;
-	return mix(fineHeight, coarseHeight, fsAlpha) * u_heightExaggeration;
+    float fineHeight = texture(og_texture0, fsFineUv).r;
+    float coarseHeight = texture(og_texture1, fsCoarseUv).r;
+    return mix(fineHeight, coarseHeight, fsAlpha) * u_heightExaggeration;
 }
 
 void main()
 {
-	vec2 levelPos = position + u_patchOriginInClippedLevel;
+    vec2 levelPos = position + u_patchOriginInClippedLevel;
 
     float height = SampleHeight(levelPos);
-	vec2 worldPos = levelPos * u_levelScaleFactor * u_levelZeroWorldScaleFactor + u_levelOffsetFromWorldOrigin;
-	vec3 displacedPosition = GeodeticToCartesian(vec3(worldPos, height));
+    vec2 worldPos = levelPos * u_levelScaleFactor * u_levelZeroWorldScaleFactor + u_levelOffsetFromWorldOrigin;
+    vec3 displacedPosition = GeodeticToCartesian(vec3(worldPos, height));
 
     fsPositionToLight = og_sunPosition - displacedPosition;
 

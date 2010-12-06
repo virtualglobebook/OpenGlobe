@@ -406,8 +406,8 @@ namespace OpenGlobe.Scene.Terrain
 
             double originLongitude = level.Terrain.IndexToLongitude(level.CurrentExtent.West);
             double originLatitude = level.Terrain.IndexToLatitude(level.CurrentExtent.South);
-            _levelOffsetFromWorldOrigin.Value = new Vector2F((float)(originLongitude - center.X),
-                                                             (float)(originLatitude - center.Y));
+            _levelOffsetFromWorldOrigin.Value = new Vector2F((float)originLongitude,
+                                                             (float)originLatitude);
 
             int coarserWest = coarserLevel.CurrentExtent.West;
             int coarserSouth = coarserLevel.CurrentExtent.South;
@@ -415,8 +415,8 @@ namespace OpenGlobe.Scene.Terrain
                                              new Vector2F(west / 2 - coarserWest + 0.5f,
                                                           south / 2 - coarserSouth + 0.5f);
 
-            _viewPosInClippedLevel.Value = new Vector2F((float)(level.Terrain.LongitudeToIndex(center.X) - level.CurrentExtent.West),
-                                                        (float)(level.Terrain.LatitudeToIndex(center.Y) - level.CurrentExtent.South));
+            _viewPosInClippedLevel.Value = new Vector2F((float)(level.Terrain.LongitudeToIndex(Trig.ToDegrees(_clipmapCenter.Longitude)) - level.CurrentExtent.West),
+                                                        (float)(level.Terrain.LatitudeToIndex(Trig.ToDegrees(_clipmapCenter.Latitude)) - level.CurrentExtent.South));
 
             _fineTextureOrigin.Value = level.OriginInTextures.ToVector2F() + new Vector2F(0.5f, 0.5f);
 
@@ -536,7 +536,7 @@ namespace OpenGlobe.Scene.Terrain
             return mesh;
         }
 
-		/*
+        /*
         private double EstimateLevelExtent(ClipmapLevel level)
         {
             int east = level.CurrentExtent.West + _clipmapSegments;
@@ -554,7 +554,7 @@ namespace OpenGlobe.Scene.Terrain
 
             return (northeastCartesian - southwestCartesian).Magnitude;
         }
-		*/
+        */
 
         private static Vector3F[] CreateColors()
         {

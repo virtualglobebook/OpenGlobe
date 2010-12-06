@@ -39,7 +39,7 @@ namespace OpenGlobe.Examples
             _clearState = new ClearState();
             _clearState.Color = Color.LightSkyBlue;
 
-            _sceneState.Camera.PerspectiveNearPlaneDistance = 0.0001;
+            _sceneState.Camera.PerspectiveNearPlaneDistance = 0.00001;
             _sceneState.Camera.PerspectiveFarPlaneDistance = 10.0;
             _sceneState.SunPosition = new Vector3D(200000, 300000, 200000);
 
