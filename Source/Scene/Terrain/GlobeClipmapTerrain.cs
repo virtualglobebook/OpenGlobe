@@ -402,10 +402,8 @@ namespace OpenGlobe.Scene.Terrain
             float levelScaleFactor = (float)Math.Pow(2.0, -levelIndex);
             _levelScaleFactor.Value = new Vector2F(levelScaleFactor, levelScaleFactor);
 
-            double originLongitude = level.Terrain.IndexToLongitude(level.CurrentExtent.West);
-            double originLatitude = level.Terrain.IndexToLatitude(level.CurrentExtent.South);
-            _levelOffsetFromWorldOrigin.Value = new Vector2F((float)originLongitude,
-                                                             (float)originLatitude);
+            _levelOffsetFromWorldOrigin.Value = new Vector2F((float)((double)level.CurrentExtent.West - level.Terrain.LongitudeToIndex(0.0)),
+                                                             (float)((double)level.CurrentExtent.South - level.Terrain.LatitudeToIndex(0.0)));
 
             int coarserWest = coarserLevel.CurrentExtent.West;
             int coarserSouth = coarserLevel.CurrentExtent.South;

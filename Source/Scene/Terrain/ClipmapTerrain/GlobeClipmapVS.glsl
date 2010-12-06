@@ -70,7 +70,7 @@ void main()
     vec2 levelPos = position + u_patchOriginInClippedLevel;
 
     float height = SampleHeight(levelPos);
-    vec2 worldPos = levelPos * u_levelScaleFactor * u_levelZeroWorldScaleFactor + u_levelOffsetFromWorldOrigin;
+    vec2 worldPos = (levelPos + u_levelOffsetFromWorldOrigin) * u_levelScaleFactor * u_levelZeroWorldScaleFactor;
     vec3 displacedPosition = GeodeticToCartesian(vec3(worldPos, height));
 
     fsPositionToLight = og_sunPosition - displacedPosition;
