@@ -11,7 +11,7 @@ namespace OpenGlobe.Scene.Terrain
 {
     internal class ClipmapUpdater : IDisposable
     {
-        public ClipmapUpdater(Context context)
+        public ClipmapUpdater(Context context, ClipmapLevel[] clipmapLevels)
         {
             ShaderVertexAttributeCollection vertexAttributes = new ShaderVertexAttributeCollection();
             vertexAttributes.Add(new ShaderVertexAttribute("position", VertexLocations.Position, ShaderVertexAttributeType.FloatVector2, 1));
@@ -70,6 +70,16 @@ namespace OpenGlobe.Scene.Terrain
             requestThread.IsBackground = true;
             requestThread.Start();
 #endif
+
+            _lastViewerPosition = new LastViewerPosition(0.0, 0.0);
+
+            // Preload the entire world at level 0
+            ClipmapLevel levelZero = clipmapLevels[0];
+            RasterTerrainTileRegion[] regions = levelZero.Terrain.GetTilesInExtent(0, 0, levelZero.Terrain.LongitudePosts - 1, levelZero.Terrain.LatitudePosts - 1);
+            foreach (RasterTerrainTileRegion region in regions)
+            {
+                RequestTileLoad(levelZero, region.Tile);
+            }
         }
 
         public void Dispose()
@@ -476,7 +486,57 @@ namespace OpenGlobe.Scene.Terrain
                 }
                 else
                 {
-                    _currentRequests.Sort(TilePriorityComparer);
+                    LastViewerPosition lastViewerPos = _lastViewerPosition;
+                    _currentRequests.Sort(delegate(TileLoadRequest a, TileLoadRequest b)
+                    {
+                        double westA = a.Tile.Level.IndexToLongitude(a.Tile.West);
+                        double eastA = a.Tile.Level.IndexToLongitude(a.Tile.East);
+                        double southA = a.Tile.Level.IndexToLatitude(a.Tile.South);
+                        double northA = a.Tile.Level.IndexToLatitude(a.Tile.North);
+                        //bool isInsideA = westA <= lastViewerPos.Longitude && eastA >= lastViewerPos.Longitude &&
+                        //                 southA <= lastViewerPos.Latitude && northA >= lastViewerPos.Latitude;
+
+                        double westB = b.Tile.Level.IndexToLongitude(b.Tile.West);
+                        double eastB = b.Tile.Level.IndexToLongitude(b.Tile.East);
+                        double southB = b.Tile.Level.IndexToLatitude(b.Tile.South);
+                        double northB = b.Tile.Level.IndexToLatitude(b.Tile.North);
+                        //bool isInsideB = westB <= lastViewerPos.Longitude && eastB >= lastViewerPos.Longitude &&
+                        //                 southB <= lastViewerPos.Latitude && northB >= lastViewerPos.Latitude;
+
+                        //if (isInsideA && isInsideB)
+                        //{
+                        //    return a.Tile.Identifier.Level.CompareTo(b.Tile.Identifier.Level);
+                        //}
+                        //else if (isInsideA && !isInsideB)
+                        //{
+                        //    return -1;
+                        //}
+                        //else if (!isInsideA && isInsideB)
+                        //{
+                        //    return 1;
+                        //}
+                        //else
+                        //{
+                            double levelA = Math.Pow(4, a.Tile.Level.LevelID + 1);
+                            double centerLongitudeA = (westA + eastA) / 2.0 - lastViewerPos.Longitude;
+                            double centerLatitudeA = (southA + northA) / 2.0 - lastViewerPos.Latitude;
+                            double distanceA = Math.Sqrt(centerLongitudeA * centerLongitudeA + centerLatitudeA * centerLatitudeA);
+                            distanceA *= levelA;
+
+                            double levelB = Math.Pow(4, b.Tile.Level.LevelID);
+                            double centerLongitudeB = (westB + eastB) / 2.0 - lastViewerPos.Longitude;
+                            double centerLatitudeB = (southB + northB) / 2.0 - lastViewerPos.Latitude;
+                            double distanceB = Math.Sqrt(centerLongitudeB * centerLongitudeB + centerLatitudeB * centerLatitudeB);
+                            distanceB *= levelB;
+
+                            return distanceA.CompareTo(distanceB);
+                        //}
+                    });
+
+                    if (_currentRequests.Count > 200)
+                    {
+                        _currentRequests.RemoveRange(200, _currentRequests.Count - 200);
+                    }
 
                     TileLoadRequest request = _currentRequests[0];
                     _currentRequests.RemoveAt(0);
@@ -489,27 +549,6 @@ namespace OpenGlobe.Scene.Terrain
 
                     _doneQueue.Post(request);
                 }
-            }
-        }
-
-        private int TilePriorityComparer(TileLoadRequest a, TileLoadRequest b)
-        {
-            if (a.Tile.Identifier.Level != b.Tile.Identifier.Level)
-            {
-                return a.Tile.Identifier.Level.CompareTo(b.Tile.Identifier.Level);
-            }
-            else
-            {
-                LastViewerPosition lastViewerPos = _lastViewerPosition;
-                double centerLongitudeA = a.Tile.Level.IndexToLongitude((a.Tile.West + a.Tile.East) / 2) - lastViewerPos.Longitude;
-                double centerLatitudeA = a.Tile.Level.IndexToLatitude((a.Tile.South + a.Tile.North) / 2) - lastViewerPos.Latitude;
-                double distanceA = Math.Sqrt(centerLongitudeA * centerLongitudeA + centerLatitudeA * centerLatitudeA);
-
-                double centerLongitudeB = a.Tile.Level.IndexToLongitude((b.Tile.West + b.Tile.East) / 2) - lastViewerPos.Longitude;
-                double centerLatitudeB = a.Tile.Level.IndexToLatitude((b.Tile.South + b.Tile.North) / 2) - lastViewerPos.Latitude;
-                double distanceB = Math.Sqrt(centerLongitudeB * centerLongitudeB + centerLatitudeB * centerLatitudeB);
-
-                return distanceA.CompareTo(distanceB);
             }
         }
 

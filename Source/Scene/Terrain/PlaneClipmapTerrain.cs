@@ -116,7 +116,7 @@ namespace OpenGlobe.Scene.Terrain
 
             _oneOverClipmapSize.Value = 1.0f / clipmapPosts;
 
-            _updater = new ClipmapUpdater(context);
+            _updater = new ClipmapUpdater(context, _clipmapLevels);
 
             HeightExaggeration = 0.00001f;
         }
