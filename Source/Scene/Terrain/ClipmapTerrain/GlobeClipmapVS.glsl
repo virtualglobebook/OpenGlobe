@@ -35,13 +35,14 @@ uniform sampler2D og_texture1;    // coarser height map
 vec3 GeodeticToCartesian(vec3 geodetic)
 {
     vec2 geodeticRadians = geodetic.xy * og_radiansPerDegree;
-    vec2 cosGeodetic = cos(geodeticRadians.xy);
-    vec2 sinGeodetic = sin(geodeticRadians.xy);
+    vec2 cosGeodetic = cos(geodeticRadians);
+    vec2 sinGeodetic = sin(geodeticRadians);
 
     vec3 normal = vec3(cosGeodetic.y * cosGeodetic.x,
                        cosGeodetic.y * sinGeodetic.x,
                        sinGeodetic.y);
-    const vec3 Radii = vec3(1.0, 1.0, 0.99664718933522437664791458697109);
+    //const vec3 Radii = vec3(1.0, 1.0, 0.99664718933522437664791458697109);
+    const vec3 Radii = vec3(6378137.0, 6378137.0, 6356752.314245);
     vec3 position = normalize(normal * Radii) * Radii;
     return normal * geodetic.z + position;
 }

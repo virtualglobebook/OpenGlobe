@@ -19,9 +19,11 @@ namespace OpenGlobe.Scene.Terrain
 {
     public class GlobeClipmapTerrain : IRenderable, IDisposable
     {
-        public GlobeClipmapTerrain(Context context, RasterTerrainSource terrainSource, int clipmapPosts)
+        public GlobeClipmapTerrain(Context context, RasterTerrainSource terrainSource, Ellipsoid ellipsoid, int clipmapPosts)
         {
             _terrainSource = terrainSource;
+            _ellipsoid = ellipsoid;
+
             _clipmapPosts = clipmapPosts;
             _clipmapSegments = _clipmapPosts - 1;
 
@@ -165,7 +167,7 @@ namespace OpenGlobe.Scene.Terrain
             if (!_lodUpdateEnabled)
                 return;
 
-            _clipmapCenter = Ellipsoid.ScaledWgs84.ToGeodetic3D(sceneState.Camera.Eye);
+            _clipmapCenter = _ellipsoid.ToGeodetic3D(sceneState.Camera.Eye);
 
             //Geodetic2D center = Ellipsoid.ScaledWgs84.ToGeodetic2D(sceneState.Camera.Target / Ellipsoid.Wgs84.MaximumRadius);
             Geodetic2D center = new Geodetic2D(_clipmapCenter.Longitude, _clipmapCenter.Latitude);
@@ -618,5 +620,6 @@ namespace OpenGlobe.Scene.Terrain
         private Geodetic3D _clipmapCenter;
 
         private static readonly Vector3F[] _colors = CreateColors();
+        private Ellipsoid _ellipsoid;
     }
 }
