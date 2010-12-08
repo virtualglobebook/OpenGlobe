@@ -44,16 +44,12 @@ vec3 GeodeticSurfaceNormal(vec3 geodetic)
 
 vec3 GeodeticToCartesian(vec3 globeRadiiSquared, vec3 geodetic)
 {
-	const vec3 radii = 
-		vec3(1.0, 1.0, 0.99664718933522437664791458697109) *
-		vec3(1.0, 1.0, 0.99664718933522437664791458697109);
-
-    vec3 n = GeodeticSurfaceNormal(geodetic);
+	vec3 n = GeodeticSurfaceNormal(geodetic);
 	vec3 g = globeRadiiSquared * n * n;
-    float gamma = sqrt(g.x + g.y + g.z);
+	float gamma = sqrt(g.x + g.y + g.z);
 
-    vec3 rSurface = (globeRadiiSquared * n) / gamma;
-    return rSurface + (geodetic.z * n);
+	vec3 rSurface = (globeRadiiSquared * n) / gamma;
+	return rSurface + (geodetic.z * n);
 }
 
 float SampleHeight(vec2 levelPos)
