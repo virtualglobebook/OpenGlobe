@@ -35,6 +35,12 @@ namespace OpenGlobe.Core
             get { return _latitude; }
         }
 
+        public bool EqualsEpsilon(Geodetic2D other, double epsilon)
+        {
+            return (Math.Abs(_longitude - other._longitude) <= epsilon) &&
+                   (Math.Abs(_latitude - other._latitude) <= epsilon);
+        }
+
         public bool Equals(Geodetic2D other)
         {
             return _longitude == other._longitude && _latitude == other._latitude;

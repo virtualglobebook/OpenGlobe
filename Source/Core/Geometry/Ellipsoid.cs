@@ -36,10 +36,10 @@ namespace OpenGlobe.Core
                 radii.X * radii.X,
                 radii.Y * radii.Y,
                 radii.Z * radii.Z);
-            _oneOverRadii = new Vector3D(
-                1.0 / radii.X,
-                1.0 / radii.Y,
-                1.0 / radii.Z);
+            _radiiToTheFourth = new Vector3D(
+                _radiiSquared.X * _radiiSquared.X,
+                _radiiSquared.Y * _radiiSquared.Y,
+                _radiiSquared.Z * _radiiSquared.Z);
             _oneOverRadiiSquared = new Vector3D(
                 1.0 / (radii.X * radii.X), 
                 1.0 / (radii.Y * radii.Y), 
@@ -71,9 +71,9 @@ namespace OpenGlobe.Core
             get { return _radii; }
         }
 
-        public Vector3D OneOverRadii
+        public Vector3D RadiiSquared
         {
-            get { return _oneOverRadii; }
+            get { return _radiiSquared; }
         }
 
         public Vector3D OneOverRadiiSquared
@@ -139,7 +139,7 @@ namespace OpenGlobe.Core
 
         public Vector3D ToVector3D(Geodetic2D geodetic)
         {
-            return ToVector3D(new Geodetic3D(geodetic.Longitude, geodetic.Latitude, 0));
+            return ToVector3D(new Geodetic3D(geodetic.Longitude, geodetic.Latitude, 0.0));
         }
 
         public Vector3D ToVector3D(Geodetic3D geodetic)
@@ -189,64 +189,84 @@ namespace OpenGlobe.Core
             return geodetics;
         }
 
-        public Geodetic2D ToGeodetic2D(Vector3D vector)
+        public Geodetic2D ToGeodetic2D(Vector3D positionOnEllipsoid)
         {
-            return new Geodetic2D(ToGeodetic3D(vector));
+            Vector3D n = GeodeticSurfaceNormal(positionOnEllipsoid);
+            return new Geodetic2D(
+                Math.Atan2(n.Y, n.X),
+                Math.Asin(n.Z / n.Magnitude));
         }
 
-        public Geodetic3D ToGeodetic3D(Vector3D vector)
+        public Geodetic3D ToGeodetic3D(Vector3D position)
         {
-            //
-            // From: http://en.wikipedia.org/wiki/Geodetic_system; TODO better
-            // reference.
-            //
-            double a2 = MaximumRadius * MaximumRadius;
-            double b2 = MinimumRadius * MinimumRadius;
-            double e2 = 1.0 - (b2 / a2);
-            double ep2 = (a2 / b2) - 1.0;
-            Vector3D vector2 = vector.MultiplyComponents(vector);
-            double r = Math.Sqrt(vector2.X + vector2.Y);
-            double r2 = r * r;
-            double E2 = a2 - b2;
-            double F = 54.0 * b2 * vector2.Z;
-            double G = r2 + ((1.0 - e2) * vector2.Z) - (e2 * E2);
-            double C = e2 * e2 * F * r2 / (G * G * G);
-            double temp0 = 1.0 + C + Math.Sqrt((C * C) + (2.0 * C));
-            double S = Math.Pow(temp0, 1.0 / 3.0);
-            temp0 = S + (1.0 / S) + 1.0;
-            double P = F / (3.0 * temp0 * temp0 * G * G);
-            double Q = Math.Sqrt(1.0 + (2.0 * e2 * e2 * P));
-            temp0 = -(P * e2 * r) / (1.0 + Q);
-            double temp1 = (0.5 * a2 * (1.0 + (1.0 / Q))) - ((P * (1 - e2) *
-                vector2.Z) / (Q * (1.0 + Q))) - (0.5 * P * r2);
-            double r0 = temp0 + Math.Sqrt(temp1);
-            temp0 = r - (e2 * r0);
-            temp0 *= temp0;
-            double U = Math.Sqrt(temp0 + vector2.Z);
-            double V = Math.Sqrt(temp0 + ((1.0 - e2) * vector2.Z));
-            temp0 = MaximumRadius * V;
-            double Z0 = b2 * vector.Z / temp0;
-            double height = U * (1.0 - (b2 / temp0));
-            double latitude = Math.Atan((Z0 + (ep2 * Z0)) / r);
-            double longitude = Math.Atan2(vector.Y, vector.X);
-            return new Geodetic3D(longitude, latitude, height);
+            Vector3D p = ScaleToGeodeticSurface(position);
+            Geodetic2D g = ToGeodetic2D(p);
+
+            double height = position.Magnitude - p.Magnitude;
+            return new Geodetic3D(g, height);
         }
 
         public Vector3D ScaleToGeodeticSurface(Vector3D position)
         {
-            return ScaleToGeodeticHeight(position, 0);
-        }
+            double b = 1.0 / Math.Sqrt(
+                (position.X * position.X) * _oneOverRadiiSquared.X +
+                (position.Y * position.Y) * _oneOverRadiiSquared.Y +
+                (position.Z * position.Z) * _oneOverRadiiSquared.Z);
+            double bSquared = b * b;
+            double n = new Vector3D(
+                b * position.X * _oneOverRadiiSquared.X,
+                b * position.Y * _oneOverRadiiSquared.Y,
+                b * position.Z * _oneOverRadiiSquared.Z).Magnitude;
+            double alpha = (1.0 - b) * (position.Magnitude / n);
 
-        public Vector3D ScaleToGeodeticHeight(Vector3D position, double height)
-        {
-            Geodetic3D geodetic = ToGeodetic3D(position);
-            Geodetic3D onSurface = new Geodetic3D(geodetic.Longitude, geodetic.Latitude, height);
-            return ToVector3D(onSurface);
+
+            double da = 0.0;
+            double db = 0.0;
+            double dc = 0.0;
+
+            double s = 0.0;
+            double dSdA = 1.0;
+
+            do
+            {
+                alpha -= (s / dSdA);
+
+                da = 1.0 + (alpha * _oneOverRadiiSquared.X);
+                db = 1.0 + (alpha * _oneOverRadiiSquared.Y);
+                dc = 1.0 + (alpha * _oneOverRadiiSquared.Z);
+
+                double da2 = da * da;
+                double db2 = db * db;
+                double dc2 = dc * dc;
+
+                double da3 = da * da2;
+                double db3 = db * db2;
+                double dc3 = dc * dc2;
+
+                double x2 = position.X * position.X;
+                double y2 = position.Y * position.Y;
+                double z2 = position.Z * position.Z;
+
+                s = x2 / (_radiiSquared.X * da2) +
+                    y2 / (_radiiSquared.Y * db2) +
+                    z2 / (_radiiSquared.Z * dc2) - 1.0;
+
+                dSdA = -2.0 *
+                    (x2 / (_radiiToTheFourth.X * da3) +
+                     y2 / (_radiiToTheFourth.Y * db3) +
+                     z2 / (_radiiToTheFourth.Z * dc3));
+            }
+            while (s > 1e-10);
+
+            return new Vector3D(
+                position.X / da,
+                position.Y / db,
+                position.Z / dc);
         }
 
         private readonly Vector3D _radii;
         private readonly Vector3D _radiiSquared;
-        private readonly Vector3D _oneOverRadii;
+        private readonly Vector3D _radiiToTheFourth;
         private readonly Vector3D _oneOverRadiiSquared;
     }
 }

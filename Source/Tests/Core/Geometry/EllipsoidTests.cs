@@ -27,7 +27,7 @@ namespace OpenGlobe.Core
             Assert.AreEqual(new Vector3D(4, 5, 6), ellipsoid2.Radii);
 
             Ellipsoid sphere = Ellipsoid.UnitSphere;
-            Assert.IsTrue(sphere.OneOverRadii.Equals((new Vector3D(1, 1, 1))));
+            Assert.IsTrue(sphere.RadiiSquared.Equals((new Vector3D(1, 1, 1))));
             Assert.IsTrue(sphere.OneOverRadiiSquared.Equals((new Vector3D(1, 1, 1))));
         }
 
@@ -222,6 +222,24 @@ namespace OpenGlobe.Core
             Assert.AreEqual(Trig.ToRadians(-97.3), g.Longitude, 1e-10);
             Assert.AreEqual(Trig.ToRadians(71.2), g.Latitude, 1e-3);
             Assert.AreEqual(1188.7, g.Height, 1e-3);
+        }
+
+        [Test]
+        public void ToGeodetic2D()
+        {
+            Assert.IsTrue(new Geodetic2D(0, 0).EqualsEpsilon(
+                Ellipsoid.UnitSphere.ToGeodetic2D(new Vector3D(1, 0, 0)), 1e-10));
+            Assert.IsTrue(new Geodetic2D(0, Trig.PiOverTwo).EqualsEpsilon(
+                Ellipsoid.UnitSphere.ToGeodetic2D(new Vector3D(0, 0, 1)), 1e-10));
+        }
+
+        [Test]
+        public void ScaleToGeodeticSurface()
+        {
+            Assert.IsTrue(new Vector3D(1, 0, 0).EqualsEpsilon(
+                Ellipsoid.UnitSphere.ScaleToGeodeticSurface(new Vector3D(3, 0, 0)), 1e-10));
+            Assert.IsTrue(new Vector3D(0, 0, 1).EqualsEpsilon(
+                Ellipsoid.UnitSphere.ScaleToGeodeticSurface(new Vector3D(0, 0, 0.5)), 1e-10));
         }
     }
 }
