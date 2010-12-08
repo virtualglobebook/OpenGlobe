@@ -34,6 +34,13 @@ namespace OpenGlobe.Core
             _height = 0;
         }
 
+        public Geodetic3D(Geodetic2D geodetic2D, double height)
+        {
+            _longitude = geodetic2D.Longitude;
+            _latitude = geodetic2D.Latitude;
+            _height = height;
+        }
+
         public double Longitude
         {
             get { return _longitude; }
