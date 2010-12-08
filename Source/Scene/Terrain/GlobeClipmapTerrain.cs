@@ -100,6 +100,9 @@ namespace OpenGlobe.Scene.Terrain
             _color = (Uniform<Vector3F>)_shaderProgram.Uniforms["u_color"];
             _blendRegionColor = (Uniform<Vector3F>)_shaderProgram.Uniforms["u_blendRegionColor"];
 
+            ((Uniform<Vector3F>)_shaderProgram.Uniforms["u_globeRadiiSquared"]).Value =
+                Ellipsoid.ScaledWgs84.RadiiSquared.ToVector3F();
+            
             _renderState = new RenderState();
             _renderState.FacetCulling.FrontFaceWindingOrder = fieldBlockMesh.FrontFaceWindingOrder;
             _primitiveType = fieldBlockMesh.PrimitiveType;
@@ -608,7 +611,7 @@ namespace OpenGlobe.Scene.Terrain
         private Uniform<float> _oneOverClipmapSize;
         private Uniform<Vector3F> _color;
         private Uniform<Vector3F> _blendRegionColor;
-
+        
         private bool _wireframe;
         private bool _blendRegionsEnabled = true;
         private bool _lodUpdateEnabled = true;

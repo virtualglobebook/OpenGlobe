@@ -28,22 +28,32 @@ uniform vec2 u_fineTextureOrigin;
 uniform float u_heightExaggeration;
 uniform float u_oneOverClipmapSize;
 uniform bool u_useBlendRegions;
+uniform vec3 u_globeRadiiSquared;
 uniform sampler2D og_texture0;    // finer height map
 uniform sampler2D og_texture1;    // coarser height map
 
-vec3 GeodeticToCartesian(vec3 geodetic)
+vec3 GeodeticSurfaceNormal(vec3 geodetic)
 {
-    // TODO:  Make this code look like Ellipsoid.ToVector3D.
-    vec2 geodeticRadians = geodetic.xy * og_radiansPerDegree;
-    vec2 cosGeodetic = cos(geodeticRadians.xy);
-    vec2 sinGeodetic = sin(geodeticRadians.xy);
+	float cosLatitude = cos(geodetic.y);
 
-    vec3 normal = vec3(cosGeodetic.y * cosGeodetic.x,
-                       cosGeodetic.y * sinGeodetic.x,
-                       sinGeodetic.y);
-    const vec3 Radii = vec3(1.0, 1.0, 0.99664718933522437664791458697109);
-    vec3 position = normalize(normal * Radii) * Radii;
-    return normal * geodetic.z + position;
+	return vec3(
+		cosLatitude * cos(geodetic.x),
+		cosLatitude * sin(geodetic.x),
+		sin(geodetic.y));
+}
+
+vec3 GeodeticToCartesian(vec3 globeRadiiSquared, vec3 geodetic)
+{
+	const vec3 radii = 
+		vec3(1.0, 1.0, 0.99664718933522437664791458697109) *
+		vec3(1.0, 1.0, 0.99664718933522437664791458697109);
+
+    vec3 n = GeodeticSurfaceNormal(geodetic);
+	vec3 g = globeRadiiSquared * n * n;
+    float gamma = sqrt(g.x + g.y + g.z);
+
+    vec3 rSurface = (globeRadiiSquared * n) / gamma;
+    return rSurface + (geodetic.z * n);
 }
 
 float SampleHeight(vec2 levelPos)
@@ -72,7 +82,7 @@ void main()
 
     float height = SampleHeight(levelPos);
     vec2 worldPos = levelPos * u_levelScaleFactor * u_levelZeroWorldScaleFactor + u_levelOffsetFromWorldOrigin;
-    vec3 displacedPosition = GeodeticToCartesian(vec3(worldPos, height));
+    vec3 displacedPosition = GeodeticToCartesian(u_globeRadiiSquared, vec3(worldPos * og_radiansPerDegree, height));
 
     fsPositionToLight = og_sunPosition - displacedPosition;
 
