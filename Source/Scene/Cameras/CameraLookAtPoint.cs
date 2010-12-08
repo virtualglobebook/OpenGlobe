@@ -413,13 +413,13 @@ namespace OpenGlobe.Scene
                 _azimuth += Trig.TwoPi;
             }
 
-            if (_elevation < -Trig.HalfPi)
+            if (_elevation < -Trig.PiOverTwo)
             {
-                _elevation = -Trig.HalfPi;
+                _elevation = -Trig.PiOverTwo;
             }
-            else if (_elevation > Trig.HalfPi)
+            else if (_elevation > Trig.PiOverTwo)
             {
-                _elevation = Trig.HalfPi;
+                _elevation = Trig.PiOverTwo;
             }
         }
 

@@ -292,15 +292,15 @@ namespace OpenGlobe.Scene
             _yaw -= yawWindowRatio * Math.PI;
             _pitch -= pitchWindowRatio * Math.PI;
 
-            if (_pitch < -Trig.HalfPi)
+            if (_pitch < -Trig.PiOverTwo)
             {
-                _pitch = -Trig.HalfPi + (-Trig.HalfPi - _pitch);
+                _pitch = -Trig.PiOverTwo + (-Trig.PiOverTwo - _pitch);
                 _yaw += Math.PI;
                 _roll += Math.PI;
             }
-            else if (_pitch > Trig.HalfPi)
+            else if (_pitch > Trig.PiOverTwo)
             {
-                _pitch = Trig.HalfPi - (_pitch - Trig.HalfPi);
+                _pitch = Trig.PiOverTwo - (_pitch - Trig.PiOverTwo);
                 _yaw += Math.PI;
                 _roll += Math.PI;
             }
