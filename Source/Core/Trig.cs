@@ -21,7 +21,6 @@ namespace OpenGlobe.Core
         public const double ThreePiOver2 = (3.0 * Math.PI) * 0.5;
         public const double TwoPi = 2.0 * Math.PI;
         public const double OneOverTwoPi = 1.0 / (2.0 * Math.PI);
-        public const double HalfPi = 0.5 * Math.PI;
         public const double RadiansPerDegree = Math.PI / 180.0;
 
         public static double ToRadians(double degrees)

@@ -38,7 +38,6 @@ namespace OpenGlobe.Renderer.GL3x
                 "const float og_threePiOver2 =     " + Trig.ThreePiOver2.ToString(NumberFormatInfo.InvariantInfo) + "; \n" +
                 "const float og_twoPi =            " + Trig.TwoPi.ToString(NumberFormatInfo.InvariantInfo) + "; \n" +
                 "const float og_oneOverTwoPi =     " + Trig.OneOverTwoPi.ToString(NumberFormatInfo.InvariantInfo) + "; \n" +
-                "const float og_halfPi =           " + Trig.HalfPi.ToString(NumberFormatInfo.InvariantInfo) + "; \n" +
                 "const float og_radiansPerDegree = " + Trig.RadiansPerDegree.ToString(NumberFormatInfo.InvariantInfo) + "; \n" +
                 "const float og_maximumFloat =     " + float.MaxValue.ToString(NumberFormatInfo.InvariantInfo) + "; \n" +
                 "const float og_minimumFloat =     " + float.MinValue.ToString(NumberFormatInfo.InvariantInfo) + "; \n";

@@ -34,6 +34,7 @@ uniform sampler2D og_texture1;    // coarser height map
 
 vec3 GeodeticToCartesian(vec3 geodetic)
 {
+    // TODO:  Make this code look like Ellipsoid.ToVector3D.
     vec2 geodeticRadians = geodetic.xy * og_radiansPerDegree;
     vec2 cosGeodetic = cos(geodeticRadians);
     vec2 sinGeodetic = sin(geodeticRadians);

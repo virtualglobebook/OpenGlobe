@@ -32,6 +32,10 @@ namespace OpenGlobe.Core
             }
 
             _radii = radii;
+            _radiiSquared = new Vector3D(
+                radii.X * radii.X,
+                radii.Y * radii.Y,
+                radii.Z * radii.Z);
             _oneOverRadii = new Vector3D(
                 1.0 / radii.X,
                 1.0 / radii.Y,
@@ -50,6 +54,16 @@ namespace OpenGlobe.Core
         public Vector3D GeodeticSurfaceNormal(Vector3D positionOnEllipsoid)
         {
             return (positionOnEllipsoid.MultiplyComponents(_oneOverRadiiSquared)).Normalize();
+        }
+
+        public Vector3D GeodeticSurfaceNormal(Geodetic3D geodetic)
+        {
+            double cosLatitude = Math.Cos(geodetic.Latitude);
+
+            return new Vector3D(
+                cosLatitude * Math.Cos(geodetic.Longitude),
+                cosLatitude * Math.Sin(geodetic.Longitude),
+                Math.Sin(geodetic.Latitude));
         }
 
         public Vector3D Radii 
@@ -130,25 +144,15 @@ namespace OpenGlobe.Core
 
         public Vector3D ToVector3D(Geodetic3D geodetic)
         {
-            double cosLon = Math.Cos(geodetic.Longitude);
-            double cosLat = Math.Cos(geodetic.Latitude);
-            double sinLon = Math.Sin(geodetic.Longitude);
-            double sinLat = Math.Sin(geodetic.Latitude);
+            Vector3D n = GeodeticSurfaceNormal(geodetic);
+            double gamma = Math.Sqrt(
+                _radiiSquared.X * (n.X * n.X) +
+                _radiiSquared.Y * (n.Y * n.Y) +
+                _radiiSquared.Z * (n.Z * n.Z));
 
-            double a = MaximumRadius;
-            double b = MinimumRadius;
-            double aSquared = a * a;
-            double firstEccentricitySquared = (aSquared - (b * b)) / aSquared;
+            Vector3D rSurface = (_radiiSquared.MultiplyComponents(n)) / gamma;
 
-            double chi = Math.Sqrt(1.0 - firstEccentricitySquared * sinLat * sinLat);
-            double normal = a / chi;
-            double normalPlusHeight = normal + geodetic.Height;
-
-            double x = normalPlusHeight * cosLat * cosLon;
-            double y = normalPlusHeight * cosLat * sinLon;
-            double z = (normal * (1.0 - firstEccentricitySquared) + geodetic.Height) * sinLat;
-
-            return new Vector3D(x, y, z);
+            return rSurface + (geodetic.Height * n);
         }
 
         public ICollection<Geodetic3D> ToGeodetic3D(IEnumerable<Vector3D> positions)
@@ -241,6 +245,7 @@ namespace OpenGlobe.Core
         }
 
         private readonly Vector3D _radii;
+        private readonly Vector3D _radiiSquared;
         private readonly Vector3D _oneOverRadii;
         private readonly Vector3D _oneOverRadiiSquared;
     }

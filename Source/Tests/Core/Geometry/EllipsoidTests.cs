@@ -7,6 +7,7 @@
 //
 #endregion
 
+using System;
 using NUnit.Framework;
 
 namespace OpenGlobe.Core
@@ -35,6 +36,15 @@ namespace OpenGlobe.Core
         {
             Assert.IsTrue(new Vector3D(1, 0, 0).Equals(Ellipsoid.UnitSphere.GeodeticSurfaceNormal(new Vector3D(1, 0, 0))));
             Assert.IsTrue(new Vector3D(0, 0, 1).Equals(Ellipsoid.UnitSphere.GeodeticSurfaceNormal(new Vector3D(0, 0, 1))));
+        }
+
+        [Test]
+        public void GeodeticSurfaceNormal2()
+        {
+            Assert.IsTrue(new Vector3D(1, 0, 0).EqualsEpsilon(
+                Ellipsoid.UnitSphere.GeodeticSurfaceNormal(new Geodetic3D(0, 0, 0)), 1e-10));
+            Assert.IsTrue(new Vector3D(0, 0, 1).EqualsEpsilon(
+                Ellipsoid.UnitSphere.GeodeticSurfaceNormal(new Geodetic3D(0, Trig.PiOverTwo, 0)), 1e-10));
         }
 
         [Test]
