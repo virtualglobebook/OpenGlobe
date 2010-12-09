@@ -244,12 +244,12 @@ namespace OpenGlobe.Core
         }
 
         [Test]
-        public void ComputeApproximateGeodesicCurve()
+        public void ComputeCurve()
         {
             Vector3D p = Vector3D.UnitX;
             Vector3D q = Vector3D.UnitZ;
 
-            IList<Vector3D> positions = Ellipsoid.UnitSphere.ComputeApproximateGeodesicCurve(
+            IList<Vector3D> positions = Ellipsoid.UnitSphere.ComputeCurve(
                 p, q, Trig.ToRadians(45));
 
             Assert.AreEqual(p, positions[0]);
@@ -258,12 +258,12 @@ namespace OpenGlobe.Core
         }
 
         [Test]
-        public void ComputeApproximateGeodesicCurve2()
+        public void ComputeCurve2()
         {
             Vector3D p = -Vector3D.UnitZ;
             Vector3D q = -Vector3D.UnitY;
 
-            IList<Vector3D> positions = Ellipsoid.UnitSphere.ComputeApproximateGeodesicCurve(
+            IList<Vector3D> positions = Ellipsoid.UnitSphere.ComputeCurve(
                 p, q, Trig.ToRadians(30));
 
             Assert.AreEqual(p, positions[0]);
