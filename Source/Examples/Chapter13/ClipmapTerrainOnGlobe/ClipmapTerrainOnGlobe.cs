@@ -88,9 +88,9 @@ namespace OpenGlobe.Examples
             snap.WidthInInches = 3;
             snap.DotsPerInch = 600;
 
-            //_hudFont = new Font("Arial", 16);
-            //_hud = new HeadsUpDisplay();
-            //_hud.Color = Color.Blue;
+            _hudFont = new Font("Arial", 16);
+            _hud = new HeadsUpDisplay();
+            _hud.Color = Color.Blue;
             UpdateHUD();
         }
 
