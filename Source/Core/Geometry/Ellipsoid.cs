@@ -263,7 +263,7 @@ namespace OpenGlobe.Core
                 position.Z / dc);
         }
 
-        public IList<Vector3D> ComputeApproximateGeodesicCurve(
+        public IList<Vector3D> ComputeCurve(
             Vector3D start, 
             Vector3D stop, 
             double granularity)
