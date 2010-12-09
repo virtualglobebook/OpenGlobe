@@ -166,6 +166,24 @@ namespace OpenGlobe.Examples
             _labels.Render(context, _sceneState);
             _tangentPlane.Render(context, _sceneState);
             _instructions.Render(context, _sceneState);
+
+            // TODO:  Move to separate example
+            /*
+            BillboardCollection c = new BillboardCollection(context);
+            c.DepthTestEnabled = false;
+            c.Texture = Device.CreateTexture2D(Device.CreateBitmapFromPoint(12), TextureFormat.RedGreenBlueAlpha8, false);
+
+            Vector3D p = _globeShape.ToVector3D(new Geodetic2D(Trig.ToRadians(-60), Trig.ToRadians(40)));
+            Vector3D q = _globeShape.ToVector3D(new Geodetic2D(Trig.ToRadians(50), Trig.ToRadians(-30)));
+            IList<Vector3D> positions = _globeShape.ComputeApproximateGeodesicCurve(p, q, Trig.ToRadians(10));
+
+            foreach (Vector3D v in positions)
+            {
+                c.Add(new Billboard() { Position = v, Color = Color.Yellow });
+            }
+
+            c.Render(context, _sceneState);
+            */
         }
 
         private void OnKeyDown(object sender, KeyboardKeyEventArgs e)

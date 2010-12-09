@@ -175,6 +175,32 @@ namespace OpenGlobe.Core
             return Math.Acos(Normalize().Dot(other.Normalize()));
         }
 
+        public Vector3D RotateAroundAxis(Vector3D axis, double theta)
+        {
+            double u = axis.X;
+            double v = axis.Y;
+            double w = axis.Z;
+
+            double cosTheta = Math.Cos(theta);
+            double sinTheta = Math.Sin(theta);
+
+            double ms = axis.MagnitudeSquared;
+            double m = Math.Sqrt(ms);
+
+            return new Vector3D(
+                ((u * (u * _x + v * _y + w * _z)) + 
+                (((_x * (v * v + w * w)) - (u * (v * _y + w * _z))) * cosTheta) + 
+                (m * ((-w * _y) + (v * _z)) * sinTheta)) / ms,
+
+                ((v * (u * _x + v * _y + w * _z)) + 
+                (((_y * (u * u + w * w)) - (v * (u * _x + w * _z))) * cosTheta) + 
+                (m * ((w * _x) - (u * _z)) * sinTheta)) / ms,
+
+                ((w * (u * _x + v * _y + w * _z)) + 
+                (((_z * (u * u + v * v)) - (w * (u * _x + v * _y))) * cosTheta) + 
+                (m * (-(v * _x) + (u * _y)) * sinTheta)) / ms);
+        }
+
         public Vector3D Negate()
         {
             return -this;
