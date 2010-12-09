@@ -11,6 +11,7 @@ in vec2 fsCoarseUv;
 in vec3 fsPositionToLight;
 in float fsAlpha;
 in float fsHeight;
+in vec2 fsLonLat;
                  
 out vec3 fragmentColor;
 

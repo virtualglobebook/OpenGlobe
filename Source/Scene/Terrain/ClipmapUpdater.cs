@@ -489,6 +489,11 @@ namespace OpenGlobe.Scene.Terrain
                     LastViewerPosition lastViewerPos = _lastViewerPosition;
                     _currentRequests.Sort(delegate(TileLoadRequest a, TileLoadRequest b)
                     {
+                        if (a.Tile.Level.LevelID == 0 && b.Tile.Level.LevelID != 0)
+                            return -1;
+                        else if (a.Tile.Level.LevelID != 0 && b.Tile.Level.LevelID == 0)
+                            return 1;
+
                         double westA = a.Tile.Level.IndexToLongitude(a.Tile.West);
                         double eastA = a.Tile.Level.IndexToLongitude(a.Tile.East);
                         double southA = a.Tile.Level.IndexToLatitude(a.Tile.South);

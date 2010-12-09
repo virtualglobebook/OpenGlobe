@@ -152,7 +152,7 @@ namespace OpenGlobe.Examples
             {
                 _camera.Dispose();
                 CameraFly fly = new CameraFly(_sceneState.Camera, _window);
-                fly.MovementRate *= 1000;
+                fly.MovementRate *= 10;
             }
         }
 
