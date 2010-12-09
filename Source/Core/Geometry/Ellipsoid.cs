@@ -263,6 +263,36 @@ namespace OpenGlobe.Core
                 position.Z / dc);
         }
 
+        public IList<Vector3D> ComputeApproximateGeodesicCurve(
+            Vector3D start, 
+            Vector3D stop, 
+            double granularity)
+        {
+            if (granularity <= 0.0)
+            {
+                throw new ArgumentOutOfRangeException("granularity", "Granularity must be greater than zero.");
+            }
+
+            Vector3D normal = start.Cross(stop).Normalize();
+            double theta = start.AngleBetween(stop);
+            int n = Math.Max((int)(theta / granularity) - 1, 0);
+            
+            IList<Vector3D> positions = new List<Vector3D>(2 + n);
+
+            positions.Add(start);
+
+            for (int i = 1; i <= n; ++i)
+            {
+                double phi = (i * granularity);
+
+                positions.Add(ScaleToGeodeticSurface(start.RotateAroundAxis(normal, phi)));
+            }
+
+            positions.Add(stop);
+
+            return positions;
+        }
+
         private readonly Vector3D _radii;
         private readonly Vector3D _radiiSquared;
         private readonly Vector3D _radiiToTheFourth;

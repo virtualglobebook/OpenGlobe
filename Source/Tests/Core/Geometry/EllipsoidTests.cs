@@ -9,6 +9,7 @@
 
 using System;
 using NUnit.Framework;
+using System.Collections.Generic;
 
 namespace OpenGlobe.Core
 {
@@ -240,6 +241,35 @@ namespace OpenGlobe.Core
                 Ellipsoid.UnitSphere.ScaleToGeodeticSurface(new Vector3D(3, 0, 0)), 1e-10));
             Assert.IsTrue(new Vector3D(0, 0, 1).EqualsEpsilon(
                 Ellipsoid.UnitSphere.ScaleToGeodeticSurface(new Vector3D(0, 0, 0.5)), 1e-10));
+        }
+
+        [Test]
+        public void ComputeApproximateGeodesicCurve()
+        {
+            Vector3D p = Vector3D.UnitX;
+            Vector3D q = Vector3D.UnitZ;
+
+            IList<Vector3D> positions = Ellipsoid.UnitSphere.ComputeApproximateGeodesicCurve(
+                p, q, Trig.ToRadians(45));
+
+            Assert.AreEqual(p, positions[0]);
+            Assert.IsTrue(new Vector3D(1, 0, 1).Normalize().EqualsEpsilon(positions[1].Normalize(), 1e-10));
+            Assert.AreEqual(q, positions[2]);
+        }
+
+        [Test]
+        public void ComputeApproximateGeodesicCurve2()
+        {
+            Vector3D p = -Vector3D.UnitZ;
+            Vector3D q = -Vector3D.UnitY;
+
+            IList<Vector3D> positions = Ellipsoid.UnitSphere.ComputeApproximateGeodesicCurve(
+                p, q, Trig.ToRadians(30));
+
+            Assert.AreEqual(p, positions[0]);
+            Assert.IsTrue(new Vector3D(0, -0.5, -0.866025403784439).Normalize().EqualsEpsilon(positions[1].Normalize(), 1e-10));
+            Assert.IsTrue(new Vector3D(0, -0.866025403784439, -0.5).Normalize().EqualsEpsilon(positions[2].Normalize(), 1e-10));
+            Assert.AreEqual(q, positions[3]);
         }
     }
 }
