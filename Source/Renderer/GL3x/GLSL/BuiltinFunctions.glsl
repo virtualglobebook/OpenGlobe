@@ -28,7 +28,7 @@ float og_distanceToLine(vec2 f, vec2 p0, vec2 p1)
 // Emulates double precision subtraction.
 // Returns left - right.
 //
-vec3 ogEmulatedDoubleSubtract(
+vec3 og_EmulatedDoubleSubtract(
 	vec3 leftHigh,  vec3 leftLow,
 	vec3 rightHigh, vec3 rightLow)
 {
@@ -55,7 +55,7 @@ vec4 ogTransformEmulatedDoublePosition(
 	vec3 cameraEyeHigh, vec3 cameraEyeLow,
 	mat4 modelViewPerspectiveMatrixRelativeToEye)
 {
-    vec3 positionEye = ogEmulatedDoubleSubtract(positionHigh, positionLow, cameraEyeHigh, cameraEyeLow);
+    vec3 positionEye = og_EmulatedDoubleSubtract(positionHigh, positionLow, cameraEyeHigh, cameraEyeLow);
     return modelViewPerspectiveMatrixRelativeToEye * vec4(positionEye, 1.0);
 }
 
@@ -65,7 +65,7 @@ vec4 ogTransformEmulatedDoublePosition(
 	mat4 modelViewPerspectiveMatrixRelativeToEye,
 	out vec3 positionInModelCoordinates)
 {
-    vec3 positionEye = ogEmulatedDoubleSubtract(positionHigh, positionLow, cameraEyeHigh, cameraEyeLow);
+    vec3 positionEye = og_EmulatedDoubleSubtract(positionHigh, positionLow, cameraEyeHigh, cameraEyeLow);
 
     positionInModelCoordinates = cameraEyeHigh + positionEye;
     return modelViewPerspectiveMatrixRelativeToEye * vec4(positionEye, 1.0);
