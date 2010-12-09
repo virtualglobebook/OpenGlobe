@@ -202,23 +202,26 @@ namespace OpenGlobe.Core
             Vector3D p = ScaleToGeodeticSurface(position);
             Geodetic2D g = ToGeodetic2D(p);
 
-            double height = position.Magnitude - p.Magnitude;
+            Vector3D h = position - p;
+            double height = Math.Sign(h.Dot(position)) * h.Magnitude;
             return new Geodetic3D(g, height);
         }
 
         public Vector3D ScaleToGeodeticSurface(Vector3D position)
         {
-            double b = 1.0 / Math.Sqrt(
+            double beta = 1.0 / Math.Sqrt(
                 (position.X * position.X) * _oneOverRadiiSquared.X +
                 (position.Y * position.Y) * _oneOverRadiiSquared.Y +
                 (position.Z * position.Z) * _oneOverRadiiSquared.Z);
-            double bSquared = b * b;
             double n = new Vector3D(
-                b * position.X * _oneOverRadiiSquared.X,
-                b * position.Y * _oneOverRadiiSquared.Y,
-                b * position.Z * _oneOverRadiiSquared.Z).Magnitude;
-            double alpha = (1.0 - b) * (position.Magnitude / n);
+                beta * position.X * _oneOverRadiiSquared.X,
+                beta * position.Y * _oneOverRadiiSquared.Y,
+                beta * position.Z * _oneOverRadiiSquared.Z).Magnitude;
+            double alpha = (1.0 - beta) * (position.Magnitude / n);
 
+            double x2 = position.X * position.X;
+            double y2 = position.Y * position.Y;
+            double z2 = position.Z * position.Z;
 
             double da = 0.0;
             double db = 0.0;
@@ -243,10 +246,6 @@ namespace OpenGlobe.Core
                 double db3 = db * db2;
                 double dc3 = dc * dc2;
 
-                double x2 = position.X * position.X;
-                double y2 = position.Y * position.Y;
-                double z2 = position.Z * position.Z;
-
                 s = x2 / (_radiiSquared.X * da2) +
                     y2 / (_radiiSquared.Y * db2) +
                     z2 / (_radiiSquared.Z * dc2) - 1.0;
@@ -256,7 +255,7 @@ namespace OpenGlobe.Core
                      y2 / (_radiiToTheFourth.Y * db3) +
                      z2 / (_radiiToTheFourth.Z * dc3));
             }
-            while (s > 1e-10);
+            while (Math.Abs(s) > 1e-10);
 
             return new Vector3D(
                 position.X / da,
