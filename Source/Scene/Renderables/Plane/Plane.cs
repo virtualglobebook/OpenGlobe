@@ -77,6 +77,7 @@ namespace OpenGlobe.Scene
                 new VertexBufferAttribute(_positionBuffer, ComponentDatatype.Float, 3, false, SizeInBytes<Vector3F>.Value, stride);
             _va.IndexBuffer = indexBuffer;
 
+            Show = true;
             ShowOutline = true;
             ShowFill = true;
 
@@ -120,23 +121,26 @@ namespace OpenGlobe.Scene
             Verify.ThrowIfNull(context);
             Verify.ThrowIfNull(sceneState);
 
-            Update();
-
-            if (ShowOutline)
+            if (Show)
             {
-                //
-                // Pass 1:  Outline
-                //
-                _lineFillDistance.Value = (float)(OutlineWidth * 0.5 * sceneState.HighResolutionSnapScale);
-                context.Draw(PrimitiveType.LineLoop, 0, 4, _drawStateLine, sceneState);
-            }
+                Update();
 
-            if (ShowFill)
-            {
-                //
-                // Pass 2:  Fill
-                //
-                context.Draw(PrimitiveType.Triangles, 4, 6, _drawStateFill, sceneState);
+                if (ShowOutline)
+                {
+                    //
+                    // Pass 1:  Outline
+                    //
+                    _lineFillDistance.Value = (float)(OutlineWidth * 0.5 * sceneState.HighResolutionSnapScale);
+                    context.Draw(PrimitiveType.LineLoop, 0, 4, _drawStateLine, sceneState);
+                }
+
+                if (ShowFill)
+                {
+                    //
+                    // Pass 2:  Fill
+                    //
+                    context.Draw(PrimitiveType.Triangles, 4, 6, _drawStateFill, sceneState);
+                }
             }
         }
 
@@ -193,6 +197,7 @@ namespace OpenGlobe.Scene
         }
 
         public double OutlineWidth { get; set; }
+        public bool Show { get; set; }
         public bool ShowOutline { get; set; }
         public bool ShowFill { get; set; }
 

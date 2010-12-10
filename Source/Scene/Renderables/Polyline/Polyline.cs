@@ -20,6 +20,7 @@ namespace OpenGlobe.Scene
             _drawState = new DrawState();
             _drawState.RenderState.FacetCulling.Enabled = false;
 
+            Show = true;
             Width = 1;
         }
 
@@ -64,14 +65,18 @@ namespace OpenGlobe.Scene
             Verify.ThrowIfNull(context);
             Verify.ThrowIfNull(sceneState);
 
-            if (_drawState.ShaderProgram != null)
+            if (Show)
             {
-                _fillDistance.Value = (float)(Width * 0.5 * sceneState.HighResolutionSnapScale);
+                if (_drawState.ShaderProgram != null)
+                {
+                    _fillDistance.Value = (float)(Width * 0.5 * sceneState.HighResolutionSnapScale);
 
-                context.Draw(_primitiveType, _drawState, sceneState);
+                    context.Draw(_primitiveType, _drawState, sceneState);
+                }
             }
         }
 
+        public bool Show { get; set; }
         public double Width { get; set; }
 
         public bool Wireframe

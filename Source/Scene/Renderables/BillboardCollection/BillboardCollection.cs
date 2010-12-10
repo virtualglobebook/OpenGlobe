@@ -53,6 +53,8 @@ namespace OpenGlobe.Scene
                 EmbeddedResources.GetText("OpenGlobe.Scene.Renderables.BillboardCollection.Shaders.BillboardsFS.glsl"));
 
             _drawState = new DrawState(renderState, sp, null);
+
+            Show = true;
         }
 
         private void CreateVertexArray(Context context)
@@ -226,17 +228,21 @@ namespace OpenGlobe.Scene
             Verify.ThrowIfNull(context);
             Verify.ThrowInvalidOperationIfNull(Texture, "Texture");
 
-            Update(context);
-
-            if (_drawState.VertexArray != null)
+            if (Show)
             {
-                context.TextureUnits[0].Texture = Texture;
-                context.TextureUnits[0].TextureSampler = Device.TextureSamplers.LinearClamp;
+                Update(context);
 
-                context.Draw(PrimitiveType.Points, _drawState, sceneState);
+                if (_drawState.VertexArray != null)
+                {
+                    context.TextureUnits[0].Texture = Texture;
+                    context.TextureUnits[0].TextureSampler = Device.TextureSamplers.LinearClamp;
+
+                    context.Draw(PrimitiveType.Points, _drawState, sceneState);
+                }
             }
         }
 
+        public bool Show { get; set; }
         public Texture2D Texture { get; set; }
 
         public bool Wireframe
