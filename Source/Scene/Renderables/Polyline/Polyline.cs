@@ -80,6 +80,12 @@ namespace OpenGlobe.Scene
             set { _drawState.RenderState.RasterizationMode = value ? RasterizationMode.Line : RasterizationMode.Fill; }
         }
 
+        public bool DepthTestEnabled
+        {
+            get { return _drawState.RenderState.DepthTest.Enabled; }
+            set { _drawState.RenderState.DepthTest.Enabled = value; }
+        }
+
         #region IDisposable Members
 
         public void Dispose()

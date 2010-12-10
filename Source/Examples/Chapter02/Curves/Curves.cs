@@ -22,11 +22,7 @@ namespace OpenGlobe.Examples
         public Curves()
         {
             _semiMinorAxis = Ellipsoid.ScaledWgs84.Radii.Z;
-
-            _globeShape = new Ellipsoid(
-                Ellipsoid.ScaledWgs84.Radii.X,
-                Ellipsoid.ScaledWgs84.Radii.Y, 
-                _semiMinorAxis);
+            SetShape();
 
             _window = Device.CreateWindow(800, 600, "Chapter 2:  Curves");
             _window.Resize += OnResize;
@@ -47,13 +43,18 @@ namespace OpenGlobe.Examples
             
             _sampledPoints = new BillboardCollection(_window.Context);
             _sampledPoints.Texture = Device.CreateTexture2D(Device.CreateBitmapFromPoint(8), TextureFormat.RedGreenBlueAlpha8, false);
+            _sampledPoints.DepthTestEnabled = false;
             
             _ellipsoid = new RayCastedGlobe(_window.Context);
-            _ellipsoid.UseAverageDepth = true;
             _ellipsoid.Texture = _texture;
 
             _polyline = new Polyline();
             _polyline.Width = 3;
+            _polyline.DepthTestEnabled = false;
+
+            _plane = new Plane(_window.Context);
+            _plane.Origin = Vector3D.Zero;
+            _plane.OutlineWidth = 3;
 
             CreateScene();
             
@@ -72,8 +73,9 @@ namespace OpenGlobe.Examples
         private void CreateScene()
         {
             string text = "Granularity: " + _granularityInDegrees + " (left/right)\n";
-            text += "Points: " + (_showPoints ? "on" : "off") + " ('p')\n";
-            text += "Polyline: " + (_showPolyline ? "on" : "off") + " ('l')\n";
+            text += "Points: " + (_showPoints ? "on" : "off") + " ('1')\n";
+            text += "Polyline: " + (_showPolyline ? "on" : "off") + " ('2')\n";
+            text += "Plane: " + (_showPlane ? "on" : "off") + " ('3')\n";
             text += "Semi-minor axis (up/down)\n";
 
             _instructions.Texture = Device.CreateTexture2D(
@@ -82,15 +84,20 @@ namespace OpenGlobe.Examples
 
             ///////////////////////////////////////////////////////////////////
 
-            Vector3D p = _globeShape.ToVector3D(new Geodetic2D(Trig.ToRadians(-60), Trig.ToRadians(40)));
-            Vector3D q = _globeShape.ToVector3D(new Geodetic2D(Trig.ToRadians(50), Trig.ToRadians(-30)));
-            IList<Vector3D> positions = _globeShape.ComputeCurve(p, q,
-                Trig.ToRadians(_granularityInDegrees));
+            IList<Vector3D> positions = _globeShape.ComputeCurve(
+                _p, _q, Trig.ToRadians(_granularityInDegrees));
 
             _sampledPoints.Clear();
-            foreach (Vector3D v in positions)
+            _sampledPoints.Add(new Billboard() { Position = positions[0], Color = Color.Orange });
+            _sampledPoints.Add(new Billboard() { Position = positions[positions.Count - 1], Color = Color.Orange });
+
+            for (int i = 1; i < positions.Count - 1; ++i)
             {
-                _sampledPoints.Add(new Billboard() { Position = v, Color = Color.Yellow });
+                _sampledPoints.Add(new Billboard() 
+                { 
+                    Position = positions[i], 
+                    Color = Color.Yellow 
+                });
             }
 
             ///////////////////////////////////////////////////////////////////
@@ -114,6 +121,12 @@ namespace OpenGlobe.Examples
             mesh.Attributes.Add(colorAttribute);
 
             _polyline.Set(_window.Context, mesh);
+
+            ///////////////////////////////////////////////////////////////////
+
+            double scale = 1.25 * _globeShape.Radii.MaximumComponent;
+            _plane.XAxis = scale * _p.Normalize();
+            _plane.YAxis = scale * _p.Cross(_q).Cross(_p).Normalize();
         }
 
         private void OnResize()
@@ -137,6 +150,11 @@ namespace OpenGlobe.Examples
             if (_showPoints)
             {
                 _sampledPoints.Render(context, _sceneState);
+            }
+
+            if (_showPlane)
+            {
+                _plane.Render(context, _sceneState);
             }
 
             _instructions.Render(context, _sceneState);
@@ -163,18 +181,35 @@ namespace OpenGlobe.Examples
                 {
                     _semiMinorAxis = Math.Max(_semiMinorAxis - _semiMinorAxisDelta, 0.1);
                 }
-                _globeShape = new Ellipsoid(1, 1, _semiMinorAxis);
+                SetShape();
 
                 CreateScene();
             }
-            else if (e.Key == KeyboardKey.P)
+            else if ((e.Key == KeyboardKey.Number1) ||
+                     (e.Key == KeyboardKey.Keypad1))
             {
                 _showPoints = !_showPoints;
             }
-            else if (e.Key == KeyboardKey.L)
+            else if ((e.Key == KeyboardKey.Number2) ||
+                     (e.Key == KeyboardKey.Keypad2))
             {
                 _showPolyline = !_showPolyline;
             }
+            else if ((e.Key == KeyboardKey.Number3) || 
+                     (e.Key == KeyboardKey.Keypad3))
+            {
+                _showPlane = !_showPlane;
+            }
+        }
+
+        private void SetShape()
+        {
+            _globeShape = new Ellipsoid(
+                Ellipsoid.ScaledWgs84.Radii.X,
+                Ellipsoid.ScaledWgs84.Radii.Y,
+                _semiMinorAxis);
+            _p = _globeShape.ToVector3D(new Geodetic2D(Trig.ToRadians(40), Trig.ToRadians(40)));
+            _q = _globeShape.ToVector3D(new Geodetic2D(Trig.ToRadians(120), Trig.ToRadians(-30)));
         }
 
         #region IDisposable Members
@@ -188,6 +223,7 @@ namespace OpenGlobe.Examples
             _sampledPoints.Dispose();
             _sampledPoints.Texture.Dispose();
             _polyline.Dispose();
+            _plane.Dispose();
             _window.Dispose();
         }
 
@@ -212,16 +248,21 @@ namespace OpenGlobe.Examples
         private readonly ClearState _clearState;
 
         private readonly Texture2D _texture;
-        private HeadsUpDisplay _instructions;
-        private RayCastedGlobe _ellipsoid;
-        private BillboardCollection _sampledPoints;
-        private Polyline _polyline;
+        private readonly HeadsUpDisplay _instructions;
+        private readonly RayCastedGlobe _ellipsoid;
+        private readonly BillboardCollection _sampledPoints;
+        private readonly Polyline _polyline;
+        private readonly Plane _plane;
 
         private Ellipsoid _globeShape;
+        private Vector3D _p;
+        private Vector3D _q;
+
         private double _semiMinorAxis;
         private const double _semiMinorAxisDelta = 0.025;
         private double _granularityInDegrees = 5.0;
         private bool _showPoints = true;
         private bool _showPolyline = true;
+        private bool _showPlane = true;
     }
 }

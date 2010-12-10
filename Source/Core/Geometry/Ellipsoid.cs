@@ -263,6 +263,16 @@ namespace OpenGlobe.Core
                 position.Z / dc);
         }
 
+        public Vector3D ScaleToGeocentricSurface(Vector3D position)
+        {
+            double beta = 1.0 / Math.Sqrt(
+                (position.X * position.X) * _oneOverRadiiSquared.X +
+                (position.Y * position.Y) * _oneOverRadiiSquared.Y +
+                (position.Z * position.Z) * _oneOverRadiiSquared.Z);
+
+            return beta * position;
+        }
+
         public IList<Vector3D> ComputeCurve(
             Vector3D start, 
             Vector3D stop, 
@@ -285,7 +295,7 @@ namespace OpenGlobe.Core
             {
                 double phi = (i * granularity);
 
-                positions.Add(ScaleToGeodeticSurface(start.RotateAroundAxis(normal, phi)));
+                positions.Add(ScaleToGeocentricSurface(start.RotateAroundAxis(normal, phi)));
             }
 
             positions.Add(stop);
