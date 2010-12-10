@@ -73,9 +73,9 @@ namespace OpenGlobe.Examples
         private void CreateScene()
         {
             string text = "Granularity: " + _granularityInDegrees + " (left/right)\n";
-            text += "Points: " + (_showPoints ? "on" : "off") + " ('1')\n";
-            text += "Polyline: " + (_showPolyline ? "on" : "off") + " ('2')\n";
-            text += "Plane: " + (_showPlane ? "on" : "off") + " ('3')\n";
+            text += "Points: " + (_sampledPoints.Show ? "on" : "off") + " ('1')\n";
+            text += "Polyline: " + (_polyline.Show ? "on" : "off") + " ('2')\n";
+            text += "Plane: " + (_plane.Show ? "on" : "off") + " ('3')\n";
             text += "Semi-minor axis (up/down)\n";
 
             _instructions.Texture = Device.CreateTexture2D(
@@ -141,22 +141,9 @@ namespace OpenGlobe.Examples
             context.Clear(_clearState);
 
             _ellipsoid.Render(context, _sceneState);
-
-            if (_showPolyline)
-            {
-                _polyline.Render(context, _sceneState);
-            }
-
-            if (_showPoints)
-            {
-                _sampledPoints.Render(context, _sceneState);
-            }
-
-            if (_showPlane)
-            {
-                _plane.Render(context, _sceneState);
-            }
-
+            _polyline.Render(context, _sceneState);
+            _sampledPoints.Render(context, _sceneState);
+            _plane.Render(context, _sceneState);
             _instructions.Render(context, _sceneState);
         }
 
@@ -188,17 +175,17 @@ namespace OpenGlobe.Examples
             else if ((e.Key == KeyboardKey.Number1) ||
                      (e.Key == KeyboardKey.Keypad1))
             {
-                _showPoints = !_showPoints;
+                _sampledPoints.Show = !_sampledPoints.Show;
             }
             else if ((e.Key == KeyboardKey.Number2) ||
                      (e.Key == KeyboardKey.Keypad2))
             {
-                _showPolyline = !_showPolyline;
+                _polyline.Show = !_polyline.Show;
             }
             else if ((e.Key == KeyboardKey.Number3) || 
                      (e.Key == KeyboardKey.Keypad3))
             {
-                _showPlane = !_showPlane;
+                _plane.Show = !_plane.Show;
             }
         }
 
@@ -261,8 +248,5 @@ namespace OpenGlobe.Examples
         private double _semiMinorAxis;
         private const double _semiMinorAxisDelta = 0.025;
         private double _granularityInDegrees = 5.0;
-        private bool _showPoints = true;
-        private bool _showPolyline = true;
-        private bool _showPlane = true;
     }
 }
