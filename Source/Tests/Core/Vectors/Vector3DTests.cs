@@ -179,6 +179,20 @@ namespace OpenGlobe.Core
         }
 
         [Test]
+        public void MaximumComponent()
+        {
+            Assert.AreEqual(3.0, new Vector3D(1.0, 2.0, 3.0).MaximumComponent);
+            Assert.AreEqual(-1.0, new Vector3D(-1.0, -2.0, -3.0).MaximumComponent);
+        }
+
+        [Test]
+        public void MinimumComponent()
+        {
+            Assert.AreEqual(1.0, new Vector3D(1.0, 2.0, 3.0).MinimumComponent);
+            Assert.AreEqual(-3.0, new Vector3D(-1.0, -2.0, -3.0).MinimumComponent);
+        }
+
+        [Test]
         public void MostOrthogonalAxis()
         {
             Vector3D v1 = new Vector3D(1, 2, 3);

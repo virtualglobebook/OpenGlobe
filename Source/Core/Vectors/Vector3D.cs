@@ -147,6 +147,16 @@ namespace OpenGlobe.Core
             return this / scalar;
         }
 
+        public double MaximumComponent
+        {
+            get { return Math.Max(Math.Max(_x, _y), _z); }
+        }
+
+        public double MinimumComponent
+        {
+            get { return Math.Min(Math.Min(_x, _y), _z); }
+        }
+
         public Vector3D MostOrthogonalAxis
         {
             get
