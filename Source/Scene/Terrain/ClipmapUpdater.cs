@@ -616,7 +616,6 @@ namespace OpenGlobe.Scene.Terrain
             public ClipmapLevel Level;
             public RasterTerrainTile Tile;
             public Texture2D Texture;
-            public long FrameNumber;
         }
 
         private VertexArray _unitQuad;
