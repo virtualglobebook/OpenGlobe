@@ -125,10 +125,7 @@ namespace OpenGlobe.Renderer.GL3x
         {
             get
             {
-                int[] viewport = new int[4];
-                GL.GetInteger(GetPName.Viewport, viewport);
-
-                return new Rectangle(viewport[0], viewport[1], viewport[2], viewport[3]);
+                return _viewport;
             }
 
             set
@@ -138,7 +135,11 @@ namespace OpenGlobe.Renderer.GL3x
                     throw new ArgumentOutOfRangeException("Viewport", "The viewport width and height must be greater than or equal to zero.");
                 }
 
-                GL.Viewport(value);
+                if (_viewport != value)
+                {
+                    _viewport = value;
+                    GL.Viewport(value);
+                }
             }
         }
 
@@ -610,6 +611,7 @@ namespace OpenGlobe.Renderer.GL3x
         private Color _clearColor;
         private float _clearDepth;
         private int _clearStencil;
+        private Rectangle _viewport;
 
         private RenderState _renderState;
         private ShaderProgramGL3x _boundShaderProgram;
