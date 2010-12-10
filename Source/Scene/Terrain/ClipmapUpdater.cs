@@ -63,15 +63,11 @@ namespace OpenGlobe.Scene.Terrain
             _workerWindow = Device.CreateWindow(1, 1);
             context.MakeCurrent();
 
-            _requestQueue.MessageReceived += TileLoadRequestReceived;
-
 #if !SingleThreaded
             Thread requestThread = new Thread(RequestThreadEntryPoint);
             requestThread.IsBackground = true;
             requestThread.Start();
 #endif
-
-            _lastViewerPosition = new LastViewerPosition(0.0, 0.0);
 
             // Preload the entire world at level 0
             ClipmapLevel levelZero = clipmapLevels[0];
@@ -84,7 +80,6 @@ namespace OpenGlobe.Scene.Terrain
 
         public void Dispose()
         {
-            _requestQueue.Dispose();
             _doneQueue.Dispose();
 
             _computeNormalsShader.Dispose();
@@ -101,13 +96,11 @@ namespace OpenGlobe.Scene.Terrain
             set { _heightExaggeration.Value = value; }
         }
 
-        public void SetNewViewerPosition(double longitude, double latitude)
-        {
-            _lastViewerPosition = new LastViewerPosition(longitude, latitude);
-        }
-
         public void ApplyNewData(Context context)
         {
+            // This is the start of a new frame, so the next request goes at the end
+            _requestInsertionPoint = null;
+
 #if SingleThreaded
             _requestQueue.ProcessQueue();
 #endif
@@ -117,6 +110,7 @@ namespace OpenGlobe.Scene.Terrain
             {
                 TileLoadRequest tile = (TileLoadRequest)e.Message;
                 _loadedTiles[tile.Tile.Identifier] = tile.Texture;
+                _loadingTiles.Remove(tile.Tile.Identifier);
                 tiles.Add(tile);
             };
             _doneQueue.MessageReceived += handler;
@@ -187,6 +181,18 @@ namespace OpenGlobe.Scene.Terrain
             return new ClipmapUpdate(first.Level, west, south, east, north);
         }
 
+        public void RequestTileResidency(Context context, ClipmapLevel level)
+        {
+            RasterTerrainTileRegion[] tileRegions = level.Terrain.GetTilesInExtent(level.NextExtent.West, level.NextExtent.South, level.NextExtent.East, level.NextExtent.North);
+            foreach (RasterTerrainTileRegion region in tileRegions)
+            {
+                if (!_loadedTiles.ContainsKey(region.Tile.Identifier))
+                {
+                    RequestTileLoad(level, region.Tile);
+                }
+            }
+        }
+
         public void Update(Context context, ClipmapUpdate update)
         {
             ClipmapLevel level = update.Level;
@@ -198,17 +204,13 @@ namespace OpenGlobe.Scene.Terrain
                 foreach (RasterTerrainTileRegion region in tileRegions)
                 {
                     Texture2D tileTexture;
-                    bool loadingOrLoaded = _loadedTiles.TryGetValue(region.Tile.Identifier, out tileTexture);
-                    if (loadingOrLoaded && tileTexture != null)
+                    bool loaded = _loadedTiles.TryGetValue(region.Tile.Identifier, out tileTexture);
+                    if (loaded)
                     {
                         RenderTileToLevelHeightTexture(context, level, region, tileTexture);
                     }
                     else
                     {
-                        if (!loadingOrLoaded)
-                        {
-                            RequestTileLoad(level, region.Tile);
-                        }
                         UpsampleTileData(context, level, region);
                     }
                 }
@@ -433,12 +435,56 @@ namespace OpenGlobe.Scene.Terrain
 
         private void RequestTileLoad(ClipmapLevel level, RasterTerrainTile tile)
         {
-            _loadedTiles[tile.Identifier] = null;
-            
-            TileLoadRequest request = new TileLoadRequest();
-            request.Level = level;
-            request.Tile = tile;
-            _requestQueue.Post(request);
+            LinkedListNode<TileLoadRequest> requestNode;
+            bool exists = _loadingTiles.TryGetValue(tile.Identifier, out requestNode);
+
+            if (!exists)
+            {
+                // Create a new request.
+                TileLoadRequest request = new TileLoadRequest();
+                request.Level = level;
+                request.Tile = tile;
+                requestNode = new LinkedListNode<TileLoadRequest>(request);
+            }
+
+            lock (_requestList)
+            {
+                if (exists)
+                {
+                    // Remove the existing request from the queue so we can re-insert it
+                    // in its new location.
+                    if (requestNode.List == null)
+                    {
+                        // Request was in the queue at one point, but it's not anymore.
+                        // That means it's been loaded,  so we don't need to do anything.
+                        return;
+                    }
+                    _requestList.Remove(requestNode);
+                }
+
+                if (_requestInsertionPoint == null || _requestInsertionPoint.List == null)
+                {
+                    _requestList.AddLast(requestNode);
+                }
+                else
+                {
+                    _requestList.AddBefore(_requestInsertionPoint, requestNode);
+                }
+                _requestInsertionPoint = requestNode;
+
+                // If the request list has too many entries, delete from the beginning
+                const int MaxRequests = 500;
+                while (_requestList.Count > MaxRequests)
+                {
+                    LinkedListNode<TileLoadRequest> nodeToRemove = _requestList.First;
+                    _requestList.RemoveFirst();
+                    _loadingTiles.Remove(nodeToRemove.Value.Tile.Identifier);
+                }
+
+                Monitor.Pulse(_requestList);
+            }
+
+            _loadingTiles[tile.Identifier] = requestNode;
         }
 
         private Texture2D CreateTextureFromTile(RasterTerrainTile tile)
@@ -478,74 +524,30 @@ namespace OpenGlobe.Scene.Terrain
 
             while (true)
             {
-                _requestQueue.ProcessQueue();
-
-                if (_currentRequests.Count == 0)
+                TileLoadRequest request = null;
+                lock (_requestList)
                 {
-                    _requestQueue.WaitForMessage();
-                }
-                else
-                {
-                    LastViewerPosition lastViewerPos = _lastViewerPosition;
-                    _currentRequests.Sort(delegate(TileLoadRequest a, TileLoadRequest b)
+                    LinkedListNode<TileLoadRequest> lastNode = _requestList.Last;
+                    if (lastNode != null)
                     {
-                        if (a.Tile.Level.LevelID == 0 && b.Tile.Level.LevelID != 0)
-                            return -1;
-                        else if (a.Tile.Level.LevelID != 0 && b.Tile.Level.LevelID == 0)
-                            return 1;
-
-                        double westA = a.Tile.Level.IndexToLongitude(a.Tile.West);
-                        double eastA = a.Tile.Level.IndexToLongitude(a.Tile.East);
-                        double southA = a.Tile.Level.IndexToLatitude(a.Tile.South);
-                        double northA = a.Tile.Level.IndexToLatitude(a.Tile.North);
-                        //bool isInsideA = westA <= lastViewerPos.Longitude && eastA >= lastViewerPos.Longitude &&
-                        //                 southA <= lastViewerPos.Latitude && northA >= lastViewerPos.Latitude;
-
-                        double westB = b.Tile.Level.IndexToLongitude(b.Tile.West);
-                        double eastB = b.Tile.Level.IndexToLongitude(b.Tile.East);
-                        double southB = b.Tile.Level.IndexToLatitude(b.Tile.South);
-                        double northB = b.Tile.Level.IndexToLatitude(b.Tile.North);
-                        //bool isInsideB = westB <= lastViewerPos.Longitude && eastB >= lastViewerPos.Longitude &&
-                        //                 southB <= lastViewerPos.Latitude && northB >= lastViewerPos.Latitude;
-
-                        //if (isInsideA && isInsideB)
-                        //{
-                        //    return a.Tile.Identifier.Level.CompareTo(b.Tile.Identifier.Level);
-                        //}
-                        //else if (isInsideA && !isInsideB)
-                        //{
-                        //    return -1;
-                        //}
-                        //else if (!isInsideA && isInsideB)
-                        //{
-                        //    return 1;
-                        //}
-                        //else
-                        //{
-                            double levelA = Math.Pow(4, a.Tile.Level.LevelID + 1);
-                            double centerLongitudeA = (westA + eastA) / 2.0 - lastViewerPos.Longitude;
-                            double centerLatitudeA = (southA + northA) / 2.0 - lastViewerPos.Latitude;
-                            double distanceA = Math.Sqrt(centerLongitudeA * centerLongitudeA + centerLatitudeA * centerLatitudeA);
-                            distanceA *= levelA;
-
-                            double levelB = Math.Pow(4, b.Tile.Level.LevelID);
-                            double centerLongitudeB = (westB + eastB) / 2.0 - lastViewerPos.Longitude;
-                            double centerLatitudeB = (southB + northB) / 2.0 - lastViewerPos.Latitude;
-                            double distanceB = Math.Sqrt(centerLongitudeB * centerLongitudeB + centerLatitudeB * centerLatitudeB);
-                            distanceB *= levelB;
-
-                            return distanceA.CompareTo(distanceB);
-                        //}
-                    });
-
-                    if (_currentRequests.Count > 200)
-                    {
-                        _currentRequests.RemoveRange(200, _currentRequests.Count - 200);
+                        request = lastNode.Value;
+                        _requestList.RemoveLast();
                     }
+                    else
+                    {
+                        Monitor.Wait(_requestList);
 
-                    TileLoadRequest request = _currentRequests[0];
-                    _currentRequests.RemoveAt(0);
+                        lastNode = _requestList.Last;
+                        if (lastNode != null)
+                        {
+                            request = lastNode.Value;
+                            _requestList.RemoveLast();
+                        }
+                    }
+                }
 
+                if (request != null)
+                {
                     RasterTerrainTile tile = request.Tile;
                     request.Texture = CreateTextureFromTile(tile);
 
@@ -614,6 +616,7 @@ namespace OpenGlobe.Scene.Terrain
             public ClipmapLevel Level;
             public RasterTerrainTile Tile;
             public Texture2D Texture;
+            public long FrameNumber;
         }
 
         private VertexArray _unitQuad;
@@ -645,11 +648,14 @@ namespace OpenGlobe.Scene.Terrain
         private Uniform<float> _heightExaggeration;
         private Uniform<float> _postDelta;
 
+        private Dictionary<RasterTerrainTileIdentifier, LinkedListNode<TileLoadRequest>> _loadingTiles = new Dictionary<RasterTerrainTileIdentifier, LinkedListNode<TileLoadRequest>>();
         private Dictionary<RasterTerrainTileIdentifier, Texture2D> _loadedTiles = new Dictionary<RasterTerrainTileIdentifier, Texture2D>();
 
         private GraphicsWindow _workerWindow;
-        private MessageQueue _requestQueue = new MessageQueue();
         private MessageQueue _doneQueue = new MessageQueue();
+
+        private LinkedList<TileLoadRequest> _requestList = new LinkedList<TileLoadRequest>();
+        private LinkedListNode<TileLoadRequest> _requestInsertionPoint;
 
         private class LastViewerPosition
         {
@@ -672,7 +678,5 @@ namespace OpenGlobe.Scene.Terrain
             private double _longitude;
             private double _latitude;
         }
-
-        private volatile LastViewerPosition _lastViewerPosition;
     }
 }

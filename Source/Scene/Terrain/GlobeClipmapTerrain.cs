@@ -177,8 +177,6 @@ namespace OpenGlobe.Scene.Terrain
             double centerLongitude = Trig.ToDegrees(center.Longitude);
             double centerLatitude = Trig.ToDegrees(center.Latitude);
 
-            _updater.SetNewViewerPosition(centerLongitude, centerLatitude);
-
             ClipmapLevel level = _clipmapLevels[_clipmapLevels.Length - 1];
             double longitudeIndex = level.Terrain.LongitudeToIndex(centerLongitude);
             double latitudeIndex = level.Terrain.LatitudeToIndex(centerLatitude);
@@ -232,6 +230,7 @@ namespace OpenGlobe.Scene.Terrain
                 ClipmapLevel thisLevel = _clipmapLevels[i];
                 ClipmapLevel coarserLevel = _clipmapLevels[i > 0 ? i - 1 : 0];
 
+                _updater.RequestTileResidency(context, thisLevel);
                 PreRenderLevel(thisLevel, coarserLevel, context, sceneState);
             }
         }
