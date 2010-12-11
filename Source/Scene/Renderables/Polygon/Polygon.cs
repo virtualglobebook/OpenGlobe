@@ -56,7 +56,7 @@ namespace OpenGlobe.Scene
                 "position", (result.Indices.Values.Count / 3) + 2);
             foreach (Vector3D position in result.Positions)
             {
-                positionsAttribute.Values.Add(globeShape.ScaleToGeodeticSurface(position));
+                positionsAttribute.Values.Add(globeShape.ScaleToGeocentricSurface(position));
             }
 
             Mesh mesh = new Mesh();
