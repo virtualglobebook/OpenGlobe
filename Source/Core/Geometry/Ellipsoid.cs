@@ -16,8 +16,8 @@ namespace OpenGlobe.Core
     public class Ellipsoid
     {
         public static readonly Ellipsoid Wgs84 = new Ellipsoid(6378137.0, 6378137.0, 6356752.314245);
-        public static readonly Ellipsoid ScaledWgs84 = new Ellipsoid(1, 1, 6356752.314245 / 6378137.0);
-        public static readonly Ellipsoid UnitSphere = new Ellipsoid(1, 1, 1);
+        public static readonly Ellipsoid ScaledWgs84 = new Ellipsoid(1.0, 1.0, 6356752.314245 / 6378137.0);
+        public static readonly Ellipsoid UnitSphere = new Ellipsoid(1.0, 1.0, 1.0);
 
         public Ellipsoid(double x, double y, double z)
             : this(new Vector3D(x, y, z))
@@ -26,7 +26,7 @@ namespace OpenGlobe.Core
 
         public Ellipsoid(Vector3D radii)
         {
-            if ((radii.X <= 0) || (radii.Y <= 0) || (radii.Z <= 0))
+            if ((radii.X <= 0.0) || (radii.Y <= 0.0) || (radii.Z <= 0.0))
             {
                 throw new ArgumentOutOfRangeException("radii");
             }
@@ -122,7 +122,7 @@ namespace OpenGlobe.Core
                 return new double[1] { -0.5 * b / a };
             }
 
-            double t = -0.5 * (b + (b > 0 ? 1.0 : -1.0) * Math.Sqrt(discriminant));
+            double t = -0.5 * (b + (b > 0.0 ? 1.0 : -1.0) * Math.Sqrt(discriminant));
             double root1 = t / a;
             double root2 = c / t;
 
