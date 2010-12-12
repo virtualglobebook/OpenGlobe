@@ -10,7 +10,7 @@
 using OpenGlobe.Core;
 using OpenGlobe.Renderer;
 
-namespace OpenGlobe.Scene.Terrain
+namespace OpenGlobe.Scene
 {
     internal class ClipmapLevel
     {

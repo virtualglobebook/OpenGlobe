@@ -13,7 +13,6 @@ using System.Drawing;
 using OpenGlobe.Core;
 using OpenGlobe.Renderer;
 using OpenGlobe.Scene;
-using OpenGlobe.Terrain;
 
 namespace OpenGlobe.Examples
 {

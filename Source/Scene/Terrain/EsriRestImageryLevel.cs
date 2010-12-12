@@ -5,7 +5,7 @@ using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
 using OpenGlobe.Core;
 
-namespace OpenGlobe.Scene.Terrain
+namespace OpenGlobe.Scene
 {
     public class EsriRestImageryLevel
     {

@@ -11,7 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace OpenGlobe.Scene.Terrain
+namespace OpenGlobe.Scene
 {
     public abstract class RasterTerrainLevel
     {

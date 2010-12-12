@@ -44,6 +44,7 @@
     <Compile Include="Shapefiles\ShapefileAppearance.cs" />
     <Compile Include="Shapefiles\ShapefileGraphics.cs" />
     <Compile Include="Shapefiles\ShapefileRenderer.cs" />
+    <Compile Include="Terrain\TerrainTile.cs" />
     <Compile Include="Terrain\ChunkedTerrain.cs" />
     <Compile Include="Terrain\ChunkedTerrainTree.cs" />
     <Compile Include="Terrain\ClipmapLevel.cs" />

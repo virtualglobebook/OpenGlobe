@@ -4,7 +4,7 @@ using System.Text;
 using OpenGlobe.Core;
 using System.IO;
 
-namespace OpenGlobe.Scene.Terrain
+namespace OpenGlobe.Scene
 {
     public class SimpleTerrainSource : RasterTerrainSource
     {

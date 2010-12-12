@@ -13,7 +13,7 @@ using System.Text;
 using OpenGlobe.Core;
 using System.Threading;
 
-namespace OpenGlobe.Scene.Terrain
+namespace OpenGlobe.Scene
 {
     public abstract class RasterTerrainSource
     {

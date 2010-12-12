@@ -14,7 +14,7 @@ using OpenGlobe.Core;
 using System.Net;
 using System.IO;
 
-namespace OpenGlobe.Scene.Terrain
+namespace OpenGlobe.Scene
 {
     public class WorldWindTerrainSource : RasterTerrainSource
     {

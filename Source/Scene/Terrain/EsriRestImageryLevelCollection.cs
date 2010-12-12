@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
-namespace OpenGlobe.Scene.Terrain
+namespace OpenGlobe.Scene
 {
     public class EsriRestImageryLevelCollection : ReadOnlyCollection<EsriRestImageryLevel>
     {

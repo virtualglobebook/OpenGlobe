@@ -13,7 +13,7 @@ using System.Text;
 using OpenGlobe.Core;
 using System.Drawing;
 
-namespace OpenGlobe.Scene.Terrain
+namespace OpenGlobe.Scene
 {
     public class WorldWindTerrainLevel : RasterTerrainLevel
     {

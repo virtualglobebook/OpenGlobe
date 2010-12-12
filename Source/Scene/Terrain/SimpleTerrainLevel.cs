@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using OpenGlobe.Core;
 
-namespace OpenGlobe.Scene.Terrain
+namespace OpenGlobe.Scene
 {
     public class SimpleTerrainLevel : RasterTerrainLevel
     {

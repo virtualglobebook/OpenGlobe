@@ -14,7 +14,7 @@ using OpenGlobe.Core;
 using OpenGlobe.Renderer;
 using OpenGlobe.Scene;
 
-namespace OpenGlobe.Terrain
+namespace OpenGlobe.Scene
 {
     public enum TerrainNormalsAlgorithm
     {

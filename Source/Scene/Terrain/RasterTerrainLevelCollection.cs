@@ -12,7 +12,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Collections.ObjectModel;
 
-namespace OpenGlobe.Scene.Terrain
+namespace OpenGlobe.Scene
 {
     public class RasterTerrainLevelCollection : ReadOnlyCollection<RasterTerrainLevel>
     {

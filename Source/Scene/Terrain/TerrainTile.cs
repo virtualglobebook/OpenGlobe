@@ -11,7 +11,7 @@ using System;
 using System.Drawing;
 using OpenGlobe.Core;
 
-namespace OpenGlobe.Terrain
+namespace OpenGlobe.Scene
 {
     public class TerrainTile
     {

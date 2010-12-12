@@ -14,7 +14,7 @@ using OpenGlobe.Scene;
 using OpenGlobe.Renderer;
 using System.Collections.Generic;
 
-namespace OpenGlobe.Terrain
+namespace OpenGlobe.Scene
 {
     public sealed class TriangleMeshTerrainTile : IDisposable
     {

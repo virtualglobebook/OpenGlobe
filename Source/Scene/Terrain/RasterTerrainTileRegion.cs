@@ -7,7 +7,7 @@
 //
 #endregion
 
-namespace OpenGlobe.Scene.Terrain
+namespace OpenGlobe.Scene
 {
     internal class RasterTerrainTileRegion
     {
