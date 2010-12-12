@@ -5,7 +5,7 @@ using System.Net;
 using System.Text;
 using OpenGlobe.Core;
 
-namespace OpenGlobe.Scene.Terrain
+namespace OpenGlobe.Scene
 {
     public class EsriRestImagery
     {

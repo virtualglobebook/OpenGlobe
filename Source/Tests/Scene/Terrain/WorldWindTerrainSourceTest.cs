@@ -10,7 +10,7 @@
 using System;
 using NUnit.Framework;
 
-namespace OpenGlobe.Scene.Terrain
+namespace OpenGlobe.Scene
 {
     [TestFixture]
     public class WorldWindTerrainSourceTest

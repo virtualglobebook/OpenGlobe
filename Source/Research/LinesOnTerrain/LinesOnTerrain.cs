@@ -8,15 +8,11 @@
 #endregion
 
 using System;
-using System.IO;
 using System.Drawing;
 using System.Collections.Generic;
-
+using OpenGlobe.Core;
 using OpenGlobe.Renderer;
 using OpenGlobe.Scene;
-
-using OpenGlobe.Core;
-using OpenGlobe.Terrain;
 
 // deron junk todo
 //

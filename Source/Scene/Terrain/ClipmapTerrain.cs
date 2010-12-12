@@ -13,9 +13,8 @@ using System.Text;
 using System.Drawing;
 using OpenGlobe.Core;
 using OpenGlobe.Renderer;
-using OpenGlobe.Terrain;
 
-namespace OpenGlobe.Scene.Terrain
+namespace OpenGlobe.Scene
 {
     public class ClipmapTerrain : IRenderable, IDisposable
     {

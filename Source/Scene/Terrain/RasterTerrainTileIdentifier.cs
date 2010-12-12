@@ -9,7 +9,7 @@
 
 using System;
 
-namespace OpenGlobe.Scene.Terrain
+namespace OpenGlobe.Scene
 {
     public struct RasterTerrainTileIdentifier : IEquatable<RasterTerrainTileIdentifier>
     {

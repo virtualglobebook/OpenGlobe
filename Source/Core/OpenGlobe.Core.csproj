@@ -98,7 +98,6 @@
     <Compile Include="Shapefile\ShapeType.cs" />
     <Compile Include="Shapefile\Shapfile.cs" />
     <Compile Include="SizeInBytes.cs" />
-    <Compile Include="Terrain\TerrainTile.cs" />
     <Compile Include="Tessellation\BoxTessellator.cs" />
     <Compile Include="Tessellation\CubeMapEllipsoidTessellator.cs" />
     <Compile Include="Tessellation\GeographicGridEllipsoidTessellator.cs" />

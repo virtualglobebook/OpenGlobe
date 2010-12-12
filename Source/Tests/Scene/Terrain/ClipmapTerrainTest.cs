@@ -12,7 +12,7 @@ using NUnit.Framework;
 using OpenGlobe.Renderer;
 using OpenGlobe.Core;
 
-namespace OpenGlobe.Scene.Terrain
+namespace OpenGlobe.Scene
 {
     [TestFixture]
     public class ClipmapTerrainTest
