@@ -62,4 +62,10 @@
       <Name>OpenGlobe.Scene</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\..\..\..\Data\Imagery\NaturalEarth\NE2_50M_SR_W_4096.jpg">
+      <Link>NE2_50M_SR_W_4096.jpg</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
 </Project>

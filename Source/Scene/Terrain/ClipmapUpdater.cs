@@ -11,7 +11,7 @@ namespace OpenGlobe.Scene.Terrain
 {
     internal class ClipmapUpdater : IDisposable
     {
-        public ClipmapUpdater(Context context)
+        public ClipmapUpdater(Context context, ClipmapLevel[] clipmapLevels)
         {
             ShaderVertexAttributeCollection vertexAttributes = new ShaderVertexAttributeCollection();
             vertexAttributes.Add(new ShaderVertexAttribute("position", VertexLocations.Position, ShaderVertexAttributeType.FloatVector2, 1));
@@ -63,17 +63,23 @@ namespace OpenGlobe.Scene.Terrain
             _workerWindow = Device.CreateWindow(1, 1);
             context.MakeCurrent();
 
-            _requestQueue.MessageReceived += TileLoadRequestReceived;
-
 #if !SingleThreaded
-            _requestQueue.Post(x => _workerWindow.Context.MakeCurrent(), null);
-            _requestQueue.StartInAnotherThread();
+            Thread requestThread = new Thread(RequestThreadEntryPoint);
+            requestThread.IsBackground = true;
+            requestThread.Start();
 #endif
+
+            // Preload the entire world at level 0
+            ClipmapLevel levelZero = clipmapLevels[0];
+            RasterTerrainTileRegion[] regions = levelZero.Terrain.GetTilesInExtent(0, 0, levelZero.Terrain.LongitudePosts - 1, levelZero.Terrain.LatitudePosts - 1);
+            foreach (RasterTerrainTileRegion region in regions)
+            {
+                RequestTileLoad(levelZero, region.Tile);
+            }
         }
 
         public void Dispose()
         {
-            _requestQueue.Dispose();
             _doneQueue.Dispose();
 
             _computeNormalsShader.Dispose();
@@ -92,6 +98,9 @@ namespace OpenGlobe.Scene.Terrain
 
         public void ApplyNewData(Context context)
         {
+            // This is the start of a new frame, so the next request goes at the end
+            _requestInsertionPoint = null;
+
 #if SingleThreaded
             _requestQueue.ProcessQueue();
 #endif
@@ -101,6 +110,7 @@ namespace OpenGlobe.Scene.Terrain
             {
                 TileLoadRequest tile = (TileLoadRequest)e.Message;
                 _loadedTiles[tile.Tile.Identifier] = tile.Texture;
+                _loadingTiles.Remove(tile.Tile.Identifier);
                 tiles.Add(tile);
             };
             _doneQueue.MessageReceived += handler;
@@ -171,6 +181,18 @@ namespace OpenGlobe.Scene.Terrain
             return new ClipmapUpdate(first.Level, west, south, east, north);
         }
 
+        public void RequestTileResidency(Context context, ClipmapLevel level)
+        {
+            RasterTerrainTileRegion[] tileRegions = level.Terrain.GetTilesInExtent(level.NextExtent.West, level.NextExtent.South, level.NextExtent.East, level.NextExtent.North);
+            foreach (RasterTerrainTileRegion region in tileRegions)
+            {
+                if (!_loadedTiles.ContainsKey(region.Tile.Identifier))
+                {
+                    RequestTileLoad(level, region.Tile);
+                }
+            }
+        }
+
         public void Update(Context context, ClipmapUpdate update)
         {
             ClipmapLevel level = update.Level;
@@ -182,17 +204,13 @@ namespace OpenGlobe.Scene.Terrain
                 foreach (RasterTerrainTileRegion region in tileRegions)
                 {
                     Texture2D tileTexture;
-                    bool loadingOrLoaded = _loadedTiles.TryGetValue(region.Tile.Identifier, out tileTexture);
-                    if (loadingOrLoaded && tileTexture != null)
+                    bool loaded = _loadedTiles.TryGetValue(region.Tile.Identifier, out tileTexture);
+                    if (loaded)
                     {
                         RenderTileToLevelHeightTexture(context, level, region, tileTexture);
                     }
                     else
                     {
-                        if (!loadingOrLoaded)
-                        {
-                            RequestTileLoad(level, region.Tile);
-                        }
                         UpsampleTileData(context, level, region);
                     }
                 }
@@ -417,12 +435,56 @@ namespace OpenGlobe.Scene.Terrain
 
         private void RequestTileLoad(ClipmapLevel level, RasterTerrainTile tile)
         {
-            _loadedTiles[tile.Identifier] = null;
-            
-            TileLoadRequest request = new TileLoadRequest();
-            request.Level = level;
-            request.Tile = tile;
-            _requestQueue.Post(request);
+            LinkedListNode<TileLoadRequest> requestNode;
+            bool exists = _loadingTiles.TryGetValue(tile.Identifier, out requestNode);
+
+            if (!exists)
+            {
+                // Create a new request.
+                TileLoadRequest request = new TileLoadRequest();
+                request.Level = level;
+                request.Tile = tile;
+                requestNode = new LinkedListNode<TileLoadRequest>(request);
+            }
+
+            lock (_requestList)
+            {
+                if (exists)
+                {
+                    // Remove the existing request from the queue so we can re-insert it
+                    // in its new location.
+                    if (requestNode.List == null)
+                    {
+                        // Request was in the queue at one point, but it's not anymore.
+                        // That means it's been loaded,  so we don't need to do anything.
+                        return;
+                    }
+                    _requestList.Remove(requestNode);
+                }
+
+                if (_requestInsertionPoint == null || _requestInsertionPoint.List == null)
+                {
+                    _requestList.AddLast(requestNode);
+                }
+                else
+                {
+                    _requestList.AddBefore(_requestInsertionPoint, requestNode);
+                }
+                _requestInsertionPoint = requestNode;
+
+                // If the request list has too many entries, delete from the beginning
+                const int MaxRequests = 500;
+                while (_requestList.Count > MaxRequests)
+                {
+                    LinkedListNode<TileLoadRequest> nodeToRemove = _requestList.First;
+                    _requestList.RemoveFirst();
+                    _loadingTiles.Remove(nodeToRemove.Value.Tile.Identifier);
+                }
+
+                Monitor.Pulse(_requestList);
+            }
+
+            _loadingTiles[tile.Identifier] = requestNode;
         }
 
         private Texture2D CreateTextureFromTile(RasterTerrainTile tile)
@@ -445,19 +507,56 @@ namespace OpenGlobe.Scene.Terrain
             return texture;
         }
 
+        private List<TileLoadRequest> _currentRequests = new List<TileLoadRequest>();
+
         /// <summary>
         /// Invoked in the <see cref="_requestQueue"/> thread when a tile load request is received.
         /// </summary>
         private void TileLoadRequestReceived(object sender, MessageQueueEventArgs e)
         {
             TileLoadRequest request = (TileLoadRequest)e.Message;
-            RasterTerrainTile tile = request.Tile;
-            request.Texture = CreateTextureFromTile(tile);
+            _currentRequests.Add(request);
+        }
 
-            Fence fence = Device.CreateFence();
-            fence.ClientWait();
+        private void RequestThreadEntryPoint()
+        {
+            _workerWindow.Context.MakeCurrent();
 
-            _doneQueue.Post(request);
+            while (true)
+            {
+                TileLoadRequest request = null;
+                lock (_requestList)
+                {
+                    LinkedListNode<TileLoadRequest> lastNode = _requestList.Last;
+                    if (lastNode != null)
+                    {
+                        request = lastNode.Value;
+                        _requestList.RemoveLast();
+                    }
+                    else
+                    {
+                        Monitor.Wait(_requestList);
+
+                        lastNode = _requestList.Last;
+                        if (lastNode != null)
+                        {
+                            request = lastNode.Value;
+                            _requestList.RemoveLast();
+                        }
+                    }
+                }
+
+                if (request != null)
+                {
+                    RasterTerrainTile tile = request.Tile;
+                    request.Texture = CreateTextureFromTile(tile);
+
+                    Fence fence = Device.CreateFence();
+                    fence.ClientWait();
+
+                    _doneQueue.Post(request);
+                }
+            }
         }
 
         public void VerifyHeights(ClipmapLevel level)
@@ -548,10 +647,35 @@ namespace OpenGlobe.Scene.Terrain
         private Uniform<float> _heightExaggeration;
         private Uniform<float> _postDelta;
 
+        private Dictionary<RasterTerrainTileIdentifier, LinkedListNode<TileLoadRequest>> _loadingTiles = new Dictionary<RasterTerrainTileIdentifier, LinkedListNode<TileLoadRequest>>();
         private Dictionary<RasterTerrainTileIdentifier, Texture2D> _loadedTiles = new Dictionary<RasterTerrainTileIdentifier, Texture2D>();
 
         private GraphicsWindow _workerWindow;
-        private MessageQueue _requestQueue = new MessageQueue();
         private MessageQueue _doneQueue = new MessageQueue();
+
+        private LinkedList<TileLoadRequest> _requestList = new LinkedList<TileLoadRequest>();
+        private LinkedListNode<TileLoadRequest> _requestInsertionPoint;
+
+        private class LastViewerPosition
+        {
+            public LastViewerPosition(double longitude, double latitude)
+            {
+                _longitude = longitude;
+                _latitude = latitude;
+            }
+
+            public double Longitude
+            {
+                get { return _longitude; }
+            }
+
+            public double Latitude
+            {
+                get { return _latitude; }
+            }
+
+            private double _longitude;
+            private double _latitude;
+        }
     }
 }

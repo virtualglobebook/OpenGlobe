@@ -10,6 +10,8 @@ in vec2 fsFineUv;
 in vec2 fsCoarseUv;
 in vec3 fsPositionToLight;
 in float fsAlpha;
+in float fsHeight;
+in vec2 fsLonLat;
                  
 out vec3 fragmentColor;
 
@@ -39,5 +41,5 @@ void main()
 	if (u_showBlendRegions)
 		fragmentColor = mix(u_color, u_blendRegionColor, fsAlpha) * intensity;
 	else
-		fragmentColor = u_color * intensity;
+		fragmentColor = mix(u_color, vec3(0.0, 0.0, 1.0), fsHeight < 0.0) * intensity;
 }

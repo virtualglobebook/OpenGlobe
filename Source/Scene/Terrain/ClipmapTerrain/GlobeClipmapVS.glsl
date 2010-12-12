@@ -12,6 +12,8 @@ out vec2 fsFineUv;
 out vec2 fsCoarseUv;
 out vec3 fsPositionToLight;
 out float fsAlpha;
+out float fsHeight;
+out vec2 fsLonLat;
 
 uniform mat4 og_modelViewPerspectiveMatrix;
 uniform vec3 og_sunPosition;
@@ -77,8 +79,19 @@ void main()
     vec2 levelPos = position + u_patchOriginInClippedLevel;
 
     float height = SampleHeight(levelPos);
-    vec2 worldPos = levelPos * u_levelScaleFactor * u_levelZeroWorldScaleFactor + u_levelOffsetFromWorldOrigin;
-    vec3 displacedPosition = GeodeticToCartesian(u_globeRadiiSquared, vec3(worldPos * og_radiansPerDegree, height));
+	fsHeight = height;
+    vec2 worldPos = (levelPos + u_levelOffsetFromWorldOrigin) * u_levelScaleFactor * u_levelZeroWorldScaleFactor;
+	fsLonLat = worldPos;
+
+	vec3 displacedPosition;
+	if (abs(worldPos.y) > 90.0)
+	{
+		displacedPosition = vec3(0.0, 0.0, 0.0);
+	}
+	else
+	{
+		displacedPosition = GeodeticToCartesian(u_globeRadiiSquared, vec3(worldPos * og_radiansPerDegree, height));
+	}
 
     fsPositionToLight = og_sunPosition - displacedPosition;
 

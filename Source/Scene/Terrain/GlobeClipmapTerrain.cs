@@ -19,9 +19,11 @@ namespace OpenGlobe.Scene.Terrain
 {
     public class GlobeClipmapTerrain : IRenderable, IDisposable
     {
-        public GlobeClipmapTerrain(Context context, RasterTerrainSource terrainSource, int clipmapPosts)
+        public GlobeClipmapTerrain(Context context, RasterTerrainSource terrainSource, Ellipsoid ellipsoid, int clipmapPosts)
         {
             _terrainSource = terrainSource;
+            _ellipsoid = ellipsoid;
+
             _clipmapPosts = clipmapPosts;
             _clipmapSegments = _clipmapPosts - 1;
 
@@ -101,7 +103,7 @@ namespace OpenGlobe.Scene.Terrain
             _blendRegionColor = (Uniform<Vector3F>)_shaderProgram.Uniforms["u_blendRegionColor"];
 
             ((Uniform<Vector3F>)_shaderProgram.Uniforms["u_globeRadiiSquared"]).Value =
-                Ellipsoid.ScaledWgs84.RadiiSquared.ToVector3F();
+                ellipsoid.RadiiSquared.ToVector3F();
             
             _renderState = new RenderState();
             _renderState.FacetCulling.FrontFaceWindingOrder = fieldBlockMesh.FrontFaceWindingOrder;
@@ -117,7 +119,7 @@ namespace OpenGlobe.Scene.Terrain
 
             _oneOverClipmapSize.Value = 1.0f / clipmapPosts;
 
-            _updater = new ClipmapUpdater(context);
+            _updater = new ClipmapUpdater(context, _clipmapLevels);
 
             HeightExaggeration = 0.00001f;
         }
@@ -168,7 +170,7 @@ namespace OpenGlobe.Scene.Terrain
             if (!_lodUpdateEnabled)
                 return;
 
-            _clipmapCenter = Ellipsoid.ScaledWgs84.ToGeodetic3D(sceneState.Camera.Eye);
+            _clipmapCenter = _ellipsoid.ToGeodetic3D(sceneState.Camera.Eye);
 
             //Geodetic2D center = Ellipsoid.ScaledWgs84.ToGeodetic2D(sceneState.Camera.Target / Ellipsoid.Wgs84.MaximumRadius);
             Geodetic2D center = new Geodetic2D(_clipmapCenter.Longitude, _clipmapCenter.Latitude);
@@ -228,6 +230,7 @@ namespace OpenGlobe.Scene.Terrain
                 ClipmapLevel thisLevel = _clipmapLevels[i];
                 ClipmapLevel coarserLevel = _clipmapLevels[i > 0 ? i - 1 : 0];
 
+                _updater.RequestTileResidency(context, thisLevel);
                 PreRenderLevel(thisLevel, coarserLevel, context, sceneState);
             }
         }
@@ -405,10 +408,8 @@ namespace OpenGlobe.Scene.Terrain
             float levelScaleFactor = (float)Math.Pow(2.0, -levelIndex);
             _levelScaleFactor.Value = new Vector2F(levelScaleFactor, levelScaleFactor);
 
-            double originLongitude = level.Terrain.IndexToLongitude(level.CurrentExtent.West);
-            double originLatitude = level.Terrain.IndexToLatitude(level.CurrentExtent.South);
-            _levelOffsetFromWorldOrigin.Value = new Vector2F((float)originLongitude,
-                                                             (float)originLatitude);
+            _levelOffsetFromWorldOrigin.Value = new Vector2F((float)((double)level.CurrentExtent.West - level.Terrain.LongitudeToIndex(0.0)),
+                                                             (float)((double)level.CurrentExtent.South - level.Terrain.LatitudeToIndex(0.0)));
 
             int coarserWest = coarserLevel.CurrentExtent.West;
             int coarserSouth = coarserLevel.CurrentExtent.South;
@@ -621,5 +622,6 @@ namespace OpenGlobe.Scene.Terrain
         private Geodetic3D _clipmapCenter;
 
         private static readonly Vector3F[] _colors = CreateColors();
+        private Ellipsoid _ellipsoid;
     }
 }

@@ -25,10 +25,13 @@ namespace OpenGlobe.Examples
         {
             _window = Device.CreateWindow(800, 600, "Chapter 11:  Clipmap Terrain");
 
+            //_ellipsoid = Ellipsoid.ScaledWgs84;
+            _ellipsoid = Ellipsoid.Wgs84;
+
             //SimpleTerrainSource terrainSource = new SimpleTerrainSource(@"..\..\..\..\..\..\Data\Terrain\ps_height_16k");
             WorldWindTerrainSource terrainSource = new WorldWindTerrainSource();
-            _clipmap = new GlobeClipmapTerrain(_window.Context, terrainSource, 511);
-            _clipmap.HeightExaggeration = (float)(1.0 / Ellipsoid.Wgs84.MaximumRadius);
+            _clipmap = new GlobeClipmapTerrain(_window.Context, terrainSource, _ellipsoid, 511);
+            _clipmap.HeightExaggeration = 1.0f; // (float)(1.0 / Ellipsoid.Wgs84.MaximumRadius);
 
             _sceneState = new SceneState();
             _sceneState.DiffuseIntensity = 0.90f;
@@ -39,9 +42,9 @@ namespace OpenGlobe.Examples
             _clearState = new ClearState();
             _clearState.Color = Color.LightSkyBlue;
 
-            _sceneState.Camera.PerspectiveNearPlaneDistance = 0.00001;
-            _sceneState.Camera.PerspectiveFarPlaneDistance = 10.0;
-            _sceneState.SunPosition = new Vector3D(200000, 300000, 200000);
+            _sceneState.Camera.PerspectiveNearPlaneDistance = 0.00001 * _ellipsoid.MaximumRadius;
+            _sceneState.Camera.PerspectiveFarPlaneDistance = 10.0 * _ellipsoid.MaximumRadius;
+            _sceneState.SunPosition = new Vector3D(200000, 300000, 200000) * _ellipsoid.MaximumRadius;
 
             double longitude = -119.5326056;
             double latitude = 37.74451389;
@@ -49,15 +52,14 @@ namespace OpenGlobe.Examples
             //double longitude = 0.0;
             //double latitude = 0.0;
 
-            Ellipsoid ellipsoid = Ellipsoid.ScaledWgs84;
-
-             _camera = new CameraLookAtPoint(_sceneState.Camera, _window, ellipsoid);
-            _camera.CenterPoint = ellipsoid.ToVector3D(viewer);
-            _camera.ZoomRateRangeAdjustment = 0.0;
-            _camera.Azimuth = 0.0;
-            _camera.Elevation = Trig.ToRadians(30.0);
-            _camera.Range = 0.005;
-            _camera.ViewPoint(ellipsoid, viewer);
+             _camera = new CameraLookAtPoint(_sceneState.Camera, _window, _ellipsoid);
+             _camera.Range = 1.5 * _ellipsoid.MaximumRadius;
+            // _camera.CenterPoint = new Vector3D(0.0, 0.0, 0.0); //ellipsoid.ToVector3D(viewer);
+            //_camera.ZoomRateRangeAdjustment = 0.0;
+            //_camera.Azimuth = 0.0;
+            //_camera.Elevation = Trig.ToRadians(30.0);
+            //_camera.Range = 0.005;
+            //_camera.ViewPoint(ellipsoid, viewer);
             //_camera.Dispose();
             //_sceneState.Camera.Eye = ellipsoid.ToVector3D(viewer);
             //_sceneState.Camera.Target = _sceneState.Camera.Eye + Vector3D.UnitZ;
@@ -65,16 +67,24 @@ namespace OpenGlobe.Examples
             //_cameraFly.UpdateParametersFromCamera();
             //_cameraFly.MovementRate = _clipmap.HeightExaggeration * 100000.0;
 
+             _globe = new RayCastedGlobe(_window.Context);
+             _globe.Shape = _ellipsoid;
+             Bitmap bitmap = new Bitmap("NE2_50M_SR_W_4096.jpg");
+             _globe.Texture = Device.CreateTexture2D(bitmap, TextureFormat.RedGreenBlue8, false);
+
+             _clearDepth = new ClearState();
+             _clearDepth.Buffers = ClearBuffers.DepthBuffer | ClearBuffers.StencilBuffer;
+
             _window.Keyboard.KeyDown += OnKeyDown;
 
             _window.Resize += OnResize;
             _window.RenderFrame += OnRenderFrame;
             _window.PreRenderFrame += OnPreRenderFrame;
 
-            PersistentView.Execute(@"C:\Users\Kevin Ring\Documents\Book\svn\GeometryClipmapping\Figures\ClipmapNestedLevels.xml", _window, _sceneState.Camera);
+            PersistentView.Execute(@"C:\Users\Kevin Ring\Documents\Book\svn\GeometryClipmapping\Figures\ClipmapLevelsNearPole.xml", _window, _sceneState.Camera);
 
             HighResolutionSnap snap = new HighResolutionSnap(_window, _sceneState);
-            snap.ColorFilename = @"C:\Users\Kevin Ring\Documents\Book\svn\GeometryClipmapping\Figures\ClipmapNestedLevels.png";
+            snap.ColorFilename = @"C:\Users\Kevin Ring\Documents\Book\svn\GeometryClipmapping\Figures\ClipmapLevelsNearPole.png";
             snap.WidthInInches = 3;
             snap.DotsPerInch = 600;
 
@@ -128,12 +138,33 @@ namespace OpenGlobe.Examples
                 _clipmap.ColorClipmapLevels = !_clipmap.ColorClipmapLevels;
                 UpdateHUD();
             }
+            else if (e.Key == KeyboardKey.Z)
+            {
+                double longitude = -119.5326056;
+                double latitude = 37.74451389;
+                Geodetic3D halfDome = new Geodetic3D(Trig.ToRadians(longitude), Trig.ToRadians(latitude), 2700.0 / Ellipsoid.Wgs84.MaximumRadius);
+                _camera.ViewPoint(_ellipsoid, halfDome);
+                _camera.Azimuth = 0.0;
+                _camera.Elevation = Trig.ToRadians(30.0);
+                _camera.Range = 0.005;
+            }
+            else if (e.Key == KeyboardKey.F)
+            {
+                _camera.Dispose();
+                CameraFly fly = new CameraFly(_sceneState.Camera, _window);
+                fly.MovementRate *= 10;
+            }
         }
 
         private void OnRenderFrame()
         {
             Context context = _window.Context;
             context.Clear(_clearState);
+
+            _globe.Render(context, _sceneState);
+
+            context.Clear(_clearDepth);
+
             _clipmap.Render(context, _sceneState);
 
             if (_hud != null)
@@ -222,5 +253,8 @@ namespace OpenGlobe.Examples
         private readonly GlobeClipmapTerrain _clipmap;
         private HeadsUpDisplay _hud;
         private Font _hudFont;
+        private RayCastedGlobe _globe;
+        private ClearState _clearDepth;
+        private Ellipsoid _ellipsoid;
     }
 }

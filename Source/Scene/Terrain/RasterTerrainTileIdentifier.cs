@@ -52,6 +52,12 @@ namespace OpenGlobe.Scene.Terrain
             return _level.GetHashCode() ^ _x.GetHashCode() ^ _y.GetHashCode();
         }
 
+        public override string ToString()
+        {
+            return "Level: " + _level + " X: " + _x + " Y: " + _y;
+        }
+
+
         private int _x;
         private int _y;
         private int _level;

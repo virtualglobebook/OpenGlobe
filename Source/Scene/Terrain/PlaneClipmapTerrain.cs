@@ -116,7 +116,7 @@ namespace OpenGlobe.Scene.Terrain
 
             _oneOverClipmapSize.Value = 1.0f / clipmapPosts;
 
-            _updater = new ClipmapUpdater(context);
+            _updater = new ClipmapUpdater(context, _clipmapLevels);
 
             HeightExaggeration = 0.00001f;
         }
@@ -227,6 +227,7 @@ namespace OpenGlobe.Scene.Terrain
                 ClipmapLevel thisLevel = _clipmapLevels[i];
                 ClipmapLevel coarserLevel = _clipmapLevels[i > 0 ? i - 1 : 0];
 
+                _updater.RequestTileResidency(context, thisLevel);
                 PreRenderLevel(thisLevel, coarserLevel, context, sceneState);
             }
         }

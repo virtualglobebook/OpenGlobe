@@ -79,13 +79,16 @@ namespace OpenGlobe.Scene.Terrain
             if (File.Exists(cacheFilename))
             {
                 byte[] data = File.ReadAllBytes(cacheFilename);
-                int index = 0;
-                for (int i = 0; i < data.Length; i += 2)
+                if (data.Length == heightsToRead * sizeof(short))
                 {
-                    result[index] = BitConverter.ToInt16(data, i);
-                    ++index;
+                    int index = 0;
+                    for (int i = 0; i < data.Length; i += 2)
+                    {
+                        result[index] = BitConverter.ToInt16(data, i);
+                        ++index;
+                    }
+                    return result;
                 }
-                return result;
             }
 
             double divisor = Math.Pow(2.0, level);

@@ -398,8 +398,8 @@ namespace OpenGlobe.Scene
         {
             CheckDisposed();
 
-            double azimuthWindowRatio = (double)movement.Width / (double)_window.Width;
-            double elevationWindowRatio = (double)movement.Height / (double)_window.Height;
+            double azimuthWindowRatio = (double)movement.Width * 1e-7 * _zoomFactor * (_range - _zoomRateRangeAdjustment) / (double)_window.Width;
+            double elevationWindowRatio = (double)movement.Height * 1e-7 * _zoomFactor * (_range - _zoomRateRangeAdjustment) / (double)_window.Height;
 
             _azimuth -= azimuthWindowRatio * Trig.TwoPi;
             _elevation += elevationWindowRatio * Math.PI;
