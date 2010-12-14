@@ -200,11 +200,9 @@ namespace OpenGlobe.Core
         public Geodetic3D ToGeodetic3D(Vector3D position)
         {
             Vector3D p = ScaleToGeodeticSurface(position);
-            Geodetic2D g = ToGeodetic2D(p);
-
             Vector3D h = position - p;
             double height = Math.Sign(h.Dot(position)) * h.Magnitude;
-            return new Geodetic3D(g, height);
+            return new Geodetic3D(ToGeodetic2D(p), height);
         }
 
         public Vector3D ScaleToGeodeticSurface(Vector3D position)
