@@ -271,5 +271,46 @@ namespace OpenGlobe.Core
             Assert.IsTrue(new Vector3D(0, -0.866025403784439, -0.5).Normalize().EqualsEpsilon(positions[2].Normalize(), 1e-10));
             Assert.AreEqual(q, positions[3]);
         }
+        
+        /*
+        [Test]
+        public void ToGeodetic3DConvergence()
+        {
+            //Ellipsoid e = Ellipsoid.ScaledWgs84;
+            //Ellipsoid e = new Ellipsoid(1, 1, 0.75);
+            Ellipsoid e = new Ellipsoid(1, 1, 0.5);
+
+            double s = 0.1 * e.Radii.MinimumComponent;
+            Random r = new Random(42);
+            Mesh m = GeographicGridEllipsoidTessellator.Compute(
+                e, 256, 128, GeographicGridEllipsoidVertexAttributes.Position);
+
+            IList<Vector3D> originalPositions = (m.Attributes["position"] as VertexAttribute<Vector3D>).Values;
+            IList<Vector3D> positions = new List<Vector3D>(originalPositions);
+            for (int j = 0; j < positions.Count; ++j)
+            {
+                Geodetic3D g = e.ToGeodetic3D(positions[j]);
+                g = new Geodetic3D(g.Longitude, g.Latitude,
+                    -s + ( s * ((double)r.Next(2000001) / 1000000.0)));
+                positions[j] = e.ToVector3D(g);
+            }
+
+            int total = 0;
+            int min = int.MaxValue;
+            int max = int.MinValue;
+
+            foreach (Vector3D p in positions)
+            {
+                int c = 0;
+                e.ScaleToGeodeticSurface(p, out c);
+
+                total += c;
+                max = Math.Max(max, c);
+                min = Math.Min(min, c);
+            }
+
+            double average = (double)total / positions.Count;
+        }
+        */
     }
 }
