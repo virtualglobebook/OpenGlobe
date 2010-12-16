@@ -38,6 +38,11 @@ namespace OpenGlobe.Core
             return new Geodetic2D(ToRadians(geodetic.Longitude), ToRadians(geodetic.Latitude));
         }
 
+        public static Vector2D ToRadians(Vector2D vector)
+        {
+            return new Vector2D(ToRadians(vector.X), ToRadians(vector.Y));
+        }
+
         public static double ToDegrees(double radians)
         {
             return radians / RadiansPerDegree;
@@ -53,5 +58,9 @@ namespace OpenGlobe.Core
             return new Geodetic2D(ToDegrees(geodetic.Longitude), ToDegrees(geodetic.Latitude));
         }
 
+        public static Vector2D ToDegrees(Vector2D vector)
+        {
+            return new Vector2D(ToDegrees(vector.X), ToDegrees(vector.Y));
+        }
     }
 }
