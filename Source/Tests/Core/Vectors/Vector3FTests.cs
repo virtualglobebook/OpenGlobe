@@ -3,7 +3,7 @@
 // (C) Copyright 2010 Patrick Cozzi, Deron Ohlarik, and Kevin Ring
 //
 // Distributed under the Boost Software License, Version 1.0f.
-// See License.txt or http://www.boost.org/LICENSE_1_0.txt.
+// See License.txt or http://www.opensource.org/licenses/mit-license.php.
 //
 #endregion
 
