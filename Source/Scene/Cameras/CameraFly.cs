@@ -285,10 +285,19 @@ namespace OpenGlobe.Scene
             double pitchWindowRatio = (double)movement.Height / (double)_window.Height;
 
             Quaterniond rotateX = Quaterniond.FromAxisAngle(Vector3d.UnitX, _roll);
-            Vector3d yawPitch = Vector3d.Transform(new Vector3d(0.0, pitchWindowRatio, yawWindowRatio), rotateX);
+            Quaterniond rotateY = Quaterniond.FromAxisAngle(Vector3d.UnitY, _pitch);
+            Quaterniond rotateZ = Quaterniond.FromAxisAngle(Vector3d.UnitZ, _yaw);
+
+            Vector3d yawPitch = new Vector3d(0.0, pitchWindowRatio, yawWindowRatio);
+            yawPitch = Vector3d.Transform(yawPitch, rotateX);
+            yawPitch = Vector3d.Transform(yawPitch, rotateY);
+            yawPitch = Vector3d.Transform(yawPitch, rotateZ);
+
+            double rollWindowRatio = yawPitch.X;
             pitchWindowRatio = yawPitch.Y;
             yawWindowRatio = yawPitch.Z;
 
+            _roll -= rollWindowRatio * Math.PI;
             _yaw -= yawWindowRatio * Math.PI;
             _pitch -= pitchWindowRatio * Math.PI;
 
@@ -322,6 +331,8 @@ namespace OpenGlobe.Scene
             {
                 _roll += Trig.TwoPi;
             }
+
+            //Console.WriteLine("Roll: " + _roll + " Pitch: " + _pitch + " Yaw: " + _yaw);
         }
 
         private void CheckDisposed()
