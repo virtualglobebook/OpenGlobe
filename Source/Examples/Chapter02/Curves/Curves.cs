@@ -169,8 +169,6 @@ namespace OpenGlobe.Examples
                     _semiMinorAxis = Math.Max(_semiMinorAxis - _semiMinorAxisDelta, 0.1);
                 }
                 SetShape();
-
-                CreateScene();
             }
             else if ((e.Key == KeyboardKey.Number1) ||
                      (e.Key == KeyboardKey.Keypad1))
@@ -187,6 +185,8 @@ namespace OpenGlobe.Examples
             {
                 _plane.Show = !_plane.Show;
             }
+
+            CreateScene();
         }
 
         private void SetShape()
