@@ -1,8 +1,8 @@
 ﻿//
 // (C) Copyright 2010 Patrick Cozzi and Kevin Ring
 //
-// Distributed under the Boost Software License, Version 1.0.
-// See License.txt or http://www.boost.org/LICENSE_1_0.txt.
+// Distributed under the MIT License.
+// See License.txt or http://www.opensource.org/licenses/mit-license.php.
 //
 
 vec4 og_ClipToWindowCoordinates(vec4 v, mat4 viewportTransformationMatrix)

@@ -2,8 +2,8 @@
 //
 // (C) Copyright 2010 Patrick Cozzi and Deron Ohlarik
 //
-// Distributed under the Boost Software License, Version 1.0.
-// See License.txt or http://www.boost.org/LICENSE_1_0.txt.
+// Distributed under the MIT License.
+// See License.txt or http://www.opensource.org/licenses/mit-license.php.
 //
       
 uniform mat4 og_modelViewMatrix;
