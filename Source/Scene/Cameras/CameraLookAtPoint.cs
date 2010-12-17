@@ -50,6 +50,11 @@ namespace OpenGlobe.Scene
             _maximumZoomRate = Double.MaxValue;
             _minimumZoomRate = ellipsoid.MaximumRadius / 100.0;
 
+            _rotateFactor = 1.0 / ellipsoid.MaximumRadius;
+            _rotateRateRangeAdjustment = ellipsoid.MaximumRadius;
+            _maximumRotateRate = Double.MaxValue;
+            _minimumRotateRate = 1.0 / 5000.0;
+
             // TODO: Should really be:
             // _range = (camera.Eye - camera.Target).Magnitude;
             _range = ellipsoid.MaximumRadius * 2.0;
@@ -398,11 +403,21 @@ namespace OpenGlobe.Scene
         {
             CheckDisposed();
 
-            double azimuthWindowRatio = (double)movement.Width * 1e-7 * _zoomFactor * (_range - _zoomRateRangeAdjustment) / (double)_window.Width;
-            double elevationWindowRatio = (double)movement.Height * 1e-7 * _zoomFactor * (_range - _zoomRateRangeAdjustment) / (double)_window.Height;
+            double rotateRate = _rotateFactor * (_range - _rotateRateRangeAdjustment);
+            if (rotateRate > _maximumRotateRate)
+            {
+                rotateRate = _maximumRotateRate;
+            }
+            if (rotateRate < _minimumRotateRate)
+            {
+                rotateRate = _minimumRotateRate;
+            }
 
-            _azimuth -= azimuthWindowRatio * Trig.TwoPi;
-            _elevation += elevationWindowRatio * Math.PI;
+            double azimuthWindowRatio = (double)movement.Width / (double)_window.Width;
+            double elevationWindowRatio = (double)movement.Height / (double)_window.Height;
+
+            _azimuth -= rotateRate * azimuthWindowRatio * Trig.TwoPi;
+            _elevation += rotateRate * elevationWindowRatio * Math.PI;
 
             while (_azimuth > Math.PI)
             {
@@ -428,7 +443,6 @@ namespace OpenGlobe.Scene
             CheckDisposed();
 
             double zoomRate = _zoomFactor * (_range - _zoomRateRangeAdjustment);
-            double rangeWindowRatio = (double)movement.Height / (double)_window.Height;
             if (zoomRate > _maximumZoomRate)
             {
                 zoomRate = _maximumZoomRate;
@@ -437,6 +451,8 @@ namespace OpenGlobe.Scene
             {
                 zoomRate = _minimumZoomRate;
             }
+
+            double rangeWindowRatio = (double)movement.Height / (double)_window.Height;
             _range -= zoomRate * rangeWindowRatio;
         }
 
@@ -455,6 +471,11 @@ namespace OpenGlobe.Scene
         private double _zoomRateRangeAdjustment;
         private double _maximumZoomRate;
         private double _minimumZoomRate;
+
+        private double _rotateFactor;
+        private double _rotateRateRangeAdjustment;
+        private double _minimumRotateRate;
+        private double _maximumRotateRate;
 
         private bool _leftButtonDown;
         private bool _rightButtonDown;
