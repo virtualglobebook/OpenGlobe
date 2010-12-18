@@ -285,7 +285,7 @@ namespace OpenGlobe.Core
             double theta = start.AngleBetween(stop);
             int n = Math.Max((int)(theta / granularity) - 1, 0);
             
-            IList<Vector3D> positions = new List<Vector3D>(2 + n);
+            List<Vector3D> positions = new List<Vector3D>(2 + n);
 
             positions.Add(start);
 
