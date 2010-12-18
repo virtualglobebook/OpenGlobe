@@ -47,10 +47,11 @@ vec3 GeodeticSurfaceNormal(vec3 geodetic)
 vec3 GeodeticToCartesian(vec3 globeRadiiSquared, vec3 geodetic)
 {
 	vec3 n = GeodeticSurfaceNormal(geodetic);
-	vec3 g = globeRadiiSquared * n * n;
+	vec3 k = globeRadiiSquared * n;
+	vec3 g = k * n;
 	float gamma = sqrt(g.x + g.y + g.z);
 
-	vec3 rSurface = (globeRadiiSquared * n) / gamma;
+	vec3 rSurface = k / gamma;
 	return rSurface + (geodetic.z * n);
 }
 

@@ -145,13 +145,13 @@ namespace OpenGlobe.Core
         public Vector3D ToVector3D(Geodetic3D geodetic)
         {
             Vector3D n = GeodeticSurfaceNormal(geodetic);
+            Vector3D k = _radiiSquared.MultiplyComponents(n);
             double gamma = Math.Sqrt(
-                _radiiSquared.X * (n.X * n.X) +
-                _radiiSquared.Y * (n.Y * n.Y) +
-                _radiiSquared.Z * (n.Z * n.Z));
+                (k.X * n.X) +
+                (k.Y * n.Y) +
+                (k.Z * n.Z));
 
-            Vector3D rSurface = (_radiiSquared.MultiplyComponents(n)) / gamma;
-
+            Vector3D rSurface = k / gamma;
             return rSurface + (geodetic.Height * n);
         }
 
