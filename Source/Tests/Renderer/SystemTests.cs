@@ -34,7 +34,7 @@ namespace OpenGlobe.Renderer
                 window.Context.Framebuffer = framebuffer;
                 window.Context.Clear(new ClearState() { Buffers = ClearBuffers.All, Color = Color.Red, Depth = 0.5f });
                 TestUtility.ValidateColor(framebuffer.ColorAttachments[0], 255, 0, 0);
-                ValidateDepth(framebuffer.DepthAttachment, 0.5f);
+                TestUtility.ValidateDepth(framebuffer.DepthAttachment, 0.5f);
 
                 //
                 // Scissor out window and verify clear doesn't modify contents
@@ -45,7 +45,7 @@ namespace OpenGlobe.Renderer
 
                 window.Context.Clear(new ClearState() { ScissorTest = scissorTest, Buffers = ClearBuffers.All, Color = Color.Blue, Depth = 1 });
                 TestUtility.ValidateColor(framebuffer.ColorAttachments[0], 255, 0, 0);
-                ValidateDepth(framebuffer.DepthAttachment, 0.5f);
+                TestUtility.ValidateDepth(framebuffer.DepthAttachment, 0.5f);
             }
         }
 
@@ -421,17 +421,6 @@ namespace OpenGlobe.Renderer
 
                 window.Context.Draw(PrimitiveType.Points, 1, 1, new DrawState(TestUtility.CreateRenderStateWithoutDepthTest(), sp, va), new SceneState());
                 TestUtility.ValidateColor(framebuffer.ColorAttachments[0], 0, 255, 0);
-            }
-        }
-
-        ///////////////////////////////////////////////////////////////////////
-
-        private static void ValidateDepth(Texture2D depthTexture, float depth)
-        {
-            using (ReadPixelBuffer readPixelBuffer = depthTexture.CopyToBuffer(ImageFormat.DepthComponent, ImageDatatype.Float, 1))
-            {
-                float[] readDepth = readPixelBuffer.CopyToSystemMemory<float>();
-                Assert.AreEqual (depth, readDepth[0]);
             }
         }
     }

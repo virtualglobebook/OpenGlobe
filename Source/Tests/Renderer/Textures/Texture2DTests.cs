@@ -91,6 +91,30 @@ namespace OpenGlobe.Renderer
         }
 
         [Test]
+        public void CopyFromFramebuffer()
+        {
+            using (GraphicsWindow window = Device.CreateWindow(1, 1))
+            using (Framebuffer framebuffer = TestUtility.CreateFramebuffer(window.Context))
+            using (Texture2D depthTexture = Device.CreateTexture2D(new Texture2DDescription(1, 1, TextureFormat.Depth32f, false)))
+            using (Texture2D readColorTexture = Device.CreateTexture2D(new Texture2DDescription(1, 1, TextureFormat.RedGreenBlue8, false)))
+            using (Texture2D readDepthTexture = Device.CreateTexture2D(new Texture2DDescription(1, 1, TextureFormat.Depth32f, false)))
+            {
+                framebuffer.DepthAttachment = depthTexture;
+
+                window.Context.Framebuffer = framebuffer;
+                window.Context.Clear(new ClearState() { Buffers = ClearBuffers.All, Color = Color.Blue, Depth = 0.5f });
+                TestUtility.ValidateColor(framebuffer.ColorAttachments[0], 0, 0, 255);
+                TestUtility.ValidateDepth(framebuffer.DepthAttachment, 0.5f);
+
+                readColorTexture.CopyFromFramebuffer();
+                readDepthTexture.CopyFromFramebuffer();
+
+                TestUtility.ValidateColor(readColorTexture, 0, 0, 255);
+                TestUtility.ValidateDepth(readDepthTexture, 0.5f);
+            }
+        }
+
+        [Test]
         public void Texture2DSubImage()
         {
             float[] pixels = new float[]

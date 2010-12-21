@@ -117,27 +117,8 @@ namespace OpenGlobe.Renderer.GL3x
             {
                 throw new ArgumentException("Pixel buffer is not big enough for provided width, height, format, and datatype.");
             }
-            
-            if (xOffset < 0)
-            {
-                throw new ArgumentOutOfRangeException("xOffset", "xOffset must be greater than or equal to zero.");
-            }
 
-            if (yOffset < 0)
-            {
-                throw new ArgumentOutOfRangeException("yOffset", "yOffset must be greater than or equal to zero.");
-            }
-
-            if (xOffset + width > _description.Width)
-            {
-                throw new ArgumentOutOfRangeException("xOffset + width must be less than or equal to Description.Width");
-            }
-            
-            if (yOffset + height > _description.Height)
-            {
-                throw new ArgumentOutOfRangeException("yOffset + height must be less than or equal to Description.Height");
-            }
-            
+            VerifyOffsets(xOffset, yOffset, width, height);
             VerifyRowAlignment(rowAlignment);
 
             WritePixelBufferGL3x bufferObjectGL = (WritePixelBufferGL3x)pixelBuffer;
@@ -153,6 +134,30 @@ namespace OpenGlobe.Renderer.GL3x
                 TypeConverterGL3x.To(format),
                 TypeConverterGL3x.To(dataType),
                 new IntPtr());
+
+            GenerateMipmaps();
+        }
+
+        public override void CopyFromFramebuffer(
+            int xOffset,
+            int yOffset,
+            int framebufferXOffset,
+            int framebufferYOffset,
+            int width,
+            int height)
+        {
+            VerifyOffsets(xOffset, yOffset, width, height);
+
+            BindToLastTextureUnit();
+            GL.ReadBuffer(ReadBufferMode.Back);                     // Default.  Not really needed here.
+            GL.PixelStore(PixelStoreParameter.UnpackAlignment, 4);  // Don't think this is needed either.
+            GL.CopyTexSubImage2D(_target, 0,
+                xOffset,
+                yOffset,
+                framebufferXOffset,
+                framebufferYOffset,
+                width,
+                height);
 
             GenerateMipmaps();
         }
@@ -181,6 +186,33 @@ namespace OpenGlobe.Renderer.GL3x
                 new IntPtr());
 
             return pixelBuffer;
+        }
+
+        private void VerifyOffsets(
+            int xOffset,
+            int yOffset,
+            int width,
+            int height)
+        {
+            if (xOffset < 0)
+            {
+                throw new ArgumentOutOfRangeException("xOffset", "xOffset must be greater than or equal to zero.");
+            }
+
+            if (yOffset < 0)
+            {
+                throw new ArgumentOutOfRangeException("yOffset", "yOffset must be greater than or equal to zero.");
+            }
+
+            if (xOffset + width > _description.Width)
+            {
+                throw new ArgumentOutOfRangeException("xOffset + width must be less than or equal to Description.Width");
+            }
+
+            if (yOffset + height > _description.Height)
+            {
+                throw new ArgumentOutOfRangeException("yOffset + height must be less than or equal to Description.Height");
+            }
         }
 
         private void VerifyRowAlignment(int rowAlignment)

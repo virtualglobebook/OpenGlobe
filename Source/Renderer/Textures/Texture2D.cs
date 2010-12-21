@@ -44,6 +44,19 @@ namespace OpenGlobe.Renderer
             ImageDatatype dataType,
             int rowAlignment);
 
+        public virtual void CopyFromFramebuffer()
+        {
+            CopyFromFramebuffer(0, 0, 0, 0, Description.Width, Description.Height);
+        }
+
+        public abstract void CopyFromFramebuffer(
+            int xOffset,
+            int yOffset,
+            int framebufferXOffset,
+            int framebufferYOffset,
+            int width,
+            int height);
+
         public virtual ReadPixelBuffer CopyToBuffer(ImageFormat format, ImageDatatype dataType)
         {
             return CopyToBuffer(format, dataType, 4);

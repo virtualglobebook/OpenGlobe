@@ -79,5 +79,14 @@ namespace OpenGlobe
                 Assert.AreEqual(blue, color[2], "Blue does not match");
             }
         }
+
+        public static void ValidateDepth(Texture2D depthTexture, float depth)
+        {
+            using (ReadPixelBuffer readPixelBuffer = depthTexture.CopyToBuffer(ImageFormat.DepthComponent, ImageDatatype.Float, 1))
+            {
+                float[] readDepth = readPixelBuffer.CopyToSystemMemory<float>();
+                Assert.AreEqual(depth, readDepth[0]);
+            }
+        }
     }
 }

@@ -14,6 +14,16 @@ namespace OpenGlobe.Renderer
 {
     public struct ColorMask : IEquatable<ColorMask>
     {
+        public static ColorMask False
+        {
+            get { return new ColorMask(false, false, false, false); }
+        }
+
+        public static ColorMask True
+        {
+            get { return new ColorMask(true, true, true, true); }
+        }
+
         public ColorMask(bool red, bool green, bool blue, bool alpha)
         {
             _red = red;
