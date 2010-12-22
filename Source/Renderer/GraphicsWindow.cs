@@ -21,7 +21,6 @@ namespace OpenGlobe.Renderer
         public event GraphicsHandler PreRenderFrame;
         public event GraphicsHandler RenderFrame;
         public event GraphicsHandler PostRenderFrame;
-        public event GraphicsHandler PostSwapBuffers;
 
         protected virtual void OnResize()
         {
@@ -46,11 +45,6 @@ namespace OpenGlobe.Renderer
         protected virtual void OnPostRenderFrame()
         {
             Handler(PostRenderFrame);
-        }
-
-        protected virtual void OnPostSwapBuffers()
-        {
-            Handler(PostSwapBuffers);
         }
 
         private void Handler(GraphicsHandler handler)

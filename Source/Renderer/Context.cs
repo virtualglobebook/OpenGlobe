@@ -28,6 +28,12 @@ namespace OpenGlobe.Renderer
 
     public abstract class Context
     {
+        protected Context()
+        {
+            _stopWatch = new Stopwatch();
+            NumberOfSampledFrames = 30;
+        }
+
         public abstract void MakeCurrent();
 
         public virtual VertexArray CreateVertexArray(Mesh mesh, ShaderVertexAttributeCollection shaderAttributes, BufferHint usageHint)
@@ -112,15 +118,24 @@ namespace OpenGlobe.Renderer
         public long NumberOfDrawCalls { get { return _numberOfDrawCalls; } }
         public long NumberOfClearCalls { get { return _numberOfClearCalls; } }
 
-        public void ResetPerformanceCounters()
-        {
-            _numberOfPoints = 0;
-            _numberOfLines = 0;
-            _numberOfTriangles = 0;
-            _numberOfPrimitives = 0;
-            _numberOfDrawCalls = 0;
-            _numberOfClearCalls = 0;
-        }
+        /// <summary>
+        /// Gets or sets the number of frames used to determine the
+        /// elapsed milliseconds and frames per second.
+        /// </summary>
+        /// <remarks>
+        /// Setting this value to one would only take the last rendered frame
+        /// into account, where as setting this value to 30 would average the
+        /// last 30 frames.
+        /// </remarks>
+        /// <seealso cref="MillisecondsPerFrame"/>
+        /// <seealso cref="FramesPerSecond"/>
+        public int NumberOfSampledFrames { get; set; }
+        public double MillisecondsPerFrame { get { return _elapsedSeconds * 1000.0; } }
+        public double FramesPerSecond { get { return 1.0 / _elapsedSeconds; } }
+        public long PointsPerSecond { get { return _pointsPerSecond; } }
+        public long LinesPerSecond { get { return _linesPerSecond; } }
+        public long TrianglesPerSecond { get { return _trianglesPerSecond; } }
+        public long PrimitivesPerSecond { get { return _primitivesPerSecond; } }
 
         private void IncreasePerformanceCounters(PrimitiveType primitiveType, int count, DrawState drawState)
         {
@@ -171,11 +186,67 @@ namespace OpenGlobe.Renderer
             ++_numberOfDrawCalls;
         }
 
+        internal void PostSwapBuffers()
+        {
+            if (PerformanceCountersEnabled)
+            {
+                _stopWatch.Stop();
+
+                _elapsedSecondsSum += (double)_stopWatch.ElapsedTicks / (double)Stopwatch.Frequency;
+                _pointsSum += _numberOfPoints;
+                _linesSum += _numberOfLines;
+                _trianglesSum += _numberOfTriangles;
+                _primitivesSum += _numberOfPrimitives;
+
+                if (++_frameCount == NumberOfSampledFrames)
+                {
+                    _elapsedSeconds = _elapsedSecondsSum / NumberOfSampledFrames;
+
+                    _pointsPerSecond = (long)((double)_pointsSum / _elapsedSecondsSum);
+                    _linesPerSecond = (long)((double)_linesSum / _elapsedSecondsSum);
+                    _trianglesPerSecond = (long)((double)_trianglesSum / _elapsedSecondsSum);
+                    _primitivesPerSecond = (long)((double)_primitivesSum / _elapsedSecondsSum);
+
+                    _elapsedSecondsSum = 0.0;
+                    _pointsSum = 0;
+                    _linesSum = 0;
+                    _trianglesSum = 0;
+                    _primitivesSum = 0;
+                    _frameCount = 0;
+                }
+
+                _numberOfPoints = 0;
+                _numberOfLines = 0;
+                _numberOfTriangles = 0;
+                _numberOfPrimitives = 0;
+                _numberOfDrawCalls = 0;
+                _numberOfClearCalls = 0;
+
+                _stopWatch.Reset();
+                _stopWatch.Start();
+            }
+        }
+
         private long _numberOfPoints;
         private long _numberOfLines;
         private long _numberOfTriangles;
         private long _numberOfPrimitives;
         private long _numberOfDrawCalls;
         private long _numberOfClearCalls;
+
+        private readonly Stopwatch _stopWatch;
+        private double _elapsedSeconds;
+        private double _elapsedSecondsSum;
+        private int _frameCount;
+
+        private long _pointsPerSecond;
+        private long _linesPerSecond;
+        private long _trianglesPerSecond;
+        private long _primitivesPerSecond;
+
+        private long _pointsSum;
+        private long _linesSum;
+        private long _trianglesSum;
+        private long _primitivesSum;
     }
 }

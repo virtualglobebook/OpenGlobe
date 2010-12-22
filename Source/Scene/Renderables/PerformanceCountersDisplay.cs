@@ -21,11 +21,9 @@ namespace OpenGlobe.Scene
     {
         public PerformanceCountersDisplay(GraphicsWindow window, SceneState sceneState)
         {
-            window.Context.ResetPerformanceCounters();
             window.Context.PerformanceCountersEnabled = true;
             window.Resize += OnResize;
             window.PostRenderFrame += PostRenderFrame;
-            window.PostSwapBuffers += PostSwapBuffers;
             
             _display = new HeadsUpDisplay();
             _display.Color = Color.Black;
@@ -33,8 +31,6 @@ namespace OpenGlobe.Scene
             _display.HorizontalOrigin = HorizontalOrigin.Right;
             _display.Position = new Vector2D(window.Width, window.Height);
             _font = new Font(_fontName, 16);
-
-            _stopWatch = new Stopwatch();
 
             _window = window;
             _sceneState = sceneState;
@@ -51,8 +47,6 @@ namespace OpenGlobe.Scene
             ShowLinesPerSecond = true;
             ShowTrianglesPerSecond = true;
             ShowPrimitivesPerSecond = true;
-
-            NumberOfSampledFrames = 30;
         }
 
         public Color Color
@@ -88,25 +82,6 @@ namespace OpenGlobe.Scene
         public bool ShowLinesPerSecond { get; set; }
         public bool ShowTrianglesPerSecond { get; set; }
         public bool ShowPrimitivesPerSecond { get; set; }
-
-        /// <summary>
-        /// Gets or sets the number of frames used to determine the
-        /// elapsed milliseconds and frames per second.
-        /// </summary>
-        /// <remarks>
-        /// Setting this value to one would only take the last rendered frame
-        /// into account, where as setting this value to 30 would average the
-        /// last 30 frames.
-        /// </remarks>
-        /// <seealso cref="MillisecondsPerFrame"/>
-        /// <seealso cref="FramesPerSecond"/>
-        public int NumberOfSampledFrames { get; set; }
-        public double MillisecondsPerFrame { get { return _elapsedSeconds * 1000.0; } }
-        public double FramesPerSecond { get { return 1.0 / _elapsedSeconds; } }
-        public long PointsPerSecond { get { return _pointsPerSecond; } }
-        public long LinesPerSecond { get { return _linesPerSecond; } }
-        public long TrianglesPerSecond { get { return _trianglesPerSecond; } }
-        public long PrimitivesPerSecond { get { return _primitivesPerSecond; } }
 
         private void OnResize()
         {
@@ -151,32 +126,32 @@ namespace OpenGlobe.Scene
 
             if (ShowMillisecondsPerFrame)
             {
-                strings.Add("ms/frame: " + string.Format(CultureInfo.CurrentCulture, "{0:N}", MillisecondsPerFrame) + "\n");
+                strings.Add("ms/frame: " + string.Format(CultureInfo.CurrentCulture, "{0:N}", context.MillisecondsPerFrame) + "\n");
             }
 
             if (ShowFramesPerSecond)
             {
-                strings.Add("fps: " + string.Format(CultureInfo.CurrentCulture, "{0:N}", FramesPerSecond) + "\n");
+                strings.Add("fps: " + string.Format(CultureInfo.CurrentCulture, "{0:N}", context.FramesPerSecond) + "\n");
             }
 
-            if (ShowPointsPerSecond && (_pointsPerSecond > 0))
+            if (ShowPointsPerSecond && (context.PointsPerSecond > 0))
             {
-                strings.Add("points/s: " + string.Format(CultureInfo.CurrentCulture, "{0:n0}", _pointsPerSecond) + "\n");
+                strings.Add("points/s: " + string.Format(CultureInfo.CurrentCulture, "{0:n0}", context.PointsPerSecond) + "\n");
             }
 
-            if (ShowLinesPerSecond && (_linesPerSecond > 0))
+            if (ShowLinesPerSecond && (context.LinesPerSecond > 0))
             {
-                strings.Add("lines/s: " + string.Format(CultureInfo.CurrentCulture, "{0:n0}", _linesPerSecond) + "\n");
+                strings.Add("lines/s: " + string.Format(CultureInfo.CurrentCulture, "{0:n0}", context.LinesPerSecond) + "\n");
             }
 
-            if (ShowTrianglesPerSecond && (_trianglesPerSecond > 0))
+            if (ShowTrianglesPerSecond && (context.TrianglesPerSecond > 0))
             {
-                strings.Add("triangles/s: " + string.Format(CultureInfo.CurrentCulture, "{0:n0}", _trianglesPerSecond) + "\n");
+                strings.Add("triangles/s: " + string.Format(CultureInfo.CurrentCulture, "{0:n0}", context.TrianglesPerSecond) + "\n");
             }
 
-            if (ShowPrimitivesPerSecond && (_primitivesPerSecond > 0))
+            if (ShowPrimitivesPerSecond && (context.PrimitivesPerSecond > 0))
             {
-                strings.Add("primitives/s: " + string.Format(CultureInfo.CurrentCulture, "{0:n0}", _primitivesPerSecond) + "\n");
+                strings.Add("primitives/s: " + string.Format(CultureInfo.CurrentCulture, "{0:n0}", context.PrimitivesPerSecond) + "\n");
             }
 
             if (_display.Texture != null)
@@ -206,50 +181,13 @@ namespace OpenGlobe.Scene
             }
         }
 
-        private void PostSwapBuffers()
-        {
-            // TODO:  Move this event and related properties to
-            // Context.  This will require some GraphicsWindow refactoring.
-
-            _stopWatch.Stop();
-
-            _elapsedSecondsSum += (double)_stopWatch.ElapsedTicks / (double)Stopwatch.Frequency;
-            _pointsSum += _window.Context.NumberOfPointsRendered;
-            _linesSum += _window.Context.NumberOfLinesRendered;
-            _trianglesSum += _window.Context.NumberOfTrianglesRendered;
-            _primitivesSum += _window.Context.NumberOfPrimitivesRendered;
-
-            if (++_frameCount == NumberOfSampledFrames)
-            {
-                _elapsedSeconds = _elapsedSecondsSum / NumberOfSampledFrames;
-
-                _pointsPerSecond = (long)((double)_pointsSum / _elapsedSecondsSum);
-                _linesPerSecond = (long)((double)_linesSum / _elapsedSecondsSum);
-                _trianglesPerSecond = (long)((double)_trianglesSum / _elapsedSecondsSum);
-                _primitivesPerSecond = (long)((double)_primitivesSum / _elapsedSecondsSum);
-
-                _elapsedSecondsSum = 0.0;
-                _pointsSum = 0;
-                _linesSum = 0;
-                _trianglesSum = 0;
-                _primitivesSum = 0;
-                _frameCount = 0;
-            }
-
-            _window.Context.ResetPerformanceCounters();
-            _stopWatch.Reset();
-            _stopWatch.Start();
-        }
-
         #region IDisposable Members
 
         public void Dispose()
         {
-            _window.Context.ResetPerformanceCounters();
             _window.Context.PerformanceCountersEnabled = false;
             _window.Resize -= OnResize;
             _window.PostRenderFrame -= PostRenderFrame;
-            _window.PostSwapBuffers -= PostSwapBuffers;
 
             if (_display.Texture != null)
             {
@@ -265,21 +203,6 @@ namespace OpenGlobe.Scene
         private SceneState _sceneState;
         private readonly HeadsUpDisplay _display;
         private Font _font;
-
-        private readonly Stopwatch _stopWatch;
-        private double _elapsedSeconds;
-        private double _elapsedSecondsSum;
-        private int _frameCount;
-
-        private long _pointsPerSecond;
-        private long _linesPerSecond;
-        private long _trianglesPerSecond;
-        private long _primitivesPerSecond;
-
-        private long _pointsSum;
-        private long _linesSum;
-        private long _trianglesSum;
-        private long _primitivesSum;
 
         private const string _fontName = "Courier New";
     }
