@@ -10,6 +10,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Globalization;
 
@@ -47,6 +48,11 @@ namespace OpenGlobe.Core
         public static Vector3F Undefined
         {
             get { return new Vector3F(float.NaN, float.NaN, float.NaN); }
+        }
+
+        public static Vector3F FromNormalizedColor(Color color)
+        {
+            return new Vector3F(color.R / 255.0f, color.G / 255.0f, color.B / 255.0f);
         }
 
         public Vector3F(float x, float y, float z)
@@ -265,6 +271,14 @@ namespace OpenGlobe.Core
         public Vector3B ToVector3B()
         {
             return new Vector3B(Convert.ToBoolean(_x), Convert.ToBoolean(_y), Convert.ToBoolean(_z));
+        }
+
+        public Color ToNormalizedColor()
+        {
+            return Color.FromArgb(
+                (int)(_x * 255.0f),
+                (int)(_y * 255.0f),
+                (int)(_z * 255.0f));
         }
 
         private readonly float _x;
