@@ -149,7 +149,7 @@ namespace OpenGlobe.Renderer.GL3x
             set { _setFramebuffer = (FramebufferGL3x)value; }
         }
 
-        public override void Clear(ClearState clearState)
+        protected override void DoClear(ClearState clearState)
         {
             ApplyFramebuffer();
 
@@ -179,7 +179,7 @@ namespace OpenGlobe.Renderer.GL3x
             GL.Clear(TypeConverterGL3x.To(clearState.Buffers));
         }
 
-        public override void Draw(PrimitiveType primitiveType, int offset, int count, DrawState drawState, SceneState sceneState)
+        protected override void DoDraw(PrimitiveType primitiveType, int offset, int count, DrawState drawState, SceneState sceneState)
         {
             VerifyDraw(drawState, sceneState);
             ApplyBeforeDraw(drawState, sceneState);
@@ -200,7 +200,7 @@ namespace OpenGlobe.Renderer.GL3x
             }
         }
 
-        public override void Draw(PrimitiveType primitiveType, DrawState drawState, SceneState sceneState)
+        protected override void DoDraw(PrimitiveType primitiveType, DrawState drawState, SceneState sceneState)
         {
             VerifyDraw(drawState, sceneState);
             ApplyBeforeDraw(drawState, sceneState);

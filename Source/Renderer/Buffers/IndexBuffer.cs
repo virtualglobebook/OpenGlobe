@@ -52,5 +52,6 @@ namespace OpenGlobe.Renderer
         public abstract int SizeInBytes { get; }
         public abstract IndexBufferDatatype Datatype { get; }
         public abstract BufferHint UsageHint { get; }
+        public abstract int Count { get; }
     }
 }

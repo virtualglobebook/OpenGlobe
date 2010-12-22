@@ -30,11 +30,6 @@ namespace OpenGlobe.Renderer.GL3x
             GL.BindBuffer(BufferTarget.ElementArrayBuffer, 0);
         }
 
-        internal int Count
-        {
-            get { return _count; }
-        }
-        
         #region IndexBuffer Members
 
         public override void CopyFromSystemMemory<T>(
@@ -79,6 +74,11 @@ namespace OpenGlobe.Renderer.GL3x
         public override IndexBufferDatatype Datatype
         {
             get { return _dataType; }
+        }
+
+        public override int Count
+        {
+            get { return _count; }
         }
 
         #endregion

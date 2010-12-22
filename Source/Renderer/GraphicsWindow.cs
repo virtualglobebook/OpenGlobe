@@ -21,46 +21,40 @@ namespace OpenGlobe.Renderer
         public event GraphicsHandler PreRenderFrame;
         public event GraphicsHandler RenderFrame;
         public event GraphicsHandler PostRenderFrame;
+        public event GraphicsHandler PostSwapBuffers;
 
         protected virtual void OnResize()
         {
-            GraphicsHandler handler = Resize;
-            if (handler != null)
-            {
-                handler();
-            }
+            Handler(Resize);
         }
 
         protected virtual void OnUpdateFrame()
         {
-            GraphicsHandler handler = UpdateFrame;
-            if (handler != null)
-            {
-                handler();
-            }
+            Handler(UpdateFrame);
         }
 
         protected virtual void OnPreRenderFrame()
         {
-            GraphicsHandler handler = PreRenderFrame;
-            if (handler != null)
-            {
-                handler();
-            }
+            Handler(PreRenderFrame);
         }
 
         protected virtual void OnRenderFrame()
         {
-            GraphicsHandler handler = RenderFrame;
-            if (handler != null)
-            {
-                handler();
-            }
+            Handler(RenderFrame);
         }
 
         protected virtual void OnPostRenderFrame()
         {
-            GraphicsHandler handler = PostRenderFrame;
+            Handler(PostRenderFrame);
+        }
+
+        protected virtual void OnPostSwapBuffers()
+        {
+            Handler(PostSwapBuffers);
+        }
+
+        private void Handler(GraphicsHandler handler)
+        {
             if (handler != null)
             {
                 handler();

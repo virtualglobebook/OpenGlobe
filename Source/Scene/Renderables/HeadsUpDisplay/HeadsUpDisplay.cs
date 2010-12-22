@@ -92,7 +92,7 @@ namespace OpenGlobe.Scene
             set
             {
                 _color = value;
-                _colorUniform.Value = new Vector3F(_color.R / 255.0f, _color.G / 255.0f, _color.B / 255.0f);
+                _colorUniform.Value = Vector3F.FromNormalizedColor(_color);
             }
         }
 

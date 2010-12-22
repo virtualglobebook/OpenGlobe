@@ -65,7 +65,8 @@ namespace OpenGlobe.Renderer.GL3x
             OnPreRenderFrame();
             OnRenderFrame();
             OnPostRenderFrame();
-            _gameWindow.SwapBuffers();      
+            _gameWindow.SwapBuffers();
+            OnPostSwapBuffers();
         }
 
         #region GraphicsWindow Members
