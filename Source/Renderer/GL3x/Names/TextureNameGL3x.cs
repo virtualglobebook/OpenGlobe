@@ -18,7 +18,7 @@ namespace OpenGlobe.Renderer.GL3x
         public TextureNameGL3x()
         {
             _value = GL.GenTexture();
-            Interlocked.Increment(ref Device.TexturesCount);
+            Interlocked.Increment(ref Device.TextureCount);
         }
 
         ~TextureNameGL3x()
@@ -43,7 +43,7 @@ namespace OpenGlobe.Renderer.GL3x
             {
                 GL.DeleteTexture(_value);
                 _value = 0;
-                Interlocked.Decrement(ref Device.TexturesCount);
+                Interlocked.Decrement(ref Device.TextureCount);
             }
         }
 

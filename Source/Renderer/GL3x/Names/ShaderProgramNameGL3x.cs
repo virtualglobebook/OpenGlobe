@@ -18,7 +18,7 @@ namespace OpenGlobe.Renderer.GL3x
         public ShaderProgramNameGL3x()
         {
             _value = GL.CreateProgram();
-            Interlocked.Increment(ref Device.ShaderProgramsCount);
+            Interlocked.Increment(ref Device.ShaderProgramCount);
         }
 
         ~ShaderProgramNameGL3x()
@@ -43,7 +43,7 @@ namespace OpenGlobe.Renderer.GL3x
             {
                 GL.DeleteProgram(_value);
                 _value = 0;
-                Interlocked.Decrement(ref Device.ShaderProgramsCount);
+                Interlocked.Decrement(ref Device.ShaderProgramCount);
             }
         }
 

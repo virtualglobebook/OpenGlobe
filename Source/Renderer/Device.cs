@@ -523,16 +523,16 @@ namespace OpenGlobe.Renderer
         }
 
         // TODO:  Add Number of uniform buffers and read/write pixel buffers?
-        public static int NumberOfShaderProgramsCreated { get { return ShaderProgramsCount; } }
-        public static int NumberOfVertexBuffersCreated { get { return VertexBuffersCount; } }
-        public static int NumberOfIndexBuffersCreated { get { return IndexBuffersCount; } }
-        public static int NumberOfTexturesCreated { get { return TexturesCount; } }
+        public static int NumberOfShaderProgramsCreated { get { return ShaderProgramCount; } }
+        public static int NumberOfVertexBuffersCreated { get { return VertexBufferCount; } }
+        public static int NumberOfIndexBuffersCreated { get { return IndexBufferCount; } }
+        public static int NumberOfTexturesCreated { get { return TextureCount; } }
         public static int NumberOfFencesCreated { get { return FenceCount; } }
 
-        internal static int ShaderProgramsCount;
-        internal static int VertexBuffersCount;
-        internal static int IndexBuffersCount;
-        internal static int TexturesCount;
+        internal static int ShaderProgramCount;
+        internal static int VertexBufferCount;
+        internal static int IndexBufferCount;
+        internal static int TextureCount;
         internal static int FenceCount;
 
         public static Extensions Extensions
