@@ -8,6 +8,7 @@
 #endregion
 
 using System;
+using System.Threading;
 using OpenTK.Graphics.OpenGL;
 
 namespace OpenGlobe.Renderer.GL3x
@@ -17,6 +18,7 @@ namespace OpenGlobe.Renderer.GL3x
         public ShaderProgramNameGL3x()
         {
             _value = GL.CreateProgram();
+            Interlocked.Increment(ref Device.ShaderProgramsCount);
         }
 
         ~ShaderProgramNameGL3x()
@@ -41,6 +43,7 @@ namespace OpenGlobe.Renderer.GL3x
             {
                 GL.DeleteProgram(_value);
                 _value = 0;
+                Interlocked.Decrement(ref Device.ShaderProgramsCount);
             }
         }
 

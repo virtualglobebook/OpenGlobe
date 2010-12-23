@@ -8,6 +8,7 @@
 #endregion
 
 using System;
+using System.Threading;
 using OpenTK.Graphics.OpenGL;
 
 namespace OpenGlobe.Renderer.GL3x
@@ -17,6 +18,7 @@ namespace OpenGlobe.Renderer.GL3x
         public TextureNameGL3x()
         {
             _value = GL.GenTexture();
+            Interlocked.Increment(ref Device.TexturesCount);
         }
 
         ~TextureNameGL3x()
@@ -41,6 +43,7 @@ namespace OpenGlobe.Renderer.GL3x
             {
                 GL.DeleteTexture(_value);
                 _value = 0;
+                Interlocked.Decrement(ref Device.TexturesCount);
             }
         }
 

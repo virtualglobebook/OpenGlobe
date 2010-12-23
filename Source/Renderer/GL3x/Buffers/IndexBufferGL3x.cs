@@ -7,9 +7,10 @@
 //
 #endregion
 
+using System;
+using System.Threading;
 using OpenGlobe.Core;
 using OpenTK.Graphics.OpenGL;
-using System;
 
 namespace OpenGlobe.Renderer.GL3x
 {
@@ -18,6 +19,7 @@ namespace OpenGlobe.Renderer.GL3x
         public IndexBufferGL3x(BufferHint usageHint, int sizeInBytes)
         {
             _bufferObject = new BufferGL3x(BufferTarget.ElementArrayBuffer, usageHint, sizeInBytes);
+            Interlocked.Increment(ref Device.IndexBuffersCount);
         }
 
         internal void Bind()
@@ -90,6 +92,7 @@ namespace OpenGlobe.Renderer.GL3x
             if (disposing)
             {
                 _bufferObject.Dispose();
+                Interlocked.Decrement(ref Device.IndexBuffersCount);
             }
             base.Dispose(disposing);
         }

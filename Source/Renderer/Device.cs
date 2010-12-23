@@ -15,6 +15,7 @@ using OpenGlobe.Core;
 using OpenGlobe.Renderer.GL3x;
 using OpenTK.Graphics.OpenGL;
 using ImagingPixelFormat = System.Drawing.Imaging.PixelFormat;
+using System.Threading;
 
 namespace OpenGlobe.Renderer
 {
@@ -520,6 +521,19 @@ namespace OpenGlobe.Renderer
         {
             GL.Flush();
         }
+
+        // TODO:  Add Number of uniform buffers and read/write pixel buffers?
+        public static int NumberOfShaderProgramsCreated { get { return ShaderProgramsCount; } }
+        public static int NumberOfVertexBuffersCreated { get { return VertexBuffersCount; } }
+        public static int NumberOfIndexBuffersCreated { get { return IndexBuffersCount; } }
+        public static int NumberOfTexturesCreated { get { return TexturesCount; } }
+        public static int NumberOfFencesCreated { get { return FenceCount; } }
+
+        internal static int ShaderProgramsCount;
+        internal static int VertexBuffersCount;
+        internal static int IndexBuffersCount;
+        internal static int TexturesCount;
+        internal static int FenceCount;
 
         public static Extensions Extensions
         {

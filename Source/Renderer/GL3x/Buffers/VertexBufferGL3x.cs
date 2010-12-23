@@ -7,6 +7,7 @@
 //
 #endregion
 
+using System.Threading;
 using OpenGlobe.Renderer;
 using OpenTK.Graphics.OpenGL;
 
@@ -17,6 +18,7 @@ namespace OpenGlobe.Renderer.GL3x
         public VertexBufferGL3x(BufferHint usageHint, int sizeInBytes)
         {
             _bufferObject = new BufferGL3x(BufferTarget.ArrayBuffer, usageHint, sizeInBytes);
+            Interlocked.Increment(ref Device.VertexBuffersCount);
         }
 
         internal void Bind()
@@ -63,6 +65,7 @@ namespace OpenGlobe.Renderer.GL3x
             if (disposing)
             {
                 _bufferObject.Dispose();
+                Interlocked.Decrement(ref Device.VertexBuffersCount);
             }
             base.Dispose(disposing);
         }

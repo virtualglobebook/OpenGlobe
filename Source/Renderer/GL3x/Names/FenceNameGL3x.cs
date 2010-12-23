@@ -8,6 +8,7 @@
 #endregion
 
 using System;
+using System.Threading;
 using OpenTK.Graphics.OpenGL;
 
 namespace OpenGlobe.Renderer.GL3x
@@ -17,6 +18,7 @@ namespace OpenGlobe.Renderer.GL3x
         public FenceNameGL3x()
         {
             _value = GL.FenceSync(ArbSync.SyncGpuCommandsComplete, 0);
+            Interlocked.Increment(ref Device.FenceCount);
         }
 
         ~FenceNameGL3x()
@@ -41,6 +43,7 @@ namespace OpenGlobe.Renderer.GL3x
             {
                 GL.DeleteSync(_value.Value);
                 _value = null;
+                Interlocked.Decrement(ref Device.FenceCount);
             }
         }
 
