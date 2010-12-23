@@ -74,6 +74,7 @@ namespace OpenGlobe.Scene
             //
             Device.Finish();
             context.PauseTiming();
+            context.PerformanceCountersEnabled = false;
 
             try
             {
@@ -180,6 +181,7 @@ namespace OpenGlobe.Scene
             }
             finally
             {
+                context.PerformanceCountersEnabled = true;
                 context.ResumeTiming();
             }
         }

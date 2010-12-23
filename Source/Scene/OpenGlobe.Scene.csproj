@@ -43,6 +43,8 @@
     <Compile Include="Cameras\CameraLookAtPoint.cs" />
     <Compile Include="Renderables\CounterDisplays\PerformanceCounters.cs" />
     <Compile Include="Renderables\CounterDisplays\PerformanceCountersDisplay.cs" />
+    <Compile Include="Renderables\CounterDisplays\ResourceCounters.cs" />
+    <Compile Include="Renderables\CounterDisplays\ResourceCountersDisplay.cs" />
     <Compile Include="Shapefiles\ShapefileAppearance.cs" />
     <Compile Include="Shapefiles\ShapefileGraphics.cs" />
     <Compile Include="Shapefiles\ShapefileRenderer.cs" />
