@@ -137,6 +137,16 @@ namespace OpenGlobe.Renderer
         public long TrianglesPerSecond { get { return _trianglesPerSecond; } }
         public long PrimitivesPerSecond { get { return _primitivesPerSecond; } }
 
+        public void PauseTiming()
+        {
+            _stopWatch.Stop();
+        }
+
+        public void ResumeTiming()
+        {
+            _stopWatch.Start();
+        }
+
         private void IncreasePerformanceCounters(PrimitiveType primitiveType, int count, DrawState drawState)
         {
             if (drawState.RenderState.PrimitiveRestart.Enabled)
