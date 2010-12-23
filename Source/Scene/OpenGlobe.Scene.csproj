@@ -41,7 +41,7 @@
   <ItemGroup>
     <Compile Include="Cameras\CameraFly.cs" />
     <Compile Include="Cameras\CameraLookAtPoint.cs" />
-    <Compile Include="Renderables\PerformanceCountersDisplay.cs" />
+    <Compile Include="Renderables\CounterDisplays\PerformanceCountersDisplay.cs" />
     <Compile Include="Shapefiles\ShapefileAppearance.cs" />
     <Compile Include="Shapefiles\ShapefileGraphics.cs" />
     <Compile Include="Shapefiles\ShapefileRenderer.cs" />
