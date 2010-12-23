@@ -110,6 +110,18 @@ namespace OpenGlobe.Scene
                     strings.Add("fences: " + string.Format(CultureInfo.CurrentCulture, "{0:n0}", Device.NumberOfFencesCreated) + "\n");
                 }
 
+                if (((VisibleCounters & ResourceCounters.NumberOfVertexArraysCreated) == ResourceCounters.NumberOfVertexArraysCreated) &&
+                    (Device.NumberOfVertexArraysCreated > 0))
+                {
+                    strings.Add("vertex arrays: " + string.Format(CultureInfo.CurrentCulture, "{0:n0}", Device.NumberOfVertexArraysCreated) + "\n");
+                }
+
+                if (((VisibleCounters & ResourceCounters.NumberOfFramebuffersCreated) == ResourceCounters.NumberOfFramebuffersCreated) &&
+                    (Device.NumberOfFramebuffersCreated > 0))
+                {
+                    strings.Add("frame buffers: " + string.Format(CultureInfo.CurrentCulture, "{0:n0}", Device.NumberOfFramebuffersCreated) + "\n");
+                }
+
                 if (_display.Texture != null)
                 {
                     _display.Texture.Dispose();

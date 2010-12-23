@@ -8,6 +8,7 @@
 #endregion
 
 using System;
+using System.Threading;
 using OpenTK.Graphics.OpenGL;
 
 namespace OpenGlobe.Renderer.GL3x
@@ -17,6 +18,7 @@ namespace OpenGlobe.Renderer.GL3x
         public VertexArrayNameGL3x()
         {
             GL.GenVertexArrays(1, out _value);
+            Interlocked.Increment(ref Device.VertexArrayCount);
         }
 
         ~VertexArrayNameGL3x()
@@ -41,6 +43,7 @@ namespace OpenGlobe.Renderer.GL3x
             {
                 GL.DeleteVertexArrays(1, ref _value);
                 _value = 0;
+                Interlocked.Decrement(ref Device.VertexArrayCount);
             }
         }
 

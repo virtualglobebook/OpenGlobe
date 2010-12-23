@@ -528,12 +528,16 @@ namespace OpenGlobe.Renderer
         public static int NumberOfIndexBuffersCreated { get { return IndexBufferCount; } }
         public static int NumberOfTexturesCreated { get { return TextureCount; } }
         public static int NumberOfFencesCreated { get { return FenceCount; } }
+        public static int NumberOfVertexArraysCreated { get { return VertexArrayCount; } }
+        public static int NumberOfFramebuffersCreated { get { return FramebufferCount; } }
 
         internal static int ShaderProgramCount;
         internal static int VertexBufferCount;
         internal static int IndexBufferCount;
         internal static int TextureCount;
         internal static int FenceCount;
+        internal static int VertexArrayCount;
+        internal static int FramebufferCount;
 
         public static Extensions Extensions
         {

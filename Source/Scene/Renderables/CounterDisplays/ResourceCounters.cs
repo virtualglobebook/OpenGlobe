@@ -19,11 +19,15 @@ namespace OpenGlobe.Scene
         NumberOfIndexBuffersCreated = 4,
         NumberOfTexturesCreated = 8,
         NumberOfFencesCreated = 16,
+        NumberOfVertexArraysCreated = 32,
+        NumberOfFramebuffersCreated = 64,
         All =
             NumberOfShaderProgramsCreated | 
             NumberOfVertexBuffersCreated | 
             NumberOfIndexBuffersCreated | 
             NumberOfTexturesCreated | 
-            NumberOfFencesCreated
+            NumberOfFencesCreated |
+            NumberOfVertexArraysCreated | 
+            NumberOfFramebuffersCreated
     }
 }
