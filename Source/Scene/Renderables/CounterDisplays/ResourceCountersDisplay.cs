@@ -122,6 +122,24 @@ namespace OpenGlobe.Scene
                     strings.Add("frame buffers: " + string.Format(CultureInfo.CurrentCulture, "{0:n0}", Device.NumberOfFramebuffersCreated) + "\n");
                 }
 
+                if (((VisibleCounters & ResourceCounters.VertexBufferMemoryUsedInBytes) == ResourceCounters.VertexBufferMemoryUsedInBytes) &&
+                    (Device.VertexBufferMemoryUsedInBytes > 0))
+                {
+                    strings.Add("vertex buffer memory: " + string.Format(CultureInfo.CurrentCulture, "{0:n0}", Device.VertexBufferMemoryUsedInBytes) + "\n");
+                }
+
+                if (((VisibleCounters & ResourceCounters.IndexBufferMemoryUsedInBytes) == ResourceCounters.IndexBufferMemoryUsedInBytes) &&
+                    (Device.IndexBufferMemoryUsedInBytes > 0))
+                {
+                    strings.Add("index buffer memory: " + string.Format(CultureInfo.CurrentCulture, "{0:n0}", Device.IndexBufferMemoryUsedInBytes) + "\n");
+                }
+
+                if (((VisibleCounters & ResourceCounters.TextureMemoryUsedInBytes) == ResourceCounters.TextureMemoryUsedInBytes) &&
+                    (Device.TextureMemoryUsedInBytes > 0))
+                {
+                    strings.Add("texture memory: " + string.Format(CultureInfo.CurrentCulture, "{0:n0}", Device.TextureMemoryUsedInBytes) + "\n");
+                }
+
                 if (_display.Texture != null)
                 {
                     _display.Texture.Dispose();

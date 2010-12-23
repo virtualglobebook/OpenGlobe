@@ -21,6 +21,9 @@ namespace OpenGlobe.Scene
         NumberOfFencesCreated = 16,
         NumberOfVertexArraysCreated = 32,
         NumberOfFramebuffersCreated = 64,
+        VertexBufferMemoryUsedInBytes = 128,
+        IndexBufferMemoryUsedInBytes = 256,
+        TextureMemoryUsedInBytes = 512,
         All =
             NumberOfShaderProgramsCreated | 
             NumberOfVertexBuffersCreated | 
@@ -28,6 +31,9 @@ namespace OpenGlobe.Scene
             NumberOfTexturesCreated | 
             NumberOfFencesCreated |
             NumberOfVertexArraysCreated | 
-            NumberOfFramebuffersCreated
+            NumberOfFramebuffersCreated | 
+            VertexBufferMemoryUsedInBytes |
+            IndexBufferMemoryUsedInBytes |
+            TextureMemoryUsedInBytes
     }
 }

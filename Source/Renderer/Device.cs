@@ -539,6 +539,14 @@ namespace OpenGlobe.Renderer
         internal static int VertexArrayCount;
         internal static int FramebufferCount;
 
+        public static int VertexBufferMemoryUsedInBytes { get { return VertexBufferMemoryCount; } }
+        public static int IndexBufferMemoryUsedInBytes { get { return IndexBufferMemoryCount; } }
+        public static int TextureMemoryUsedInBytes { get { return TextureMemoryCount; } }
+
+        internal static int VertexBufferMemoryCount;
+        internal static int IndexBufferMemoryCount;
+        internal static int TextureMemoryCount;
+
         public static Extensions Extensions
         {
             get { return s_extensions; }

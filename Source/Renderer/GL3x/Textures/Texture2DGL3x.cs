@@ -8,6 +8,7 @@
 #endregion
 
 using System;
+using System.Threading;
 using OpenGlobe.Renderer;
 using OpenTK.Graphics.OpenGL;
 using OpenTKTextureUnit = OpenTK.Graphics.OpenGL.TextureUnit;
@@ -72,6 +73,7 @@ namespace OpenGlobe.Renderer.GL3x
             ApplySampler(Device.TextureSamplers.LinearClamp);
 
             GC.AddMemoryPressure(description.ApproximateSizeInBytes);
+            Interlocked.Add(ref Device.TextureMemoryCount, description.ApproximateSizeInBytes);
         }
 
         internal TextureNameGL3x Handle
@@ -262,6 +264,7 @@ namespace OpenGlobe.Renderer.GL3x
             {
                 _name.Dispose();
                 GC.RemoveMemoryPressure(_description.ApproximateSizeInBytes);
+                Interlocked.Add(ref Device.TextureMemoryCount, -_description.ApproximateSizeInBytes);
             }
             base.Dispose(disposing);
         }

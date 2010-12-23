@@ -19,6 +19,7 @@ namespace OpenGlobe.Renderer.GL3x
         {
             _bufferObject = new BufferGL3x(BufferTarget.ArrayBuffer, usageHint, sizeInBytes);
             Interlocked.Increment(ref Device.VertexBufferCount);
+            Interlocked.Add(ref Device.VertexBufferMemoryCount, sizeInBytes);
         }
 
         internal void Bind()
@@ -64,12 +65,14 @@ namespace OpenGlobe.Renderer.GL3x
         {
             if (disposing)
             {
+                int sizeInBytes = _bufferObject.SizeInBytes;
                 _bufferObject.Dispose();
                 Interlocked.Decrement(ref Device.VertexBufferCount);
+                Interlocked.Add(ref Device.VertexBufferMemoryCount, -sizeInBytes);
             }
             base.Dispose(disposing);
         }
-
+        
         #endregion
 
         BufferGL3x _bufferObject;
