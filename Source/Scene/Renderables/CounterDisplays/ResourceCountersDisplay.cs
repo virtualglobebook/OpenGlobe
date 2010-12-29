@@ -23,6 +23,7 @@ namespace OpenGlobe.Scene
         {
             window.Resize += OnResize;
             window.PostRenderFrame += PostRenderFrame;
+            window.Keyboard.KeyDown += OnKeyDown;
 
             _display = new HeadsUpDisplay();
             _display.Color = Color.Black;
@@ -35,8 +36,13 @@ namespace OpenGlobe.Scene
             _window = window;
             _sceneState = sceneState;
 
+            Show = true;
+            ShowKey = KeyboardKey.F12;
             VisibleCounters = ResourceCounters.All;
         }
+
+        public bool Show { get; set; }
+        public KeyboardKey ShowKey { get; set; }
 
         public Color Color
         {
@@ -67,6 +73,11 @@ namespace OpenGlobe.Scene
 
         private void PostRenderFrame()
         {
+            if (!Show)
+            {
+                return;
+            }
+
             Context context = _window.Context;
 
             //
@@ -174,6 +185,14 @@ namespace OpenGlobe.Scene
             {
                 context.PerformanceCountersEnabled = enablePerformanceCounters;
                 context.ResumeTiming();
+            }
+        }
+
+        void OnKeyDown(object sender, KeyboardKeyEventArgs e)
+        {
+            if (e.Key == ShowKey)
+            {
+                Show = !Show;
             }
         }
 
