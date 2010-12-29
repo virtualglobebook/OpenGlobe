@@ -28,6 +28,7 @@ namespace OpenGlobe.Scene
             _display.Color = Color.Black;
             _display.VerticalOrigin = VerticalOrigin.Bottom;
             _display.HorizontalOrigin = HorizontalOrigin.Right;
+            _display.ShowBackground = true;
             _display.Position = new Vector2D(window.Width, window.Height);
             _font = new Font(_fontName, 16);
 
