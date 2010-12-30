@@ -69,6 +69,18 @@ namespace OpenGlobe.Renderer
 
         public abstract Texture2DDescription Description { get; }
 
+        public Bitmap CopyToBitmap()
+        {
+            //
+            // The pixel buffer uses four byte row alignment because it matches
+            // a bitmap's row alignment (BitmapData.Stride).
+            //
+            using (ReadPixelBuffer pixelBuffer = CopyToBuffer(ImageFormat.BlueGreenRed, ImageDatatype.UnsignedByte, 4))
+            {
+                return pixelBuffer.CopyToBitmap(Description.Width, Description.Height, PixelFormat.Format24bppRgb);
+            }
+        }
+
         public virtual void Save(string filename)
         {
             if (Description.TextureFormat == TextureFormat.RedGreenBlue8)
@@ -97,9 +109,8 @@ namespace OpenGlobe.Renderer
             // The pixel buffer uses four byte row alignment because it matches
             // a bitmap's row alignment (BitmapData.Stride).
             //
-            using (ReadPixelBuffer pixelBuffer = CopyToBuffer(ImageFormat.BlueGreenRed, ImageDatatype.UnsignedByte, 4))
+            using (Bitmap bitmap = CopyToBitmap())
             {
-                Bitmap bitmap = pixelBuffer.CopyToBitmap(Description.Width, Description.Height, PixelFormat.Format24bppRgb);
                 bitmap.Save(filename);
             }
         }

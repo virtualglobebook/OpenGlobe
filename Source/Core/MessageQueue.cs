@@ -49,7 +49,7 @@ namespace OpenGlobe.Core
         /// The thread created by this method will continue running until <see cref="Terminate"/>
         /// is called.
         /// </summary>
-        public void StartInAnotherThread()
+        public void StartInAnotherThread(ThreadPriority threadPriority)
         {
             lock (_queue)
             {
@@ -60,7 +60,13 @@ namespace OpenGlobe.Core
 
             Thread thread = new Thread(Run);
             thread.IsBackground = true;
+            thread.Priority = threadPriority;
             thread.Start();
+        }
+
+        public void StartInAnotherThread()
+        {
+            StartInAnotherThread(ThreadPriority.Normal);
         }
 
         /// <summary>
