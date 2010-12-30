@@ -38,12 +38,14 @@ namespace OpenGlobe.Scene
             _sceneState = sceneState;
 
             Show = true;
-            ShowKey = KeyboardKey.F12;
+            Hotkey = KeyboardKey.F12;
+            HotkeyEnabled = true;
             VisibleCounters = PerformanceCounters.All;
         }
 
         public bool Show { get; set;}
-        public KeyboardKey ShowKey { get; set; }
+        public KeyboardKey Hotkey { get; set; }
+        public bool HotkeyEnabled { get; set; }
 
         public Color Color
         {
@@ -83,6 +85,10 @@ namespace OpenGlobe.Scene
 
             //
             // Do not count the time it takes to render the display.
+            //
+            // Calling Finish does introduce some overhead though, so
+            // the frame rate is actually slightly higher than what
+            // is reported.
             //
             Device.Finish();
             context.PauseTiming();
@@ -198,11 +204,14 @@ namespace OpenGlobe.Scene
             }
         }
 
-        void OnKeyDown(object sender, KeyboardKeyEventArgs e)
+        private void OnKeyDown(object sender, KeyboardKeyEventArgs e)
         {
-            if (e.Key == ShowKey)
+            if (HotkeyEnabled)
             {
-                Show = !Show;
+                if (e.Key == Hotkey)
+                {
+                    Show = !Show;
+                }
             }
         }
 
@@ -213,6 +222,7 @@ namespace OpenGlobe.Scene
             _window.Context.PerformanceCountersEnabled = false;
             _window.Resize -= OnResize;
             _window.PostRenderFrame -= PostRenderFrame;
+            _window.Keyboard.KeyDown -= OnKeyDown;
 
             if (_display.Texture != null)
             {

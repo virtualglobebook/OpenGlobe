@@ -37,12 +37,14 @@ namespace OpenGlobe.Scene
             _sceneState = sceneState;
 
             Show = true;
-            ShowKey = KeyboardKey.F12;
+            Hotkey = KeyboardKey.F12;
+            HotkeyEnabled = true;
             VisibleCounters = ResourceCounters.All;
         }
 
         public bool Show { get; set; }
-        public KeyboardKey ShowKey { get; set; }
+        public KeyboardKey Hotkey { get; set; }
+        public bool HotkeyEnabled { get; set; }
 
         public Color Color
         {
@@ -188,11 +190,14 @@ namespace OpenGlobe.Scene
             }
         }
 
-        void OnKeyDown(object sender, KeyboardKeyEventArgs e)
+        private void OnKeyDown(object sender, KeyboardKeyEventArgs e)
         {
-            if (e.Key == ShowKey)
+            if (HotkeyEnabled)
             {
-                Show = !Show;
+                if (e.Key == Hotkey)
+                {
+                    Show = !Show;
+                }
             }
         }
 
@@ -202,6 +207,7 @@ namespace OpenGlobe.Scene
         {
             _window.Resize -= OnResize;
             _window.PostRenderFrame -= PostRenderFrame;
+            _window.Keyboard.KeyDown -= OnKeyDown;
 
             if (_display.Texture != null)
             {
