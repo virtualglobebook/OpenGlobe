@@ -27,7 +27,8 @@ namespace OpenGlobe.Renderer
             _frameQueue.MessageReceived += new FrameWorker().Process;
 
             Hotkey = KeyboardKey.F9;
-            HotkeyEnabled = true;
+            CancelHotkey = KeyboardKey.F10;
+            HotkeysEnabled = true;
             OutputPath = "./";
             _state = FrameCaptureState.Stopped;
         }
@@ -56,12 +57,20 @@ namespace OpenGlobe.Renderer
                         //
                         // A bitmap is posted instead of the texture to minimize
                         // to amount of video memory consumed while capturing.
-                        // This increases the frame rate hit incurred by capturing
-                        // because the rendering thread is responsible for the
-                        // texture to bitmap conversion.
+                        // This increases the frame rate hit incurred by asynchronous 
+                        // capturing because the rendering thread is responsible for 
+                        // the texture to bitmap conversion.
                         //
                         texture.CopyFromFramebuffer();
-                        _frameQueue.Post(new FrameRequest(filename, texture.CopyToBitmap()));
+
+                        if (Asynchronous)
+                        {
+                            _frameQueue.Post(new FrameRequest(filename, texture.CopyToBitmap()));
+                        }
+                        else
+                        {
+                            _frameQueue.Send(new FrameRequest(filename, texture.CopyToBitmap()));
+                        }
                     }
                 }
                 catch (Exception e)
@@ -74,7 +83,7 @@ namespace OpenGlobe.Renderer
 
         private void OnKeyDown(object sender, KeyboardKeyEventArgs e)
         {
-            if (HotkeyEnabled)
+            if (HotkeysEnabled)
             {
                 if (e.Key == Hotkey)
                 {
@@ -87,6 +96,10 @@ namespace OpenGlobe.Renderer
                         Stop();
                     }
                 }
+                else if (e.Key == CancelHotkey)
+                {
+                    Cancel();
+                }
             }
         }
 
@@ -97,7 +110,9 @@ namespace OpenGlobe.Renderer
 
         public string OutputPath { get; set; }
         public KeyboardKey Hotkey { get; set; }
-        public bool HotkeyEnabled { get; set; }
+        public KeyboardKey CancelHotkey { get; set; }
+        public bool HotkeysEnabled { get; set; }
+        public bool Asynchronous { get; set; }
 
         public void Start()
         {
@@ -133,6 +148,21 @@ namespace OpenGlobe.Renderer
             if (_state == FrameCaptureState.Capturing)
             {
                 _state = FrameCaptureState.Paused;
+            }
+        }
+
+        public void Cancel()
+        {
+            if (_state != FrameCaptureState.Stopped)
+            {
+                string outputPath = _fullOutputPath;
+
+                Stop();
+
+                if (outputPath != null)
+                {
+                    Directory.Delete(outputPath, true);
+                }
             }
         }
 
