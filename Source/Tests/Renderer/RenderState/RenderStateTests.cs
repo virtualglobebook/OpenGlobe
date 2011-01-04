@@ -50,6 +50,16 @@ namespace OpenGlobe.Renderer
         }
 
         [Test]
+        public void Rasterizer()
+        {
+            RenderState renderState = new RenderState();
+            Assert.IsTrue(renderState.Rasterizer);
+
+            renderState.Rasterizer = false;
+            Assert.IsFalse(renderState.Rasterizer);
+        }
+
+        [Test]
         public void RasterizationMode()
         {
             RenderState renderState = new RenderState();

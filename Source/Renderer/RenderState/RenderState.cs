@@ -31,6 +31,7 @@ namespace OpenGlobe.Renderer
             PrimitiveRestart = new PrimitiveRestart();
             FacetCulling = new FacetCulling();
             ProgramPointSize = ProgramPointSize.Disabled;
+            Rasterizer = true;
             RasterizationMode = RasterizationMode.Fill;
             ScissorTest = new ScissorTest();
             StencilTest = new StencilTest();
@@ -44,6 +45,7 @@ namespace OpenGlobe.Renderer
         public PrimitiveRestart PrimitiveRestart { get; set; }
         public FacetCulling FacetCulling { get; set; }
         public ProgramPointSize ProgramPointSize { get; set; }
+        public bool Rasterizer { get; set; }
         public RasterizationMode RasterizationMode { get; set; }
         public ScissorTest ScissorTest { get; set; }
         public StencilTest StencilTest { get; set; }

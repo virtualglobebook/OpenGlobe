@@ -55,6 +55,8 @@ namespace OpenGlobe.Renderer.GL3x
             Enable(EnableCap.ProgramPointSize, renderState.ProgramPointSize == ProgramPointSize.Enabled);
             GL.PolygonMode(MaterialFace.FrontAndBack, TypeConverterGL3x.To(renderState.RasterizationMode));
 
+            Enable(EnableCap.RasterizerDiscard, !renderState.Rasterizer);
+
             Enable(EnableCap.ScissorTest, renderState.ScissorTest.Enabled);
             Rectangle rectangle = renderState.ScissorTest.Rectangle;
             GL.Scissor(rectangle.Left, rectangle.Bottom, rectangle.Width, rectangle.Height);
@@ -280,6 +282,15 @@ namespace OpenGlobe.Renderer.GL3x
             {
                 GL.PolygonMode(MaterialFace.FrontAndBack, TypeConverterGL3x.To(rasterizationMode));
                 _renderState.RasterizationMode = rasterizationMode;
+            }
+        }
+
+        private void ApplyRasterizer(bool rasterizer)
+        {
+            if (_renderState.Rasterizer != rasterizer)
+            {
+                Enable(EnableCap.RasterizerDiscard, !rasterizer);
+                _renderState.Rasterizer = rasterizer;
             }
         }
 
@@ -536,6 +547,7 @@ namespace OpenGlobe.Renderer.GL3x
             ApplyPrimitiveRestart(renderState.PrimitiveRestart);
             ApplyFacetCulling(renderState.FacetCulling);
             ApplyProgramPointSize(renderState.ProgramPointSize);
+            ApplyRasterizer(renderState.Rasterizer);
             ApplyRasterizationMode(renderState.RasterizationMode);
             ApplyScissorTest(renderState.ScissorTest);
             ApplyStencilTest(renderState.StencilTest);
