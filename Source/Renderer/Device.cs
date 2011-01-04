@@ -31,9 +31,13 @@ namespace OpenGlobe.Renderer
         {
             using (GraphicsWindow window = CreateWindow(1, 1))
             {
-                GL.GetInteger(GetPName.MaxVertexAttribs, out s_maximumNumberOfVertexAttributes);
+                GL.GetInteger(GetPName.MaxVertexAttribs, out s_maximumVertexAttributes);
                 GL.GetInteger(GetPName.MaxCombinedTextureImageUnits, out s_numberOfTextureUnits);
-                GL.GetInteger(GetPName.MaxColorAttachments, out s_maximumNumberOfColorAttachments);
+                GL.GetInteger(GetPName.MaxColorAttachments, out s_maximumColorAttachments);
+
+                GL.GetInteger(GetPName.MaxTransformFeedbackInterleavedComponents, out s_maximumTransformFeedbackInterleavedComponents);
+                GL.GetInteger(GetPName.MaxTransformFeedbackSeparateAttribs, out s_maximumTransformFeedbackSeparateAttributes);
+                GL.GetInteger(GetPName.MaxTransformFeedbackSeparateComponents, out s_maximumTransformFeedbackSeparateComponents);
 
                 ///////////////////////////////////////////////////////////////
 
@@ -574,9 +578,9 @@ namespace OpenGlobe.Renderer
             get { return s_drawAutomaticUniformFactories; }
         }
 
-        public static int MaximumNumberOfVertexAttributes
+        public static int MaximumVertexAttributes
         {
-            get { return s_maximumNumberOfVertexAttributes;  }
+            get { return s_maximumVertexAttributes;  }
         }
 
         public static int NumberOfTextureUnits
@@ -584,14 +588,33 @@ namespace OpenGlobe.Renderer
             get { return s_numberOfTextureUnits; }
         }
 
-        public static int MaximumNumberOfColorAttachments
+        public static int MaximumColorAttachments
         { 
-            get { return s_maximumNumberOfColorAttachments; } 
+            get { return s_maximumColorAttachments; } 
         }
 
-        private static int s_maximumNumberOfVertexAttributes;
+        public static int MaximumTransformFeedbackInterleavedComponents
+        {
+            get { return s_maximumTransformFeedbackInterleavedComponents; }
+        }
+
+        public static int MaximumTransformFeedbackSeparateAttributes
+        {
+            get { return s_maximumTransformFeedbackSeparateAttributes; }
+        }
+
+        public static int MaximumTransformFeedbackSeparateComponents
+        {
+            get { return s_maximumTransformFeedbackSeparateComponents; }
+        }
+
+        private static int s_maximumVertexAttributes;
         private static int s_numberOfTextureUnits;
-        private static int s_maximumNumberOfColorAttachments;
+        private static int s_maximumColorAttachments;
+
+        private static int s_maximumTransformFeedbackInterleavedComponents;
+        private static int s_maximumTransformFeedbackSeparateAttributes;
+        private static int s_maximumTransformFeedbackSeparateComponents;
 
         private static ShaderCache s_shaderCache;
         private static Extensions s_extensions;

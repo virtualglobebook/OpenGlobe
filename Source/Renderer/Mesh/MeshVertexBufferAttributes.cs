@@ -20,7 +20,7 @@ namespace OpenGlobe.Renderer
     {
         public MeshVertexBufferAttributes()
         {
-            _attributes = new VertexBufferAttribute[Device.MaximumNumberOfVertexAttributes];
+            _attributes = new VertexBufferAttribute[Device.MaximumVertexAttributes];
         }
 
         #region vertexBufferAttributes Members

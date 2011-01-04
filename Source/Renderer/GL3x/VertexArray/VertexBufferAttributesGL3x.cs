@@ -24,7 +24,7 @@ namespace OpenGlobe.Renderer.GL3x
     {
         public VertexBufferAttributesGL3x()
 	    {
-            _attributes = new VertexBufferAttributeGL3x[Device.MaximumNumberOfVertexAttributes];
+            _attributes = new VertexBufferAttributeGL3x[Device.MaximumVertexAttributes];
         }
 
         #region VertexBufferAttributes Members
