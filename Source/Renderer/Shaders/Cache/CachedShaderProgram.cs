@@ -7,9 +7,11 @@
 //
 #endregion
 
+using System;
+
 namespace OpenGlobe.Renderer
 {
-    internal class CachedShaderProgram
+    internal sealed class CachedShaderProgram : IDisposable
     {
         public CachedShaderProgram(ShaderProgram shaderProgram)
         {
@@ -27,6 +29,17 @@ namespace OpenGlobe.Renderer
             get { return _referenceCount; }
             set { _referenceCount = value; }
         }
+
+        #region IDisposable Members
+
+        public void Dispose()
+        {
+            _shaderProgram.Dispose();
+            _shaderProgram = null;
+            _referenceCount = 0;
+        }
+
+        #endregion
 
         ShaderProgram _shaderProgram;
         int _referenceCount;

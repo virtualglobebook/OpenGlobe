@@ -37,6 +37,7 @@ namespace OpenGlobe.Renderer
 
                 ///////////////////////////////////////////////////////////////
 
+                s_shaderCache = new ShaderCache();
                 s_extensions = new ExtensionsGL3x();
 
                 ///////////////////////////////////////////////////////////////
@@ -547,6 +548,11 @@ namespace OpenGlobe.Renderer
         internal static int IndexBufferMemoryCount;
         internal static int TextureMemoryCount;
 
+        public static ShaderCache ShaderCache
+        {
+            get { return s_shaderCache; }
+        }
+
         public static Extensions Extensions
         {
             get { return s_extensions; }
@@ -586,7 +592,8 @@ namespace OpenGlobe.Renderer
         private static int s_maximumNumberOfVertexAttributes;
         private static int s_numberOfTextureUnits;
         private static int s_maximumNumberOfColorAttachments;
-        
+
+        private static ShaderCache s_shaderCache;
         private static Extensions s_extensions;
         private static LinkAutomaticUniformCollection s_linkAutomaticUniforms;
         private static DrawAutomaticUniformFactoryCollection s_drawAutomaticUniformFactories;

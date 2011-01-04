@@ -7,11 +7,12 @@
 //
 #endregion
 
+using System;
 using System.Collections.Generic;
 
 namespace OpenGlobe.Renderer
 {
-    public class ShaderCache
+    public sealed class ShaderCache : IDisposable
     {
         public ShaderProgram FindOrAdd(
             string key,
@@ -90,10 +91,26 @@ namespace OpenGlobe.Renderer
                 if (--cachedShaderProgram.ReferenceCount == 0)
                 {
                     _shaderPrograms.Remove(key);
-                    cachedShaderProgram.ShaderProgram.Dispose();
+                    cachedShaderProgram.Dispose();
                 }
             }
         }
+
+        #region IDisposable Members
+
+        public void Dispose()
+        {
+            lock (_shaderPrograms)
+            {
+                foreach (KeyValuePair<string, CachedShaderProgram> pair in _shaderPrograms)
+                {
+                    pair.Value.Dispose();
+                }
+                _shaderPrograms.Clear();
+            }
+        }
+
+        #endregion
 
         private Dictionary<string, CachedShaderProgram> _shaderPrograms = new Dictionary<string, CachedShaderProgram>();
     }
