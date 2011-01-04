@@ -15,7 +15,9 @@ namespace OpenGlobe.Renderer
     public abstract class ShaderProgram : Disposable
     {
         public abstract string Log { get; }
-        public abstract FragmentOutputs FragmentOutputs  { get; }
+        public abstract TransformFeedbackOutputCollection TransformFeedbackOutputs { get; }
+        public abstract TransformFeedbackAttributeLayout TransformFeedbackAttributeLayout { get; }
+        public abstract FragmentOutputs FragmentOutputs { get; }
         public abstract ShaderVertexAttributeCollection VertexAttributes { get; }
         public abstract UniformCollection Uniforms { get; }
         public abstract UniformBlockCollection UniformBlocks { get; }

@@ -61,6 +61,9 @@
     <Compile Include="Shaders\DrawAutomaticUniforms\ModelViewPerspectiveMatrixRelativeToEyeUniformFactory.cs" />
     <Compile Include="Shaders\DrawAutomaticUniforms\ViewMatrixUniform.cs" />
     <Compile Include="Shaders\DrawAutomaticUniforms\ViewMatrixUniformFactory.cs" />
+    <Compile Include="Shaders\TransformFeedback\TransformFeedbackAttributeLayout.cs" />
+    <Compile Include="Shaders\TransformFeedback\TransformFeedbackOutput.cs" />
+    <Compile Include="Shaders\TransformFeedback\TransformFeedbackOutputCollection.cs" />
     <Compile Include="VertexArray\VertexLocations.cs" />
     <Compile Include="DrawState.cs" />
     <Compile Include="Extensions.cs">

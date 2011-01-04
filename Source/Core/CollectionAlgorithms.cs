@@ -99,6 +99,34 @@ namespace OpenGlobe.Core
             }
         }
 
+        public static T[] EnumerableToArray<T>(IEnumerable<T> enumerable)
+        {
+            if (enumerable == null)
+            {
+                throw new ArgumentNullException("enumerable");
+            }
+
+            T[] array = enumerable as T[];
+
+            if (array != null)
+            {
+                return array;
+            }
+            else
+            {
+                int count = EnumerableCount(enumerable);
+                T[] newArray = new T[count];
+
+                int i = 0;
+                foreach (T t in enumerable)
+                {
+                    newArray[i++] = t;
+                }
+
+                return newArray;
+            }
+        }
+
         public static IList<T> CopyEnumerableToList<T>(IEnumerable<T> enumerable)
         {
             if (enumerable == null)

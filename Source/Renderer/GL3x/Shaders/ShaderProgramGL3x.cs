@@ -10,6 +10,7 @@
 using System;
 using System.Text;
 using System.Collections.Generic;
+using OpenGlobe.Core;
 using OpenTK.Graphics.OpenGL;
 
 namespace OpenGlobe.Renderer.GL3x
@@ -18,15 +19,10 @@ namespace OpenGlobe.Renderer.GL3x
     {
         public ShaderProgramGL3x(
             string vertexShaderSource,
-            string fragmentShaderSource)
-            : this(vertexShaderSource, string.Empty, fragmentShaderSource)
-        {
-        }
-
-        public ShaderProgramGL3x(
-            string vertexShaderSource,
             string geometryShaderSource,
-            string fragmentShaderSource)
+            string fragmentShaderSource,
+            IEnumerable<string> transformFeedbackOutputs,
+            TransformFeedbackAttributeLayout transformFeedbackAttributeLayout)
         {
             _vertexShader = new ShaderObjectGL3x(ShaderType.VertexShader, vertexShaderSource);
             if (geometryShaderSource.Length > 0)
@@ -45,6 +41,25 @@ namespace OpenGlobe.Renderer.GL3x
             }
             GL.AttachShader(programHandle, _fragmentShader.Handle);
 
+            if (transformFeedbackOutputs != null)
+            {
+                string[] feedbackOutputs = CollectionAlgorithms.
+                    EnumerableToArray(transformFeedbackOutputs);
+
+                if (feedbackOutputs.Length > 0)
+                {
+                    if ((transformFeedbackAttributeLayout == TransformFeedbackAttributeLayout.Separate) &&
+                        (feedbackOutputs.Length > Device.MaximumTransformFeedbackSeparateAttributes))
+                    {
+                        throw new InsufficientVideoCardException(
+                            "The number of feedback outputs exceeds Device.MaximumTransformFeedbackSeparateAttributes.");
+                    }
+
+                    GL.TransformFeedbackVaryings(programHandle, feedbackOutputs.Length,
+                        feedbackOutputs, TypeConverterGL3x.To(transformFeedbackAttributeLayout));
+                }
+            }
+
             GL.LinkProgram(programHandle);
 
             int linkStatus;
@@ -55,19 +70,47 @@ namespace OpenGlobe.Renderer.GL3x
                 throw new CouldNotCreateVideoCardResourceException("Could not link shader program.  Link Log:  \n\n" + ProgramInfoLog);
             }
 
+            _transformFeedbackOutputs = FindTransformFeedbackOutputs(programHandle);
+            _transformFeedbackAttributeLayout = transformFeedbackAttributeLayout;
             _fragmentOutputs = new FragmentOutputsGL3x(_program);
-            _vertexAttributes = FindVertexAttributes(_program);
+            _vertexAttributes = FindVertexAttributes(programHandle);
             _dirtyUniforms = new List<ICleanable>();
-            _uniforms = FindUniforms(_program);
-            _uniformBlocks = FindUniformBlocks(_program);
+            _uniforms = FindUniforms(programHandle);
+            _uniformBlocks = FindUniformBlocks(programHandle);
 
             InitializeAutomaticUniforms(_uniforms);
         }
 
-        private static ShaderVertexAttributeCollection FindVertexAttributes(ShaderProgramNameGL3x program)
+        private static TransformFeedbackOutputCollection FindTransformFeedbackOutputs(int programHandle)
         {
-            int programHandle = program.Value;
+            TransformFeedbackOutputCollection outputs = new TransformFeedbackOutputCollection();
 
+            int numberOfVaryings;
+            GL.GetProgram(programHandle, ProgramParameter.TransformFeedbackVaryings, out numberOfVaryings);
+
+            int varyingNameMaxLength;
+            GL.GetProgram(programHandle, ProgramParameter.TransformFeedbackVaryingMaxLength, out varyingNameMaxLength);
+
+            for (int i = 0; i < numberOfVaryings; ++i)
+            {
+                int nameLength;
+                int size;
+                ActiveAttribType type;
+                StringBuilder nameBuilder = new StringBuilder(varyingNameMaxLength);
+
+                GL.GetTransformFeedbackVarying(programHandle, i,
+                    varyingNameMaxLength, out nameLength, out size, out type, nameBuilder);
+
+                String name = nameBuilder.ToString();
+
+                outputs.Add(new TransformFeedbackOutput(name, TypeConverterGL3x.To(type), size));
+            }
+
+            return outputs;
+        }
+
+        private static ShaderVertexAttributeCollection FindVertexAttributes(int programHandle)
+        {
             int numberOfAttributes;
             GL.GetProgram(programHandle, ProgramParameter.ActiveAttributes, out numberOfAttributes);
 
@@ -104,10 +147,8 @@ namespace OpenGlobe.Renderer.GL3x
             return vertexAttributes;
         }
 
-        private UniformCollection FindUniforms(ShaderProgramNameGL3x program)
+        private UniformCollection FindUniforms(int programHandle)
         {
-            int programHandle = program.Value;
-
             int numberOfUniforms;
             GL.GetProgram(programHandle, ProgramParameter.ActiveUniforms, out numberOfUniforms);
 
@@ -243,10 +284,8 @@ namespace OpenGlobe.Renderer.GL3x
             throw new NotSupportedException("An implementation for uniform type " + type.ToString() + " does not exist.");
         }
 
-        private static UniformBlockCollection FindUniformBlocks(ShaderProgramNameGL3x program)
+        private static UniformBlockCollection FindUniformBlocks(int programHandle)
         {
-            int programHandle = program.Value;
-
             int numberOfUniformBlocks;
             GL.GetProgram(programHandle, ProgramParameter.ActiveUniformBlocks, out numberOfUniformBlocks);
 
@@ -413,6 +452,16 @@ namespace OpenGlobe.Renderer.GL3x
             get { return ProgramInfoLog; }
         }
 
+        public override TransformFeedbackOutputCollection TransformFeedbackOutputs 
+        {
+            get { return _transformFeedbackOutputs;  }
+        }
+
+        public override TransformFeedbackAttributeLayout TransformFeedbackAttributeLayout 
+        {
+            get { return _transformFeedbackAttributeLayout; }
+        }
+
         public override FragmentOutputs FragmentOutputs 
         {
             get { return _fragmentOutputs; }
@@ -450,13 +499,25 @@ namespace OpenGlobe.Renderer.GL3x
         {
             if (disposing)
             {
-                _program.Dispose();
-                _vertexShader.Dispose();
+                if (_program != null)
+                {
+                    _program.Dispose();
+                }
+
+                if (_vertexShader != null)
+                {
+                    _vertexShader.Dispose();
+                }
+
                 if (_geometryShader != null)
                 {
                     _geometryShader.Dispose();
                 }
-                _fragmentShader.Dispose();
+
+                if (_fragmentShader != null)
+                {
+                    _fragmentShader.Dispose();
+                }
             }
             base.Dispose(disposing);
         }
@@ -467,6 +528,8 @@ namespace OpenGlobe.Renderer.GL3x
         private readonly ShaderObjectGL3x _geometryShader;
         private readonly ShaderObjectGL3x _fragmentShader;
         private readonly ShaderProgramNameGL3x _program;
+        private readonly TransformFeedbackOutputCollection _transformFeedbackOutputs;
+        private readonly TransformFeedbackAttributeLayout _transformFeedbackAttributeLayout;
         private readonly FragmentOutputsGL3x _fragmentOutputs;
         private readonly ShaderVertexAttributeCollection _vertexAttributes;
         private readonly IList<ICleanable> _dirtyUniforms;

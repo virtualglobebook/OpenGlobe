@@ -292,5 +292,54 @@ namespace OpenGlobe.Renderer
                 Assert.AreEqual(UniformType.Float, red.Datatype);
             }
         }
+
+        [Test]
+        public void TransformFeedback()
+        {
+            string vs =
+                @"#version 330
+
+                  in vec4 position;
+                  out vec3 fsColor;
+                  out float fsDepthScale;
+
+                  void main()                     
+                  {
+                      gl_Position = position;
+                      fsColor = position.xyz;
+                      fsDepthScale = position.w;
+                  }";
+            string fs =
+                @"#version 330
+                 
+                  out vec3 fragmentColor;
+                  in vec3 fsColor;
+                  in float fsDepthScale;
+
+                  void main()
+                  {
+                      fragmentColor = fsColor;
+                      gl_FragDepth *= fsDepthScale;
+                  }";
+
+            using (GraphicsWindow window = Device.CreateWindow(1, 1))
+            using (ShaderProgram sp = Device.CreateShaderProgram(vs, fs,
+                new string[] { "gl_Position", "fsDepthScale" },
+                TransformFeedbackAttributeLayout.Interleaved))
+            {
+                Assert.AreEqual(2, sp.TransformFeedbackOutputs.Count);
+                Assert.AreEqual(TransformFeedbackAttributeLayout.Interleaved, sp.TransformFeedbackAttributeLayout);
+
+                TransformFeedbackOutput positionOutput = sp.TransformFeedbackOutputs["gl_Position"];
+                Assert.AreEqual("gl_Position", positionOutput.Name);
+                Assert.AreEqual(ShaderVertexAttributeType.FloatVector4, positionOutput.Datatype);
+                Assert.AreEqual(4, positionOutput.NumberOfComponents);
+
+                TransformFeedbackOutput depthScaleOutput = sp.TransformFeedbackOutputs["fsDepthScale"];
+                Assert.AreEqual("fsDepthScale", depthScaleOutput.Name);
+                Assert.AreEqual(ShaderVertexAttributeType.Float, depthScaleOutput.Datatype);
+                Assert.AreEqual(1, depthScaleOutput.NumberOfComponents);
+            }
+        }
     }
 }

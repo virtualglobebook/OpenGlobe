@@ -79,8 +79,8 @@ namespace OpenGlobe.Renderer
             get { return _type; }
         }
 
-        private string _name;
-        private UniformType _type;
+        private readonly string _name;
+        private readonly UniformType _type;
     }
 
     public abstract class Uniform<T> : Uniform

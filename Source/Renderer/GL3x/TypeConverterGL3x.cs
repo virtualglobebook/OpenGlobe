@@ -1022,5 +1022,18 @@ namespace OpenGlobe.Renderer.GL3x
 
             throw new ArgumentException("wrap");
         }
+
+        public static TransformFeedbackMode To(TransformFeedbackAttributeLayout layout)
+        {
+            switch (layout)
+            {
+                case TransformFeedbackAttributeLayout.Separate:
+                    return TransformFeedbackMode.SeparateAttribs;
+                case TransformFeedbackAttributeLayout.Interleaved:
+                    return TransformFeedbackMode.InterleavedAttribs;
+            }
+
+            throw new ArgumentException("layout");
+        }
     }
 }

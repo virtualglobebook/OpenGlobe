@@ -113,7 +113,8 @@ namespace OpenGlobe.Renderer
             string vertexShaderSource,
             string fragmentShaderSource)
         {
-            return new ShaderProgramGL3x(vertexShaderSource, fragmentShaderSource);
+            return new ShaderProgramGL3x(vertexShaderSource, string.Empty, 
+                fragmentShaderSource, null, TransformFeedbackAttributeLayout.Separate);
         }
 
         public static ShaderProgram CreateShaderProgram(
@@ -121,7 +122,29 @@ namespace OpenGlobe.Renderer
             string geometryShaderSource,
             string fragmentShaderSource)
         {
-            return new ShaderProgramGL3x(vertexShaderSource, geometryShaderSource, fragmentShaderSource);
+            return new ShaderProgramGL3x(vertexShaderSource, geometryShaderSource,
+                fragmentShaderSource, null, TransformFeedbackAttributeLayout.Separate);
+        }
+
+        public static ShaderProgram CreateShaderProgram(
+            string vertexShaderSource,
+            string geometryShaderSource,
+            string fragmentShaderSource,
+            IEnumerable<string> transformFeedbackOutputs,
+            TransformFeedbackAttributeLayout transformFeedbackAttributeLayout)
+        {
+            return new ShaderProgramGL3x(vertexShaderSource, geometryShaderSource,
+                fragmentShaderSource, transformFeedbackOutputs, transformFeedbackAttributeLayout);
+        }
+
+        public static ShaderProgram CreateShaderProgram(
+            string vertexShaderSource,
+            string fragmentShaderSource,
+            IEnumerable<string> transformFeedbackOutputs,
+            TransformFeedbackAttributeLayout transformFeedbackAttributeLayout)
+        {
+            return new ShaderProgramGL3x(vertexShaderSource, string.Empty,
+                fragmentShaderSource, transformFeedbackOutputs, transformFeedbackAttributeLayout);
         }
 
         public static VertexBuffer CreateVertexBuffer(BufferHint usageHint, int sizeInBytes)

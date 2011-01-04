@@ -58,9 +58,9 @@ namespace OpenGlobe.Renderer
             get { return _length; }
         }
 
-        private string _name;
-        private int _location;
-        private ShaderVertexAttributeType _type;
-        private int _length;                            // TODO:  Array type
+        private readonly string _name;
+        private readonly int _location;
+        private readonly ShaderVertexAttributeType _type;
+        private readonly int _length;                            // TODO:  Array type
     }
 }
