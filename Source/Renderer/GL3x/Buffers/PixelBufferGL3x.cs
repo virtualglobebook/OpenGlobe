@@ -45,6 +45,7 @@ namespace OpenGlobe.Renderer.GL3x
             //
             Bind();
             GL.BufferData(_type, new IntPtr(sizeInBytes), new IntPtr(), _usageHint);
+            UnBind();
 
             GC.AddMemoryPressure(sizeInBytes);
         }
@@ -83,6 +84,7 @@ namespace OpenGlobe.Renderer.GL3x
                 new IntPtr(destinationOffsetInBytes),
                 new IntPtr(lengthInBytes),
                 bufferInSystemMemory);
+            UnBind();
         }
         
         public void CopyFromBitmap(Bitmap bitmap)
@@ -121,6 +123,7 @@ namespace OpenGlobe.Renderer.GL3x
                 new IntPtr(),
                 new IntPtr(sizeInBytes),
                 lockedPixels.Scan0);
+            UnBind();
 
             lockedBitmap.UnlockBits(lockedPixels);
         }
@@ -149,6 +152,8 @@ namespace OpenGlobe.Renderer.GL3x
 
             Bind();
             GL.GetBufferSubData(_type, new IntPtr(offsetInBytes), new IntPtr(lengthInBytes), bufferInSystemMemory);
+            UnBind();
+
             return bufferInSystemMemory;
         }
 
@@ -204,6 +209,11 @@ namespace OpenGlobe.Renderer.GL3x
         public void Bind()
         {
             GL.BindBuffer(_type, _name.Value);
+        }
+
+        internal void UnBind()
+        {
+            GL.BindBuffer(_type, 0);
         }
 
         public void Dispose()

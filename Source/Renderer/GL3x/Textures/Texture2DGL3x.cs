@@ -136,6 +136,7 @@ namespace OpenGlobe.Renderer.GL3x
                 TypeConverterGL3x.To(format),
                 TypeConverterGL3x.To(dataType),
                 new IntPtr());
+            WritePixelBufferGL3x.UnBind();
 
             GenerateMipmaps();
         }
@@ -186,6 +187,7 @@ namespace OpenGlobe.Renderer.GL3x
                 TypeConverterGL3x.To(format),
                 TypeConverterGL3x.To(dataType),
                 new IntPtr());
+            pixelBuffer.UnBind();
 
             return pixelBuffer;
         }

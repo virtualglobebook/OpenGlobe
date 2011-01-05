@@ -40,9 +40,16 @@ namespace OpenGlobe.Renderer.GL3x
             // Alternately, we can delay GL.BufferData until the first
             // CopyFromSystemMemory() call.
             //
+
+            //
+            // We always unbind a buffer object after using it, so we don't 
+            // leave it bound to a target, which would cause undefined 
+            // behavior with transform feedback.
+            //
             GL.BindVertexArray(0);
             Bind();
             GL.BufferData(_type, new IntPtr(sizeInBytes), new IntPtr(), _usageHint);
+            UnBind();
 
             GC.AddMemoryPressure(sizeInBytes);
         }
@@ -82,6 +89,7 @@ namespace OpenGlobe.Renderer.GL3x
                 new IntPtr(destinationOffsetInBytes),
                 new IntPtr(lengthInBytes),
                 bufferInSystemMemory);
+            UnBind();
         }
 
         public T[] CopyToSystemMemory<T>(int offsetInBytes, int lengthInBytes) where T : struct
@@ -109,6 +117,8 @@ namespace OpenGlobe.Renderer.GL3x
             GL.BindVertexArray(0);
             Bind();
             GL.GetBufferSubData(_type, new IntPtr(offsetInBytes), new IntPtr(lengthInBytes), bufferInSystemMemory);
+            UnBind();
+
             return bufferInSystemMemory;
         }
 
@@ -130,6 +140,11 @@ namespace OpenGlobe.Renderer.GL3x
         public void Bind()
         {
             GL.BindBuffer(_type, _name.Value);
+        }
+
+        public void UnBind()
+        {
+            GL.BindBuffer(_type, 0);
         }
 
         public void Dispose()

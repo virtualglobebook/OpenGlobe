@@ -27,11 +27,6 @@ namespace OpenGlobe.Renderer.GL3x
             _bufferObject.Bind();
         }
 
-        internal static void UnBind()
-        {
-            GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
-        }
-
         #region VertexBuffer Members
 
         public override void CopyFromSystemMemory<T>(

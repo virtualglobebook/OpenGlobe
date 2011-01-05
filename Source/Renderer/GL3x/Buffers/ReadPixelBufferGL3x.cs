@@ -26,6 +26,11 @@ namespace OpenGlobe.Renderer.GL3x
             _bufferObject.Bind();
         }
 
+        internal void UnBind()
+        {
+            _bufferObject.UnBind();
+        }
+
         #region ReadPixelBuffer Members
 
         public override void CopyFromSystemMemory<T>(
