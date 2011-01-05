@@ -57,6 +57,8 @@
     <Compile Include="Shaders\DrawAutomaticUniforms\ModelMatrixUniformFactory.cs" />
     <Compile Include="Shaders\DrawAutomaticUniforms\ModelViewMatrixRelativeToEyeUniform.cs" />
     <Compile Include="Shaders\DrawAutomaticUniforms\ModelViewMatrixRelativeToEyeUniformFactory.cs" />
+    <Compile Include="Shaders\DrawAutomaticUniforms\ModelViewPerspectiveInverseUniform.cs" />
+    <Compile Include="Shaders\DrawAutomaticUniforms\ModelViewPerspectiveInverseUniformFactory.cs" />
     <Compile Include="Shaders\DrawAutomaticUniforms\ModelViewPerspectiveMatrixRelativeToEyeUniform.cs" />
     <Compile Include="Shaders\DrawAutomaticUniforms\ModelViewPerspectiveMatrixRelativeToEyeUniformFactory.cs" />
     <Compile Include="Shaders\DrawAutomaticUniforms\ViewMatrixUniform.cs" />

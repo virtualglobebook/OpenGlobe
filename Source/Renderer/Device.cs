@@ -68,6 +68,7 @@ namespace OpenGlobe.Renderer
                 drawAutomaticUniformFactories.Add(new ModelViewPerspectiveMatrixRelativeToEyeUniformFactory());
                 drawAutomaticUniformFactories.Add(new ModelViewMatrixRelativeToEyeUniformFactory());
                 drawAutomaticUniformFactories.Add(new ModelViewPerspectiveMatrixUniformFactory());
+                drawAutomaticUniformFactories.Add(new ModelViewPerspectiveInverseUniformFactory());
                 drawAutomaticUniformFactories.Add(new ModelViewOrthographicMatrixUniformFactory());
                 drawAutomaticUniformFactories.Add(new ModelViewMatrixUniformFactory());
                 drawAutomaticUniformFactories.Add(new ModelMatrixUniformFactory());

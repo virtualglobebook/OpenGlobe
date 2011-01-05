@@ -125,6 +125,11 @@ namespace OpenGlobe.Renderer
             get { return PerspectiveMatrix * ModelViewMatrix; }
         }
 
+        public Matrix4D ModelViewPerspectiveInverse
+        {
+            get { return ModelViewPerspectiveMatrix.Inverse(); }
+        }
+
         public Matrix4D ModelViewOrthographicMatrix
         {
             get { return ModelViewMatrix * OrthographicMatrix; }
