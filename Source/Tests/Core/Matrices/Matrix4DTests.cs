@@ -190,6 +190,49 @@ namespace OpenGlobe.Core
         }
 
         [Test]
+        public void Inverse()
+        {
+            Matrix4D m = new Matrix4D(Matrix3D.Identity, Vector3D.Zero);
+            Matrix4D mInverse = m.Inverse();
+
+            Assert.AreEqual(Matrix4D.Identity, mInverse * m);
+        }
+
+        [Test]
+        public void Inverse2()
+        {
+            Matrix4D m = new Matrix4D(Matrix3D.Identity, new Vector3D(1.0, 2.0, 3.0));
+            Matrix4D mInverse = m.Inverse();
+
+            Assert.AreEqual(Matrix4D.Identity, mInverse * m);
+        }
+
+        [Test]
+        public void Inverse3()
+        {
+            Matrix4D m = new Matrix4D(
+                0.72,  0.70, 0.00,  0.00, 
+               -0.40,  0.41, 0.82,  0.00,
+                0.57, -0.59, 0.57, -3.86,
+                0.00,  0.00, 0.00,  1.00);
+            Matrix4D mInverse = m.Inverse();
+
+            Assert.IsTrue(Matrix4D.Identity.EqualsEpsilon(mInverse * m, 0.0000001));
+        }
+
+        [Test]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void Inverse4()
+        {
+            Matrix4D m = new Matrix4D(
+                1.0, 2.0, 3.0, 4.0,
+                5.0, 6.0, 7.0, 8.0,
+                9.0, 10.0, 11.0, 12.0,
+                13.0, 14.0, 15.0, 16.0);
+            Matrix4D mInverse = m.Inverse();
+        }
+
+        [Test]
         public void InverseTransformation()
         {
             Matrix4D m = new Matrix4D(Matrix3D.Identity, Vector3D.Zero);
@@ -219,6 +262,21 @@ namespace OpenGlobe.Core
             Vector4D vv = mInverse * vPrime;
 
             Assert.AreEqual(v, vv);
+        }
+
+        [Test]
+        public void InverseTransformation3()
+        {
+            Matrix3D rotation = new Matrix3D(
+                1.0, 0.0, 0.0,
+                0.0, 0.0, 1.0,
+                0.0, 1.0, 0.0);
+            Vector3D translation = new Vector3D(1.0, 2, 3.0);
+
+            Matrix4D m = new Matrix4D(rotation, translation);
+            Matrix4D mInverse = m.InverseTransformation();
+
+            Assert.AreEqual(Matrix4D.Identity, mInverse * m);
         }
 
         [Test]
@@ -366,6 +424,24 @@ namespace OpenGlobe.Core
 
             Assert.IsFalse(a.Equals(null));
             Assert.IsFalse(a.Equals(5));
+        }
+
+        [Test]
+        public void EqualsEpsilon()
+        {
+            Matrix4D m = new Matrix4D(
+                1.0, 2.0, 3.0, 4.0,
+                5.0, 6.0, 7.0, 8.0,
+                9.0, 10.0, 11.0, 12.0,
+                13.0, 14.0, 15.0, 16.0);
+            Matrix4D m2 = new Matrix4D(
+                1.1, 2.1, 3.1, 4.1,
+                5.1, 6.1, 7.1, 8.1,
+                9.1, 10.1, 11.1, 12.1,
+                13.1, 14.1, 15.1, 16.1);
+
+            Assert.IsTrue(m.EqualsEpsilon(m2, 0.2));
+            Assert.IsFalse(m.EqualsEpsilon(m2, 0.05));
         }
 
         [Test]
