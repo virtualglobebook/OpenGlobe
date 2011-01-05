@@ -82,6 +82,35 @@ namespace OpenGlobe.Core
         }
 
         [Test]
+        public void Construct3()
+        {
+            Matrix3D rotation = new Matrix3D(
+                1.0, 4.0, 7.0,
+                2.0, 5.0, 8.0,
+                3.0, 6.0, 9.0);
+            Vector3D translation = new Vector3D(10.0, 11.0, 12.0);
+
+            Matrix4D m = new Matrix4D(rotation, translation);
+
+            Assert.AreEqual(1.0, m.Column0Row0);
+            Assert.AreEqual(4.0, m.Column1Row0);
+            Assert.AreEqual(7.0, m.Column2Row0);
+            Assert.AreEqual(10.0, m.Column3Row0);
+            Assert.AreEqual(2.0, m.Column0Row1);
+            Assert.AreEqual(5.0, m.Column1Row1);
+            Assert.AreEqual(8.0, m.Column2Row1);
+            Assert.AreEqual(11.0, m.Column3Row1);
+            Assert.AreEqual(3.0, m.Column0Row2);
+            Assert.AreEqual(6.0, m.Column1Row2);
+            Assert.AreEqual(9.0, m.Column2Row2);
+            Assert.AreEqual(12.0, m.Column3Row2);
+            Assert.AreEqual(0.0, m.Column0Row3);
+            Assert.AreEqual(0.0, m.Column1Row3);
+            Assert.AreEqual(0.0, m.Column2Row3);
+            Assert.AreEqual(1.0, m.Column3Row3);
+        }
+
+        [Test]
         public void DoubleToFloat()
         {
             Matrix4D m = new Matrix4D(
@@ -158,6 +187,53 @@ namespace OpenGlobe.Core
             Assert.AreEqual(8.0, m.Column1Row3);
             Assert.AreEqual(12.0, m.Column2Row3);
             Assert.AreEqual(16.0, m.Column3Row3);
+        }
+
+        [Test]
+        public void InverseTransformation()
+        {
+            Matrix4D m = new Matrix4D(Matrix3D.Identity, Vector3D.Zero);
+            Matrix4D mInverse = m.InverseTransformation();
+
+            Vector4D v = new Vector4D(1.0, 2.0, 3.0, 1.0);
+            Vector4D vPrime = m * v;
+            Vector4D vv = mInverse * vPrime;
+
+            Assert.AreEqual(v, vv);
+        }
+
+        [Test]
+        public void InverseTransformation2()
+        {
+            Matrix3D rotation = new Matrix3D(
+                1.0, 0.0, 0.0,
+                0.0, 0.0, 1.0,
+                0.0, 1.0, 0.0);
+            Vector3D translation = new Vector3D(10.0, 20, 30.0);
+
+            Matrix4D m = new Matrix4D(rotation, translation);
+            Matrix4D mInverse = m.InverseTransformation();
+
+            Vector4D v = new Vector4D(1.0, 2.0, 3.0, 1.0);
+            Vector4D vPrime = m * v;
+            Vector4D vv = mInverse * vPrime;
+
+            Assert.AreEqual(v, vv);
+        }
+
+        [Test]
+        public void TransformationGetters()
+        {
+            Matrix3D rotation = new Matrix3D(
+                1.0, 4.0, 7.0,
+                2.0, 5.0, 8.0,
+                3.0, 6.0, 9.0);
+            Vector3D translation = new Vector3D(10.0, 11.0, 12.0);
+
+            Matrix4D m = new Matrix4D(rotation, translation);
+            Assert.AreEqual(rotation, m.Rotation);
+            Assert.AreEqual(rotation.Transpose(), m.RotationTranspose());
+            Assert.AreEqual(translation, m.Translation);
         }
 
         [Test]

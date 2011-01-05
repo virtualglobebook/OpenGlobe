@@ -49,6 +49,29 @@ namespace OpenGlobe.Core
             };
         }
 
+        /// <summary>
+        /// Initializes a 4x4 transformation matrix composed of a
+        /// 3x3 rotation matrix in the upper left and a 3D
+        /// translation in the upper right.  The bottom row is
+        /// [0, 0, 0, 1].
+        /// </summary>
+        /// <param name="rotation">
+        /// The rotation matrix to initialize the upper left 3x3 elements.
+        /// </param>
+        /// <param name="translation">
+        /// The translation to initialize the upper right 3D elements.
+        /// </param>
+        public Matrix4D(Matrix3D rotation, Vector3D translation)
+        {
+            _values = new double[] 
+            { 
+                rotation.Column0Row0, rotation.Column0Row1, rotation.Column0Row2, 0.0,
+                rotation.Column1Row0, rotation.Column1Row1, rotation.Column1Row2, 0.0,
+                rotation.Column2Row0, rotation.Column2Row1, rotation.Column2Row2, 0.0,
+                translation.X, translation.Y, translation.Z, 1.0
+            };
+        }
+
         public int NumberOfComponents
         {
             get { return 16; }
@@ -102,6 +125,96 @@ namespace OpenGlobe.Core
                 Column1Row0, Column1Row1, Column1Row2, Column1Row3,
                 Column2Row0, Column2Row1, Column2Row2, Column2Row3,
                 Column3Row0, Column3Row1, Column3Row2, Column3Row3);
+        }
+
+        /// <summary>
+        /// Returns the inverse of the matrix assuming it is a
+        /// transformation matrix, where the upper left 3x3 elements
+        /// are a rotation matrix, and the upper three elements in
+        /// the fourth column are the translation.  The bottom row
+        /// is assumed to be [0, 0, 0, 1].
+        /// </summary>
+        /// <remarks>
+        /// This method is faster than computing the inverse for a 
+        /// general 4x4 matrix using <cref = "Inverse" />.
+        /// <p />
+        /// The matrix is not verified to be in the proper form.
+        /// </remarks>
+        /// <returns>The inverse of the matrix</returns>
+        /// <seealso cref="Matrix4D(Matrix3D,Vector3D)" />
+        /// <seealso cref="Inverse" />
+        public Matrix4D InverseTransformation()
+        {
+            // r = rotaton, rT = r^-1
+            Matrix3D rT = RotationTranspose();
+
+            // T = translation, rTT = (-rT)(T)
+            Vector3D rTT = -rT * Translation;
+
+            // [ rT, rTT ]
+            // [  0,  1  ]
+            return new Matrix4D(
+                rT.Column0Row0, rT.Column1Row0, rT.Column2Row0, rTT.X,
+                rT.Column0Row1, rT.Column1Row1, rT.Column2Row1, rTT.Y,
+                rT.Column0Row2, rT.Column1Row2, rT.Column2Row2, rTT.Z,
+                0.0, 0.0, 0.0, 1.0);
+        }
+
+        public Matrix4D Inverse()
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Gets the upper left 3x3 rotation matrix, assuming
+        /// the matrix is a transformation matrix of the form
+        /// initialized with <see cref="Matrix4D(Matrix3D,Vector3D)" />.
+        /// </summary>
+        /// <seealso cref="Matrix4D(Matrix3D,Vector3D)" />
+        public Matrix3D Rotation
+        {
+            get
+            {
+                return new Matrix3D(
+                    Column0Row0, Column1Row0, Column2Row0,
+                    Column0Row1, Column1Row1, Column2Row1,
+                    Column0Row2, Column1Row2, Column2Row2);
+            }
+        }
+
+        /// <summary>
+        /// Returns the transpose of the upper left 3x3 rotation 
+        /// matrix, assuming the matrix is a transformation matrix 
+        /// of the form initialized with 
+        /// <see cref="Matrix4D(Matrix3D,Vector3D)" />.
+        /// </summary>
+        /// <remarks>
+        /// The tranpose of a rotation matrix is also its inverse.
+        /// </remarks>
+        /// <returns>
+        /// The transpose of the upper left 3x3 rotation matrix.
+        /// </returns>
+        /// <seealso cref="Matrix4D(Matrix3D,Vector3D)" />
+        public Matrix3D RotationTranspose()
+        {
+            return new Matrix3D(
+                Column0Row0, Column0Row1, Column0Row2,
+                Column1Row0, Column1Row1, Column1Row2,
+                Column2Row0, Column2Row1, Column2Row2);
+        }
+
+        /// <summary>
+        /// Gets the upper right 3D translation, assuming the 
+        /// matrix is a transformation matrix of the form initialized with 
+        /// <see cref="Matrix4D(Matrix3D,Vector3D)" />.
+        /// </summary>
+        /// <seealso cref="Matrix4D(Matrix3D,Vector3D)" />
+        public Vector3D Translation
+        {
+            get
+            {
+                return new Vector3D(Column3Row0, Column3Row1, Column3Row2);
+            }
         }
 
         public static Matrix4D CreatePerspectiveFieldOfView(double fovy, double aspect, double zNear, double zFar)

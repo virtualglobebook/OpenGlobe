@@ -110,6 +110,14 @@ namespace OpenGlobe.Core
             return new Vector3D(x, y, z);
         }
 
+        public static Matrix3D operator -(Matrix3D matrix)
+        {
+            return new Matrix3D(
+                -matrix.Column0Row0, -matrix.Column1Row0, -matrix.Column2Row0,
+                -matrix.Column0Row1, -matrix.Column1Row1, -matrix.Column2Row1,
+                -matrix.Column0Row2, -matrix.Column1Row2, -matrix.Column2Row2);
+        }
+
         public bool Equals(Matrix3D other)
         {
             if (Matrix3D.ReferenceEquals(other, null))

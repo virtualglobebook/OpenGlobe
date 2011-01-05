@@ -159,6 +159,21 @@ namespace OpenGlobe.Core
         }
 
         [Test]
+        public void Negate()
+        {
+            Matrix3D m = new Matrix3D(
+                1.0, 4.0, 7.0,
+                2.0, 5.0, 8.0,
+                3.0, 6.0, 9.0);
+            Matrix3D negativeM = new Matrix3D(
+                -1.0, -4.0, -7.0,
+                -2.0, -5.0, -8.0,
+                -3.0, -6.0, -9.0);
+
+            Assert.AreEqual(negativeM, -m);
+        }
+
+        [Test]
         public void Equals()
         {
             Matrix3D a = new Matrix3D(
