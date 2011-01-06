@@ -41,6 +41,16 @@ namespace OpenGlobe.Renderer
         }
 
         [Test]
+        public void DepthClamp()
+        {
+            RenderState renderState = new RenderState();
+            Assert.IsFalse(renderState.DepthClamp);
+
+            renderState.DepthClamp = true;
+            Assert.IsTrue(renderState.DepthClamp);
+        }
+
+        [Test]
         public void ProgramPointSize()
         {
             RenderState renderState = new RenderState();

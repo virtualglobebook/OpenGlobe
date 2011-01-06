@@ -43,6 +43,7 @@ namespace OpenGlobe.Renderer
         }
 
         public PrimitiveRestart PrimitiveRestart { get; set; }
+        public bool DepthClamp { get; set; }
         public FacetCulling FacetCulling { get; set; }
         public ProgramPointSize ProgramPointSize { get; set; }
         public bool Rasterizer { get; set; }

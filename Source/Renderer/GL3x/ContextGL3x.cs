@@ -49,6 +49,8 @@ namespace OpenGlobe.Renderer.GL3x
             Enable(EnableCap.PrimitiveRestart, renderState.PrimitiveRestart.Enabled);
             GL.PrimitiveRestartIndex(renderState.PrimitiveRestart.Index);
 
+            Enable(EnableCap.DepthClamp, renderState.DepthClamp);
+
             Enable(EnableCap.CullFace, renderState.FacetCulling.Enabled);
             GL.CullFace(TypeConverterGL3x.To(renderState.FacetCulling.Face));
             GL.FrontFace(TypeConverterGL3x.To(renderState.FacetCulling.FrontFaceWindingOrder));
@@ -287,6 +289,15 @@ namespace OpenGlobe.Renderer.GL3x
                     GL.PrimitiveRestartIndex(primitiveRestart.Index);
                     _renderState.PrimitiveRestart.Index = primitiveRestart.Index;
                 }
+            }
+        }
+
+        private void ApplyDepthClamp(bool depthClamp)
+        {
+            if (_renderState.DepthClamp != depthClamp)
+            {
+                Enable(EnableCap.DepthClamp, depthClamp);
+                _renderState.DepthClamp = depthClamp;
             }
         }
 
@@ -593,6 +604,7 @@ namespace OpenGlobe.Renderer.GL3x
         {
             ApplyPrimitiveRestart(renderState.PrimitiveRestart);
             ApplyFacetCulling(renderState.FacetCulling);
+            ApplyDepthClamp(renderState.DepthClamp);
             ApplyProgramPointSize(renderState.ProgramPointSize);
             ApplyRasterizer(renderState.Rasterizer);
             ApplyRasterizationMode(renderState.RasterizationMode);
