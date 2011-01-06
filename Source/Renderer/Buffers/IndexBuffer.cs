@@ -25,7 +25,7 @@ namespace OpenGlobe.Renderer
         UnsignedInt
     }
 
-    public abstract class IndexBuffer : Disposable
+    public abstract class IndexBuffer : Buffer
     {
         public virtual void CopyFromSystemMemory<T>(T[] bufferInSystemMemory) where T : struct
         {

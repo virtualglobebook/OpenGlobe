@@ -96,6 +96,7 @@
     <Compile Include="Renderer\Scene\CameraTest.cs" />
     <Compile Include="Renderer\Shaders\ShaderCacheTests.cs" />
     <Compile Include="Renderer\Shaders\UniformTests.cs" />
+    <Compile Include="Renderer\TransformFeedbackTests.cs" />
     <Compile Include="Renderer\VertexArray\VertexArrayTests.cs" />
     <Compile Include="Renderer\Buffers\BufferObjectTests.cs" />
     <Compile Include="Renderer\Framebuffer\FramebufferTests.cs" />

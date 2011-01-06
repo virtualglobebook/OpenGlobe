@@ -45,9 +45,11 @@
   <ItemGroup>
     <Compile Include="BlittableBGRA.cs" />
     <Compile Include="BlittableRGBA.cs" />
+    <Compile Include="Buffers\Buffer.cs" />
     <Compile Include="Buffers\BufferHint.cs" />
     <Compile Include="Buffers\PixelBufferHint.cs" />
     <Compile Include="ClearState.cs" />
+    <Compile Include="GL3x\Buffers\IBufferName.cs" />
     <Compile Include="Infrastructure\EmbeddedResources.cs" />
     <Compile Include="Shaders\DrawAutomaticUniforms\CameraEyeHighUniform.cs" />
     <Compile Include="Shaders\DrawAutomaticUniforms\CameraEyeHighUniformFactory.cs" />
@@ -66,6 +68,7 @@
     <Compile Include="Shaders\TransformFeedback\TransformFeedbackAttributeLayout.cs" />
     <Compile Include="Shaders\TransformFeedback\TransformFeedbackOutput.cs" />
     <Compile Include="Shaders\TransformFeedback\TransformFeedbackOutputCollection.cs" />
+    <Compile Include="Shaders\TransformFeedback\TransformFeedbackPrimitiveType.cs" />
     <Compile Include="VertexArray\VertexLocations.cs" />
     <Compile Include="DrawState.cs" />
     <Compile Include="Extensions.cs">

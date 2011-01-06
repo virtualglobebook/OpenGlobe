@@ -9,9 +9,10 @@
 
 using System;
 using System.Drawing;
+using System.Collections.Generic;
+using OpenGlobe.Core;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
-using OpenGlobe.Core;
 
 namespace OpenGlobe.Renderer.GL3x
 {
@@ -181,14 +182,54 @@ namespace OpenGlobe.Renderer.GL3x
             GL.Clear(TypeConverterGL3x.To(clearState.Buffers));
         }
 
+        public override void BeginTransformFeedback(
+            TransformFeedbackPrimitiveType primitiveType,
+            IEnumerable<Buffer> buffers)
+        {
+            if (buffers == null)
+            {
+                throw new ArgumentNullException("buffers");
+            }
+
+            int i = 0;
+            foreach (Buffer buffer in buffers)
+            {
+                int name = ((IBufferName)buffer).Name;
+                GL.BindBufferBase(BufferTarget.TransformFeedbackBuffer, i++, name);
+
+                // TF_TODO:  Support optional index and offset with each buffer, e.g.:
+                //
+                //   GL.BindBufferRange(BufferTarget.TransformFeedbackBuffer, i++, name, 
+                //       new IntPtr(0), new IntPtr(16));
+            }
+
+            GL.BeginTransformFeedback(TypeConverterGL3x.To(primitiveType));
+        }
+
+        public override void EndBeginTransform()
+        {
+            GL.EndTransformFeedback();
+
+            for (int i = 0; i < Device.MaximumTransformFeedbackSeparateAttributes; ++i)
+            {
+                GL.BindBufferBase(BufferTarget.TransformFeedbackBuffer, i, 0);
+            }
+        }
+
         protected override void DoDraw(PrimitiveType primitiveType, int offset, int count, DrawState drawState, SceneState sceneState)
         {
             VerifyDraw(drawState, sceneState);
             ApplyBeforeDraw(drawState, sceneState);
-            
+
             VertexArrayGL3x vertexArray = (VertexArrayGL3x)drawState.VertexArray;
             IndexBufferGL3x indexBuffer = vertexArray.IndexBuffer as IndexBufferGL3x;
-            
+
+            // TF_TODO:
+            //int result;
+            //int name;
+            //GL.GenQueries(1, out name);
+            //GL.BeginQuery(QueryTarget.TransformFeedbackPrimitivesWritten, name);
+
             if (indexBuffer != null)
             {
                 GL.DrawRangeElements(TypeConverterGL3x.To(primitiveType),
@@ -200,6 +241,12 @@ namespace OpenGlobe.Renderer.GL3x
             {
                 GL.DrawArrays(TypeConverterGL3x.To(primitiveType), offset, count);
             }
+
+            // TF_TODO:
+            //GL.EndQuery(QueryTarget.PrimitivesGenerated);
+            //GL.EndQuery(QueryTarget.TransformFeedbackPrimitivesWritten);
+            //GL.GetQueryObject(name, GetQueryObjectParam.QueryResult, out result);
+            //GL.DeleteQueries(1, ref name);
         }
 
         protected override void DoDraw(PrimitiveType primitiveType, DrawState drawState, SceneState sceneState)

@@ -216,6 +216,15 @@ namespace OpenGlobe.Renderer.GL3x
             GL.BindBuffer(_type, 0);
         }
 
+        #region IBufferName Members
+
+        public int Name
+        {
+            get { return _name.Value; }
+        }
+
+        #endregion
+
         public void Dispose()
         {
             _name.Dispose();

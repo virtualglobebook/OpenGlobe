@@ -62,6 +62,11 @@ namespace OpenGlobe.Renderer
         public abstract Rectangle Viewport { get; set; }
         public abstract Framebuffer Framebuffer { get; set; }
 
+        public abstract void BeginTransformFeedback(
+            TransformFeedbackPrimitiveType primitiveType,
+            IEnumerable<Buffer> buffers);
+        public abstract void EndBeginTransform();
+
         public void Clear(ClearState clearState)
         {
             if (PerformanceCountersEnabled)

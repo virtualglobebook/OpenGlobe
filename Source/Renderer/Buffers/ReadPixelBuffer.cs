@@ -14,7 +14,7 @@ using OpenGlobe.Core;
 
 namespace OpenGlobe.Renderer
 {
-    public abstract class ReadPixelBuffer : Disposable
+    public abstract class ReadPixelBuffer : Buffer
     {
         public virtual void CopyFromSystemMemory<T>(T[] bufferInSystemMemory) where T : struct
         {

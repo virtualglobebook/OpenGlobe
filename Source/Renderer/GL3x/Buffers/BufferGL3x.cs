@@ -132,9 +132,9 @@ namespace OpenGlobe.Renderer.GL3x
             get { return TypeConverterGL3x.To(_usageHint); }
         }
 
-        public BufferNameGL3x Handle
+        public int Name
         {
-            get { return _name; }
+            get { return _name.Value; }
         }
 
         public void Bind()

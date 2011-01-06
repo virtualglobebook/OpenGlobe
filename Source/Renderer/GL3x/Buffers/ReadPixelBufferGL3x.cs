@@ -13,7 +13,7 @@ using ImagingPixelFormat = System.Drawing.Imaging.PixelFormat;
 
 namespace OpenGlobe.Renderer.GL3x
 {
-    internal class ReadPixelBufferGL3x : ReadPixelBuffer
+    internal class ReadPixelBufferGL3x : ReadPixelBuffer, IBufferName
     {
         public ReadPixelBufferGL3x(PixelBufferHint usageHint, int sizeInBytes)
         {
@@ -64,6 +64,15 @@ namespace OpenGlobe.Renderer.GL3x
         public override PixelBufferHint UsageHint
         {
             get { return _usageHint; }
+        }
+
+        #endregion
+
+        #region IBufferName Members
+
+        public int Name
+        {
+            get { return _bufferObject.Name; }
         }
 
         #endregion

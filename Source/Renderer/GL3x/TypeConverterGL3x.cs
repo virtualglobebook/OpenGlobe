@@ -1035,5 +1035,20 @@ namespace OpenGlobe.Renderer.GL3x
 
             throw new ArgumentException("layout");
         }
+
+        public static BeginFeedbackMode To(TransformFeedbackPrimitiveType type)
+        {
+            switch (type)
+            {
+                case TransformFeedbackPrimitiveType.Points:
+                    return BeginFeedbackMode.Points;
+                case TransformFeedbackPrimitiveType.Lines:
+                    return BeginFeedbackMode.Lines;
+                case TransformFeedbackPrimitiveType.Triangles:
+                    return BeginFeedbackMode.Triangles;
+            }
+
+            throw new ArgumentException("type");
+        }
     }
 }

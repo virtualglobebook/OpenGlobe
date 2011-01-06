@@ -14,7 +14,7 @@ using OpenTK.Graphics.OpenGL;
 
 namespace OpenGlobe.Renderer.GL3x
 {
-    internal class IndexBufferGL3x : IndexBuffer
+    internal class IndexBufferGL3x : IndexBuffer, IBufferName
     {
         public IndexBufferGL3x(BufferHint usageHint, int sizeInBytes)
         {
@@ -82,6 +82,15 @@ namespace OpenGlobe.Renderer.GL3x
         public override int Count
         {
             get { return _count; }
+        }
+
+        #endregion
+
+        #region IBufferName Members
+
+        public int Name
+        {
+            get { return _bufferObject.Name; }
         }
 
         #endregion

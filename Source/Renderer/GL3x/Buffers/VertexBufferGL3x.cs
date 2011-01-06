@@ -13,7 +13,7 @@ using OpenTK.Graphics.OpenGL;
 
 namespace OpenGlobe.Renderer.GL3x
 {
-    internal class VertexBufferGL3x : VertexBuffer
+    internal class VertexBufferGL3x : VertexBuffer, IBufferName
     {
         public VertexBufferGL3x(BufferHint usageHint, int sizeInBytes)
         {
@@ -50,6 +50,15 @@ namespace OpenGlobe.Renderer.GL3x
         public override BufferHint UsageHint
         {
             get { return _bufferObject.UsageHint; }
+        }
+
+        #endregion
+
+        #region IBufferName Members
+
+        public int Name
+        {
+            get { return _bufferObject.Name; }
         }
 
         #endregion

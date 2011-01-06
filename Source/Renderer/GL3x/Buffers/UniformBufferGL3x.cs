@@ -12,16 +12,11 @@ using OpenTK.Graphics.OpenGL;
 
 namespace OpenGlobe.Renderer.GL3x
 {
-    internal class UniformBufferGL3x : UniformBuffer
+    internal class UniformBufferGL3x : UniformBuffer, IBufferName
     {
         public UniformBufferGL3x(BufferHint usageHint, int sizeInBytes)
         {
             _bufferObject = new BufferGL3x(BufferTarget.UniformBuffer, usageHint, sizeInBytes);
-        }
-
-        internal BufferNameGL3x Handle
-        {
-            get { return _bufferObject.Handle; }
         }
 
         #region UniformBuffer Members
@@ -47,6 +42,15 @@ namespace OpenGlobe.Renderer.GL3x
         public override BufferHint UsageHint
         {
             get { return _bufferObject.UsageHint; }
+        }
+
+        #endregion
+
+        #region IBufferName Members
+
+        public int Name
+        {
+            get { return _bufferObject.Name; }
         }
 
         #endregion

@@ -12,7 +12,7 @@ using OpenGlobe.Core;
 
 namespace OpenGlobe.Renderer
 {
-    public abstract class VertexBuffer : Disposable
+    public abstract class VertexBuffer : Buffer
     {
         public virtual void CopyFromSystemMemory<T>(T[] bufferInSystemMemory) where T : struct
         {
