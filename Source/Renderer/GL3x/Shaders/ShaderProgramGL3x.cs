@@ -24,22 +24,25 @@ namespace OpenGlobe.Renderer.GL3x
             IEnumerable<string> transformFeedbackOutputs,
             TransformFeedbackAttributeLayout transformFeedbackAttributeLayout)
         {
-            _vertexShader = new ShaderObjectGL3x(ShaderType.VertexShader, vertexShaderSource);
-            if (geometryShaderSource.Length > 0)
-            {
-                _geometryShader = new ShaderObjectGL3x(ShaderType.GeometryShaderExt, geometryShaderSource);
-            }
-            _fragmentShader = new ShaderObjectGL3x(ShaderType.FragmentShader, fragmentShaderSource);
-
             _program = new ShaderProgramNameGL3x();
             int programHandle = _program.Value;
 
-            GL.AttachShader(programHandle, _vertexShader.Handle);
-            if (geometryShaderSource.Length > 0)
+            //
+            // Shader objects are disposed so they are marked for deletion
+            // in GL, and will be deleted when the shader program is.
+            //
+            using (ShaderObjectGL3x vertexShader = new ShaderObjectGL3x(ShaderType.VertexShader, vertexShaderSource))
+            using (ShaderObjectGL3x geometryShader = (geometryShaderSource.Length > 0) ?
+                new ShaderObjectGL3x(ShaderType.GeometryShaderExt, geometryShaderSource) : null)
+            using (ShaderObjectGL3x fragmentShader = new ShaderObjectGL3x(ShaderType.FragmentShader, fragmentShaderSource))
             {
-                GL.AttachShader(programHandle, _geometryShader.Handle);
+                GL.AttachShader(programHandle, vertexShader.Handle);
+                if (geometryShaderSource.Length > 0)
+                {
+                    GL.AttachShader(programHandle, geometryShader.Handle);
+                }
+                GL.AttachShader(programHandle, fragmentShader.Handle);
             }
-            GL.AttachShader(programHandle, _fragmentShader.Handle);
 
             if (transformFeedbackOutputs != null)
             {
@@ -200,8 +203,8 @@ namespace OpenGlobe.Renderer.GL3x
         }
 
         private Uniform CreateUniform(
-            string name, 
-            int location, 
+            string name,
+            int location,
             ActiveUniformType type)
         {
             switch (type)
@@ -452,17 +455,17 @@ namespace OpenGlobe.Renderer.GL3x
             get { return ProgramInfoLog; }
         }
 
-        public override TransformFeedbackOutputCollection TransformFeedbackOutputs 
+        public override TransformFeedbackOutputCollection TransformFeedbackOutputs
         {
-            get { return _transformFeedbackOutputs;  }
+            get { return _transformFeedbackOutputs; }
         }
 
-        public override TransformFeedbackAttributeLayout TransformFeedbackAttributeLayout 
+        public override TransformFeedbackAttributeLayout TransformFeedbackAttributeLayout
         {
             get { return _transformFeedbackAttributeLayout; }
         }
 
-        public override FragmentOutputs FragmentOutputs 
+        public override FragmentOutputs FragmentOutputs
         {
             get { return _fragmentOutputs; }
         }
@@ -503,30 +506,12 @@ namespace OpenGlobe.Renderer.GL3x
                 {
                     _program.Dispose();
                 }
-
-                if (_vertexShader != null)
-                {
-                    _vertexShader.Dispose();
-                }
-
-                if (_geometryShader != null)
-                {
-                    _geometryShader.Dispose();
-                }
-
-                if (_fragmentShader != null)
-                {
-                    _fragmentShader.Dispose();
-                }
             }
             base.Dispose(disposing);
         }
 
         #endregion
 
-        private readonly ShaderObjectGL3x _vertexShader;
-        private readonly ShaderObjectGL3x _geometryShader;
-        private readonly ShaderObjectGL3x _fragmentShader;
         private readonly ShaderProgramNameGL3x _program;
         private readonly TransformFeedbackOutputCollection _transformFeedbackOutputs;
         private readonly TransformFeedbackAttributeLayout _transformFeedbackAttributeLayout;
