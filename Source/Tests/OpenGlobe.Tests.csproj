@@ -93,6 +93,7 @@
     <Compile Include="Renderer\MultiThreading\TextureFactory.cs" />
     <Compile Include="Renderer\MultiThreading\VertexBufferFactory.cs" />
     <Compile Include="Renderer\MultiThreading\VertexBufferMultiThreadingTests.cs" />
+    <Compile Include="Renderer\Queries\QueryTests.cs" />
     <Compile Include="Renderer\Scene\CameraTest.cs" />
     <Compile Include="Renderer\Shaders\ShaderCacheTests.cs" />
     <Compile Include="Renderer\Shaders\UniformTests.cs" />

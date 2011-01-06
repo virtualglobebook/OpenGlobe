@@ -1050,5 +1050,20 @@ namespace OpenGlobe.Renderer.GL3x
 
             throw new ArgumentException("type");
         }
+
+        public static QueryTarget To(QueryType type)
+        {
+            switch (type)
+            {
+                case QueryType.NumberOfSamplesPassed:
+                    return QueryTarget.SamplesPassed;
+                case QueryType.NumberOfPrimitivesGenerated:
+                    return QueryTarget.PrimitivesGenerated;
+                case QueryType.NumberOfTransformFeedbackPrimitivesWritten:
+                    return QueryTarget.TransformFeedbackPrimitivesWritten;
+            }
+
+            throw new ArgumentException("type");
+        }
     }
 }

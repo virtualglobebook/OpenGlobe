@@ -57,10 +57,14 @@ namespace OpenGlobe.Renderer
 
         public abstract VertexArray CreateVertexArray();
         public abstract Framebuffer CreateFramebuffer();
+        public abstract Query CreateQuery(QueryType queryType);
 
         public abstract TextureUnits TextureUnits { get; }
         public abstract Rectangle Viewport { get; set; }
         public abstract Framebuffer Framebuffer { get; set; }
+
+        public abstract void BeginQuery(Query query);
+        public abstract void EndQuery(Query query);
 
         public abstract void BeginTransformFeedback(
             TransformFeedbackPrimitiveType primitiveType,

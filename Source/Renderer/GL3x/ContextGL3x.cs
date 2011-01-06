@@ -121,6 +121,16 @@ namespace OpenGlobe.Renderer.GL3x
             return new FramebufferGL3x();
         }
 
+        public override Query CreateQuery(QueryType queryType)
+        {
+            if (_queriesInflight[(int)queryType])
+            {
+                throw new InvalidOperationException("Can't create query because a query of this type is already in flight.  Call Context.End() first.");
+            }
+
+            return new QueryGL3x(queryType);
+        }
+
         public override TextureUnits TextureUnits
         {
             get { return _textureUnits; }
@@ -184,6 +194,44 @@ namespace OpenGlobe.Renderer.GL3x
             GL.Clear(TypeConverterGL3x.To(clearState.Buffers));
         }
 
+        public override void BeginQuery(Query query)
+        {
+            if (query == null)
+            {
+                throw new ArgumentNullException("query");
+            }
+
+            int index = (int)query.QueryType;
+
+            if (_queriesInflight[index])
+            {
+                throw new InvalidOperationException("A query of this type is already in flight.  Call Context.End() first.");
+            }
+            _queriesInflight[index] = true;
+
+            QueryGL3x queryGL = query as QueryGL3x;
+            queryGL.Begin();
+        }
+
+        public override void EndQuery(Query query)
+        {
+            if (query == null)
+            {
+                throw new ArgumentNullException("query");
+            }
+
+            int index = (int)query.QueryType;
+
+            if (!_queriesInflight[index])
+            {
+                throw new InvalidOperationException("A query of this type is not in flight.  Call Context.Begin() first.");
+            }
+            _queriesInflight[index] = false;
+
+            QueryGL3x queryGL = query as QueryGL3x;
+            queryGL.End();
+        }
+
         public override void BeginTransformFeedback(
             TransformFeedbackPrimitiveType primitiveType,
             IEnumerable<Buffer> buffers)
@@ -226,12 +274,6 @@ namespace OpenGlobe.Renderer.GL3x
             VertexArrayGL3x vertexArray = (VertexArrayGL3x)drawState.VertexArray;
             IndexBufferGL3x indexBuffer = vertexArray.IndexBuffer as IndexBufferGL3x;
 
-            // TF_TODO:
-            //int result;
-            //int name;
-            //GL.GenQueries(1, out name);
-            //GL.BeginQuery(QueryTarget.TransformFeedbackPrimitivesWritten, name);
-
             if (indexBuffer != null)
             {
                 GL.DrawRangeElements(TypeConverterGL3x.To(primitiveType),
@@ -243,12 +285,6 @@ namespace OpenGlobe.Renderer.GL3x
             {
                 GL.DrawArrays(TypeConverterGL3x.To(primitiveType), offset, count);
             }
-
-            // TF_TODO:
-            //GL.EndQuery(QueryTarget.PrimitivesGenerated);
-            //GL.EndQuery(QueryTarget.TransformFeedbackPrimitivesWritten);
-            //GL.GetQueryObject(name, GetQueryObjectParam.QueryResult, out result);
-            //GL.DeleteQueries(1, ref name);
         }
 
         protected override void DoDraw(PrimitiveType primitiveType, DrawState drawState, SceneState sceneState)
@@ -688,6 +724,7 @@ namespace OpenGlobe.Renderer.GL3x
         private ShaderProgramGL3x _boundShaderProgram;
         private FramebufferGL3x _boundFramebuffer;
         private FramebufferGL3x _setFramebuffer;
+        private bool[] _queriesInflight = new bool[3];  // TODO:  Don't hardcode
 
         private TextureUnitsGL3x _textureUnits;
 

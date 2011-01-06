@@ -39,6 +39,10 @@ namespace OpenGlobe.Renderer
                 GL.GetInteger(GetPName.MaxTransformFeedbackSeparateAttribs, out s_maximumTransformFeedbackSeparateAttributes);
                 GL.GetInteger(GetPName.MaxTransformFeedbackSeparateComponents, out s_maximumTransformFeedbackSeparateComponents);
 
+                GL.GetQuery(QueryTarget.SamplesPassed, GetQueryParam.QueryCounterBits, out s_numberOfSamplesPassedQueryBits);
+                GL.GetQuery(QueryTarget.PrimitivesGenerated, GetQueryParam.QueryCounterBits, out s_numberOfPrimitivesGeneratedQueryBits);
+                GL.GetQuery(QueryTarget.TransformFeedbackPrimitivesWritten, GetQueryParam.QueryCounterBits, out s_numberOfTransformFeedbackPrimitivesWrittenQueryBits);
+
                 ///////////////////////////////////////////////////////////////
 
                 s_shaderCache = new ShaderCache();
@@ -557,6 +561,7 @@ namespace OpenGlobe.Renderer
         public static int NumberOfIndexBuffersCreated { get { return IndexBufferCount; } }
         public static int NumberOfTexturesCreated { get { return TextureCount; } }
         public static int NumberOfFencesCreated { get { return FenceCount; } }
+        public static int NumberOfQueriesCreated { get { return QueryCount; } }
         public static int NumberOfVertexArraysCreated { get { return VertexArrayCount; } }
         public static int NumberOfFramebuffersCreated { get { return FramebufferCount; } }
 
@@ -565,6 +570,7 @@ namespace OpenGlobe.Renderer
         internal static int IndexBufferCount;
         internal static int TextureCount;
         internal static int FenceCount;
+        internal static int QueryCount;
         internal static int VertexArrayCount;
         internal static int FramebufferCount;
 
@@ -632,6 +638,21 @@ namespace OpenGlobe.Renderer
             get { return s_maximumTransformFeedbackSeparateComponents; }
         }
 
+        public static int NumberOfSamplesPassedQueryBits
+        {
+            get { return s_numberOfSamplesPassedQueryBits; }
+        }
+
+        public static int NumberOfPrimitivesGeneratedQueryBits
+        {
+            get { return s_numberOfPrimitivesGeneratedQueryBits; }
+        }
+
+        public static int NumberOfTransformFeedbackPrimitivesWrittenQueryBits
+        {
+            get { return s_numberOfTransformFeedbackPrimitivesWrittenQueryBits; }
+        }
+
         private static int s_maximumVertexAttributes;
         private static int s_numberOfTextureUnits;
         private static int s_maximumColorAttachments;
@@ -639,6 +660,10 @@ namespace OpenGlobe.Renderer
         private static int s_maximumTransformFeedbackInterleavedComponents;
         private static int s_maximumTransformFeedbackSeparateAttributes;
         private static int s_maximumTransformFeedbackSeparateComponents;
+
+        private static int s_numberOfSamplesPassedQueryBits;
+        private static int s_numberOfPrimitivesGeneratedQueryBits;
+        private static int s_numberOfTransformFeedbackPrimitivesWrittenQueryBits;
 
         private static ShaderCache s_shaderCache;
         private static Extensions s_extensions;

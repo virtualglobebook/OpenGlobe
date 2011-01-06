@@ -13,7 +13,7 @@ using OpenTK.Graphics.OpenGL;
 
 namespace OpenGlobe.Renderer.GL3x
 {
-    public class FenceGL3x : Fence
+    internal class FenceGL3x : Fence
     {
         public FenceGL3x()
         {
