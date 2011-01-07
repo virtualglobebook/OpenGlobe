@@ -33,8 +33,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chapter06DepthBufferPrecisi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chapter11TerrainShading", "Examples\Chapter11\TerrainShading\Chapter11TerrainShading.csproj", "{35405C20-1149-4941-99E3-5EC639B1086A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ResearchLinesOnTerrain", "Research\LinesOnTerrain\ResearchLinesOnTerrain.csproj", "{2F86841E-018F-4FB7-A428-981B34A2F9F8}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chapter07VectorData", "Examples\Chapter07\VectorData\Chapter07VectorData.csproj", "{A13EB11D-AA8D-4CB0-9822-56A20A431CE6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chapter10Multithreading", "Examples\Chapter10\Multithreading\Chapter10Multithreading.csproj", "{1DEAD09B-0473-4C83-8AF7-7FA178AC6067}"
@@ -107,10 +105,6 @@ Global
 		{35405C20-1149-4941-99E3-5EC639B1086A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{35405C20-1149-4941-99E3-5EC639B1086A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{35405C20-1149-4941-99E3-5EC639B1086A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2F86841E-018F-4FB7-A428-981B34A2F9F8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2F86841E-018F-4FB7-A428-981B34A2F9F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2F86841E-018F-4FB7-A428-981B34A2F9F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2F86841E-018F-4FB7-A428-981B34A2F9F8}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A13EB11D-AA8D-4CB0-9822-56A20A431CE6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{A13EB11D-AA8D-4CB0-9822-56A20A431CE6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A13EB11D-AA8D-4CB0-9822-56A20A431CE6}.Release|Any CPU.ActiveCfg = Release|Any CPU
