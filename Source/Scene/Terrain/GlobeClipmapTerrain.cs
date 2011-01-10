@@ -53,6 +53,9 @@ namespace OpenGlobe.Scene
                 _clipmapLevels[i].FinerLevel = i == _clipmapLevels.Length - 1 ? null : _clipmapLevels[i + 1];
             }
 
+            _clearColor = new ClearState();
+            _clearColor.Buffers = ClearBuffers.ColorBuffer;
+
             _shaderProgram = Device.CreateShaderProgram(
                 EmbeddedResources.GetText("OpenGlobe.Scene.Terrain.ClipmapTerrain.GlobeClipmapVS.glsl"),
                 EmbeddedResources.GetText("OpenGlobe.Scene.Terrain.ClipmapTerrain.GlobeClipmapFS.glsl"));
@@ -456,7 +459,8 @@ namespace OpenGlobe.Scene
                 CreateSilhouetteFramebuffer(context);
 
                 Framebuffer oldFramebuffer = context.Framebuffer;
-                //context.Framebuffer = _silhouetteFrameBuffer;
+                context.Framebuffer = _silhouetteFrameBuffer;
+                context.Clear(_clearColor);
 
                 for (int i = maxLevel; i >= 0; --i)
                 {
@@ -464,7 +468,7 @@ namespace OpenGlobe.Scene
                     ClipmapLevel coarserLevel = _clipmapLevels[i > 0 ? i - 1 : 0];
                     RenderLevel(i, thisLevel, coarserLevel, (i == maxLevel), true, center, context, sceneState);
                 }
-
+                 
                 context.Framebuffer = oldFramebuffer;
             }
             else
@@ -725,6 +729,8 @@ namespace OpenGlobe.Scene
         private int _clipmapPosts;
         private int _clipmapSegments;
         private ClipmapLevel[] _clipmapLevels;
+
+        private readonly ClearState _clearColor;
 
         private ShaderProgram _shaderProgram;
         private RenderState _renderState;
