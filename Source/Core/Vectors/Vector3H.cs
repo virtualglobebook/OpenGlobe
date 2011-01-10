@@ -63,6 +63,13 @@ namespace OpenGlobe.Core
             _z = z;
         }
 
+        public Vector3H(Half value)
+        {
+            _x = value;
+            _y = value;
+            _z = value;
+        }
+
         public Vector3H(float x, float y, float z)
         {
             _x = new Half(x);

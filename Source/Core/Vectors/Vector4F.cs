@@ -78,6 +78,14 @@ namespace OpenGlobe.Core
             _w = w;
         }
 
+        public Vector4F(float value)
+        {
+            _x = value;
+            _y = value;
+            _z = value;
+            _w = value;
+        }
+
         public float X
         {
             get { return _x; }

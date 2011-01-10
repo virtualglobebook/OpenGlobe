@@ -50,6 +50,12 @@ namespace OpenGlobe.Core
             _y = y;
         }
 
+        public Vector2F(float value)
+        {
+            _x = value;
+            _y = value;
+        }
+
         public float X
         {
             get { return _x; }

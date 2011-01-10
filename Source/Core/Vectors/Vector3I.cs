@@ -56,6 +56,13 @@ namespace OpenGlobe.Core
             _z = z;
         }
 
+        public Vector3I(int value)
+        {
+            _x = value;
+            _y = value;
+            _z = value;
+        }
+
         public int X
         {
             get { return _x; }

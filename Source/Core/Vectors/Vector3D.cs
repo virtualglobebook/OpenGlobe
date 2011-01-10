@@ -63,6 +63,13 @@ namespace OpenGlobe.Core
             _z = z;
         }
 
+        public Vector3D(double value)
+        {
+            _x = value;
+            _y = value;
+            _z = value;
+        }
+
         public double X
         {
             get { return _x; }

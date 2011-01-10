@@ -56,6 +56,14 @@ namespace OpenGlobe.Core
             _w = w;
         }
 
+        public Vector4B(bool value)
+        {
+            _x = value;
+            _y = value;
+            _z = value;
+            _w = value;
+        }
+
         public bool X
         {
             get { return _x; }

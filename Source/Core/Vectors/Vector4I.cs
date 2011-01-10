@@ -71,6 +71,14 @@ namespace OpenGlobe.Core
             _w = w;
         }
 
+        public Vector4I(int value)
+        {
+            _x = value;
+            _y = value;
+            _z = value;
+            _w = value;
+        }
+
         public int X
         {
             get { return _x; }

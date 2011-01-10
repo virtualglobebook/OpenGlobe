@@ -45,6 +45,13 @@ namespace OpenGlobe.Core
             _z = z;
         }
 
+        public Vector3B(bool value)
+        {
+            _x = value;
+            _y = value;
+            _z = value;
+        }
+
         public bool X
         {
             get { return _x; }

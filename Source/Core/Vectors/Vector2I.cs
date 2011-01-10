@@ -42,6 +42,12 @@ namespace OpenGlobe.Core
             _y = y;
         }
 
+        public Vector2I(int value)
+        {
+            _x = value;
+            _y = value;
+        }
+
         public int X
         {
             get { return _x; }

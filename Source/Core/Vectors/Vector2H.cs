@@ -50,6 +50,12 @@ namespace OpenGlobe.Core
             _y = y;
         }
 
+        public Vector2H(Half value)
+        {
+            _x = value;
+            _y = value;
+        }
+
         public Vector2H(float x, float y)
         {
             _x = new Half(x);

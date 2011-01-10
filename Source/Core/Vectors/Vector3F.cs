@@ -69,6 +69,13 @@ namespace OpenGlobe.Core
             _z = z;
         }
 
+        public Vector3F(float value)
+        {
+            _x = value;
+            _y = value;
+            _z = value;
+        }
+
         public float X
         {
             get { return _x; }

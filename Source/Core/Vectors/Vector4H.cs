@@ -78,6 +78,14 @@ namespace OpenGlobe.Core
             _w = w;
         }
 
+        public Vector4H(Half value)
+        {
+            _x = value;
+            _y = value;
+            _z = value;
+            _w = value;
+        }
+
         public Vector4H(float x, float y, float z, float w)
         {
             _x = new Half(x);
