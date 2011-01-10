@@ -16,7 +16,16 @@ using OpenGlobe.Renderer;
 
 namespace OpenGlobe.Scene
 {
-    public class GlobeClipmapTerrain : IRenderable, IDisposable
+    [Flags]
+    public enum TerrainRenderBuffers
+    {
+        Color = 1,
+        Depth = 2,
+        Silhouette = 4,
+        All = Color | Depth | Silhouette
+    }
+    
+    public class GlobeClipmapTerrain : IDisposable
     {
         public GlobeClipmapTerrain(Context context, RasterTerrainSource terrainSource, Ellipsoid ellipsoid, int clipmapPosts)
         {
@@ -186,6 +195,41 @@ namespace OpenGlobe.Scene
             set { _colorClipmapLevels = value; }
         }
 
+        public Texture2D SilhouetteTexture 
+        { 
+            get { return _silhouetteTexture; } 
+        }
+
+        public Texture2D DepthTexture 
+        { 
+            get { return _depthTexture; } 
+        }
+
+        private void CreateDepthTexture(Context context)
+        {
+            if ((_depthTexture == null) ||
+                (_depthTexture.Description.Width != context.Viewport.Width) ||
+                (_depthTexture.Description.Height != context.Viewport.Height))
+            {
+                DisposeDepth();
+                _depthTexture = Device.CreateTexture2D(new Texture2DDescription(context.Viewport.Width, context.Viewport.Height, TextureFormat.Depth24Stencil8));
+            }
+        }
+
+        private void CreateSilhouetteFramebuffer(Context context)
+        {
+            if ((_silhouetteTexture == null) ||
+                (_silhouetteTexture.Description.Width != context.Viewport.Width) ||
+                (_silhouetteTexture.Description.Height != context.Viewport.Height))
+            {
+                DisposeSilhouette();
+                _silhouetteTexture = Device.CreateTexture2D(new Texture2DDescription(context.Viewport.Width, context.Viewport.Height, TextureFormat.Red8));
+
+                _silhouetteFrameBuffer = context.CreateFramebuffer();
+                _silhouetteFrameBuffer.DepthAttachment = _depthTexture;
+                _silhouetteFrameBuffer.ColorAttachments[0] = _silhouetteTexture;
+            }
+        }
 
         public void PreRender(Context context, SceneState sceneState)
         {
@@ -340,7 +384,7 @@ namespace OpenGlobe.Scene
             level.CurrentExtent.North = level.NextExtent.North;
         }
 
-        public void Render(Context context, SceneState sceneState)
+        public void Render(Context context, SceneState sceneState, TerrainRenderBuffers buffers)
         {
             if (_wireframe)
             {
@@ -385,15 +429,47 @@ namespace OpenGlobe.Scene
             }*/
 
             //Vector2D center = toSubtract.XY;
-            Vector2D center = new Vector2D(0.0, 0.0);
+            Vector2D center = Vector2D.Zero;
 
-            bool rendered = false;
+            _renderState.ColorMask = ((buffers & TerrainRenderBuffers.Color) == TerrainRenderBuffers.Color) ? ColorMask.True : ColorMask.False;
+
             for (int i = maxLevel; i >= 0; --i)
             {
                 ClipmapLevel thisLevel = _clipmapLevels[i];
                 ClipmapLevel coarserLevel = _clipmapLevels[i > 0 ? i - 1 : 0];
+                RenderLevel(i, thisLevel, coarserLevel, (i == maxLevel), false, center, context, sceneState);
+            }
 
-                rendered = RenderLevel(i, thisLevel, coarserLevel, !rendered, center, context, sceneState);
+            if (((buffers & TerrainRenderBuffers.Depth) == TerrainRenderBuffers.Depth) ||
+                ((buffers & TerrainRenderBuffers.Silhouette) == TerrainRenderBuffers.Silhouette))
+            {
+                CreateDepthTexture(context);
+                _depthTexture.CopyFromFramebuffer();
+            }
+            else
+            {
+                DisposeDepth();
+            }
+
+            if ((buffers & TerrainRenderBuffers.Silhouette) == TerrainRenderBuffers.Silhouette)
+            {
+                CreateSilhouetteFramebuffer(context);
+
+                Framebuffer oldFramebuffer = context.Framebuffer;
+                //context.Framebuffer = _silhouetteFrameBuffer;
+
+                for (int i = maxLevel; i >= 0; --i)
+                {
+                    ClipmapLevel thisLevel = _clipmapLevels[i];
+                    ClipmapLevel coarserLevel = _clipmapLevels[i > 0 ? i - 1 : 0];
+                    RenderLevel(i, thisLevel, coarserLevel, (i == maxLevel), true, center, context, sceneState);
+                }
+
+                context.Framebuffer = oldFramebuffer;
+            }
+            else
+            {
+                DisposeSilhouette();
             }
 
             sceneState.Camera.Target = previousTarget;
@@ -401,7 +477,7 @@ namespace OpenGlobe.Scene
             sceneState.SunPosition = previousSun;
         }
 
-        private bool RenderLevel(int levelIndex, ClipmapLevel level, ClipmapLevel coarserLevel, bool fillRing, Vector2D center, Context context, SceneState sceneState)
+        private void RenderLevel(int levelIndex, ClipmapLevel level, ClipmapLevel coarserLevel, bool fillRing, bool renderSilhouette, Vector2D center, Context context, SceneState sceneState)
         {
             context.TextureUnits[0].Texture = level.HeightTexture;
             context.TextureUnits[0].TextureSampler = Device.TextureSamplers.NearestRepeat;
@@ -453,64 +529,65 @@ namespace OpenGlobe.Scene
             _useBlendRegions.Value = _blendRegionsEnabled && level != coarserLevel;
             _useBlendRegionsSilhouette.Value = _useBlendRegions.Value;
 
-            DrawBlock(_fillPatch, level, coarserLevel, west, south, west, south, context, sceneState);
-            DrawBlock(_fillPatch, level, coarserLevel, west, south, west + _fillPatchSegments, south, context, sceneState);
-            DrawBlock(_fillPatch, level, coarserLevel, west, south, east - 2 * _fillPatchSegments, south, context, sceneState);
-            DrawBlock(_fillPatch, level, coarserLevel, west, south, east - _fillPatchSegments, south, context, sceneState);
+            DrawBlock(_fillPatch, renderSilhouette, west, south, west, south, context, sceneState);
+            DrawBlock(_fillPatch, renderSilhouette, west, south, west + _fillPatchSegments, south, context, sceneState);
+            DrawBlock(_fillPatch, renderSilhouette, west, south, east - 2 * _fillPatchSegments, south, context, sceneState);
+            DrawBlock(_fillPatch, renderSilhouette, west, south, east - _fillPatchSegments, south, context, sceneState);
 
-            DrawBlock(_fillPatch, level, coarserLevel, west, south, west, south + _fillPatchSegments, context, sceneState);
-            DrawBlock(_fillPatch, level, coarserLevel, west, south, east - _fillPatchSegments, south + _fillPatchSegments, context, sceneState);
+            DrawBlock(_fillPatch, renderSilhouette, west, south, west, south + _fillPatchSegments, context, sceneState);
+            DrawBlock(_fillPatch, renderSilhouette, west, south, east - _fillPatchSegments, south + _fillPatchSegments, context, sceneState);
 
-            DrawBlock(_fillPatch, level, coarserLevel, west, south, west, north - 2 * _fillPatchSegments, context, sceneState);
-            DrawBlock(_fillPatch, level, coarserLevel, west, south, east - _fillPatchSegments, north - 2 * _fillPatchSegments, context, sceneState);
+            DrawBlock(_fillPatch, renderSilhouette, west, south, west, north - 2 * _fillPatchSegments, context, sceneState);
+            DrawBlock(_fillPatch, renderSilhouette, west, south, east - _fillPatchSegments, north - 2 * _fillPatchSegments, context, sceneState);
 
-            DrawBlock(_fillPatch, level, coarserLevel, west, south, west, north - _fillPatchSegments, context, sceneState);
-            DrawBlock(_fillPatch, level, coarserLevel, west, south, west + _fillPatchSegments, north - _fillPatchSegments, context, sceneState);
-            DrawBlock(_fillPatch, level, coarserLevel, west, south, east - 2 * _fillPatchSegments, north - _fillPatchSegments, context, sceneState);
-            DrawBlock(_fillPatch, level, coarserLevel, west, south, east - _fillPatchSegments, north - _fillPatchSegments, context, sceneState);
+            DrawBlock(_fillPatch, renderSilhouette, west, south, west, north - _fillPatchSegments, context, sceneState);
+            DrawBlock(_fillPatch, renderSilhouette, west, south, west + _fillPatchSegments, north - _fillPatchSegments, context, sceneState);
+            DrawBlock(_fillPatch, renderSilhouette, west, south, east - 2 * _fillPatchSegments, north - _fillPatchSegments, context, sceneState);
+            DrawBlock(_fillPatch, renderSilhouette, west, south, east - _fillPatchSegments, north - _fillPatchSegments, context, sceneState);
 
-            DrawBlock(_horizontalFixupPatch, level, coarserLevel, west, south, west, south + 2 * _fillPatchSegments, context, sceneState);
-            DrawBlock(_horizontalFixupPatch, level, coarserLevel, west, south, east - _fillPatchSegments, south + 2 * _fillPatchSegments, context, sceneState);
+            DrawBlock(_horizontalFixupPatch, renderSilhouette, west, south, west, south + 2 * _fillPatchSegments, context, sceneState);
+            DrawBlock(_horizontalFixupPatch, renderSilhouette, west, south, east - _fillPatchSegments, south + 2 * _fillPatchSegments, context, sceneState);
 
-            DrawBlock(_verticalFixupPatch, level, coarserLevel, west, south, west + 2 * _fillPatchSegments, south, context, sceneState);
-            DrawBlock(_verticalFixupPatch, level, coarserLevel, west, south, west + 2 * _fillPatchSegments, north - _fillPatchSegments, context, sceneState);
+            DrawBlock(_verticalFixupPatch, renderSilhouette, west, south, west + 2 * _fillPatchSegments, south, context, sceneState);
+            DrawBlock(_verticalFixupPatch, renderSilhouette, west, south, west + 2 * _fillPatchSegments, north - _fillPatchSegments, context, sceneState);
 
-            DrawBlock(_degenerateTrianglePatch, level, coarserLevel, west, south, west, south, context, sceneState);
+            if (!renderSilhouette)
+            {
+                DrawBlock(_degenerateTrianglePatch, renderSilhouette, west, south, west, south, context, sceneState);
+            }
 
             // Fill the center of the highest-detail ring
             if (fillRing)
             {
-                DrawBlock(_fillPatch, level, coarserLevel, west, south, west + _fillPatchSegments, south + _fillPatchSegments, context, sceneState);
-                DrawBlock(_fillPatch, level, coarserLevel, west, south, west + 2 * _fillPatchPosts, south + _fillPatchSegments, context, sceneState);
-                DrawBlock(_fillPatch, level, coarserLevel, west, south, west + _fillPatchSegments, south + 2 * _fillPatchPosts, context, sceneState);
-                DrawBlock(_fillPatch, level, coarserLevel, west, south, west + 2 * _fillPatchPosts, south + 2 * _fillPatchPosts, context, sceneState);
+                DrawBlock(_fillPatch, renderSilhouette, west, south, west + _fillPatchSegments, south + _fillPatchSegments, context, sceneState);
+                DrawBlock(_fillPatch, renderSilhouette, west, south, west + 2 * _fillPatchPosts, south + _fillPatchSegments, context, sceneState);
+                DrawBlock(_fillPatch, renderSilhouette, west, south, west + _fillPatchSegments, south + 2 * _fillPatchPosts, context, sceneState);
+                DrawBlock(_fillPatch, renderSilhouette, west, south, west + 2 * _fillPatchPosts, south + 2 * _fillPatchPosts, context, sceneState);
 
-                DrawBlock(_horizontalFixupPatch, level, coarserLevel, west, south, west + _fillPatchSegments, south + 2 * _fillPatchSegments, context, sceneState);
-                DrawBlock(_horizontalFixupPatch, level, coarserLevel, west, south, west + 2 * _fillPatchPosts, south + 2 * _fillPatchSegments, context, sceneState);
+                DrawBlock(_horizontalFixupPatch, renderSilhouette, west, south, west + _fillPatchSegments, south + 2 * _fillPatchSegments, context, sceneState);
+                DrawBlock(_horizontalFixupPatch, renderSilhouette, west, south, west + 2 * _fillPatchPosts, south + 2 * _fillPatchSegments, context, sceneState);
 
-                DrawBlock(_verticalFixupPatch, level, coarserLevel, west, south, west + 2 * _fillPatchSegments, south + _fillPatchSegments, context, sceneState);
-                DrawBlock(_verticalFixupPatch, level, coarserLevel, west, south, west + 2 * _fillPatchSegments, south + 2 * _fillPatchPosts, context, sceneState);
+                DrawBlock(_verticalFixupPatch, renderSilhouette, west, south, west + 2 * _fillPatchSegments, south + _fillPatchSegments, context, sceneState);
+                DrawBlock(_verticalFixupPatch, renderSilhouette, west, south, west + 2 * _fillPatchSegments, south + 2 * _fillPatchPosts, context, sceneState);
 
-                DrawBlock(_centerPatch, level, coarserLevel, west, south, west + 2 * _fillPatchSegments, south + 2 * _fillPatchSegments, context, sceneState);
+                DrawBlock(_centerPatch, renderSilhouette, west, south, west + 2 * _fillPatchSegments, south + 2 * _fillPatchSegments, context, sceneState);
             }
             else
             {
                 int offset = level.OffsetStripOnNorth
                                 ? north - _fillPatchPosts
                                 : south + _fillPatchSegments;
-                DrawBlock(_horizontalOffsetPatch, level, coarserLevel, west, south, west + _fillPatchSegments, offset, context, sceneState);
+                DrawBlock(_horizontalOffsetPatch, renderSilhouette, west, south, west + _fillPatchSegments, offset, context, sceneState);
 
                 int southOffset = level.OffsetStripOnNorth ? 0 : 1;
                 offset = level.OffsetStripOnEast
                                 ? east - _fillPatchPosts
                                 : west + _fillPatchSegments;
-                DrawBlock(_verticalOffsetPatch, level, coarserLevel, west, south, offset, south + _fillPatchSegments + southOffset, context, sceneState);
+                DrawBlock(_verticalOffsetPatch, renderSilhouette, west, south, offset, south + _fillPatchSegments + southOffset, context, sceneState);
             }
-
-            return true;
         }
 
-        private void DrawBlock(VertexArray block, ClipmapLevel level, ClipmapLevel coarserLevel, int overallWest, int overallSouth, int blockWest, int blockSouth, Context context, SceneState sceneState)
+        private void DrawBlock(VertexArray block, bool renderSilhouette, int overallWest, int overallSouth, int blockWest, int blockSouth, Context context, SceneState sceneState)
         {
             int textureWest = blockWest - overallWest;
             int textureSouth = blockSouth - overallSouth;
@@ -518,14 +595,48 @@ namespace OpenGlobe.Scene
             _patchOriginInClippedLevel.Value = new Vector2F(textureWest, textureSouth);
             _patchOriginInClippedLevelSilhouette.Value = _patchOriginInClippedLevel.Value;
 
-            DrawState drawState = new DrawState(_renderState, _shaderProgram, block);
-            //DrawState drawState = new DrawState(_renderStateSilhouette, _shaderProgramSilhouette, block);
+            DrawState drawState = null;
+            if (!renderSilhouette)
+            {
+                drawState = new DrawState(_renderState, _shaderProgram, block);
+            }
+            else
+            {
+                drawState = new DrawState(_renderStateSilhouette, _shaderProgramSilhouette, block);
+            }
             context.Draw(_primitiveType, drawState, sceneState);
         }
 
         public void Dispose()
         {
             _shaderProgramSilhouette.Dispose();
+
+            DisposeDepth();
+            DisposeSilhouette();
+        }
+
+        private void DisposeDepth()
+        {
+            if (_depthTexture != null)
+            {
+                _depthTexture.Dispose();
+                _depthTexture = null;
+            }
+        }
+
+        private void DisposeSilhouette()
+        {
+            if (_silhouetteTexture != null)
+            {
+                _silhouetteTexture.Dispose();
+                _silhouetteTexture = null;
+            }
+
+            if (_silhouetteFrameBuffer != null)
+            {
+                _silhouetteFrameBuffer.Dispose();
+                _silhouetteFrameBuffer = null;
+            }
         }
 
         private Mesh CreateDegenerateTriangleMesh()
@@ -630,30 +741,34 @@ namespace OpenGlobe.Scene
         private VertexArray _centerPatch;
         private VertexArray _degenerateTrianglePatch;
 
-        private Uniform<Vector2F> _patchOriginInClippedLevel;
-        private Uniform<Vector2F> _levelScaleFactor;
-        private Uniform<Vector2F> _levelZeroWorldScaleFactor;
-        private Uniform<Vector2F> _levelOffsetFromWorldOrigin;
-        private Uniform<float> _heightExaggeration;
-        private Uniform<Vector2F> _fineLevelOriginInCoarse;
-        private Uniform<Vector2F> _viewPosInClippedLevel;
-        private Uniform<Vector2F> _fineTextureOrigin;
-        private Uniform<bool> _showBlendRegions;
-        private Uniform<bool> _useBlendRegions;
-        private Uniform<Vector3F> _color;
-        private Uniform<Vector3F> _blendRegionColor;
+        private readonly Uniform<Vector2F> _patchOriginInClippedLevel;
+        private readonly Uniform<Vector2F> _levelScaleFactor;
+        private readonly Uniform<Vector2F> _levelZeroWorldScaleFactor;
+        private readonly Uniform<Vector2F> _levelOffsetFromWorldOrigin;
+        private readonly Uniform<float> _heightExaggeration;
+        private readonly Uniform<Vector2F> _fineLevelOriginInCoarse;
+        private readonly Uniform<Vector2F> _viewPosInClippedLevel;
+        private readonly Uniform<Vector2F> _fineTextureOrigin;
+        private readonly Uniform<bool> _showBlendRegions;
+        private readonly Uniform<bool> _useBlendRegions;
+        private readonly Uniform<Vector3F> _color;
+        private readonly Uniform<Vector3F> _blendRegionColor;
 
-        private ShaderProgram _shaderProgramSilhouette;
-        private Uniform<Vector2F> _patchOriginInClippedLevelSilhouette;
-        private Uniform<Vector2F> _levelScaleFactorSilhouette;
-        private Uniform<Vector2F> _levelZeroWorldScaleFactorSilhouette;
-        private Uniform<Vector2F> _levelOffsetFromWorldOriginSilhouette;
-        private Uniform<float> _heightExaggerationSilhouette;
-        private Uniform<Vector2F> _fineLevelOriginInCoarseSilhouette;
-        private Uniform<Vector2F> _viewPosInClippedLevelSilhouette;
-        private Uniform<Vector2F> _fineTextureOriginSilhouette;
-        private Uniform<bool> _useBlendRegionsSilhouette;
-        private RenderState _renderStateSilhouette;
+        private readonly ShaderProgram _shaderProgramSilhouette;
+        private readonly Uniform<Vector2F> _patchOriginInClippedLevelSilhouette;
+        private readonly Uniform<Vector2F> _levelScaleFactorSilhouette;
+        private readonly Uniform<Vector2F> _levelZeroWorldScaleFactorSilhouette;
+        private readonly Uniform<Vector2F> _levelOffsetFromWorldOriginSilhouette;
+        private readonly Uniform<float> _heightExaggerationSilhouette;
+        private readonly Uniform<Vector2F> _fineLevelOriginInCoarseSilhouette;
+        private readonly Uniform<Vector2F> _viewPosInClippedLevelSilhouette;
+        private readonly Uniform<Vector2F> _fineTextureOriginSilhouette;
+        private readonly Uniform<bool> _useBlendRegionsSilhouette;
+        private readonly RenderState _renderStateSilhouette;
+
+        private Texture2D _silhouetteTexture;
+        private Texture2D _depthTexture;
+        private Framebuffer _silhouetteFrameBuffer;
 
         private bool _wireframe;
         private bool _blendRegionsEnabled = true;

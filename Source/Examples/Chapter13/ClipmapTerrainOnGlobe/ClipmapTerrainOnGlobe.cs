@@ -142,7 +142,7 @@ namespace OpenGlobe.Examples
                 _camera.ViewPoint(_ellipsoid, halfDome);
                 _camera.Azimuth = 0.0;
                 _camera.Elevation = Trig.ToRadians(30.0);
-                _camera.Range = 0.005;
+                _camera.Range = 100000.0; // 0.005;
             }
             else if (e.Key == KeyboardKey.F)
             {
@@ -161,7 +161,7 @@ namespace OpenGlobe.Examples
 
             context.Clear(_clearDepth);
 
-            _clipmap.Render(context, _sceneState);
+            _clipmap.Render(context, _sceneState, TerrainRenderBuffers.Color);
 
             if (_hud != null)
             {
