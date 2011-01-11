@@ -123,29 +123,9 @@ namespace OpenGlobe.Scene
 
             ///////////////////////////////////////////////////////////////////
 
-            _shaderProgramSilhouette = Device.CreateShaderProgram(
-                EmbeddedResources.GetText("OpenGlobe.Scene.Terrain.ClipmapTerrain.GlobeClipmapVS.glsl"),
-                EmbeddedResources.GetText("OpenGlobe.Scene.Terrain.TriangleMeshTerrainTile.SilhouetteGS.glsl"),
-                EmbeddedResources.GetText("OpenGlobe.Scene.Terrain.TriangleMeshTerrainTile.SilhouetteFS.glsl"));
-
-            ((Uniform<float>)_shaderProgramSilhouette.Uniforms["u_fillDistance"]).Value = 1.5f;
-            ((Uniform<Vector3F>)_shaderProgramSilhouette.Uniforms["u_globeRadiiSquared"]).Value = ellipsoid.RadiiSquared.ToVector3F();
-            ((Uniform<float>)_shaderProgramSilhouette.Uniforms["u_oneOverClipmapSize"]).Value = 1.0f / clipmapPosts;
-            ((Uniform<Vector2F>)_shaderProgramSilhouette.Uniforms["u_unblendedRegionSize"]).Value = new Vector2F((float)(_clipmapSegments / 2 - _clipmapPosts / 10.0 - 1));
-            ((Uniform<Vector2F>)_shaderProgramSilhouette.Uniforms["u_oneOverBlendedRegionSize"]).Value = new Vector2F((float)(10.0 / _clipmapPosts));
-            _patchOriginInClippedLevelSilhouette = (Uniform<Vector2F>)_shaderProgramSilhouette.Uniforms["u_patchOriginInClippedLevel"];
-            _levelScaleFactorSilhouette = (Uniform<Vector2F>)_shaderProgramSilhouette.Uniforms["u_levelScaleFactor"];
-            _levelZeroWorldScaleFactorSilhouette = (Uniform<Vector2F>)_shaderProgramSilhouette.Uniforms["u_levelZeroWorldScaleFactor"];
-            _levelOffsetFromWorldOriginSilhouette = (Uniform<Vector2F>)_shaderProgramSilhouette.Uniforms["u_levelOffsetFromWorldOrigin"];
-            _heightExaggerationSilhouette = (Uniform<float>)_shaderProgramSilhouette.Uniforms["u_heightExaggeration"];
-            _viewPosInClippedLevelSilhouette = (Uniform<Vector2F>)_shaderProgramSilhouette.Uniforms["u_viewPosInClippedLevel"];
-            _fineLevelOriginInCoarseSilhouette = (Uniform<Vector2F>)_shaderProgramSilhouette.Uniforms["u_fineLevelOriginInCoarse"];
-            _fineTextureOriginSilhouette = (Uniform<Vector2F>)_shaderProgramSilhouette.Uniforms["u_fineTextureOrigin"];
-            _useBlendRegionsSilhouette = (Uniform<bool>)_shaderProgramSilhouette.Uniforms["u_useBlendRegions"];
-            
-            _useBlendRegionsSilhouette.Value = true;
-
             _renderStateSilhouette = new RenderState();
+            _renderStateSilhouette.LineWidth = 3.0f;
+            _renderStateSilhouette.RasterizationMode = RasterizationMode.Line;
             _renderStateSilhouette.FacetCulling.FrontFaceWindingOrder = fieldBlockMesh.FrontFaceWindingOrder;
             _renderStateSilhouette.FacetCulling.Face = CullFace.Front;
             _renderStateSilhouette.DepthMask = false;
@@ -181,7 +161,6 @@ namespace OpenGlobe.Scene
             set
             {
                 _heightExaggeration.Value = value;
-                _heightExaggerationSilhouette.Value = _heightExaggeration.Value;
                 _updater.HeightExaggeration = 0.00001f; // value;
             }
         }
@@ -408,7 +387,6 @@ namespace OpenGlobe.Scene
             //sceneState.SunPosition -= toSubtract;
 
             _levelZeroWorldScaleFactor.Value = new Vector2F((float)_clipmapLevels[0].Terrain.PostDeltaLongitude, (float)_clipmapLevels[0].Terrain.PostDeltaLatitude);
-            _levelZeroWorldScaleFactorSilhouette.Value = _levelZeroWorldScaleFactor.Value;
 
             int maxLevel = _clipmapLevels.Length - 1;
 
@@ -462,19 +440,12 @@ namespace OpenGlobe.Scene
                 context.Framebuffer = _silhouetteFrameBuffer;
                 context.Clear(_clearColor);
 
-                Device.Hack();
-                _renderState.RasterizationMode = RasterizationMode.Line;
-                _renderState.FacetCulling.Face = CullFace.Front;
-
                 for (int i = maxLevel; i >= 0; --i)
                 {
                     ClipmapLevel thisLevel = _clipmapLevels[i];
                     ClipmapLevel coarserLevel = _clipmapLevels[i > 0 ? i - 1 : 0];
                     RenderLevel(i, thisLevel, coarserLevel, (i == maxLevel), true, center, context, sceneState);
                 }
-
-                _renderState.FacetCulling.Face = CullFace.Back;
-                _renderState.RasterizationMode = RasterizationMode.Fill;
 
                 context.Framebuffer = oldFramebuffer;
             }
@@ -517,28 +488,22 @@ namespace OpenGlobe.Scene
 
             float levelScaleFactor = (float)Math.Pow(2.0, -levelIndex);
             _levelScaleFactor.Value = new Vector2F(levelScaleFactor, levelScaleFactor);
-            _levelScaleFactorSilhouette.Value = _levelScaleFactor.Value;
 
             _levelOffsetFromWorldOrigin.Value = new Vector2F((float)((double)level.CurrentExtent.West - level.Terrain.LongitudeToIndex(0.0)),
                                                              (float)((double)level.CurrentExtent.South - level.Terrain.LatitudeToIndex(0.0)));
-            _levelOffsetFromWorldOriginSilhouette.Value = _levelOffsetFromWorldOrigin.Value;
 
             int coarserWest = coarserLevel.CurrentExtent.West;
             int coarserSouth = coarserLevel.CurrentExtent.South;
             _fineLevelOriginInCoarse.Value = coarserLevel.OriginInTextures.ToVector2F() +
                                              new Vector2F(west / 2 - coarserWest + 0.5f,
                                                           south / 2 - coarserSouth + 0.5f);
-            _fineLevelOriginInCoarseSilhouette.Value = _fineLevelOriginInCoarse.Value;
 
             _viewPosInClippedLevel.Value = new Vector2F((float)(level.Terrain.LongitudeToIndex(Trig.ToDegrees(_clipmapCenter.Longitude)) - level.CurrentExtent.West),
                                                         (float)(level.Terrain.LatitudeToIndex(Trig.ToDegrees(_clipmapCenter.Latitude)) - level.CurrentExtent.South));
-            _viewPosInClippedLevelSilhouette.Value = _viewPosInClippedLevel.Value;
 
             _fineTextureOrigin.Value = level.OriginInTextures.ToVector2F() + new Vector2F(0.5f, 0.5f);
-            _fineTextureOriginSilhouette.Value = _fineTextureOrigin.Value;
 
             _useBlendRegions.Value = _blendRegionsEnabled && level != coarserLevel;
-            _useBlendRegionsSilhouette.Value = _useBlendRegions.Value;
 
             DrawBlock(_fillPatch, renderSilhouette, west, south, west, south, context, sceneState);
             DrawBlock(_fillPatch, renderSilhouette, west, south, west + _fillPatchSegments, south, context, sceneState);
@@ -604,24 +569,21 @@ namespace OpenGlobe.Scene
             int textureSouth = blockSouth - overallSouth;
 
             _patchOriginInClippedLevel.Value = new Vector2F(textureWest, textureSouth);
-            _patchOriginInClippedLevelSilhouette.Value = _patchOriginInClippedLevel.Value;
 
             DrawState drawState = null;
-            //if (!renderSilhouette)
-            //{
+            if (!renderSilhouette)
+            {
                 drawState = new DrawState(_renderState, _shaderProgram, block);
-            //}
-            //else
-            //{
-            //    drawState = new DrawState(_renderStateSilhouette, _shaderProgramSilhouette, block);
-            //}
+            }
+            else
+            {
+                drawState = new DrawState(_renderStateSilhouette, _shaderProgram, block);
+            }
             context.Draw(_primitiveType, drawState, sceneState);
         }
 
         public void Dispose()
         {
-            _shaderProgramSilhouette.Dispose();
-
             DisposeDepth();
             DisposeSilhouette();
         }
@@ -767,16 +729,6 @@ namespace OpenGlobe.Scene
         private readonly Uniform<Vector3F> _color;
         private readonly Uniform<Vector3F> _blendRegionColor;
 
-        private readonly ShaderProgram _shaderProgramSilhouette;
-        private readonly Uniform<Vector2F> _patchOriginInClippedLevelSilhouette;
-        private readonly Uniform<Vector2F> _levelScaleFactorSilhouette;
-        private readonly Uniform<Vector2F> _levelZeroWorldScaleFactorSilhouette;
-        private readonly Uniform<Vector2F> _levelOffsetFromWorldOriginSilhouette;
-        private readonly Uniform<float> _heightExaggerationSilhouette;
-        private readonly Uniform<Vector2F> _fineLevelOriginInCoarseSilhouette;
-        private readonly Uniform<Vector2F> _viewPosInClippedLevelSilhouette;
-        private readonly Uniform<Vector2F> _fineTextureOriginSilhouette;
-        private readonly Uniform<bool> _useBlendRegionsSilhouette;
         private readonly RenderState _renderStateSilhouette;
 
         private Texture2D _silhouetteTexture;

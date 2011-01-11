@@ -19,7 +19,7 @@ namespace OpenGlobe.Examples
     {
         public LinesOnGlobe()
         {
-            _window = Device.CreateWindow(800, 600, "Research:  Lines on Globe");
+            _window = Device.CreateWindow(800, 600, "Research:  Lines on Globe", WindowType.Default, false);
 
             //_ellipsoid = Ellipsoid.ScaledWgs84;
             _ellipsoid = Ellipsoid.Wgs84;

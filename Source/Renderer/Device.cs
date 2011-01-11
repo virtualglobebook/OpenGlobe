@@ -27,11 +27,6 @@ namespace OpenGlobe.Renderer
 
     public static class Device
     {
-        public static void Hack()
-        {
-            GL.LineWidth(3.0f);
-        }
-
         static Device()
         {
             using (GraphicsWindow window = CreateWindow(1, 1))
@@ -111,12 +106,17 @@ namespace OpenGlobe.Renderer
 
         public static GraphicsWindow CreateWindow(int width, int height, string title)
         {
-            return CreateWindow(width, height, title, WindowType.Default);
+            return new GraphicsWindowGL3x(width, height, title, WindowType.Default, true);
         }
 
         public static GraphicsWindow CreateWindow(int width, int height, string title, WindowType windowType)
         {
-            return new GraphicsWindowGL3x(width, height, title, windowType);
+            return new GraphicsWindowGL3x(width, height, title, windowType, true);
+        }
+
+        public static GraphicsWindow CreateWindow(int width, int height, string title, WindowType windowType, bool coreProfile)
+        {
+            return new GraphicsWindowGL3x(width, height, title, windowType, coreProfile);
         }
 
         public static ShaderProgram CreateShaderProgram(

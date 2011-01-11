@@ -18,7 +18,7 @@ namespace OpenGlobe.Renderer.GL3x
 {
     internal class ContextGL3x : Context
     {
-        public ContextGL3x(GameWindow gameWindow, int width, int height)
+        public ContextGL3x(GameWindow gameWindow, int width, int height, bool coreProfile)
         {
             Vector4 clearColor = new Vector4();
             GL.GetFloat(GetPName.DepthClearValue, out _clearDepth);
@@ -33,18 +33,19 @@ namespace OpenGlobe.Renderer.GL3x
             _renderState = new RenderState();
             _textureUnits = new TextureUnitsGL3x();
 
+            _gameWindow = gameWindow;
+            _coreProfile = coreProfile;
+
             //
             // Sync GL state with default render state.
             //
             ForceApplyRenderState(_renderState);
-
             Viewport = new Rectangle(0, 0, width, height);
-            _gameWindow = gameWindow;
         }
 
         #region ForceApplyRenderState
 
-        private static void ForceApplyRenderState(RenderState renderState)
+        private void ForceApplyRenderState(RenderState renderState)
         {
             Enable(EnableCap.PrimitiveRestart, renderState.PrimitiveRestart.Enabled);
             GL.PrimitiveRestartIndex(renderState.PrimitiveRestart.Index);
@@ -56,6 +57,12 @@ namespace OpenGlobe.Renderer.GL3x
             GL.FrontFace(TypeConverterGL3x.To(renderState.FacetCulling.FrontFaceWindingOrder));
 
             Enable(EnableCap.ProgramPointSize, renderState.ProgramPointSize == ProgramPointSize.Enabled);
+
+            if (!_coreProfile)
+            {
+                GL.LineWidth(renderState.LineWidth);
+            }
+
             GL.PolygonMode(MaterialFace.FrontAndBack, TypeConverterGL3x.To(renderState.RasterizationMode));
 
             Enable(EnableCap.RasterizerDiscard, !renderState.Rasterizer);
@@ -370,6 +377,22 @@ namespace OpenGlobe.Renderer.GL3x
             }
         }
 
+        private void ApplyLineWidth(float lineWidth)
+        {
+            if (_renderState.LineWidth != lineWidth)
+            {
+                if (!_coreProfile)
+                {
+                    GL.LineWidth(lineWidth);
+                    _renderState.LineWidth = lineWidth;
+                }
+                else
+                {
+                    throw new InvalidOperationException("The OpenGL core profile only supports a line width of one.");
+                }
+            }
+        }
+
         private void ApplyRasterizationMode(RasterizationMode rasterizationMode)
         {
             if (_renderState.RasterizationMode != rasterizationMode)
@@ -642,6 +665,7 @@ namespace OpenGlobe.Renderer.GL3x
             ApplyFacetCulling(renderState.FacetCulling);
             ApplyDepthClamp(renderState.DepthClamp);
             ApplyProgramPointSize(renderState.ProgramPointSize);
+            ApplyLineWidth(renderState.LineWidth);
             ApplyRasterizer(renderState.Rasterizer);
             ApplyRasterizationMode(renderState.RasterizationMode);
             ApplyScissorTest(renderState.ScissorTest);
@@ -729,5 +753,6 @@ namespace OpenGlobe.Renderer.GL3x
         private TextureUnitsGL3x _textureUnits;
 
         private GameWindow _gameWindow;
+        private bool _coreProfile;
     }
 }

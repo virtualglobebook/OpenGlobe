@@ -15,7 +15,7 @@ namespace OpenGlobe.Renderer.GL3x
 {
     internal class GraphicsWindowGL3x : GraphicsWindow
     {
-        public GraphicsWindowGL3x(int width, int height, string title, WindowType windowType)
+        public GraphicsWindowGL3x(int width, int height, string title, WindowType windowType, bool coreProfile)
         {
             if (width < 0)
             {
@@ -33,9 +33,20 @@ namespace OpenGlobe.Renderer.GL3x
                 width = DisplayDevice.Default.Width;
                 height = DisplayDevice.Default.Height;
             }
-            
+
+            GraphicsContextFlags flags = GraphicsContextFlags.Default;
+
+#if DEBUG
+            flags |= GraphicsContextFlags.Debug;
+#endif
+
+            if (coreProfile)
+            {
+                flags |= GraphicsContextFlags.ForwardCompatible;
+            }
+
             _gameWindow = new GameWindow(width, height, new GraphicsMode(24, 24, 8), title, gameWindowFlags,
-                DisplayDevice.Default, 3, 3, /* GraphicsContextFlags.ForwardCompatible | */ GraphicsContextFlags.Debug);
+                DisplayDevice.Default, 3, 3, flags);
 
             FinalizerThreadContextGL3x.Initialize();
             _gameWindow.MakeCurrent();
@@ -44,7 +55,7 @@ namespace OpenGlobe.Renderer.GL3x
             _gameWindow.UpdateFrame += new EventHandler<FrameEventArgs>(this.OnUpdateFrame);
             _gameWindow.RenderFrame += new EventHandler<FrameEventArgs>(this.OnRenderFrame);
 
-            _context = new ContextGL3x(_gameWindow, width, height);
+            _context = new ContextGL3x(_gameWindow, width, height, coreProfile);
 
             _mouse = new MouseGL3x(_gameWindow.Mouse);
             _keyboard = new KeyboardGL3x(_gameWindow.Keyboard);
