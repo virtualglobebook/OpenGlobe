@@ -27,6 +27,11 @@ namespace OpenGlobe.Renderer
 
     public static class Device
     {
+        public static void Hack()
+        {
+            GL.LineWidth(3.0f);
+        }
+
         static Device()
         {
             using (GraphicsWindow window = CreateWindow(1, 1))

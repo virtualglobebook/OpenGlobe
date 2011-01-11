@@ -462,13 +462,20 @@ namespace OpenGlobe.Scene
                 context.Framebuffer = _silhouetteFrameBuffer;
                 context.Clear(_clearColor);
 
+                Device.Hack();
+                _renderState.RasterizationMode = RasterizationMode.Line;
+                _renderState.FacetCulling.Face = CullFace.Front;
+
                 for (int i = maxLevel; i >= 0; --i)
                 {
                     ClipmapLevel thisLevel = _clipmapLevels[i];
                     ClipmapLevel coarserLevel = _clipmapLevels[i > 0 ? i - 1 : 0];
                     RenderLevel(i, thisLevel, coarserLevel, (i == maxLevel), true, center, context, sceneState);
                 }
-                 
+
+                _renderState.FacetCulling.Face = CullFace.Back;
+                _renderState.RasterizationMode = RasterizationMode.Fill;
+
                 context.Framebuffer = oldFramebuffer;
             }
             else
@@ -600,14 +607,14 @@ namespace OpenGlobe.Scene
             _patchOriginInClippedLevelSilhouette.Value = _patchOriginInClippedLevel.Value;
 
             DrawState drawState = null;
-            if (!renderSilhouette)
-            {
+            //if (!renderSilhouette)
+            //{
                 drawState = new DrawState(_renderState, _shaderProgram, block);
-            }
-            else
-            {
-                drawState = new DrawState(_renderStateSilhouette, _shaderProgramSilhouette, block);
-            }
+            //}
+            //else
+            //{
+            //    drawState = new DrawState(_renderStateSilhouette, _shaderProgramSilhouette, block);
+            //}
             context.Draw(_primitiveType, drawState, sceneState);
         }
 

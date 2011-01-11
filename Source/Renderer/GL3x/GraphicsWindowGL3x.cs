@@ -35,7 +35,7 @@ namespace OpenGlobe.Renderer.GL3x
             }
             
             _gameWindow = new GameWindow(width, height, new GraphicsMode(24, 24, 8), title, gameWindowFlags,
-                DisplayDevice.Default, 3, 3, GraphicsContextFlags.ForwardCompatible | GraphicsContextFlags.Debug);
+                DisplayDevice.Default, 3, 3, /* GraphicsContextFlags.ForwardCompatible | */ GraphicsContextFlags.Debug);
 
             FinalizerThreadContextGL3x.Initialize();
             _gameWindow.MakeCurrent();

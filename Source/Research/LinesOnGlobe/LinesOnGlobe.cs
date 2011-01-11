@@ -109,6 +109,8 @@ namespace OpenGlobe.Examples
                 }";
 
             _viewportQuad = new ViewportQuad(_window.Context, fs);
+
+            new PerformanceCountersDisplay(_window, _sceneState);
         }
 
         private void OnResize()
