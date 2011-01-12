@@ -509,15 +509,6 @@ namespace OpenGlobe.Scene
 
         private List<TileLoadRequest> _currentRequests = new List<TileLoadRequest>();
 
-        /// <summary>
-        /// Invoked in the <see cref="_requestQueue"/> thread when a tile load request is received.
-        /// </summary>
-        private void TileLoadRequestReceived(object sender, MessageQueueEventArgs e)
-        {
-            TileLoadRequest request = (TileLoadRequest)e.Message;
-            _currentRequests.Add(request);
-        }
-
         private void RequestThreadEntryPoint()
         {
             _workerWindow.Context.MakeCurrent();
