@@ -126,8 +126,6 @@ namespace OpenGlobe.Examples
                 _camera.Azimuth = 0.0;
                 _camera.Elevation = Trig.ToRadians(30.0);
                 _camera.Range = 10000.0;
-                _camera.RotateRateRangeAdjustment = 0.0;
-                _camera.RotateFactor *= 1000.0;
             }
             else if (e.Key == KeyboardKey.F)
             {
