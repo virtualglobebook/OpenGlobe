@@ -9,6 +9,7 @@
 
 using System;
 using System.Globalization;
+using System.Diagnostics;
 using OpenTK.Graphics.OpenGL;
 using OpenGlobe.Core;
 
@@ -83,8 +84,7 @@ namespace OpenGlobe.Renderer.GL3x
 
             if (compileStatus == 0)
             {
-                Console.WriteLine(sources[0]);
-                Console.WriteLine(sources[1]);
+                Debug.WriteLine("Could not compile shader object.  Compile Log:  \n\n" + CompileLog);
                 throw new CouldNotCreateVideoCardResourceException("Could not compile shader object.  Compile Log:  \n\n" + CompileLog);
             }
         }

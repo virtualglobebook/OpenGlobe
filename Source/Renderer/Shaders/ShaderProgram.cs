@@ -22,6 +22,17 @@ namespace OpenGlobe.Renderer
         public abstract UniformCollection Uniforms { get; }
         public abstract UniformBlockCollection UniformBlocks { get; }
 
+        public virtual void StartWatch(string vertexShaderFilePath, string fragmentShaderFilePath)
+        {
+            StartWatch(vertexShaderFilePath, string.Empty, fragmentShaderFilePath);
+        }
+
+        public abstract void StartWatch(
+            string vertexShaderFilePath,
+            string geometryShaderFilePath,
+            string fragmentShaderFilePath);
+        public abstract void StopWatch();
+
         protected void InitializeAutomaticUniforms(UniformCollection uniforms)
         {
             foreach (Uniform uniform in uniforms)

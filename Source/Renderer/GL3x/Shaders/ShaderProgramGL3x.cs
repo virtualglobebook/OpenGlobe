@@ -10,6 +10,8 @@
 using System;
 using System.Text;
 using System.Collections.Generic;
+using System.IO;
+using System.Diagnostics;
 using OpenGlobe.Core;
 using OpenTK.Graphics.OpenGL;
 
@@ -31,13 +33,13 @@ namespace OpenGlobe.Renderer.GL3x
             // Shader objects are disposed so they are marked for deletion
             // in GL, and will be deleted when the shader program is.
             //
+            bool hasGS = (geometryShaderSource != string.Empty);
             using (ShaderObjectGL3x vertexShader = new ShaderObjectGL3x(ShaderType.VertexShader, vertexShaderSource))
-            using (ShaderObjectGL3x geometryShader = (geometryShaderSource.Length > 0) ?
-                new ShaderObjectGL3x(ShaderType.GeometryShaderExt, geometryShaderSource) : null)
+            using (ShaderObjectGL3x geometryShader = hasGS ? new ShaderObjectGL3x(ShaderType.GeometryShaderExt, geometryShaderSource) : null)
             using (ShaderObjectGL3x fragmentShader = new ShaderObjectGL3x(ShaderType.FragmentShader, fragmentShaderSource))
             {
                 GL.AttachShader(programHandle, vertexShader.Handle);
-                if (geometryShaderSource.Length > 0)
+                if (hasGS)
                 {
                     GL.AttachShader(programHandle, geometryShader.Handle);
                 }
@@ -429,9 +431,10 @@ namespace OpenGlobe.Renderer.GL3x
 
         internal void Bind()
         {
+            Rebuild();
             GL.UseProgram(_program.Value);
         }
-
+        
         internal void Clean(Context context, DrawState drawState, SceneState sceneState)
         {
             SetDrawAutomaticUniforms(context, drawState, sceneState);
@@ -441,6 +444,88 @@ namespace OpenGlobe.Renderer.GL3x
                 _dirtyUniforms[i].Clean();
             }
             _dirtyUniforms.Clear();
+        }
+
+        private void ShaderChanged()
+        {
+            _shaderChanged = true;
+        }
+
+        private void Rebuild()
+        {
+            //
+            // Recompile and link if a shader's source file changed.
+            //
+            // This makes the huge assumption that the uniform locations,
+            // attribute locations, etc. did not change, nor were any
+            // uniforms added or removed.  In time, we may relax these
+            // assumptions.
+            //
+            if (_shaderChanged)
+            {
+                _shaderChanged = false;
+
+                ShaderProgramNameGL3x program = null;
+                try
+                {
+                    program = new ShaderProgramNameGL3x();
+                    int programHandle = program.Value;
+
+                    bool hasGS = (_watch.GeometryShaderFilePath != string.Empty);
+                    string vs = File.ReadAllText(_watch.VertexShaderFilePath);
+                    string gs = hasGS ? File.ReadAllText(_watch.GeometryShaderFilePath) : string.Empty;
+                    string fs = File.ReadAllText(_watch.FragmentShaderFilePath);
+
+                    using (ShaderObjectGL3x vertexShader = new ShaderObjectGL3x(ShaderType.VertexShader, vs))
+                    using (ShaderObjectGL3x geometryShader = hasGS ? new ShaderObjectGL3x(ShaderType.GeometryShaderExt, gs) : null)
+                    using (ShaderObjectGL3x fragmentShader = new ShaderObjectGL3x(ShaderType.FragmentShader, fs))
+                    {
+                        GL.AttachShader(programHandle, vertexShader.Handle);
+                        if (hasGS)
+                        {
+                            GL.AttachShader(programHandle, geometryShader.Handle);
+                        }
+                        GL.AttachShader(programHandle, fragmentShader.Handle);
+                    }
+
+                    GL.LinkProgram(programHandle);
+
+                    int linkStatus;
+                    GL.GetProgram(programHandle, ProgramParameter.LinkStatus, out linkStatus);
+
+                    if (linkStatus == 0)
+                    {
+                        Debug.WriteLine("Could not link shader program.  Link Log:  \n\n" + ProgramInfoLog);
+                        throw new Exception();
+                    }
+
+                    _program.Dispose();
+                    _program = program;
+
+                    //
+                    // All uniforms are now dirty.  To keep everything consistent, 
+                    // we should also set their private dirty flag to true, but that is a pain.
+                    //
+                    _dirtyUniforms.Clear();
+                    for (int i = 0; i < _uniforms.Count; ++i)
+                    {
+                        _dirtyUniforms.Add(_uniforms[i] as ICleanable);
+                    }
+                }
+                catch
+                {
+                    //
+                    // Shader program failed to compile/link.  See
+                    // Debug Output window for details.
+                    //
+                    Debugger.Break();
+
+                    if (program != null)
+                    {
+                        program.Dispose();
+                    }
+                }
+            }
         }
 
         private string ProgramInfoLog
@@ -484,6 +569,28 @@ namespace OpenGlobe.Renderer.GL3x
         {
             get { return _uniformBlocks; }
         }
+        
+        public override void StartWatch(
+            string vertexShaderFilePath,
+            string geometryShaderFilePath,
+            string fragmentShaderFilePath)
+        {
+            StopWatch();
+            _watch = new ShaderWatch(
+                vertexShaderFilePath,
+                geometryShaderFilePath,
+                fragmentShaderFilePath,
+                ShaderChanged);
+        }
+
+        public override void StopWatch()
+        {
+            if (_watch != null)
+            {
+                _watch.Dispose();
+                _watch = null;
+            }
+        }
 
         #endregion
 
@@ -506,13 +613,18 @@ namespace OpenGlobe.Renderer.GL3x
                 {
                     _program.Dispose();
                 }
+
+                if (_watch != null)
+                {
+                    _watch.Dispose();
+                }
             }
             base.Dispose(disposing);
         }
 
         #endregion
 
-        private readonly ShaderProgramNameGL3x _program;
+        private ShaderProgramNameGL3x _program;
         private readonly TransformFeedbackOutputCollection _transformFeedbackOutputs;
         private readonly TransformFeedbackAttributeLayout _transformFeedbackAttributeLayout;
         private readonly FragmentOutputsGL3x _fragmentOutputs;
@@ -520,5 +632,8 @@ namespace OpenGlobe.Renderer.GL3x
         private readonly IList<ICleanable> _dirtyUniforms;
         private readonly UniformCollection _uniforms;
         private readonly UniformBlockCollection _uniformBlocks;
+
+        private ShaderWatch _watch;
+        private bool _shaderChanged;
     }
 }
