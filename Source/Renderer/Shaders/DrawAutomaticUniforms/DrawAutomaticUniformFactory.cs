@@ -12,6 +12,7 @@ namespace OpenGlobe.Renderer
     public abstract class DrawAutomaticUniformFactory
     {
         public abstract string Name { get; }
+        public abstract UniformType Datatype { get; }
         public abstract DrawAutomaticUniform Create(Uniform uniform);
     }
 }

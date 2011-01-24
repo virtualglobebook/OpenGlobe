@@ -16,10 +16,8 @@ in float fsDistanceToEye;
 
 out vec3 fragmentColor;
 
-uniform vec4 og_diffuseSpecularAmbientShininess;
-uniform sampler2D og_texture2;    // finer normal map
-uniform sampler2D og_texture3;    // coarser normal map
-uniform float og_highResolutionSnapScale;
+// og_texture2 - finer normal map
+// og_texture3 - coarser normal map
 
 uniform bool u_showBlendRegions;
 uniform vec3 u_color;

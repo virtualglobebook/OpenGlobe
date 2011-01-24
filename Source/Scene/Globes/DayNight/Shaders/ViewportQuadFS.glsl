@@ -10,9 +10,9 @@ in vec2 fsTextureCoordinates;
 
 out vec4 fragmentColor;
 
-uniform sampler2D og_texture0;    // Day
-uniform sampler2D og_texture1;    // Night
-uniform sampler2D og_texture2;    // Blend
+// og_texture0 - Day
+// og_texture1 - Night
+// og_texture2 - Blend
 uniform int u_DayNightOutput;
 
 void main()

@@ -18,6 +18,11 @@ namespace OpenGlobe.Renderer
             get { return "og_viewport"; }
         }
 
+        public override UniformType Datatype
+        {
+            get { return UniformType.FloatVector4; }
+        }
+
         public override DrawAutomaticUniform Create(Uniform uniform)
         {
             return new ViewportUniform(uniform);

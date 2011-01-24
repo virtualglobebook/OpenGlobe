@@ -14,10 +14,6 @@ in vec4 gsOutlineColor[];
 
 flat out vec4 fsColor;
 
-uniform mat4 og_modelViewPerspectiveMatrix;
-uniform mat4 og_viewportTransformationMatrix;
-uniform mat4 og_viewportOrthographicMatrix;
-uniform float og_perspectiveNearPlaneDistance;
 uniform float u_fillDistance;
 uniform float u_outlineDistance;
 

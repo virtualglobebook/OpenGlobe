@@ -8,8 +8,6 @@
 
 layout(location = og_positionVertexLocation) in vec4 position;
 out vec2 windowPosition;
-uniform mat4 og_modelViewPerspectiveMatrix;
-uniform mat4 og_viewportTransformationMatrix;
 
 void main()                     
 {

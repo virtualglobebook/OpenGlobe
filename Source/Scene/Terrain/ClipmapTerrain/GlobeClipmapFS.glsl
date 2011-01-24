@@ -15,9 +15,8 @@ in vec2 fsLonLat;
                  
 out vec3 fragmentColor;
 
-uniform vec4 og_diffuseSpecularAmbientShininess;
-uniform sampler2D og_texture2;    // finer normal map
-uniform sampler2D og_texture3;    // coarser normal map
+// og_texture2 - finer normal map
+// og_texture3 - coarser normal map
 
 uniform bool u_showBlendRegions;
 uniform vec3 u_color;

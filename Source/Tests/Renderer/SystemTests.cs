@@ -255,9 +255,6 @@ namespace OpenGlobe.Renderer
                 @"#version 330
 
                   layout(location = og_positionVertexLocation) in vec4 position;
-                  uniform mat4 og_viewMatrix;
-                  uniform mat4 og_modelMatrix;
-                  uniform mat4 og_perspectiveMatrix;
 
                   void main()
                   {
@@ -274,7 +271,6 @@ namespace OpenGlobe.Renderer
                 @"#version 330
 
                   layout(location = og_positionVertexLocation) in vec4 position;
-                  uniform mat4 og_modelViewPerspectiveMatrix;
 
                   void main()
                   {

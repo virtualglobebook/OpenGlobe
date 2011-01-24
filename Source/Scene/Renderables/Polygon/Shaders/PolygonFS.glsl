@@ -11,7 +11,6 @@ in vec3 positionToLight;
 in vec3 positionToEye;
 out vec4 fragmentColor;
 
-uniform vec4 og_diffuseSpecularAmbientShininess;
 uniform vec3 u_globeOneOverRadiiSquared;
 uniform vec4 u_color;
 

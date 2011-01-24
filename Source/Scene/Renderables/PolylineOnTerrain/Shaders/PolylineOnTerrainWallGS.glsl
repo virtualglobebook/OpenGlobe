@@ -9,11 +9,6 @@
 layout(lines_adjacency) in;
 layout(triangle_strip, max_vertices = 4) out;
 
-uniform mat4 og_perspectiveMatrix;
-uniform mat4 og_viewportTransformationMatrix;
-uniform float og_pixelSizePerDistance;
-uniform float og_perspectiveNearPlaneDistance;
-
 vec4 ClipToWindowCoordinates(vec4 v)
 {
     v.xyz /= v.w;

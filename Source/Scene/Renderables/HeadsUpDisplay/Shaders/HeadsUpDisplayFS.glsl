@@ -10,7 +10,6 @@ in vec2 fsTextureCoordinates;
 
 out vec4 fragmentColor;
 
-uniform sampler2D og_texture0;
 uniform vec3 u_color;
 uniform bool u_showBackground;
 

@@ -18,6 +18,11 @@ namespace OpenGlobe.Renderer
             get { return "og_inverseViewportDimensions"; }
         }
 
+        public override UniformType Datatype
+        {
+            get { return UniformType.FloatVector2; }
+        }
+
         public override DrawAutomaticUniform Create(Uniform uniform)
         {
             return new InverseViewportDimensionsUniform(uniform);

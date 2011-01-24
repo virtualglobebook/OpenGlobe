@@ -6,8 +6,6 @@
 // See License.txt or http://www.opensource.org/licenses/mit-license.php.
 //
 
-uniform sampler2D og_texture0;
-uniform vec2 og_inverseViewportDimensions;
 out vec4 fragmentColor;
 
 void main()

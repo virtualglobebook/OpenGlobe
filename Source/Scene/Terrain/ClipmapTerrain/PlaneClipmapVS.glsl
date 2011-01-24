@@ -16,10 +16,6 @@ out float gsAlpha;
 out vec2 gsWindowPosition;
 out float gsDistanceToEye;
 
-uniform mat4 og_modelViewPerspectiveMatrix;
-uniform mat4 og_viewportTransformationMatrix;
-uniform vec3 og_cameraEye;
-uniform vec3 og_sunPosition;
 uniform vec3 u_sunPositionRelativeToViewer;
 uniform vec2 u_patchOriginInClippedLevel;
 uniform vec2 u_levelScaleFactor;
@@ -33,8 +29,8 @@ uniform vec2 u_fineTextureOrigin;
 uniform float u_heightExaggeration;
 uniform float u_oneOverClipmapSize;
 uniform bool u_useBlendRegions;
-uniform sampler2D og_texture0;    // finer height map
-uniform sampler2D og_texture1;    // coarser height map
+// og_texture0 - finer height map
+// og_texture1 - coarser height map
 
 float SampleHeight(vec2 levelPos)
 {

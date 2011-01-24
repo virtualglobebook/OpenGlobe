@@ -17,9 +17,6 @@ out vec4 gsColor;
 out float gsOrigin;
 out vec2 gsPixelOffset;
 
-uniform mat4 og_modelViewPerspectiveMatrix;
-uniform mat4 og_viewportTransformationMatrix;
-
 vec4 ModelToWindowCoordinates(
     vec4 v, 
     mat4 modelViewPerspectiveMatrix, 

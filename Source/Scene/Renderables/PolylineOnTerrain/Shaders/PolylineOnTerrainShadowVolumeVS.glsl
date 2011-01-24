@@ -6,7 +6,6 @@
 // See License.txt or http://www.opensource.org/licenses/mit-license.php.
 //
    
-uniform mat4 og_modelViewMatrix;
 layout(location = og_positionVertexLocation) in vec4 position;
 
 void main()                     

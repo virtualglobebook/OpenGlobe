@@ -15,8 +15,6 @@ out float fsAlpha;
 out float fsHeight;
 out vec2 fsLonLat;
 
-uniform mat4 og_modelViewPerspectiveMatrix;
-uniform vec3 og_sunPosition;
 uniform vec3 u_sunPositionRelativeToViewer;
 uniform vec2 u_patchOriginInClippedLevel;
 uniform vec2 u_levelScaleFactor;
@@ -31,8 +29,8 @@ uniform float u_heightExaggeration;
 uniform float u_oneOverClipmapSize;
 uniform bool u_useBlendRegions;
 uniform vec3 u_globeRadiiSquared;
-uniform sampler2D og_texture0;    // finer height map
-uniform sampler2D og_texture1;    // coarser height map
+// og_texture0 - finer height map
+// og_texture1 - coarser height map
 
 vec3 GeodeticSurfaceNormal(vec3 geodetic)
 {

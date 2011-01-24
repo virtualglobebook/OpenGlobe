@@ -29,6 +29,7 @@ namespace OpenGlobe.Scene
             _updateDrawState = new DrawState(new RenderState(), _updateShader, _unitQuad);
             _updateDrawState.RenderState.FacetCulling.FrontFaceWindingOrder = unitQuad.FrontFaceWindingOrder;
             _updateDrawState.RenderState.DepthTest.Enabled = false;
+            ((Uniform<int>)_updateShader.Uniforms["u_texture"]).Value = 0;
             _updateDestinationOffset = (Uniform<Vector2F>)_updateShader.Uniforms["u_destinationOffset"];
             _updateUpdateSize = (Uniform<Vector2F>)_updateShader.Uniforms["u_updateSize"];
             _updateSourceOrigin = (Uniform<Vector2F>)_updateShader.Uniforms["u_sourceOrigin"];

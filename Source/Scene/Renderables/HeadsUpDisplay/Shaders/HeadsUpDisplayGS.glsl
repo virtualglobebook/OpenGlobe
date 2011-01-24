@@ -11,9 +11,6 @@ layout(triangle_strip, max_vertices = 4) out;
 
 out vec2 fsTextureCoordinates;
 
-uniform mat4 og_viewportOrthographicMatrix;
-uniform sampler2D og_texture0;
-uniform float og_highResolutionSnapScale;
 uniform vec2 u_originScale;
 
 void main()

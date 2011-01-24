@@ -35,10 +35,6 @@ namespace OpenGlobe.Examples
                   out vec3 positionToLight;
                   out vec3 positionToEye;
 
-                  uniform mat4 og_modelViewPerspectiveMatrix;
-                  uniform vec3 og_cameraEye;
-                  uniform vec3 og_sunPosition;
-
                   void main()                     
                   {
                         gl_Position = og_modelViewPerspectiveMatrix * position; 
@@ -56,9 +52,8 @@ namespace OpenGlobe.Examples
                   in vec3 positionToEye;
                   out vec3 fragmentColor;
 
-                  uniform vec4 og_diffuseSpecularAmbientShininess;
-                  uniform sampler2D og_texture0;                    // Day
-                  uniform sampler2D og_texture1;                    // Night
+                  // og_texture0 - Day
+                  // og_texture1 - Night
 
                   uniform float u_blendDuration;
                   uniform float u_blendDurationScale;

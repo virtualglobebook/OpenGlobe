@@ -18,6 +18,11 @@ namespace OpenGlobe.Renderer
             get { return "og_cameraEyeHigh"; }
         }
 
+        public override UniformType Datatype
+        {
+            get { return UniformType.FloatVector3; }
+        }
+
         public override DrawAutomaticUniform Create(Uniform uniform)
         {
             return new CameraEyeHighUniform(uniform);

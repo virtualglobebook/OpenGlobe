@@ -12,10 +12,6 @@ layout(triangle_strip, max_vertices = 4) out;
 in vec4 gsColor[];
 flat out vec4 fsColor;
 
-uniform mat4 og_modelViewPerspectiveMatrix;
-uniform mat4 og_viewportTransformationMatrix;
-uniform mat4 og_viewportOrthographicMatrix;
-uniform float og_perspectiveNearPlaneDistance;
 uniform float u_fillDistance;
 
 vec4 ClipToWindowCoordinates(vec4 v, mat4 viewportTransformationMatrix)

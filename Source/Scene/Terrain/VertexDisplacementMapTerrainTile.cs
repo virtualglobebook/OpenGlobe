@@ -66,7 +66,8 @@ namespace OpenGlobe.Scene
             ((Uniform<Vector2F>)spTerrain.Uniforms["u_positionToRepeatTextureCoordinate"]).Value = new Vector2F(
                 (float)(4.0 / (double)tile.Resolution.X),
                 (float)(4.0 / (double)tile.Resolution.Y));
-            
+            ((Uniform<int>)spTerrain.Uniforms["u_heightMap"]).Value = 0;
+
             ///////////////////////////////////////////////////////////////////
 
             ShaderProgram spNormals = Device.CreateShaderProgram(
@@ -75,6 +76,7 @@ namespace OpenGlobe.Scene
                 EmbeddedResources.GetText("OpenGlobe.Scene.Terrain.VertexDisplacementMapTerrainTile.NormalsFS.glsl"));
             _heightExaggerationNormals = (Uniform<float>)spNormals.Uniforms["u_heightExaggeration"];
             _fillDistanceNormals = (Uniform<float>)spNormals.Uniforms["u_fillDistance"];
+            ((Uniform<int>)spNormals.Uniforms["u_heightMap"]).Value = 0;
             ((Uniform<Vector3F>)spNormals.Uniforms["u_color"]).Value = Vector3F.Zero;
 
             ///////////////////////////////////////////////////////////////////
@@ -86,6 +88,7 @@ namespace OpenGlobe.Scene
             _lineWidthWireframe = (Uniform<float>)spWireframe.Uniforms["u_halfLineWidth"];
             _heightExaggerationWireframe = (Uniform<float>)spWireframe.Uniforms["u_heightExaggeration"];
             ((Uniform<Vector3F>)spWireframe.Uniforms["u_color"]).Value = Vector3F.Zero;
+            ((Uniform<int>)spWireframe.Uniforms["u_heightMap"]).Value = 0;
             
             ///////////////////////////////////////////////////////////////////
 
@@ -138,7 +141,6 @@ namespace OpenGlobe.Scene
             {
                 ShaderProgram sp = _drawStateTerrain.ShaderProgram;
 
-                ((Uniform<int>)sp.Uniforms["u_normalAlgorithm"]).Value = (int)_normalsAlgorithm;
                 ((Uniform<int>)sp.Uniforms["u_shadingAlgorithm"] ).Value = (int)_shadingAlgorithm;
                 ((Uniform<bool>)sp.Uniforms["u_showTerrain"]).Value = _showTerrain;
                 ((Uniform<bool>)sp.Uniforms["u_showSilhouette"]).Value = _showSilhouette;

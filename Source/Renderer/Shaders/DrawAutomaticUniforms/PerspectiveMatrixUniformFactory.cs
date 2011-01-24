@@ -18,6 +18,11 @@ namespace OpenGlobe.Renderer
             get { return "og_perspectiveMatrix"; }
         }
 
+        public override UniformType Datatype
+        {
+            get { return UniformType.FloatMatrix44; }
+        }
+
         public override DrawAutomaticUniform Create(Uniform uniform)
         {
             return new PerspectiveMatrixUniform(uniform);

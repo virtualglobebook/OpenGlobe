@@ -11,12 +11,8 @@ out vec4 dayColor;
 out vec4 nightColor;
 out float blendAlpha;
 
-uniform mat4x2 og_modelZToClipCoordinates;
-uniform vec4 og_diffuseSpecularAmbientShininess;
-uniform sampler2D og_texture0;                    // Day
-uniform sampler2D og_texture1;                    // Night
-uniform vec3 og_sunPosition;
-uniform vec3 og_cameraEye;
+// og_texture0 - Day
+// og_texture1 - Night
 uniform vec3 u_cameraEyeSquared;
 uniform vec3 u_globeOneOverRadiiSquared;
 uniform float u_blendDuration;

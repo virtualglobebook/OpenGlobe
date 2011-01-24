@@ -18,6 +18,11 @@ namespace OpenGlobe.Renderer
             get { return "og_modelZToClipCoordinates"; }
         }
 
+        public override UniformType Datatype
+        {
+            get { return UniformType.FloatMatrix42; }
+        }
+
         public override DrawAutomaticUniform Create(Uniform uniform)
         {
             return new ModelZToClipCoordinatesUniform(uniform);

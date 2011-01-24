@@ -14,7 +14,6 @@ out vec3 normalOutput;
 uniform float u_heightExaggeration;
 uniform float u_postDelta;
 uniform vec2 u_oneOverHeightMapSize;
-uniform sampler2D og_texture0;
 
 void main()
 {

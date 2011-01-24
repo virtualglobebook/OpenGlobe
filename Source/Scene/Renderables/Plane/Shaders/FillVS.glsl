@@ -8,14 +8,8 @@
 layout(location = og_positionHighVertexLocation) in vec3 positionHigh;
 layout(location = og_positionLowVertexLocation) in vec3 positionLow;
 
-uniform mat4 og_modelViewPerspectiveMatrix;
-uniform float og_perspectiveFarPlaneDistance;
 uniform bool u_logarithmicDepth;
 uniform float u_logarithmicDepthConstant;
-
-uniform vec3 og_cameraEyeHigh;
-uniform vec3 og_cameraEyeLow;
-uniform mat4 og_modelViewPerspectiveMatrixRelativeToEye;
 
 vec4 applyLogarithmicDepth(
     vec4 clipPosition,

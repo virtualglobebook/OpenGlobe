@@ -37,6 +37,7 @@ namespace OpenGlobe.Scene
             _tileAABBUpperRight = new Vector3D(tile.Resolution.X, tile.Resolution.Y,
                 tile.MaximumHeight - tile.MinimumHeight);
 
+            ((Uniform<int>)sp.Uniforms["u_heightMap"]).Value = 0;
             _heightExaggeration = (Uniform<float>)sp.Uniforms["u_heightExaggeration"];
             _minimumHeight = (Uniform<float>)sp.Uniforms["u_minimumHeight"];
             _maximumHeight = (Uniform<float>)sp.Uniforms["u_maximumHeight"];

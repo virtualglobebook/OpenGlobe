@@ -9,11 +9,6 @@
 layout(lines) in;
 layout(triangle_strip, max_vertices = 4) out;
 
-uniform mat4 og_modelViewPerspectiveMatrix;
-uniform mat4 og_viewportTransformationMatrix;
-uniform mat4 og_viewportOrthographicMatrix;
-uniform float og_perspectiveNearPlaneDistance;
-uniform float og_perspectiveFarPlaneDistance;
 uniform bool u_logarithmicDepth;
 uniform float u_logarithmicDepthConstant;
 uniform float u_fillDistance;

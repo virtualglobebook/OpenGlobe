@@ -10,7 +10,7 @@ in vec2 fsTextureCoordinates;
 
 out float heightOutput;
 
-uniform sampler2D og_texture0; // coarse height map
+// og_texture0 - coarse height map
 
 void main()
 {

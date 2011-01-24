@@ -92,7 +92,6 @@ namespace OpenGlobe.Examples
             string fs =
                 @"#version 330
 
-                uniform sampler2D og_texture0;
                 in vec2 fsTextureCoordinates;
                 out vec4 fragmentColor;
 

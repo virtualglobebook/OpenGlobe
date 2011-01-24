@@ -11,8 +11,6 @@ in vec4 fsColor;
 
 out vec4 fragmentColor;
 
-uniform sampler2D og_texture0;
-
 void main()
 {
     vec4 color = texture(og_texture0, fsTextureCoordinates);

@@ -12,8 +12,6 @@ in float fsTextureCoordinate;
 
 out vec4 fragmentColor;
 
-uniform sampler2D og_texture0;
-
 void main()
 {
     vec2 texel = texture(og_texture0, vec2(fsTextureCoordinate, 0.5)).rg;

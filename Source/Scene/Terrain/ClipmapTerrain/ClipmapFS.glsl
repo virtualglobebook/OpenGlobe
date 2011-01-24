@@ -13,8 +13,7 @@ in vec2 fsTextureCoordinate;
                  
 out vec3 fragmentColor;
 
-uniform vec4 og_diffuseSpecularAmbientShininess;
-uniform sampler2DRect og_texture2;
+uniform sampler2DRect u_imageryTexture;
 
 float LightIntensity(vec3 normal, vec3 toLight, vec3 toEye, vec4 diffuseSpecularAmbientShininess)
 {
@@ -36,5 +35,5 @@ void main()
     vec3 positionToEye = normalize(fsPositionToEye);
 
 	float intensity = LightIntensity(normal, positionToLight, positionToEye, og_diffuseSpecularAmbientShininess);
-	fragmentColor = texture(og_texture2, fsTextureCoordinate).rgb * intensity;
+	fragmentColor = texture(u_imageryTexture, fsTextureCoordinate).rgb * intensity;
 }

@@ -16,10 +16,6 @@ flat out vec4 fsColor;
 flat out vec4 fsOutlineColor;
 out float fsTextureCoordinate;
 
-uniform mat4 og_modelViewPerspectiveMatrix;
-uniform mat4 og_viewportTransformationMatrix;
-uniform mat4 og_viewportOrthographicMatrix;
-uniform float og_perspectiveNearPlaneDistance;
 uniform float u_distance;
 
 vec4 ClipToWindowCoordinates(vec4 v, mat4 viewportTransformationMatrix)

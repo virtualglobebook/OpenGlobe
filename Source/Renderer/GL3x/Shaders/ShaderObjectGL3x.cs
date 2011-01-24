@@ -28,6 +28,19 @@ namespace OpenGlobe.Renderer.GL3x
                 "#define og_colorVertexLocation             " + VertexLocations.Color.ToString(NumberFormatInfo.InvariantInfo) + " \n" +
                 "#define og_positionHighVertexLocation      " + VertexLocations.PositionHigh.ToString(NumberFormatInfo.InvariantInfo) + " \n" +
                 "#define og_positionLowVertexLocation       " + VertexLocations.PositionLow.ToString(NumberFormatInfo.InvariantInfo) + " \n" +
+                //
+                // If the shader is authored in a tool like RenderMonkey,
+                // the author will need to declare automatic uniforms, which
+                // should be wrapped with:
+                //
+                //   #ifndef OPENGLOBE_AUTOMATIC_UNIFORMS
+                //   #endif
+                //
+                // so OpenGlobe doesn't declare the uniforms again.  If the
+                // shader is only ever executed with OpenGlobe, the author
+                // doesn't need to declare any uniforms.
+                //
+                "#define OPENGLOBE_AUTOMATIC_UNIFORMS 1 \n\n" +
 
                 "const float og_E =                " + Math.E.ToString(NumberFormatInfo.InvariantInfo) + "; \n" +
                 "const float og_pi =               " + Math.PI.ToString(NumberFormatInfo.InvariantInfo) + "; \n" +
@@ -66,8 +79,21 @@ namespace OpenGlobe.Renderer.GL3x
                 modifiedSource = source;
             }
 
-            string[] sources = new[] { builtinConstants, builtinFunctions, modifiedSource };
-            int[] lengths = new[] { builtinConstants.Length, builtinFunctions.Length, modifiedSource.Length };
+            string automaticUniforms = DrawAutomaticUniformDeclarations();
+
+            string[] sources = new[] 
+            { 
+                builtinConstants, 
+                automaticUniforms,
+                builtinFunctions, 
+                modifiedSource 
+            };
+            int[] lengths = new[] 
+            { 
+                builtinConstants.Length, 
+                automaticUniforms.Length,
+                builtinFunctions.Length, 
+                modifiedSource.Length };
 
             _shaderObject = GL.CreateShader(shaderType);
             unsafe
@@ -102,6 +128,128 @@ namespace OpenGlobe.Renderer.GL3x
         public string CompileLog
         {
             get { return GL.GetShaderInfoLog(_shaderObject); }
+        }
+
+        private static string DrawAutomaticUniformDeclarations()
+        {
+            string s = "";
+
+            foreach (LinkAutomaticUniform uniform in Device.LinkAutomaticUniforms)
+            {
+                s += "uniform " + UniformTypeToName(uniform.Datatype) + " " + uniform.Name + "; \n";
+            }
+
+            foreach (DrawAutomaticUniformFactory uniform in Device.DrawAutomaticUniformFactories)
+            {
+                s += "uniform " + UniformTypeToName(uniform.Datatype) + " " + uniform.Name + "; \n";
+            }
+
+            return s;
+        }
+
+        private static string UniformTypeToName(UniformType type)
+        {
+            switch (type)
+            {
+                case UniformType.Int:
+                    return "int";
+                case UniformType.Float:
+                    return "float";
+                case UniformType.FloatVector2:
+                    return "vec2";
+                case UniformType.FloatVector3:
+                    return "vec3";
+                case UniformType.FloatVector4:
+                    return "vec4";
+                case UniformType.IntVector2:
+                    return "ivec2";
+                case UniformType.IntVector3:
+                    return "ivec3";
+                case UniformType.IntVector4:
+                    return "ivec4";
+                case UniformType.Bool:
+                    return "bool";
+                case UniformType.BoolVector2:
+                    return "bvec2";
+                case UniformType.BoolVector3:
+                    return "bvec3";
+                case UniformType.BoolVector4:
+                    return "bvec4";
+                case UniformType.FloatMatrix22:
+                    return "mat2";
+                case UniformType.FloatMatrix33:
+                    return "mat3";
+                case UniformType.FloatMatrix44:
+                    return "mat4";
+                case UniformType.Sampler1D:
+                    return "sampler1D";
+                case UniformType.Sampler2D:
+                    return "sampler2D";
+                case UniformType.Sampler2DRectangle:
+                    return "sampler2DRect";
+                case UniformType.Sampler2DRectangleShadow:
+                    return "sampler2DRectShadow";
+                case UniformType.Sampler3D:
+                    return "sampler3D";
+                case UniformType.SamplerCube:
+                    return "samplerCube";
+                case UniformType.Sampler1DShadow:
+                    return "sampler1DShadow";
+                case UniformType.Sampler2DShadow:
+                    return "sampler2DShadow";
+                case UniformType.FloatMatrix23:
+                    return "mat2x3";
+                case UniformType.FloatMatrix24:
+                    return "mat2x4";
+                case UniformType.FloatMatrix32:
+                    return "mat3x2";
+                case UniformType.FloatMatrix34:
+                    return "mat3x4";
+                case UniformType.FloatMatrix42:
+                    return "mat4x2";
+                case UniformType.FloatMatrix43:
+                    return "mat4x3";
+                case UniformType.Sampler1DArray:
+                    return "sampler1DArray";
+                case UniformType.Sampler2DArray:
+                    return "sampler2DArray";
+                case UniformType.Sampler1DArrayShadow:
+                    return "sampler1DArrayShadow";
+                case UniformType.Sampler2DArrayShadow:
+                    return "sampler2DArrayShadow";
+                case UniformType.SamplerCubeShadow:
+                    return "samplerCubeShadow";
+                case UniformType.IntSampler1D:
+                    return "isampler1D";
+                case UniformType.IntSampler2D:
+                    return "isampler2D";
+                case UniformType.IntSampler2DRectangle:
+                    return "isampler2DRect";
+                case UniformType.IntSampler3D:
+                    return "isampler3D";
+                case UniformType.IntSamplerCube:
+                    return "isamplerCube";
+                case UniformType.IntSampler1DArray:
+                    return "isampler1DArray";
+                case UniformType.IntSampler2DArray:
+                    return "isampler2DArray";
+                case UniformType.UnsignedIntSampler1D:
+                    return "usampler1D";
+                case UniformType.UnsignedIntSampler2D:
+                    return "usampler2D";
+                case UniformType.UnsignedIntSampler2DRectangle:
+                    return "usampler2DRect";
+                case UniformType.UnsignedIntSampler3D:
+                    return "usampler3D";
+                case UniformType.UnsignedIntSamplerCube:
+                    return "usamplerCube";
+                case UniformType.UnsignedIntSampler1DArray:
+                    return "usampler1DArray";
+                case UniformType.UnsignedIntSampler2DArray:
+                    return "usampler2DArray";
+            }
+
+            throw new ArgumentException("type");
         }
 
         #region Disposable Members

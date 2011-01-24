@@ -8,7 +8,6 @@
 
 layout(location = og_positionVertexLocation) in vec4 position;
 
-uniform mat4 og_modelViewPerspectiveMatrix;
 uniform float u_heightExaggeration;
 
 void main()                     

@@ -9,11 +9,6 @@
 in vec3 worldPosition;
 out vec3 fragmentColor;
 
-uniform mat4x2 og_modelZToClipCoordinates;
-uniform vec4 og_diffuseSpecularAmbientShininess;
-uniform sampler2D og_texture0;
-uniform vec3 og_cameraLightPosition;
-uniform vec3 og_cameraEye;
 uniform vec3 u_cameraEyeSquared;
 uniform vec3 u_globeOneOverRadiiSquared;
 uniform bool u_useAverageDepth;

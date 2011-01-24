@@ -29,7 +29,6 @@ namespace OpenGlobe.Examples
                 @"#version 330
 
                   layout(location = og_positionVertexLocation) in vec4 position;
-                  uniform mat4 og_modelViewPerspectiveMatrix;
 
                   void main()                     
                   {

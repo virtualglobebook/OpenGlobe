@@ -11,10 +11,6 @@ out vec3 worldPosition;
 out vec3 positionToLight;
 out vec3 positionToEye;
 
-uniform mat4 og_modelViewPerspectiveMatrix;
-uniform float og_perspectiveFarPlaneDistance;
-uniform vec3 og_cameraEye;
-uniform vec3 og_cameraLightPosition;
 uniform bool u_logarithmicDepth;
 uniform float u_logarithmicDepthConstant;
 

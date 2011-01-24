@@ -23,6 +23,15 @@ namespace OpenGlobe.Renderer
             get { return "og_texture" + _textureUnit; }
         }
 
+        public override UniformType Datatype
+        {
+            //
+            // Actually, we could make this work for any sampler
+            // type, since they are all just Uniform<int> to us.
+            //
+            get { return UniformType.Sampler2D; }
+        }
+
         public override void Set(Uniform uniform)
         {
  	        ((Uniform<int>)uniform).Value = _textureUnit;

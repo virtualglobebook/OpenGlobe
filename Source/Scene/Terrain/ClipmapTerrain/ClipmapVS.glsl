@@ -13,11 +13,8 @@ out vec3 fsPositionToLight;
 out vec3 fsPositionToEye;
 out vec2 fsTextureCoordinate;
 
-uniform mat4 og_modelViewPerspectiveMatrix;
-uniform vec3 og_cameraEye;
-uniform vec3 og_sunPosition;
-uniform sampler2DRect og_texture0;    // Fine height map
-uniform sampler2DRect og_texture1;    // Coarse height map
+uniform sampler2DRect u_fineHeightMap;
+uniform sampler2DRect u_coarseHeightMap;
 uniform vec4 u_gridScaleFactor;
 uniform vec4 u_worldScaleFactor;
 uniform vec4 u_fineBlockOrig;
@@ -45,8 +42,8 @@ float SampleHeight(vec2 gridPos)
     float alphaScalar = max(alpha.x, alpha.y);
 
     // sample the vertex texture
-    float heightFine = texture(og_texture0, uvFine).r;
-    float heightCoarse = texture(og_texture1, uvCoarse).r;
+    float heightFine = texture(u_fineHeightMap, uvFine).r;
+    float heightCoarse = texture(u_coarseHeightMap, uvCoarse).r;
     return mix(heightFine, heightCoarse, alphaScalar);
 }
 

@@ -15,15 +15,13 @@ in float height;
 
 out vec3 fragmentColor;
 
-uniform vec4 og_diffuseSpecularAmbientShininess;
-uniform sampler2D og_texture6;    // Color map
-uniform sampler2D og_texture1;    // Color ramp for height
-uniform sampler2D og_texture7;    // Color ramp for slope
-uniform sampler2D og_texture2;    // Blend ramp for grass and stone
-uniform sampler2D og_texture3;    // Grass
-uniform sampler2D og_texture4;    // Stone
-uniform sampler2D og_texture5;    // Blend map
-uniform float og_highResolutionSnapScale;
+// og_texture6 - Color map
+// og_texture1 - Color ramp for height
+// og_texture7 - Color ramp for slope
+// og_texture2 - Blend ramp for grass and stone
+// og_texture3 - Grass
+// og_texture4 - Stone
+// og_texture5 - Blend map
 uniform float u_minimumHeight;
 uniform float u_maximumHeight;
 uniform int u_normalAlgorithm;

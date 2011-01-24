@@ -35,10 +35,6 @@ namespace OpenGlobe.Examples
                   out vec3 positionToLight;
                   out vec3 positionToEye;
 
-                  uniform mat4 og_modelViewPerspectiveMatrix;
-                  uniform vec3 og_cameraEye;
-                  uniform vec3 og_cameraLightPosition;
-
                   void main()                     
                   {
                         gl_Position = og_modelViewPerspectiveMatrix * position; 
@@ -55,9 +51,6 @@ namespace OpenGlobe.Examples
                   in vec3 positionToLight;
                   in vec3 positionToEye;
                   out vec3 fragmentColor;
-
-                  uniform vec4 og_diffuseSpecularAmbientShininess;
-                  uniform sampler2D og_texture0;
 
                   float LightIntensity(vec3 normal, vec3 toLight, vec3 toEye, vec4 diffuseSpecularAmbientShininess)
                   {

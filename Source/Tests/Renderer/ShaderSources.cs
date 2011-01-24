@@ -86,8 +86,6 @@ namespace OpenGlobe.Renderer
             return
                 @"#version 330
                  
-                  uniform sampler2D og_texture0;
-                  uniform sampler2D og_texture1;
                   out vec4 FragColor;
 
                   void main()

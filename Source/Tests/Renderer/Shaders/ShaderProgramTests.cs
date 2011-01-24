@@ -244,10 +244,6 @@ namespace OpenGlobe.Renderer
             string fs =
                 @"#version 330
                  
-                  uniform sampler2D og_texture0;
-                  uniform sampler2D og_texture1;
-                  uniform sampler2D og_texture2;
-                  uniform sampler2D og_texture3;
                   out vec4 FragColor;
 
                   void main()

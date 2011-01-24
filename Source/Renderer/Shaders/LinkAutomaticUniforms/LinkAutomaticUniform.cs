@@ -12,6 +12,7 @@ namespace OpenGlobe.Renderer
     public abstract class LinkAutomaticUniform
     {
         public abstract string Name { get; }
+        public abstract UniformType Datatype { get; }
         public abstract void Set(Uniform uniform);
     }
 }

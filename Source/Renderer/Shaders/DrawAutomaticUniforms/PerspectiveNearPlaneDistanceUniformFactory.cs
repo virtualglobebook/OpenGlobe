@@ -18,6 +18,11 @@ namespace OpenGlobe.Renderer
             get { return "og_perspectiveNearPlaneDistance"; }
         }
 
+        public override UniformType Datatype
+        {
+            get { return UniformType.Float; }
+        }
+
         public override DrawAutomaticUniform Create(Uniform uniform)
         {
             return new PerspectiveNearPlaneDistanceUniform(uniform);

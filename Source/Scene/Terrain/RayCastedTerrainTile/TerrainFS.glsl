@@ -10,10 +10,7 @@ in vec3 boxExit;
 
 out vec3 fragmentColor;
 
-uniform sampler2DRect og_texture0;    // Height map
-uniform vec3 og_cameraEye;
-uniform mat4x2 og_modelZToClipCoordinates;
-
+uniform sampler2DRect u_heightMap;
 uniform vec3 u_aabbLowerLeft;
 uniform vec3 u_aabbUpperRight;
 uniform float u_minimumHeight;
@@ -134,7 +131,7 @@ bool StepRay(
     out vec3 intersectionPoint)
 {
     vec2 floorTexEntry = floor(texEntry.xy);
-    float height = texture(og_texture0, MirrorRepeat(floorTexEntry, mirrorTextureCoordinates)).r;
+    float height = texture(u_heightMap, MirrorRepeat(floorTexEntry, mirrorTextureCoordinates)).r;
     height *= u_heightExaggeration;
 
     vec2 delta = ((floorTexEntry + vec2(1.0)) - texEntry.xy) * oneOverDirectionXY;
@@ -204,7 +201,7 @@ void main()
 	//
 	// Mirror such that ray always steps in positive x and y direction
 	//
-    vec2 heightMapSize = vec2(textureSize(og_texture0));
+    vec2 heightMapSize = vec2(textureSize(u_heightMap));
     bvec2 mirror = lessThan(direction.xy, vec2(0.0));
     vec2 mirrorTextureCoordinates = vec2(0.0);
 

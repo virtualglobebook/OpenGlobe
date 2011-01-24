@@ -18,6 +18,11 @@ namespace OpenGlobe.Renderer
             get { return "og_highResolutionSnapScale"; }
         }
 
+        public override UniformType Datatype
+        {
+            get { return UniformType.Float; }
+        }
+
         public override DrawAutomaticUniform Create(Uniform uniform)
         {
             return new HighResolutionSnapScaleUniform(uniform);

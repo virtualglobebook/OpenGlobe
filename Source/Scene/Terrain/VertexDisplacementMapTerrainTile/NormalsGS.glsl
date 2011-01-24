@@ -12,11 +12,7 @@ layout(triangle_strip, max_vertices = 4) out;
 in float gsDistanceToEye[];
 out float fsDistanceToEye;
 
-uniform mat4 og_modelViewPerspectiveMatrix;
-uniform mat4 og_viewportTransformationMatrix;
-uniform mat4 og_viewportOrthographicMatrix;
-uniform float og_perspectiveNearPlaneDistance;
-uniform sampler2DRect og_texture0;    // Height map
+uniform sampler2DRect u_heightMap;
 uniform float u_heightExaggeration;
 uniform float u_fillDistance;
 uniform int u_normalAlgorithm;
@@ -108,15 +104,15 @@ void main()
 
     if (u_normalAlgorithm == 1)       // TerrainNormalsAlgorithm.ForwardDifference
     {
-        terrainNormal = ComputeNormalForwardDifference(gl_in[0].gl_Position.xyz, og_texture0, u_heightExaggeration);
+        terrainNormal = ComputeNormalForwardDifference(gl_in[0].gl_Position.xyz, u_heightMap, u_heightExaggeration);
     }
     else if (u_normalAlgorithm == 2)  // TerrainNormalsAlgorithm.CentralDifference
     {
-        terrainNormal = ComputeNormalCentralDifference(gl_in[0].gl_Position.xyz, og_texture0, u_heightExaggeration);
+        terrainNormal = ComputeNormalCentralDifference(gl_in[0].gl_Position.xyz, u_heightMap, u_heightExaggeration);
     }
     else if (u_normalAlgorithm == 3)  // TerrainNormalsAlgorithm.SobelFilter
     {
-        terrainNormal = ComputeNormalSobelFilter(gl_in[0].gl_Position.xyz, og_texture0, u_heightExaggeration);
+        terrainNormal = ComputeNormalSobelFilter(gl_in[0].gl_Position.xyz, u_heightMap, u_heightExaggeration);
     }
 
     vec4 clipP0;

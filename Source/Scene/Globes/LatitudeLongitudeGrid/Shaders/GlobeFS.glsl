@@ -15,9 +15,6 @@ uniform vec2 u_gridLineWidth;
 uniform vec2 u_gridResolution;
 uniform vec3 u_globeOneOverRadiiSquared;
 
-uniform vec4 og_diffuseSpecularAmbientShininess;
-uniform sampler2D og_texture0;
-
 float LightIntensity(vec3 normal, vec3 toLight, vec3 toEye, vec4 diffuseSpecularAmbientShininess)
 {
     vec3 toReflectedLight = reflect(-toLight, normal);

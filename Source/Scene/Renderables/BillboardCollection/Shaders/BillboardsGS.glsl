@@ -17,11 +17,6 @@ in vec2 gsPixelOffset[];
 out vec2 fsTextureCoordinates;
 out vec4 fsColor;
 
-uniform mat4 og_viewportOrthographicMatrix;
-uniform sampler2D og_texture0;
-uniform float og_highResolutionSnapScale;
-uniform vec4 og_viewport;
-
 void main()
 {
     float originScales[3] = float[](0.0, 1.0, -1.0);

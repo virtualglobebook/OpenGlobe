@@ -18,6 +18,11 @@ namespace OpenGlobe.Renderer
             get { return "og_modelViewPerspectiveInverse"; }
         }
 
+        public override UniformType Datatype
+        {
+            get { return UniformType.FloatMatrix44; }
+        }
+
         public override DrawAutomaticUniform Create(Uniform uniform)
         {
             return new ModelViewPerspectiveInverseUniform(uniform);

@@ -11,8 +11,6 @@ in vec3 positionToLight;
 in vec3 positionToEye;
 out vec3 fragmentColor;
 
-uniform vec4 og_diffuseSpecularAmbientShininess;
-uniform sampler2D og_texture0;
 uniform bool u_Textured;
 
 float LightIntensity(vec3 normal, vec3 toLight, vec3 toEye, vec4 diffuseSpecularAmbientShininess)

@@ -15,10 +15,7 @@ out vec2 textureCoordinate;
 out vec2 repeatTextureCoordinate;
 out float height;
 
-uniform mat4 og_modelViewPerspectiveMatrix;
-uniform vec3 og_cameraEye;
-uniform vec3 og_cameraLightPosition;
-uniform sampler2DRect og_texture0;    // Height map
+uniform sampler2DRect u_heightMap;
 uniform float u_heightExaggeration;
 uniform int u_normalAlgorithm;
 uniform vec2 u_positionToTextureCoordinate;
@@ -119,28 +116,28 @@ vec3 ComputeNormalSobelFilter(
 
 void main()
 {
-    vec3 displacedPosition = vec3(position, texture(og_texture0, position).r * u_heightExaggeration);
+    vec3 displacedPosition = vec3(position, texture(u_heightMap, position).r * u_heightExaggeration);
 
     gl_Position = og_modelViewPerspectiveMatrix * vec4(displacedPosition, 1.0);
 
     if (u_normalAlgorithm == 1)       // TerrainNormalsAlgorithm.ThreeForward
     {
-        fsNormal = ComputeNormalForwardDifference(displacedPosition, og_texture0, u_heightExaggeration);
+        fsNormal = ComputeNormalForwardDifference(displacedPosition, u_heightMap, u_heightExaggeration);
     }
     else if (u_normalAlgorithm == 2)  // TerrainNormalsAlgorithm.FourSamples
     {
-        fsNormal = ComputeNormalCentralDifference(displacedPosition, og_texture0, u_heightExaggeration);
+        fsNormal = ComputeNormalCentralDifference(displacedPosition, u_heightMap, u_heightExaggeration);
     }
     else if (u_normalAlgorithm == 3)  // TerrainNormalsAlgorithm.SobelFilter
     {
-        fsNormal = ComputeNormalSobelFilter(displacedPosition, og_texture0, u_heightExaggeration);
+        fsNormal = ComputeNormalSobelFilter(displacedPosition, u_heightMap, u_heightExaggeration);
     }
     else
     {
 	    //
         // Even if lighting isn't used, shading algorithms based on terrain slope require the normal.
 		//
-        fsNormal = ComputeNormalForwardDifference(displacedPosition, og_texture0, u_heightExaggeration);
+        fsNormal = ComputeNormalForwardDifference(displacedPosition, u_heightMap, u_heightExaggeration);
     }
 
     fsPositionToLight = og_cameraLightPosition - displacedPosition;

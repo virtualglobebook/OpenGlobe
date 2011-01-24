@@ -18,6 +18,11 @@ namespace OpenGlobe.Renderer
             get { return "og_modelViewMatrixRelativeToEye"; }
         }
 
+        public override UniformType Datatype
+        {
+            get { return UniformType.FloatMatrix44; }
+        }
+
         public override DrawAutomaticUniform Create(Uniform uniform)
         {
             return new ModelViewMatrixRelativeToEyeUniform(uniform);

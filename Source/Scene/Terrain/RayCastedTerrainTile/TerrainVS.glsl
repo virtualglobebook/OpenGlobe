@@ -8,7 +8,6 @@
 
 layout(location = og_positionVertexLocation) in vec4 position;
 out vec3 boxExit;
-uniform mat4 og_modelViewPerspectiveMatrix;
 
 void main()
 {

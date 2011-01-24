@@ -9,9 +9,6 @@
 layout(triangles) in;
 layout(triangle_strip, max_vertices = 8) out;
 
-uniform mat4 og_viewportTransformationMatrix;
-uniform mat4 og_viewportOrthographicMatrix;
-uniform float og_perspectiveNearPlaneDistance;
 uniform float u_fillDistance;
 
 vec4 ClipToWindowCoordinates(vec4 v)

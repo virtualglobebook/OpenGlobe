@@ -10,7 +10,6 @@ in vec3 color;
 
 out vec3 fsColor;
 
-uniform mat4 og_modelViewPerspectiveMatrix;
 uniform float u_pointSize;
 
 void main()                     

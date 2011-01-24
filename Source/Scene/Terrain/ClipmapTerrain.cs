@@ -104,6 +104,9 @@ namespace OpenGlobe.Scene
             Mesh degenerateTriangleMesh = CreateDegenerateTriangleMesh();
             _degenerateTriangles = context.CreateVertexArray(degenerateTriangleMesh, _shaderProgram.VertexAttributes, BufferHint.StaticDraw);
 
+            ((Uniform<int>)_shaderProgram.Uniforms["u_fineHeightMap"]).Value = 0;
+            ((Uniform<int>)_shaderProgram.Uniforms["u_coarseHeightMap"]).Value = 1;
+            ((Uniform<int>)_shaderProgram.Uniforms["u_imageryTexture"]).Value = 2;
             _gridScaleFactor = (Uniform<Vector4F>)_shaderProgram.Uniforms["u_gridScaleFactor"];
             _worldScaleFactor = (Uniform<Vector4F>)_shaderProgram.Uniforms["u_worldScaleFactor"];
             _fineBlockOrigin = (Uniform<Vector4F>)_shaderProgram.Uniforms["u_fineBlockOrig"];
