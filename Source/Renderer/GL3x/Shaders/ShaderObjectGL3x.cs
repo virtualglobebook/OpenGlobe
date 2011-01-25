@@ -79,6 +79,28 @@ namespace OpenGlobe.Renderer.GL3x
                 modifiedSource = source;
             }
 
+            //
+            // NVIDIA apparently concatenates each source string together
+            // so the line number reported for errors and warnings is
+            // way off.  Here, we fix that.
+            //
+            // For whatever reason, NVIDIA also doesn't want #line to be 
+            // the first line, so we add the dummy comment line.
+            //
+            // Also, we should really use '#line 3', because according to
+            // the GLSL 3.3 spec:
+            //
+            //    "The number provided is the number of the next line of 
+            //     code, not the current line.  This makes it match C++ 
+            //     semantics"
+            //
+            // The line number is almost certainly to be wrong on ATI.
+            //
+            modifiedSource =
+                "//#version 330 \n" +
+                "#line 1 \n" +
+                modifiedSource;
+
             string automaticUniforms = DrawAutomaticUniformDeclarations();
 
             string[] sources = new[] 
