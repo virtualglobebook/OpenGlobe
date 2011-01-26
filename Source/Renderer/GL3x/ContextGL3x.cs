@@ -657,6 +657,34 @@ namespace OpenGlobe.Renderer.GL3x
 
             _textureUnits.Clean();
             ApplyFramebuffer();
+
+#if DEBUG
+            if (_boundFramebuffer != null)
+            {
+                //
+                // Having a texture bound to a texture unit and as a draw
+                // framebuffer attachment can, not not always, result in
+                // undefined behavior.  See GL 3.3 core profile spec, 
+                // Section 4.4.3.
+                //
+                ColorAttachments colorAttachments = _boundFramebuffer.ColorAttachments;
+
+                for (int j = 0; j < colorAttachments.Count; ++j)
+                {
+                    if (colorAttachments[j] != null)
+                    {
+                        for (int i = 0; i < _textureUnits.Count; ++i)
+                        {
+                            if (_textureUnits[i].Texture == colorAttachments[j])
+                            {
+                                throw new InvalidOperationException("The texture attached to texture unit " + i + " is also attached to the framebuffer color attachment " + j + ".  This is likely to lead to undefined behavior.");
+                            }
+                        }
+                    }
+                }
+
+            }
+#endif
         }
 
         private void ApplyRenderState(RenderState renderState)
@@ -729,6 +757,12 @@ namespace OpenGlobe.Renderer.GL3x
             {
                 _setFramebuffer.Clean();
 #if DEBUG
+                //
+                // Be aware:  "If the combination of formats of the images attached 
+                // to a framebuffer object are not supported by the implementation, 
+                // then the framebuffer is not complete under the clause labeled 
+                // FRAMEBUFFER_UNSUPPORTED."
+                //
                 FramebufferErrorCode errorCode = GL.CheckFramebufferStatus(FramebufferTarget.Framebuffer);
                 if (errorCode != FramebufferErrorCode.FramebufferComplete)
                 {

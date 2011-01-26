@@ -83,13 +83,15 @@ namespace OpenGlobe.Renderer
 
         public virtual void Save(string filename)
         {
-            if (Description.TextureFormat == TextureFormat.RedGreenBlue8)
+            if ((Description.TextureFormat == TextureFormat.RedGreenBlue8) ||
+                (Description.TextureFormat == TextureFormat.Red8))
             {
                 SaveColor(filename);
             }
             else if ((Description.TextureFormat == TextureFormat.Depth16) ||
                      (Description.TextureFormat == TextureFormat.Depth24) ||
-                     (Description.TextureFormat == TextureFormat.Depth32f))
+                     (Description.TextureFormat == TextureFormat.Depth32f) ||
+                     (Description.TextureFormat == TextureFormat.Depth24Stencil8))
             {
                 SaveDepth(filename);
             }
