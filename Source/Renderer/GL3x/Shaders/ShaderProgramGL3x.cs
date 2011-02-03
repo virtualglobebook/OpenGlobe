@@ -11,6 +11,7 @@ using System;
 using System.Text;
 using System.Collections.Generic;
 using System.IO;
+using System.Globalization;
 using System.Diagnostics;
 using OpenGlobe.Core;
 using OpenTK.Graphics.OpenGL;
@@ -77,7 +78,7 @@ namespace OpenGlobe.Renderer.GL3x
 
             _transformFeedbackOutputs = FindTransformFeedbackOutputs(programHandle);
             _transformFeedbackAttributeLayout = transformFeedbackAttributeLayout;
-            _fragmentOutputs = new FragmentOutputsGL3x(_program);
+            _fragmentOutputs = new FragmentOutputsGL3x(programHandle);
             _vertexAttributes = FindVertexAttributes(programHandle);
             _dirtyUniforms = new List<ICleanable>();
             _uniforms = FindUniforms(programHandle);
@@ -453,6 +454,8 @@ namespace OpenGlobe.Renderer.GL3x
 
         private void Rebuild()
         {
+            // TODO:  This function doesn't take into account transform feedback.
+
             //
             // Recompile and link if a shader's source file changed.
             //
@@ -495,12 +498,15 @@ namespace OpenGlobe.Renderer.GL3x
 
                     if (linkStatus == 0)
                     {
-                        Debug.WriteLine("Could not link shader program.  Link Log:  \n\n" + ProgramInfoLog);
+                        Debug.WriteLine("\nCould not link shader program.  Link Log:  \n\n" + ProgramInfoLog);
                         throw new Exception();
                     }
 
+                    VerifyRebuild(programHandle);
+
                     _program.Dispose();
                     _program = program;
+                    _fragmentOutputs = new FragmentOutputsGL3x(programHandle);
 
                     //
                     // All uniforms are now dirty.  To keep everything consistent, 
@@ -523,6 +529,138 @@ namespace OpenGlobe.Renderer.GL3x
                     if (program != null)
                     {
                         program.Dispose();
+                    }
+                }
+            }
+        }
+
+        private void VerifyRebuild(int programHandle)
+        {
+            //
+            // Verify that vertex attributes, uniforms, and uniform blocks did not change.
+            // 
+            // Requiring an application recompile for these types of changes is a limitation
+            // of our engine.  With enough effort, we could remove some or all of these.
+            //
+            // In particular, it would be reasonable to allow the addition and removal
+            // of automatic uniforms.
+            //
+            VerifyRebuildVertexAttributes(programHandle);
+            VerifyRebuildUniforms(programHandle);
+            VerifyRebuildUniformsBlocks(programHandle);
+        }
+
+        private void VerifyRebuildVertexAttributes(int programHandle)
+        {
+            ShaderVertexAttributeCollection vertexAttributes = FindVertexAttributes(programHandle);
+
+            if (vertexAttributes.Count != _vertexAttributes.Count)
+            {
+                Debug.WriteLine("\nRecompiling/linking shader changed the number of vertex attributes from " +
+                    _vertexAttributes.Count.ToString(NumberFormatInfo.InvariantInfo) + " to " +
+                    vertexAttributes.Count.ToString(NumberFormatInfo.InvariantInfo) + ".  The application must be recompiled.");
+                throw new Exception();
+            }
+
+            for (int i = 0; i < vertexAttributes.Count; ++i)
+            {
+                ShaderVertexAttribute newAttribute = vertexAttributes[i];
+                ShaderVertexAttribute oldAttribute = _vertexAttributes[i];
+
+                if ((newAttribute.Name != oldAttribute.Name) ||
+                    (newAttribute.Location != oldAttribute.Location) ||
+                    (newAttribute.Datatype != oldAttribute.Datatype) ||
+                    (newAttribute.Length != oldAttribute.Length))
+                {
+                    Debug.WriteLine("\nRecompiling/linking shader changed a vertex attribute:\n" +
+                        "\t Old name: [" + oldAttribute.Name + "] New name: [" + newAttribute.Name + "]\n" +
+                        "\t Old location: [" + oldAttribute.Location.ToString(NumberFormatInfo.InvariantInfo) + "] New location: [" + newAttribute.Location.ToString(NumberFormatInfo.InvariantInfo) + "]\n" +
+                        "\t Old datatype: [" + StringConverterGL3x.ShaderVertexAttributeTypeToString(oldAttribute.Datatype) + "] New datatype: [" + StringConverterGL3x.ShaderVertexAttributeTypeToString(newAttribute.Datatype) + "]\n" +
+                        "\t Old length: [" + oldAttribute.Length.ToString(NumberFormatInfo.InvariantInfo) + "] New length: [" + newAttribute.Length.ToString(NumberFormatInfo.InvariantInfo) + "]\n" +
+                        "The application must be recompiled.");
+                    throw new Exception();
+                }
+            }
+        }
+
+        private void VerifyRebuildUniforms(int programHandle)
+        {
+            UniformCollection uniforms = FindUniforms(programHandle);
+
+            if (uniforms.Count != _uniforms.Count)
+            {
+                Debug.WriteLine("\nRecompiling/linking shader changed the number of uniforms from " +
+                    _uniforms.Count.ToString(NumberFormatInfo.InvariantInfo) + " to " +
+                    uniforms.Count.ToString(NumberFormatInfo.InvariantInfo) + ".\nThe application must be recompiled.");
+
+                if (uniforms.Count < _uniforms.Count)
+                {
+                    Debug.WriteLine("Even if you did not explicitly remove a uniform, a code change may have allowed the compiler/linked to optimize out a uniform.");
+                }
+
+                throw new Exception();
+            }
+
+            for (int i = 0; i < uniforms.Count; ++i)
+            {
+                Uniform newUniform = uniforms[i];
+                Uniform oldUniform = _uniforms[i];
+
+                if ((newUniform.Name != oldUniform.Name) || (newUniform.Datatype != oldUniform.Datatype))
+                {
+                    Debug.WriteLine("\nRecompiling/linking shader changed a uniform:\n" +
+                        "\t Old name: [" + oldUniform.Name + "] New name: [" + newUniform.Name + "]\n" +
+                        "\t Old datatype: [" + StringConverterGL3x.UniformTypeToString(oldUniform.Datatype) + "] New datatype: [" + StringConverterGL3x.UniformTypeToString(newUniform.Datatype) + "]\n" +
+                        "The application must be recompiled.");
+                    throw new Exception();
+                }
+            }
+        }
+
+        private void VerifyRebuildUniformsBlocks(int programHandle)
+        {
+            UniformBlockCollection uniformBlocks = FindUniformBlocks(programHandle);
+
+            if (uniformBlocks.Count != _uniformBlocks.Count)
+            {
+                Debug.WriteLine("\nRecompiling/linking shader changed the number of uniform blocks from " +
+                    _uniformBlocks.Count.ToString(NumberFormatInfo.InvariantInfo) + " to " +
+                    uniformBlocks.Count.ToString(NumberFormatInfo.InvariantInfo) + ".  The application must be recompiled.");
+                throw new Exception();
+            }
+
+            for (int i = 0; i < uniformBlocks.Count; ++i)
+            {
+                UniformBlock newBlock = uniformBlocks[i];
+                UniformBlock oldBlock = _uniformBlocks[i];
+
+                if ((newBlock.Name != oldBlock.Name) || 
+                    (newBlock.SizeInBytes != oldBlock.SizeInBytes) ||
+                    (newBlock.Members.Count != oldBlock.Members.Count))
+                {
+                    Debug.WriteLine("\nRecompiling/linking shader changed a uniform block:\n" +
+                        "\t Old name: [" + oldBlock.Name + "] New name: [" + newBlock.Name + "]\n" +
+                        "\t Old size in bytes: [" + oldBlock.SizeInBytes + "] New size in bytes: [" + newBlock.SizeInBytes + "]\n" +
+                        "\t Old members count: [" + oldBlock.Members.Count + "] New members count: [" + newBlock.Members.Count + "]\n" +
+                        "The application must be recompiled.");
+                    throw new Exception();
+                }
+
+                for (int j = 0; j < newBlock.Members.Count; ++j)
+                {
+                    UniformBlockMember newMember = newBlock.Members[j];
+                    UniformBlockMember oldMember = oldBlock.Members[j];
+
+                    if ((newMember.Name != oldMember.Name) ||
+                        (newMember.Datatype != oldMember.Datatype) ||
+                        (newMember.OffsetInBytes != oldMember.OffsetInBytes))
+                    {
+                        Debug.WriteLine("\nRecompiling/linking shader changed a member of a uniform block:\n" +
+                            "\t Uniform block: [" + newBlock.Name + "]\n" +
+                            "\t Old name: [" + oldMember.Name + "] New name: [" + newMember.Name + "]\n" +
+                            "\t Old datatype: [" + StringConverterGL3x.UniformTypeToString(oldMember.Datatype) + "] New datatype: [" + StringConverterGL3x.UniformTypeToString(newMember.Datatype) + "]\n" +
+                            "\t Old offset in bytes: [" + newMember.OffsetInBytes + "] New offset in bytes: [" + oldMember.OffsetInBytes + "]\n" +
+                            "The application must be recompiled.");
                     }
                 }
             }
@@ -627,7 +765,7 @@ namespace OpenGlobe.Renderer.GL3x
         private ShaderProgramNameGL3x _program;
         private readonly TransformFeedbackOutputCollection _transformFeedbackOutputs;
         private readonly TransformFeedbackAttributeLayout _transformFeedbackAttributeLayout;
-        private readonly FragmentOutputsGL3x _fragmentOutputs;
+        private FragmentOutputsGL3x _fragmentOutputs;
         private readonly ShaderVertexAttributeCollection _vertexAttributes;
         private readonly IList<ICleanable> _dirtyUniforms;
         private readonly UniformCollection _uniforms;

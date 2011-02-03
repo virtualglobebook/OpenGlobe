@@ -52,6 +52,7 @@
     <Compile Include="GL3x\Buffers\IBufferName.cs" />
     <Compile Include="GL3x\Names\QueryNameGL3x.cs" />
     <Compile Include="GL3x\Queries\QueryGL3x.cs" />
+    <Compile Include="GL3x\StringConverterGL3x.cs" />
     <Compile Include="Shaders\ShaderWatch.cs" />
     <Compile Include="Infrastructure\EmbeddedResources.cs" />
     <Compile Include="Queries\Query.cs" />

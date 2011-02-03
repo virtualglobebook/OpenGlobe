@@ -15,9 +15,9 @@ namespace OpenGlobe.Renderer.GL3x
 {
     internal class FragmentOutputsGL3x : FragmentOutputs
     {
-        public FragmentOutputsGL3x(ShaderProgramNameGL3x program)
+        public FragmentOutputsGL3x(int programHandle)
         {
-            _program = program;
+            _programHandle = programHandle;
         }
 
         #region FragmentOutputs Members
@@ -26,7 +26,7 @@ namespace OpenGlobe.Renderer.GL3x
         {
             get 
             {
-                int i = GL.GetFragDataLocation(_program.Value, index);
+                int i = GL.GetFragDataLocation(_programHandle, index);
 
                 if (i == -1)
                 {
@@ -39,6 +39,6 @@ namespace OpenGlobe.Renderer.GL3x
 
         #endregion
 
-        private ShaderProgramNameGL3x _program;
+        private int _programHandle;
     }
 }
