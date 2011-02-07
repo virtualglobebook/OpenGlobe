@@ -199,7 +199,6 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Renderables\HeadsUpDisplay\Shaders\HeadsUpDisplayFS.glsl" />
-    <EmbeddedResource Include="Renderables\HeadsUpDisplay\Shaders\HeadsUpDisplayGS.glsl" />
     <EmbeddedResource Include="Renderables\HeadsUpDisplay\Shaders\HeadsUpDisplayVS.glsl" />
   </ItemGroup>
   <ItemGroup>

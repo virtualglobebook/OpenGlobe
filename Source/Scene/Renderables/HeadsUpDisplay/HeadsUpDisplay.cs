@@ -29,10 +29,10 @@ namespace OpenGlobe.Scene
 
             ShaderProgram sp = Device.CreateShaderProgram(
                 EmbeddedResources.GetText("OpenGlobe.Scene.Renderables.HeadsUpDisplay.Shaders.HeadsUpDisplayVS.glsl"),
-                EmbeddedResources.GetText("OpenGlobe.Scene.Renderables.HeadsUpDisplay.Shaders.HeadsUpDisplayGS.glsl"),
                 EmbeddedResources.GetText("OpenGlobe.Scene.Renderables.HeadsUpDisplay.Shaders.HeadsUpDisplayFS.glsl"));
             _colorUniform = (Uniform<Vector3F>)sp.Uniforms["u_color"];
             _originScaleUniform = (Uniform<Vector2F>)sp.Uniforms["u_originScale"];
+            _halfTextureSize = (Uniform<Vector2F>)sp.Uniforms["u_halfTextureSize"];
             _showBackground = (Uniform<bool>)sp.Uniforms["u_showBackground"];
             _drawState = new DrawState(renderState, sp, null);
 
@@ -45,14 +45,27 @@ namespace OpenGlobe.Scene
         private void CreateVertexArray(Context context)
         {
             // TODO:  Buffer hint.
-            _positionBuffer = Device.CreateVertexBuffer(BufferHint.StaticDraw, SizeInBytes<Vector2F>.Value);
+            _positionBuffer = Device.CreateVertexBuffer(BufferHint.StaticDraw, 4 * SizeInBytes<Vector2F>.Value);
+            _textureCoordinatesBuffer = Device.CreateVertexBuffer(BufferHint.StaticDraw, 4 * SizeInBytes<Vector2F>.Value);
+
+            Vector2F[] textureCoordinates = new Vector2F[] 
+            { 
+                new Vector2F(0.0f, 0.0f),
+                new Vector2F(1.0f, 0.0f),
+                new Vector2F(0.0f, 1.0f),
+                new Vector2F(1.0f, 1.0f)
+            };
+            _textureCoordinatesBuffer.CopyFromSystemMemory(textureCoordinates);
 
             VertexBufferAttribute positionAttribute = new VertexBufferAttribute(
                 _positionBuffer, ComponentDatatype.Float, 2);
+            VertexBufferAttribute textureCoordinatesAttribute = new VertexBufferAttribute(
+                _textureCoordinatesBuffer, ComponentDatatype.Float, 2);
 
             _vertexArray = context.CreateVertexArray();
             _vertexArray.Attributes[_drawState.ShaderProgram.VertexAttributes["position"].Location] = positionAttribute;
-
+            _vertexArray.Attributes[_drawState.ShaderProgram.VertexAttributes["textureCoordinates"].Location] = textureCoordinatesAttribute;
+            
             _drawState.VertexArray = _vertexArray;
          }
 
@@ -63,7 +76,13 @@ namespace OpenGlobe.Scene
                 DisposeVertexArray();
                 CreateVertexArray(context);
 
-                Vector2F[] positions = new Vector2F[] { _position.ToVector2F() };
+                Vector2F[] positions = new Vector2F[] 
+                { 
+                    _position.ToVector2F(),
+                    _position.ToVector2F(),
+                    _position.ToVector2F(),
+                    _position.ToVector2F()
+                };
                 _positionBuffer.CopyFromSystemMemory(positions);
 
                 _positionDirty = false;
@@ -79,9 +98,12 @@ namespace OpenGlobe.Scene
 
             if (_drawState.VertexArray != null)
             {
+                _halfTextureSize.Value = new Vector2F(
+                    Texture.Description.Width, 
+                    Texture.Description.Height) * 0.5f * (float)sceneState.HighResolutionSnapScale;
                 context.TextureUnits[0].Texture = Texture;
-                context.TextureUnits[0].TextureSampler = Device.TextureSamplers.LinearClamp;
-                context.Draw(PrimitiveType.Points, _drawState, sceneState);
+                context.TextureUnits[0].TextureSampler = Device.TextureSamplers.NearestClamp;
+                context.Draw(PrimitiveType.TriangleStrip, _drawState, sceneState);
             }
         }
 
@@ -160,6 +182,12 @@ namespace OpenGlobe.Scene
                 _positionBuffer = null;
             }
 
+            if (_textureCoordinatesBuffer != null)
+            {
+                _textureCoordinatesBuffer.Dispose();
+                _textureCoordinatesBuffer = null;
+            }
+
             if (_vertexArray != null)
             {
                 _vertexArray.Dispose();
@@ -170,6 +198,7 @@ namespace OpenGlobe.Scene
         private readonly DrawState _drawState;
         private readonly Uniform<Vector3F> _colorUniform;
         private readonly Uniform<Vector2F> _originScaleUniform;
+        private readonly Uniform<Vector2F> _halfTextureSize;
         private readonly Uniform<bool> _showBackground;
         private Color _color;
 
@@ -179,6 +208,7 @@ namespace OpenGlobe.Scene
         private VerticalOrigin _verticalOrigin;
 
         private VertexBuffer _positionBuffer;
+        private VertexBuffer _textureCoordinatesBuffer; // TODO: share across all heads up displays
         private VertexArray _vertexArray;
 
         private static readonly Half[] _originScale = new Half[] { new Half(0.0), new Half(1.0), new Half(-1.0) };
