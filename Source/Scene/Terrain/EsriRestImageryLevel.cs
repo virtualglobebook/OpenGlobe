@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
 using OpenGlobe.Core;
+using OpenGlobe.Scene;
 
 namespace OpenGlobe.Scene
 {
@@ -51,6 +52,16 @@ namespace OpenGlobe.Scene
         public int LatitudePosts
         {
             get { return _latitudePosts; }
+        }
+
+        public int LongitudeTiles
+        {
+            get { return (int)Math.Round(360.0 / TileDeltaLongitude); }
+        }
+
+        public int LatitudeTiles
+        {
+            get { return (int)Math.Round(180.0 / TileDeltaLatitude); ; }
         }
 
         public byte[] GetImage(int west, int south, int east, int north)
@@ -187,6 +198,75 @@ namespace OpenGlobe.Scene
         {
             GeodeticExtent extent = _imagerySource.Extent;
             return extent.West + longitudeIndex * _postDeltaLongitude;
+        }
+
+        internal EsriRestImageryTileRegion[] GetTilesInExtent(int west, int south, int east, int north)
+        {
+            int tileLongitudePosts = LongitudePosts / LongitudeTiles;
+            int tileLatitudePosts = LatitudePosts / LatitudeTiles;
+
+            int tileXStart = west / tileLongitudePosts;
+            int tileXStop = east / tileLongitudePosts;
+
+            if (west < 0)
+            {
+                --tileXStart;
+            }
+            if (east < 0)
+            {
+                --tileXStop;
+            }
+
+            int tileYStart = south / tileLatitudePosts;
+            int tileYStop = north / tileLatitudePosts;
+
+            if (south < 0)
+            {
+                --tileYStart;
+            }
+            if (north < 0)
+            {
+                --tileYStop;
+            }
+
+            int tileWidth = tileXStop - tileXStart + 1;
+            int tileHeight = tileYStop - tileYStart + 1;
+
+            EsriRestImageryTileRegion[] result = new EsriRestImageryTileRegion[tileWidth * tileHeight];
+            int resultIndex = 0;
+
+            for (int tileY = tileYStart; tileY <= tileYStop; ++tileY)
+            {
+                int tileYOrigin = tileY * tileLatitudePosts;
+
+                int currentSouth = south - tileYOrigin;
+                if (currentSouth < 0)
+                    currentSouth = 0;
+
+                int currentNorth = north - tileYOrigin;
+                if (currentNorth >= tileLatitudePosts)
+                    currentNorth = tileLatitudePosts - 1;
+
+                for (int tileX = tileXStart; tileX <= tileXStop; ++tileX)
+                {
+                    int tileXOrigin = tileX * tileLongitudePosts;
+
+                    int currentWest = west - tileXOrigin;
+                    if (currentWest < 0)
+                        currentWest = 0;
+
+                    int currentEast = east - tileXOrigin;
+                    if (currentEast >= tileLongitudePosts)
+                        currentEast = tileLongitudePosts - 1;
+
+                    EsriRestImageryTileIdentifier tileID = new EsriRestImageryTileIdentifier(_level, tileX, tileY);
+                    EsriRestImageryTile tile = _imagerySource.GetTile(tileID);
+                    result[resultIndex] = new EsriRestImageryTileRegion(tile, currentWest, currentSouth, currentEast, currentNorth);
+                    ++resultIndex;
+                }
+            }
+
+            return result;
         }
 
         private class Tile

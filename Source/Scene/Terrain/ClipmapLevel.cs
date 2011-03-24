@@ -15,11 +15,14 @@ namespace OpenGlobe.Scene
     internal class ClipmapLevel
     {
         public RasterTerrainLevel Terrain;
+        public EsriRestImageryLevel Imagery;
 
         public Texture2D HeightTexture;
         public Texture2D NormalTexture;
+        public Texture2D ImageryTexture;
 
         public Vector2I OriginInTextures = new Vector2I(0, 0);
+        public Vector2I OriginInImagery = new Vector2I(0, 0);
 
         public bool OffsetStripOnNorth;
         public bool OffsetStripOnEast;
@@ -47,7 +50,13 @@ namespace OpenGlobe.Scene
         public Extent CurrentExtent = new Extent(1, 1, 0, 0);
         public Extent NextExtent = new Extent();
 
+        public Extent CurrentImageryExtent = new Extent(1, 1, 0, 0);
+        public Extent NextImageryExtent = new Extent();
+
         public ClipmapLevel FinerLevel;
         public ClipmapLevel CoarserLevel;
+
+        public int ImageryWidth;
+        public int ImageryHeight;
     }
 }

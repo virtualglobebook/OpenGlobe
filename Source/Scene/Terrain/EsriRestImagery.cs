@@ -4,6 +4,8 @@ using System.IO;
 using System.Net;
 using System.Text;
 using OpenGlobe.Core;
+using OpenGlobe.Scene;
+using System.Collections.Generic;
 
 namespace OpenGlobe.Scene
 {
@@ -109,16 +111,103 @@ namespace OpenGlobe.Scene
             return new Bitmap(cacheFilename);
         }
 
+        internal EsriRestImageryTile GetTile(EsriRestImageryTileIdentifier identifier)
+        {
+            EsriRestImageryTile tile;
+            if (m_activeTiles.TryGetValue(identifier, out tile))
+            {
+                return tile;
+            }
+
+            // New tiles are not initially active.  They become active when loaded.
+            tile = CreateTile(identifier);
+            return tile;
+        }
+
+        protected virtual EsriRestImageryTile CreateTile(EsriRestImageryTileIdentifier identifier)
+        {
+            return new DefaultEsriRestImageryTile(this, identifier);
+        }
+
         private Uri _baseUri;
         private GeodeticExtent _extent = new GeodeticExtent(-180, -90, 180, 90);
         private int _tilesLoaded;
         private EsriRestImageryLevel[] _levels;
         private EsriRestImageryLevelCollection _levelsCollection;
+        private Dictionary<EsriRestImageryTileIdentifier, EsriRestImageryTile> m_activeTiles = new Dictionary<EsriRestImageryTileIdentifier, EsriRestImageryTile>();
 
         private const int NumberOfLevels = 20;
         private const int TileWidth = 150;
         private const int TileHeight = 150;
         private const double LevelZeroDeltaLongitudeDegrees = 180.0;
         private const double LevelZeroDeltaLatitudeDegrees = 180.0;
+
+        private class DefaultEsriRestImageryTile : EsriRestImageryTile
+        {
+            public DefaultEsriRestImageryTile(EsriRestImagery terrainSource, EsriRestImageryTileIdentifier identifier) :
+                base(terrainSource, identifier)
+            {
+            }
+
+            public override EsriRestImageryTile SouthwestChild
+            {
+                get
+                {
+                    EsriRestImageryTileIdentifier current = Identifier;
+                    EsriRestImageryTileIdentifier child = new EsriRestImageryTileIdentifier(current.Level + 1, current.X * 2, current.Y * 2);
+                    return Source.GetTile(child);
+                }
+            }
+
+            public override EsriRestImageryTile SoutheastChild
+            {
+                get
+                {
+                    EsriRestImageryTileIdentifier current = Identifier;
+                    EsriRestImageryTileIdentifier child = new EsriRestImageryTileIdentifier(current.Level + 1, current.X * 2 + 1, current.Y * 2);
+                    return Source.GetTile(child);
+                }
+            }
+
+            public override EsriRestImageryTile NorthwestChild
+            {
+                get
+                {
+                    EsriRestImageryTileIdentifier current = Identifier;
+                    EsriRestImageryTileIdentifier child = new EsriRestImageryTileIdentifier(current.Level + 1, current.X * 2, current.Y * 2 + 1);
+                    return Source.GetTile(child);
+                }
+            }
+
+            public override EsriRestImageryTile NortheastChild
+            {
+                get
+                {
+                    EsriRestImageryTileIdentifier current = Identifier;
+                    EsriRestImageryTileIdentifier child = new EsriRestImageryTileIdentifier(current.Level + 1, current.X * 2 + 1, current.Y * 2 + 1);
+                    return Source.GetTile(child);
+                }
+            }
+
+            public override int West
+            {
+                get { return (Level.LongitudePosts / Level.LongitudeTiles) * Identifier.X; }
+            }
+
+            public override int South
+            {
+                get { return (Level.LatitudePosts / Level.LatitudeTiles) * Identifier.Y; }
+            }
+
+            public override int East
+            {
+                get { return (Level.LongitudePosts / Level.LongitudeTiles) * (Identifier.X + 1) - 1; }
+            }
+
+            public override int North
+            {
+                get { return (Level.LatitudePosts / Level.LatitudeTiles) * (Identifier.Y + 1) - 1; }
+            }
+        }
     }
 }

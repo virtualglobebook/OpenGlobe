@@ -26,7 +26,8 @@ namespace OpenGlobe.Examples
 
             //SimpleTerrainSource terrainSource = new SimpleTerrainSource(@"..\..\..\..\..\..\Data\Terrain\ps_height_16k");
             WorldWindTerrainSource terrainSource = new WorldWindTerrainSource();
-            _clipmap = new GlobeClipmapTerrain(_window.Context, terrainSource, _ellipsoid, 511);
+            EsriRestImagery imagery = new EsriRestImagery();
+            _clipmap = new GlobeClipmapTerrain(_window.Context, terrainSource, imagery, _ellipsoid, 511);
             _clipmap.HeightExaggeration = 1.0f; // (float)(1.0 / Ellipsoid.Wgs84.MaximumRadius);
 
             _sceneState = new SceneState();

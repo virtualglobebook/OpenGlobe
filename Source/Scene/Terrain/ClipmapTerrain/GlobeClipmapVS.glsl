@@ -10,6 +10,7 @@ in vec2 position;
 
 out vec2 fsFineUv;
 out vec2 fsCoarseUv;
+out vec2 fsFineColorUv;
 out vec3 fsPositionToLight;
 out float fsAlpha;
 out float fsHeight;
@@ -31,6 +32,9 @@ uniform float u_heightExaggeration;
 uniform float u_oneOverClipmapSize;
 uniform bool u_useBlendRegions;
 uniform vec3 u_globeRadiiSquared;
+uniform vec2 u_terrainToImageryResolutionRatio;
+uniform vec2 u_terrainOffsetInImagery;
+uniform vec2 u_oneOverImagerySize;
 uniform sampler2D og_texture0;    // finer height map
 uniform sampler2D og_texture1;    // coarser height map
 
@@ -83,6 +87,8 @@ void main()
 	fsHeight = height;
     vec2 worldPos = (levelPos + u_levelOffsetFromWorldOrigin) * u_levelScaleFactor * u_levelZeroWorldScaleFactor;
 	fsLonLat = worldPos;
+
+    fsFineColorUv = (levelPos * u_terrainToImageryResolutionRatio + u_terrainOffsetInImagery) * u_oneOverImagerySize;
 
 	vec3 displacedPosition;
 	if (abs(worldPos.y) > 90.0)

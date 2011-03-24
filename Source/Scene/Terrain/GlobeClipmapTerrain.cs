@@ -18,7 +18,7 @@ namespace OpenGlobe.Scene
 {
     public class GlobeClipmapTerrain : IRenderable, IDisposable
     {
-        public GlobeClipmapTerrain(Context context, RasterTerrainSource terrainSource, Ellipsoid ellipsoid, int clipmapPosts)
+        public GlobeClipmapTerrain(Context context, RasterTerrainSource terrainSource, EsriRestImagery imagery, Ellipsoid ellipsoid, int clipmapPosts)
         {
             _terrainSource = terrainSource;
             _ellipsoid = ellipsoid;
@@ -42,6 +42,26 @@ namespace OpenGlobe.Scene
                 _clipmapLevels[i].NormalTexture = Device.CreateTexture2D(new Texture2DDescription(_clipmapPosts, _clipmapPosts, TextureFormat.RedGreenBlue32f));
                 _clipmapLevels[i].CoarserLevel = i == 0 ? null : _clipmapLevels[i - 1];
                 _clipmapLevels[i].FinerLevel = i == _clipmapLevels.Length - 1 ? null : _clipmapLevels[i + 1];
+
+                // Aim for roughly one imagery texel per geometry texel.
+                // Find the first imagery level that meets our resolution needs.
+                double longitudeResRequired = terrainLevel.PostDeltaLongitude;
+                double latitudeResRequired = terrainLevel.PostDeltaLatitude;
+                EsriRestImageryLevel imageryLevel = null;
+                for (int j = 0; j < imagery.Levels.Count; ++j)
+                {
+                    imageryLevel = imagery.Levels[j];
+                    if (imageryLevel.PostDeltaLongitude <= longitudeResRequired &&
+                        imageryLevel.PostDeltaLatitude <= latitudeResRequired)
+                    {
+                        break;
+                    }
+                }
+
+                _clipmapLevels[i].Imagery = imageryLevel;
+                _clipmapLevels[i].ImageryWidth = (int)Math.Ceiling(_clipmapPosts * terrainLevel.PostDeltaLongitude / imageryLevel.PostDeltaLongitude);
+                _clipmapLevels[i].ImageryHeight = (int)Math.Ceiling(_clipmapPosts * terrainLevel.PostDeltaLatitude / imageryLevel.PostDeltaLatitude);
+                _clipmapLevels[i].ImageryTexture = Device.CreateTexture2D(new Texture2DDescription(_clipmapLevels[i].ImageryWidth, _clipmapLevels[i].ImageryHeight, TextureFormat.RedGreenBlue8, false));
             }
 
             _shaderProgram = Device.CreateShaderProgram(
@@ -100,6 +120,9 @@ namespace OpenGlobe.Scene
             _oneOverClipmapSize = (Uniform<float>)_shaderProgram.Uniforms["u_oneOverClipmapSize"];
             _color = (Uniform<Vector3F>)_shaderProgram.Uniforms["u_color"];
             _blendRegionColor = (Uniform<Vector3F>)_shaderProgram.Uniforms["u_blendRegionColor"];
+            _terrainToImageryResolutionRatio = (Uniform<Vector2F>)_shaderProgram.Uniforms["u_terrainToImageryResolutionRatio"];
+            _terrainOffsetInImagery = (Uniform<Vector2F>)_shaderProgram.Uniforms["u_terrainOffsetInImagery"];
+            _oneOverImagerySize = (Uniform<Vector2F>)_shaderProgram.Uniforms["u_oneOverImagerySize"];
 
             ((Uniform<Vector3F>)_shaderProgram.Uniforms["u_globeRadiiSquared"]).Value =
                 ellipsoid.RadiiSquared.ToVector3F();
@@ -179,6 +202,8 @@ namespace OpenGlobe.Scene
             ClipmapLevel level = _clipmapLevels[_clipmapLevels.Length - 1];
             double longitudeIndex = level.Terrain.LongitudeToIndex(centerLongitude);
             double latitudeIndex = level.Terrain.LatitudeToIndex(centerLatitude);
+            double imageryLongitudeIndex = level.Imagery.LongitudeToIndex(centerLongitude);
+            double imageryLatitudeIndex = level.Imagery.LatitudeToIndex(centerLatitude);
 
             int west = (int)(longitudeIndex - _clipmapPosts / 2);
             if ((west % 2) != 0)
@@ -191,18 +216,28 @@ namespace OpenGlobe.Scene
                 ++south;
             }
 
+            int imageryWest = (int)(imageryLongitudeIndex - level.ImageryWidth / 2);
+            int imagerySouth = (int)(imageryLatitudeIndex - level.ImageryHeight / 2);
+
             level.NextExtent.West = west;
             level.NextExtent.East = west + _clipmapSegments;
             level.NextExtent.South = south;
             level.NextExtent.North = south + _clipmapSegments;
 
+            level.NextImageryExtent.West = imageryWest;
+            level.NextImageryExtent.East = imageryWest + level.ImageryWidth;
+            level.NextImageryExtent.South = imagerySouth;
+            level.NextImageryExtent.North = imagerySouth + level.ImageryHeight;
+
             UpdateOriginInTextures(level);
+            UpdateImageryOriginInTextures(level);
 
             for (int i = _clipmapLevels.Length - 2; i >= 0; --i)
             {
                 level = _clipmapLevels[i];
                 ClipmapLevel finerLevel = _clipmapLevels[i + 1];
 
+                // Terrain
                 level.NextExtent.West = finerLevel.NextExtent.West / 2 - _fillPatchSegments;
                 level.OffsetStripOnEast = (level.NextExtent.West % 2) == 0;
                 if (!level.OffsetStripOnEast)
@@ -219,7 +254,17 @@ namespace OpenGlobe.Scene
                 }
                 level.NextExtent.North = level.NextExtent.South + _clipmapSegments;
 
+                // Imagery
+                imageryWest = (int)level.Imagery.LongitudeToIndex(level.Terrain.IndexToLongitude(level.NextExtent.West));
+                imagerySouth = (int)level.Imagery.LatitudeToIndex(level.Terrain.IndexToLatitude(level.NextExtent.South));
+
+                level.NextImageryExtent.West = imageryWest;
+                level.NextImageryExtent.East = imageryWest + level.ImageryWidth;
+                level.NextImageryExtent.South = imagerySouth;
+                level.NextImageryExtent.North = imagerySouth + level.ImageryHeight;
+
                 UpdateOriginInTextures(level);
+                UpdateImageryOriginInTextures(level);
             }
 
             _updater.ApplyNewData(context);
@@ -230,7 +275,8 @@ namespace OpenGlobe.Scene
                 ClipmapLevel coarserLevel = _clipmapLevels[i > 0 ? i - 1 : 0];
 
                 _updater.RequestTileResidency(context, thisLevel);
-                PreRenderLevel(thisLevel, coarserLevel, context, sceneState);
+                UpdateTerrain(thisLevel, coarserLevel, context, sceneState);
+                UpdateImagery(thisLevel, coarserLevel, context, sceneState);
             }
         }
 
@@ -258,7 +304,31 @@ namespace OpenGlobe.Scene
             }
         }
 
-        private void PreRenderLevel(ClipmapLevel level, ClipmapLevel coarserLevel, Context context, SceneState sceneState)
+        private void UpdateImageryOriginInTextures(ClipmapLevel level)
+        {
+            int deltaX = level.NextImageryExtent.West - level.CurrentImageryExtent.West;
+            int deltaY = level.NextImageryExtent.South - level.CurrentImageryExtent.South;
+            if (deltaX == 0 && deltaY == 0)
+                return;
+
+            if (level.CurrentImageryExtent.West > level.CurrentImageryExtent.East ||  // initial update
+                Math.Abs(deltaX) >= level.ImageryWidth || Math.Abs(deltaY) >= level.ImageryHeight)      // complete update
+            {
+                level.OriginInImagery = new Vector2I(0, 0);
+            }
+            else
+            {
+                int newOriginX = (level.OriginInImagery.X + deltaX) % level.ImageryWidth;
+                if (newOriginX < 0)
+                    newOriginX += level.ImageryWidth;
+                int newOriginY = (level.OriginInImagery.Y + deltaY) % level.ImageryHeight;
+                if (newOriginY < 0)
+                    newOriginY += level.ImageryHeight;
+                level.OriginInImagery = new Vector2I(newOriginX, newOriginY);
+            }
+        }
+
+        private void UpdateTerrain(ClipmapLevel level, ClipmapLevel coarserLevel, Context context, SceneState sceneState)
         {
             int deltaX = level.NextExtent.West - level.CurrentExtent.West;
             int deltaY = level.NextExtent.South - level.CurrentExtent.South;
@@ -309,12 +379,68 @@ namespace OpenGlobe.Scene
                 _updater.Update(context, verticalUpdate);
             }
 
-            //_updater.VerifyHeights(level);
-
             level.CurrentExtent.West = level.NextExtent.West;
             level.CurrentExtent.South = level.NextExtent.South;
             level.CurrentExtent.East = level.NextExtent.East;
             level.CurrentExtent.North = level.NextExtent.North;
+        }
+
+        private void UpdateImagery(ClipmapLevel level, ClipmapLevel coarserLevel, Context context, SceneState sceneState)
+        {
+            int deltaX = level.NextImageryExtent.West - level.CurrentImageryExtent.West;
+            int deltaY = level.NextImageryExtent.South - level.CurrentImageryExtent.South;
+            if (deltaX == 0 && deltaY == 0)
+                return;
+
+            int minLongitude = deltaX > 0 ? level.CurrentImageryExtent.East + 1 : level.NextImageryExtent.West;
+            int maxLongitude = deltaX > 0 ? level.NextImageryExtent.East : level.CurrentImageryExtent.West - 1;
+            int minLatitude = deltaY > 0 ? level.CurrentImageryExtent.North + 1 : level.NextImageryExtent.South;
+            int maxLatitude = deltaY > 0 ? level.NextImageryExtent.North : level.CurrentImageryExtent.South - 1;
+
+            int width = maxLongitude - minLongitude + 1;
+            int height = maxLatitude - minLatitude + 1;
+
+            if (level.CurrentImageryExtent.West > level.CurrentImageryExtent.East || // initial update
+                width >= level.ImageryWidth || height >= level.ImageryHeight) // complete update
+            {
+                // Initial or complete update.
+                width = level.ImageryWidth;
+                height = level.ImageryHeight;
+                deltaX = level.ImageryWidth;
+                deltaY = level.ImageryHeight;
+                minLongitude = level.NextImageryExtent.West;
+                maxLongitude = level.NextImageryExtent.East;
+                minLatitude = level.NextImageryExtent.South;
+                maxLatitude = level.NextImageryExtent.North;
+            }
+
+            if (height > 0)
+            {
+                ClipmapUpdate horizontalUpdate = new ClipmapUpdate(
+                    level,
+                    level.NextImageryExtent.West,
+                    minLatitude,
+                    level.NextImageryExtent.East,
+                    maxLatitude);
+                _updater.UpdateImagery(context, horizontalUpdate);
+            }
+
+            if (width > 0)
+            {
+                ClipmapUpdate verticalUpdate = new ClipmapUpdate(
+                    level,
+                    minLongitude,
+                    level.NextImageryExtent.South,
+                    maxLongitude,
+                    level.NextImageryExtent.North);
+                _updater.UpdateImagery(context, verticalUpdate);
+            }
+
+
+            level.CurrentImageryExtent.West = level.NextImageryExtent.West;
+            level.CurrentImageryExtent.South = level.NextImageryExtent.South;
+            level.CurrentImageryExtent.East = level.NextImageryExtent.East;
+            level.CurrentImageryExtent.North = level.NextImageryExtent.North;
         }
 
         public void Render(Context context, SceneState sceneState)
@@ -387,6 +513,8 @@ namespace OpenGlobe.Scene
             context.TextureUnits[2].TextureSampler = Device.TextureSamplers.LinearRepeat;
             context.TextureUnits[3].Texture = coarserLevel.NormalTexture;
             context.TextureUnits[3].TextureSampler = Device.TextureSamplers.LinearRepeat;
+            context.TextureUnits[4].Texture = level.ImageryTexture;
+            context.TextureUnits[4].TextureSampler = Device.TextureSamplers.LinearRepeat;
 
             if (_colorClipmapLevels)
             {
@@ -422,6 +550,20 @@ namespace OpenGlobe.Scene
             _fineTextureOrigin.Value = level.OriginInTextures.ToVector2F() + new Vector2F(0.5f, 0.5f);
 
             _useBlendRegions.Value = _blendRegionsEnabled && level != coarserLevel;
+
+            _terrainToImageryResolutionRatio.Value = new Vector2F((float)(level.Terrain.PostDeltaLongitude / level.Imagery.PostDeltaLongitude),
+                                                                  (float)(level.Terrain.PostDeltaLatitude / level.Imagery.PostDeltaLatitude));
+
+            double terrainWest = level.Terrain.IndexToLongitude(level.CurrentExtent.West);
+            double terrainSouth = level.Terrain.IndexToLatitude(level.CurrentExtent.South);
+            double imageryWestIndex = level.Imagery.LongitudeToIndex(terrainWest);
+            double imagerySouthIndex = level.Imagery.LatitudeToIndex(terrainSouth);
+
+            Vector2D terrainOffsetInImagery = level.OriginInImagery.ToVector2D() +
+                                              new Vector2D(imageryWestIndex - level.CurrentImageryExtent.West,
+                                                           imagerySouthIndex - level.CurrentImageryExtent.South);
+            _terrainOffsetInImagery.Value = terrainOffsetInImagery.ToVector2F();
+            _oneOverImagerySize.Value = new Vector2F((float)(1.0 / level.ImageryWidth), (float)(1.0 / level.ImageryHeight));
 
             DrawBlock(_fillPatch, level, coarserLevel, west, south, west, south, context, sceneState);
             DrawBlock(_fillPatch, level, coarserLevel, west, south, west + _fillPatchSegments, south, context, sceneState);
@@ -611,6 +753,9 @@ namespace OpenGlobe.Scene
         private Uniform<float> _oneOverClipmapSize;
         private Uniform<Vector3F> _color;
         private Uniform<Vector3F> _blendRegionColor;
+        private Uniform<Vector2F> _terrainToImageryResolutionRatio;
+        private Uniform<Vector2F> _terrainOffsetInImagery;
+        private Uniform<Vector2F> _oneOverImagerySize;
         
         private bool _wireframe;
         private bool _blendRegionsEnabled = true;
