@@ -766,7 +766,7 @@ namespace OpenGlobe.Scene
             using (WritePixelBuffer wpb = Device.CreateWritePixelBuffer(PixelBufferHint.Stream, width * height * sizeof(int) * 3))
             {
                 wpb.CopyFromSystemMemory(image);
-                texture.CopyFromBuffer(wpb, ImageFormat.RedGreenBlue, ImageDatatype.UnsignedByte);
+                texture.CopyFromBuffer(wpb, ImageFormat.BlueGreenRed, ImageDatatype.UnsignedByte);
             }
 
             return texture;
