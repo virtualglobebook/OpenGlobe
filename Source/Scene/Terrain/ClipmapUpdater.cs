@@ -112,6 +112,7 @@ namespace OpenGlobe.Scene
         {
             // This is the start of a new frame, so the next request goes at the end
             _requestInsertionPoint = null;
+            _imageryRequestInsertionPoint = null;
 
 #if SingleThreaded
             _requestQueue.ProcessQueue();
