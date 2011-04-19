@@ -517,7 +517,7 @@ namespace OpenGlobe.Scene
                 return;
 
             context.TextureUnits[0].Texture = coarserLevel.HeightTexture;
-            context.TextureUnits[0].TextureSampler = Device.TextureSamplers.LinearRepeat; // TODO: change to NearestRepeat
+            context.TextureUnits[0].TextureSampler = Device.TextureSamplers.LinearRepeat;
 
             _framebuffer.ColorAttachments[_upsampleHeightOutput] = level.HeightTexture;
 
@@ -559,7 +559,7 @@ namespace OpenGlobe.Scene
                 return;
 
             context.TextureUnits[0].Texture = coarserLevel.ImageryTexture;
-            context.TextureUnits[0].TextureSampler = Device.TextureSamplers.LinearRepeat; // TODO: change to NearestRepeat
+            context.TextureUnits[0].TextureSampler = Device.TextureSamplers.LinearRepeat;
 
             _framebuffer.ColorAttachments[_upsampleHeightOutput] = level.ImageryTexture;
 

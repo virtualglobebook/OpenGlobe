@@ -36,7 +36,6 @@ vec3 ComputeColor()
 {
     vec3 fineColor = texture(og_texture4, fsFineColorUv).rgb;
     return fineColor;
-    //return vec3(fsFineColorUv, 0.0) + fineColor * vec3(0.0, 0.00000001, 0.0);
 }
 
 void main()

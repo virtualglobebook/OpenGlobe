@@ -259,9 +259,9 @@ namespace OpenGlobe.Scene
                 imagerySouth = (int)level.Imagery.LatitudeToIndex(level.Terrain.IndexToLatitude(level.NextExtent.South));
 
                 level.NextImageryExtent.West = imageryWest;
-                level.NextImageryExtent.East = imageryWest + level.ImageryWidth;
+                level.NextImageryExtent.East = imageryWest + level.ImageryWidth - 1;
                 level.NextImageryExtent.South = imagerySouth;
-                level.NextImageryExtent.North = imagerySouth + level.ImageryHeight;
+                level.NextImageryExtent.North = imagerySouth + level.ImageryHeight - 1;
 
                 UpdateOriginInTextures(level);
                 UpdateImageryOriginInTextures(level);
