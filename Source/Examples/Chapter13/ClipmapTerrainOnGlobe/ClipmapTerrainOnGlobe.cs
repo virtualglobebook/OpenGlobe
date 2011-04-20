@@ -44,8 +44,8 @@ namespace OpenGlobe.Examples
             _sceneState.Camera.PerspectiveFarPlaneDistance = 10.0 * _ellipsoid.MaximumRadius;
             _sceneState.SunPosition = new Vector3D(200000, 300000, 200000) * _ellipsoid.MaximumRadius;
 
-             _camera = new CameraLookAtPoint(_sceneState.Camera, _window, _ellipsoid);
-             _camera.Range = 1.5 * _ellipsoid.MaximumRadius;
+             _lookCamera = new CameraLookAtPoint(_sceneState.Camera, _window, _ellipsoid);
+             _lookCamera.Range = 1.5 * _ellipsoid.MaximumRadius;
 
              _globe = new RayCastedGlobe(_window.Context);
              _globe.Shape = _ellipsoid;
@@ -123,16 +123,38 @@ namespace OpenGlobe.Examples
                 double longitude = -119.5326056;
                 double latitude = 37.74451389;
                 Geodetic3D halfDome = new Geodetic3D(Trig.ToRadians(longitude), Trig.ToRadians(latitude), 2700.0);
-                _camera.ViewPoint(_ellipsoid, halfDome);
-                _camera.Azimuth = 0.0;
-                _camera.Elevation = Trig.ToRadians(30.0);
-                _camera.Range = 10000.0;
+                _lookCamera.ViewPoint(_ellipsoid, halfDome);
+                _lookCamera.Azimuth = 0.0;
+                _lookCamera.Elevation = Trig.ToRadians(30.0);
+                _lookCamera.Range = 10000.0;
             }
             else if (e.Key == KeyboardKey.F)
             {
-                _camera.Dispose();
-                CameraFly fly = new CameraFly(_sceneState.Camera, _window);
-                //fly.MovementRate *= 10;
+                if (_lookCamera != null)
+                {
+                    _lookCamera.Dispose();
+                    _lookCamera = null;
+                    _flyCamera = new CameraFly(_sceneState.Camera, _window);
+                }
+                else if (_flyCamera != null)
+                {
+                    _flyCamera.Dispose();
+                    _flyCamera = null;
+                    _sceneState.Camera.Target = new Vector3D(0.0, 0.0, 0.0);
+                    _lookCamera = new CameraLookAtPoint(_sceneState.Camera, _window, _ellipsoid);
+                    _lookCamera.UpdateParametersFromCamera();
+                }
+                UpdateHUD();
+            }
+            else if (_flyCamera != null && (e.Key == KeyboardKey.Plus || e.Key == KeyboardKey.KeypadPlus))
+            {
+                _flyCamera.MovementRate *= 2.0;
+                UpdateHUD();
+            }
+            else if (_flyCamera != null && (e.Key == KeyboardKey.Minus || e.Key == KeyboardKey.KeypadMinus))
+            {
+                _flyCamera.MovementRate *= 0.5;
+                UpdateHUD();
             }
         }
 
@@ -170,6 +192,12 @@ namespace OpenGlobe.Examples
             text += "Wireframe: " + (_clipmap.Wireframe ? "Enabled" : "Disabled") + " (W)\n";
             text += "LOD Update: " + (_clipmap.LodUpdateEnabled ? "Enabled" : "Disabled") + " (L)\n";
             text += "Color Clipmap Levels: " + (_clipmap.ColorClipmapLevels ? "Enabled" : "Disabled") + " (C)\n";
+            text += "Camera: " + (_lookCamera != null ? "Look At" : "Fly") + " (F)\n";
+
+            if (_flyCamera != null)
+            {
+                text += "Speed: " + _flyCamera.MovementRate + "m/s (+/-)\n";
+            }
 
             if (_hud.Texture != null)
             {
@@ -195,8 +223,8 @@ namespace OpenGlobe.Examples
 
         public void Dispose()
         {
-            if (_camera != null)
-                _camera.Dispose();
+            if (_lookCamera != null)
+                _lookCamera.Dispose();
             //if (_cameraFly != null)
             //    _cameraFly.Dispose();
             _clipmap.Dispose();
@@ -227,8 +255,8 @@ namespace OpenGlobe.Examples
 
         private readonly GraphicsWindow _window;
         private readonly SceneState _sceneState;
-        private readonly CameraLookAtPoint _camera;
-        //private CameraFly _cameraFly;
+        private CameraLookAtPoint _lookCamera;
+        private CameraFly _flyCamera;
         private readonly ClearState _clearState;
         private readonly GlobeClipmapTerrain _clipmap;
         private HeadsUpDisplay _hud;
