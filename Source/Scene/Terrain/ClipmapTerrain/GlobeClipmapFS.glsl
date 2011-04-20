@@ -21,7 +21,9 @@ uniform sampler2D og_texture2;    // finer normal map
 uniform sampler2D og_texture3;    // coarser normal map
 uniform sampler2D og_texture4;    // color map
 
+uniform bool u_showImagery;
 uniform bool u_showBlendRegions;
+uniform bool u_shade;
 uniform vec3 u_color;
 uniform vec3 u_blendRegionColor;
 
@@ -32,23 +34,17 @@ vec3 ComputeNormal()
 	return normalize(mix(fineNormal, coarseNormal, fsAlpha));
 }
 
-vec3 ComputeColor()
-{
-    vec3 fineColor = texture(og_texture4, fsFineColorUv).rgb;
-    return fineColor;
-}
-
 void main()
 {
-    vec3 normal = ComputeNormal();
-    vec3 color = ComputeColor();
-    vec3 positionToLight = normalize(fsPositionToLight);
+    vec3 color = u_showImagery ? texture(og_texture4, fsFineColorUv).rgb : u_color;
+    fragmentColor = u_showBlendRegions ? mix(color, u_blendRegionColor, fsAlpha) : color;
 
-	float diffuse = og_diffuseSpecularAmbientShininess.x * max(dot(positionToLight, normal), 0.0);
-	float intensity = diffuse + og_diffuseSpecularAmbientShininess.z;
-
-	if (u_showBlendRegions)
-		fragmentColor = mix(u_color, u_blendRegionColor, fsAlpha) * intensity;
-	else
-		fragmentColor = color; // * intensity;
+    if (u_shade)
+    {
+        vec3 positionToLight = normalize(fsPositionToLight);
+        vec3 normal = ComputeNormal();
+        float diffuse = og_diffuseSpecularAmbientShininess.x * max(dot(positionToLight, normal), 0.0);
+    	float intensity = diffuse + og_diffuseSpecularAmbientShininess.z;
+        fragmentColor *= intensity;
+    }
 }

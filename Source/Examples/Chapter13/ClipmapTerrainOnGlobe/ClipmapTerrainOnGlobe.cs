@@ -82,7 +82,7 @@ namespace OpenGlobe.Examples
 
         private void OnKeyDown(object sender, KeyboardKeyEventArgs e)
         {
-            if (e.Key == KeyboardKey.S)
+            if (e.Key == KeyboardKey.U)
             {
                 _sceneState.SunPosition = _sceneState.Camera.Eye;
             }
@@ -116,6 +116,26 @@ namespace OpenGlobe.Examples
             else if (e.Key == KeyboardKey.C)
             {
                 _clipmap.ColorClipmapLevels = !_clipmap.ColorClipmapLevels;
+                if (_clipmap.ColorClipmapLevels)
+                {
+                    _clipmap.ShowImagery = false;
+                    _clipmap.Shade = true;
+                }
+                UpdateHUD();
+            }
+            else if (e.Key == KeyboardKey.I)
+            {
+                _clipmap.ShowImagery = !_clipmap.ShowImagery;
+                _clipmap.Shade = !_clipmap.ShowImagery;
+                if (_clipmap.ShowImagery)
+                {
+                    _clipmap.ColorClipmapLevels = false;
+                }
+                UpdateHUD();
+            }
+            else if (e.Key == KeyboardKey.S)
+            {
+                _clipmap.Shade = !_clipmap.Shade;
                 UpdateHUD();
             }
             else if (e.Key == KeyboardKey.Z)
@@ -189,6 +209,8 @@ namespace OpenGlobe.Examples
             string text;
 
             text = "Blending: " + GetBlendingString() + " (B)\n";
+            text += "Imagery: " + (_clipmap.ShowImagery ? "Enabled" : "Disabled") + " (I)\n";
+            text += "Shading: " + (_clipmap.Shade ? "Enabled" : "Disabled") + " (S)\n";
             text += "Wireframe: " + (_clipmap.Wireframe ? "Enabled" : "Disabled") + " (W)\n";
             text += "LOD Update: " + (_clipmap.LodUpdateEnabled ? "Enabled" : "Disabled") + " (L)\n";
             text += "Color Clipmap Levels: " + (_clipmap.ColorClipmapLevels ? "Enabled" : "Disabled") + " (C)\n";

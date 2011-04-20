@@ -123,6 +123,8 @@ namespace OpenGlobe.Scene
             _terrainToImageryResolutionRatio = (Uniform<Vector2F>)_shaderProgram.Uniforms["u_terrainToImageryResolutionRatio"];
             _terrainOffsetInImagery = (Uniform<Vector2F>)_shaderProgram.Uniforms["u_terrainOffsetInImagery"];
             _oneOverImagerySize = (Uniform<Vector2F>)_shaderProgram.Uniforms["u_oneOverImagerySize"];
+            _showImagery = (Uniform<bool>)_shaderProgram.Uniforms["u_showImagery"];
+            _shade = (Uniform<bool>)_shaderProgram.Uniforms["u_shade"];
 
             ((Uniform<Vector3F>)_shaderProgram.Uniforms["u_globeRadiiSquared"]).Value =
                 ellipsoid.RadiiSquared.ToVector3F();
@@ -138,6 +140,7 @@ namespace OpenGlobe.Scene
             _unblendedRegionSize.Value = new Vector2F(unblendedRegionSize, unblendedRegionSize);
 
             _useBlendRegions.Value = true;
+            _showImagery.Value = true;
 
             _oneOverClipmapSize.Value = 1.0f / clipmapPosts;
 
@@ -162,6 +165,18 @@ namespace OpenGlobe.Scene
         {
             get { return _showBlendRegions.Value; }
             set { _showBlendRegions.Value = value; }
+        }
+
+        public bool ShowImagery
+        {
+            get { return _showImagery.Value; }
+            set { _showImagery.Value = value; }
+        }
+
+        public bool Shade
+        {
+            get { return _shade.Value; }
+            set { _shade.Value = value; }
         }
 
         public float HeightExaggeration
@@ -756,6 +771,8 @@ namespace OpenGlobe.Scene
         private Uniform<Vector2F> _terrainToImageryResolutionRatio;
         private Uniform<Vector2F> _terrainOffsetInImagery;
         private Uniform<Vector2F> _oneOverImagerySize;
+        private Uniform<bool> _showImagery;
+        private Uniform<bool> _shade;
         
         private bool _wireframe;
         private bool _blendRegionsEnabled = true;
