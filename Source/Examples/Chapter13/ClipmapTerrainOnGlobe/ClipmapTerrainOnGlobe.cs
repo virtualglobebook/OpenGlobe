@@ -140,13 +140,16 @@ namespace OpenGlobe.Examples
             }
             else if (e.Key == KeyboardKey.Z)
             {
-                double longitude = -119.5326056;
-                double latitude = 37.74451389;
-                Geodetic3D halfDome = new Geodetic3D(Trig.ToRadians(longitude), Trig.ToRadians(latitude), 2700.0);
-                _lookCamera.ViewPoint(_ellipsoid, halfDome);
-                _lookCamera.Azimuth = 0.0;
-                _lookCamera.Elevation = Trig.ToRadians(30.0);
-                _lookCamera.Range = 10000.0;
+                if (_lookCamera != null)
+                {
+                    double longitude = -119.5326056;
+                    double latitude = 37.74451389;
+                    Geodetic3D halfDome = new Geodetic3D(Trig.ToRadians(longitude), Trig.ToRadians(latitude), 2700.0);
+                    _lookCamera.ViewPoint(_ellipsoid, halfDome);
+                    _lookCamera.Azimuth = 0.0;
+                    _lookCamera.Elevation = Trig.ToRadians(30.0);
+                    _lookCamera.Range = 10000.0;
+                }
             }
             else if (e.Key == KeyboardKey.F)
             {
