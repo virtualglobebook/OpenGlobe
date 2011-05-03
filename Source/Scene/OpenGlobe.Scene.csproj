@@ -210,18 +210,6 @@
     <EmbeddedResource Include="Renderables\PolylineOnTerrain\Shaders\PolylineOnTerrainWallVS.glsl" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Terrain\ClipmapTerrain\ClipmapVS.glsl" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Terrain\ClipmapTerrain\ClipmapFS.glsl" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Terrain\ClipmapTerrain\PlaneClipmapFS.glsl" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Terrain\ClipmapTerrain\PlaneClipmapVS.glsl" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Terrain\ClipmapTerrain\ClipmapUpdateFS.glsl" />
   </ItemGroup>
   <ItemGroup>
@@ -234,9 +222,6 @@
   <ItemGroup>
     <EmbeddedResource Include="Terrain\ClipmapTerrain\ClipmapComputeNormalsFS.glsl" />
     <EmbeddedResource Include="Terrain\ClipmapTerrain\ClipmapComputeNormalsVS.glsl" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Terrain\ClipmapTerrain\PlaneClipmapGS.glsl" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Terrain\ClipmapTerrain\GlobeClipmapFS.glsl" />
