@@ -18,7 +18,7 @@ namespace OpenGlobe.Scene
 {
     public class PlaneClipmapTerrain : IRenderable, IDisposable
     {
-        public PlaneClipmapTerrain(Context context, RasterTerrainSource terrainSource, int clipmapPosts)
+        public PlaneClipmapTerrain(Context context, RasterSource terrainSource, int clipmapPosts)
         {
             _terrainSource = terrainSource;
             _clipmapPosts = clipmapPosts;
@@ -34,7 +34,7 @@ namespace OpenGlobe.Scene
 
             for (int i = 0; i < _clipmapLevels.Length; ++i)
             {
-                RasterTerrainLevel terrainLevel = _terrainSource.Levels[i];
+                RasterLevel terrainLevel = _terrainSource.Levels[i];
                 _clipmapLevels[i].Terrain = terrainLevel;
                 _clipmapLevels[i].HeightTexture = Device.CreateTexture2D(new Texture2DDescription(_clipmapPosts, _clipmapPosts, TextureFormat.Red32f));
                 _clipmapLevels[i].NormalTexture = Device.CreateTexture2D(new Texture2DDescription(_clipmapPosts, _clipmapPosts, TextureFormat.RedGreenBlue32f));
@@ -332,10 +332,10 @@ namespace OpenGlobe.Scene
             int longitudeIndex = (int)_clipmapLevels[0].Terrain.LongitudeToIndex(_clipmapCenter.X);
             int latitudeIndex = (int)_clipmapLevels[0].Terrain.LatitudeToIndex(_clipmapCenter.Y);
 
-            float[] heightSample = new float[1];
+            /*float[] heightSample = new float[1];
             _clipmapLevels[0].Terrain.GetPosts(longitudeIndex, latitudeIndex, longitudeIndex, latitudeIndex, heightSample, 0, 1);
 
-            /*while (maxLevel > 0)
+            while (maxLevel > 0)
             {
                 double terrainHeight = heightSample[0] * _heightExaggeration.Value; // TODO: get the real terrain height
                 double viewerHeight = clipmapCenter.Z;
@@ -565,7 +565,7 @@ namespace OpenGlobe.Scene
             return colors;
         }
 
-        private RasterTerrainSource _terrainSource;
+        private RasterSource _terrainSource;
         private int _clipmapPosts;
         private int _clipmapSegments;
         private ClipmapLevel[] _clipmapLevels;

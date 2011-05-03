@@ -18,7 +18,7 @@ namespace OpenGlobe.Scene
 {
     public class GlobeClipmapTerrain : IRenderable, IDisposable
     {
-        public GlobeClipmapTerrain(Context context, RasterTerrainSource terrainSource, EsriRestImagery imagery, Ellipsoid ellipsoid, int clipmapPosts)
+        public GlobeClipmapTerrain(Context context, RasterSource terrainSource, EsriRestImagery imagery, Ellipsoid ellipsoid, int clipmapPosts)
         {
             _terrainSource = terrainSource;
             _ellipsoid = ellipsoid;
@@ -36,7 +36,7 @@ namespace OpenGlobe.Scene
 
             for (int i = 0; i < _clipmapLevels.Length; ++i)
             {
-                RasterTerrainLevel terrainLevel = _terrainSource.Levels[i];
+                RasterLevel terrainLevel = _terrainSource.Levels[i];
                 _clipmapLevels[i].Terrain = terrainLevel;
                 _clipmapLevels[i].HeightTexture = Device.CreateTexture2D(new Texture2DDescription(_clipmapPosts, _clipmapPosts, TextureFormat.Red32f));
                 _clipmapLevels[i].NormalTexture = Device.CreateTexture2D(new Texture2DDescription(_clipmapPosts, _clipmapPosts, TextureFormat.RedGreenBlue32f));
@@ -124,7 +124,7 @@ namespace OpenGlobe.Scene
             _terrainOffsetInImagery = (Uniform<Vector2F>)_shaderProgram.Uniforms["u_terrainOffsetInImagery"];
             _oneOverImagerySize = (Uniform<Vector2F>)_shaderProgram.Uniforms["u_oneOverImagerySize"];
             _showImagery = (Uniform<bool>)_shaderProgram.Uniforms["u_showImagery"];
-            _shade = (Uniform<bool>)_shaderProgram.Uniforms["u_shade"];
+            _lighting = (Uniform<bool>)_shaderProgram.Uniforms["u_shade"];
 
             ((Uniform<Vector3F>)_shaderProgram.Uniforms["u_globeRadiiSquared"]).Value =
                 ellipsoid.RadiiSquared.ToVector3F();
@@ -173,10 +173,10 @@ namespace OpenGlobe.Scene
             set { _showImagery.Value = value; }
         }
 
-        public bool Shade
+        public bool Lighting
         {
-            get { return _shade.Value; }
-            set { _shade.Value = value; }
+            get { return _lighting.Value; }
+            set { _lighting.Value = value; }
         }
 
         public float HeightExaggeration
@@ -485,10 +485,10 @@ namespace OpenGlobe.Scene
             int longitudeIndex = (int)_clipmapLevels[0].Terrain.LongitudeToIndex(_clipmapCenter.Longitude);
             int latitudeIndex = (int)_clipmapLevels[0].Terrain.LatitudeToIndex(_clipmapCenter.Latitude);
 
-            float[] heightSample = new float[1];
+            /*float[] heightSample = new float[1];
             _clipmapLevels[0].Terrain.GetPosts(longitudeIndex, latitudeIndex, longitudeIndex, latitudeIndex, heightSample, 0, 1);
 
-            /*while (maxLevel > 0)
+            while (maxLevel > 0)
             {
                 double terrainHeight = heightSample[0] * _heightExaggeration.Value; // TODO: get the real terrain height
                 double viewerHeight = clipmapCenter.Z;
@@ -733,7 +733,7 @@ namespace OpenGlobe.Scene
             return colors;
         }
 
-        private RasterTerrainSource _terrainSource;
+        private RasterSource _terrainSource;
         private int _clipmapPosts;
         private int _clipmapSegments;
         private ClipmapLevel[] _clipmapLevels;
@@ -772,7 +772,7 @@ namespace OpenGlobe.Scene
         private Uniform<Vector2F> _terrainOffsetInImagery;
         private Uniform<Vector2F> _oneOverImagerySize;
         private Uniform<bool> _showImagery;
-        private Uniform<bool> _shade;
+        private Uniform<bool> _lighting;
         
         private bool _wireframe;
         private bool _blendRegionsEnabled = true;

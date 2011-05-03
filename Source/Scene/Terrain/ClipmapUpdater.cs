@@ -77,8 +77,8 @@ namespace OpenGlobe.Scene
 
             // Preload the entire world at level 0
             ClipmapLevel levelZero = clipmapLevels[0];
-            RasterTerrainTileRegion[] regions = levelZero.Terrain.GetTilesInExtent(0, 0, levelZero.Terrain.LongitudePosts - 1, levelZero.Terrain.LatitudePosts - 1);
-            foreach (RasterTerrainTileRegion region in regions)
+            RasterTileRegion[] regions = levelZero.Terrain.GetTilesInExtent(0, 0, levelZero.Terrain.LongitudePosts - 1, levelZero.Terrain.LatitudePosts - 1);
+            foreach (RasterTileRegion region in regions)
             {
                 RequestTileLoad(levelZero, region.Tile);
             }
@@ -159,7 +159,7 @@ namespace OpenGlobe.Scene
             //    }
         }
 
-        public void ApplyNewTile(Context context, ClipmapLevel level, RasterTerrainTile tile)
+        public void ApplyNewTile(Context context, ClipmapLevel level, RasterTile tile)
         {
             ClipmapUpdate entireLevel = new ClipmapUpdate(
                 level,
@@ -193,7 +193,7 @@ namespace OpenGlobe.Scene
             }
         }
 
-        private void ApplyIfNotLoaded(Context context, ClipmapLevel level, RasterTerrainTile tile)
+        private void ApplyIfNotLoaded(Context context, ClipmapLevel level, RasterTile tile)
         {
             Texture2D texture;
             if (!_loadedTiles.TryGetValue(tile.Identifier, out texture) || texture == null)
@@ -256,8 +256,8 @@ namespace OpenGlobe.Scene
 
         public void RequestTileResidency(Context context, ClipmapLevel level)
         {
-            RasterTerrainTileRegion[] tileRegions = level.Terrain.GetTilesInExtent(level.NextExtent.West, level.NextExtent.South, level.NextExtent.East, level.NextExtent.North);
-            foreach (RasterTerrainTileRegion region in tileRegions)
+            RasterTileRegion[] tileRegions = level.Terrain.GetTilesInExtent(level.NextExtent.West, level.NextExtent.South, level.NextExtent.East, level.NextExtent.North);
+            foreach (RasterTileRegion region in tileRegions)
             {
                 if (!_loadedTiles.ContainsKey(region.Tile.Identifier))
                 {
@@ -282,8 +282,8 @@ namespace OpenGlobe.Scene
             ClipmapUpdate[] updates = SplitUpdateToAvoidWrappingTerrain(update);
             foreach (ClipmapUpdate nonWrappingUpdate in updates)
             {
-                RasterTerrainTileRegion[] tileRegions = level.Terrain.GetTilesInExtent(nonWrappingUpdate.West, nonWrappingUpdate.South, nonWrappingUpdate.East, nonWrappingUpdate.North);
-                foreach (RasterTerrainTileRegion region in tileRegions)
+                RasterTileRegion[] tileRegions = level.Terrain.GetTilesInExtent(nonWrappingUpdate.West, nonWrappingUpdate.South, nonWrappingUpdate.East, nonWrappingUpdate.North);
+                foreach (RasterTileRegion region in tileRegions)
                 {
                     Texture2D tileTexture;
                     bool loaded = _loadedTiles.TryGetValue(region.Tile.Identifier, out tileTexture);
@@ -478,7 +478,7 @@ namespace OpenGlobe.Scene
             context.Viewport = oldViewport;
         }
 
-        private void RenderTileToLevelHeightTexture(Context context, ClipmapLevel level, RasterTerrainTileRegion region, Texture2D texture)
+        private void RenderTileToLevelHeightTexture(Context context, ClipmapLevel level, RasterTileRegion region, Texture2D texture)
         {
             context.TextureUnits[0].Texture = texture;
             context.TextureUnits[0].TextureSampler = Device.TextureSamplers.NearestClamp;
@@ -510,7 +510,7 @@ namespace OpenGlobe.Scene
             context.Viewport = oldViewport;
         }
 
-        private void UpsampleTileData(Context context, ClipmapLevel level, RasterTerrainTileRegion region)
+        private void UpsampleTileData(Context context, ClipmapLevel level, RasterTileRegion region)
         {
             ClipmapLevel coarserLevel = level.CoarserLevel;
 
@@ -626,7 +626,7 @@ namespace OpenGlobe.Scene
             context.Viewport = oldViewport;
         }
 
-        private void RequestTileLoad(ClipmapLevel level, RasterTerrainTile tile)
+        private void RequestTileLoad(ClipmapLevel level, RasterTile tile)
         {
             LinkedListNode<TileLoadRequest> requestNode;
             bool exists = _loadingTiles.TryGetValue(tile.Identifier, out requestNode);
@@ -734,26 +734,6 @@ namespace OpenGlobe.Scene
             _loadingImageryTiles[tile.Identifier] = requestNode;
         }
 
-        private Texture2D CreateTextureFromTile(RasterTerrainTile tile)
-        {
-            int width = tile.East - tile.West + 1;
-            int height = tile.North - tile.South + 1;
-
-            Texture2DDescription description = new Texture2DDescription(width, height, TextureFormat.Red32f, false);
-            Texture2D texture = Device.CreateTexture2DRectangle(description);
-
-            float[] posts = new float[width * height];
-            tile.GetPosts(0, 0, width - 1, height - 1, posts, 0, width);
-
-            using (WritePixelBuffer wpb = Device.CreateWritePixelBuffer(PixelBufferHint.Stream, width * height * sizeof(float)))
-            {
-                wpb.CopyFromSystemMemory(posts);
-                texture.CopyFromBuffer(wpb, ImageFormat.Red, ImageDatatype.Float);
-            }
-
-            return texture;
-        }
-
         private Texture2D CreateImageryTextureFromTile(EsriRestImageryTile tile)
         {
             int width = tile.East - tile.West + 1;
@@ -803,8 +783,8 @@ namespace OpenGlobe.Scene
 
                 if (request != null)
                 {
-                    RasterTerrainTile tile = request.Tile;
-                    request.Texture = CreateTextureFromTile(tile);
+                    RasterTile tile = request.Tile;
+                    request.Texture = tile.LoadTexture();
 
                     Fence fence = Device.CreateFence();
                     fence.ClientWait();
@@ -855,62 +835,10 @@ namespace OpenGlobe.Scene
             }
         }
 
-        public void VerifyHeights(ClipmapLevel level)
-        {
-            ReadPixelBuffer rpb = level.HeightTexture.CopyToBuffer(ImageFormat.Red, ImageDatatype.Float);
-            float[] postsFromTexture = rpb.CopyToSystemMemory<float>();
-
-            ReadPixelBuffer rpbNormals = level.NormalTexture.CopyToBuffer(ImageFormat.RedGreenBlue, ImageDatatype.Float);
-            Vector3F[] normalsFromTexture = rpbNormals.CopyToSystemMemory<Vector3F>();
-
-            int clipmapPosts = level.NextExtent.East - level.NextExtent.West + 1;
-
-            float[] realPosts = new float[clipmapPosts * clipmapPosts];
-            level.Terrain.GetPosts(level.NextExtent.West, level.NextExtent.South, level.NextExtent.East, level.NextExtent.North, realPosts, 0, clipmapPosts);
-
-            float heightExaggeration = HeightExaggeration;
-            float postDelta = (float)level.Terrain.PostDeltaLongitude;
-
-            for (int j = 0; j < clipmapPosts; ++j)
-            {
-                int y = (j + level.OriginInTextures.Y) % clipmapPosts;
-                for (int i = 0; i < clipmapPosts; ++i)
-                {
-                    int x = (i + level.OriginInTextures.X) % clipmapPosts;
-
-                    float realHeight = realPosts[j * clipmapPosts + i];
-                    float heightFromTexture = postsFromTexture[y * clipmapPosts + x];
-
-                    if (realHeight != heightFromTexture)
-                        throw new Exception("bad");
-
-                    if (i != 0 && i != clipmapPosts - 1 &&
-                        j != 0 && j != clipmapPosts - 1)
-                    {
-                        int top = (j + 1) * clipmapPosts + i;
-                        float topHeight = realPosts[top] * heightExaggeration;
-                        int bottom = (j - 1) * clipmapPosts + i;
-                        float bottomHeight = realPosts[bottom] * heightExaggeration;
-                        int right = j * clipmapPosts + i + 1;
-                        float rightHeight = realPosts[right] * heightExaggeration;
-                        int left = j * clipmapPosts + i - 1;
-                        float leftHeight = realPosts[left] * heightExaggeration;
-
-                        Vector3F realNormal = new Vector3F(leftHeight - rightHeight, bottomHeight - topHeight, 2.0f * postDelta).Normalize();
-
-                        Vector3F normalFromTexture = normalsFromTexture[y * clipmapPosts + x].Normalize();
-
-                        if (!realNormal.EqualsEpsilon(normalFromTexture, 1e-5f))
-                            throw new Exception("normal is bad.");
-                    }
-                }
-            }
-        }
-
         private class TileLoadRequest
         {
             public ClipmapLevel Level;
-            public RasterTerrainTile Tile;
+            public RasterTile Tile;
             public Texture2D Texture;
         }
 
@@ -950,8 +878,8 @@ namespace OpenGlobe.Scene
         private Uniform<float> _heightExaggeration;
         private Uniform<float> _postDelta;
 
-        private Dictionary<RasterTerrainTileIdentifier, LinkedListNode<TileLoadRequest>> _loadingTiles = new Dictionary<RasterTerrainTileIdentifier, LinkedListNode<TileLoadRequest>>();
-        private Dictionary<RasterTerrainTileIdentifier, Texture2D> _loadedTiles = new Dictionary<RasterTerrainTileIdentifier, Texture2D>();
+        private Dictionary<RasterTileIdentifier, LinkedListNode<TileLoadRequest>> _loadingTiles = new Dictionary<RasterTileIdentifier, LinkedListNode<TileLoadRequest>>();
+        private Dictionary<RasterTileIdentifier, Texture2D> _loadedTiles = new Dictionary<RasterTileIdentifier, Texture2D>();
 
         private Dictionary<EsriRestImageryTileIdentifier, LinkedListNode<ImageryTileLoadRequest>> _loadingImageryTiles = new Dictionary<EsriRestImageryTileIdentifier, LinkedListNode<ImageryTileLoadRequest>>();
         private Dictionary<EsriRestImageryTileIdentifier, Texture2D> _loadedImageryTiles = new Dictionary<EsriRestImageryTileIdentifier, Texture2D>();

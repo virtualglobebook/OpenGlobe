@@ -25,7 +25,7 @@ namespace OpenGlobe.Examples
             _ellipsoid = Ellipsoid.Wgs84;
 
             //SimpleTerrainSource terrainSource = new SimpleTerrainSource(@"..\..\..\..\..\..\Data\Terrain\ps_height_16k");
-            WorldWindTerrainSource terrainSource = new WorldWindTerrainSource();
+            WorldWindTerrainSource2 terrainSource = new WorldWindTerrainSource2();
             EsriRestImagery imagery = new EsriRestImagery();
             _clipmap = new GlobeClipmapTerrain(_window.Context, terrainSource, imagery, _ellipsoid, 511);
             _clipmap.HeightExaggeration = 1.0f; // (float)(1.0 / Ellipsoid.Wgs84.MaximumRadius);
@@ -119,14 +119,14 @@ namespace OpenGlobe.Examples
                 if (_clipmap.ColorClipmapLevels)
                 {
                     _clipmap.ShowImagery = false;
-                    _clipmap.Shade = true;
+                    _clipmap.Lighting = true;
                 }
                 UpdateHUD();
             }
             else if (e.Key == KeyboardKey.I)
             {
                 _clipmap.ShowImagery = !_clipmap.ShowImagery;
-                _clipmap.Shade = !_clipmap.ShowImagery;
+                _clipmap.Lighting = !_clipmap.ShowImagery;
                 if (_clipmap.ShowImagery)
                 {
                     _clipmap.ColorClipmapLevels = false;
@@ -135,7 +135,7 @@ namespace OpenGlobe.Examples
             }
             else if (e.Key == KeyboardKey.S)
             {
-                _clipmap.Shade = !_clipmap.Shade;
+                _clipmap.Lighting = !_clipmap.Lighting;
                 UpdateHUD();
             }
             else if (e.Key == KeyboardKey.Z)
@@ -213,7 +213,7 @@ namespace OpenGlobe.Examples
 
             text = "Blending: " + GetBlendingString() + " (B)\n";
             text += "Imagery: " + (_clipmap.ShowImagery ? "Enabled" : "Disabled") + " (I)\n";
-            text += "Shading: " + (_clipmap.Shade ? "Enabled" : "Disabled") + " (S)\n";
+            text += "Lighting: " + (_clipmap.Lighting ? "Enabled" : "Disabled") + " (S)\n";
             text += "Wireframe: " + (_clipmap.Wireframe ? "Enabled" : "Disabled") + " (W)\n";
             text += "LOD Update: " + (_clipmap.LodUpdateEnabled ? "Enabled" : "Disabled") + " (L)\n";
             text += "Color Clipmap Levels: " + (_clipmap.ColorClipmapLevels ? "Enabled" : "Disabled") + " (C)\n";

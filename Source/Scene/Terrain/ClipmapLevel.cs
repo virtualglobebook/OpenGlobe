@@ -14,7 +14,7 @@ namespace OpenGlobe.Scene
 {
     internal class ClipmapLevel
     {
-        public RasterTerrainLevel Terrain;
+        public RasterLevel Terrain;
         public EsriRestImageryLevel Imagery;
 
         public Texture2D HeightTexture;

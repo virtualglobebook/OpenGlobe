@@ -47,6 +47,12 @@
     <Compile Include="Terrain\EsriRestImageryTile.cs" />
     <Compile Include="Terrain\EsriRestImageryTileIdentifier.cs" />
     <Compile Include="Terrain\EsriRestImageryTileRegion.cs" />
+    <Compile Include="Terrain\RasterLevel.cs" />
+    <Compile Include="Terrain\RasterLevelCollection.cs" />
+    <Compile Include="Terrain\RasterSource.cs" />
+    <Compile Include="Terrain\RasterTile.cs" />
+    <Compile Include="Terrain\RasterTileIdentifier.cs" />
+    <Compile Include="Terrain\RasterTileRegion.cs" />
     <Compile Include="Terrain\TerrainTile.cs" />
     <Compile Include="Terrain\ChunkedTerrain.cs" />
     <Compile Include="Terrain\ChunkedTerrainTree.cs" />
@@ -101,6 +107,7 @@
     <Compile Include="Terrain\ClipmapTerrain.cs" />
     <Compile Include="Terrain\WorldWindTerrainLevel.cs" />
     <Compile Include="Terrain\WorldWindTerrainSource.cs" />
+    <Compile Include="Terrain\WorldWindTerrainSource2.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Core\OpenGlobe.Core.csproj">

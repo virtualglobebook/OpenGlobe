@@ -9,9 +9,9 @@
 
 namespace OpenGlobe.Scene
 {
-    public class RasterTerrainTileRegion
+    public class RasterTileRegion
     {
-        public RasterTerrainTileRegion(RasterTerrainTile tile, int west, int south, int east, int north)
+        public RasterTileRegion(RasterTile tile, int west, int south, int east, int north)
         {
             _tile = tile;
             _west = west;
@@ -20,7 +20,7 @@ namespace OpenGlobe.Scene
             _north = north;
         }
 
-        public RasterTerrainTile Tile
+        public RasterTile Tile
         {
             get { return _tile; }
         }
@@ -45,7 +45,7 @@ namespace OpenGlobe.Scene
             get { return _north; }
         }
 
-        private readonly RasterTerrainTile _tile;
+        private readonly RasterTile _tile;
         private readonly int _west;
         private readonly int _south;
         private readonly int _east;
