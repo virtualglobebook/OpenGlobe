@@ -83,8 +83,8 @@ namespace OpenGlobe.Scene
                 RequestTileLoad(levelZero, region.Tile);
             }
 
-            EsriRestImageryTileRegion[] imageryRegions = levelZero.Imagery.GetTilesInExtent(0, 0, levelZero.Imagery.LongitudePosts - 1, levelZero.Imagery.LatitudePosts - 1);
-            foreach (EsriRestImageryTileRegion region in imageryRegions)
+            RasterTileRegion[] imageryRegions = levelZero.Imagery.GetTilesInExtent(0, 0, levelZero.Imagery.LongitudePosts - 1, levelZero.Imagery.LatitudePosts - 1);
+            foreach (RasterTileRegion region in imageryRegions)
             {
                 RequestImageryTileLoad(levelZero, region.Tile);
             }
@@ -202,7 +202,7 @@ namespace OpenGlobe.Scene
             }
         }
 
-        public void ApplyNewImageryTile(Context context, ClipmapLevel level, EsriRestImageryTile tile)
+        public void ApplyNewImageryTile(Context context, ClipmapLevel level, RasterTile tile)
         {
             ClipmapUpdate entireLevel = new ClipmapUpdate(
                 level,
@@ -236,7 +236,7 @@ namespace OpenGlobe.Scene
             }
         }
 
-        private void ApplyImageryIfNotLoaded(Context context, ClipmapLevel level, EsriRestImageryTile tile)
+        private void ApplyImageryIfNotLoaded(Context context, ClipmapLevel level, RasterTile tile)
         {
             Texture2D texture;
             if (!_loadedImageryTiles.TryGetValue(tile.Identifier, out texture) || texture == null)
@@ -265,8 +265,8 @@ namespace OpenGlobe.Scene
                 }
             }
 
-            EsriRestImageryTileRegion[] imageryTileRegions = level.Imagery.GetTilesInExtent(level.NextImageryExtent.West, level.NextImageryExtent.South, level.NextImageryExtent.East, level.NextImageryExtent.North);
-            foreach (EsriRestImageryTileRegion region in imageryTileRegions)
+            RasterTileRegion[] imageryTileRegions = level.Imagery.GetTilesInExtent(level.NextImageryExtent.West, level.NextImageryExtent.South, level.NextImageryExtent.East, level.NextImageryExtent.North);
+            foreach (RasterTileRegion region in imageryTileRegions)
             {
                 if (!_loadedImageryTiles.ContainsKey(region.Tile.Identifier))
                 {
@@ -315,8 +315,8 @@ namespace OpenGlobe.Scene
             ClipmapUpdate[] updates = SplitUpdateToAvoidWrappingImagery(update);
             foreach (ClipmapUpdate nonWrappingUpdate in updates)
             {
-                EsriRestImageryTileRegion[] tileRegions = level.Imagery.GetTilesInExtent(nonWrappingUpdate.West, nonWrappingUpdate.South, nonWrappingUpdate.East, nonWrappingUpdate.North);
-                foreach (EsriRestImageryTileRegion region in tileRegions)
+                RasterTileRegion[] tileRegions = level.Imagery.GetTilesInExtent(nonWrappingUpdate.West, nonWrappingUpdate.South, nonWrappingUpdate.East, nonWrappingUpdate.North);
+                foreach (RasterTileRegion region in tileRegions)
                 {
                     Texture2D tileTexture;
                     bool loaded = _loadedImageryTiles.TryGetValue(region.Tile.Identifier, out tileTexture);
@@ -446,7 +446,7 @@ namespace OpenGlobe.Scene
             }
         }
 
-        private void RenderImageryTileToLevelTexture(Context context, ClipmapLevel level, EsriRestImageryTileRegion region, Texture2D texture)
+        private void RenderImageryTileToLevelTexture(Context context, ClipmapLevel level, RasterTileRegion region, Texture2D texture)
         {
             context.TextureUnits[0].Texture = texture;
             context.TextureUnits[0].TextureSampler = Device.TextureSamplers.NearestClamp;
@@ -552,7 +552,7 @@ namespace OpenGlobe.Scene
             context.Viewport = oldViewport;
         }
 
-        private void UpsampleImageryTileData(Context context, ClipmapLevel level, EsriRestImageryTileRegion region)
+        private void UpsampleImageryTileData(Context context, ClipmapLevel level, RasterTileRegion region)
         {
             ClipmapLevel coarserLevel = level.CoarserLevel;
 
@@ -680,7 +680,7 @@ namespace OpenGlobe.Scene
             _loadingTiles[tile.Identifier] = requestNode;
         }
 
-        private void RequestImageryTileLoad(ClipmapLevel level, EsriRestImageryTile tile)
+        private void RequestImageryTileLoad(ClipmapLevel level, RasterTile tile)
         {
             LinkedListNode<ImageryTileLoadRequest> requestNode;
             bool exists = _loadingImageryTiles.TryGetValue(tile.Identifier, out requestNode);
@@ -734,23 +734,9 @@ namespace OpenGlobe.Scene
             _loadingImageryTiles[tile.Identifier] = requestNode;
         }
 
-        private Texture2D CreateImageryTextureFromTile(EsriRestImageryTile tile)
+        private Texture2D CreateImageryTextureFromTile(RasterTile tile)
         {
-            int width = tile.East - tile.West + 1;
-            int height = tile.North - tile.South + 1;
-
-            Texture2DDescription description = new Texture2DDescription(width, height, TextureFormat.RedGreenBlue8, false);
-            Texture2D texture = Device.CreateTexture2DRectangle(description);
-
-            byte[] image = tile.GetImage(0, 0, width - 1, height - 1);
-
-            using (WritePixelBuffer wpb = Device.CreateWritePixelBuffer(PixelBufferHint.Stream, width * height * sizeof(int) * 3))
-            {
-                wpb.CopyFromSystemMemory(image);
-                texture.CopyFromBuffer(wpb, ImageFormat.BlueGreenRed, ImageDatatype.UnsignedByte);
-            }
-
-            return texture;
+            return tile.LoadTexture();
         }
 
         private void RequestThreadEntryPoint()
@@ -824,7 +810,7 @@ namespace OpenGlobe.Scene
 
                 if (request != null)
                 {
-                    EsriRestImageryTile tile = request.Tile;
+                    RasterTile tile = request.Tile;
                     request.Texture = CreateImageryTextureFromTile(tile);
 
                     Fence fence = Device.CreateFence();
@@ -845,7 +831,7 @@ namespace OpenGlobe.Scene
         private class ImageryTileLoadRequest
         {
             public ClipmapLevel Level;
-            public EsriRestImageryTile Tile;
+            public RasterTile Tile;
             public Texture2D Texture;
         }
 
@@ -881,8 +867,8 @@ namespace OpenGlobe.Scene
         private Dictionary<RasterTileIdentifier, LinkedListNode<TileLoadRequest>> _loadingTiles = new Dictionary<RasterTileIdentifier, LinkedListNode<TileLoadRequest>>();
         private Dictionary<RasterTileIdentifier, Texture2D> _loadedTiles = new Dictionary<RasterTileIdentifier, Texture2D>();
 
-        private Dictionary<EsriRestImageryTileIdentifier, LinkedListNode<ImageryTileLoadRequest>> _loadingImageryTiles = new Dictionary<EsriRestImageryTileIdentifier, LinkedListNode<ImageryTileLoadRequest>>();
-        private Dictionary<EsriRestImageryTileIdentifier, Texture2D> _loadedImageryTiles = new Dictionary<EsriRestImageryTileIdentifier, Texture2D>();
+        private Dictionary<RasterTileIdentifier, LinkedListNode<ImageryTileLoadRequest>> _loadingImageryTiles = new Dictionary<RasterTileIdentifier, LinkedListNode<ImageryTileLoadRequest>>();
+        private Dictionary<RasterTileIdentifier, Texture2D> _loadedImageryTiles = new Dictionary<RasterTileIdentifier, Texture2D>();
 
         private GraphicsWindow _workerWindow;
         private GraphicsWindow _imageryWorkerWindow;

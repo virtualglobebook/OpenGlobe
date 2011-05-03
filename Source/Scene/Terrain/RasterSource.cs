@@ -22,7 +22,7 @@ namespace OpenGlobe.Scene
             }
 
             // New tiles are not initially active.  They become active when loaded.
-            tile = CreateTile(identifier);
+            tile = new RasterTile(this, identifier);
             return tile;
         }
 
@@ -37,11 +37,6 @@ namespace OpenGlobe.Scene
         }
 
         public abstract Texture2D LoadTileTexture(RasterTileIdentifier identifier);
-
-        protected virtual RasterTile CreateTile(RasterTileIdentifier identifier)
-        {
-            return new RasterTile(this, identifier);
-        }
 
         private readonly Dictionary<RasterTileIdentifier, RasterTile> m_activeTiles = new Dictionary<RasterTileIdentifier, RasterTile>();
     }

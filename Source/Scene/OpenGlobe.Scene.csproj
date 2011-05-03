@@ -44,9 +44,6 @@
     <Compile Include="Shapefiles\ShapefileAppearance.cs" />
     <Compile Include="Shapefiles\ShapefileGraphics.cs" />
     <Compile Include="Shapefiles\ShapefileRenderer.cs" />
-    <Compile Include="Terrain\EsriRestImageryTile.cs" />
-    <Compile Include="Terrain\EsriRestImageryTileIdentifier.cs" />
-    <Compile Include="Terrain\EsriRestImageryTileRegion.cs" />
     <Compile Include="Terrain\RasterLevel.cs" />
     <Compile Include="Terrain\RasterLevelCollection.cs" />
     <Compile Include="Terrain\RasterSource.cs" />
@@ -86,10 +83,7 @@
     <Compile Include="Shapefiles\PointShapefile.cs" />
     <Compile Include="Shapefiles\PolygonShapefile.cs" />
     <Compile Include="Shapefiles\PolylineShapefile.cs" />
-    <Compile Include="Terrain\EsriRestImageryLevel.cs" />
-    <Compile Include="Terrain\EsriRestImageryLevelCollection.cs" />
     <Compile Include="Terrain\RayCastedTerrainTile.cs" />
-    <Compile Include="Terrain\TextureQuadTree.cs" />
     <Compile Include="Terrain\TriangleMeshTerrainTile.cs" />
     <Compile Include="Terrain\VertexDisplacementMapTerrainTile.cs" />
     <Compile Include="Terrain\WorldWindTerrainSource.cs" />

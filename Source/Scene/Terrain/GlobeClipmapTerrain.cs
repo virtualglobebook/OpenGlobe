@@ -47,7 +47,7 @@ namespace OpenGlobe.Scene
                 // Find the first imagery level that meets our resolution needs.
                 double longitudeResRequired = terrainLevel.PostDeltaLongitude;
                 double latitudeResRequired = terrainLevel.PostDeltaLatitude;
-                EsriRestImageryLevel imageryLevel = null;
+                RasterLevel imageryLevel = null;
                 for (int j = 0; j < imagery.Levels.Count; ++j)
                 {
                     imageryLevel = imagery.Levels[j];
