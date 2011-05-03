@@ -92,7 +92,7 @@
     <Compile Include="Terrain\TextureQuadTree.cs" />
     <Compile Include="Terrain\TriangleMeshTerrainTile.cs" />
     <Compile Include="Terrain\VertexDisplacementMapTerrainTile.cs" />
-    <Compile Include="Terrain\WorldWindTerrainSource2.cs" />
+    <Compile Include="Terrain\WorldWindTerrainSource.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Core\OpenGlobe.Core.csproj">

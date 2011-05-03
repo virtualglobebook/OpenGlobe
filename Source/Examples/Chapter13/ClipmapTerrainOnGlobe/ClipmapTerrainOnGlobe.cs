@@ -19,16 +19,14 @@ namespace OpenGlobe.Examples
     {
         public ClipmapTerrainOnGlobe()
         {
-            _window = Device.CreateWindow(800, 600, "Chapter 11:  Clipmap Terrain");
+            _window = Device.CreateWindow(800, 600, "Chapter 13:  Clipmap Terrain on a Globe");
 
-            //_ellipsoid = Ellipsoid.ScaledWgs84;
             _ellipsoid = Ellipsoid.Wgs84;
 
-            //SimpleTerrainSource terrainSource = new SimpleTerrainSource(@"..\..\..\..\..\..\Data\Terrain\ps_height_16k");
-            WorldWindTerrainSource2 terrainSource = new WorldWindTerrainSource2();
+            WorldWindTerrainSource terrainSource = new WorldWindTerrainSource();
             EsriRestImagery imagery = new EsriRestImagery();
             _clipmap = new GlobeClipmapTerrain(_window.Context, terrainSource, imagery, _ellipsoid, 511);
-            _clipmap.HeightExaggeration = 1.0f; // (float)(1.0 / Ellipsoid.Wgs84.MaximumRadius);
+            _clipmap.HeightExaggeration = 1.0f;
 
             _sceneState = new SceneState();
             _sceneState.DiffuseIntensity = 0.90f;
@@ -37,8 +35,7 @@ namespace OpenGlobe.Examples
             _sceneState.Camera.FieldOfViewY = Math.PI / 3.0;
 
             _clearState = new ClearState();
-            _clearState.Color = Color.LightSkyBlue;
-            //_clearState.Color = Color.White;
+            _clearState.Color = Color.White;
 
             _sceneState.Camera.PerspectiveNearPlaneDistance = 0.000001 * _ellipsoid.MaximumRadius;
             _sceneState.Camera.PerspectiveFarPlaneDistance = 10.0 * _ellipsoid.MaximumRadius;

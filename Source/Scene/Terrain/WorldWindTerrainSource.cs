@@ -17,14 +17,14 @@ using OpenGlobe.Renderer;
 
 namespace OpenGlobe.Scene
 {
-    public class WorldWindTerrainSource2 : RasterSource
+    public class WorldWindTerrainSource : RasterSource
     {
-        public WorldWindTerrainSource2() :
+        public WorldWindTerrainSource() :
             this(new Uri("http://www.nasa.network.com/elev?service=WMS&request=GetMap&version=1.3&srs=EPSG:4326&layers=mergedElevations&styles=&format=application/bil16&bgColor=-9999.0&width=150&height=150"))
         {
         }
 
-        public WorldWindTerrainSource2(Uri baseUri)
+        public WorldWindTerrainSource(Uri baseUri)
         {
             _baseUri = baseUri;
 
