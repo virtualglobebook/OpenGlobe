@@ -8,11 +8,11 @@
               
 in vec2 fsTextureCoordinates;
 
-out vec4 heightOutput;
+out vec4 texelOutput;
 
 uniform sampler2DRect og_texture0;
 
 void main()
 {
-    heightOutput = texture(og_texture0, fsTextureCoordinates);
+    texelOutput = texture(og_texture0, fsTextureCoordinates);
 }

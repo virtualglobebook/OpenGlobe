@@ -380,7 +380,7 @@ namespace OpenGlobe.Scene
                     minLatitude,
                     level.NextExtent.East,
                     maxLatitude);
-                _updater.Update(context, horizontalUpdate);
+                _updater.UpdateTerrain(context, horizontalUpdate);
             }
 
             if (width > 0)
@@ -391,7 +391,7 @@ namespace OpenGlobe.Scene
                     level.NextExtent.South,
                     maxLongitude,
                     level.NextExtent.North);
-                _updater.Update(context, verticalUpdate);
+                _updater.UpdateTerrain(context, verticalUpdate);
             }
 
             level.CurrentExtent.West = level.NextExtent.West;

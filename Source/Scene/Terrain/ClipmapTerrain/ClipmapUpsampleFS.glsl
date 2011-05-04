@@ -8,11 +8,11 @@
               
 in vec2 fsTextureCoordinates;
 
-out vec4 heightOutput;
+out vec4 texelOutput;
 
-uniform sampler2D og_texture0; // coarse height map
+uniform sampler2D og_texture0; // coarse map
 
 void main()
 {
-    heightOutput = texture(og_texture0, fsTextureCoordinates);
+    texelOutput = texture(og_texture0, fsTextureCoordinates);
 }
