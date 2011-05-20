@@ -45,6 +45,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chapter13ClipmapTerrainOnGl
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chapter02Curves", "Examples\Chapter02\Curves\Chapter02Curves.csproj", "{3E18D0D2-E64C-49C4-BEF4-684925F00DA7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SphereVersusEllipsoid", "Examples\Other\SphereVersusEllipsoid\SphereVersusEllipsoid.csproj", "{93FAA96B-669E-42DA-A358-EA0FBEA17437}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -127,6 +129,10 @@ Global
 		{3E18D0D2-E64C-49C4-BEF4-684925F00DA7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3E18D0D2-E64C-49C4-BEF4-684925F00DA7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3E18D0D2-E64C-49C4-BEF4-684925F00DA7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{93FAA96B-669E-42DA-A358-EA0FBEA17437}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{93FAA96B-669E-42DA-A358-EA0FBEA17437}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{93FAA96B-669E-42DA-A358-EA0FBEA17437}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{93FAA96B-669E-42DA-A358-EA0FBEA17437}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
