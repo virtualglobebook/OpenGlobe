@@ -201,6 +201,16 @@ namespace OpenGlobe.Scene
             set { _colorClipmapLevels = value; }
         }
 
+        public Ellipsoid Ellipsoid
+        {
+            get { return _ellipsoid; }
+            set
+            {
+                _ellipsoid = value;
+                ((Uniform<Vector3F>)_shaderProgram.Uniforms["u_globeRadiiSquared"]).Value =
+                    _ellipsoid.RadiiSquared.ToVector3F();
+            }
+        }
 
         public void PreRender(Context context, SceneState sceneState)
         {

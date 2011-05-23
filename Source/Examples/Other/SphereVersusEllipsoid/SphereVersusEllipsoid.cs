@@ -40,11 +40,18 @@ namespace OpenGlobe.Examples
             _sphere.Shape = new Ellipsoid(averageRadius, averageRadius, averageRadius);
             _sphere.Texture = texture;
 
-            _sceneState.Camera.PerspectiveNearPlaneDistance = 0.000001 * _ellipsoid.Shape.MaximumRadius;
-            _sceneState.Camera.PerspectiveFarPlaneDistance = 10.0 * _ellipsoid.Shape.MaximumRadius;
+            _sceneState.Camera.PerspectiveNearPlaneDistance =  1000;
+            _sceneState.Camera.PerspectiveFarPlaneDistance = 100000000;
 
             _sceneState.Camera.ZoomToTarget(_ellipsoid.Shape.MaximumRadius * 2.0);
             _camera = new CameraLookAtPoint(_sceneState.Camera, _window, _ellipsoid.Shape);
+
+            _billboards = new BillboardCollection(_window.Context);
+            _billboards.Texture = Device.CreateTexture2D(new Bitmap("paper-plane--arrow.png"), TextureFormat.RedGreenBlue8, false);
+            _billboards.Add(new Billboard()
+            {
+                Position = _ellipsoid.Shape.ToVector3D(new Geodetic3D(Trig.ToRadians(-55), Trig.ToRadians(60), 1000.0))
+            });
         }
 
         private void OnResize()
@@ -62,6 +69,8 @@ namespace OpenGlobe.Examples
                 _ellipsoid.Render(context, _sceneState);
             else
                 _sphere.Render(context, _sceneState);
+
+            _billboards.Render(context, _sceneState);
         }
 
         private void OnKeyDown(object sender, KeyboardKeyEventArgs e)
@@ -69,6 +78,14 @@ namespace OpenGlobe.Examples
             if (e.Key == KeyboardKey.Space)
             {
                 _renderEllipsoid = !_renderEllipsoid;
+            }
+            else if (e.Key == KeyboardKey.Z)
+            {
+                _camera.ViewPoint(_ellipsoid.Shape, new Geodetic3D(Trig.ToRadians(-55), Trig.ToRadians(60)));
+                _camera.ZoomRateRangeAdjustment = 0.0;
+                _camera.RotateRateRangeAdjustment = 0.0;
+                _camera.RotateFactor = 0.0;
+                _camera.MinimumRotateRate = 2.0;
             }
         }
 
@@ -98,5 +115,6 @@ namespace OpenGlobe.Examples
         private CameraLookAtPoint _camera;
         private RayCastedGlobe _sphere;
         private bool _renderEllipsoid = true;
+        private BillboardCollection _billboards;
     }
 }

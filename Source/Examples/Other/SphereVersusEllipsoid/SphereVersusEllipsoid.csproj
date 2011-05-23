@@ -6,7 +6,7 @@
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{93FAA96B-669E-42DA-A358-EA0FBEA17437}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>SphereVersusEllipsoid</RootNamespace>
     <AssemblyName>SphereVersusEllipsoid</AssemblyName>
@@ -32,6 +32,9 @@
     <DebugType>pdbonly</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -62,6 +65,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\..\..\Data\Icons\YusukeKamiyamane\paper-plane--arrow.png">
+      <Link>paper-plane--arrow.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <Content Include="..\..\..\..\Data\Imagery\NaturalEarth\NE2_50M_SR_W_4096.jpg">
       <Link>NE2_50M_SR_W_4096.jpg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

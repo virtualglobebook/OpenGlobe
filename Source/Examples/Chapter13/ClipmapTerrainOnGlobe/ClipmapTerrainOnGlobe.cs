@@ -176,6 +176,20 @@ namespace OpenGlobe.Examples
                 _flyCamera.MovementRate *= 0.5;
                 UpdateHUD();
             }
+            else if (e.Key == KeyboardKey.E)
+            {
+                if (_clipmap.Ellipsoid.MaximumRadius == _clipmap.Ellipsoid.MinimumRadius)
+                {
+                    _clipmap.Ellipsoid = Ellipsoid.Wgs84;
+                    _globe.Shape = Ellipsoid.Wgs84;
+                }
+                else
+                {
+                    double radius = Ellipsoid.Wgs84.MaximumRadius;
+                    _clipmap.Ellipsoid = new Ellipsoid(radius, radius, radius);
+                    _globe.Shape = _clipmap.Ellipsoid;
+                }
+            }
         }
 
         private void OnRenderFrame()

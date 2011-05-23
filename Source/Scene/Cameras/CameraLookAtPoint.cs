@@ -131,6 +131,24 @@ namespace OpenGlobe.Scene
             set { _zoomRateRangeAdjustment = value; }
         }
 
+        public double RotateRateRangeAdjustment
+        {
+            get { return _rotateRateRangeAdjustment; }
+            set { _rotateRateRangeAdjustment = value; }
+        }
+
+        public double RotateFactor
+        {
+            get { return _rotateFactor; }
+            set { _rotateFactor = value; }
+        }
+
+        public double MinimumRotateRate
+        {
+            get { return _minimumRotateRate; }
+            set { _minimumRotateRate = value; }
+        }
+
         /// <summary>
         /// Gets or sets the maximum rate at which the camera zooms in response to mouse events, regardless of the current
         /// <see cref="Range"/>.  See <see cref="ZoomFactor"/> and <see cref="ZoomRateRangeAdjustment"/> for an explanation
