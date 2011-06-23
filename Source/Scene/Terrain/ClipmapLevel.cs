@@ -7,12 +7,13 @@
 //
 #endregion
 
+using System;
 using OpenGlobe.Core;
 using OpenGlobe.Renderer;
 
 namespace OpenGlobe.Scene
 {
-    internal class ClipmapLevel
+    internal class ClipmapLevel : IDisposable
     {
         public RasterLevel Terrain;
         public RasterLevel Imagery;
@@ -58,5 +59,12 @@ namespace OpenGlobe.Scene
 
         public int ImageryWidth;
         public int ImageryHeight;
+
+        public void Dispose()
+        {
+            HeightTexture.Dispose();
+            NormalTexture.Dispose();
+            ImageryTexture.Dispose();
+        }
     }
 }

@@ -483,11 +483,6 @@ namespace OpenGlobe.Scene
             Vector3D previousEye = sceneState.Camera.Eye;
             Vector3D previousSun = sceneState.SunPosition;
 
-            //Vector3D toSubtract = new Vector3D(_clipmapCenter.X, _clipmapCenter.Y, 0.0);
-            //sceneState.Camera.Target -= toSubtract;
-            //sceneState.Camera.Eye -= toSubtract;
-            //sceneState.SunPosition -= toSubtract;
-
             _levelZeroWorldScaleFactor.Value = new Vector2F((float)_clipmapLevels[0].Terrain.PostDeltaLongitude, (float)_clipmapLevels[0].Terrain.PostDeltaLatitude);
 
             int maxLevel = _clipmapLevels.Length - 1;
@@ -495,23 +490,6 @@ namespace OpenGlobe.Scene
             int longitudeIndex = (int)_clipmapLevels[0].Terrain.LongitudeToIndex(_clipmapCenter.Longitude);
             int latitudeIndex = (int)_clipmapLevels[0].Terrain.LatitudeToIndex(_clipmapCenter.Latitude);
 
-            /*float[] heightSample = new float[1];
-            _clipmapLevels[0].Terrain.GetPosts(longitudeIndex, latitudeIndex, longitudeIndex, latitudeIndex, heightSample, 0, 1);
-
-            while (maxLevel > 0)
-            {
-                double terrainHeight = heightSample[0] * _heightExaggeration.Value; // TODO: get the real terrain height
-                double viewerHeight = clipmapCenter.Z;
-                double h = viewerHeight - terrainHeight;
-                double gridExtent = _clipmapLevels[maxLevel].Terrain.PostDeltaLongitude * _clipmapPosts;
-                if (h <= 0.4 * gridExtent)
-                {
-                    break;
-                }
-                --maxLevel;
-            }*/
-
-            //Vector2D center = toSubtract.XY;
             Vector2D center = new Vector2D(0.0, 0.0);
 
             bool rendered = false;
@@ -657,10 +635,6 @@ namespace OpenGlobe.Scene
             context.Draw(_primitiveType, drawState, sceneState);
         }
 
-        public void Dispose()
-        {
-        }
-
         private Mesh CreateDegenerateTriangleMesh()
         {
             Mesh mesh = new Mesh();
@@ -704,26 +678,6 @@ namespace OpenGlobe.Scene
             return mesh;
         }
 
-        /*
-        private double EstimateLevelExtent(ClipmapLevel level)
-        {
-            int east = level.CurrentExtent.West + _clipmapSegments;
-            int north = level.CurrentExtent.South + _clipmapSegments;
-
-            Geodetic2D southwest = new Geodetic2D(
-                                    Trig.ToRadians(level.Terrain.IndexToLongitude(level.CurrentExtent.West)),
-                                    Trig.ToRadians(level.Terrain.IndexToLatitude(level.CurrentExtent.South)));
-            Geodetic2D northeast = new Geodetic2D(
-                                    Trig.ToRadians(level.Terrain.IndexToLongitude(east)),
-                                    Trig.ToRadians(level.Terrain.IndexToLatitude(north)));
-
-            Vector3D southwestCartesian = Ellipsoid.ScaledWgs84.ToVector3D(southwest);
-            Vector3D northeastCartesian = Ellipsoid.ScaledWgs84.ToVector3D(northeast);
-
-            return (northeastCartesian - southwestCartesian).Magnitude;
-        }
-        */
-
         private static Vector3F[] CreateColors()
         {
             int i = 0;
@@ -741,6 +695,23 @@ namespace OpenGlobe.Scene
                 colors[i] = new Vector3F((float)random.NextDouble(), (float)random.NextDouble(), (float)random.NextDouble());
             }
             return colors;
+        }
+
+        public void Dispose()
+        {
+            foreach (ClipmapLevel level in _clipmapLevels)
+            {
+                level.Dispose();
+            }
+            _shaderProgram.Dispose();
+            _fillPatch.Dispose();
+            _horizontalFixupPatch.Dispose();
+            _verticalFixupPatch.Dispose();
+            _horizontalOffsetPatch.Dispose();
+            _verticalOffsetPatch.Dispose();
+            _centerPatch.Dispose();
+            _degenerateTrianglePatch.Dispose();
+            _updater.Dispose();
         }
 
         private RasterSource _terrainSource;

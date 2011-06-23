@@ -58,13 +58,6 @@ namespace OpenGlobe.Examples
             _window.RenderFrame += OnRenderFrame;
             _window.PreRenderFrame += OnPreRenderFrame;
 
-            PersistentView.Execute(@"C:\Users\Kevin Ring\Documents\Book\svn\GeometryClipmapping\Figures\ClipmapLevelsNearPole.xml", _window, _sceneState.Camera);
-
-            HighResolutionSnap snap = new HighResolutionSnap(_window, _sceneState);
-            snap.ColorFilename = @"C:\Users\Kevin Ring\Documents\Book\svn\GeometryClipmapping\Figures\ClipmapLevelsNearPole.png";
-            snap.WidthInInches = 3;
-            snap.DotsPerInch = 600;
-
             _hudFont = new Font("Arial", 16);
             _hud = new HeadsUpDisplay();
             _hud.Color = Color.Blue;
@@ -261,8 +254,8 @@ namespace OpenGlobe.Examples
         {
             if (_lookCamera != null)
                 _lookCamera.Dispose();
-            //if (_cameraFly != null)
-            //    _cameraFly.Dispose();
+            if (_flyCamera != null)
+                _flyCamera.Dispose();
             _clipmap.Dispose();
             if (_hudFont != null)
                 _hudFont.Dispose();
@@ -271,6 +264,7 @@ namespace OpenGlobe.Examples
                 _hud.Texture.Dispose();
                 _hud.Dispose();
             }
+            _globe.Dispose();
             _window.Dispose();
         }
 
