@@ -125,7 +125,7 @@ namespace OpenGlobe.Examples
             _camera.ZoomRateRangeAdjustment = 0;
             _camera.MinimumRotateRate = 1.0;
             _camera.MaximumRotateRate = 1.0;
-            _camera.RotateRateRangeAdjustment = 0;
+            _camera.RotateRateRangeAdjustment = 0.0;
             _camera.RotateFactor = 0.0;
         }
 
