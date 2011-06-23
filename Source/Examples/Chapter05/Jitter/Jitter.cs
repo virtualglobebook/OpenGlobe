@@ -123,6 +123,10 @@ namespace OpenGlobe.Examples
             _camera.MaximumZoomRate = FromMeters(Double.MaxValue);
             _camera.ZoomFactor = 10;
             _camera.ZoomRateRangeAdjustment = 0;
+            _camera.MinimumRotateRate = 1.0;
+            _camera.MaximumRotateRate = 1.0;
+            _camera.RotateRateRangeAdjustment = 0;
+            _camera.RotateFactor = 0.0;
         }
 
         private void CreateAlgorithm()
