@@ -487,9 +487,6 @@ namespace OpenGlobe.Scene
 
             int maxLevel = _clipmapLevels.Length - 1;
 
-            int longitudeIndex = (int)_clipmapLevels[0].Terrain.LongitudeToIndex(_clipmapCenter.Longitude);
-            int latitudeIndex = (int)_clipmapLevels[0].Terrain.LatitudeToIndex(_clipmapCenter.Latitude);
-
             Vector2D center = new Vector2D(0.0, 0.0);
 
             bool rendered = false;

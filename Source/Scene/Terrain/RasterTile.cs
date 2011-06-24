@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 //
 // (C) Copyright 2010 Patrick Cozzi and Kevin Ring
 //
@@ -16,7 +16,6 @@ namespace OpenGlobe.Scene
     {
         public RasterTile(RasterSource source, RasterTileIdentifier identifier)
         {
-            _source = source;
             _level = source.Levels[identifier.Level];
             _identifier = identifier;
             _west = identifier.X * Level.LongitudePostsPerTile;
@@ -135,7 +134,6 @@ namespace OpenGlobe.Scene
 
         private RasterTileIdentifier _identifier;
         private RasterLevel _level;
-        private RasterSource _source;
         private int _west;
         private int _south;
         private int _east;
