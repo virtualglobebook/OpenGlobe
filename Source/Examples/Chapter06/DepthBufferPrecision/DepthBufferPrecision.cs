@@ -38,7 +38,6 @@ namespace OpenGlobe.Examples
             _camera = new CameraLookAtPoint(_sceneState.Camera, _window, _globeShape);
 
             _sceneState.Camera.ZoomToTarget(_globeShape.MaximumRadius);
-            PersistentView.Execute(@"E:\Manuscript\DepthBufferPrecision\Figures\DepthBufferFormat.xml", _window, _sceneState.Camera);
 
             ///////////////////////////////////////////////////////////////////
 

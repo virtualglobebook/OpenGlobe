@@ -88,13 +88,6 @@ namespace OpenGlobe.Examples
             _sceneState.AmbientIntensity = 0.4f;
             _sceneState.Camera.ZoomToTarget(globeShape.MaximumRadius);
 
-            //PersistentView.Execute(@"E:\Manuscript\RenderingVectorData\Figures\WithVectorData.xml", _window, _sceneState.Camera);
-            
-            //HighResolutionSnap snap = new HighResolutionSnap(_window, _sceneState);
-            //snap.ColorFilename = @"E:\Manuscript\RenderingVectorData\Figures\WithoutVectorData.png";
-            //snap.WidthInInches = 4;
-            //snap.DotsPerInch = 600;
-
             UpdateHUD();
         }
 

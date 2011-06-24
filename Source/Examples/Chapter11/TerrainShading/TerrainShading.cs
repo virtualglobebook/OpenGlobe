@@ -55,13 +55,6 @@ namespace OpenGlobe.Examples
             _camera.RotateFactor = 0.0;
             _sceneState.Camera.ZoomToTarget(tileRadius);
 
-            PersistentView.Execute(@"E:\Manuscript\TerrainRendering\Figures\BlendMask.xml", _window, _sceneState.Camera);
-
-            HighResolutionSnap snap = new HighResolutionSnap(_window, _sceneState);
-            snap.ColorFilename = @"E:\Manuscript\TerrainRendering\Figures\BlendMaskTerrain.png";
-            snap.WidthInInches = 3;
-            snap.DotsPerInch = 600;
-
             ///////////////////////////////////////////////////////////////////
 
             _hudFont = new Font("Arial", 16);

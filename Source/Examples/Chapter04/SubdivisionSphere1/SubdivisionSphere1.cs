@@ -107,11 +107,6 @@ namespace OpenGlobe.Examples
             _texture = Device.CreateTexture2D(bitmap, TextureFormat.RedGreenBlue8, false);
 
             _sceneState.Camera.ZoomToTarget(1);
-
-            HighResolutionSnap snap = new HighResolutionSnap(_window, _sceneState);
-            snap.ColorFilename = @"E:\Manuscript\GlobeRendering\Figures\GeographicGridEllipsoidTessellationPol.png";
-            snap.WidthInInches = 3;
-            snap.DotsPerInch = 600;
         }
 
         private void OnResize()

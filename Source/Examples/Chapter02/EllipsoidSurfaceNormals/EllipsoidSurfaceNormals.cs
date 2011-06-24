@@ -45,12 +45,6 @@ namespace OpenGlobe.Examples
 
             _sceneState.Camera.Eye = Vector3D.UnitY;
             _sceneState.Camera.ZoomToTarget(2 * _globeShape.MaximumRadius);
-            PersistentView.Execute(@"E:\Manuscript\VirtualGlobeFoundations\Figures\EllipsoidSurfaceNormals.xml", _window, _sceneState.Camera);
-
-            HighResolutionSnap snap = new HighResolutionSnap(_window, _sceneState);
-            snap.ColorFilename = @"E:\Manuscript\VirtualGlobeFoundations\Figures\EllipsoidSurfaceNormals1.png";
-            snap.WidthInInches = 1.5;
-            snap.DotsPerInch = 1200;
         }
 
         private void CreateScene()

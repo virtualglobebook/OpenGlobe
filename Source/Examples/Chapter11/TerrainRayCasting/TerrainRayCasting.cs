@@ -44,14 +44,7 @@ namespace OpenGlobe.Examples
             _camera.RotateRateRangeAdjustment = 0.0;
             _camera.RotateFactor = 0.0;
             _sceneState.Camera.ZoomToTarget(tileRadius);
-
-            PersistentView.Execute(@"E:\Manuscript\TerrainBasics\Figures\GPURayCastingNearestNeighbor.xml", _window, _sceneState.Camera);
             
-            HighResolutionSnap snap = new HighResolutionSnap(_window, _sceneState);
-            snap.ColorFilename = @"E:\Manuscript\TerrainBasics\Figures\GPURayCastingNearestNeighbor.png";
-            snap.WidthInInches = 4;
-            snap.DotsPerInch = 600;
-
             ///////////////////////////////////////////////////////////////////
 
             _hudFont = new Font("Arial", 16);

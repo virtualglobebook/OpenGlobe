@@ -44,12 +44,6 @@ namespace OpenGlobe.Examples
 
             CreateCamera();
             CreateAlgorithm();
-
-            PersistentView.Execute(@"E:\Manuscript\VertexTransformPrecision\Figures\aaa.xml", _window, _sceneState.Camera);
-            HighResolutionSnap snap = new HighResolutionSnap(_window, _sceneState);
-            snap.ColorFilename = @"E:\Manuscript\VertexTransformPrecision\Figures\aaa.png";
-            snap.WidthInInches = 3;
-            snap.DotsPerInch = 600;
         }
 
         private double ToMeters(double value)

@@ -56,11 +56,6 @@ namespace OpenGlobe.Research
             _sceneState.Camera.ZoomToTarget(tileRadius);
             _sceneState.Camera.Eye = new Vector3D(_xPos, 256, 0);
             
-            HighResolutionSnap snap = new HighResolutionSnap(_window, _sceneState);
-            snap.ColorFilename = @"E:\Manuscript\TerrainRendering\Figures\LinesOnTerrain.png";
-            snap.WidthInInches = 3;
-            snap.DotsPerInch = 600;
-
             //
             // Positions
             //

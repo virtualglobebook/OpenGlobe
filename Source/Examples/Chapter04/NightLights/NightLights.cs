@@ -137,12 +137,6 @@ namespace OpenGlobe.Examples
             _sceneState.SpecularIntensity = 0.15f;
             _sceneState.AmbientIntensity = 0.35f;
             _sceneState.Camera.ZoomToTarget(1);
-            PersistentView.Execute(@"E:\Manuscript\GlobeRendering\Figures\NightLights.xml", _window, _sceneState.Camera);
-
-            HighResolutionSnap snap = new HighResolutionSnap(_window, _sceneState);
-            snap.ColorFilename = @"E:\Manuscript\GlobeRendering\Figures\NightLightsPointTwo.png";
-            snap.WidthInInches = 2;
-            snap.DotsPerInch = 600;
         }
 
         private void OnResize()
