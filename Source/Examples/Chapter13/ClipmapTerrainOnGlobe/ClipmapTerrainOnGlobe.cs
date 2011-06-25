@@ -148,6 +148,7 @@ namespace OpenGlobe.Examples
                     _lookCamera.Dispose();
                     _lookCamera = null;
                     _flyCamera = new CameraFly(_sceneState.Camera, _window);
+                    _flyCamera.MovementRate = 1200.0;
                 }
                 else if (_flyCamera != null)
                 {
