@@ -79,6 +79,7 @@ namespace OpenGlobe.Examples
 
             _hudFont = new Font("Arial", 16);
             _hud = new HeadsUpDisplay();
+            _hud.Color = Color.Blue;
 
             _showVectorData = true;
 
@@ -86,13 +87,6 @@ namespace OpenGlobe.Examples
             _sceneState.SpecularIntensity = 0.1f;
             _sceneState.AmbientIntensity = 0.4f;
             _sceneState.Camera.ZoomToTarget(globeShape.MaximumRadius);
-
-            //PersistentView.Execute(@"E:\Manuscript\RenderingVectorData\Figures\WithVectorData.xml", _window, _sceneState.Camera);
-            
-            //HighResolutionSnap snap = new HighResolutionSnap(_window, _sceneState);
-            //snap.ColorFilename = @"E:\Manuscript\RenderingVectorData\Figures\WithoutVectorData.png";
-            //snap.WidthInInches = 4;
-            //snap.DotsPerInch = 600;
 
             UpdateHUD();
         }

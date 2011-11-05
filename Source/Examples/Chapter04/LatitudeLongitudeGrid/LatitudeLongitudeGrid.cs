@@ -80,15 +80,6 @@ namespace OpenGlobe.Examples
             });
 
             atlas.Dispose();
-
-            ///////////////////////////////////////////////////////////////////
-
-            PersistentView.Execute(@"E:\Manuscript\GlobeRendering\Figures\LatitudeLongitudeGridClosest.xml", _window, _sceneState.Camera);
-
-            HighResolutionSnap snap = new HighResolutionSnap(_window, _sceneState);
-            snap.ColorFilename = @"E:\Manuscript\GlobeRendering\Figures\LatitudeLongitudeGridClosest.png";
-            snap.WidthInInches = 1.5;
-            snap.DotsPerInch = 600;
         }
 
         private void OnResize()

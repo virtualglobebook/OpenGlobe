@@ -10,12 +10,15 @@ in vec2 position;
 
 out vec2 fsFineUv;
 out vec2 fsCoarseUv;
+out vec2 fsFineColorUv;
 out vec3 fsPositionToLight;
 out float fsAlpha;
 out float fsHeight;
 out vec2 fsLonLat;
 
-uniform vec3 u_sunPositionRelativeToViewer;
+//uniform mat4 og_modelViewPerspectiveMatrix;
+//uniform vec3 og_sunPosition;
+//uniform vec3 u_sunPositionRelativeToViewer;
 uniform vec2 u_patchOriginInClippedLevel;
 uniform vec2 u_levelScaleFactor;
 uniform vec2 u_levelZeroWorldScaleFactor;
@@ -29,9 +32,12 @@ uniform float u_heightExaggeration;
 uniform float u_oneOverClipmapSize;
 uniform bool u_useBlendRegions;
 uniform vec3 u_globeRadiiSquared;
-// og_texture0 - finer height map
-// og_texture1 - coarser height map
-
+uniform vec2 u_terrainToImageryResolutionRatio;
+uniform vec2 u_terrainOffsetInImagery;
+uniform vec2 u_oneOverImagerySize;
+//uniform sampler2D og_texture0;    // finer height map
+//uniform sampler2D og_texture1;    // coarser height map
+//
 vec3 GeodeticSurfaceNormal(vec3 geodetic)
 {
 	float cosLatitude = cos(geodetic.y);
@@ -81,6 +87,8 @@ void main()
 	fsHeight = height;
     vec2 worldPos = (levelPos + u_levelOffsetFromWorldOrigin) * u_levelScaleFactor * u_levelZeroWorldScaleFactor;
 	fsLonLat = worldPos;
+
+    fsFineColorUv = (levelPos * u_terrainToImageryResolutionRatio + u_terrainOffsetInImagery) * u_oneOverImagerySize;
 
 	vec3 displacedPosition;
 	if (abs(worldPos.y) > 90.0)

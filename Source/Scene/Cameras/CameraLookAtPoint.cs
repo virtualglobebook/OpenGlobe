@@ -52,7 +52,7 @@ namespace OpenGlobe.Scene
 
             _rotateFactor = 1.0 / ellipsoid.MaximumRadius;
             _rotateRateRangeAdjustment = ellipsoid.MaximumRadius;
-            _maximumRotateRate = Double.MaxValue;
+            _maximumRotateRate = 1.0;
             _minimumRotateRate = 1.0 / 5000.0;
 
             // TODO: Should really be:
@@ -129,6 +129,30 @@ namespace OpenGlobe.Scene
         {
             get { return _zoomRateRangeAdjustment; }
             set { _zoomRateRangeAdjustment = value; }
+        }
+
+        public double RotateRateRangeAdjustment
+        {
+            get { return _rotateRateRangeAdjustment; }
+            set { _rotateRateRangeAdjustment = value; }
+        }
+
+        public double RotateFactor
+        {
+            get { return _rotateFactor; }
+            set { _rotateFactor = value; }
+        }
+
+        public double MinimumRotateRate
+        {
+            get { return _minimumRotateRate; }
+            set { _minimumRotateRate = value; }
+        }
+
+        public double MaximumRotateRate
+        {
+            get { return _maximumRotateRate; }
+            set { _maximumRotateRate = value; }
         }
 
         /// <summary>

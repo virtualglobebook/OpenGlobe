@@ -39,15 +39,12 @@ namespace OpenGlobe.Examples
             double tileRadius = Math.Max(terrainTile.Resolution.X, terrainTile.Resolution.Y) * 0.5;
             _camera = new CameraLookAtPoint(_sceneState.Camera, _window, Ellipsoid.UnitSphere);
             _camera.CenterPoint = new Vector3D(terrainTile.Resolution.X * 0.5, terrainTile.Resolution.Y * 0.5, 0.0);
+            _camera.MinimumRotateRate = 1.0;
+            _camera.MaximumRotateRate = 1.0;
+            _camera.RotateRateRangeAdjustment = 0.0;
+            _camera.RotateFactor = 0.0;
             _sceneState.Camera.ZoomToTarget(tileRadius);
-
-            PersistentView.Execute(@"E:\Manuscript\TerrainBasics\Figures\GPURayCastingNearestNeighbor.xml", _window, _sceneState.Camera);
             
-            HighResolutionSnap snap = new HighResolutionSnap(_window, _sceneState);
-            snap.ColorFilename = @"E:\Manuscript\TerrainBasics\Figures\GPURayCastingNearestNeighbor.png";
-            snap.WidthInInches = 4;
-            snap.DotsPerInch = 600;
-
             ///////////////////////////////////////////////////////////////////
 
             _hudFont = new Font("Arial", 16);

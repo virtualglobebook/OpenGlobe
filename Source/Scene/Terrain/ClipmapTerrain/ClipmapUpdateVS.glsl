@@ -14,7 +14,7 @@ uniform vec2 u_sourceOrigin;
 uniform vec2 u_updateSize;
 uniform vec2 u_destinationOffset;
 
-void main()                     
+void main()
 {
     vec2 scaledPosition = position * u_updateSize;
     gl_Position = og_viewportOrthographicMatrix * vec4(scaledPosition + u_destinationOffset, 0.0, 1.0);

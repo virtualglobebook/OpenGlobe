@@ -44,12 +44,6 @@ namespace OpenGlobe.Examples
 
             CreateCamera();
             CreateAlgorithm();
-
-            PersistentView.Execute(@"E:\Manuscript\VertexTransformPrecision\Figures\aaa.xml", _window, _sceneState.Camera);
-            HighResolutionSnap snap = new HighResolutionSnap(_window, _sceneState);
-            snap.ColorFilename = @"E:\Manuscript\VertexTransformPrecision\Figures\aaa.png";
-            snap.WidthInInches = 3;
-            snap.DotsPerInch = 600;
         }
 
         private double ToMeters(double value)
@@ -123,6 +117,10 @@ namespace OpenGlobe.Examples
             _camera.MaximumZoomRate = FromMeters(Double.MaxValue);
             _camera.ZoomFactor = 10;
             _camera.ZoomRateRangeAdjustment = 0;
+            _camera.MinimumRotateRate = 1.0;
+            _camera.MaximumRotateRate = 1.0;
+            _camera.RotateRateRangeAdjustment = 0.0;
+            _camera.RotateFactor = 0.0;
         }
 
         private void CreateAlgorithm()

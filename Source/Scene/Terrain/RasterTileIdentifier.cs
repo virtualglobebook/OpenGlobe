@@ -11,9 +11,9 @@ using System;
 
 namespace OpenGlobe.Scene
 {
-    public struct RasterTerrainTileIdentifier : IEquatable<RasterTerrainTileIdentifier>
+    public struct RasterTileIdentifier : IEquatable<RasterTileIdentifier>
     {
-        public RasterTerrainTileIdentifier(int level, int x, int y)
+        public RasterTileIdentifier(int level, int x, int y)
         {
             _level = level;
             _x = x;
@@ -35,16 +35,16 @@ namespace OpenGlobe.Scene
             get { return _y; }
         }
 
-        public bool Equals(RasterTerrainTileIdentifier other)
+        public bool Equals(RasterTileIdentifier other)
         {
             return _level == other._level && _x == other._x && _y == other._y;
         }
 
         public override bool Equals(object obj)
         {
-            if (!(obj is RasterTerrainTileIdentifier))
+            if (!(obj is RasterTileIdentifier))
                 return false;
-            return Equals((RasterTerrainTileIdentifier)obj);
+            return Equals((RasterTileIdentifier)obj);
         }
 
         public override int GetHashCode()

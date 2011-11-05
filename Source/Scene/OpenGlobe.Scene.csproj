@@ -48,14 +48,17 @@
     <Compile Include="Shapefiles\ShapefileAppearance.cs" />
     <Compile Include="Shapefiles\ShapefileGraphics.cs" />
     <Compile Include="Shapefiles\ShapefileRenderer.cs" />
+    <Compile Include="Terrain\RasterLevel.cs" />
+    <Compile Include="Terrain\RasterLevelCollection.cs" />
+    <Compile Include="Terrain\RasterSource.cs" />
+    <Compile Include="Terrain\RasterTile.cs" />
+    <Compile Include="Terrain\RasterTileIdentifier.cs" />
+    <Compile Include="Terrain\RasterTileRegion.cs" />
     <Compile Include="Terrain\TerrainTile.cs" />
-    <Compile Include="Terrain\ChunkedTerrain.cs" />
-    <Compile Include="Terrain\ChunkedTerrainTree.cs" />
     <Compile Include="Terrain\ClipmapLevel.cs" />
     <Compile Include="Terrain\ClipmapUpdate.cs" />
     <Compile Include="Terrain\ClipmapUpdater.cs" />
     <Compile Include="Terrain\GlobeClipmapTerrain.cs" />
-    <Compile Include="Terrain\PlaneClipmapTerrain.cs" />
     <Compile Include="Terrain\EsriRestImagery.cs" />
     <Compile Include="Globes\DayNight\DayNightGlobe.cs" />
     <Compile Include="Globes\DayNight\DayNightViewportQuad.cs" />
@@ -84,23 +87,9 @@
     <Compile Include="Shapefiles\PointShapefile.cs" />
     <Compile Include="Shapefiles\PolygonShapefile.cs" />
     <Compile Include="Shapefiles\PolylineShapefile.cs" />
-    <Compile Include="Terrain\EsriRestImageryLevel.cs" />
-    <Compile Include="Terrain\EsriRestImageryLevelCollection.cs" />
-    <Compile Include="Terrain\RasterTerrainLevel.cs" />
-    <Compile Include="Terrain\RasterTerrainLevelCollection.cs" />
-    <Compile Include="Terrain\RasterTerrainSource.cs" />
-    <Compile Include="Terrain\RasterTerrainTile.cs" />
-    <Compile Include="Terrain\RasterTerrainTileIdentifier.cs" />
-    <Compile Include="Terrain\RasterTerrainTileRegion.cs" />
-    <Compile Include="Terrain\RasterTerrainTileStatus.cs" />
     <Compile Include="Terrain\RayCastedTerrainTile.cs" />
-    <Compile Include="Terrain\SimpleTerrainLevel.cs" />
-    <Compile Include="Terrain\SimpleTerrainSource.cs" />
-    <Compile Include="Terrain\TextureQuadTree.cs" />
     <Compile Include="Terrain\TriangleMeshTerrainTile.cs" />
     <Compile Include="Terrain\VertexDisplacementMapTerrainTile.cs" />
-    <Compile Include="Terrain\ClipmapTerrain.cs" />
-    <Compile Include="Terrain\WorldWindTerrainLevel.cs" />
     <Compile Include="Terrain\WorldWindTerrainSource.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -218,18 +207,6 @@
     <EmbeddedResource Include="Renderables\PolylineOnTerrain\Shaders\PolylineOnTerrainWallVS.glsl" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Terrain\ClipmapTerrain\ClipmapVS.glsl" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Terrain\ClipmapTerrain\ClipmapFS.glsl" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Terrain\ClipmapTerrain\PlaneClipmapFS.glsl" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Terrain\ClipmapTerrain\PlaneClipmapVS.glsl" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Terrain\ClipmapTerrain\ClipmapUpdateFS.glsl" />
   </ItemGroup>
   <ItemGroup>
@@ -242,9 +219,6 @@
   <ItemGroup>
     <EmbeddedResource Include="Terrain\ClipmapTerrain\ClipmapComputeNormalsFS.glsl" />
     <EmbeddedResource Include="Terrain\ClipmapTerrain\ClipmapComputeNormalsVS.glsl" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Terrain\ClipmapTerrain\PlaneClipmapGS.glsl" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Terrain\ClipmapTerrain\GlobeClipmapFS.glsl" />

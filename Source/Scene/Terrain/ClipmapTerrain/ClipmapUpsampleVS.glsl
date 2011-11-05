@@ -13,11 +13,11 @@ out vec2 fsTextureCoordinates;
 uniform vec2 u_sourceOrigin;
 uniform vec2 u_updateSize;
 uniform vec2 u_destinationOffset;
-uniform vec2 u_oneOverHeightMapSize;
+uniform vec2 u_oneOverTextureSize;
 
 void main()                     
 {
     vec2 scaledPosition = position * u_updateSize;
     gl_Position = og_viewportOrthographicMatrix * vec4(scaledPosition + u_destinationOffset, 0.0, 1.0);
-    fsTextureCoordinates = (scaledPosition * 0.5 + u_sourceOrigin) * u_oneOverHeightMapSize;
+    fsTextureCoordinates = (scaledPosition * 0.5 + u_sourceOrigin) * u_oneOverTextureSize;
 }

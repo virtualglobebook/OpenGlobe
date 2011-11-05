@@ -4,14 +4,16 @@ using System.IO;
 using System.Net;
 using System.Text;
 using OpenGlobe.Core;
+using OpenGlobe.Scene;
+using System.Collections.Generic;
+using OpenGlobe.Renderer;
+using System.Drawing.Imaging;
 
 namespace OpenGlobe.Scene
 {
-    public class EsriRestImagery
+    public class EsriRestImagery : RasterSource
     {
         public EsriRestImagery() :
-            //this(new Uri("http://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/"))
-            //this(new Uri("http://server.arcgisonline.com/ArcGIS/rest/services/ESRI_Imagery_World_2D/MapServer/tile/"))
             this(new Uri("http://server.arcgisonline.com/ArcGIS/rest/services/I3_Imagery_Prime_World_2D/MapServer/tile/"))
         {
         }
@@ -20,20 +22,22 @@ namespace OpenGlobe.Scene
         {
             _baseUri = baseUri;
 
-            _levels = new EsriRestImageryLevel[NumberOfLevels];
-            _levelsCollection = new EsriRestImageryLevelCollection(_levels);
+            _levels = new RasterLevel[NumberOfLevels];
+            _levelsCollection = new RasterLevelCollection(_levels);
 
             double deltaLongitude = LevelZeroDeltaLongitudeDegrees;
             double deltaLatitude = LevelZeroDeltaLatitudeDegrees;
             for (int i = 0; i < _levels.Length; ++i)
             {
-                _levels[i] = new EsriRestImageryLevel(this, i, deltaLongitude, deltaLatitude);
+                int longitudePosts = (int)Math.Round(360.0 / deltaLongitude) * TileLongitudePosts + 1;
+                int latitudePosts = (int)Math.Round(180.0 / deltaLatitude) * TileLatitudePosts + 1;
+                _levels[i] = new RasterLevel(this, i, _extent, longitudePosts, latitudePosts, TileLongitudePosts, TileLatitudePosts);
                 deltaLongitude /= 2.0;
                 deltaLatitude /= 2.0;
             }
         }
 
-        public GeodeticExtent Extent
+        public override GeodeticExtent Extent
         {
             get { return _extent; }
         }
@@ -48,13 +52,17 @@ namespace OpenGlobe.Scene
             get { return 512; }
         }
 
-        public EsriRestImageryLevelCollection Levels
+        public override RasterLevelCollection Levels
         {
             get { return _levelsCollection; }
         }
 
-        internal Bitmap DownloadTile(int level, int longitudeIndex, int latitudeIndex)
+        public override Texture2D LoadTileTexture(RasterTileIdentifier identifier)
         {
+            int level = identifier.Level;
+            int longitudeIndex = identifier.X;
+            int latitudeIndex = identifier.Y;
+
             string cachePath = "esri";
             cachePath = Path.Combine(cachePath, level.ToString());
             cachePath = Path.Combine(cachePath, latitudeIndex.ToString());
@@ -65,55 +73,47 @@ namespace OpenGlobe.Scene
                 Directory.CreateDirectory(cachePath);
             }
 
-            //int heightsToRead = TileWidth * TileHeight;
-            //short[] result = new short[heightsToRead];
-
-            if (File.Exists(cacheFilename))
+            if (!File.Exists(cacheFilename))
             {
-                return new Bitmap(cacheFilename);
-            }
+                // Esri tiles are numbered from the northwest instead of from the southwest.
 
-            //double divisor = Math.Pow(2.0, level);
-            //double longitudeResolution = LevelZeroDeltaLongitudeDegrees / divisor;
-            //double latitudeResolution = LevelZeroDeltaLatitudeDegrees / divisor;
+                StringBuilder query = new StringBuilder(_baseUri.AbsoluteUri);
+                query.Append(level);
+                query.Append('/');
+                query.Append((1 << level) - latitudeIndex - 1);
+                query.Append('/');
+                query.Append(longitudeIndex);
 
-            // Esri tiles are numbered from the northwest instead of from the southwest.
+                string queryString = query.ToString();
+                ++_tilesLoaded;
+                Console.WriteLine("(" + _tilesLoaded + ") Downloading " + queryString);
 
-            StringBuilder query = new StringBuilder(_baseUri.AbsoluteUri);
-            query.Append(level);
-            query.Append('/');
-            query.Append((1 << level) - latitudeIndex - 1);
-            query.Append('/');
-            query.Append(longitudeIndex);
-
-            string queryString = query.ToString();
-            ++_tilesLoaded;
-            Console.WriteLine("(" + _tilesLoaded + ") Downloading " + queryString);
-
-            WebRequest request = WebRequest.Create(queryString);
-            using (WebResponse response = request.GetResponse())
-            using (Stream stream = response.GetResponseStream())
-            using (FileStream file = new FileStream(cacheFilename, FileMode.Create, FileAccess.Write))
-            {
-                const int bufferSize = 4096;
-                byte[] buffer = new byte[bufferSize];
-
-                int bytesRead = stream.Read(buffer, 0, bufferSize);
-                while (bytesRead > 0)
+                WebRequest request = WebRequest.Create(queryString);
+                using (WebResponse response = request.GetResponse())
+                using (Stream stream = response.GetResponseStream())
+                using (FileStream file = new FileStream(cacheFilename, FileMode.Create, FileAccess.Write))
                 {
-                    file.Write(buffer, 0, bytesRead);
-                    bytesRead = stream.Read(buffer, 0, bufferSize);
+                    const int bufferSize = 4096;
+                    byte[] buffer = new byte[bufferSize];
+
+                    int bytesRead = stream.Read(buffer, 0, bufferSize);
+                    while (bytesRead > 0)
+                    {
+                        file.Write(buffer, 0, bytesRead);
+                        bytesRead = stream.Read(buffer, 0, bufferSize);
+                    }
                 }
             }
 
-            return new Bitmap(cacheFilename);
+            Bitmap bitmap = new Bitmap(cacheFilename);
+            return Device.CreateTexture2DRectangle(bitmap, TextureFormat.RedGreenBlue8);
         }
 
         private Uri _baseUri;
         private GeodeticExtent _extent = new GeodeticExtent(-180, -90, 180, 90);
         private int _tilesLoaded;
-        private EsriRestImageryLevel[] _levels;
-        private EsriRestImageryLevelCollection _levelsCollection;
+        private RasterLevel[] _levels;
+        private RasterLevelCollection _levelsCollection;
 
         private const int NumberOfLevels = 20;
         private const int TileWidth = 150;

@@ -50,15 +50,6 @@ namespace OpenGlobe.Examples
             _globe.ShowWireframeBoundingBox = true;
 
             _sceneState.Camera.ZoomToTarget(globeShape.MaximumRadius);
-            //CenterCameraOnPoint();
-            //CenterCameraOnGlobeCenter();
-
-            PersistentView.Execute(@"E:\Manuscript\GlobeRendering\Figures\GPURayCasting.xml", _window, _sceneState.Camera);
-
-            HighResolutionSnap snap = new HighResolutionSnap(_window, _sceneState);
-            snap.ColorFilename = @"E:\Manuscript\GlobeRendering\Figures\GlobeRayCasting.png";
-            snap.WidthInInches = 3;
-            snap.DotsPerInch = 600;
         }
 
         private void OnResize()

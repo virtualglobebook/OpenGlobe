@@ -13,10 +13,11 @@ using System.Text;
 using OpenGlobe.Core;
 using System.Net;
 using System.IO;
+using OpenGlobe.Renderer;
 
 namespace OpenGlobe.Scene
 {
-    public class WorldWindTerrainSource : RasterTerrainSource
+    public class WorldWindTerrainSource : RasterSource
     {
         public WorldWindTerrainSource() :
             this(new Uri("http://www.nasa.network.com/elev?service=WMS&request=GetMap&version=1.3&srs=EPSG:4326&layers=mergedElevations&styles=&format=application/bil16&bgColor=-9999.0&width=150&height=150"))
@@ -27,14 +28,17 @@ namespace OpenGlobe.Scene
         {
             _baseUri = baseUri;
 
-            _levels = new WorldWindTerrainLevel[NumberOfLevels];
-            _levelsCollection = new RasterTerrainLevelCollection(_levels);
+            _levels = new RasterLevel[NumberOfLevels];
+            _levelsCollection = new RasterLevelCollection(_levels);
 
             double deltaLongitude = LevelZeroDeltaLongitudeDegrees;
             double deltaLatitude = LevelZeroDeltaLatitudeDegrees;
+
             for (int i = 0; i < _levels.Length; ++i)
             {
-                _levels[i] = new WorldWindTerrainLevel(this, i, deltaLongitude, deltaLatitude);
+                int longitudePosts = (int)Math.Round(360.0 / deltaLongitude) * TileLongitudePosts + 1;
+                int latitudePosts = (int)Math.Round(180.0 / deltaLatitude) * TileLatitudePosts + 1;
+                _levels[i] = new RasterLevel(this, i, _extent, longitudePosts, latitudePosts, TileLongitudePosts, TileLatitudePosts);
                 deltaLongitude /= 2.0;
                 deltaLatitude /= 2.0;
             }
@@ -45,7 +49,7 @@ namespace OpenGlobe.Scene
             get { return _extent; }
         }
 
-        public override RasterTerrainLevelCollection Levels
+        public override RasterLevelCollection Levels
         {
             get { return _levelsCollection; }
         }
@@ -60,13 +64,11 @@ namespace OpenGlobe.Scene
             get { return TileHeight; }
         }
 
-        private int _tilesLoaded;
-
-        internal short[] DownloadTile(int level, int longitudeIndex, int latitudeIndex)
+        public override Texture2D LoadTileTexture(RasterTileIdentifier identifier)
         {
-            string cachePath = level.ToString();
-            cachePath = Path.Combine(cachePath, longitudeIndex.ToString());
-            string cacheFilename = Path.Combine(cachePath, latitudeIndex.ToString() + ".bil");
+            string cachePath = identifier.Level.ToString();
+            cachePath = Path.Combine(cachePath, identifier.X.ToString());
+            string cacheFilename = Path.Combine(cachePath, identifier.Y.ToString() + ".bil");
 
             if (!Directory.Exists(cachePath))
             {
@@ -74,88 +76,95 @@ namespace OpenGlobe.Scene
             }
 
             int heightsToRead = TileWidth * TileHeight;
-            short[] result = new short[heightsToRead];
+            float[] result = new float[heightsToRead];
+            byte[] data = null;
 
             if (File.Exists(cacheFilename))
             {
-                byte[] data = File.ReadAllBytes(cacheFilename);
-                if (data.Length == heightsToRead * sizeof(short))
-                {
-                    int index = 0;
-                    for (int i = 0; i < data.Length; i += 2)
-                    {
-                        result[index] = BitConverter.ToInt16(data, i);
-                        ++index;
-                    }
-                    return result;
-                }
+                data = File.ReadAllBytes(cacheFilename);
             }
 
-            double divisor = Math.Pow(2.0, level);
-            double longitudeResolution = LevelZeroDeltaLongitudeDegrees / divisor;
-            double latitudeResolution = LevelZeroDeltaLatitudeDegrees / divisor;
-
-            double west = -180.0 + longitudeResolution * longitudeIndex;
-            double east = -180.0 + longitudeResolution * (longitudeIndex + 1);
-            double south = -90.0 + latitudeResolution * latitudeIndex;
-            double north = -90.0 + latitudeResolution * (latitudeIndex + 1);
-
-            StringBuilder query = new StringBuilder(_baseUri.AbsoluteUri);
-            query.Append("&bbox=");
-            query.Append(west.ToString("0.###########"));
-            query.Append(',');
-            query.Append(south.ToString("0.###########"));
-            query.Append(',');
-            query.Append(east.ToString("0.###########"));
-            query.Append(',');
-            query.Append(north.ToString("0.###########"));
-            query.Append('&');
-
-            string queryString = query.ToString();
-            ++_tilesLoaded;
-            Console.WriteLine("(" + _tilesLoaded + ") Downloading " + queryString);
-
-            WebRequest request = WebRequest.Create(queryString);
-            using (WebResponse response = request.GetResponse())
-            using (Stream stream = response.GetResponseStream())
-            using (FileStream file = new FileStream(cacheFilename, FileMode.Create, FileAccess.Write))
+            if (data == null || data.Length != heightsToRead * sizeof(short))
             {
-                int index = 0;
+                double divisor = Math.Pow(2.0, identifier.Level);
+                double longitudeResolution = LevelZeroDeltaLongitudeDegrees / divisor;
+                double latitudeResolution = LevelZeroDeltaLatitudeDegrees / divisor;
 
-                const int bufferSize = 4096;
-                byte[] buffer = new byte[bufferSize];
-                int offset = 0;
+                double west = -180.0 + longitudeResolution * identifier.X;
+                double east = -180.0 + longitudeResolution * (identifier.X + 1);
+                double south = -90.0 + latitudeResolution * identifier.Y;
+                double north = -90.0 + latitudeResolution * (identifier.Y + 1);
+
+                StringBuilder query = new StringBuilder(_baseUri.AbsoluteUri);
+                query.Append("&bbox=");
+                query.Append(west.ToString("0.###########"));
+                query.Append(',');
+                query.Append(south.ToString("0.###########"));
+                query.Append(',');
+                query.Append(east.ToString("0.###########"));
+                query.Append(',');
+                query.Append(north.ToString("0.###########"));
+                query.Append('&');
+
+                string queryString = query.ToString();
+                ++_tilesLoaded;
+                Console.WriteLine("(" + _tilesLoaded + ") Downloading " + queryString);
 
                 int bytesToRead = heightsToRead * 2;
 
-                while (bytesToRead > 0)
-                {
-                    int bytesRead = stream.Read(buffer, offset, bufferSize - offset);
-                    file.Write(buffer, offset, bytesRead);
-                    bytesRead += offset;
-                    for (int i = 0; i < bytesRead; i += 2)
-                    {
-                        result[index] = BitConverter.ToInt16(buffer, i);
-                        ++index;
-                    }
-                    offset = bytesRead % 2;
-                    if (offset > 0)
-                    {
-                        bytesRead -= 1;
-                        --index;
-                        buffer[0] = buffer[bytesRead];
-                    }
-                    bytesToRead -= bytesRead;
-                }
+                WebRequest request = WebRequest.Create(queryString);
 
-                return result;
+                data = new byte[bytesToRead];
+
+                using (WebResponse response = request.GetResponse())
+                using (Stream stream = response.GetResponseStream())
+                using (FileStream file = new FileStream(cacheFilename, FileMode.Create, FileAccess.Write))
+                {
+                    int bytesRead = 0;
+                    while (bytesRead < bytesToRead)
+                    {
+                        int bytesReadThisTime = stream.Read(data, bytesRead, bytesToRead - bytesRead);
+                        if (bytesReadThisTime == 0)
+                            throw new IOException("Unexpected end of file.");
+                        file.Write(data, bytesRead, bytesReadThisTime);
+                        bytesRead += bytesReadThisTime;
+                    }
+                }
             }
+
+            // Make the southwest corner the origin instead of the northwest.
+            int index = 0;
+            for (int row = TileHeight - 1; row >= 0; --row)
+            {
+                int rowIndex = row * TileWidth;
+                for (int col = 0; col < TileWidth; ++col)
+                {
+                    result[index++] = BitConverter.ToInt16(data, 2 * (rowIndex + col));
+                }
+            }
+
+            return PostsToTexture(result);
+        }
+
+        private Texture2D PostsToTexture(float[] posts)
+        {
+            Texture2DDescription description = new Texture2DDescription(TileWidth, TileHeight, TextureFormat.Red32f, false);
+            Texture2D texture = Device.CreateTexture2DRectangle(description);
+
+            using (WritePixelBuffer wpb = Device.CreateWritePixelBuffer(PixelBufferHint.Stream, TileWidth * TileHeight * sizeof(float)))
+            {
+                wpb.CopyFromSystemMemory(posts);
+                texture.CopyFromBuffer(wpb, ImageFormat.Red, ImageDatatype.Float);
+            }
+
+            return texture;
         }
 
         private Uri _baseUri;
-        private WorldWindTerrainLevel[] _levels;
-        private RasterTerrainLevelCollection _levelsCollection;
+        private RasterLevel[] _levels;
+        private RasterLevelCollection _levelsCollection;
         private GeodeticExtent _extent = new GeodeticExtent(-180.0, -90.0, 180.0, 90.0);
+        private int _tilesLoaded;
 
         private const int NumberOfLevels = 12;
         private const int TileWidth = 150;

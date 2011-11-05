@@ -87,15 +87,7 @@ namespace OpenGlobe.Core
             }
             else
             {
-                int count = EnumerableCount(enumerable);
-                IList<T> newList = new List<T>(count);
-
-                foreach (T t in enumerable)
-                {
-                    newList.Add(t);
-                }
-
-                return newList;
+                return new List<T>(enumerable);
             }
         }
 
@@ -134,15 +126,7 @@ namespace OpenGlobe.Core
                 throw new ArgumentNullException("enumerable");
             }
 
-            int count = EnumerableCount(enumerable);
-            IList<T> newList = new List<T>(count);
-
-            foreach (T t in enumerable)
-            {
-                newList.Add(t);
-            }
-
-            return newList;
+            return new List<T>(enumerable);
         }
     }
 }

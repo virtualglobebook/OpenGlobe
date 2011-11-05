@@ -41,8 +41,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chapter03Triangle", "Exampl
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chapter05Jitter", "Examples\Chapter05\Jitter\Chapter05Jitter.csproj", "{B1DBCA8C-DB77-4E11-BCE9-589681E497C8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chapter13ClipmapTerrain", "Examples\Chapter13\ClipmapTerrain\Chapter13ClipmapTerrain.csproj", "{16C79B80-4411-4CDF-BBF9-0C207BCAFDB6}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chapter13ClipmapTerrainOnGlobe", "Examples\Chapter13\ClipmapTerrainOnGlobe\Chapter13ClipmapTerrainOnGlobe.csproj", "{6B3B197E-FFD5-41C5-889E-E790DC1EF2E4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chapter02Curves", "Examples\Chapter02\Curves\Chapter02Curves.csproj", "{3E18D0D2-E64C-49C4-BEF4-684925F00DA7}"
@@ -121,10 +119,6 @@ Global
 		{B1DBCA8C-DB77-4E11-BCE9-589681E497C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B1DBCA8C-DB77-4E11-BCE9-589681E497C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B1DBCA8C-DB77-4E11-BCE9-589681E497C8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{16C79B80-4411-4CDF-BBF9-0C207BCAFDB6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{16C79B80-4411-4CDF-BBF9-0C207BCAFDB6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{16C79B80-4411-4CDF-BBF9-0C207BCAFDB6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{16C79B80-4411-4CDF-BBF9-0C207BCAFDB6}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6B3B197E-FFD5-41C5-889E-E790DC1EF2E4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6B3B197E-FFD5-41C5-889E-E790DC1EF2E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6B3B197E-FFD5-41C5-889E-E790DC1EF2E4}.Release|Any CPU.ActiveCfg = Release|Any CPU

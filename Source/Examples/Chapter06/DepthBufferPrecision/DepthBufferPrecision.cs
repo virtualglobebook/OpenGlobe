@@ -38,7 +38,6 @@ namespace OpenGlobe.Examples
             _camera = new CameraLookAtPoint(_sceneState.Camera, _window, _globeShape);
 
             _sceneState.Camera.ZoomToTarget(_globeShape.MaximumRadius);
-            PersistentView.Execute(@"E:\Manuscript\DepthBufferPrecision\Figures\DepthBufferFormat.xml", _window, _sceneState.Camera);
 
             ///////////////////////////////////////////////////////////////////
 
@@ -70,7 +69,7 @@ namespace OpenGlobe.Examples
 
             _hudFont = new Font("Arial", 16);
             _hud = new HeadsUpDisplay();
-            _hud.Color = Color.Black;
+            _hud.Color = Color.Blue;
             UpdateHUD();
         }
 

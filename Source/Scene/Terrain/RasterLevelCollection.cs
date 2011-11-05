@@ -14,9 +14,9 @@ using System.Collections.ObjectModel;
 
 namespace OpenGlobe.Scene
 {
-    public class RasterTerrainLevelCollection : ReadOnlyCollection<RasterTerrainLevel>
+    public class RasterLevelCollection : ReadOnlyCollection<RasterLevel>
     {
-        public RasterTerrainLevelCollection(IList<RasterTerrainLevel> collectionToWrap) :
+        public RasterLevelCollection(IList<RasterLevel> collectionToWrap) :
             base(collectionToWrap)
         {
         }

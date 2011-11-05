@@ -6,6 +6,7 @@ using OpenGlobe.Renderer;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
+using OpenGlobe.Scene;
 
 namespace OpenGlobe.Scene
 {
@@ -25,7 +26,7 @@ namespace OpenGlobe.Scene
             _updateShader = Device.CreateShaderProgram(
                 EmbeddedResources.GetText("OpenGlobe.Scene.Terrain.ClipmapTerrain.ClipmapUpdateVS.glsl"),
                 EmbeddedResources.GetText("OpenGlobe.Scene.Terrain.ClipmapTerrain.ClipmapUpdateFS.glsl"));
-            _updateHeightOutput = _updateShader.FragmentOutputs["heightOutput"];
+            _updateTexelOutput = _updateShader.FragmentOutputs["texelOutput"];
             _updateDrawState = new DrawState(new RenderState(), _updateShader, _unitQuad);
             _updateDrawState.RenderState.FacetCulling.FrontFaceWindingOrder = unitQuad.FrontFaceWindingOrder;
             _updateDrawState.RenderState.DepthTest.Enabled = false;
@@ -37,14 +38,14 @@ namespace OpenGlobe.Scene
             _upsampleShader = Device.CreateShaderProgram(
                 EmbeddedResources.GetText("OpenGlobe.Scene.Terrain.ClipmapTerrain.ClipmapUpsampleVS.glsl"),
                 EmbeddedResources.GetText("OpenGlobe.Scene.Terrain.ClipmapTerrain.ClipmapUpsampleFS.glsl"));
-            _upsampleHeightOutput = _upsampleShader.FragmentOutputs["heightOutput"];
+            _upsampleTexelOutput = _upsampleShader.FragmentOutputs["texelOutput"];
             _upsampleDrawState = new DrawState(new RenderState(), _upsampleShader, _unitQuad);
             _upsampleDrawState.RenderState.FacetCulling.FrontFaceWindingOrder = unitQuad.FrontFaceWindingOrder;
             _upsampleDrawState.RenderState.DepthTest.Enabled = false;
             _upsampleSourceOrigin = (Uniform<Vector2F>)_upsampleShader.Uniforms["u_sourceOrigin"];
             _upsampleUpdateSize = (Uniform<Vector2F>)_upsampleShader.Uniforms["u_updateSize"];
             _upsampleDestinationOffset = (Uniform<Vector2F>)_upsampleShader.Uniforms["u_destinationOffset"];
-            _upsampleOneOverHeightMapSize = (Uniform<Vector2F>)_upsampleShader.Uniforms["u_oneOverHeightMapSize"];
+            _upsampleOneOverTextureSize = (Uniform<Vector2F>)_upsampleShader.Uniforms["u_oneOverTextureSize"];
 
             _computeNormalsShader = Device.CreateShaderProgram(
                 EmbeddedResources.GetText("OpenGlobe.Scene.Terrain.ClipmapTerrain.ClipmapComputeNormalsVS.glsl"),
@@ -61,27 +62,34 @@ namespace OpenGlobe.Scene
 
             HeightExaggeration = 1.0f;
 
-            _workerWindow = Device.CreateWindow(1, 1);
+            ClipmapLevel levelZero = clipmapLevels[0];
+            InitializeRequestThreads(context, _terrain, levelZero, levelZero.Terrain);
+            InitializeRequestThreads(context, _imagery, levelZero, levelZero.Imagery);
+        }
+
+        private void InitializeRequestThreads(Context context, RasterDataDetails details, ClipmapLevel clipmapLevelZero, RasterLevel rasterLevelZero)
+        {
+            details.WorkerWindow = Device.CreateWindow(1, 1);
             context.MakeCurrent();
 
 #if !SingleThreaded
             Thread requestThread = new Thread(RequestThreadEntryPoint);
             requestThread.IsBackground = true;
-            requestThread.Start();
+            requestThread.Start(details);
 #endif
 
             // Preload the entire world at level 0
-            ClipmapLevel levelZero = clipmapLevels[0];
-            RasterTerrainTileRegion[] regions = levelZero.Terrain.GetTilesInExtent(0, 0, levelZero.Terrain.LongitudePosts - 1, levelZero.Terrain.LatitudePosts - 1);
-            foreach (RasterTerrainTileRegion region in regions)
+            RasterTileRegion[] regions = rasterLevelZero.GetTilesInExtent(0, 0, rasterLevelZero.LongitudePosts - 1, rasterLevelZero.LatitudePosts - 1);
+            foreach (RasterTileRegion region in regions)
             {
-                RequestTileLoad(levelZero, region.Tile);
+                RequestTileLoad(details, clipmapLevelZero, region.Tile);
             }
         }
 
         public void Dispose()
         {
-            _doneQueue.Dispose();
+            _terrain.DoneQueue.Dispose();
+            _imagery.DoneQueue.Dispose();
 
             _computeNormalsShader.Dispose();
             _upsampleShader.Dispose();
@@ -99,45 +107,48 @@ namespace OpenGlobe.Scene
 
         public void ApplyNewData(Context context)
         {
+            ApplyNewData(context, _terrain);
+            ApplyNewData(context, _imagery);
+        }
+
+        private void ApplyNewData(Context context, RasterDataDetails details)
+        {
             // This is the start of a new frame, so the next request goes at the end
-            _requestInsertionPoint = null;
+            details.RequestInsertionPoint = null;
 
 #if SingleThreaded
-            _requestQueue.ProcessQueue();
+            details.RequestQueue.ProcessQueue();
 #endif
-            // TODO: it would be nice if the MessageQueue gave us a way to do this directly without anonymous delegate trickery.
+
             List<TileLoadRequest> tiles = new List<TileLoadRequest>();
             EventHandler<MessageQueueEventArgs> handler = delegate(object sender, MessageQueueEventArgs e)
             {
                 TileLoadRequest tile = (TileLoadRequest)e.Message;
-                _loadedTiles[tile.Tile.Identifier] = tile.Texture;
-                _loadingTiles.Remove(tile.Tile.Identifier);
+                details.LoadedTiles[tile.Tile.Identifier] = tile.Texture;
+                details.LoadingTiles.Remove(tile.Tile.Identifier);
                 tiles.Add(tile);
             };
-            _doneQueue.MessageReceived += handler;
-            _doneQueue.ProcessQueue();
-            _doneQueue.MessageReceived -= handler;
+            details.DoneQueue.MessageReceived += handler;
+            details.DoneQueue.ProcessQueue();
+            details.DoneQueue.MessageReceived -= handler;
 
             foreach (TileLoadRequest tile in tiles)
             {
-                ApplyNewTile(context, tile.Level, tile.Tile);
+                ApplyNewTile(context, details, tile.Level, tile.Tile);
             }
-
-            //if (tiles.Count > 0)
-            //    foreach (ClipmapLevel level in levels)
-            //    {
-            //        VerifyHeights(level);
-            //    }
         }
 
-        public void ApplyNewTile(Context context, ClipmapLevel level, RasterTerrainTile tile)
+        private void ApplyNewTile(Context context, RasterDataDetails details, ClipmapLevel level, RasterTile tile)
         {
+            ClipmapLevel.Extent nextExtent = details.Type == RasterType.Terrain ? level.NextExtent : level.NextImageryExtent;
+            RasterLevel rasterLevel = details.Type == RasterType.Terrain ? level.Terrain : level.Imagery;
+
             ClipmapUpdate entireLevel = new ClipmapUpdate(
                 level,
-                level.NextExtent.West,
-                level.NextExtent.South,
-                level.NextExtent.East,
-                level.NextExtent.North);
+                nextExtent.West,
+                nextExtent.South,
+                nextExtent.East,
+                nextExtent.North);
 
             ClipmapUpdate thisTile = new ClipmapUpdate(
                 level,
@@ -150,26 +161,26 @@ namespace OpenGlobe.Scene
 
             if (intersection.Width > 0 && intersection.Height > 0)
             {
-                Update(context, intersection);
+                Update(context, intersection, level, details, rasterLevel);
 
                 // Recurse on child tiles if they're NOT loaded.  Unloaded children will use data from this tile.
                 ClipmapLevel finer = level.FinerLevel;
                 if (finer != null)
                 {
-                    ApplyIfNotLoaded(context, finer, tile.SouthwestChild);
-                    ApplyIfNotLoaded(context, finer, tile.SoutheastChild);
-                    ApplyIfNotLoaded(context, finer, tile.NorthwestChild);
-                    ApplyIfNotLoaded(context, finer, tile.NortheastChild);
+                    ApplyIfNotLoaded(context, details, finer, tile.SouthwestChild);
+                    ApplyIfNotLoaded(context, details, finer, tile.SoutheastChild);
+                    ApplyIfNotLoaded(context, details, finer, tile.NorthwestChild);
+                    ApplyIfNotLoaded(context, details, finer, tile.NortheastChild);
                 }
             }
         }
 
-        private void ApplyIfNotLoaded(Context context, ClipmapLevel level, RasterTerrainTile tile)
+        private void ApplyIfNotLoaded(Context context, RasterDataDetails details, ClipmapLevel level, RasterTile tile)
         {
             Texture2D texture;
-            if (!_loadedTiles.TryGetValue(tile.Identifier, out texture) || texture == null)
+            if (!details.LoadedTiles.TryGetValue(tile.Identifier, out texture) || texture == null)
             {
-                ApplyNewTile(context, level, tile);
+                ApplyNewTile(context, details, level, tile);
             }
         }
 
@@ -184,58 +195,81 @@ namespace OpenGlobe.Scene
 
         public void RequestTileResidency(Context context, ClipmapLevel level)
         {
-            RasterTerrainTileRegion[] tileRegions = level.Terrain.GetTilesInExtent(level.NextExtent.West, level.NextExtent.South, level.NextExtent.East, level.NextExtent.North);
-            foreach (RasterTerrainTileRegion region in tileRegions)
+            RequestTileResidency(context, level, _terrain, level.Terrain, level.NextExtent);
+            RequestTileResidency(context, level, _imagery, level.Imagery, level.NextImageryExtent);
+        }
+
+        private void RequestTileResidency(Context context, ClipmapLevel level, RasterDataDetails details, RasterLevel rasterLevel, ClipmapLevel.Extent nextExtent)
+        {
+            RasterTileRegion[] tileRegions = rasterLevel.GetTilesInExtent(nextExtent.West, nextExtent.South, nextExtent.East, nextExtent.North);
+            foreach (RasterTileRegion region in tileRegions)
             {
-                if (!_loadedTiles.ContainsKey(region.Tile.Identifier))
+                if (!details.LoadedTiles.ContainsKey(region.Tile.Identifier))
                 {
-                    RequestTileLoad(level, region.Tile);
+                    RequestTileLoad(details, level, region.Tile);
                 }
             }
         }
 
-        public void Update(Context context, ClipmapUpdate update)
+        public void UpdateTerrain(Context context, ClipmapUpdate update)
         {
             ClipmapLevel level = update.Level;
+            Update(context, update, level, _terrain, level.Terrain);
+        }
 
-            ClipmapUpdate[] updates = SplitUpdateToAvoidWrapping(update);
+        public void UpdateImagery(Context context, ClipmapUpdate update)
+        {
+            ClipmapLevel level = update.Level;
+            Update(context, update, level, _imagery, level.Imagery);
+        }
+
+        private void Update(Context context, ClipmapUpdate update, ClipmapLevel level, RasterDataDetails details, RasterLevel rasterLevel)
+        {
+            ClipmapUpdate[] updates = SplitUpdateToAvoidWrapping(update, details);
             foreach (ClipmapUpdate nonWrappingUpdate in updates)
             {
-                RasterTerrainTileRegion[] tileRegions = level.Terrain.GetTilesInExtent(nonWrappingUpdate.West, nonWrappingUpdate.South, nonWrappingUpdate.East, nonWrappingUpdate.North);
-                foreach (RasterTerrainTileRegion region in tileRegions)
+                RasterTileRegion[] tileRegions = rasterLevel.GetTilesInExtent(nonWrappingUpdate.West, nonWrappingUpdate.South, nonWrappingUpdate.East, nonWrappingUpdate.North);
+                foreach (RasterTileRegion region in tileRegions)
                 {
                     Texture2D tileTexture;
-                    bool loaded = _loadedTiles.TryGetValue(region.Tile.Identifier, out tileTexture);
+                    bool loaded = details.LoadedTiles.TryGetValue(region.Tile.Identifier, out tileTexture);
                     if (loaded)
                     {
-                        RenderTileToLevelHeightTexture(context, level, region, tileTexture);
+                        RenderTileToLevelTexture(context, level, details, region, tileTexture);
                     }
                     else
                     {
-                        UpsampleTileData(context, level, region);
+                        UpsampleTileData(context, level, details, region);
                     }
                 }
             }
 
-            // Normals at edges are incorrect, so include a one-post buffer around the update region
-            // when updating normals in order to update normals that were previously at the edge.
-            ClipmapUpdate updateWithBuffer = update.AddBufferWithinLevelNextExtent();
-            ClipmapUpdate[] normalUpdates = SplitUpdateToAvoidWrapping(updateWithBuffer);
-            foreach (ClipmapUpdate normalUpdate in normalUpdates)
+            if (details.Type == RasterType.Terrain)
             {
-                UpdateNormals(context, normalUpdate);
+                // Normals at edges are incorrect, so include a one-post buffer around the update region
+                // when updating normals in order to update normals that were previously at the edge.
+                ClipmapUpdate updateWithBuffer = update.AddBufferWithinLevelNextExtent();
+                ClipmapUpdate[] normalUpdates = SplitUpdateToAvoidWrapping(updateWithBuffer, details);
+                foreach (ClipmapUpdate normalUpdate in normalUpdates)
+                {
+                    UpdateNormals(context, normalUpdate);
+                }
             }
         }
 
-        private ClipmapUpdate[] SplitUpdateToAvoidWrapping(ClipmapUpdate update)
+        private ClipmapUpdate[] SplitUpdateToAvoidWrapping(ClipmapUpdate update, RasterDataDetails details)
         {
             ClipmapLevel level = update.Level;
-            int clipmapSize = level.NextExtent.East - level.NextExtent.West + 1;
+            Vector2I origin = details.Type == RasterType.Terrain ? level.OriginInTextures : level.OriginInImagery;
+            ClipmapLevel.Extent extent = details.Type == RasterType.Terrain ? level.NextExtent : level.NextImageryExtent;
 
-            int west = (level.OriginInTextures.X + (update.West - level.NextExtent.West)) % clipmapSize;
-            int east = (level.OriginInTextures.X + (update.East - level.NextExtent.West)) % clipmapSize;
-            int south = (level.OriginInTextures.Y + (update.South - level.NextExtent.South)) % clipmapSize;
-            int north = (level.OriginInTextures.Y + (update.North - level.NextExtent.South)) % clipmapSize;
+            int clipmapSizeX = extent.East - extent.West + 1;
+            int clipmapSizeY = extent.North - extent.South + 1;
+
+            int west = (origin.X + (update.West - extent.West)) % clipmapSizeX;
+            int east = (origin.X + (update.East - extent.West)) % clipmapSizeX;
+            int south = (origin.Y + (update.South - extent.South)) % clipmapSizeY;
+            int north = (origin.Y + (update.North - extent.South)) % clipmapSizeY;
 
             if (east < west && north < south)
             {
@@ -244,27 +278,27 @@ namespace OpenGlobe.Scene
                     level,
                     update.West,
                     update.South,
-                    level.NextExtent.West + (clipmapSize - level.OriginInTextures.X - 1),
-                    level.NextExtent.South + (clipmapSize - level.OriginInTextures.Y - 1));
+                    extent.West + (clipmapSizeX - origin.X - 1),
+                    extent.South + (clipmapSizeY - origin.Y - 1));
 
                 ClipmapUpdate bottomRightUpdate = new ClipmapUpdate(
                     level,
-                    level.NextExtent.West + clipmapSize - level.OriginInTextures.X,
+                    extent.West + clipmapSizeX - origin.X,
                     update.South,
                     update.East,
-                    level.NextExtent.South + (clipmapSize - level.OriginInTextures.Y - 1));
+                    extent.South + (clipmapSizeY - origin.Y - 1));
 
                 ClipmapUpdate topLeftUpdate = new ClipmapUpdate(
                     level,
                     update.West,
-                    level.NextExtent.South + clipmapSize - level.OriginInTextures.Y,
-                    level.NextExtent.West + (clipmapSize - level.OriginInTextures.X - 1),
+                    extent.South + clipmapSizeY - origin.Y,
+                    extent.West + (clipmapSizeX - origin.X - 1),
                     update.North);
 
                 ClipmapUpdate topRightUpdate = new ClipmapUpdate(
                     level,
-                    level.NextExtent.West + clipmapSize - level.OriginInTextures.X,
-                    level.NextExtent.South + clipmapSize - level.OriginInTextures.Y,
+                    extent.West + clipmapSizeX - origin.X,
+                    extent.South + clipmapSizeY - origin.Y,
                     update.East,
                     update.North);
 
@@ -282,12 +316,12 @@ namespace OpenGlobe.Scene
                     level,
                     update.West,
                     update.South,
-                    level.NextExtent.West + (clipmapSize - level.OriginInTextures.X - 1),
+                    extent.West + (clipmapSizeX - origin.X - 1),
                     update.North);
 
                 ClipmapUpdate rightUpdate = new ClipmapUpdate(
                     level,
-                    level.NextExtent.West + clipmapSize - level.OriginInTextures.X,
+                    extent.West + clipmapSizeX - origin.X,
                     update.South,
                     update.East,
                     update.North);
@@ -305,12 +339,12 @@ namespace OpenGlobe.Scene
                     update.West,
                     update.South,
                     update.East,
-                    level.NextExtent.South + (clipmapSize - level.OriginInTextures.Y - 1));
+                    extent.South + (clipmapSizeY - origin.Y - 1));
 
                 ClipmapUpdate topUpdate = new ClipmapUpdate(
                     level,
                     update.West,
-                    level.NextExtent.South + clipmapSize - level.OriginInTextures.Y,
+                    extent.South + clipmapSizeY - origin.Y,
                     update.East,
                     update.North);
 
@@ -328,16 +362,33 @@ namespace OpenGlobe.Scene
             }
         }
 
-        private void RenderTileToLevelHeightTexture(Context context, ClipmapLevel level, RasterTerrainTileRegion region, Texture2D texture)
+        private void RenderTileToLevelTexture(Context context, ClipmapLevel level, RasterDataDetails details, RasterTileRegion region, Texture2D tileTexture)
         {
-            context.TextureUnits[0].Texture = texture;
+            Texture2D levelTexture;
+            Vector2I originInTextures;
+            ClipmapLevel.Extent nextExtent;
+
+            if (details.Type == RasterType.Terrain)
+            {
+                levelTexture = level.HeightTexture;
+                originInTextures = level.OriginInTextures;
+                nextExtent = level.NextExtent;
+            }
+            else
+            {
+                levelTexture = level.ImageryTexture;
+                originInTextures = level.OriginInImagery;
+                nextExtent = level.NextImageryExtent;
+            }
+
+            context.TextureUnits[0].Texture = tileTexture;
             context.TextureUnits[0].TextureSampler = Device.TextureSamplers.NearestClamp;
 
-            _framebuffer.ColorAttachments[_updateHeightOutput] = level.HeightTexture;
+            _framebuffer.ColorAttachments[_updateTexelOutput] = levelTexture;
 
-            int clipmapSize = level.NextExtent.East - level.NextExtent.West + 1;
-            int destWest = (level.OriginInTextures.X + (region.Tile.West + region.West - level.NextExtent.West)) % clipmapSize;
-            int destSouth = (level.OriginInTextures.Y + (region.Tile.South + region.South - level.NextExtent.South)) % clipmapSize;
+            int clipmapSize = nextExtent.East - nextExtent.West + 1;
+            int destWest = (originInTextures.X + (region.Tile.West + region.West - nextExtent.West)) % clipmapSize;
+            int destSouth = (originInTextures.Y + (region.Tile.South + region.South - nextExtent.South)) % clipmapSize;
 
             int width = region.East - region.West + 1;
             int height = region.North - region.South + 1;
@@ -351,34 +402,61 @@ namespace OpenGlobe.Scene
             Framebuffer oldFramebuffer = context.Framebuffer;
 
             // Update the context and draw
-            context.Viewport = new Rectangle(0, 0, level.HeightTexture.Description.Width, level.HeightTexture.Description.Height);
+            context.Viewport = new Rectangle(0, 0, levelTexture.Description.Width, levelTexture.Description.Height);
             context.Framebuffer = _framebuffer;
             context.Draw(_unitQuadPrimitiveType, _updateDrawState, _sceneState);
 
             // Restore the context to its original state
             context.Framebuffer = oldFramebuffer;
             context.Viewport = oldViewport;
+            context.TextureUnits[0].Texture = null;
         }
 
-        private void UpsampleTileData(Context context, ClipmapLevel level, RasterTerrainTileRegion region)
+        private void UpsampleTileData(Context context, ClipmapLevel level, RasterDataDetails details, RasterTileRegion region)
         {
             ClipmapLevel coarserLevel = level.CoarserLevel;
 
             if (coarserLevel == null)
                 return;
 
-            context.TextureUnits[0].Texture = coarserLevel.HeightTexture;
-            context.TextureUnits[0].TextureSampler = Device.TextureSamplers.LinearRepeat; // TODO: change to NearestRepeat
+            Texture2D levelTexture;
+            Texture2D coarserLevelTexture;
+            Vector2I originInTextures;
+            Vector2I coarserOriginInTextures;
+            ClipmapLevel.Extent nextExtent;
+            ClipmapLevel.Extent coarserNextExtent;
 
-            _framebuffer.ColorAttachments[_upsampleHeightOutput] = level.HeightTexture;
+            if (details.Type == RasterType.Terrain)
+            {
+                levelTexture = level.HeightTexture;
+                coarserLevelTexture = coarserLevel.HeightTexture;
+                originInTextures = level.OriginInTextures;
+                coarserOriginInTextures = coarserLevel.OriginInTextures;
+                nextExtent = level.NextExtent;
+                coarserNextExtent = coarserLevel.NextExtent;
+            }
+            else
+            {
+                levelTexture = level.ImageryTexture;
+                coarserLevelTexture = coarserLevel.ImageryTexture;
+                originInTextures = level.OriginInImagery;
+                coarserOriginInTextures = coarserLevel.OriginInImagery;
+                nextExtent = level.NextImageryExtent;
+                coarserNextExtent = coarserLevel.NextImageryExtent;
+            }
 
-            int fineClipmapSize = level.NextExtent.East - level.NextExtent.West + 1;
-            int destWest = (level.OriginInTextures.X + (region.Tile.West + region.West - level.NextExtent.West)) % fineClipmapSize;
-            int destSouth = (level.OriginInTextures.Y + (region.Tile.South + region.South - level.NextExtent.South)) % fineClipmapSize;
+            context.TextureUnits[0].Texture = coarserLevelTexture;
+            context.TextureUnits[0].TextureSampler = Device.TextureSamplers.LinearRepeat;
 
-            int coarseClipmapSize = coarserLevel.NextExtent.East - coarserLevel.NextExtent.West + 1;
-            double sourceWest = (coarserLevel.OriginInTextures.X + ((region.Tile.West + region.West) / 2.0 - coarserLevel.NextExtent.West)) % coarseClipmapSize;
-            double sourceSouth = (coarserLevel.OriginInTextures.Y + ((region.Tile.South + region.South) / 2.0 - coarserLevel.NextExtent.South)) % coarseClipmapSize;
+            _framebuffer.ColorAttachments[_upsampleTexelOutput] = levelTexture;
+
+            int fineClipmapSize = nextExtent.East - nextExtent.West + 1;
+            int destWest = (originInTextures.X + (region.Tile.West + region.West - nextExtent.West)) % fineClipmapSize;
+            int destSouth = (originInTextures.Y + (region.Tile.South + region.South - nextExtent.South)) % fineClipmapSize;
+
+            int coarseClipmapSize = coarserNextExtent.East - coarserNextExtent.West + 1;
+            double sourceWest = (coarserOriginInTextures.X + ((region.Tile.West + region.West) / 2.0 - coarserNextExtent.West)) % coarseClipmapSize;
+            double sourceSouth = (coarserOriginInTextures.Y + ((region.Tile.South + region.South) / 2.0 - coarserNextExtent.South)) % coarseClipmapSize;
 
             int width = region.East - region.West + 1;
             int height = region.North - region.South + 1;
@@ -386,20 +464,21 @@ namespace OpenGlobe.Scene
             _upsampleSourceOrigin.Value = new Vector2F((float)sourceWest, (float)sourceSouth);
             _upsampleUpdateSize.Value = new Vector2F(width, height);
             _upsampleDestinationOffset.Value = new Vector2F(destWest, destSouth);
-            _upsampleOneOverHeightMapSize.Value = new Vector2F(1.0f / coarserLevel.HeightTexture.Description.Width, 1.0f / coarserLevel.HeightTexture.Description.Height);
+            _upsampleOneOverTextureSize.Value = new Vector2F(1.0f / coarserLevelTexture.Description.Width, 1.0f / coarserLevelTexture.Description.Height);
 
             // Save the current state of the context
             Rectangle oldViewport = context.Viewport;
             Framebuffer oldFramebuffer = context.Framebuffer;
 
             // Update the context and draw
-            context.Viewport = new Rectangle(0, 0, level.HeightTexture.Description.Width, level.HeightTexture.Description.Height);
+            context.Viewport = new Rectangle(0, 0, levelTexture.Description.Width, levelTexture.Description.Height);
             context.Framebuffer = _framebuffer;
             context.Draw(_unitQuadPrimitiveType, _upsampleDrawState, _sceneState);
 
             // Restore the context to its original state
             context.Framebuffer = oldFramebuffer;
             context.Viewport = oldViewport;
+            context.TextureUnits[0].Texture = null;
         }
 
         private void UpdateNormals(Context context, ClipmapUpdate update)
@@ -432,12 +511,13 @@ namespace OpenGlobe.Scene
             // Restore the context to its original state
             context.Framebuffer = oldFramebuffer;
             context.Viewport = oldViewport;
+            context.TextureUnits[0].Texture = null;
         }
 
-        private void RequestTileLoad(ClipmapLevel level, RasterTerrainTile tile)
+        private void RequestTileLoad(RasterDataDetails details,  ClipmapLevel level, RasterTile tile)
         {
             LinkedListNode<TileLoadRequest> requestNode;
-            bool exists = _loadingTiles.TryGetValue(tile.Identifier, out requestNode);
+            bool exists = details.LoadingTiles.TryGetValue(tile.Identifier, out requestNode);
 
             if (!exists)
             {
@@ -448,7 +528,7 @@ namespace OpenGlobe.Scene
                 requestNode = new LinkedListNode<TileLoadRequest>(request);
             }
 
-            lock (_requestList)
+            lock (details.RequestList)
             {
                 if (exists)
                 {
@@ -460,163 +540,104 @@ namespace OpenGlobe.Scene
                         // That means it's been loaded,  so we don't need to do anything.
                         return;
                     }
-                    _requestList.Remove(requestNode);
+                    details.RequestList.Remove(requestNode);
                 }
 
-                if (_requestInsertionPoint == null || _requestInsertionPoint.List == null)
+                if (details.RequestInsertionPoint == null || details.RequestInsertionPoint.List == null)
                 {
-                    _requestList.AddLast(requestNode);
+                    details.RequestList.AddLast(requestNode);
                 }
                 else
                 {
-                    _requestList.AddBefore(_requestInsertionPoint, requestNode);
+                    details.RequestList.AddBefore(details.RequestInsertionPoint, requestNode);
                 }
-                _requestInsertionPoint = requestNode;
+                details.RequestInsertionPoint = requestNode;
 
                 // If the request list has too many entries, delete from the beginning
                 const int MaxRequests = 500;
-                while (_requestList.Count > MaxRequests)
+                while (details.RequestList.Count > MaxRequests)
                 {
-                    LinkedListNode<TileLoadRequest> nodeToRemove = _requestList.First;
-                    _requestList.RemoveFirst();
-                    _loadingTiles.Remove(nodeToRemove.Value.Tile.Identifier);
+                    LinkedListNode<TileLoadRequest> nodeToRemove = details.RequestList.First;
+                    details.RequestList.RemoveFirst();
+                    details.LoadingTiles.Remove(nodeToRemove.Value.Tile.Identifier);
                 }
 
-                Monitor.Pulse(_requestList);
+                Monitor.Pulse(details.RequestList);
             }
 
-            _loadingTiles[tile.Identifier] = requestNode;
+            details.LoadingTiles[tile.Identifier] = requestNode;
         }
 
-        private Texture2D CreateTextureFromTile(RasterTerrainTile tile)
+        private void RequestThreadEntryPoint(object state)
         {
-            int width = tile.East - tile.West + 1;
-            int height = tile.North - tile.South + 1;
+            RasterDataDetails details = (RasterDataDetails)state;
 
-            Texture2DDescription description = new Texture2DDescription(width, height, TextureFormat.Red32f, false);
-            Texture2D texture = Device.CreateTexture2DRectangle(description);
-
-            float[] posts = new float[width * height];
-            tile.GetPosts(0, 0, width - 1, height - 1, posts, 0, width);
-
-            using (WritePixelBuffer wpb = Device.CreateWritePixelBuffer(PixelBufferHint.Stream, width * height * sizeof(float)))
-            {
-                wpb.CopyFromSystemMemory(posts);
-                texture.CopyFromBuffer(wpb, ImageFormat.Red, ImageDatatype.Float);
-            }
-
-            return texture;
-        }
-
-        private List<TileLoadRequest> _currentRequests = new List<TileLoadRequest>();
-
-        /// <summary>
-        /// Invoked in the <see cref="_requestQueue"/> thread when a tile load request is received.
-        /// </summary>
-        private void TileLoadRequestReceived(object sender, MessageQueueEventArgs e)
-        {
-            TileLoadRequest request = (TileLoadRequest)e.Message;
-            _currentRequests.Add(request);
-        }
-
-        private void RequestThreadEntryPoint()
-        {
-            _workerWindow.Context.MakeCurrent();
+            details.WorkerWindow.Context.MakeCurrent();
 
             while (true)
             {
                 TileLoadRequest request = null;
-                lock (_requestList)
+                lock (details.RequestList)
                 {
-                    LinkedListNode<TileLoadRequest> lastNode = _requestList.Last;
+                    LinkedListNode<TileLoadRequest> lastNode = details.RequestList.Last;
                     if (lastNode != null)
                     {
                         request = lastNode.Value;
-                        _requestList.RemoveLast();
+                        details.RequestList.RemoveLast();
                     }
                     else
                     {
-                        Monitor.Wait(_requestList);
+                        Monitor.Wait(details.RequestList);
 
-                        lastNode = _requestList.Last;
+                        lastNode = details.RequestList.Last;
                         if (lastNode != null)
                         {
                             request = lastNode.Value;
-                            _requestList.RemoveLast();
+                            details.RequestList.RemoveLast();
                         }
                     }
                 }
 
                 if (request != null)
                 {
-                    RasterTerrainTile tile = request.Tile;
-                    request.Texture = CreateTextureFromTile(tile);
+                    RasterTile tile = request.Tile;
+                    request.Texture = tile.LoadTexture();
 
                     Fence fence = Device.CreateFence();
                     fence.ClientWait();
 
-                    _doneQueue.Post(request);
+                    details.DoneQueue.Post(request);
                 }
             }
         }
 
-        public void VerifyHeights(ClipmapLevel level)
+        private enum RasterType
         {
-            ReadPixelBuffer rpb = level.HeightTexture.CopyToBuffer(ImageFormat.Red, ImageDatatype.Float);
-            float[] postsFromTexture = rpb.CopyToSystemMemory<float>();
-
-            ReadPixelBuffer rpbNormals = level.NormalTexture.CopyToBuffer(ImageFormat.RedGreenBlue, ImageDatatype.Float);
-            Vector3F[] normalsFromTexture = rpbNormals.CopyToSystemMemory<Vector3F>();
-
-            int clipmapPosts = level.NextExtent.East - level.NextExtent.West + 1;
-
-            float[] realPosts = new float[clipmapPosts * clipmapPosts];
-            level.Terrain.GetPosts(level.NextExtent.West, level.NextExtent.South, level.NextExtent.East, level.NextExtent.North, realPosts, 0, clipmapPosts);
-
-            float heightExaggeration = HeightExaggeration;
-            float postDelta = (float)level.Terrain.PostDeltaLongitude;
-
-            for (int j = 0; j < clipmapPosts; ++j)
-            {
-                int y = (j + level.OriginInTextures.Y) % clipmapPosts;
-                for (int i = 0; i < clipmapPosts; ++i)
-                {
-                    int x = (i + level.OriginInTextures.X) % clipmapPosts;
-
-                    float realHeight = realPosts[j * clipmapPosts + i];
-                    float heightFromTexture = postsFromTexture[y * clipmapPosts + x];
-
-                    if (realHeight != heightFromTexture)
-                        throw new Exception("bad");
-
-                    if (i != 0 && i != clipmapPosts - 1 &&
-                        j != 0 && j != clipmapPosts - 1)
-                    {
-                        int top = (j + 1) * clipmapPosts + i;
-                        float topHeight = realPosts[top] * heightExaggeration;
-                        int bottom = (j - 1) * clipmapPosts + i;
-                        float bottomHeight = realPosts[bottom] * heightExaggeration;
-                        int right = j * clipmapPosts + i + 1;
-                        float rightHeight = realPosts[right] * heightExaggeration;
-                        int left = j * clipmapPosts + i - 1;
-                        float leftHeight = realPosts[left] * heightExaggeration;
-
-                        Vector3F realNormal = new Vector3F(leftHeight - rightHeight, bottomHeight - topHeight, 2.0f * postDelta).Normalize();
-
-                        Vector3F normalFromTexture = normalsFromTexture[y * clipmapPosts + x].Normalize();
-
-                        if (!realNormal.EqualsEpsilon(normalFromTexture, 1e-5f))
-                            throw new Exception("normal is bad.");
-                    }
-                }
-            }
+            Terrain,
+            Imagery
         }
 
         private class TileLoadRequest
         {
             public ClipmapLevel Level;
-            public RasterTerrainTile Tile;
+            public RasterTile Tile;
             public Texture2D Texture;
+        }
+
+        private class RasterDataDetails
+        {
+            public RasterDataDetails(RasterType type)
+            {
+                Type = type;
+            }
+
+            public RasterType Type;
+            public GraphicsWindow WorkerWindow;
+            public Dictionary<RasterTileIdentifier, LinkedListNode<TileLoadRequest>> LoadingTiles = new Dictionary<RasterTileIdentifier, LinkedListNode<TileLoadRequest>>();
+            public Dictionary<RasterTileIdentifier, Texture2D> LoadedTiles = new Dictionary<RasterTileIdentifier, Texture2D>();
+            public LinkedList<TileLoadRequest> RequestList = new LinkedList<TileLoadRequest>();
+            public LinkedListNode<TileLoadRequest> RequestInsertionPoint;
+            public MessageQueue DoneQueue = new MessageQueue();
         }
 
         private VertexArray _unitQuad;
@@ -625,19 +646,19 @@ namespace OpenGlobe.Scene
         private Framebuffer _framebuffer;
 
         private ShaderProgram _updateShader;
-        private int _updateHeightOutput;
+        private int _updateTexelOutput;
         private DrawState _updateDrawState;
         private Uniform<Vector2F> _updateDestinationOffset;
         private Uniform<Vector2F> _updateUpdateSize;
         private Uniform<Vector2F> _updateSourceOrigin;
 
         private ShaderProgram _upsampleShader;
-        private int _upsampleHeightOutput;
+        private int _upsampleTexelOutput;
         private DrawState _upsampleDrawState;
         private Uniform<Vector2F> _upsampleSourceOrigin;
         private Uniform<Vector2F> _upsampleUpdateSize;
         private Uniform<Vector2F> _upsampleDestinationOffset;
-        private Uniform<Vector2F> _upsampleOneOverHeightMapSize;
+        private Uniform<Vector2F> _upsampleOneOverTextureSize;
 
         private ShaderProgram _computeNormalsShader;
         private int _normalOutput;
@@ -648,35 +669,7 @@ namespace OpenGlobe.Scene
         private Uniform<float> _heightExaggeration;
         private Uniform<float> _postDelta;
 
-        private Dictionary<RasterTerrainTileIdentifier, LinkedListNode<TileLoadRequest>> _loadingTiles = new Dictionary<RasterTerrainTileIdentifier, LinkedListNode<TileLoadRequest>>();
-        private Dictionary<RasterTerrainTileIdentifier, Texture2D> _loadedTiles = new Dictionary<RasterTerrainTileIdentifier, Texture2D>();
-
-        private GraphicsWindow _workerWindow;
-        private MessageQueue _doneQueue = new MessageQueue();
-
-        private LinkedList<TileLoadRequest> _requestList = new LinkedList<TileLoadRequest>();
-        private LinkedListNode<TileLoadRequest> _requestInsertionPoint;
-
-        private class LastViewerPosition
-        {
-            public LastViewerPosition(double longitude, double latitude)
-            {
-                _longitude = longitude;
-                _latitude = latitude;
-            }
-
-            public double Longitude
-            {
-                get { return _longitude; }
-            }
-
-            public double Latitude
-            {
-                get { return _latitude; }
-            }
-
-            private double _longitude;
-            private double _latitude;
-        }
+        private RasterDataDetails _terrain = new RasterDataDetails(RasterType.Terrain);
+        private RasterDataDetails _imagery = new RasterDataDetails(RasterType.Imagery);
     }
 }

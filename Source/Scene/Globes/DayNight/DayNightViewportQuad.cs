@@ -61,6 +61,10 @@ namespace OpenGlobe.Scene
             _drawState.VertexArray = _geometry.VertexArray;
 
             context.Draw(PrimitiveType.TriangleStrip, _drawState, sceneState);
+
+            context.TextureUnits[0].Texture = null;
+            context.TextureUnits[1].Texture = null;
+            context.TextureUnits[2].Texture = null;
         }
 
         public Texture2D DayTexture { get; set; }

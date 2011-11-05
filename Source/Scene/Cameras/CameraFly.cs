@@ -54,22 +54,16 @@ namespace OpenGlobe.Scene
             set { _position = value; }
         }
 
-        public double Roll
+        public Vector3D Look
         {
-            get { return _roll; }
-            set { _roll = value; }
+            get { return new Vector3D(_look.X, _look.Y, _look.Z); }
+            set { _look = new Vector3d(value.X, value.Y, value.Z); }
         }
 
-        public double Pitch
+        public Vector3D Up
         {
-            get { return _pitch; }
-            set { _pitch = value; }
-        }
-
-        public double Yaw
-        {
-            get { return _yaw; }
-            set { _yaw = value; }
+            get { return new Vector3D(_up.X, _up.Y, _up.Z); }
+            set { _up = new Vector3d(value.X, value.Y, value.Z); }
         }
 
         public double MovementRate
@@ -253,75 +247,47 @@ namespace OpenGlobe.Scene
 
         private void RollLeft(double seconds)
         {
-            _roll -= seconds;
-            while (_roll > Math.PI)
-            {
-                _roll -= Trig.TwoPi;
-            }
-            while (_roll < -Math.PI)
-            {
-                _roll += Trig.TwoPi;
-            }
+            Quaterniond rotation = Quaterniond.FromAxisAngle(_look, -seconds);
+
+            _up = Vector3d.Transform(_up, rotation);
+            _right = Vector3d.Cross(_look, _up);
+
+            _up.Normalize();
+            _right.Normalize();
         }
 
         private void RollRight(double seconds)
         {
-            _roll += seconds;
-            while (_roll > Math.PI)
-            {
-                _roll -= Trig.TwoPi;
-            }
-            while (_roll < -Math.PI)
-            {
-                _roll += Trig.TwoPi;
-            }
+            Quaterniond rotation = Quaterniond.FromAxisAngle(_look, seconds);
+
+            _up = Vector3d.Transform(_up, rotation);
+            _right = Vector3d.Cross(_look, _up);
+
+            _up.Normalize();
+            _right.Normalize();
         }
 
         private void Rotate(Size movement)
         {
             CheckDisposed();
 
-            double yawWindowRatio = (double)movement.Width / (double)_window.Width;
-            double pitchWindowRatio = (double)movement.Height / (double)_window.Height;
+            double horizontalWindowRatio = (double)movement.Width / (double)_window.Width;
+            double verticalWindowRatio = (double)movement.Height / (double)_window.Height;
 
-            Quaterniond rotateX = Quaterniond.FromAxisAngle(Vector3d.UnitX, _roll);
-            Vector3d yawPitch = Vector3d.Transform(new Vector3d(0.0, pitchWindowRatio, yawWindowRatio), rotateX);
-            pitchWindowRatio = yawPitch.Y;
-            yawWindowRatio = yawPitch.Z;
+            // Horizontal movement is rotation around the Up-axis
+            // Vertical movement is rotation around the Right-axis
+            Quaterniond horizontalRotation = Quaterniond.FromAxisAngle(_up, -horizontalWindowRatio);
+            Quaterniond verticalRotation = Quaterniond.FromAxisAngle(_right, verticalWindowRatio);
 
-            _yaw -= yawWindowRatio * Math.PI;
-            _pitch -= pitchWindowRatio * Math.PI;
+            _look = Vector3d.Transform(_look, horizontalRotation);
+            _look = Vector3d.Transform(_look, verticalRotation);
+            _up = Vector3d.Transform(_up, horizontalRotation);
+            _up = Vector3d.Transform(_up, verticalRotation);
+            _right = Vector3d.Cross(_look, _up);
 
-            if (_pitch < -Trig.PiOverTwo)
-            {
-                _pitch = -Trig.PiOverTwo + (-Trig.PiOverTwo - _pitch);
-                _yaw += Math.PI;
-                _roll += Math.PI;
-            }
-            else if (_pitch > Trig.PiOverTwo)
-            {
-                _pitch = Trig.PiOverTwo - (_pitch - Trig.PiOverTwo);
-                _yaw += Math.PI;
-                _roll += Math.PI;
-            }
-
-            while (_yaw > Math.PI)
-            {
-                _yaw -= Trig.TwoPi;
-            }
-            while (_yaw < -Math.PI)
-            {
-                _yaw += Trig.TwoPi;
-            }
-
-            while (_roll > Math.PI)
-            {
-                _roll -= Trig.TwoPi;
-            }
-            while (_roll < -Math.PI)
-            {
-                _roll += Trig.TwoPi;
-            }
+            _look.Normalize();
+            _up.Normalize();
+            _right.Normalize();
         }
 
         private void CheckDisposed()
@@ -338,38 +304,17 @@ namespace OpenGlobe.Scene
         /// </summary>
         public void UpdateParametersFromCamera()
         {
-            if (first)
-            {
-                first = false;
-                _position = _camera.Eye;
-                Vector3D look = _camera.Forward;
-                _yaw = Math.Atan2(look.Y, look.X);
-                _pitch = Math.Asin(look.Z / look.Magnitude);
-            }
+            _position = _camera.Eye;
+            _look = new Vector3d(_camera.Forward.X, _camera.Forward.Y, _camera.Forward.Z);
+            _up = new Vector3d(_camera.Up.X, _camera.Up.Y, _camera.Up.Z);
+            _right = new Vector3d(_camera.Right.X, _camera.Right.Y, _camera.Right.Z);
         }
-        private bool first = true;
 
         private void UpdateCameraFromParameters()
         {
             _camera.Eye = _position;
-
-            Quaterniond rotateX = Quaterniond.FromAxisAngle(Vector3d.UnitX, _roll);
-            Quaterniond rotateY = Quaterniond.FromAxisAngle(Vector3d.UnitY, _pitch);
-            Quaterniond rotateZ = Quaterniond.FromAxisAngle(Vector3d.UnitZ, _yaw);
-
-            Vector3d look = Vector3d.Transform(Vector3d.UnitX, rotateX);
-            look = Vector3d.Transform(look, rotateY);
-            look = Vector3d.Transform(look, rotateZ);
-
-            Vector3d up = Vector3d.Transform(Vector3d.UnitZ, rotateX);
-            up = Vector3d.Transform(up, rotateY);
-            up = Vector3d.Transform(up, rotateZ);
-
-            look.Normalize();
-            up.Normalize();
-
-            _camera.Target = _camera.Eye + new Vector3D(look.X, look.Y, look.Z);
-            _camera.Up = new Vector3D(up.X, up.Y, up.Z);
+            _camera.Target = _position + Look;
+            _camera.Up = Up;
         }
 
         private Camera _camera;
@@ -382,9 +327,9 @@ namespace OpenGlobe.Scene
         private Point _lastPoint;
 
         private Vector3D _position;
-        private double _roll;
-        private double _pitch;
-        private double _yaw;
+        private Vector3d _look;
+        private Vector3d _up;
+        private Vector3d _right;
         private double _movementRate = 300.0;
     }
 }
