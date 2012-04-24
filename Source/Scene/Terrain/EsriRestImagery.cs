@@ -14,7 +14,7 @@ namespace OpenGlobe.Scene
     public class EsriRestImagery : RasterSource
     {
         public EsriRestImagery() :
-            this(new Uri("http://server.arcgisonline.com/ArcGIS/rest/services/I3_Imagery_Prime_World_2D/MapServer/tile/"))
+            this(new Uri("http://server.arcgisonline.com/ArcGIS/rest/services/ESRI_Imagery_World_2D/MapServer/tile/"))
         {
         }
 
@@ -115,9 +115,7 @@ namespace OpenGlobe.Scene
         private RasterLevel[] _levels;
         private RasterLevelCollection _levelsCollection;
 
-        private const int NumberOfLevels = 20;
-        private const int TileWidth = 150;
-        private const int TileHeight = 150;
+        private const int NumberOfLevels = 16;
         private const double LevelZeroDeltaLongitudeDegrees = 180.0;
         private const double LevelZeroDeltaLatitudeDegrees = 180.0;
     }
