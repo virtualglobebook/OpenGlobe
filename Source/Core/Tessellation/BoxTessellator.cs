@@ -28,7 +28,7 @@ namespace OpenGlobe.Core
             VertexAttributeDoubleVector3 positionsAttribute = new VertexAttributeDoubleVector3("position", 8);
             mesh.Attributes.Add(positionsAttribute);
 
-            IndicesUnsignedShort indices = new IndicesUnsignedShort(24);
+            IndicesUnsignedShort indices = new IndicesUnsignedShort(36);
             mesh.Indices = indices;
 
             //
