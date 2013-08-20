@@ -643,7 +643,7 @@ namespace OpenGlobe.Scene
             IList<Vector2F> positions = positionsAttribute.Values;
             mesh.Attributes.Add(positionsAttribute);
 
-            int numberOfIndices = (_clipmapSegments / 2) * 3 * 4;
+            int numberOfIndices = (numberOfPositions - 2) * 3;
             IndicesUnsignedShort indices = new IndicesUnsignedShort(numberOfIndices);
             mesh.Indices = indices;
 
@@ -667,7 +667,7 @@ namespace OpenGlobe.Scene
                 positions.Add(new Vector2F(i, 0.0f));
             }
 
-            for (int i = 0; i < numberOfIndices; i += 2)
+            for (int i = 0; i < numberOfPositions - 2; ++i)
             {
                 indices.AddTriangle(new TriangleIndicesUnsignedShort((ushort)i, (ushort)(i + 1), (ushort)(i + 2)));
             }
