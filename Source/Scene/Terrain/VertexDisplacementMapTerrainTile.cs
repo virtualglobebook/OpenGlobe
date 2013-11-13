@@ -136,16 +136,19 @@ namespace OpenGlobe.Scene
         {
             if (_dirty)
             {
-                ShaderProgram sp = _drawStateTerrain.ShaderProgram;
+                ShaderProgram terrainSP = _drawStateTerrain.ShaderProgram;
 
-                ((Uniform<int>)sp.Uniforms["u_normalAlgorithm"]).Value = (int)_normalsAlgorithm;
-                ((Uniform<int>)sp.Uniforms["u_shadingAlgorithm"] ).Value = (int)_shadingAlgorithm;
-                ((Uniform<bool>)sp.Uniforms["u_showTerrain"]).Value = _showTerrain;
-                ((Uniform<bool>)sp.Uniforms["u_showSilhouette"]).Value = _showSilhouette;
-                ((Uniform<int>)sp.Uniforms["u_normalAlgorithm"]).Value = (int)_normalsAlgorithm;
+                ((Uniform<int>)terrainSP.Uniforms["u_normalAlgorithm"]).Value = (int)_normalsAlgorithm;
+                ((Uniform<int>)terrainSP.Uniforms["u_shadingAlgorithm"] ).Value = (int)_shadingAlgorithm;
+                ((Uniform<bool>)terrainSP.Uniforms["u_showTerrain"]).Value = _showTerrain;
+                ((Uniform<bool>)terrainSP.Uniforms["u_showSilhouette"]).Value = _showSilhouette;
+                ((Uniform<int>)terrainSP.Uniforms["u_normalAlgorithm"]).Value = (int)_normalsAlgorithm;
 
-                _minimumHeight = (Uniform<float>)sp.Uniforms["u_minimumHeight"];
-                _maximumHeight = (Uniform<float>)sp.Uniforms["u_maximumHeight"];
+                _minimumHeight = (Uniform<float>)terrainSP.Uniforms["u_minimumHeight"];
+                _maximumHeight = (Uniform<float>)terrainSP.Uniforms["u_maximumHeight"];
+
+                ShaderProgram normalSP = _drawStateNormals.ShaderProgram;
+                ((Uniform<int>)normalSP.Uniforms["u_normalAlgorithm"]).Value = (int)_normalsAlgorithm;
 
                 _dirty = false;
             }

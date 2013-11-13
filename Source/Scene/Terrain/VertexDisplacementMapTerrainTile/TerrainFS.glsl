@@ -89,7 +89,7 @@ void main()
         float dy = abs(dFdy(height));
         float dF = max(dx, dy) * og_highResolutionSnapScale * 2.0;  // Line width
 
-        fragmentColor = mix(vec3(0.0, intensity, 0.0), vec3(intensity, 0.0, 0.0), (distanceToContour < dF));
+        fragmentColor = mix(vec3(0.0, intensity, 0.0), vec3(intensity, 0.0, 0.0), float(distanceToContour < dF));
     }
     else if (u_shadingAlgorithm == 4)  // TerrainShadingAlgorithm.ColorRampByHeight
     {
@@ -115,7 +115,7 @@ void main()
         float dy = abs(dFdy(slopeAngle));
         float dF = max(dx, dy) * og_highResolutionSnapScale * 2.0;  // Line width
 
-        fragmentColor = mix(vec3(0.0, intensity, 0.0), vec3(intensity, 0.0, 0.0), (distanceToContour < dF));
+        fragmentColor = mix(vec3(0.0, intensity, 0.0), vec3(intensity, 0.0, 0.0), float(distanceToContour < dF));
     }
     else if (u_shadingAlgorithm == 8)  // TerrainShadingAlgorithm.ColorRampBySlope
     {
