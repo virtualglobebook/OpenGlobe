@@ -20,7 +20,7 @@ namespace OpenGlobe.Scene
     public class WorldWindTerrainSource : RasterSource
     {
         public WorldWindTerrainSource() :
-            this(new Uri("http://www.nasa.network.com/elev?service=WMS&request=GetMap&version=1.3&srs=EPSG:4326&layers=mergedElevations&styles=&format=application/bil16&bgColor=-9999.0&width=150&height=150"))
+            this(new Uri("https://worldwind26.arc.nasa.gov/elev?service=WMS&request=GetMap&version=1.3&srs=EPSG:4326&layers=mergedElevations&styles=&format=application/bil16&bgColor=-9999.0&width=150&height=150"))
         {
         }
 
