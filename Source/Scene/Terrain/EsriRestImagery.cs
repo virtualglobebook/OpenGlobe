@@ -14,7 +14,7 @@ namespace OpenGlobe.Scene
     public class EsriRestImagery : RasterSource
     {
         public EsriRestImagery() :
-            this(new Uri("http://server.arcgisonline.com/ArcGIS/rest/services/ESRI_Imagery_World_2D/MapServer/tile/"))
+            this(new Uri("https://wi.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/MapServer/tile/"))
         {
         }
 
